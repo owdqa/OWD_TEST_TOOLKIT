@@ -1,0 +1,8 @@
+gaia-ui-tests
+.pydevproject
+.project
+*.pyc
+.bak
+build
+dist
+*~

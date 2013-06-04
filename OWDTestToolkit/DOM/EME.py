@@ -1,0 +1,13 @@
+here_check              = ('id', 'shortcuts-items')
+groups                  = ('xpath', "//*[@id='shortcuts-items']//li")
+add_group_button        = ("xpath", "//li[@class='shortcut add']")
+remove_group_icon       = ("xpath", "./span[@class='remove']")
+loading_groups_message  = ("id", "shortcuts-customize-loading")
+apps                    = ('xpath', "//li[@class='cloud']")
+back_btn                = ('id', 'button-clear')
+add_app_to_homescreen   = ('id', 'modal-dialog-confirm-ok')
+connection_warning_msg  = ("class name", "connection-message")
+search_field            = ("id", "search-q")
+searching_spinner       = ("class name", "loading-apps")
+search_result_icon_xpath= "//li[@data-name='%s']"
+search_result_area      = ("id", "evmeApps")
