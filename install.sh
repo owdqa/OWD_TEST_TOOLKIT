@@ -9,7 +9,6 @@ EOF
 
 # Log file for 'everything'.
 export LOGFILE=${1:-"/tmp/owd_setup_$(date +%H%M%Y%m%d).log"}
-printf "\n\n** THE LOGFILE FOR DETAILS OF THIS INSTALLATION IS: $LOGFILE **\n"
 
 # Branch for gaiatest etc...1
 export BRANCH=${2:-"v1-train"}
