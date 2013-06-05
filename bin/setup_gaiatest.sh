@@ -51,14 +51,14 @@ sudo rm -rf gaia-ui-tests 2>/dev/null
 #
 # Now re-install everything.
 #
-printf "\n\n- Cloning gaiatest - this make take a few minutes, please wait ...\n\n" | tee -a $LOGFILE
+printf "\n* Cloning gaiatest - this make take a few minutes, please wait ...\n\n" | tee -a $LOGFILE
 git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>>$LOGFILE
 
 # Install gaiatest.
 cd gaia-ui-tests
-printf "\n\n- Switching to branch \"$BRANCH\" of gaiatest ...\n\n" | tee -a $LOGFILE
+printf "\n* Switching to branch \"$BRANCH\" of gaiatest ...\n\n" | tee -a $LOGFILE
 git checkout $BRANCH  2> >( tee $LOGFILE)
-printf "\n\n- Installing gaiatest for branch \"$(git branch | grep '*')\" ...\n\n" | tee -a $LOGFILE
+printf "\n* Installing gaiatest for branch \"$(git branch | grep '*')\" ...\n\n" | tee -a $LOGFILE
 sudo python setup.py develop | tee /tmp/gaiatest_setup.log >> $LOGFILE
 
 #
@@ -68,6 +68,6 @@ sudo python setup.py develop | tee /tmp/gaiatest_setup.log >> $LOGFILE
 x=$(grep -i error /tmp/gaiatest_setup.log)
 if [ "$x" ]
 then
-	printf "\n\nERRORS detected while setting up gaiatest dependencies! Trying again ...\n\n" | tee -a $LOGFILE
+	printf "\n* ERRORS detected while setting up gaiatest dependencies! Trying once more ...\n\n" | tee -a $LOGFILE
 	sudo python setup.py develop >> $LOGFILE
 fi
