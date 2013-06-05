@@ -2,6 +2,7 @@ import GLOBAL
 friends_header       = ('xpath', GLOBAL.app_head_specific % 'Facebook Friends')
 friends_list         = ('xpath', "//li[@class='block-item']")
 link_friends_list    = ('xpath', "//ol[@id='friends-list']//li")
+# link_friends_list    = ('xpath', "//ol[@id='contacts-list-R']//li")
 totals               = ('id', 'fb-totals')
 
 email                = ("xpath", "//input[@name='email']")
