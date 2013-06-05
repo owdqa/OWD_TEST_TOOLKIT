@@ -234,7 +234,7 @@ class AppMessages(GaiaTestCase):
         x.tap()
         
         self.marionette.switch_to_frame()
-        x = self.UTILS.getElement(DOM.Messages.confirm_delete_threads, "OK button in question dialog")
+        x = self.UTILS.getElement(DOM.GLOBAL.modal_ok_button, "OK button in question dialog")
         x.tap()
         self.UTILS.switchToFrame(*DOM.Messages.frame_locator)
         time.sleep(2)
@@ -250,7 +250,7 @@ class AppMessages(GaiaTestCase):
         
         time.sleep(1)
         self.marionette.switch_to_frame()
-        x = self.UTILS.getElement(DOM.Messages.confirm_delete_threads, "OK button in question dialog")
+        x = self.UTILS.getElement(DOM.GLOBAL.modal_ok_button, "OK button in question dialog")
         x.tap()
         
         #
