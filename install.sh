@@ -9,7 +9,7 @@ EOF
 
 # Log file for 'everything'.
 export LOGFILE=${1:-"/tmp/owd_setup_$(date +%H%M%Y%m%d).log"}
-printf "\n\n** THE LOGFILE FOR DETAILS OF THIS INSTALLATION IS: $LOGFILE **\n\n"
+printf "\n\n** THE LOGFILE FOR DETAILS OF THIS INSTALLATION IS: $LOGFILE **\n"
 
 # Branch for gaiatest etc...1
 export BRANCH=${2:-"v1-train"}
@@ -55,11 +55,11 @@ fi
 #
 printf "\n\nCompleting install of OWD_TEST_TOOLKIT..." | tee -a $LOGFILE
 printf "\n=========================================\n" | tee -a $LOGFILE
-printf "\n\n- Switching to branch $BRANCH of OWD_TEST_TOOLKIT ...\n\n" | tee -a $LOGFILE
-git checkout $BRANCH 2> >( tee $LOGFILE)
-printf "\n\n- Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".\n\n" | tee -a $LOGFILE
+printf "\n* Switching to branch $BRANCH of OWD_TEST_TOOLKIT ...\n\n" | tee -a $LOGFILE
+git checkout $BRANCH 2> >( tee -a $LOGFILE)
+printf "\n* Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".\n\n" | tee -a $LOGFILE
 
-printf "\n\n- Installing OWD_TEST_TOOLKIT...\n\n" | tee -a $LOGFILE
+printf "\n* Installing OWD_TEST_TOOLKIT...\n\n" | tee -a $LOGFILE
 sudo python setup.py install >> $LOGFILE
 
 
@@ -74,6 +74,6 @@ rm -rf owd_test_cases 2>/dev/null
 git clone https://github.com/roydude/owd_test_cases.git >> $LOGFILE 2>> $LOGFILE
 cd $HOME/projects/owd_test_cases
 
-printf "\n\n- Switching to branch $BRANCH of owd_test_cases ...\n\n" | tee -a $LOGFILE
-git checkout $BRANCH  2> >( tee $LOGFILE)
-printf "\n\n- Now using owd_test_cases branch \"$(git branch | grep '*')\".\n\n"
+printf "\n* Switching to branch $BRANCH of owd_test_cases ...\n\n" | tee -a $LOGFILE
+git checkout $BRANCH  2> >( tee -a $LOGFILE)
+printf "\n* Now using owd_test_cases branch \"$(git branch | grep '*')\".\n\n"
