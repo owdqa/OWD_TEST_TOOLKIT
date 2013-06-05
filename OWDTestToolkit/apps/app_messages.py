@@ -247,6 +247,7 @@ class AppMessages(GaiaTestCase):
         orig_iframe = self.UTILS.currentIframe()
         x = self.UTILS.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
         x.tap()
+        self.UTILS.quitTest()
         
         time.sleep(1)
         self.marionette.switch_to_frame()
@@ -269,11 +270,11 @@ class AppMessages(GaiaTestCase):
             self.UTILS.logResult("info", "(No message threads to delete.)")
         else:
             self.UTILS.logResult("info", "Deleting message threads ...")
-
+ 
             x = self.threadEditModeON()
             x = self.UTILS.getElement(DOM.Messages.check_all_threads_btn, "Select all button")
             x.tap()
-            
+             
             self.deleteSelectedThreads()
             self.UTILS.waitForElements(DOM.Messages.no_threads_message, 
                                        "No message threads notification", True, 60)
