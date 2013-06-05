@@ -272,18 +272,6 @@ class AppContacts(GaiaTestCase):
         # 'view all contacts' screen).
         #
         
-        #
-        # Find the name of our contact in the contacts list.
-        #
-#        try:
-#            contact_found = self.marionette.find_element("xpath", DOM.Contacts.view_all_contact_xpath % p_contact['name'].replace(" ",""))
-#        except:
-#            self.UTILS.logResult(False, "'" + p_contact['name'] + "' is found in the contacts list!")
-#            return 0 # (leave the function)
-
-        #
-        # TEST: try to click the contact name in the contacts list.
-        #
         x = ("xpath", DOM.Contacts.view_all_contact_xpath % p_contact_name.replace(" ",""))
         contact_found = self.UTILS.getElement(x, "Contact '" + p_contact_name + "'")
         contact_found.tap()
@@ -449,22 +437,26 @@ class AppContacts(GaiaTestCase):
         #
         # Were we already connected to facebook?
         #
+        boolFound = False
         try:
             self.parent.wait_for_element_displayed('xpath', "//button[text()='Remove']", timeout=5)
-            x = self.marionette.find_element('xpath', "//button[text()='Remove']")
+            boolFound = True
+        except:
+            pass
+        
+        if boolFound:
+            self.UTILS.logResult("info", "Logging out of facebook so I can re-enable the FB import ...")
+            x = self.UTILS.getElement(('xpath', "//button[text()='Remove']"), "Remove button")
             x.tap()
+            
             self.UTILS.waitForElements(DOM.Contacts.settings_fb_logout_wait, "FB logout message", True, 5)
             self.UTILS.waitForNotElements(DOM.Contacts.settings_fb_logout_wait, "FB logout message", True, 60)
             
             self.marionette.switch_to_frame()
             self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
 
-            x = self.UTILS.getElement(DOM.Contacts.settings_done_button, "Settings Done button")
-            x.tap()
-            time.sleep(1)
-
             #
-            # Now click the 'enable facebook' button again.
+            # Now relaunch and click the 'enable facebook' button again.
             #
             # For some reason I need to relaunch the Contacts app first.
             # If I don't then after I log in again the 'Please hold on ...'
@@ -481,12 +473,6 @@ class AppContacts(GaiaTestCase):
             x = self.UTILS.getElement(DOM.Contacts.settings_fb_enable, "Enable facebook button")
             x.tap()
 
-        except:
-            #
-            # We weren't logged into facebook, so continue.
-            #
-            pass
-
         self.marionette.switch_to_frame()
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
 
@@ -497,6 +483,8 @@ class AppContacts(GaiaTestCase):
         # Verifies that this contact is linked
         # (assumes we're in the 'all contacts' screen).
         #
+        
+        self.launch()
         
         #
         # Check that our contact is now listed as a facebook contact (icon by the name in 'all contacts' screen).

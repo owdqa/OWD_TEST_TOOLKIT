@@ -178,7 +178,8 @@ p_str<br>
 p_no_keyboard=False<br>
 p_clear=True<br>
 p_enter=True<br>
-p_validate=True</td>
+p_validate=True<br>
+p_remove_keyboard=True</td>
 <td align=left>  Types this string into this element. If p_no_keyboard = True then it doesn't use the keyboard. <b>NOTE:</b> If os variable "NO_KEYBOARD" is set (to anything), then regardless of what you send to this method, it will never use the keyboard. </td>
 </tr>
 <tr>

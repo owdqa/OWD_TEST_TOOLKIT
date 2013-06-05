@@ -23,7 +23,7 @@ class AppFacebook(GaiaTestCase):
         #
         # Get the count of friends that will be imported.
         #
-        x = self.UTILS.getElements(DOM.Facebook.friends_list, "Facebook friends list")
+        x = self.UTILS.getElements(DOM.Facebook.friends_list, "Facebook 'import friends' list")
         friend_count = len(x)
         
         #
@@ -61,7 +61,7 @@ class AppFacebook(GaiaTestCase):
         
         # (For some reason this only works if I get all matching elements regardless of visibility,
         # THEN check for visibility. There must be a matching element that never becomes visible.)
-        x = self.UTILS.getElements(DOM.Facebook.link_friends_list, "facebook friends list", False, 20)
+        x = self.UTILS.getElements(DOM.Facebook.link_friends_list, "Facebook 'link friends' list", False, 20)
         
         email = False
         

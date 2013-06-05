@@ -26,7 +26,7 @@ class main(GaiaTestCase):
         self.switchToFrame("src", orig_frame)
         
     
-    def typeThis(self, p_element_array, p_desc, p_str, p_no_keyboard=False, p_clear=True, p_enter=True, p_validate=True):        
+    def typeThis(self, p_element_array, p_desc, p_str, p_no_keyboard=False, p_clear=True, p_enter=True, p_validate=True, p_remove_keyboard=True):        
         #
         # Types this string into this element.
         # If p_no_keyboard = True then it doesn't use the keyboard.
@@ -114,15 +114,16 @@ class main(GaiaTestCase):
             self.TEST(p_str == fieldText, 
                       "The field contains the correct string ...|" + fieldText + "|- vs. -|" + p_str)
             
-        #
-        # Try to tap the header to remove the keyboard now that we've finished.
-        #
-        try:
-            x = self.marionette.find_element(*DOM.GLOBAL.app_head)
-            x.tap()
-            time.sleep(0.5)
-        except:
-            pass
+        if p_remove_keyboard:
+            #
+            # Try to tap the header to remove the keyboard now that we've finished.
+            #
+            try:
+                x = self.marionette.find_element(*DOM.GLOBAL.app_head)
+                x.tap()
+                time.sleep(0.5)
+            except:
+                pass
         
     def setTimeToNow(self, p_continent=False, p_city=False):
         #
