@@ -56,8 +56,6 @@ sudo apt-get install android-tools-adb android-tools-fastboot
 <b>2.</b> From a terminal, go to the directory you want the test toolkit to be in ("cd ~/projects" for example) then type:
 
 <pre>
-git clone https://github.com/roydude/OWD_TEST_TOOLKIT.git
-cd OWD_TEST_TOOLKIT
 ./install.sh
 </pre>
 
@@ -69,8 +67,8 @@ export PATH="$PATH:/path/to/OWD_TEST_TOOLKIT"
 </pre>
 
 
-Creating tests
-==============
+Creating a new test suite
+=========================
 
 <b>1.</b> The *./example* folder contains a working test for you to examine, adapt, copy etc... Copy the *./example/* folder to the destination for your new tests:
 
@@ -88,11 +86,17 @@ Running tests
 
 <b>1.</b> Make sure your device has been flashed with an 'eng' build (the 'user' build won't allow Marionette to run and the tests won't work). In the *OWD_TEST_TOOLKIT/bin* folder, type:
 <pre>
-sudo flash_device
+sudo flash_device <i>Device</i> eng <i>branch</i>
+</pre>
+
+... for example:
+
+<pre>
+sudo flash_device unagi eng v1-train
 </pre>
 
 
-<b>2.</b> Make sure 'remote debugging' is *OFF* on your device:
+<b>2.</b> Make sure 'remote debugging' is *OFF* on your device (it must be like this for 'eng' builds):
 
 *Settings > Device Information > More Information >  Developer > Remote debugging*
 
@@ -111,6 +115,12 @@ sudo flash_device
 
 ... will run the tests from the files *test_0178.py*, *test_make_a_contact.py* and *test_bugfix124.py*.
 
+... or specify particular test 'types' :
+
+<pre>
+./run_tests {REGRESSION}
+</pre>
+
 <b>4.</b> As each test is completed, a summary line (description / result) will be displayed. Once all tests have completed the overall test results will be displayed.
 
 To see full details of the test run for a particular test case - in the *OWD_TEST_TOOLKIT/bin* folder, type:
@@ -125,7 +135,7 @@ Some notes on running "run_tests" ...
 
 You will be prompted for any input values required by the tests you have chosen (i.e. anything using *self.UTILS.get_os_variable()*).
 
-* If you these values are stored in the file *./tests/parameters* (in your test folder), then you will not be prompted for them.
+* If you these values are stored in the file *$HOME/.OWD_TEST_PARAMETERS*, then you will not be prompted for them.
 
 * If you specify the number of the device itself for sms tests, then they may timeout (because as soon as the device sends a text, the response is received and read so the statusbar notification for that response never happens). It is advisable, therefore, to use the number of a different device for sms tests.
 
