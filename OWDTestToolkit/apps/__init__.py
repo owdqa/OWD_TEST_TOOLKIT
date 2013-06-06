@@ -9,7 +9,7 @@ from EverythingMe import *
 from Facebook import *
 from Ftu import *
 from Gallery import *
-from Market import *
+from Marketplace import *
 from Messages import *
 from Settings import *
 from Video import *
