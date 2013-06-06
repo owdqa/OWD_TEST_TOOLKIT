@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 	
 class main(GaiaTestCase):
 
-    def waitForReceivedMsgInThisThread(self, p_timeOut=60):
+    def waitForReceivedMsgInThisThread(self, p_timeOut=20):
         #
         # Waits for the last message in this thread to be a 'received' message
         # and returns the element for this message.
