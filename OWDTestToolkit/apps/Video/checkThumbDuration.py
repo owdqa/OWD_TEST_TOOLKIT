@@ -9,6 +9,9 @@ class main(GaiaTestCase):
         durations = self.UTILS.getElements(DOM.Video.thumb_durations,
                                            "Thumbnail durations", True, 20, False)
         
+        if not durations:
+        	return False
+        
         myDur = durations[p_thumb_num].text
         
         #
