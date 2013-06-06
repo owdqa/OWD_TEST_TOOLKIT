@@ -845,7 +845,7 @@ p_not_keyboard=True</td>
 </tr>
 <tr>
 <td align=center>waitForReceivedMsgInThisThread</td>
-<td align=left>p_timeOut=30</td>
+<td align=left>p_timeOut=60</td>
 <td align=left>  Waits for the last message in this thread to be a 'received' message and returns the element for this message. </td>
 </tr>
 <tr>
