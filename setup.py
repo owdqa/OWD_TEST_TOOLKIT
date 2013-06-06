@@ -22,7 +22,7 @@ setup(name='OWD_TEST_TOOLKIT',
                 'OWDTestToolkit/apps/Gallery',
                 'OWDTestToolkit/apps/Calculator',
                 'OWDTestToolkit/apps/Keyboard',
-                'OWDTestToolkit/apps/Market',
+                'OWDTestToolkit/apps/Marketplace',
                 'OWDTestToolkit/apps/Email',
                 'OWDTestToolkit/utils']
       )
