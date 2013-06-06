@@ -319,7 +319,7 @@ class AppMessages(GaiaTestCase):
         x = self.UTILS.getElements(DOM.Messages.message_timestamps, "Message timestamps")
         return x[-1].text
         
-    def waitForReceivedMsgInThisThread(self, p_timeOut=30):
+    def waitForReceivedMsgInThisThread(self, p_timeOut=60):
         #
         # Waits for the last message in this thread to be a 'received' message
         # and returns the element for this message.
