@@ -24,7 +24,12 @@ class EverythingMe (
         #
         # Launch the app.
         #
-        self.apps.kill_all()
-        self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        
+        self.UTILS.goHome()
+        
+        #
+        # Scroll to the left to expose the 'everything.me' screen.
+        #
+        self.UTILS.scrollHomescreenLeft()
+        self.UTILS.waitForElements(DOM.EME.groups, "EME groups", True, 30)
 
