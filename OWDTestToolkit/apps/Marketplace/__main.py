@@ -4,7 +4,7 @@ import  installApp                         ,\
         searchForApp                       ,\
         selectSearchResultApp              
 
-class Market (
+class Marketplace (
             installApp.main,
             searchForApp.main,
             selectSearchResultApp.main):
