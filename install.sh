@@ -103,4 +103,6 @@ then
     printf "\n* Switching to branch $BRANCH of owd_test_cases ...\n\n" | tee -a $LOGFILE
     git checkout $BRANCH  2> >( tee -a $LOGFILE)
     printf "\n* Now using owd_test_cases branch \"$(git branch | grep '*')\".\n\n"
+else
+    printf "\n\n*** NOTE: Not refreshing owd_test_cases! *** \n\n"
 fi
