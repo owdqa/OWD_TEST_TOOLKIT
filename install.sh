@@ -61,15 +61,24 @@ git checkout $BRANCH 2> >( tee -a $LOGFILE)
 printf "\n* Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".\n\n" | tee -a $LOGFILE
 
 printf "\n* Installing OWD_TEST_TOOLKIT...\n\n" | tee -a $LOGFILE
-x=$(dirname $(sudo python setup.py install --dry-run | grep Writing | awk '{print $2}'))
-if [ "$x" ]
+install_dir=$(dirname $(sudo python setup.py install --dry-run | grep Writing | awk '{print $2}'))
+	
+if [ ! "$install_dir" ]
+then
+	# Couldn't find it for some reason - try getting the marionette folder.
+	install_dir=$($MYPATH/get_python_dist_path marionette)
+fi
+
+if [ "$install_dir" ]
 then
     # Deleting as root, so be paranoid about where you are!!
     cd /tmp
-    cd $x
+    cd $install_dir
     sudo rm -rf OWDTestToolkit OWD_TEST_TOOLKIT*egg*
 fi
+
 cd $HOME/projects/OWD_TEST_TOOLKIT
+sudo python setup.py clean --all >> $LOGFILE 2>/dev/null
 sudo python setup.py install >> $LOGFILE
 
 
