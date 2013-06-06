@@ -30,7 +30,7 @@ _end_test(){
 _check_2nd_chance(){
     STROUT="$1"
     EXIT=$2
-    if [ "${_2ND_CHANCE}" ] || [ "$DEBUG_QUICK_TEST" ]
+    if [ "${_2ND_CHANCE}" ] || [ ! "$OWD_USE_2ND_CHANCE" ]
     then
     	_end_test "$STROUT" $EXIT
     else
@@ -44,9 +44,9 @@ _check_2nd_chance(){
 # Run the test using 'gaiatest', ignore STDOUT (because what we want is being
 # writtin to a file), but capture STDERR.
 #
-# (For speed, only restart if this is 2nd chance AND DEBUG_QUICK_TEST isn't set.)
+# (For speed, only restart if this is 2nd chance AND OWD_USE_2ND_CHANCE is set.)
 [ "${_2ND_CHANCE}" ] && RESTART="--restart" || RESTART=""
-[ "$DEBUG_QUICK_TEST" ] && RESTART="" || RESTART="$RESTART"
+[ ! "$OWD_USE_2ND_CHANCE" ] && RESTART="" || RESTART="$RESTART"
 TESTVARS="--testvars=${THISPATH}/gaiatest_testvars.json"
 ADDRESS="--address localhost:2828"
 

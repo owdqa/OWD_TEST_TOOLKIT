@@ -49,6 +49,8 @@ fi
 #
 [ ! -d ./gaia-ui-tests ] && ./bin/setup_gaiatest.sh "$BRANCH"
 
+
+
 #
 # Install me.
 #
@@ -59,20 +61,48 @@ git checkout $BRANCH 2> >( tee -a $LOGFILE)
 printf "\n* Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".\n\n" | tee -a $LOGFILE
 
 printf "\n* Installing OWD_TEST_TOOLKIT...\n\n" | tee -a $LOGFILE
+install_dir=$(dirname $(sudo python setup.py install --dry-run | grep Writing | awk '{print $2}'))
+	
+if [ ! "$install_dir" ]
+then
+	# Couldn't find it for some reason - try getting the marionette folder.
+	install_dir=$($MYPATH/get_python_dist_path marionette)
+fi
+
+if [ "$install_dir" ]
+then
+    # Deleting as root, so be paranoid about where you are!!
+    cd /tmp
+    cd $install_dir
+    sudo rm -rf OWDTestToolkit OWD_TEST_TOOLKIT*egg*
+fi
+
+cd $HOME/projects/OWD_TEST_TOOLKIT
+sudo python setup.py clean --all >> $LOGFILE 2>/dev/null
 sudo python setup.py install >> $LOGFILE
 
 
-#
-# Install the owd test cases.
-#
-printf "\n\nInstalling owd_test_cases..." | tee -a $LOGFILE
-printf "\n============================\n" | tee -a $LOGFILE
-cd $HOME/projects
-rm -rf owd_test_cases 2>/dev/null
 
-git clone https://github.com/roydude/owd_test_cases.git >> $LOGFILE 2>> $LOGFILE
-cd $HOME/projects/owd_test_cases
+#
+# If you're developing the toolkit, this might be the last thing you want,
+# so I've defaulted it to not do this! ...
+#
+if [ "$REINSTALL_OWD_TEST_CASES" ]
+then
+    #
+    # Install the owd test cases.
+    #
+    printf "\n\nInstalling owd_test_cases..." | tee -a $LOGFILE
+    printf "\n============================\n" | tee -a $LOGFILE
+    cd $HOME/projects
+    rm -rf owd_test_cases 2>/dev/null
 
-printf "\n* Switching to branch $BRANCH of owd_test_cases ...\n\n" | tee -a $LOGFILE
-git checkout $BRANCH  2> >( tee -a $LOGFILE)
-printf "\n* Now using owd_test_cases branch \"$(git branch | grep '*')\".\n\n"
+    git clone https://github.com/roydude/owd_test_cases.git >> $LOGFILE 2>> $LOGFILE
+    cd $HOME/projects/owd_test_cases
+
+    printf "\n* Switching to branch $BRANCH of owd_test_cases ...\n\n" | tee -a $LOGFILE
+    git checkout $BRANCH  2> >( tee -a $LOGFILE)
+    printf "\n* Now using owd_test_cases branch \"$(git branch | grep '*')\".\n\n"
+else
+    printf "\n\n*** NOTE: Not refreshing owd_test_cases! *** \n\n"
+fi
