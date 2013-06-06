@@ -1,0 +1,15 @@
+#!/bin/bash
+
+ls | while read dir
+do
+    [ ! -d "$dir" ] && continue
+
+    cd $dir
+    ls | while read fnam
+    do
+        sed -e "s/from global_imports import/from OWDTestToolkit.global_imports import/" $fnam > $fnam.new
+        mv $fnam.new $fnam
+    done
+
+    cd ..
+done

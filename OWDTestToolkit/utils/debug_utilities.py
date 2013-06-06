@@ -1,5 +1,4 @@
-from global_imports import *
-from gaiatest import GaiaTestCase
+from OWDTestToolkit.global_imports import *
 
 class main(GaiaTestCase):
     #################################################################################
