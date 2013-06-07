@@ -134,9 +134,9 @@ class main(GaiaTestCase):
 
 
     ##
-    ## Quickly install an app. - CURRENTLY NEEDS MORE INFO THAN  HAVE.
+    ## Quickly install an app. - CURRENTLY NEEDS MORE INFO THAN I HAVE.
     ##
-    #def installAppQuick(self, p_name):
+    #def quickInstallQpp(self, p_name):
         ##
         ## The url address usually uses the name of the app, minus spaces
         ## and in lowercase.

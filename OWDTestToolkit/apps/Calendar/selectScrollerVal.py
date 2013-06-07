@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 	
 class main(GaiaTestCase):
 
-    def _select(self, p_component, p_number):
+    def selectScrollerVal(self, p_component, p_number):
         #
         # Set the time using the scroller.
         #        
@@ -22,16 +22,11 @@ class main(GaiaTestCase):
         while str(p_number) != currVal and str(p_number).zfill(2) != currVal:
             # Do we need to go forwards or backwards?
             if p_number > int(currVal):
-                self._scrollForward(scroller)
+                self._moveScroller(scroller, True)
             if p_number < int(currVal):
-                self._scrollBackward(scroller)
+                self._moveScroller(scroller, False)
                 
             # Get the new 'currVal'.
             currVal = scroller.find_element(*DOM.Clock.time_picker_curr_val).text
                 
-
-
-
-
-
 
