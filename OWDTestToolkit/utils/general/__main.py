@@ -7,6 +7,7 @@ import  clearGeolocPermission,\
         addFileToDevice,\
         selectFromSystemDialog,\
         switch_24_12
+        
 class main ( 
             clearGeolocPermission.main,
             typeThis.main,
