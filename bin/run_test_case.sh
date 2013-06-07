@@ -89,63 +89,54 @@ then
     do
         result=$(echo $line | awk '{print $2}')
         
-        #
-        # Blocked tests only get one chance.
-        #
-        blockedTest=$(echo "$result" | grep -i "blocked")
-        if [ "$blockedTest" ]
+        failTest=$(echo "$result" | grep -i "failed")
+        if [ ! "$failTest" ]
         then
-        	_end_test "$line" 0
+            x="$line"
+            errChk=$(grep -i error $ERR_FILE)
+
+            if [ "$errChk" ]
+            then
+            	#
+            	# SOME marionette errors just need a little wait.
+            	#
+            	x=$(grep -i "Could not successfully complete transport of message to Gecko" $ERR_FILE)
+            	if [ "$x" ]
+            	then
+            		# Try again, without 2nd chance being set.
+            		_2ND_CHANCE=""
+            		_check_2nd_chance "$x" 1
+            	else
+            	    #
+            	    # This test failed.
+                    #
+            	    if [ "$TEST_IS_BLOCKED" ]
+            	    then
+            	    	subword="(blocked)"
+            	    else
+                        subword="*FAILED* "
+                    fi
+                    
+	                x=$(echo "$line" | sed -e "s/#[^ ]*[^(]*/#$TNAM $subword /")
+	                _check_2nd_chance "$x" 1
+                fi
+            fi
+            
+            #
+            # If we get here then all's well - just leave.
+            #
+            _end_test "$x" 0
         else
-	        failTest=$(echo "$result" | grep -i "failed")
-	        if [ ! "$failTest" ]
-	        then
-	            x="$line"
-	            errChk=$(grep -i error $ERR_FILE)
-	
-	            if [ "$errChk" ]
-	            then
-	            	#
-	            	# SOME marionette errors just need a little wait.
-	            	#
-	            	x=$(grep -i "Could not successfully complete transport of message to Gecko" $ERR_FILE)
-	            	if [ "$x" ]
-	            	then
-	            		# Try again, without 2nd chance being set.
-	            		_2ND_CHANCE=""
-	            		_check_2nd_chance "$x" 1
-	            	else
-	            	    #
-	            	    # This test failed.
-                        #
-	            	    if [ "$TEST_IS_BLOCKED" ]
-	            	    then
-	            	    	subword="(blocked)"
-	            	    else
-                            subword="*FAILED* "
-	                    fi
-	                    
-		                x=$(echo "$line" | sed -e "s/#[^ ]*[^(]*/#$TNAM $subword /")
-		                _check_2nd_chance "$x" 1
-	                fi
-	            fi
-	            
-	            #
-	            # If we get here then all's well - just leave.
-	            #
-	            _end_test "$x" 0
-	        else
-	            #
-	            # It failed - at the moment, failures are often just
-	            # 'something odd' in Marionette or Gaiatest, which run
-	            # fine the next time you try.
-	            # Because this is so often the case, we'll give a failed
-	            # test case a second chance before giving up.
-	            #
-	            _check_2nd_chance "$line" 2
-	        fi
-	        _2ND_CHANCE="Y"
+            #
+            # It failed - at the moment, failures are often just
+            # 'something odd' in Marionette or Gaiatest, which run
+            # fine the next time you try.
+            # Because this is so often the case, we'll give a failed
+            # test case a second chance before giving up.
+            #
+            _check_2nd_chance "$line" 2
         fi
+        _2ND_CHANCE="Y"
     done
 else
     _check_2nd_chance "#$TNAM *FAILED*  (unknown - unknown): ${TEST_DESC:0:80}" 3  
