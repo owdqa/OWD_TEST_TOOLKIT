@@ -4,3 +4,5 @@ app_head             = ('tag name', "h1")
 app_titlebar_name    = ('class name', 'titlebarIcon')
 keyboard_iframe      = ("src", "app://keyboard.gaiamobile.org/index.html")
 modal_ok_button      = ("id", "modal-dialog-confirm-ok")
+
+scroller_curr_val    = ("class name", "picker-unit active")

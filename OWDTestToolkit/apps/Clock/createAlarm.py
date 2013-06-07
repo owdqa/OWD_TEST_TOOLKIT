@@ -21,22 +21,30 @@ class main(GaiaTestCase):
         t_ampm = x[1]
 
         self.UTILS.logComment("Creating new alarm for " + str(t_hour) + ":" + str(p_min).zfill(2) + " " + t_ampm)
+    
+        scroller_hours = self.UTILS.getElement(
+            (DOM.Clock.time_picker_column[0],DOM.Clock.time_scroller[1] % p_component),
+            "Scroller for 'hours'")
         
+        scroller_minutes = self.UTILS.getElement(
+            (DOM.Clock.time_picker_column[0],DOM.Clock.time_scroller[1] % p_component),
+            "Scroller for 'minutes'")
+
         #
         # Set the hour.
         #
-        self.UTILS.setScrollerVal("hours", t_hour)
+        self.UTILS.setScrollerVal(scroller_hours, t_hour)
         
         #
         # Set the minutes.
         #
-        self.UTILS.setScrollerVal("minutes", p_min)
+        self.UTILS.setScrollerVal(scroller_minutes, p_min)
         
         #
         # Set the AM / PM.
         #
-        scroller = self.UTILS.getElement(DOM.Clock.time_picker_ampm, "AM/PM picker")
-        currVal  = scroller.find_element(*DOM.Clock.time_picker_curr_val).text
+        scroller = self.UTILS.getElement(DOM.Clock.time_scroller_ampm, "AM/PM picker")
+        currVal  = scroller.find_element(*DOM.GLOBAL.scroller_curr_val).text
         
         if t_ampm != currVal:
             if currVal == "AM":

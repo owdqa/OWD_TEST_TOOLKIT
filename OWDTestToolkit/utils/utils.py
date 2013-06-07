@@ -1,27 +1,27 @@
 from OWDTestToolkit.global_imports import *
 
-import app_utilities        , \
-       debug_utilities      , \
-       element_utilities    , \
-       general_utilities    , \
-       home_utilities       , \
-       iframe_utilities     , \
-       network_utilities    , \
-       reporting_utilities  , \
-       statusbar_utilities  , \
-       test_utilities
-       
+import  app         ,\
+        debug       ,\
+        element     ,\
+        general     ,\
+        home        ,\
+        iframe      ,\
+        network     ,\
+        reporting   ,\
+        statusbar   ,\
+        test
 
-class UTILS(app_utilities.main        ,
-            debug_utilities.main      ,
-            element_utilities.main    ,
-            general_utilities.main    ,
-            home_utilities.main       ,
-            iframe_utilities.main     ,
-            network_utilities.main    ,
-            reporting_utilities.main  ,
-            statusbar_utilities.main  ,
-            test_utilities.main):
+
+class UTILS(app.main        ,
+            debug.main      ,
+            element.main    ,
+            general.main    ,
+            home.main       ,
+            iframe.main     ,
+            network.main    ,
+            reporting.main  ,
+            statusbar.main  ,
+            test.main):
     #
     # When you create your instance of this class, include the
     # "self" object so we can access the calling class' objects.
@@ -34,13 +34,24 @@ class UTILS(app_utilities.main        ,
         self.marionette     = p_parent.marionette
         self.actions        = Actions(self.marionette)
 
+        #
+        # Globals used for reporting ...
+        #
         self._resultArray   = []
         self._commentArray  = []
         self.errNum         = 0
         self.passed         = 0
         self.failed         = 0
         self.start_time     = time.time()
+        
+        #
+        # Other globals ...
+        #
+        self._DEFAULT_ELEMENT_TIMEOUT = 5
 
+        #
+        # Get run details from the OS.
+        #
         self.testNum        = self.get_os_variable("TEST_NAME")
         self.testDesc       = self.get_os_variable("TEST_DESC")
         self.det_fnam       = self.get_os_variable("DET_FILE")
@@ -51,17 +62,17 @@ class UTILS(app_utilities.main        ,
         #
         self.data_layer.set_setting("vibration.enabled", True)
         self.data_layer.set_setting("audio.volume.notification", 0)
-        
+         
         #
         # Default timeout for element searches.
         #
         self.marionette.set_search_timeout(20)
-        
+         
         #
         # Set the current time to 'now'.
         #
         self.setTimeToNow()
-        
+         
         #
         # Unlock (if necessary).
         #
