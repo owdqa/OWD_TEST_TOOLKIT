@@ -24,5 +24,15 @@ setup(name='OWD_TEST_TOOLKIT',
                 'OWDTestToolkit/apps/Keyboard',
                 'OWDTestToolkit/apps/Marketplace',
                 'OWDTestToolkit/apps/Email',
-                'OWDTestToolkit/utils']
+                'OWDTestToolkit/utils',
+                'OWDTestToolkit/utils/app',
+                'OWDTestToolkit/utils/debug',
+                'OWDTestToolkit/utils/element',
+                'OWDTestToolkit/utils/general',
+                'OWDTestToolkit/utils/home',
+                'OWDTestToolkit/utils/iframe',
+                'OWDTestToolkit/utils/network',
+                'OWDTestToolkit/utils/reporting',
+                'OWDTestToolkit/utils/statusbar',
+                'OWDTestToolkit/utils/test']
       )

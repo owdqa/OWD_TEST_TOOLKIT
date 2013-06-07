@@ -2,7 +2,6 @@ from OWDTestToolkit.global_imports import *
 
 import  cellular_and_data                  ,\
         checkWifiLisetedAsConnected        ,\
-        _getPickerSpinnerElement           ,\
         goSound                            ,\
         setAlarmVolume                     ,\
         setRingerAndNotifsVolume           ,\
@@ -15,7 +14,6 @@ import  cellular_and_data                  ,\
 class Settings (
             cellular_and_data.main,
             checkWifiLisetedAsConnected.main,
-            _getPickerSpinnerElement.main,
             goSound.main,
             setAlarmVolume.main,
             setRingerAndNotifsVolume.main,

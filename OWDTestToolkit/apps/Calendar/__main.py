@@ -1,22 +1,14 @@
 from OWDTestToolkit.global_imports import *
 
 import  addEvent                           ,\
-        _calcStep                          ,\
         createEvent                        ,\
         getEventPreview                    ,\
-        _scrollBackward                    ,\
-        _scrollForward                     ,\
-        _select                            ,\
         setView                            
 
 class Calendar (
             addEvent.main,
-            _calcStep.main,
             createEvent.main,
             getEventPreview.main,
-            _scrollBackward.main,
-            _scrollForward.main,
-            _select.main,
             setView.main):
     
     def __init__(self, p_parent):
@@ -25,6 +17,7 @@ class Calendar (
         self.parent     = p_parent
         self.marionette = p_parent.marionette
         self.UTILS      = p_parent.UTILS
+        self.actions    = Actions(self.marionette)
 
     def launch(self):
         #

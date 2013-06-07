@@ -35,7 +35,7 @@ class main(GaiaTestCase):
         #
         # Sort the time out into 12 hour format.
         #
-        x = self.switch_24_12(p_hour)
+        x = self.UTILS.switch_24_12(p_hour)
         t_hour = x[0]
         t_ampm = x[1]
 

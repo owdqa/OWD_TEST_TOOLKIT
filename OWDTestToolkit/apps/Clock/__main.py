@@ -1,27 +1,17 @@
 from OWDTestToolkit.global_imports import *
 
-import  _calcStep                          ,\
-        checkAlarmPreview                  ,\
+import  checkAlarmPreview                  ,\
         checkAlarmRingDetails              ,\
         checkStatusbarIcon                 ,\
         createAlarm                        ,\
-        deleteAllAlarms                    ,\
-        _scrollBackward                    ,\
-        _scrollForward                     ,\
-        _select                            ,\
-        switch_24_12                       
+        deleteAllAlarms                    
 
 class Clock (
-            _calcStep.main,
             checkAlarmPreview.main,
             checkAlarmRingDetails.main,
             checkStatusbarIcon.main,
             createAlarm.main,
-            deleteAllAlarms.main,
-            _scrollBackward.main,
-            _scrollForward.main,
-            _select.main,
-            switch_24_12.main):
+            deleteAllAlarms.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
@@ -29,6 +19,7 @@ class Clock (
         self.parent     = p_parent
         self.marionette = p_parent.marionette
         self.UTILS      = p_parent.UTILS
+        self.actions    = Actions(self.marionette)
 
     def launch(self):
         #

@@ -47,17 +47,32 @@ class main(GaiaTestCase):
         return
         x = self.UTILS.getElement( ("id", "start-time-locale"), "Start time field")
         x.tap()
+        
+        #
+        # Set the time usin ghte scrollers.
+        #
+        
+        #
+        # Set the time using the scroller.
+        #
+        scroller_hours = self.UTILS.getElement(
+            (DOM.Clock.time_picker_column[0],DOM.Clock.time_scroller[1] % p_component),
+            "Scroller for 'hours'")
+        
+        scroller_minutes = self.UTILS.getElement(
+            (DOM.Clock.time_picker_column[0],DOM.Clock.time_scroller[1] % p_component),
+            "Scroller for 'minutes'")
 
-        self._select("hours", 5)
-        self._select("minutes", 01)
-        scroller = self.UTILS.getElement(DOM.Clock.time_picker_ampm, "AM/PM picker")
-        currVal  = scroller.find_element(*DOM.Clock.time_picker_curr_val).text
+        self.UTILS.setScrollerVal(scroller_hours, 5)
+        self.UTILS.setScrollerVal(scroller_minutes, 01)
+        scroller = self.UTILS.getElement(DOM.Clock.time_scroller_ampm, "AM/PM picker")
+        currVal  = scroller.find_element(*DOM.GLOBAL.scroller_curr_val).text
         
         if t_ampm != currVal:
             if currVal == "AM":
-                self._scrollForward(scroller)
+                self.UTILS.moveScroller(scroller, True)
             else:
-                self._scrollBackward(scroller)
+                self.UTILS.moveScroller(scroller, False)
 
         self.UTILS.screenShotOnErr()
         
