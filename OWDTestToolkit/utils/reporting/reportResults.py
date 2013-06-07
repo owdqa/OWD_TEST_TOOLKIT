@@ -4,7 +4,7 @@ class main(GaiaTestCase):
 
     def reportResults(self):
         #
-        # Clear out 'things' left by previous tetss, then
+        # Clear out 'things' left by previous tests, then
         # Create the final result file from the result and comment arrays
         # (run only once, at the end of each test case).
         #

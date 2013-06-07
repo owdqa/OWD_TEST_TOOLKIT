@@ -1,0 +1,58 @@
+# Notes about using app classes
+
+(Need more description in here.)
+<!--api-->
+<table>
+  <tr>
+    <th>Method</th><th>Parameters and defaults</th><th>Description</th>
+  </tr>
+./test/quitTest.py:    def quitTest(self, p_msg=False):
+./test/TEST.py:    def TEST(self, p_result, p_msg, p_stop = False):
+./iframe/switchToFrame.py:    def switchToFrame(self, p_tag, p_str, p_quitOnError=True):
+./iframe/currentIframe.py:    def currentIframe(self, p_attribute="src"):
+./iframe/viewAllIframes.py:    def viewAllIframes(self):
+./home/scrollHomescreenRight.py:    def scrollHomescreenRight(self):
+./home/goHome.py:    def goHome(self):
+./home/scrollHomescreenLeft.py:    def scrollHomescreenLeft(self):
+./home/touchHomeButton.py:    def touchHomeButton(self):
+./home/holdHomeButton.py:    def holdHomeButton(self):
+./app/findAppIcon.py:    def findAppIcon(self, p_appName, p_reloadHome=True):
+./app/launchAppViaHomescreen.py:    def launchAppViaHomescreen(self, p_appName):
+./app/isAppInstalled.py:    def isAppInstalled(self, p_appName):
+./app/uninstallApp.py:    def uninstallApp(self, p_appName):
+./statusbar/displayStatusBar.py:    def displayStatusBar(self):
+./statusbar/isIconInStatusBar.py:    def isIconInStatusBar(self, p_dom, p_returnFrame=False):
+./statusbar/hideStatusBar.py:    def hideStatusBar(self):
+./statusbar/clearAllStatusBarNotifs.py:    def clearAllStatusBarNotifs(self, p_silent=False):
+./statusbar/openSettingFromStatusbar.py:    def openSettingFromStatusbar(self):
+./statusbar/waitForStatusBarNew.py:    def waitForStatusBarNew(self, p_dom=DOM.Statusbar.status_bar_new, p_displayed=True, p_timeOut=20):
+./statusbar/toggleViaStatusBar.py:    def toggleViaStatusBar(self, p_type):
+./statusbar/toggleViaStatusBar.py:    def _sb_doToggle(self, p_def, p_type):
+./network/waitForNetworkItemDisabled.py:    def waitForNetworkItemDisabled(self, p_type, p_timeOut=60):
+./network/getNetworkConnection.py:    def getNetworkConnection(self):
+./network/waitForNetworkItemEnabled.py:    def waitForNetworkItemEnabled(self, p_type, p_timeOut=60):
+./network/disableAllNetworkSettings.py:    def disableAllNetworkSettings(self):
+./network/isNetworkTypeEnabled.py:    def isNetworkTypeEnabled(self, p_type):
+./element/waitForNotElements.py:    def waitForNotElements(self, p_element, p_msg, p_displayed=True, p_timeout=False, p_stop=True):        
+./element/moveScroller.py:    def moveScroller(self, p_scroller, p_forward=True):
+./element/moveScroller.py:    def _calcScrollerStep(self, p_scroller):
+./element/getElements.py:    def getElements(self, p_element, p_msg, p_displayed=True, p_timeout=False, p_stop=True):
+./element/getElement.py:    def getElement(self, p_element, p_msg, p_displayed=True, p_timeout=False, p_stop=True):
+./element/setScrollerVal.py:    def setScrollerVal(self, p_scrollerElement, p_number):
+./element/headerCheck.py:    def headerCheck(self, p_str):
+./element/waitForElements.py:    def waitForElements(self, p_element, p_msg, p_displayed=True, p_timeout=False, p_stop=True):
+./utils.py:    def __init__(self, p_parent):
+./debug/screenShot.py:    def screenShot(self, p_fileSuffix):
+./debug/screenShotOnErr.py:    def screenShotOnErr(self):
+./debug/savePageHTML.py:    def savePageHTML(self, p_outfile):
+./general/typeThis.py:    def typeThis(self, p_element_array, p_desc, p_str, p_no_keyboard=False, p_clear=True, p_enter=True, p_validate=True, p_remove_keyboard=True):        
+./general/setTimeToNow.py:    def setTimeToNow(self, p_continent=False, p_city=False):
+./general/get_os_variable.py:    def get_os_variable(self, p_name, p_validate=True):
+./general/clearGeolocPermission.py:    def clearGeolocPermission(self, p_allow=False):
+./general/addFileToDevice.py:    def addFileToDevice(self, p_file, count=1, destination=''):
+./general/selectFromSystemDialog.py:    def selectFromSystemDialog(self, p_str):
+./general/switch_24_12.py:    def switch_24_12(self, p_hour):
+./reporting/logComment.py:    def logComment(self, p_str):
+./reporting/reportResults.py:    def reportResults(self):
+./reporting/logResult.py:    def logResult(self, p_result, p_msg, p_fnam=False):
+./reporting/logResult.py:    def _printSubNote(self, msgArr):

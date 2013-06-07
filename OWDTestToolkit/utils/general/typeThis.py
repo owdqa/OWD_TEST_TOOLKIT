@@ -2,7 +2,15 @@ from OWDTestToolkit.global_imports import *
     
 class main(GaiaTestCase):
 
-    def typeThis(self, p_element_array, p_desc, p_str, p_no_keyboard=False, p_clear=True, p_enter=True, p_validate=True, p_remove_keyboard=True):        
+    def typeThis(self, 
+                 p_element_array, 
+                 p_desc, 
+                 p_str, 
+                 p_no_keyboard=False, 
+                 p_clear=True, 
+                 p_enter=True, 
+                 p_validate=True, 
+                 p_remove_keyboard=True):        
         #
         # Types this string into this element.
         # If p_no_keyboard = True then it doesn't use the keyboard.
