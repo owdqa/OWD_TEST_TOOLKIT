@@ -7,6 +7,7 @@ import  isIconInStatusBar,\
         toggleViaStatusBar,\
         clearAllStatusBarNotifs,\
         waitForStatusBarNew
+        
 class main ( 
             isIconInStatusBar.main,
             displayStatusBar.main,

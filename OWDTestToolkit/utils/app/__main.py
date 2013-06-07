@@ -4,6 +4,7 @@ import  findAppIcon,\
         launchAppViaHomescreen,\
         isAppInstalled,\
         uninstallApp
+        
 class main ( 
             findAppIcon.main,
             launchAppViaHomescreen.main,
