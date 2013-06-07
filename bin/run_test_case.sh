@@ -9,6 +9,13 @@ export DET_FILE=${RESULT_DIR}/${TEST_NAME}_detail
 
 TEST_IS_BLOCKED=$(echo "$TEST_DESC" | grep -i "blocked by")
 
+#
+# Make sure gaiatest isn't still running (sometimes a process is left after the run).
+#
+ps -ef | grep gaiatest | grep -v "grep" | awk '{print $2}' | while read pid
+do
+	kill $pid > /dev/null 2> /dev/null
+done
 
 TNAM=$(echo $TEST_NAME | awk '{printf "%-5s", $0}')
 
