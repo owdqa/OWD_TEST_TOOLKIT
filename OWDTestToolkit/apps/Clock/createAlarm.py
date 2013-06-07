@@ -16,7 +16,7 @@ class main(GaiaTestCase):
         #
         # Sort the time out into 12 hour format.
         #
-        x = self.switch_24_12(p_hour)
+        x = self.UTILS.switch_24_12(p_hour)
         t_hour = x[0]
         t_ampm = x[1]
 
@@ -25,12 +25,12 @@ class main(GaiaTestCase):
         #
         # Set the hour.
         #
-        self._select("hours", t_hour)
+        self.UTILS.setScrollerVal("hours", t_hour)
         
         #
         # Set the minutes.
         #
-        self._select("minutes", p_min)
+        self.UTILS.setScrollerVal("minutes", p_min)
         
         #
         # Set the AM / PM.
@@ -40,9 +40,9 @@ class main(GaiaTestCase):
         
         if t_ampm != currVal:
             if currVal == "AM":
-                self._scrollForward(scroller)
+                self.UTILS.moveScroller(scroller)
             else:
-                self._scrollBackward(scroller)
+                self.UTILS.moveScroller(scroller)
                 
         #
         # Set the label.
