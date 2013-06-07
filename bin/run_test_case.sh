@@ -7,6 +7,9 @@ export ERR_FILE=${RESULT_DIR}/error_output
 export SUM_FILE=${RESULT_DIR}/${TEST_NAME}_summary
 export DET_FILE=${RESULT_DIR}/${TEST_NAME}_detail
 
+TEST_IS_BLOCKED=$(echo "$TEST_DESC" | grep -i "blocked by")
+
+
 TNAM=$(echo $TEST_NAME | awk '{printf "%-5s", $0}')
 
 # At the moment things sometimes file the first time. This
@@ -30,7 +33,9 @@ _end_test(){
 _check_2nd_chance(){
     STROUT="$1"
     EXIT=$2
-    if [ "${_2ND_CHANCE}" ] || [ ! "$OWD_USE_2ND_CHANCE" ]
+    
+    # (Neve give a 2nd chance to a blocked test.)
+    if [ "${_2ND_CHANCE}" ] || [ ! "$OWD_USE_2ND_CHANCE" ] || [ "$TEST_IS_BLOCKED" ]
     then
     	_end_test "$STROUT" $EXIT
     else
@@ -106,16 +111,20 @@ then
 	            	x=$(grep -i "Could not successfully complete transport of message to Gecko" $ERR_FILE)
 	            	if [ "$x" ]
 	            	then
+	            		# Try again, without 2nd chance being set.
 	            		_2ND_CHANCE=""
 	            		_check_2nd_chance "$x" 1
 	            	else
-	            	    y=$(echo "$TEST_DESC" | grep -i "blocked by")
-	            	    if [ "$y" ]
+	            	    #
+	            	    # This test failed.
+                        #
+	            	    if [ "$TEST_IS_BLOCKED" ]
 	            	    then
 	            	    	subword="(blocked)"
 	            	    else
                             subword="*FAILED* "
 	                    fi
+	                    
 		                x=$(echo "$line" | sed -e "s/#[^ ]*[^(]*/#$TNAM $subword /")
 		                _check_2nd_chance "$x" 1
 	                fi
