@@ -41,26 +41,72 @@ DEVICE=$1
 TYPE=$2
 VERSION=$3
 LOG_FILE=/tmp/${DEVICE}_flash_download.log
-LIST_FILE=/tmp/device_build_list_$(date +%Y%M%d%H%M%S).html
-SOURCE_DIR=https://owd.tid.es/releases/DEVELOP/lastest-version
+DATES_AVAILABLE=/tmp/${DEVICE}_date_available.html
+LIST_FILE=/tmp/device_build_list_$(date +%Y%M%d).html
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=$(dirname $SCRIPT)
 CONN_ABD=${SCRIPTPATH}/connect_device
 TARGET_DIR=$HOME/Downloads/device_flash_files
 [ ! -d "$TARGET_DIR" ] && mkdir -p $TARGET_DIR
 
+#
+# The latest version sould be in the tid.es option (comment out the ci2 one if you want that method).
+#
+SOURCE_DIR=https://owd.tid.es/releases/DEVELOP/lastest-version
+SOURCE_DIR=http://ci2-owd/releases/DEVELOP/
+
 
 #
-# Get list of files available in the release directory (in order of last modified descending).
+# Get the latest date (if using the ci2-owd build).
 #
-wget -O $LIST_FILE --no-check-certificate $SOURCE_DIR/?C=M;O=D
-
-
-#
-# Get the name of the newest 'eng' release (which is at the top of the list).
-#
-REL_FILE=$(egrep -i "${DEVICE}.*${TYPE}.*${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
-
+x=$(echo $SOURCE_DIR | grep ci2-owd)
+if [ "$x" ]
+then
+	#
+	# Get list of files available in the release directory (in order of last modified descending).
+	#
+	wget -O $DATES_AVAILABLE --no-check-certificate $SOURCE_DIR?C=M;O=D
+    while read reldate
+    do
+		#
+		# Set this to be the name of the directory.
+		#
+		NEW_SOURCE_DIR=${SOURCE_DIR}${reldate}
+		
+		#
+		# Get list of files available in the release directory (in order of last modified descending).
+		#
+		wget -O $LIST_FILE --no-check-certificate $NEW_SOURCE_DIR?C=M;O=D
+		
+		#
+		# Get the name of the newest release (which is at the top of the list).
+		#
+		REL_FILE=$(egrep -i "${DEVICE}.*${TYPE}.*${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
+		
+		#
+		# Download the release file (takes about 15-20 mins on free network).
+		#
+		if [ "$REL_FILE" ]
+		then
+			printf "\n\n** Latest file detected is \"$REL_FILE\" from $reldate. **\n\n"
+		    SOURCE_DIR="${NEW_SOURCE_DIR}"
+			break
+		fi
+    done <<EOF
+    $(grep "folder.gif" $DATES_AVAILABLE | sed -e "s/^.*href=\"//" | sed -e "s/\/.*$//" | egrep "^[0-9]" | sort -r)
+EOF
+else
+	#
+	# Get list of files available in the release directory (in order of last modified descending).
+	#
+	wget -O $LIST_FILE --no-check-certificate $SOURCE_DIR/?C=M;O=D
+	
+	
+	#
+	# Get the name of the newest 'eng' release (which is at the top of the list).
+	#
+	REL_FILE=$(egrep -i "${DEVICE}.*${TYPE}.*${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
+fi
 
 #
 # Download the release file (takes about 15-20 mins on free network).
