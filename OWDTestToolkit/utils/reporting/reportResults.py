@@ -38,7 +38,7 @@ class main(GaiaTestCase):
                 DET_FILE.write("           : %s\n" % i)
         
         res_str = pass_str if self.failed == 0 else fail_str
-        res_str = blocked_str if (res_str == fail_str and "BLOCKED BY" in self.testDesc) else res_str
+        res_str = blocked_str   if (res_str == fail_str and "BLOCKED BY" in self.testDesc) else res_str
         res_str = unblocked_str if (res_str == pass_str and "BLOCKED BY" in self.testDesc) else res_str
 
         #
@@ -51,7 +51,7 @@ class main(GaiaTestCase):
         if len(self.testDesc) > 80:
             self.testDesc = self.testDesc[:76] + " ..."
 
-        SUM_FILE.write("#%s%s (%s - %s): %s.\n" % (
+        SUM_FILE.write("#%s %s (%s - %s): %s.\n" % (
                                                   self.testNum.ljust(5),
                                                   res_str.ljust(9),
                                                   str(test_time),
