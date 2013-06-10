@@ -14,12 +14,13 @@ class main(GaiaTestCase):
         # Create output files (summary, which is displayed and
         # details, which is not displayed).
         #
-        pass_str    = "         "
-        fail_str    = "*FAILED* "
-        blocked_str = "(blocked)"
-        test_time   = time.time() - self.start_time
-        test_time   = round(test_time, 0)
-        test_time   = str(datetime.timedelta(seconds=test_time))
+        pass_str      = "         "
+        fail_str      = "*FAILED* "
+        blocked_str   = "(blocked)"
+        unblocked_str = "*unblock*"
+        test_time     = time.time() - self.start_time
+        test_time     = round(test_time, 0)
+        test_time     = str(datetime.timedelta(seconds=test_time))
 
         DET_FILE    = open(self.det_fnam, "w")
         SUM_FILE    = open(self.sum_fnam, "w")
@@ -37,7 +38,8 @@ class main(GaiaTestCase):
                 DET_FILE.write("           : %s\n" % i)
         
         res_str = pass_str if self.failed == 0 else fail_str
-        res_str = blocked_str if (res_str == fail_str and "BLOCKED BY" in self.testDesc) else res_str
+        res_str = blocked_str   if (res_str == fail_str and "BLOCKED BY" in self.testDesc) else res_str
+        res_str = unblocked_str if (res_str == pass_str and "BLOCKED BY" in self.testDesc) else res_str
 
         #
         # Get total number of tests performed.
