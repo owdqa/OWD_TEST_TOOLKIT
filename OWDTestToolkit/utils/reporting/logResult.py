@@ -13,7 +13,11 @@ class main(GaiaTestCase):
         #
 
         # Get timestamp.        
-        time_now = time.strftime("[%H:%M:%S]", gmtime())
+        time_now   = time.time() - self.last_timestamp
+        time_now   = round(time_now, 0)
+        time_now   = "[" + str(datetime.timedelta(seconds=time_now)) + "]"
+
+        self.last_timestamp = time.time()
         
         if str(p_result).lower() == "info":
             timestamp = self._no_time 

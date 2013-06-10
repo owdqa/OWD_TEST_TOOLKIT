@@ -43,6 +43,7 @@ class UTILS(app.main        ,
         self.passed         = 0
         self.failed         = 0
         self.start_time     = time.time()
+        self.last_timestamp = time.time()
         
         #
         # Other globals ...
