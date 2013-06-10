@@ -21,6 +21,13 @@ class Marketplace (
         # Launch the app.
         #
         self.apps.kill_all()
-        self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        
+        # WARNING: Marketplace is in a weird place - you need to use "Marketplace Dev"!!
+#         self.app = self.apps.launch(self.__class__.__name__)
+        self.app = self.apps.launch("Marketplace Dev")
+
+        self.UTILS.waitForNotElements(DOM.Market.market_loading_icon, 
+                                      self.__class__.__name__ + " app - loading icon",
+                                      True,
+                                      30)
 
