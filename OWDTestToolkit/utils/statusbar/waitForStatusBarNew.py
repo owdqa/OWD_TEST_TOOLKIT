@@ -17,3 +17,5 @@ class main(GaiaTestCase):
         # Only switch if not called from the 'start' screen ...
         if orig_iframe != '':
             self.switchToFrame("src", orig_iframe, False)
+
+        return x
