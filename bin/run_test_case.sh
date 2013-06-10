@@ -96,7 +96,7 @@ then
     do
         result=$(echo $line | awk '{print $2}')
         
-        failTest=$(echo "$result" | grep -i "failed")
+        failTest=$(echo "$result" | egrep -i "failed|blocked")
         if [ ! "$failTest" ]
         then
             x="$line"
