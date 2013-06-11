@@ -24,7 +24,6 @@ DEVICE=$1
 TYPE=$2
 VERSION=$3
 LOG_FILE=/tmp/${DEVICE}_flash_download.log
-SOURCE_DIR=https://owd.tid.es/releases/DEVELOP/lastest-version
 SCRIPT=$(readlink -f $0)
 SCRIPTPATH=$(dirname $SCRIPT)
 CONN_ABD=${SCRIPTPATH}/connect_device

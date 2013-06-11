@@ -63,6 +63,12 @@ class UTILS(app.main        ,
         #
         self.data_layer.set_setting("vibration.enabled", True)
         self.data_layer.set_setting("audio.volume.notification", 0)
+        
+        #
+        # Default permissions.
+        #
+        self.apps.set_permission('Camera', 'geolocation', 'deny')
+
          
         #
         # Default timeout for element searches.
