@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+
 export MYPATH=$(dirname $0)
 export CURRPATH=$(pwd)
 
@@ -12,7 +14,7 @@ printf "\n====================================================\n" | tee -a $LOGF
 # Remove any previous marionette
 # (using 'sudo', so be paranoid about "rm -rf"!!!).
 #
-install_dir=$($MYPATH/get_python_dist_path marionette)
+install_dir=$($OWD_TEST_TOOLKIT_BIN/get_python_dist_path.sh marionette)
 if [ "$install_dir" ]
 then
 	sudo rm -rf $install_dir/moz*  2> /dev/null
@@ -40,7 +42,7 @@ git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>>$LOGFILE
 
 # Install gaiatest.
 cd gaia-ui-tests
-printf "\n* Switching to branch \"$BRANCH\" of gaiatest ...\n\n" | tee -a $LOGFILE
+printf "\n* Switching to branch \"$BRANCH\" of gaiatest ... (ask on #mozwebqa about errors - this changes sometimes!)\n\n" | tee -a $LOGFILE
 git checkout $BRANCH  2> >( tee $LOGFILE)
 printf "\n* Installing gaiatest for branch \"$(git branch | grep '*')\" ...\n\n" | tee -a $LOGFILE
 sudo python setup.py develop | tee /tmp/gaiatest_setup.log >> $LOGFILE

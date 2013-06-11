@@ -1,4 +1,6 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+
 #
 # Script to return the cross-reference number.
 #

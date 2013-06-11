@@ -1,4 +1,6 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+
 #
 # Rebuilds the 'parameters' file for you tests.
 # (Must be run from the test 'root' folder).

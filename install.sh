@@ -4,8 +4,11 @@
 export OWD_TEST_TOOLKIT_DIR=$(pwd)
 cat >  $HOME/.OWD_TEST_TOOLKIT_LOCATION << EOF
 export OWD_TEST_TOOLKIT_DIR=$OWD_TEST_TOOLKIT_DIR
+export OWD_TEST_TOOLKIT_BIN=$OWD_TEST_TOOLKIT_DIR/bin
 export PATH=$PATH:$OWD_TEST_TOOLKIT_DIR/bin
 EOF
+
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 # Log file for 'everything'.
 export LOGFILE=${1:-"/tmp/owd_setup_$(date +%H%M%Y%m%d).log"}
@@ -47,7 +50,7 @@ fi
 #
 # Install gaiatest and marionette.
 #
-[ ! -d ./gaia-ui-tests ] && ./bin/setup_gaiatest.sh "$BRANCH"
+[ ! -d ./gaia-ui-tests ] && $OWD_TEST_TOOLKIT_BIN/setup_gaiatest.sh "$BRANCH"
 
 
 
@@ -77,7 +80,7 @@ then
     sudo rm -rf OWDTestToolkit OWD_TEST_TOOLKIT*egg*
 fi
 
-cd $HOME/projects/OWD_TEST_TOOLKIT
+cd $OWD_TEST_TOOLKIT_DIR
 sudo python setup.py clean --all >> $LOGFILE 2>/dev/null
 sudo python setup.py install >> $LOGFILE
 
@@ -94,11 +97,11 @@ then
     #
     printf "\n\nInstalling owd_test_cases..." | tee -a $LOGFILE
     printf "\n============================\n" | tee -a $LOGFILE
-    cd $HOME/projects
+    cd $OWD_TEST_TOOLKIT_BIN/..
     rm -rf owd_test_cases 2>/dev/null
 
     git clone https://github.com/roydude/owd_test_cases.git >> $LOGFILE 2>> $LOGFILE
-    cd $HOME/projects/owd_test_cases
+    cd owd_test_cases
 
     printf "\n* Switching to branch $BRANCH of owd_test_cases ...\n\n" | tee -a $LOGFILE
     git checkout $BRANCH  2> >( tee -a $LOGFILE)

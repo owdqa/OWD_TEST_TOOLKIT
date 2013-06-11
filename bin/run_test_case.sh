@@ -1,4 +1,5 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 #
 # Some of these variables come from 'run_all_tests' ...

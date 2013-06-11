@@ -1,4 +1,5 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 PROJNAM=${1:?"Please specify the project to search for."}
 
