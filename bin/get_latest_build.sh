@@ -1,4 +1,6 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+
 #
 # Relies on user and password being set in ~/.wgetrc
 
@@ -43,9 +45,6 @@ VERSION=$3
 LOG_FILE=/tmp/${DEVICE}_flash_download.log
 DATES_AVAILABLE=/tmp/${DEVICE}_date_available.html
 LIST_FILE=/tmp/device_build_list_$(date +%Y%M%d).html
-SCRIPT=$(readlink -f $0)
-SCRIPTPATH=$(dirname $SCRIPT)
-CONN_ABD=${SCRIPTPATH}/connect_device
 TARGET_DIR=$HOME/Downloads/device_flash_files
 [ ! -d "$TARGET_DIR" ] && mkdir -p $TARGET_DIR
 

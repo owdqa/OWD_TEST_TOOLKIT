@@ -1,4 +1,6 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+
 #
 # Script to do a simple xref check of a test number.
 #

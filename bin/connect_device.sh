@@ -1,4 +1,5 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 # Because 'su' may not have the correct path to 'adb' ...
 cmd_adb=$(which adb)

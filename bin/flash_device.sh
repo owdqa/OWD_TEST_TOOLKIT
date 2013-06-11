@@ -1,4 +1,6 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+
 #
 # Organises downloading the latest build and flashing the
 # device with it.
@@ -24,21 +26,18 @@ DEVICE=$1
 TYPE=$2
 VERSION=$3
 LOG_FILE=/tmp/${DEVICE}_flash_download.log
-SCRIPT=$(readlink -f $0)
-SCRIPTPATH=$(dirname $SCRIPT)
-CONN_ABD=${SCRIPTPATH}/connect_device
 TARGET_DIR=$HOME/Downloads/device_flash_files
 
 #
 # Make sure nothing else is running first.
 #
-wait_for_no_other_test_run.sh $$
+$OWD_TEST_TOOLKIT_BIN/wait_for_no_other_test_run.sh $$
 
 
 # By default, get the build file too (just pass any parameter as $3 and it'll skip this).
 if [ ! "$4" ]
 then
-    ${SCRIPTPATH}/get_latest_build.sh $DEVICE $TYPE $VERSION
+    $OWD_TEST_TOOLKIT_BIN/get_latest_build.sh $DEVICE $TYPE $VERSION
 
     if [ $? -ne 0 ]
     then
