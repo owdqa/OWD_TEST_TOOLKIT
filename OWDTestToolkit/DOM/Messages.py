@@ -21,7 +21,7 @@ message_sending_spinner= ("xpath", "//aside[@class='pack-end'][-1]/progress")
 header_back_button     = ("id","messages-back-button")
 
 threads                = ("xpath", "//p[@class='name']")
-thread_messages        = ('xpath', '//article[@id="messages-container"]//li')
+threads_list           = ('xpath', '//article[@id="threads-container"]//li')
 thread_selector_xpath  = "//*[@id='threads-container']//li//a/p[text()='%s']"
 thread_timestamp_xpath = thread_selector_xpath + "/..//time"
 no_threads_message     = ("id", "no-result-message")
@@ -31,11 +31,12 @@ check_all_threads_btn  = ("id", "threads-check-all-button")
 check_all_messages_btn = ("id", "messages-check-all-button")
 delete_threads_button  = ("id", "threads-delete-button")
 
+message_list           = ('xpath', '//article[@id="messages-container"]//li')
 unread_message         = ('css selector', 'li > a.unread')
 messages_from_num      = "//*[contains(@id, '%s')]"
 message_timestamps     = ("xpath", ".//*[@id='messages-container']/header")
 received_messages      = ('xpath', "//li[@class='bubble'][a[@class='received']]")
-edit_messages_icon     = ("id","icon-edit")
+edit_messages_icon     = ("id","messages-edit-icon")
 edit_msgs_delete_btn   = ("id","messages-delete-button")
 edit_msgs_sel_all_btn  = ("id","messages-check-all-button")
 

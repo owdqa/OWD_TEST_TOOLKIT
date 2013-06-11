@@ -758,6 +758,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>threadExists</td>
+        <td align=left>p_num</td>
+        <td align=left>Verifies that a thread exists for this number (just return True or False).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>startNewSMS</td>
         <td align=left></td>
         <td align=left>Starts a new sms (doesn't fill anything in).  Assumes the Messaging app is already launched.</td>
@@ -859,6 +866,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>deleteMessagesInThisThread</td>
         <td align=left>p_msg_array=False</td>
         <td align=left>Enters edit mode, selects the required messages and  deletes them.<br>  p_msg_array is an array of numbers.  If it's not specified then all messages in this  thread will be deleted.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getThreadText</td>
+        <td align=left>p_num</td>
+        <td align=left>Returns the preview text for the thread for this number (if it exists),  or False if either the thread doesn't exist or can't be found.</td>
     </tr>
 
 
