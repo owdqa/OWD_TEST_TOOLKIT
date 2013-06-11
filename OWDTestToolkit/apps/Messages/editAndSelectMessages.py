@@ -19,7 +19,7 @@ class main(GaiaTestCase):
         # Check the messages (for some reason, just doing x[i].click() doesn't
         # work for element zero, so I had to do this 'longhanded' version!).
         #
-        x = self.UTILS.getElements(DOM.Messages.thread_messages, "Messages")
+        x = self.UTILS.getElements(DOM.Messages.message_list, "Messages")
         y = 0
         for i in x:
             if y in p_msg_array:

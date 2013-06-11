@@ -25,10 +25,12 @@ import  addContactToThisSMS                ,\
         selectAddContactButton             ,\
         sendSMS                            ,\
         startNewSMS                        ,\
+        getThreadText                      ,\
         threadCarrier                      ,\
         threadEditModeOFF                  ,\
         threadEditModeON                   ,\
         threadType                         ,\
+        threadExists                       ,\
         timeOfLastMessageInThread          ,\
         timeOfThread                       ,\
         waitForReceivedMsgInThisThread     ,\
@@ -60,10 +62,12 @@ class Messages (
             selectAddContactButton.main,
             sendSMS.main,
             startNewSMS.main,
+            getThreadText.main,
             threadCarrier.main,
             threadEditModeOFF.main,
             threadEditModeON.main,
             threadType.main,
+            threadExists.main,
             timeOfLastMessageInThread.main,
             timeOfThread.main,
             waitForReceivedMsgInThisThread.main,
