@@ -33,7 +33,7 @@ class test_7(GaiaTestCase):
         #
         # Classes particular to this test case.
         #
-        self.contacts   = AppContacts(self)
+        self.contacts   = Contacts(self)
         
         #
         # Set the timeout for element searches.

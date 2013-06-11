@@ -1,4 +1,6 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+
 #
 # Waits until no other test runs are detected (to avoid conflicts on Ci server).
 #

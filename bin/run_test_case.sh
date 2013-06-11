@@ -1,4 +1,5 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 #
 # Some of these variables come from 'run_all_tests' ...
@@ -6,6 +7,16 @@
 export ERR_FILE=${RESULT_DIR}/error_output
 export SUM_FILE=${RESULT_DIR}/${TEST_NAME}_summary
 export DET_FILE=${RESULT_DIR}/${TEST_NAME}_detail
+
+TEST_IS_BLOCKED=$(echo "$TEST_DESC" | grep -i "blocked by")
+
+#
+# Make sure gaiatest isn't still running (sometimes a process is left after the run).
+#
+ps -ef | grep gaiatest | grep -v "grep" | awk '{print $2}' | while read pid
+do
+	kill $pid > /dev/null 2> /dev/null
+done
 
 TNAM=$(echo $TEST_NAME | awk '{printf "%-5s", $0}')
 
@@ -30,7 +41,9 @@ _end_test(){
 _check_2nd_chance(){
     STROUT="$1"
     EXIT=$2
-    if [ "${_2ND_CHANCE}" ] || [ "$DEBUG_QUICK_TEST" ]
+    
+    # (Neve give a 2nd chance to a blocked test.)
+    if [ "${_2ND_CHANCE}" ] || [ ! "$OWD_USE_2ND_CHANCE" ] || [ "$TEST_IS_BLOCKED" ]
     then
     	_end_test "$STROUT" $EXIT
     else
@@ -44,11 +57,11 @@ _check_2nd_chance(){
 # Run the test using 'gaiatest', ignore STDOUT (because what we want is being
 # writtin to a file), but capture STDERR.
 #
-# (For speed, only restart if this is 2nd chance AND DEBUG_QUICK_TEST isn't set.)
+# (For speed, only restart if this is 2nd chance AND OWD_USE_2ND_CHANCE is set.)
 [ "${_2ND_CHANCE}" ] && RESTART="--restart" || RESTART=""
-[ "$DEBUG_QUICK_TEST" ] && RESTART="" || RESTART="$RESTART"
+[ ! "$OWD_USE_2ND_CHANCE" ] && RESTART="" || RESTART="$RESTART"
 TESTVARS="--testvars=${THISPATH}/gaiatest_testvars.json"
-ADDRESS="--address localhost:2828"
+ADDRESS="--address=localhost:2828"
 
 gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE > /dev/null 2>$ERR_FILE
 
@@ -84,59 +97,54 @@ then
     do
         result=$(echo $line | awk '{print $2}')
         
-        #
-        # Blocked tests only get one chance.
-        #
-        blockedTest=$(echo "$result" | grep -i "blocked")
-        if [ "$blockedTest" ]
+        failTest=$(echo "$result" | egrep -i "failed|blocked")
+        if [ ! "$failTest" ]
         then
-        	_end_test "$line" 0
+            x="$line"
+            errChk=$(grep -i error $ERR_FILE)
+
+            if [ "$errChk" ]
+            then
+            	#
+            	# SOME marionette errors just need a little wait.
+            	#
+            	x=$(grep -i "Could not successfully complete transport of message to Gecko" $ERR_FILE)
+            	if [ "$x" ]
+            	then
+            		# Try again, without 2nd chance being set.
+            		_2ND_CHANCE=""
+            		_check_2nd_chance "$x" 1
+            	else
+            	    #
+            	    # This test failed.
+                    #
+            	    if [ "$TEST_IS_BLOCKED" ]
+            	    then
+            	    	subword="(blocked)"
+            	    else
+                        subword="*FAILED* "
+                    fi
+                    
+	                x=$(echo "$line" | sed -e "s/#[^ ]*[^(]*/#$TNAM $subword /")
+	                _check_2nd_chance "$x" 1
+                fi
+            fi
+            
+            #
+            # If we get here then all's well - just leave.
+            #
+            _end_test "$x" 0
         else
-	        failTest=$(echo "$result" | grep -i "failed")
-	        if [ ! "$failTest" ]
-	        then
-	            x="$line"
-	            errChk=$(grep -i error $ERR_FILE)
-	
-	            if [ "$errChk" ]
-	            then
-	            	#
-	            	# SOME marionette errors just need a little wait.
-	            	#
-	            	x=$(grep -i "Could not successfully complete transport of message to Gecko" $ERR_FILE)
-	            	if [ "$x" ]
-	            	then
-	            		_2ND_CHANCE=""
-	            		_check_2nd_chance "$x" 1
-	            	else
-	            	    y=$(echo "$TEST_DESC" | grep -i "blocked by")
-	            	    if [ "$y" ]
-	            	    then
-	            	    	subword="(blocked)"
-	            	    else
-                            subword="*FAILED* "
-	                    fi
-		                x=$(echo "$line" | sed -e "s/#[^ ]*[^(]*/#$TNAM $subword /")
-		                _check_2nd_chance "$x" 1
-	                fi
-	            fi
-	            
-	            #
-	            # If we get here then all's well - just leave.
-	            #
-	            _end_test "$x" 0
-	        else
-	            #
-	            # It failed - at the moment, failures are often just
-	            # 'something odd' in Marionette or Gaiatest, which run
-	            # fine the next time you try.
-	            # Because this is so often the case, we'll give a failed
-	            # test case a second chance before giving up.
-	            #
-	            _check_2nd_chance "$line" 2
-	        fi
-	        _2ND_CHANCE="Y"
+            #
+            # It failed - at the moment, failures are often just
+            # 'something odd' in Marionette or Gaiatest, which run
+            # fine the next time you try.
+            # Because this is so often the case, we'll give a failed
+            # test case a second chance before giving up.
+            #
+            _check_2nd_chance "$line" 2
         fi
+        _2ND_CHANCE="Y"
     done
 else
     _check_2nd_chance "#$TNAM *FAILED*  (unknown - unknown): ${TEST_DESC:0:80}" 3  

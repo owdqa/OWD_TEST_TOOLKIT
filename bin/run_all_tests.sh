@@ -1,4 +1,5 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 
 mkdir /tmp/tests 2>/dev/null
@@ -7,7 +8,6 @@ chmod 777 /tmp/tests 2> /dev/null
 export THISPATH=$(dirname $0)
 export EXECPATH=$(pwd)
 export RESULT_DIR="/tmp/tests/B2G_tests.$(date +%Y%m%d%H%M%S)"
-export RUNTEST="$THISPATH/run_test_case.sh"
 export TESTDIR="./tests"
 export PARAM_FILE="$HOME/.OWD_TEST_PARAMETERS"
 export GET_XREF="$THISPATH/get_xref.sh"
@@ -36,15 +36,9 @@ run_test(){
     TEST_DESC=$(grep "_Description" $TEST_FILE | head -1 | sed -e "s/^[^\"]*\"\(.*\)\"/\1/")
     export TEST_DESC=${TEST_DESC:-"(no description found!)"}
 
-    $RUNTEST 
+    $OWD_TEST_TOOLKIT_BIN/run_test_case.sh 
 }
 
-
-
-################################################################################
-#
-# INITIAL SETUP OF DEPENDENCIES
-#
 
 
 ################################################################################
@@ -272,7 +266,7 @@ done
 #
 # Establsh connection to device.
 #
-$THISPATH/connect_device.sh
+$OWD_TEST_TOOLKIT_BIN/connect_device.sh
 
 if [ $? -ne 0 ]
 then

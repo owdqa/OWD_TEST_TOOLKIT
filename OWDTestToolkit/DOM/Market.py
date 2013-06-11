@@ -1,3 +1,4 @@
+market_loading_icon     = ('css selector', 'div.loading-fragment')
 frame_locator           = ("src","https://marketplace.firefox.com/")
 search_query            = ('id', 'search-q')
 featured_apps           = ('xpath', ".//*[@id='featured-home']/ul/li/a/canvas")

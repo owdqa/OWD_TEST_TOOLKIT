@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+
 export MYPATH=$(dirname $0)
 export CURRPATH=$(pwd)
 
@@ -12,32 +14,16 @@ printf "\n====================================================\n" | tee -a $LOGF
 # Remove any previous marionette
 # (using 'sudo', so be paranoid about "rm -rf"!!!).
 #
+install_dir=$($OWD_TEST_TOOLKIT_BIN/get_python_dist_path.sh marionette)
+if [ "$install_dir" ]
+then
+	sudo rm -rf $install_dir/moz*  2> /dev/null
+	sudo rm -rf $install_dir/marionette*  2> /dev/null
+	sudo rm -rf $install_dir/ManifestDestiny*  2> /dev/null
+	sudo rm -rf $install_dir/gaiatest* 2> /dev/null
+	sudo rm gaiatest* 2>/dev/null
+fi
 
-# Use PYTHONPATH to get the location of Marionette etc...
-x=$(python <<!
-import sys
-print sys.path
-exit()
-!
-)
-IFS=', ' read -a array <<< "$x"
-for element in "${array[@]}"
-do
-    el=$(echo $element | sed -e "s/'//g")
-    ck=$(basename $el | egrep "^marionette")
-    if [ "$ck" ]
-    then
-    	install_dir=$(dirname $el)
-    	if [ "$install_dir" ]
-    	then
-			sudo rm -rf $install_dir/moz*  2> /dev/null
-			sudo rm -rf $install_dir/marionette*  2> /dev/null
-			sudo rm -rf $install_dir/ManifestDestiny*  2> /dev/null
-			sudo rm -rf $install_dir/gaiatest* 2> /dev/null
-			sudo rm gaiatest* 2>/dev/null
-    	fi
-    fi
-done
 
 # Remove the exec files too.
 x=$(which marionette 2>/dev/null)
@@ -56,7 +42,7 @@ git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>>$LOGFILE
 
 # Install gaiatest.
 cd gaia-ui-tests
-printf "\n* Switching to branch \"$BRANCH\" of gaiatest ...\n\n" | tee -a $LOGFILE
+printf "\n* Switching to branch \"$BRANCH\" of gaiatest ... (ask on #mozwebqa about errors - this changes sometimes!)\n\n" | tee -a $LOGFILE
 git checkout $BRANCH  2> >( tee $LOGFILE)
 printf "\n* Installing gaiatest for branch \"$(git branch | grep '*')\" ...\n\n" | tee -a $LOGFILE
 sudo python setup.py develop | tee /tmp/gaiatest_setup.log >> $LOGFILE

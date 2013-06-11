@@ -30,14 +30,14 @@ cancel_edit_threads    = ("id", "threads-cancel-button")
 check_all_threads_btn  = ("id", "threads-check-all-button")
 check_all_messages_btn = ("id", "messages-check-all-button")
 delete_threads_button  = ("id", "threads-delete-button")
-confirm_delete_threads = ("id", "modal-dialog-confirm-ok")
 
 unread_message         = ('css selector', 'li > a.unread')
 messages_from_num      = "//*[contains(@id, '%s')]"
 message_timestamps     = ("xpath", ".//*[@id='messages-container']/header")
 received_messages      = ('xpath', "//li[@class='bubble'][a[@class='received']]")
 edit_messages_icon     = ("id","icon-edit")
-delete_messages_button = ("id","messages-delete-button")
+edit_msgs_delete_btn   = ("id","messages-delete-button")
+edit_msgs_sel_all_btn  = ("id","messages-check-all-button")
 
 airplane_warning_header= ("id", "dialog-title")
 airplane_warning_ok    = ("id", "dialog-no")

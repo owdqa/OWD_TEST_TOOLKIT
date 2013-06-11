@@ -1,4 +1,5 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 num=${1:?"Syntax: $0 <test number>"}
 

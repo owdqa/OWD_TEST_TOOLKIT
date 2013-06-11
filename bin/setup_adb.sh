@@ -1,4 +1,5 @@
 #!/bin/bash
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 printf "Making sure ADB is up to date ...\n\n"
 
