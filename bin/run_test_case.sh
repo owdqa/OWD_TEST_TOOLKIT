@@ -60,7 +60,7 @@ _check_2nd_chance(){
 [ "${_2ND_CHANCE}" ] && RESTART="--restart" || RESTART=""
 [ ! "$OWD_USE_2ND_CHANCE" ] && RESTART="" || RESTART="$RESTART"
 TESTVARS="--testvars=${THISPATH}/gaiatest_testvars.json"
-ADDRESS="--address localhost:2828"
+ADDRESS="--address=localhost:2828"
 
 gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE > /dev/null 2>$ERR_FILE
 
