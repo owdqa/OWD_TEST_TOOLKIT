@@ -6,3 +6,4 @@ gaia-ui-tests
 build
 dist
 *~
+.~*
