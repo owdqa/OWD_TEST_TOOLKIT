@@ -13,14 +13,10 @@ class main(GaiaTestCase):
  			for i in x:
  				try:
  					y = i.find_element("xpath", ".//p[text()='%s']" % p_num)
- 					
- 					if y:
- 						z = i.find_element("xpath", ".//span[@class='body-text']")
- 						return z.text
- 				except:
- 					pass
- 		
-		 		return False
-        else:
-			return False
+					z = i.find_element("xpath", ".//span[@class='body-text']")
+					return z.text
+				except:
+					pass
+
+        return False
         
