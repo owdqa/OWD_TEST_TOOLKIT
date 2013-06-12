@@ -19,14 +19,6 @@ export GET_XREF="$THISPATH/get_xref.sh"
 
 [ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
 
-if [ ! -f "$PARAM_FILE" ]
-then
-	echo "
-Please edit the $HOME/.OWD_TEST_PARAMETERS file and add the variable values.
-"
-	exit
-fi
-
 ################################################################################
 #
 # FUNCTIONS
