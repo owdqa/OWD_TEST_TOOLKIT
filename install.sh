@@ -97,7 +97,7 @@ then
     #
     printf "\n\nInstalling owd_test_cases..." | tee -a $LOGFILE
     printf "\n============================\n" | tee -a $LOGFILE
-    cd $OWD_TEST_TOOLKIT_BIN/..
+    cd $OWD_TEST_TOOLKIT_DIR/..
     rm -rf owd_test_cases 2>/dev/null
 
     git clone https://github.com/roydude/owd_test_cases.git >> $LOGFILE 2>> $LOGFILE
