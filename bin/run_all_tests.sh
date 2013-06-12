@@ -1,6 +1,11 @@
 #!/bin/bash
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
+#
+# Before we do anything, check the parameters file is okay.
+#
+$OWD_TEST_TOOLKIT_BIN/check_parameters_file.sh
+[ $? -ne 0 ] && exit 1
 
 mkdir /tmp/tests 2>/dev/null
 chmod 777 /tmp/tests 2> /dev/null
@@ -14,6 +19,13 @@ export GET_XREF="$THISPATH/get_xref.sh"
 
 [ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
 
+if [ ! -f "$PARAM_FILE" ]
+then
+	echo "
+Please edit the $HOME/.OWD_TEST_PARAMETERS file and add the variable values.
+"
+	exit
+fi
 
 ################################################################################
 #
