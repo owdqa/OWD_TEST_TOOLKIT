@@ -2,7 +2,6 @@ import base64, sys
 from marionette import Marionette
   
 ucount  = 0
-fnum    = 0
 LOGDIR  = sys.argv[1] + "/"
 m       = Marionette(host='localhost', port=2828)
   
@@ -11,9 +10,9 @@ m.set_search_timeout(1000)
  
 m.switch_to_frame()
 frames = m.find_elements("tag name", "iframe")
-for frame_num in range (0, len(frames)):
+for fnum in range (0, len(frames)):
   
-    frame_src = frames[frame_num].get_attribute("src")
+    frame_src = frames[fnum].get_attribute("src")
       
     if frame_src != "":
         startpos = frame_src.index('/') + 2
@@ -68,5 +67,4 @@ for frame_num in range (0, len(frames)):
     f.write(m.page_source.encode('ascii', 'ignore') )
     f.close()
      
-    fnum = fnum + 1
     m.switch_to_frame()
