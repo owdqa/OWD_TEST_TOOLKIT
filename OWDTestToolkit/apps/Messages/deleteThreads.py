@@ -11,9 +11,20 @@ class main(GaiaTestCase):
         # If it's not specified then all messages in this 
         # thread will be deleted.
         #
-        if p_target_array:
-            self.editAndSelectThreads(p_target_array)
-            self.deleteSelectedThreads()
-        else:
-            self.deleteAllThreads()
+		x = self.marionette.find_element(*DOM.Messages.no_threads_message)
+		if x.is_displayed():
+			self.UTILS.logResult("info", "(No message threads to delete.)")
+			
+			#
+			# Without this 'return' the code actually tries to do the 'else:' part
+			# too!!
+			#
+			return
+		else:
+			self.UTILS.logResult("info", "Deleting message threads ...")
+	        if p_target_array:
+	            self.editAndSelectThreads(p_target_array)
+	            self.deleteSelectedThreads()
+	        else:
+	            self.deleteAllThreads()
             
