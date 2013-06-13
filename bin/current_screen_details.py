@@ -1,17 +1,26 @@
 import base64, sys
 from marionette import Marionette
-  
-ucount  = 0
+
+#
+# The first variable is the log directory.
+#
 LOGDIR  = sys.argv[1] + "/"
-m       = Marionette(host='localhost', port=2828)
-  
+
+ucount  = 0
+m       = Marionette(host='localhost', port=2828)  
 m.start_session()
 m.set_search_timeout(1000)
- 
+
+#
+# Now loop through all the iframes, gathering details about each one.
+#
 m.switch_to_frame()
 frames = m.find_elements("tag name", "iframe")
 for fnum in range (0, len(frames)):
   
+    #
+    # App name is usually in the "src" attribute, so it's worth a shot..
+    #
     frame_src = frames[fnum].get_attribute("src")
       
     if frame_src != "":
@@ -27,7 +36,7 @@ for fnum in range (0, len(frames)):
     filename_details    = LOGDIR + filename + "_iframe_details.txt"
     filename_screenshot = LOGDIR + filename + ".png"
     filename_htmldump   = LOGDIR + filename + ".html"
-      
+    
     print ""
     print "Iframe for app \"" + appname + "\" ..."
     print "    |_ iframe details saved to : " + filename_details
@@ -35,7 +44,8 @@ for fnum in range (0, len(frames)):
     print "    |_ html dump saved to      : " + filename_htmldump
      
     #
-    # Record the iframe details.
+    # Record the iframe details (pretty verbose, but 'execute_script' 
+    # wasn't letting me use 'for' loops in js for some reason).
     #
     f = open(filename_details, 'w')
     f.write("Attributes for this iframe ...\n")
