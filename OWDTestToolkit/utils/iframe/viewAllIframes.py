@@ -2,6 +2,8 @@ from OWDTestToolkit.global_imports import *
     
 class main(GaiaTestCase):
     
+    msg = ""
+    
     def viewAllIframes(self):
         #
         # DEV TOOL: this will loop through every iframe, 
@@ -15,7 +17,18 @@ class main(GaiaTestCase):
         LOGDIR              = os.environ['RESULT_DIR'] + "/"
         current_iframe_src  = self.currentIframe()
         
+        if current_iframe_src == "":
+            extra_bit = "(*) "
+        else:
+            extra_bit = ""
+            
+        self.msg = extra_bit + "Iframe for 'top level' () ..."
+        filename_screenshot = LOGDIR + "top_level" + ".png"
+        filename_htmldump   = LOGDIR + "top_level" + ".html"
         self.marionette.switch_to_frame()
+        self._recordDetails(filename_screenshot, filename_htmldump)
+        self.logResult("info", self.msg)
+
         frames = self.marionette.find_elements("tag name", "iframe")
         for fnum in range (0, len(frames)):
             
@@ -50,15 +63,12 @@ class main(GaiaTestCase):
             filename_screenshot = LOGDIR + filename + ".png"
             filename_htmldump   = LOGDIR + filename + ".html"
               
-            msg = extra_bit + "Iframe for app \"" + appname + "\" ..."
-            msg = msg + "|iframe details saved to : " + filename_details
-            msg = msg + "|screenshot saved to     : " + filename_screenshot
-            msg = msg + "|html dump saved to      : " + filename_htmldump
-            self.logResult("info", msg)
+            self.msg = extra_bit + "Iframe for app \"" + appname + "\" ..."
              
             #
             # Record the iframe details.
             #
+            self.msg = self.msg + "|iframe details saved to : " + filename_details
             f = open(filename_details, 'w')
             f.write("Attributes for this iframe ...\n")
             num_attribs = self.marionette.execute_script("return document.getElementsByTagName('iframe')[" + str(fnum) + "].attributes.length;")
@@ -75,23 +85,33 @@ class main(GaiaTestCase):
             #
             self.marionette.switch_to_frame(fnum)
               
-            #
-            # Take the screenshot and save it to the file.
-            #
-            screenshot = self.marionette.screenshot()[22:]
-            with open(filename_screenshot, 'w') as f:
-                f.write(base64.decodestring(screenshot))
-            f.close()
-                  
-            #
-            # Take the html dump and save it to the file.
-            #
-            f = open(filename_htmldump, 'w')
-            f.write(self.marionette.page_source.encode('ascii', 'ignore') )
-            f.close()
+            self._recordDetails(filename_screenshot, filename_htmldump)
              
             self.marionette.switch_to_frame()
 
+            self.logResult("info", self.msg)
+
+    def _recordDetails(self, filename_screenshot, filename_htmldump):
+        #
+        # PRIVATE function to record the details of this frame.
+        #
+        
+        #
+        # Take the screenshot and save it to the file.
+        #
+        self.msg = self.msg + "|screenshot saved to     : " + filename_screenshot
+        screenshot = self.marionette.screenshot()[22:]
+        with open(filename_screenshot, 'w') as f:
+            f.write(base64.decodestring(screenshot))
+        f.close()
+              
+        #
+        # Take the html dump and save it to the file.
+        #
+        self.msg = self.msg + "|html dump saved to      : " + filename_htmldump
+        f = open(filename_htmldump, 'w')
+        f.write(self.marionette.page_source.encode('ascii', 'ignore') )
+        f.close()
 
 #     def viewAllIframes(self):
 #         #
