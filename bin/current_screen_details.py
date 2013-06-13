@@ -1,4 +1,9 @@
-import base64, sys
+#!/usr/bin/python2.7
+#
+# Script to capture screenshots / html and attribute info.
+# about all current iframes on a device.
+#
+import base64, sys, os
 from marionette import Marionette
 
 class current_frame():
@@ -94,6 +99,17 @@ class current_frame():
         f.close()
 
 
-LOGDIR  = sys.argv[1] + "/"
+#########################################
+#
+# Staring point.
+#
+
+# Make sure we're connected to the device.
+os.system("./connect_device.sh")
+
+# Set up the dir.
+LOGDIR  = "/tmp/tests/current_screen/"
+os.system("mkdir -p " + LOGDIR + " > /dev/null")
+
 current_frame().main(LOGDIR)
 
