@@ -9,12 +9,9 @@
 # 1. the name of your code snippet file (just a ".py" python script, including
 #    the path), containing just something like this for example:
 #
-#        x = self.marionette.find_elements('xpath', "//ol[@id='friends-list']//li")
-#        for i in x:
-#            y = i.find_elements('xpath', './/p')[1]
-#            if y.text == "roytest_2@hotmail.com":
-#                print "TAPPING!"
-#                i.tap()
+#    x = self.marionette.find_element('id', 'settings-button')
+#    x.tap()
+#
 #
 # (it will inherit everything from here automatically, such as "self.marionette" etc...)
 #

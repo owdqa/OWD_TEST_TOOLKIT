@@ -68,6 +68,7 @@ class UTILS(app.main        ,
         # Default permissions.
         #
         self.apps.set_permission('Camera', 'geolocation', 'deny')
+        self.apps.set_permission('Homescreen', 'geolocation', 'deny')
 
          
         #
