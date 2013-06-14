@@ -1,44 +1,59 @@
 #!/usr/bin/python2.7
 #
-# Script to check an element definition works.
+# Script to test a code snippet against the current state of the device
+# (saves you having to run through the test each time to get the device
+# into the correct state to test your code).
 #
-# Takes the following parameters:
+# Takes one MANDATORY parameter:
 #
-# 1. element identifier type.
-# 2. element identifier value.
-# 3. iframe identifier type (optional)
-# 4. iframe identifier value (optional)
-# 5. child iframe identifier type ... etc... (optional)
+# 1. the name of your code snippet file (just a ".py" python script, including
+#    the path), containing just something like this for example:
+#
+#        x = self.marionette.find_elements('xpath', "//ol[@id='friends-list']//li")
+#        for i in x:
+#            y = i.find_elements('xpath', './/p')[1]
+#            if y.text == "roytest_2@hotmail.com":
+#                print "TAPPING!"
+#                i.tap()
+#
+# (it will inherit everything from here automatically, such as "self.marionette" etc...)
+#
+# ... and the following OPTIONAL parameters:
+#
+# 1. iframe identifier type
+# 2. iframe identifier value
+# 3. ... repeat for child iframes ...
 #
 # If you need to reach an iframe within another iframe, you can just specify the next frame too:
 #
-#     check_element.py <element def> <iframe def> <child iframe def> <child iframe def> ...
+#     check_element.py <snippet file> <iframe def> <child iframe def> <child iframe def> ...
 # 
 # For example:
 #
 #    One iframe deep - contacts application:
 #    ---------------------------------------
-#    ./DEBUG_get_element.py \
-#                     "id" "ok-button" \                                                <-- element
+#    ./DEBUG_try_code_snippet.py \
+#                     "/tmp/snippet.py" \                                               <-- snippet file
 #                     "src" "app://communications.gaiamobile.org/contacts/index.html"   <-- iframe
 #
 #    Two iframes deep - facebook app from contacts application (for linking contacts):
 #    ---------------------------------------------------------------------------------
-#    ./DEBUG_get_element.py \
-#                     "id" "ok-button" \                                                <-- element
+#    ./DEBUG_try_code_snippet.py \
+#                     "/tmp/snippet.py" \                                               <-- snippet file
 #                     "src" "app://communications.gaiamobile.org/contacts/index.html" \ <-- iframe
 #                     "id"  "fb-extensions"                                             <-- child iframe
 #
 #    No iframes - just using the top-level "()" frame:
 #    --------------------------------------------------
-#    ./DEBUG_get_element.py "id" "ok-button"                                            <-- element
+#    ./DEBUG_try_code_snippet.py "/tmp/snippet.py"                                      <-- snippet file
 #
 import base64, sys, os
 from marionette import Marionette
+from marionette import Actions
 
 class current_frame():
     
-    def main(self, LOGDIR, p_el, p_frame_array=False):
+    def main(self, p_snippet, p_frame_array=False):
         #
         # p_el is an array for the element.
         # p_frame_array is a list of iframes to iterate through (optional).
@@ -70,50 +85,13 @@ class current_frame():
         if first_iframe:
             print ""
             print "Using 'top level' iframe () ..."
+            
         
-        #
-        # Grab a screenshot and html dump of this frame.
-        #
-        p_sfnam = LOGDIR + "screenshot.png"
-        p_hfnam = LOGDIR + "html_dump.html"
+        # Run the code snippet.
         print ""
-        print "Screenshot of this frame saved to: " + p_sfnam
-        screenshot = self.marionette.screenshot()[22:]
-        with open(p_sfnam, 'w') as f:
-            f.write(base64.decodestring(screenshot))
-        f.close()
-
-        print "HTML dump of this frame saved to : " + p_hfnam
-        f = open(p_hfnam, 'w')
-        f.write(self.marionette.page_source.encode('ascii', 'ignore') )
-        f.close()
-
-        #
-        # Test to see if the element is present / displayed / etc...
-        #
+        print "Running code snippet from this location ..."
         print ""
-        print "Checking for element: " + str(p_el)
-        b_present   = False
-        b_displayed = False
-        b_enabled   = False
-        try:
-            x = self.marionette.find_element(*p_el)
-            if x:
-                b_present = True
-                
-                if x.is_displayed():
-                    b_displayed = True
-                    
-                if x.is_enabled():
-                    b_enabled = True
-        except:
-            pass
-        
-        print ""
-        print "Present  : " + str(b_present)
-        print "Displayed: " + str(b_displayed)
-        print "Enabled  : " + str(b_enabled)
-        print ""
+        execfile(p_snippet)
 
 #########################################
 #
@@ -123,9 +101,10 @@ class current_frame():
 # Make sure we're connected to the device.
 os.system(". $HOME/.OWD_TEST_TOOLKIT_LOCATION; $OWD_TEST_TOOLKIT_BIN/connect_device.sh")
 
+
 # Set up the parameters.
-p_el     = (sys.argv[1], sys.argv[2])
-i        = 3
+p_snippet= sys.argv[1]
+i        = 2
 p_iframe = []
 while i:
     try:
@@ -134,11 +113,6 @@ while i:
     except:
         break
 
-# Set up the dir.
-LOGDIR  = "/tmp/tests/current_screen/"
-os.system("mkdir -p " + LOGDIR + " 2> /dev/null")
-os.system("rm " + LOGDIR + "* 2> /dev/null")
-
-# Do it!
-current_frame().main(LOGDIR, p_el, p_iframe)
+# Switch to the relevant frame and run the snippet.
+current_frame().main(p_snippet, p_iframe)
 
