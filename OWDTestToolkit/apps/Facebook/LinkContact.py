@@ -16,12 +16,12 @@ class main(GaiaTestCase):
         for i in x:
             if i.is_displayed():
                 #
-                # Keep the name and email detais for this contact.
+                # Keep the name and email details for this contact.
                 #
                 thisContact = i.find_elements("tag name", "p")[1]
                 if thisContact.text == p_contactEmail:
-                    i.tap()
                     email = p_contactEmail
+                    thisContact.tap()
                     break
 
         self.UTILS.TEST(email, "Desired link contact's email address is displayed.")
