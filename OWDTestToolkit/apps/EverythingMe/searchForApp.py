@@ -8,7 +8,27 @@ class main(GaiaTestCase):
         # result to appear etc...).<br>
         # Returns the element for the icon (or False if it's not found).
         #
-        self.UTILS.typeThis(DOM.EME.search_field, "Search field", p_name, p_no_keyboard=True)
+        self.UTILS.typeThis(DOM.EME.search_field, 
+						  	"Search field", 
+						  	p_name, 
+							p_no_keyboard=True, 
+							p_clear=True, 
+							p_enter=True, 
+							p_validate=True, 
+							p_remove_keyboard=False)
+        
+        #
+        # Need to click this one for some reason.
+        #
+        x = self.UTILS.getElement(DOM.EME.search_field, "Search field (just to click it)")
+        x.click()
+        
+        #
+        # Tap the first suggestion.
+        #
+        
+        x = self.UTILS.getElements(DOM.EME.search_suggestions, "Search suggestion list")
+        x[0].tap()
         
         boolOK = True
         
