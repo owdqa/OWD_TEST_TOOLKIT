@@ -105,11 +105,13 @@ class current_frame():
 #
 
 # Make sure we're connected to the device.
-os.system("./connect_device.sh")
+os.system(". $HOME/.OWD_TEST_TOOLKIT_LOCATION; $OWD_TEST_TOOLKIT_BIN/connect_device.sh")
 
 # Set up the dir.
 LOGDIR  = "/tmp/tests/current_screen/"
 os.system("mkdir -p " + LOGDIR + " > /dev/null")
+os.system("rm " + LOGDIR + "* > /dev/null")
 
+# Do it!
 current_frame().main(LOGDIR)
 
