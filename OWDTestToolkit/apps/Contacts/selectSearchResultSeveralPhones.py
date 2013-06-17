@@ -6,10 +6,11 @@ class main(GaiaTestCase):
         #
         # Select the result of a search 
         #
-        y = self.marionette.find_elements(*DOM.Contacts.search_results_list)
+        y = self.UTILS.getElements(DOM.Contacts.search_results_list, "Search results list")
         for i in y:
             if p_contactName in i.text:
                 i.tap()
+                break
         
         #
         # Then select the phone p_num, nothing if p_num is 0 
@@ -19,6 +20,8 @@ class main(GaiaTestCase):
         if p_num == 0:
             OK.tap()
         else:
-            num = self.UTILS.getElement(p_num)
+            xpath=('xpath','//span[contains(text(),"'+ str(p_num) +'")]')
+            self.UTILS.logComment("Using xpath " + str(xpath))
+            num = self.UTILS.getElement(xpath,"Number to select")
             num.tap()
 

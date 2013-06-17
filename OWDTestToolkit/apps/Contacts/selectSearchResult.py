@@ -6,9 +6,10 @@ class main(GaiaTestCase):
         #
         # Select the result of a search 
         #
-        y = self.marionette.find_elements(*DOM.Contacts.search_results_list)
+        y = self.UTILS.getElements(DOM.Contacts.search_results_list,"Search results list")
         for i in y:
             if p_contactName in i.text:
                 i.tap()
+                break
                 
 

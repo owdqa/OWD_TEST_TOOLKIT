@@ -57,29 +57,21 @@ class UTILS(app.main        ,
         self.testDesc       = self.get_os_variable("TEST_DESC")
         self.det_fnam       = self.get_os_variable("DET_FILE")
         self.sum_fnam       = self.get_os_variable("SUM_FILE")
-        
+
         #
-        # Default device to 'silent + vibrate'.
+        # Set device defaults.
         #
         self.data_layer.set_setting("vibration.enabled", True)
         self.data_layer.set_setting("audio.volume.notification", 0)
-        
-        #
-        # Default permissions.
-        #
+
         self.apps.set_permission('Camera', 'geolocation', 'deny')
         self.apps.set_permission('Homescreen', 'geolocation', 'deny')
 
-         
-        #
-        # Default timeout for element searches.
-        #
         self.marionette.set_search_timeout(20)
-         
-        #
-        # Set the current time to 'now'.
-        #
+
         self.setTimeToNow()
+        
+        self.setupDataConn()
          
         #
         # Unlock (if necessary).
