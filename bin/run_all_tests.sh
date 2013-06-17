@@ -17,6 +17,14 @@ export TESTDIR="./tests"
 export PARAM_FILE="$HOME/.OWD_TEST_PARAMETERS"
 export GET_XREF="$THISPATH/get_xref.sh"
 
+#
+# Exit codes so the we know hoe the test runner script ended.
+#
+export EXIT_PASSED=0
+export EXIT_FAILED=1
+export EXIT_BLOCKED=2
+
+
 [ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
 
 ################################################################################
@@ -288,6 +296,8 @@ PASSED=0
 TOTAL=0
 TCPASS=0
 TCTOTAL=0
+TCBLOCKED=0
+TCFAILED=0
 for i in $(echo $TESTS)
 do
 	if [ ! -f ./tests/test_${i}.py ]
@@ -302,6 +312,14 @@ do
     if [ $exitCode -eq 0 ]
     then
         TCPASS=$(($TCPASS+1))
+    else
+        if [ $exitCode -eq $EXIT_FAILED ]
+        then
+        	TCFAILED=$(($TCFAILED+1))
+		elif [ $exitCode -eq $EXIT_BLOCKED ]
+		then
+            TCBLOCKED=$(($TCBLOCKED+1))			
+		fi
     fi
     TCTOTAL=$(($TCTOTAL+1))
     
@@ -332,7 +350,17 @@ do
     
 done
 
-printf "\nPassed $TCPASS/$TCTOTAL test cases ($PASSED/$TOTAL test actions in total).\n"
+echo "
+*******************
+
+Unexpected failures: $TCFAILED
+
+*******************
+
+Test cases passed  : $TCPASS / $TCTOTAL 
+Test actions passed: $PASSED / $TOTAL
+Total blocked tests: $TCBLOCKED
+"
 
 printf "\nDONE.\n\n"
 
