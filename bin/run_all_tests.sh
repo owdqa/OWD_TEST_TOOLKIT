@@ -360,13 +360,10 @@ do
     
 done
 
-echo "
-*******************
+printf "\n*******************\n"
+printf "Unexpected failures: %4s\n\n" $TCFAILED
+printf "\n*******************\n\n"
 
-Unexpected failures: $TCFAILED
-
-*******************
-"
 printf "Test cases passed  : %4s / %-4s\n" $TCPASS $TCTOTAL 
 printf "Test actions passed: %4s / %-4s\n" $PASSED $TOTAL
 printf "Total blocked tests: %4s\n\n" $TCBLOCKED
