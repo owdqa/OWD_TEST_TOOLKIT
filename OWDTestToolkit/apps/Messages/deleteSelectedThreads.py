@@ -6,6 +6,13 @@ class main(GaiaTestCase):
         #
         # Delete the currently selected message threads.
         #
+        self.logResult(False, "Blocked by bug 879816 (and takes too long to fail!")
+        return
+       
+       
+       
+       
+       
         orig_iframe = self.UTILS.currentIframe()
         x = self.UTILS.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
         x.tap()
