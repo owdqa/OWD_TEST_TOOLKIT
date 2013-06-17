@@ -751,6 +751,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>checkThreadHeader</td>
+        <td align=left>p_header</td>
+        <td align=left>Verifies if a string is contained in the header</td>
+    </tr>
+
+
+    <tr>
         <td align=center>selectAddContactButton</td>
         <td align=left></td>
         <td align=left>Taps the 'add contact' button and switches to the  correct 'contacts' frame.<br>  Returns the "src" of the original iframe.</td>

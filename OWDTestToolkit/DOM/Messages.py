@@ -35,6 +35,7 @@ message_list           = ('xpath', '//article[@id="messages-container"]//li')
 unread_message         = ('css selector', 'li > a.unread')
 messages_from_num      = "//*[contains(@id, '%s')]"
 message_timestamps     = ("xpath", ".//*[@id='messages-container']/header")
+message_header         = ("id", "messages-header-text")
 received_messages      = ('xpath', "//li[@class='bubble'][a[@class='received']]")
 edit_messages_icon     = ("id","messages-edit-icon")
 edit_msgs_delete_btn   = ("id","messages-delete-button")
