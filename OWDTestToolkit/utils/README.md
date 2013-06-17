@@ -285,9 +285,30 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>setDeviceDefaults</td>
+        <td align=left></td>
+        <td align=left>Set the device defaults before testing.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>setupDataConn</td>
+        <td align=left></td>
+        <td align=left>Set the phone's time (using gaia data_layer instead of the UI).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>setTimeToNow</td>
         <td align=left>p_continent=False<br>p_city=False</td>
         <td align=left>Set the phone's time (using gaia data_layer instead of the UI).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>wipeDeviceData</td>
+        <td align=left>p_parent</td>
+        <td align=left>Clean all data from the device (reboots the device).</td>
     </tr>
 
 
