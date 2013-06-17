@@ -5,6 +5,7 @@ import  addContactToThisSMS                ,\
         checkAirplaneModeWarning           ,\
         checkIsInToField                   ,\
         checkNumberIsInToField             ,\
+        checkThreadHeader                  ,\
         clickSMSNotifier                   ,\
         closeThread                        ,\
         countMessagesInThisThread          ,\
@@ -42,6 +43,7 @@ class Messages (
             checkAirplaneModeWarning.main,
             checkIsInToField.main,
             checkNumberIsInToField.main,
+            checkThreadHeader.main,
             clickSMSNotifier.main,
             closeThread.main,
             countMessagesInThisThread.main,
