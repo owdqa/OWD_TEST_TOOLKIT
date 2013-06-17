@@ -318,21 +318,17 @@ do
     echo "$results"
 
     #
-    # Get the totals (unless the exit code was due to the code
-    # being broken).
+    # Get the totals.
     #
-    #if [ $exitCode -ne 1 ]
-    #then
-        totals=` echo "$results" | sed -e "s/^[^(]*([^-]*- *\([^)]*\).*$/\1/"`
-	    passed=$(echo "$totals"  | awk 'BEGIN{FS="/"}{print $1}' | awk '{print $1}' | egrep "^[0-9]*$")
-	    total=$( echo "$totals"  | awk 'BEGIN{FS="/"}{print $2}' | awk '{print $1}' | egrep "^[0-9]*$")
+    totals=` echo "$results" | sed -e "s/^[^(]*([^-]*- *\([^)]*\).*$/\1/"`
+    passed=$(echo "$totals"  | awk 'BEGIN{FS="/"}{print $1}' | awk '{print $1}' | egrep "^[0-9]*$")
+    total=$( echo "$totals"  | awk 'BEGIN{FS="/"}{print $2}' | awk '{print $1}' | egrep "^[0-9]*$")
 
-	    passed=${passed:-0}
-	    total=${total:-0}
-	
-	    PASSED=$(($PASSED+$passed))
-	    TOTAL=$(($TOTAL+$total))
-    #fi
+    passed=${passed:-0}
+    total=${total:-0}
+
+    PASSED=$(($PASSED+$passed))
+    TOTAL=$(($TOTAL+$total))
     
 done
 
