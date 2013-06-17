@@ -369,7 +369,7 @@ Unexpected failures: $TCFAILED
 "
 printf "Test cases passed  : %4s / %-4s\n" $TCPASS $TCTOTAL 
 printf "Test actions passed: %4s / %-4s\n" $PASSED $TOTAL
-printf "Total blocked tests: $TCBLOCKED\n\n"
+printf "Total blocked tests: %4s\n\n" $TCBLOCKED
 
 printf "\nDONE.\n\n"
 
