@@ -18,6 +18,8 @@ import  countEmailAddressesWhileEditing , \
         pressCancelEditButton           , \
         checkEditContactDetails         , \
         editContact                     , \
+        selectSearchResult              , \
+        selectSearchResultSeveralPhones , \
         switchToFacebook                , \
         tapLinkContact                  , \
         enableFBImport                  , \
@@ -48,6 +50,8 @@ class Contacts(  countEmailAddressesWhileEditing.main,
                     pressCancelEditButton.main,
                     checkEditContactDetails.main,
                     editContact.main,
+                    selectSearchResult.main,
+                    selectSearchResultSeveralPhones.main,
                     switchToFacebook.main,
                     tapLinkContact.main,
                     enableFBImport.main,
