@@ -113,7 +113,7 @@ then
             	then
             		# Try again, without 2nd chance being set.
             		_2ND_CHANCE=""
-            		_check_2nd_chance "$x" 1
+            		_check_2nd_chance "$x" $EXIT_FAILED
             	else
             	    #
             	    # This test failed.
@@ -121,12 +121,14 @@ then
             	    if [ "$TEST_IS_BLOCKED" ]
             	    then
             	    	subword="(blocked)"
+            	    	EXIT_CODE=$EXIT_BLOCKED
             	    else
                         subword="*FAILED* "
+                        EXIT_CODE=$EXIT_FAILED
                     fi
                     
 	                x=$(echo "$line" | sed -e "s/#[^ ]*[^(]*/#$TNAM $subword /")
-	                _check_2nd_chance "$x" 1
+	                _check_2nd_chance "$x" $EXIT_CODE
                 fi
             fi
             
@@ -142,10 +144,10 @@ then
             # Because this is so often the case, we'll give a failed
             # test case a second chance before giving up.
             #
-            _check_2nd_chance "$line" 2
+            _check_2nd_chance "$line" $EXIT_FAILED
         fi
         _2ND_CHANCE="Y"
     done
 else
-    _check_2nd_chance "#$TNAM *FAILED*  (unknown - unknown): ${TEST_DESC:0:80}" 3  
+    _check_2nd_chance "#$TNAM *FAILED*  (unknown - unknown): ${TEST_DESC:0:80}" $EXIT_FAILED
 fi
