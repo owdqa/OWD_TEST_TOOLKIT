@@ -48,7 +48,17 @@ run_test(){
     TEST_DESC=$(grep "_Description" $TEST_FILE | head -1 | sed -e "s/^[^\"]*\"\(.*\)\"/\1/")
     export TEST_DESC=${TEST_DESC:-"(no description found!)"}
 
-    $OWD_TEST_TOOLKIT_BIN/run_test_case.sh 
+    #
+    # Bit of fiddling to get the 'real' timestamp for this test case.
+    #
+    x=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1)
+    y=$(echo "$x" | egrep "^#")
+    z=$(echo "$x" | egrep "^real" | awk '{print $2}' | awk 'BEGIN{FS="."}{print $1}')
+    z_mm=$(echo "$z" | awk 'BEGIN{FS="m"}{print $1}' | awk '{printf "%.2d", $0}')
+    z_ss=$(echo "$z" | awk 'BEGIN{FS="m"}{print $2}' | awk '{printf "%.2d", $0}')
+    z="$z_mm:$z_ss"
+
+    echo "$y" | sed -e "s/TESTTIME/$z/"
 }
 
 
@@ -356,11 +366,10 @@ echo "
 Unexpected failures: $TCFAILED
 
 *******************
-
-Test cases passed  : $TCPASS / $TCTOTAL 
-Test actions passed: $PASSED / $TOTAL
-Total blocked tests: $TCBLOCKED
 "
+printf "Test cases passed  : %4s / %-4s\n" $TCPASS $TCTOTAL 
+printf "Test actions passed: %4s / %-4s\n" $PASSED $TOTAL
+printf "Total blocked tests: $TCBLOCKED\n\n"
 
 printf "\nDONE.\n\n"
 
