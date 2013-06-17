@@ -6,6 +6,13 @@ class main(GaiaTestCase):
         #
         # Delete the currently selected messages in this thread.
         #
+        self.UTILS.logResult(False, "Deleting threads is blocked by bug 879816 (and takes too long to fail!).")
+        return
+	   
+	   
+	   
+	   
+	   
         x= self.UTILS.getElement(DOM.Messages.edit_msgs_delete_btn, "Delete message" )
         x.tap()
         
