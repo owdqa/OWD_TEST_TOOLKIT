@@ -27,7 +27,7 @@ class main(GaiaTestCase):
 
         DET_FILE.write("Test case  : %s\n" % self.testNum)
         DET_FILE.write("Description: %s\n" % self.testDesc)
-        DET_FILE.write("Time taken : %s\n" % str(test_time))
+        DET_FILE.write("Time taken : %s (not including restarting device etc...)\n" % str(test_time))
 
         boolStart = False
         for i in self._commentArray:
@@ -54,7 +54,7 @@ class main(GaiaTestCase):
         SUM_FILE.write("#%s %s (%s - %s): %s.\n" % (
                                                   self.testNum.ljust(5),
                                                   res_str.ljust(9),
-                                                  str(test_time),
+                                                  "TESTTIME",
                                                   totals.center(7),
                                                   self.testDesc.ljust(80)
                                                   )
