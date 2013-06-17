@@ -4,7 +4,7 @@ class main(GaiaTestCase):
 
     def setupDataConn(self):
         #
-        # Set the phone's time (using gaia data_layer instead of the UI).
+        # Set the phone's details for data conn (APN etc...).
         #
         APN  = "telefonica.es"
         ID   = "telefonica"

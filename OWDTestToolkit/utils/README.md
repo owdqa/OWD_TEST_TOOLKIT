@@ -294,7 +294,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>setupDataConn</td>
         <td align=left></td>
-        <td align=left>Set the phone's time (using gaia data_layer instead of the UI).</td>
+        <td align=left>Set the phone's details for data conn (APN etc...).</td>
     </tr>
 
 
