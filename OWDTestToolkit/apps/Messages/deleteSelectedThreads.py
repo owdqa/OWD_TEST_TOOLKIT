@@ -6,7 +6,7 @@ class main(GaiaTestCase):
         #
         # Delete the currently selected message threads.
         #
-        self.logResult(False, "Blocked by bug 879816 (and takes too long to fail!")
+        self.UTILS.logResult(False, "Blocked by bug 879816 (and takes too long to fail!")
         return
        
        
