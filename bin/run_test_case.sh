@@ -20,9 +20,13 @@ done
 
 TNAM=$(echo $TEST_NAME | awk '{printf "%-5s", $0}')
 
+
+#
 # At the moment things sometimes file the first time. This
 # just allows us to try one more time.
+#
 _2ND_CHANCE=$1
+
 
 #
 # Function to report the end of the test.
@@ -34,6 +38,7 @@ _end_test(){
     echo "${EXIT_STR}${ATTEMPTS}"
     exit $EXIT_CODE
 }
+
 
 #
 # Function to handle 2nd chances ...
@@ -53,13 +58,27 @@ _check_2nd_chance(){
     fi
 }
 
+
 #
 # Run the test using 'gaiatest', ignore STDOUT (because what we want is being
 # writtin to a file), but capture STDERR.
 #
-# (For speed, only restart if this is 2nd chance AND OWD_USE_2ND_CHANCE is set.)
+# For speed, only restart the device if:
+#
+#   1. This is the 2nd chance.
+#   2. The test case script has "_RESTART_DEVICE = True" in it.
+#
+#
+
+# 1.
 [ "${_2ND_CHANCE}" ] && RESTART="--restart" || RESTART=""
-[ ! "$OWD_USE_2ND_CHANCE" ] && RESTART="" || RESTART="$RESTART"
+
+# 2.
+x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE) 
+[ "${x}" ] && RESTART="--restart" || RESTART=""
+
+
+#[ ! "$OWD_USE_2ND_CHANCE" ] && RESTART="" || RESTART="$RESTART"
 TESTVARS="--testvars=${THISPATH}/gaiatest_testvars.json"
 ADDRESS="--address=localhost:2828"
 
