@@ -63,6 +63,7 @@ class UTILS(app.main        ,
         #
         self.data_layer.set_setting("vibration.enabled", True)
         self.data_layer.set_setting("audio.volume.notification", 0)
+        self.data_layer.set_setting('ril.radio.disabled', False)
 
         self.apps.set_permission('Camera', 'geolocation', 'deny')
         self.apps.set_permission('Homescreen', 'geolocation', 'deny')
