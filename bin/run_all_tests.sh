@@ -366,11 +366,10 @@ echo "
 Unexpected failures: $TCFAILED
 
 *******************
-
-Test cases passed  : $TCPASS / $TCTOTAL 
-Test actions passed: $PASSED / $TOTAL
-Total blocked tests: $TCBLOCKED
 "
+printf "Test cases passed  : %4s / %-4s\n" $TCPASS $TCTOTAL 
+printf "Test actions passed: %4s / %-4s\n" $PASSED $TOTAL
+printf "Total blocked tests: $TCBLOCKED\n\n"
 
 printf "\nDONE.\n\n"
 
