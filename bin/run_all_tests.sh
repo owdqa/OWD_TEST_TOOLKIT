@@ -10,12 +10,14 @@ $OWD_TEST_TOOLKIT_BIN/check_parameters_file.sh
 mkdir /tmp/tests 2>/dev/null
 chmod 777 /tmp/tests 2> /dev/null
 
-export THISPATH=$(dirname $0)
-export EXECPATH=$(pwd)
-export RESULT_DIR="/tmp/tests/B2G_tests.$(date +%Y%m%d%H%M%S)"
 export TESTDIR="./tests"
 export PARAM_FILE="$HOME/.OWD_TEST_PARAMETERS"
-export GET_XREF="$THISPATH/get_xref.sh"
+export GET_XREF="$OWD_TEST_TOOLKIT_BIN/get_xref.sh"
+
+export RESULT_DIR="/tmp/tests/B2G_tests.$(date +%Y%m%d%H%M%S)"
+[ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
+
+export TMP_VAR_FILE="$RESULT_DIR/.tmp_var_file"
 
 #
 # Exit codes so the we know hoe the test runner script ended.
@@ -25,40 +27,48 @@ export EXIT_FAILED=1
 export EXIT_BLOCKED=2
 
 
-[ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
-
 ################################################################################
 #
 # FUNCTIONS
 #
 
 #
+# Function to split the output from the test run into variables.
+#
+f_split_run_details(){
+    test_num=$(     echo "$1" | awk 'BEGIN{FS="\t"}{print $1}')
+    test_blocked=$( echo "$1" | awk 'BEGIN{FS="\t"}{print $2}')
+    test_result=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $3}')
+    test_passes=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $4}')
+    test_total=$(   echo "$1" | awk 'BEGIN{FS="\t"}{print $5}')
+    test_desc=$(    echo "$1" | awk 'BEGIN{FS="\t"}{print $6}' | sed -e "s/^[ \t]*//" | sed -e "s/\"//g")
+    test_repeat=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $7}')
+    
+    echo "
+    test_num=\"$test_num\"
+    test_blocked=\"$test_blocked\"
+    test_result=\"$test_result\"
+    test_passes=\"$test_passes\"
+    test_total=\"$test_total\"
+    test_desc=\"$test_desc\"
+    test_repeat=\"$test_repeat\"
+    " > $TMP_VAR_FILE
+}
+
+#
 # Function to run a test case ...
 #
 run_test(){
-    export TEST_FILE="./tests/test_${1}.py"
-    
-    if [ "$TEST_TYPE" ]
-    then
-    	export TEST_NAME=$($GET_XREF "$TEST_TYPE" "$1")
-    else
-        export TEST_NAME=$1
-    fi
-    
-    TEST_DESC=$(grep "_Description" $TEST_FILE | head -1 | sed -e "s/^[^\"]*\"\(.*\)\"/\1/")
-    export TEST_DESC=${TEST_DESC:-"(no description found!)"}
-
     #
-    # Bit of fiddling to get the 'real' timestamp for this test case.
+    # Run the test and update the variables with the results.
     #
-    x=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1)
-    y=$(echo "$x" | egrep "^#")
-    z=$(echo "$x" | egrep "^real" | awk '{print $2}' | awk 'BEGIN{FS="."}{print $1}')
-    z_mm=$(echo "$z" | awk 'BEGIN{FS="m"}{print $1}' | awk '{printf "%.2d", $0}')
-    z_ss=$(echo "$z" | awk 'BEGIN{FS="m"}{print $2}' | awk '{printf "%.2d", $0}')
-    z="$z_mm:$z_ss"
-
-    echo "$y" | sed -e "s/TESTTIME/$z/"
+    while read line
+    do
+    	f_split_run_details "$line"
+    	break
+done <<EOF
+    $($OWD_TEST_TOOLKIT_BIN/run_test_case.sh)
+EOF
 }
 
 
@@ -73,7 +83,6 @@ run_test(){
 # the caller has either set the values for this shell manually,
 # or wants to be asked).
 #
-# NOTE: Modified to only set variables which haven't been set already.
 if [ -f "$PARAM_FILE" ]
 then
     while read line
@@ -102,8 +111,10 @@ then
     exit 1
 fi
 
+
+################################################################################
 #
-# Firstly, if this is a TEST TYPE, then ignore everything else.
+# Set up test list (using test type, if specified, or test numbers.
 #
 export TEST_TYPE=$(echo "$@" | awk 'BEGIN{FS="{"}{print $2}' | awk 'BEGIN{FS="}"}{print $1}')
 if [ "$TEST_TYPE" ]
@@ -146,62 +157,15 @@ else
 	    do
 	        TESTS="$TESTS $line"
 	    done <<EOF
-	    $(ls ./tests/test_*.py | grep -v "test_00" | sed -e "s/^.*test_//" | sed -e "s/\..*//")
+	    $(ls ./tests/test_*.py | sed -e "s/^.*test_//" | sed -e "s/\..*//")
 EOF
-	fi
-	
-	
-	group_markers=""
-	while true
-	do
-	    x=$(echo "$TESTS" | egrep "\[.*\]")    
-	    if [ ! "$x" ]
-	    then
-	    	# no markers left.
-	    	break
-	    fi
-	    
-	    # Add the next group marker to the list using newlines (because we can't use space).
-	    group=$(echo "$TESTS" | sed -e "s/^.*\(\[[a-zA-Z0-9 ]*\]\).*$/\1/")
-	    group_markers="$group_markers\n$group"
-	    
-	    # Remove this marker from the TESTS variable.
-	    x=$(echo $TESTS | sed -e "s/^\(.*\)\(\[[a-zA-Z0-9 ]*\]\)\(.*\)$/\1\3/")
-	    TESTS="$x"
-	done
-		
-	#
-	# 'Unpack' any group selectors in the tests spec.
-	#
-	if [ "$group_markers" ]
-	then
-		while read group_marker
-		do
-			[ ! "$group_marker" ] && continue
-			
-			# Prepare the marker to be used in a grep ("[]" need escaped)
-		    group_marker=$(echo $group_marker | sed -e "s/\[/\\\[/" | sed -e "s/\]/\\\]/")
-		    
-		    while read match_file
-		    do
-		        match_test=$(echo $match_file | \
-		                     awk '{print $1}' | \
-		                     awk 'BEGIN{FS="_"}{print $NF}' | \
-		                     awk 'BEGIN{FS="."}{print $1}')
-		        group_tests="$group_tests $match_test"
-		    done <<EOF
-		    $(grep "$group_marker" ./tests/test_*.py | grep "_Description")
-EOF
-	    done <<EOF2
-	    $(printf "$group_markers")
-EOF2
-	fi
+    fi
 fi
 	
 #
 # Order the list (uniquely).
 #
-TEST_TMP="$TESTS $group_tests"
+TEST_TMP="$TESTS"
 TESTS=""
 while read testnum
 do
@@ -212,78 +176,10 @@ EOF
 
 
 
-
-#
-# Run the tests ...
-#
-for i in $(echo $TESTS)
-do
-	[ ! -f ./tests/test_${i}.py ] && continue
-	
-    while read line
-    do
-        # If it's commented out ignore it.
-        ISCOMMENTED=$(echo $line | awk '{print $1}' | egrep "^#")
-        [ "$ISCOMMENTED" ] && continue
-
-        VARNAM=$(echo $line | sed -e "s/^.*(\"//" | sed -e "s/\".*//")
-        VARSTR=$(echo $line | sed -e "s/^.*, *\"//" | sed -e "s/\".*//")
-
-        #
-        # Ignore this 'variable' - just using it to prompt.
-        #
-        if [ "$VARNAM" = "ENTER" ]
-        then
-            continue
-        fi
-
-        #
-        # Make sure it's not already set.
-        #
-        env_set=$(eval echo $`echo $VARNAM`)
-        if [ ! "$env_set" ]
-        then
-            QUESTION=("${QUESTION[@]}" "$VARSTR")
-            VARIABLE=("${VARIABLE[@]}" "$VARNAM")
-        fi
-
-    done << EOF
-    $(grep -i ".get_os_variable" tests/test_${i}.py | grep -v "False)")
-EOF
-done
-
-for ((i=0; i<=${#QUESTION[@]}; ++i))
-do
-    if [ "${QUESTION[$i]}" ]
-    then
-        Q="${QUESTION[$i]}"
-        V="${VARIABLE[$i]}"
-
-        if [ ! "$gotParams" ]
-        then
-            gotParams="Y"
-            printf "\nSome of the tests you have chosen require input ...\n\n"
-        fi
-
-        ans=""
-        while [ ! "$ans" ]
-        do
-            printf "$Q [$V]: "
-            read ans
-        done
-
-        eval export $V="$ans" 2>/dev/null
-
-    fi
-done 
-
-
 ################################################################################
 #
 # NOW RUN THE TESTS ...
 #
-[ "$gotParams" ] && printf "\n\n"
-
 
 #
 # Establsh connection to device.
@@ -304,69 +200,96 @@ printf "\n\n(For test run details, see '*_detail' files in \"${RESULT_DIR}\".)\n
 #
 PASSED=0
 TOTAL=0
+BLOCKED=0
 TCPASS=0
 TCTOTAL=0
-TCBLOCKED=0
 TCFAILED=0
 for i in $(echo $TESTS)
 do
-	if [ ! -f ./tests/test_${i}.py ]
-	then
-		echo "ERROR: Cannot find test for \"$i\"!"
-		continue
-	fi	
+    export TEST_FILE="./tests/test_${i}.py"
 
-    results=$(run_test $i)
-    exitCode=$?
+	if [ ! -f $TEST_FILE ]
+	then
+		echo "ERROR: $TEST_FILE not found, cannot find test for \"$i\"!"
+		continue
+	fi
+	
+	export TEST_NUM=$i
+
+    #
+    # Run the test and record the time taken...
+    #
+    test_time=$( (time run_test $TEST_CASE) 2>&1 )
+
+    # This is a pain, but that capture $() stops us assigning
+    # variables from there directly.
+    . $TMP_VAR_FILE
     
-    if [ $exitCode -eq 0 ]
+    #
+    # Update the final summary totals.
+    #
+    if [ "$test_result" = "0" ]
     then
+    	#
+    	# Passed.
+    	#
         TCPASS=$(($TCPASS+1))
+        [ "$test_blocked" = "Y" ] && test_result="*unblock?*" || test_result=""
     else
-        if [ $exitCode -eq $EXIT_FAILED ]
-        then
-        	TCFAILED=$(($TCFAILED+1))
-		elif [ $exitCode -eq $EXIT_BLOCKED ]
-		then
-            TCBLOCKED=$(($TCBLOCKED+1))			
-		fi
+        #
+        # Failed.
+        #
+        TCFAILED=$(($TCFAILED+1))
+        [ "$test_blocked" = "Y" ] && test_result="(blocked)" || test_result="*FAILED*"        
     fi
     TCTOTAL=$(($TCTOTAL+1))
+    [ "$test_blocked" = "Y" ] && BLOCKED=$(($TCBLOCKED+1))
     
-    errChk=$(echo $results | grep -i " unknown)" | awk '{print $2}' | grep "FAIL")
-    if [ "$errChk" ]
+    [ "$test_passes" = "?" ] && tp=0 || tp=$test_passes
+    [ "$test_total"  = "?" ] && tt=0 || tt=$test_total
+    PASSED=$(($PASSED+$tp))
+    TOTAL=$(($TOTAL+$tt))
+
+        
+    #
+    # Get the xref test number (if applicable).
+    #
+    if [ "$TEST_TYPE" ]
     then
-        #
-        # Total failure - ignore and move on...
-        #
-        echo "$results"
-        continue
+        export test_num=$($GET_XREF "$TEST_TYPE" "$test_num")
     fi
-
-    echo "$results"
-
+    
     #
-    # Get the totals.
+    # Prepare and report the summary results for this test.
     #
-    totals=` echo "$results" | sed -e "s/^[^(]*([^-]*- *\([^)]*\).*$/\1/"`
-    passed=$(echo "$totals"  | awk 'BEGIN{FS="/"}{print $1}' | awk '{print $1}' | egrep "^[0-9]*$")
-    total=$( echo "$totals"  | awk 'BEGIN{FS="/"}{print $2}' | awk '{print $1}' | egrep "^[0-9]*$")
+    z=$(echo "$test_time" | egrep "^real" | awk '{print $2}' | awk 'BEGIN{FS="."}{print $1}')
+    z_mm=$(echo "$z" | awk 'BEGIN{FS="m"}{print $1}' | awk '{printf "%.2d", $0}')
+    z_ss=$(echo "$z" | awk 'BEGIN{FS="m"}{print $2}' | awk '{printf "%.2d", $0}')
 
-    passed=${passed:-0}
-    total=${total:-0}
+    test_time="$z_mm:$z_ss"
+    
+    x=${#test_desc}
+    [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
+test_repeat="(x2)"
+    printf "%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
+           "$test_num"    \
+           "$test_result" \
+           "$test_time"   \
+           "$test_passes" \
+           "$test_total"  \
+           "$test_desc"   \
+           "$test_repeat"
 
-    PASSED=$(($PASSED+$passed))
-    TOTAL=$(($TOTAL+$total))
     
 done
 
-printf "\n*******************\n"
-printf "Unexpected failures: %4s\n\n" $TCFAILED
+printf "\n*******************\n\n"
+printf "Unexpected failures: %4s\n" $TCFAILED
 printf "\n*******************\n\n"
 
 printf "Test cases passed  : %4s / %-4s\n" $TCPASS $TCTOTAL 
 printf "Test actions passed: %4s / %-4s\n" $PASSED $TOTAL
-printf "Total blocked tests: %4s\n\n" $TCBLOCKED
+printf "Total blocked tests: %4s\n\n" $BLOCKED
 
 printf "\nDONE.\n\n"
 

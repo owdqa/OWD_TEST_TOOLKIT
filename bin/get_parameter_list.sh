@@ -9,6 +9,7 @@
 #
 IGNORE_LIST=(
     "TEST_NAME" 
+    "TEST_NUM"
     "TEST_DESC" 
     "DET_FILE" 
     "SUM_FILE" 

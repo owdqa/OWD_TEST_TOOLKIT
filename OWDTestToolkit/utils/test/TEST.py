@@ -14,13 +14,11 @@ class main(GaiaTestCase):
         fnam = False
         if not p_result:
             fnam = self.screenShotOnErr()
-            self.failed = self.failed + 1
             self.logResult(p_result, p_msg, fnam)
 
             if p_stop:
                 self.quitTest()
         else:
-            self.passed = self.passed + 1
             self.logResult(p_result, p_msg)
         
 
