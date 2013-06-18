@@ -282,8 +282,8 @@ do
     
     x=${#test_desc}
     [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
-    printf "%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
-           "$test_num"    \
+    printf "#%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
+           "$TEST_NUM"    \
            "$test_result" \
            "$test_time"   \
            "$test_passes" \
