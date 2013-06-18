@@ -168,5 +168,5 @@ then
         _2ND_CHANCE="Y"
     done
 else
-    _check_2nd_chance "#$TNAM *FAILED*  (unknown - unknown): ${TEST_DESC:0:80}" $EXIT_FAILED
+    _check_2nd_chance "#$TNAM *FAILED*  (TESTTIME - unknown): ${TEST_DESC:0:80}" $EXIT_FAILED
 fi
