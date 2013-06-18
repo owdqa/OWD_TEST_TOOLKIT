@@ -280,8 +280,12 @@ do
 
     test_time="$z_mm:$z_ss"
     
+    #
+    # Pad the descrioption to 70 chars - if it's over that put "..." on the end.
+    #
     x=${#test_desc}
     [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
+    
     printf "#%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
            "$TEST_NUM"    \
            "$test_result" \

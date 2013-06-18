@@ -19,6 +19,7 @@ class EverythingMe (
         self.parent     = p_parent
         self.marionette = p_parent.marionette
         self.UTILS      = p_parent.UTILS
+        self.actions    = Actions(self.marionette)
 
     def launch(self):
         #
