@@ -2,8 +2,8 @@ from OWDTestToolkit.global_imports import *
     
 class main(GaiaTestCase):
 
-    _subnote  = " |__ ";
-    _no_time  = "          " #(10 spaces)
+    _subnote  = "|__ ";
+    _no_time  = "         " #(10 spaces)
     
     def logResult(self, p_result, p_msg, p_fnam=False):
         #
@@ -38,17 +38,12 @@ class main(GaiaTestCase):
         self._resultArray.append((self._no_time, "info", " "))          # (blank newline)
         self._resultArray.append((timestamp, p_result, msgArr[0])) # (the main message)
         
-        if p_result:
-            #
-            # Don't add the subnotes if this was just a test that passed.
-            #
-            if not str(p_result) == "info":
+        if not str(p_result) == "info":
+            if p_result:            
+                self.passed = self.passed + 1
                 return
-        else:
-            #
-            # Result = False, mark this up!
-            #
-            self.failed = self.failed + 1
+            else:
+                self.failed = self.failed + 1
 
         #
         # Print subnote (only for failed and 'info' messages.

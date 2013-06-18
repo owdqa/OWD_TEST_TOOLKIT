@@ -5,10 +5,8 @@
 # Some of these variables come from 'run_all_tests' ...
 #
 export ERR_FILE=${RESULT_DIR}/error_output
-export SUM_FILE=${RESULT_DIR}/${TEST_NAME}_summary
-export DET_FILE=${RESULT_DIR}/${TEST_NAME}_detail
-
-TEST_IS_BLOCKED=$(echo "$TEST_DESC" | grep -i "blocked by")
+export SUM_FILE=${RESULT_DIR}/${TEST_NUM}_summary
+export DET_FILE=${RESULT_DIR}/${TEST_NUM}_detail
 
 #
 # Make sure gaiatest isn't still running (sometimes a process is left after the run).
@@ -18,79 +16,122 @@ do
 	kill $pid > /dev/null 2> /dev/null
 done
 
-TNAM=$(echo $TEST_NAME | awk '{printf "%-5s", $0}')
-
 
 #
-# At the moment things sometimes file the first time. This
-# just allows us to try one more time.
+# Function to split the line from the test reporter into variables.
 #
-_2ND_CHANCE=$1
+f_split_run_details(){
+	test_num=$(     echo "$1" | awk 'BEGIN{FS="\t"}{print $1}')
+    test_result=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $2}')
+    test_passes=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $3}')
+    test_total=$(   echo "$1" | awk 'BEGIN{FS="\t"}{print $4}')
+	test_desc=$(    echo "$1" | awk 'BEGIN{FS="\t"}{print $5}')
+}
 
-
 #
-# Function to report the end of the test.
+# Function to just output the result summary line.
 #
-_end_test(){
-	EXIT_STR="$1"
-	EXIT_CODE=$2
-    [ "${_2ND_CHANCE}" ] && ATTEMPTS="(x2)" || ATTEMPTS=""
-    echo "${EXIT_STR}${ATTEMPTS}"
-    exit $EXIT_CODE
+f_output_run_details(){
+	printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
+	       "$test_num"    \
+	       "$test_blocked"\
+           "$test_result" \
+           "$test_passes" \
+           "$test_total"  \
+           "$test_desc"   \
+           "$test_repeat"
 }
 
 
 #
-# Function to handle 2nd chances ...
+# Function to run a test case ...
 #
-_check_2nd_chance(){
-    STROUT="$1"
-    EXIT=$2
-    
-    # (Neve give a 2nd chance to a blocked test.)
-    if [ "${_2ND_CHANCE}" ] || [ ! "$OWD_USE_2ND_CHANCE" ] || [ "$TEST_IS_BLOCKED" ]
+f_run_test(){
+    #
+    # Run the test and update the variables with the results.
+    #
+    if [ ! "$test_blocked" ]
     then
-    	_end_test "$STROUT" $EXIT
-    else
-        # Try again.
-        $0 Y
-        exit $?
+	    x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE)
+	    [ "$x" ] && RESTART="--restart"
+    fi
+	TESTVARS="--testvars=${OWD_TEST_TOOLKIT_BIN}/gaiatest_testvars.json"
+	ADDRESS="--address=localhost:2828"
+
+	while read line
+	do
+	    f_split_run_details "$line"
+	    break
+    done <<EOF
+    $(gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE 2>$ERR_FILE | egrep "^#")
+EOF
+}
+
+#
+# Function to see if we can use 2nd chance.
+#
+f_2nd_chance(){
+    #
+    # The rules are ...
+    #
+    # - only if $OWD_USE_2ND_CHANCE is set.
+    # - if not blocked.
+    # - restart device always on 2nd chance.
+    #
+    if [ ! "$test_blocked" ] && [ "$OWD_USE_2ND_CHANCE" ]
+    then
+	    if [ "$test_result" != "0" ]
+	    then
+            export RESTART="--restart"
+            f_run_test
+            test_repeat="(x2)"
+        fi
     fi
 }
 
 
-#
-# Run the test using 'gaiatest', ignore STDOUT (because what we want is being
-# writtin to a file), but capture STDERR.
-#
-# For speed, only restart the device if:
-#
-#   1. This is the 2nd chance.
-#   2. The test case script has "_RESTART_DEVICE = True" in it.
-#
-#
-
-# 1.
-[ "${_2ND_CHANCE}" ] && RESTART="--restart" || RESTART=""
-
-# 2.
-x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE) 
-[ "${x}" ] && RESTART="--restart" || RESTART=""
-
-
-#[ ! "$OWD_USE_2ND_CHANCE" ] && RESTART="" || RESTART="$RESTART"
-TESTVARS="--testvars=${THISPATH}/gaiatest_testvars.json"
-ADDRESS="--address=localhost:2828"
-
-gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE > /dev/null 2>$ERR_FILE
 
 #
-# Now append any Marionette output to the details file (sometimes it contains
+# Run the test.
+#
+test_blocked=$(egrep "^[^#]*_Description *= *.*BLOCKED BY" $TEST_FILE)
+RESTART=""
+test_repeat=""
+f_run_test
+
+#
+# Check for 2nd chance.
+#
+f_2nd_chance
+
+if [ ! "$test_num" ]
+then
+    #
+    # Total failure - didn't even get to the test part!
+    #
+    test_num="$TEST_NUM"
+    test_result="1" #(no. of fails - this just marks the test as 'did not pass')
+    test_passes="?"
+    test_total="?"
+    test_desc=$(grep "_Description" $TEST_FILE | awk 'BEGIN{FS="="}{print $2}')
+fi
+
+
+#
+# Append any Marionette output to the details file (sometimes it contains
 # 'issues' that we don't catch).
 #
 x=$(grep -i error $ERR_FILE)
 if [ "$x" ]
 then
+	#
+	# Set the test result status to 'something failed'.
+	#
+	test_result="1"
+	
+	#
+	# Append the marionette stacktrace to the end of the details file.
+	#
     echo "
 
 
@@ -105,68 +146,8 @@ $(cat $ERR_FILE)
 
 fi
 
-#
-# Display the summary file.
-# If there is an 'error' in the marionette output but we think our tests
-# passed, this indicates a possible error with our test code.
-#
-if [ -f "$SUM_FILE" ]
-then
-    cat $SUM_FILE | while read line
-    do
-        result=$(echo $line | awk '{print $2}')
-        
-        failTest=$(echo "$result" | egrep -i "failed|blocked")
-        if [ ! "$failTest" ]
-        then
-            x="$line"
-            errChk=$(grep -i error $ERR_FILE)
 
-            if [ "$errChk" ]
-            then
-            	#
-            	# SOME marionette errors just need a little wait.
-            	#
-            	x=$(grep -i "Could not successfully complete transport of message to Gecko" $ERR_FILE)
-            	if [ "$x" ]
-            	then
-            		# Try again, without 2nd chance being set.
-            		_2ND_CHANCE=""
-            		_check_2nd_chance "$x" $EXIT_FAILED
-            	else
-            	    #
-            	    # This test failed.
-                    #
-            	    if [ "$TEST_IS_BLOCKED" ]
-            	    then
-            	    	subword="(blocked)"
-            	    	EXIT_CODE=$EXIT_BLOCKED
-            	    else
-                        subword="*FAILED* "
-                        EXIT_CODE=$EXIT_FAILED
-                    fi
-                    
-	                x=$(echo "$line" | sed -e "s/#[^ ]*[^(]*/#$TNAM $subword /")
-	                _check_2nd_chance "$x" $EXIT_CODE
-                fi
-            fi
-            
-            #
-            # If we get here then all's well - just leave.
-            #
-            _end_test "$x" 0
-        else
-            #
-            # It failed - at the moment, failures are often just
-            # 'something odd' in Marionette or Gaiatest, which run
-            # fine the next time you try.
-            # Because this is so often the case, we'll give a failed
-            # test case a second chance before giving up.
-            #
-            _check_2nd_chance "$line" $EXIT_FAILED
-        fi
-        _2ND_CHANCE="Y"
-    done
-else
-    _check_2nd_chance "#$TNAM *FAILED*  (TESTTIME - unknown): ${TEST_DESC:0:80}" $EXIT_FAILED
-fi
+#
+# Finally, output the final details (tab separated).
+#
+f_output_run_details

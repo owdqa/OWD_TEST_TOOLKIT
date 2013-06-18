@@ -53,10 +53,14 @@ class UTILS(app.main        ,
         #
         # Get run details from the OS.
         #
-        self.testNum        = self.get_os_variable("TEST_NAME")
-        self.testDesc       = self.get_os_variable("TEST_DESC")
+        self.testNum        = self.get_os_variable("TEST_NUM")
         self.det_fnam       = self.get_os_variable("DET_FILE")
-        self.sum_fnam       = self.get_os_variable("SUM_FILE")
+        self.sum_fnam       = self.get_os_variable("SUM_FILE")        
+        try:
+            self.testDesc   = self.parent._Description
+        except:
+            self.testDesc   = "(no description found!)"
+        
 
         #
         # Set device defaults.
