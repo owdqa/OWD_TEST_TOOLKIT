@@ -37,16 +37,14 @@ export EXIT_BLOCKED=2
 #
 f_split_run_details(){
     test_num=$(     echo "$1" | awk 'BEGIN{FS="\t"}{print $1}')
-    test_blocked=$( echo "$1" | awk 'BEGIN{FS="\t"}{print $2}')
-    test_result=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $3}')
-    test_passes=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $4}')
-    test_total=$(   echo "$1" | awk 'BEGIN{FS="\t"}{print $5}')
-    test_desc=$(    echo "$1" | awk 'BEGIN{FS="\t"}{print $6}' | sed -e "s/^[ \t]*//" | sed -e "s/\"//g")
-    test_repeat=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $7}')
+    test_result=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $2}')
+    test_passes=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $3}')
+    test_total=$(   echo "$1" | awk 'BEGIN{FS="\t"}{print $4}')
+    test_desc=$(    echo "$1" | awk 'BEGIN{FS="\t"}{print $5}' | sed -e "s/^[ \t]*//" | sed -e "s/\"//g")
+    test_repeat=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $6}')
     
     echo "
     test_num=\"$test_num\"
-    test_blocked=\"$test_blocked\"
     test_result=\"$test_result\"
     test_passes=\"$test_passes\"
     test_total=\"$test_total\"
@@ -133,7 +131,7 @@ then
     	fi
     	
     	# Use the function to return a test (if there is one!)
-    NEW=$($GET_XREF "$TEST_TYPE" "$orig")
+        NEW=$($GET_XREF "$TEST_TYPE" "$orig")
     	if [ "$NEW" ]
     	then
     	   # This test is part of this test type.
@@ -195,6 +193,11 @@ fi
 
 printf "\n\n(For test run details, see '*_detail' files in \"${RESULT_DIR}\".)\n\n"
 
+if [ "$OWD_NO_BLOCKED" ]
+then
+	printf "** NOTE: 'OWD_NO_BLOCKED' is set - ignoring blocked test cases. **\n\n"
+fi
+
 #
 # Now run tests as required.
 #
@@ -211,6 +214,15 @@ do
 	if [ ! -f $TEST_FILE ]
 	then
 		echo "ERROR: $TEST_FILE not found, cannot find test for \"$i\"!"
+		continue
+	fi
+	
+	#
+	# If this test is blocked AND OWD_NO_BLOCKED is set, then ignore it.
+	#
+	export test_blocked=$(egrep "^[^#]*_Description *= *.*BLOCKED BY" $TEST_FILE)
+	if [ "$test_blocked" ] && [ "$OWD_NO_BLOCKED" ]
+	then
 		continue
 	fi
 	
@@ -270,7 +282,6 @@ do
     
     x=${#test_desc}
     [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
-test_repeat="(x2)"
     printf "%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
            "$test_num"    \
            "$test_result" \

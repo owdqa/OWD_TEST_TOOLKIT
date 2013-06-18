@@ -32,9 +32,8 @@ f_split_run_details(){
 # Function to just output the result summary line.
 #
 f_output_run_details(){
-	printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
+	printf "%s\t%s\t%s\t%s\t%s\t%s\n" \
 	       "$test_num"    \
-	       "$test_blocked"\
            "$test_result" \
            "$test_passes" \
            "$test_total"  \
@@ -90,11 +89,9 @@ f_2nd_chance(){
 }
 
 
-
 #
 # Run the test.
 #
-test_blocked=$(egrep "^[^#]*_Description *= *.*BLOCKED BY" $TEST_FILE)
 RESTART=""
 test_repeat=""
 f_run_test
