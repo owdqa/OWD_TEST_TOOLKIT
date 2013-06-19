@@ -161,7 +161,7 @@ EOF
 fi
 	
 #
-# Order the list (uniquely).
+# Order the list (uniquely and in order).
 #
 TEST_TMP="$TESTS"
 TESTS=""
@@ -169,7 +169,7 @@ while read testnum
 do
 	TESTS="$TESTS $testnum"
 done << EOF
-$(echo "$TEST_TMP" | sed -e "s/ /\n/g" | sort -u)
+$(echo "$TEST_TMP" | sed -e "s/ /\n/g" | sort -nu)
 EOF
 
 
