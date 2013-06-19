@@ -1,5 +1,6 @@
 #!/bin/bash
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
+. $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
 
 #
 # Before we do anything, check the parameters file is okay.
@@ -14,62 +15,22 @@ export TESTDIR="./tests"
 export PARAM_FILE="$HOME/.OWD_TEST_PARAMETERS"
 export GET_XREF="$OWD_TEST_TOOLKIT_BIN/get_xref.sh"
 
-export RESULT_DIR="/tmp/tests/B2G_tests.$(date +%Y%m%d%H%M%S)"
+export RUN_ID=$(date +%Y%m%d%H%M%S)
+export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
+export RESULT_DIR="/tmp/tests/B2G_tests.$RUN_ID"
 [ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
 
 export TMP_VAR_FILE="$RESULT_DIR/.tmp_var_file"
+export HTML_LINES="$RESULT_DIR/.html_lines"
+export SUMMARY_HTML=$RESULT_DIR/run_summary.html
+
 
 #
-# Exit codes so the we know hoe the test runner script ended.
+# Exit codes so the we know how the test runner script ended.
 #
 export EXIT_PASSED=0
 export EXIT_FAILED=1
 export EXIT_BLOCKED=2
-
-
-################################################################################
-#
-# FUNCTIONS
-#
-
-#
-# Function to split the output from the test run into variables.
-#
-f_split_run_details(){
-    test_num=$(     echo "$1" | awk 'BEGIN{FS="\t"}{print $1}')
-    test_result=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $2}')
-    test_passes=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $3}')
-    test_total=$(   echo "$1" | awk 'BEGIN{FS="\t"}{print $4}')
-    test_desc=$(    echo "$1" | awk 'BEGIN{FS="\t"}{print $5}' | sed -e "s/^[ \t]*//" | sed -e "s/\"//g")
-    test_repeat=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $6}')
-    
-    echo "
-    test_num=\"$test_num\"
-    test_result=\"$test_result\"
-    test_passes=\"$test_passes\"
-    test_total=\"$test_total\"
-    test_desc=\"$test_desc\"
-    test_repeat=\"$test_repeat\"
-    " > $TMP_VAR_FILE
-}
-
-#
-# Function to run a test case ...
-#
-run_test(){
-    #
-    # Run the test and update the variables with the results.
-    #
-    while read line
-    do
-    	f_split_run_details "$line"
-    	break
-done <<EOF
-    $($OWD_TEST_TOOLKIT_BIN/run_test_case.sh)
-EOF
-}
-
-
 
 ################################################################################
 #
@@ -227,16 +188,31 @@ do
 	fi
 	
 	export TEST_NUM=$i
+	export ERR_FILE=${RESULT_DIR}/error_output
+	export SUM_FILE=${RESULT_DIR}/${TEST_NUM}_summary
+	export DET_FILE=${RESULT_DIR}/${TEST_NUM}_detail
 
     #
     # Run the test and record the time taken...
     #
-    test_time=$( (time run_test $TEST_CASE) 2>&1 )
-
-    # This is a pain, but that capture $() stops us assigning
-    # variables from there directly.
-    . $TMP_VAR_FILE
+    test_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
     
+    #
+    # Get the test run details.
+    #
+    f_split_run_details "$(cat $SUM_FILE)"
+    if [ ! "$test_result" ]
+    then
+        #
+        # Total failure - didn't even get to the test part!
+        #
+        test_num="$TEST_NUM"
+        test_result="1" #(no. of fails - this just marks the test as 'did not pass')
+        test_passes="?"
+        test_total="?"
+        test_desc=$(grep "_Description" $TEST_FILE | awk 'BEGIN{FS="="}{print $2}')
+    fi
+
     #
     # Update the final summary totals.
     #
@@ -278,16 +254,29 @@ do
     z_mm=$(echo "$z" | awk 'BEGIN{FS="m"}{print $1}' | awk '{printf "%.2d", $0}')
     z_ss=$(echo "$z" | awk 'BEGIN{FS="m"}{print $2}' | awk '{printf "%.2d", $0}')
 
-    test_time="$z_mm:$z_ss"
+    export test_time="$z_mm:$z_ss"
+
+    #    
+    # OUTPUT FOR HTML BUILDER.
+    #
+    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
+           "$test_num"    \
+           "$test_result" \
+           "$test_passes" \
+           "$test_total"  \
+           "$test_desc"   \
+           "$test_time"   \
+           "$test_repeat" >> $HTML_LINES
     
     #
-    # Pad the descrioption to 70 chars - if it's over that put "..." on the end.
-    #
+    # OUTPUT TO STDOUT.
+    #    
+    # Pad the description to 70 chars - if it's over that put "..." on the end.
     x=${#test_desc}
     [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
     
     printf "#%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
-           "$TEST_NUM"    \
+           "$test_num"    \
            "$test_result" \
            "$test_time"   \
            "$test_passes" \
@@ -307,6 +296,13 @@ printf "Test actions passed: %4s / %-4s\n" $PASSED $TOTAL
 printf "Total blocked tests: %4s\n\n" $BLOCKED
 
 printf "\nDONE.\n\n"
+
+
+#
+# Now create the html page.
+#
+$OWD_TEST_TOOLKIT_BIN/run_create_html.sh
+
 
 #
 # For Jenkins - if we didn't pass every tests then exit as 'fail' (non-zero).

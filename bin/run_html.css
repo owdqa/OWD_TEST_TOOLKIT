@@ -1,0 +1,49 @@
+body{
+    background-color:#ffffff;
+}
+
+body.details{
+    font-family:"monospace";
+    font-weight:"normal";
+    font-size:11px;
+}
+
+h1{
+    color:#222222;
+    text-align:center;
+    font-family:"sans";
+    font-weight:"bold";
+    font-size:20px;
+}
+
+h2{
+    color:#444444;
+    text-align:center;
+    font-family:"sans";
+    font-weight:"normal";
+    font-size:14px;
+}
+
+table{
+    font-family:"sans";
+    font-size:14px;
+}
+
+tr.failed{
+    background-color:#ff5050;
+    color:#000000;
+}
+tr.passed{
+    background-color:#00ff99;
+    color:#000000;
+}
+
+td{
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+td.desc{
+    font-size:12px;
+}

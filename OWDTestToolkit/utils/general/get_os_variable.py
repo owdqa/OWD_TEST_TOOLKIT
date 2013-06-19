@@ -15,7 +15,7 @@ class main(GaiaTestCase):
                 x = False
             
             if p_validate:
-                self.TEST(x, "Variable '" + p_name + "' set to: " + str(x) + ".", True)
+                self.TEST(x, "Variable '" + p_name + "' set to: " + str(x), True)
                 
             return x
 
