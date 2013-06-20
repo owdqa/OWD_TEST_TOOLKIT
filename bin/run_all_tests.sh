@@ -196,19 +196,19 @@ do
     # Run the test and record the time taken...
     #
     test_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
-    
+
     #
     # Get the test run details.
     #
-    test_result=""
+    test_failed=""
     [ -f "$SUM_FILE" ] && f_split_run_details "$(cat $SUM_FILE)"
-    if [ ! "$test_result" ]
+    if [ ! "$test_failed" ]
     then
         #
         # Total failure - didn't even get to the test part!
         #
         test_num="$TEST_NUM"
-        test_result="1" #(no. of fails - this just marks the test as 'did not pass')
+        test_failed="1" #(no. of fails - this just marks the test as 'did not pass')
         test_passes="?"
         test_total="?"
         test_desc=$(grep "_Description" $TEST_FILE | awk 'BEGIN{FS="="}{print $2}')
@@ -217,22 +217,22 @@ do
     #
     # Update the final summary totals.
     #
-    if [ "$test_result" = "0" ]
+    if [ "$test_failed" = "0" ]
     then
     	#
     	# Passed.
     	#
         TCPASS=$(($TCPASS+1))
-        [ "$test_blocked" = "Y" ] && test_result="*unblock?*" || test_result=""
+        [ "$test_blocked" ] && test_failed="*unblock?*" || test_failed=""
     else
         #
         # Failed.
         #
         TCFAILED=$(($TCFAILED+1))
-        [ "$test_blocked" = "Y" ] && test_result="(blocked)" || test_result="*FAILED*"        
+        [ "$test_blocked" ] && test_failed="(blocked)" || test_failed="*FAILED*"        
     fi
     TCTOTAL=$(($TCTOTAL+1))
-    [ "$test_blocked" = "Y" ] && BLOCKED=$(($TCBLOCKED+1))
+    [ "$test_blocked" ] && BLOCKED=$(($TCBLOCKED+1))
     
     [ "$test_passes" = "?" ] && tp=0 || tp=$test_passes
     [ "$test_total"  = "?" ] && tt=0 || tt=$test_total
@@ -262,7 +262,7 @@ do
     #
     printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
            "$test_num"    \
-           "$test_result" \
+           "$test_failed" \
            "$test_passes" \
            "$test_total"  \
            "$test_desc"   \
@@ -278,7 +278,7 @@ do
     
     printf "#%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
            "$test_num"    \
-           "$test_result" \
+           "$test_failed" \
            "$test_time"   \
            "$test_passes" \
            "$test_total"  \
