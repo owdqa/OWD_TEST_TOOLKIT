@@ -27,7 +27,7 @@ f_run_test(){
 	ADDRESS="--address=localhost:2828"
 	
 	gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE >$ERR_FILE 2>&1
-	f_split_run_details
+	f_split_run_details "$(cat $SUM_FILE)"
 }
 
 #
@@ -43,7 +43,7 @@ f_2nd_chance(){
     #
     if [ ! "$test_blocked" ] && [ "$OWD_USE_2ND_CHANCE" ]
     then
-	    if [ "$test_result" != "0" ]
+	    if [ "$test_failed" != "0" ]
 	    then
             export RESTART="--restart"
             f_run_test
@@ -51,7 +51,7 @@ f_2nd_chance(){
             #
             # Add the repeat to the end of the test summary file.
             #
-            printf "\t(x2)" >> $SUM_FILE
+            test_repeat="(x2)"
         fi
     fi
 }
@@ -71,6 +71,11 @@ f_2nd_chance
 
 
 #
+# Get the summary details
+#
+f_split_run_details "$(cat $SUM_FILE)"
+
+#
 # Append any Marionette output to the details file (sometimes it contains
 # 'issues' that we don't catch).
 #
@@ -80,7 +85,7 @@ then
 	#
 	# Set the test result status to 'something failed'.
 	#
-	test_result="1"
+	test_failed="1"
 	
 	#
 	# Append the marionette stacktrace to the end of the details file.
@@ -98,3 +103,16 @@ $(cat $ERR_FILE)
 " >> $DET_FILE
 
 fi
+
+#
+# Update the summary file (Marionette issues won't be caught in it).
+#
+printf "#%s\t%s\t%s\t%s\t%s\t%s\n" \
+       "$test_num"     \
+	   "$test_failed"  \
+	   "$test_passes"  \
+	   "$test_total"   \
+	   "$test_desc"    \
+	   "$test_repeat" > $SUM_FILE
+
+
