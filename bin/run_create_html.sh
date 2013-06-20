@@ -12,6 +12,7 @@
 RUN_DIR=$(basename $RESULT_DIR)
 OUTDIR=/var/www/html/owd_tests/$RUN_DIR
 OUTHTML="http://owd-qa-server/owd_tests/$RUN_DIR"
+export SUMMARY_HTML=$RESULT_DIR/index.html
 
 if [ ! -d "$OUTDIR" ]
 then
@@ -134,6 +135,6 @@ cp $OWD_TEST_TOOLKIT_BIN/run_html.css $RESULT_DIR
 # COPY EVERYTHING INTO THE OUTDIR.
 #
 cd $RESULT_DIR
-cp *.{html,css,txt,png} $OUTDIR 2> /dev/null
+cp * $OUTDIR 2> /dev/null
 
-printf "\nTo see the interactive detail of this run: $OUTHTML/run_summary.html\n\n"
+printf "\nTo analyse the details of this run, navigate to: $OUTHTML\n\n"
