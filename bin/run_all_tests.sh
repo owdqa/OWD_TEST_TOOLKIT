@@ -226,11 +226,16 @@ do
         #
         # Failed.
         #
-        TCFAILED=$(($TCFAILED+1))
-        [ "$test_blocked" ] && test_failed="(blocked)" || test_failed="*FAILED*"        
+        if [ "$test_blocked" ]
+        then
+        	test_failed="(blocked)"
+        else
+            test_failed="*FAILED*"        
+            TCFAILED=$(($TCFAILED+1))
+	    fi
     fi
     TCTOTAL=$(($TCTOTAL+1))
-    [ "$test_blocked" ] && BLOCKED=$(($TCBLOCKED+1))
+    [ "$test_blocked" ] && BLOCKED=$(($BLOCKED+1))
     
     [ "$test_passes" = "?" ] && tp=0 || tp=$test_passes
     [ "$test_total"  = "?" ] && tt=0 || tt=$test_total
