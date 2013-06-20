@@ -30,7 +30,14 @@ echo "<html>
 #
 # Summary details in a table.
 #
-echo "        <table>" >> $SUMMARY_HTML
+echo "
+        <table>
+            <tr>
+                <th               >Test ID</th>
+                <th               >Time<br>taken</th>
+                <th               >Test<br>actions<br>passed</th>
+                <th class=\"desc\">Description</th>
+            </tr>" >> $SUMMARY_HTML
 
 cat $HTML_LINES | while read line
 do
@@ -39,15 +46,20 @@ do
 	[ ! "$test_result" ] && rowclass="passed" || rowclass="failed"
 	
     #
-    # OUTPUT TO HTML FILE.
+    # Add test case summary line.
     #
     echo "
             <tr class=\"$rowclass\">
-                <td><a href=\"./${test_num}_detail.html\">${test_num}</a></td>
-                <td>$test_result</td>
-                <td>$test_time</td>
-                <td>$test_passes / $test_total</td>
-                <td class=\"desc\">$test_desc $test_repeat</td>
+                <td class=\"id\"     >
+                    <div title="Click this to see the test run details.">
+	                    <a href=\"./${test_num}_detail.html\">
+	                        ${test_num}
+	                    </a>
+                    </div>
+                </td>
+                <td class=\"time\"   >$test_time</td>
+                <td class=\"results\">$test_passes / $test_total</td>
+                <td class=\"desc\"   >$test_desc $test_repeat</td>
             </tr>" >> $SUMMARY_HTML
 done
 

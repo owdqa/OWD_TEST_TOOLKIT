@@ -1,12 +1,7 @@
-body{
-    background-color:#ffffff;
-}
-
-body.details{
-    font-family:"monospace";
-    font-weight:"normal";
-    font-size:11px;
-}
+a:link    {color:#0000ff;text-decoration:none;}
+a:visited {color:#0000ff;text-decoration:none;}
+a:hover   {color:#0000ff;text-decoration:none;background-color:#ffffff;}
+a:active  {color:#0000ff;text-decoration:none;}
 
 h1{
     color:#222222;
@@ -24,11 +19,24 @@ h2{
     font-size:14px;
 }
 
+body{
+    background-color:#ffffff;
+}
+
+body.details{
+    font-family:"monospace";
+    font-weight:"normal";
+    font-size:11px;
+}
+
 table{
     font-family:"sans";
     font-size:14px;
 }
 
+tr{
+    background-color:#eeeeee;
+}
 tr.failed{
     background-color:#ff5050;
     color:#000000;
@@ -38,12 +46,33 @@ tr.passed{
     color:#000000;
 }
 
+th{
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size:12px;
+}
+th.desc{
+    text-align: left;
+}
 td{
     padding-top: 4px;
     padding-bottom: 4px;
     padding-left: 8px;
     padding-right: 8px;
+    font-size:12px;
+}
+td.id{
+    text-align: center;
+}
+td.time{
+    text-align: center;
+}
+td.results{
+    text-align: center;
 }
 td.desc{
-    font-size:12px;
+    text-align: left;
+    font-size:10px;
 }

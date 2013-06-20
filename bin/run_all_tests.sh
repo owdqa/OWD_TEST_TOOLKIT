@@ -200,7 +200,8 @@ do
     #
     # Get the test run details.
     #
-    f_split_run_details "$(cat $SUM_FILE)"
+    test_result=""
+    [ -f "$SUM_FILE" ] && f_split_run_details "$(cat $SUM_FILE)"
     if [ ! "$test_result" ]
     then
         #
