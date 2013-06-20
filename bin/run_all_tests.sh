@@ -2,46 +2,21 @@
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 . $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
 
-#
-# Before we do anything, check the parameters file is okay.
-#
-$OWD_TEST_TOOLKIT_BIN/check_parameters_file.sh
-[ $? -ne 0 ] && exit 1
-
 mkdir /tmp/tests 2>/dev/null
 chmod 777 /tmp/tests 2> /dev/null
 
-export TESTDIR="./tests"
-export PARAM_FILE="$HOME/.OWD_TEST_PARAMETERS"
-export GET_XREF="$OWD_TEST_TOOLKIT_BIN/get_xref.sh"
-
-export RUN_ID=$(date +%Y%m%d%H%M%S)
-export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
-export RESULT_DIR="/tmp/tests/B2G_tests.$RUN_ID"
-[ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
-
-export TMP_VAR_FILE="$RESULT_DIR/.tmp_var_file"
-export HTML_LINES="$RESULT_DIR/.html_lines"
-export SUMMARY_HTML=$RESULT_DIR/run_summary.html
-
-
-#
-# Exit codes so the we know how the test runner script ended.
-#
-export EXIT_PASSED=0
-export EXIT_FAILED=1
-export EXIT_BLOCKED=2
 
 ################################################################################
 #
 # SET UP REQUIRED TEST VARIABLES
 #
 
-#
-# If the param file exists, then load it (otherwise assume
-# the caller has either set the values for this shell manually,
-# or wants to be asked).
-#
+# Check parameters file.
+$OWD_TEST_TOOLKIT_BIN/check_parameters_file.sh
+[ $? -ne 0 ] && exit 1
+
+# If it's okay, the load variables from this file.
+export PARAM_FILE="$HOME/.OWD_TEST_PARAMETERS"
 if [ -f "$PARAM_FILE" ]
 then
     while read line
@@ -58,17 +33,39 @@ then
 EOF
 fi
 
+# Check the xref file variable was set and is a readable file.
+export GET_XREF="$OWD_TEST_TOOLKIT_BIN/get_xref.sh"
 if [ ! "$OWD_XREF_FILE" ]
 then
     printf "\n'OWD_XREF_FILE' variable not set!\n\n"
     exit 1
 fi
-
 if [ ! -f "$OWD_XREF_FILE" ]
 then
     printf "\n$OWD_XREF_FILE is not a readable file!\n\n"
     exit 1
 fi
+
+# Location of test scripts.
+export TESTDIR="./tests"
+
+# Directory for all output.
+export RUN_ID=$(date +%Y%m%d%H%M%S)
+export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
+export RESULT_DIR="/tmp/tests/B2G_tests.$RUN_ID"
+[ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
+
+# Variables related to building the HTML pages.
+export TMP_VAR_FILE="$RESULT_DIR/.tmp_var_file"
+export HTML_LINES="$RESULT_DIR/.html_lines"
+export SUMMARY_HTML=$RESULT_DIR/run_summary.html
+
+
+# Exit codes so the we know how the test runner script ended.
+export EXIT_PASSED=0
+export EXIT_FAILED=1
+export EXIT_BLOCKED=2
+
 
 
 ################################################################################
@@ -141,19 +138,14 @@ EOF
 #
 
 #
-# Establsh connection to device.
+# Establsh connection to device (or quit if there was a problem).
 #
 $OWD_TEST_TOOLKIT_BIN/connect_device.sh
+[ $? -ne 0 ] && exit 1
 
-if [ $? -ne 0 ]
-then
-    # There was a problem connecting the device - just quit.
-    exit 1
-fi
-
-
-printf "\n\n(For test run details, see '*_detail' files in \"${RESULT_DIR}\".)\n\n"
-
+#
+# Check to see if we are running blocked tests or ignoring them.
+#
 if [ "$OWD_NO_BLOCKED" ]
 then
 	printf "** NOTE: 'OWD_NO_BLOCKED' is set - ignoring blocked test cases. **\n\n"
@@ -162,6 +154,8 @@ fi
 #
 # Now run tests as required.
 #
+printf "\n\n(For test run details, see '*_detail' files in \"${RESULT_DIR}\".)\n\n"
+
 PASSED=0
 TOTAL=0
 BLOCKED=0
@@ -170,8 +164,10 @@ TCTOTAL=0
 TCFAILED=0
 for i in $(echo $TESTS)
 do
+	#
+	# Make sure there is a test file for this test id.
+	#
     export TEST_FILE="./tests/test_${i}.py"
-
 	if [ ! -f $TEST_FILE ]
 	then
 		echo "ERROR: $TEST_FILE not found, cannot find test for \"$i\"!"
@@ -187,6 +183,9 @@ do
 		continue
 	fi
 	
+	#
+	# Set up some 'test id dependant' variables.
+	#
 	export TEST_NUM=$i
 	export ERR_FILE=${RESULT_DIR}/error_output
 	export SUM_FILE=${RESULT_DIR}/${TEST_NUM}_summary
@@ -198,7 +197,7 @@ do
     test_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
 
     #
-    # Get the test run details.
+    # Gather the test run details.
     #
     test_failed=""
     [ -f "$SUM_FILE" ] && f_split_run_details "$(cat $SUM_FILE)"
@@ -241,7 +240,7 @@ do
 
         
     #
-    # Get the xref test number (if applicable).
+    # Get the xref test number to report against (if applicable).
     #
     if [ "$TEST_TYPE" ]
     then
@@ -249,16 +248,15 @@ do
     fi
     
     #
-    # Prepare and report the summary results for this test.
+    # Put the elapsed time for this test into a nice format.
     #
     z=$(echo "$test_time" | egrep "^real" | awk '{print $2}' | awk 'BEGIN{FS="."}{print $1}')
     z_mm=$(echo "$z" | awk 'BEGIN{FS="m"}{print $1}' | awk '{printf "%.2d", $0}')
     z_ss=$(echo "$z" | awk 'BEGIN{FS="m"}{print $2}' | awk '{printf "%.2d", $0}')
-
     export test_time="$z_mm:$z_ss"
 
     #    
-    # OUTPUT FOR HTML BUILDER.
+    # OUTPUT SUMMARY FOR HTML PAGE BUILDER.
     #
     printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
            "$test_num"    \
@@ -270,7 +268,7 @@ do
            "$test_repeat" >> $HTML_LINES
     
     #
-    # OUTPUT TO STDOUT.
+    # OUTPUT SUMMARY TO STDOUT.
     #    
     # Pad the description to 70 chars - if it's over that put "..." on the end.
     x=${#test_desc}
@@ -300,7 +298,7 @@ printf "\nDONE.\n\n"
 
 
 #
-# Now create the html page.
+# RUN THE HTML PAGE BUILDER.
 #
 $OWD_TEST_TOOLKIT_BIN/run_create_html.sh
 

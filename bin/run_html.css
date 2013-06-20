@@ -36,15 +36,18 @@ table{
 
 tr{
     background-color:#eeeeee;
+    color:#000000;
 }
 tr.failed{
-    background-color:#ff5050;
-    color:#000000;
+    background-color:#ff9999;
 }
 tr.passed{
-    background-color:#00ff99;
-    color:#000000;
+    background-color:#99ffaa;
 }
+
+
+
+
 
 th{
     padding-top: 4px;
