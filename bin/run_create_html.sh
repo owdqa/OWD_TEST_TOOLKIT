@@ -6,6 +6,18 @@
 #
 . $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
 
+#
+# This is where the test run details will be put.
+#
+RUN_DIR=$(basename $RESULT_DIR)
+OUTDIR=/var/www/html/owd_tests/$RUN_DIR
+OUTHTML="http://owd-qa-server/owd_tests/$RUN_DIR"
+
+if [ ! -d "$OUTDIR" ]
+then
+	sudo mkdir -p $OUTDIR
+	sudo chmod 777 $OUTDIR
+fi
 
 ##########################################################################
 #
@@ -43,7 +55,12 @@ cat $HTML_LINES | while read line
 do
 	f_split_run_details "$line"
 	
-	[ ! "$test_result" ] && rowclass="passed" || rowclass="failed"
+	#
+	# Make 'Blocked' bold so it's clear.
+	#
+	test_desc=$(echo "$test_desc" | sed -e "s/\(blocked\)/<b>\1<\/b>/I")
+	
+	[ "$test_failed" ] && rowclass="failed" || rowclass="passed"
 	
     #
     # Add test case summary line.
@@ -51,7 +68,7 @@ do
     echo "
             <tr class=\"$rowclass\">
                 <td class=\"id\"     >
-                    <div title="Click this to see the test run details.">
+                    <div title=\"Click this to see the test run details.\">
 	                    <a href=\"./${test_num}_detail.html\">
 	                        ${test_num}
 	                    </a>
@@ -93,7 +110,7 @@ do
     #
     sed -e "s/$/<br>/" $fnam | \
     sed -e "s/ /\&nbsp/g"    | \
-    sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">\1\2<\/a>,g"  >> $fnam.html
+    sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">"$OUTHTML"\2<\/a>,g"  >> $fnam.html
     	
 	#
 	# Finish the file off.
@@ -111,3 +128,12 @@ done
 cp $OWD_TEST_TOOLKIT_BIN/run_html.css $RESULT_DIR
 
 
+
+##########################################################################
+#
+# COPY EVERYTHING INTO THE OUTDIR.
+#
+cd $RESULT_DIR
+cp *.{html,css,txt,png} $OUTDIR 2> /dev/null
+
+printf "\nTo see the interactive detail of this run: $OUTHTML/run_summary.html\n\n"
