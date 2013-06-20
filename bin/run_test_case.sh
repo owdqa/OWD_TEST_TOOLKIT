@@ -1,12 +1,6 @@
 #!/bin/bash
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
-
-#
-# Some of these variables come from 'run_all_tests' ...
-#
-export ERR_FILE=${RESULT_DIR}/error_output
-export SUM_FILE=${RESULT_DIR}/${TEST_NUM}_summary
-export DET_FILE=${RESULT_DIR}/${TEST_NUM}_detail
+. $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
 
 #
 # Make sure gaiatest isn't still running (sometimes a process is left after the run).
@@ -15,31 +9,6 @@ ps -ef | grep gaiatest | grep -v "grep" | awk '{print $2}' | while read pid
 do
 	kill $pid > /dev/null 2> /dev/null
 done
-
-
-#
-# Function to split the line from the test reporter into variables.
-#
-f_split_run_details(){
-	test_num=$(     echo "$1" | awk 'BEGIN{FS="\t"}{print $1}')
-    test_result=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $2}')
-    test_passes=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $3}')
-    test_total=$(   echo "$1" | awk 'BEGIN{FS="\t"}{print $4}')
-	test_desc=$(    echo "$1" | awk 'BEGIN{FS="\t"}{print $5}')
-}
-
-#
-# Function to just output the result summary line.
-#
-f_output_run_details(){
-	printf "%s\t%s\t%s\t%s\t%s\t%s\n" \
-	       "$test_num"    \
-           "$test_result" \
-           "$test_passes" \
-           "$test_total"  \
-           "$test_desc"   \
-           "$test_repeat"
-}
 
 
 #
@@ -56,14 +25,9 @@ f_run_test(){
     fi
 	TESTVARS="--testvars=${OWD_TEST_TOOLKIT_BIN}/gaiatest_testvars.json"
 	ADDRESS="--address=localhost:2828"
-
-	while read line
-	do
-	    f_split_run_details "$line"
-	    break
-    done <<EOF
-    $(gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE 2>$ERR_FILE | egrep "^#")
-EOF
+	
+	gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE >$ERR_FILE 2>&1
+	f_split_run_details
 }
 
 #
@@ -83,7 +47,11 @@ f_2nd_chance(){
 	    then
             export RESTART="--restart"
             f_run_test
-            test_repeat="(x2)"
+            
+            #
+            # Add the repeat to the end of the test summary file.
+            #
+            printf "\t(x2)" >> $SUM_FILE
         fi
     fi
 }
@@ -100,18 +68,6 @@ f_run_test
 # Check for 2nd chance.
 #
 f_2nd_chance
-
-if [ ! "$test_num" ]
-then
-    #
-    # Total failure - didn't even get to the test part!
-    #
-    test_num="$TEST_NUM"
-    test_result="1" #(no. of fails - this just marks the test as 'did not pass')
-    test_passes="?"
-    test_total="?"
-    test_desc=$(grep "_Description" $TEST_FILE | awk 'BEGIN{FS="="}{print $2}')
-fi
 
 
 #
@@ -142,9 +98,3 @@ $(cat $ERR_FILE)
 " >> $DET_FILE
 
 fi
-
-
-#
-# Finally, output the final details (tab separated).
-#
-f_output_run_details

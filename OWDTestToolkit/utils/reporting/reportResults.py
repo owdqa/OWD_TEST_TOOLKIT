@@ -21,6 +21,7 @@ class main(GaiaTestCase):
         test_time     = str(datetime.timedelta(seconds=test_time))
 
         DET_FILE    = open(self.det_fnam, "w")
+        SUM_FILE    = open(self.sum_fnam, "w")
 
         DET_FILE.write("Test case  : %s\n" % self.testNum)
         DET_FILE.write("Description: %s\n" % self.testDesc)
@@ -45,12 +46,12 @@ class main(GaiaTestCase):
         #
         # Return summary information to stdout.
         #
-        print("#%s\t%s\t%s\t%s\t%s\n" % ( self.testNum,
-                                          self.failed,
-                                          str(y),
-                                          str(x),
-                                          self.testDesc
-                                          )
+        SUM_FILE.write("#%s\t%s\t%s\t%s\t%s" % (self.testNum,
+                                                  self.failed,
+                                                  str(y),
+                                                  str(x),
+                                                  self.testDesc
+                                                  )
                        )
         
         #
@@ -81,3 +82,4 @@ class main(GaiaTestCase):
                 DET_FILE.write(" " + i[2] + "\n")
         
         DET_FILE.close()
+        SUM_FILE.close()
