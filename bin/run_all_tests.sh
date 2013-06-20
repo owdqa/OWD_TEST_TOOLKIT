@@ -58,7 +58,6 @@ export RESULT_DIR="/tmp/tests/B2G_tests.$RUN_ID"
 # Variables related to building the HTML pages.
 export TMP_VAR_FILE="$RESULT_DIR/.tmp_var_file"
 export HTML_LINES="$RESULT_DIR/.html_lines"
-export SUMMARY_HTML=$RESULT_DIR/run_summary.html
 
 
 # Exit codes so the we know how the test runner script ended.
