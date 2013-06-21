@@ -52,7 +52,10 @@ echo "
                 <th class=\"desc\">Description</th>
             </tr>" >> $SUMMARY_HTML
 
-cat $HTML_LINES | while read line
+#
+# Put the FAILED tests at the top so they're quick to debug.
+#
+sort -k2r $HTML_LINES | while read line
 do
 	f_split_run_details "$line"
 	

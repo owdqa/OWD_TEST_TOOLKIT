@@ -199,7 +199,7 @@ do
     # Gather the test run details.
     #
     test_failed=""
-    [ -f "$SUM_FILE" ] && f_split_run_details "$(cat $SUM_FILE)"
+    [ -f "$SUM_FILE" ] && f_split_run_details "$(tail -1 $SUM_FILE)"
     if [ ! "$test_failed" ]
     then
         #
