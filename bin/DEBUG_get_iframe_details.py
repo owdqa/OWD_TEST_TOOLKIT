@@ -47,7 +47,14 @@ class current_frame():
                 ucount = ucount + 1
                 appname  = "(unknown)"
                 filename = "unknown_" + str(ucount)
-                  
+            
+            #
+            # Because we call this script sometimes when we hit a Marionette issue,
+            # these filenames may already exist (and we'd overwrite them!), so
+            # add 'DEBUG_' to the start of the filename.
+            #
+            filename = "DEBUG_" + filename
+                 
             filename_details         = LOGDIR + filename + "_iframe_details.txt"
             self.filename_screenshot = LOGDIR + filename + ".png"
             self.filename_htmldump   = LOGDIR + filename + ".html"
@@ -108,9 +115,16 @@ class current_frame():
 os.system(". $HOME/.OWD_TEST_TOOLKIT_LOCATION; $OWD_TEST_TOOLKIT_BIN/connect_device.sh")
 
 # Set up the dir.
-LOGDIR  = "/tmp/tests/current_screen/"
-os.system("mkdir -p " + LOGDIR + " > /dev/null")
-os.system("rm " + LOGDIR + "* > /dev/null")
+LOGDIR = False
+try:
+    LOGDIR = sys.argv[1] + "/"
+except:
+    pass
+
+if not LOGDIR:
+    LOGDIR  = "/tmp/tests/current_screen/"
+    os.system("mkdir -p " + LOGDIR + " > /dev/null")
+    os.system("rm " + LOGDIR + "* > /dev/null")
 
 # Do it!
 current_frame().main(LOGDIR)
