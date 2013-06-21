@@ -48,6 +48,8 @@ class main(GaiaTestCase):
                 ucount = ucount + 1
                 appname  = "(unknown)"
                 filename = "unknown_" + str(ucount)
+                
+            filename = self.testNum + "_" + filename
                   
             #
             # Mark the current iframe.

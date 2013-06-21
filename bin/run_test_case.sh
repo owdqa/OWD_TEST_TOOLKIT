@@ -102,10 +102,16 @@ then
 $(cat $ERR_FILE)
 " >> $DET_FILE
 
+    #
+    # Record details of all iframes.
+    #
+    printf "\n\n************ Gathering details of all iframes ... ************\n\n"
+    $OWD_TEST_TOOLKIT_BIN/DEBUG_get_iframe_details.py $RESULT_DIR >> $DET_FILE
+
 fi
 
 #
-# Update the summary file (Marionette issues won't be caught in it).
+# Update the summary file (because Marionette issues won't be caught in it yet).
 #
 printf "#%s\t%s\t%s\t%s\t%s\t%s\n" \
        "$test_num"     \
@@ -113,6 +119,7 @@ printf "#%s\t%s\t%s\t%s\t%s\t%s\n" \
 	   "$test_passes"  \
 	   "$test_total"   \
 	   "$test_desc"    \
+	   "$test_time"    \
 	   "$test_repeat" > $SUM_FILE
 
 
