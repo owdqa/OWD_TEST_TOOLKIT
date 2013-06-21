@@ -10,7 +10,6 @@ do
 	kill $pid > /dev/null 2> /dev/null
 done
 
-
 #
 # Function to run a test case ...
 #
@@ -28,6 +27,17 @@ f_run_test(){
 	
 	gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE >$ERR_FILE 2>&1
 	f_split_run_details "$(cat $SUM_FILE)"
+	
+	if [ "$test_failed" = "0" ]
+	then
+		# Passed our tests, but check if marionette reported an error.
+		#
+        x=$(egrep -i "error|exception" $ERR_FILE)
+        if [ "$x" ]
+        then
+        	test_failed="1"
+        fi
+	fi
 }
 
 #
@@ -45,17 +55,24 @@ f_2nd_chance(){
     then
 	    if [ "$test_failed" != "0" ]
 	    then
-            export RESTART="--restart"
+	    	#
+	    	# This is an ADB 'reboot' (which sometimes solves a
+	    	# problem that gaiatest 'restart' doesn't).
+	    	#
+			sudo adb reboot
+			sudo adb wait-for-device
+			sleep 20
+			$OWD_TEST_TOOLKIT_BIN/connect_device.sh >/dev/null
+
             f_run_test
             
             #
             # Add the repeat to the end of the test summary file.
             #
-            test_repeat="(x2)"
+            test_repeat="(x2) "
         fi
     fi
 }
-
 
 #
 # Run the test.
@@ -80,7 +97,7 @@ f_split_run_details "$(cat $SUM_FILE)"
 # Append any Marionette output to the details file (sometimes it contains
 # 'issues' that we don't catch).
 #
-x=$(grep -i error $ERR_FILE)
+x=$(egrep -i "error|exception" $ERR_FILE)
 if [ "$x" ]
 then
 	#
