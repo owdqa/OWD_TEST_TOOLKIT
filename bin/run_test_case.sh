@@ -75,6 +75,7 @@ f_2nd_chance
 #
 f_split_run_details "$(cat $SUM_FILE)"
 
+
 #
 # Append any Marionette output to the details file (sometimes it contains
 # 'issues' that we don't catch).
@@ -114,12 +115,10 @@ fi
 # Update the summary file (because Marionette issues won't be caught in it yet).
 #
 printf "#%s\t%s\t%s\t%s\t%s\t%s\n" \
-       "$test_num"     \
-	   "$test_failed"  \
-	   "$test_passes"  \
-	   "$test_total"   \
-	   "$test_desc"    \
-	   "$test_time"    \
-	   "$test_repeat" > $SUM_FILE
-
+       "$test_num"                 \
+	   "$test_failed"              \
+	   "$test_passes"              \
+	   "$test_total"               \
+	   "$test_repeat$test_desc"    \
+	   "$test_time"                > $SUM_FILE
 

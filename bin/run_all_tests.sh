@@ -153,7 +153,7 @@ fi
 #
 # Now run tests as required.
 #
-printf "\n\n(For test run details, see '*_detail' files in \"${RESULT_DIR}\".)\n\n"
+printf "\n\n(Temporary store for test run files = \"${RESULT_DIR}\".)\n\n"
 
 PASSED=0
 TOTAL=0
@@ -195,11 +195,13 @@ do
     #
     test_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
 
+
     #
     # Gather the test run details.
     #
     test_failed=""
     [ -f "$SUM_FILE" ] && f_split_run_details "$(tail -1 $SUM_FILE)"
+
     if [ ! "$test_failed" ]
     then
         #
@@ -284,8 +286,7 @@ do
            "$test_time"   \
            "$test_passes" \
            "$test_total"  \
-           "$test_desc"   \
-           "$test_repeat"
+           "$test_desc"   
 
     
 done
