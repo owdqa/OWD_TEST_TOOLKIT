@@ -54,9 +54,10 @@ fi
 export TESTDIR="./tests"
 
 # Directory for all output.
-export RUN_ID=$(date +%Y%m%d%H%M%S)
+export NOWTIME=$(date +%Y%m%d%H%M)
+export RUN_ID=${RUN_ID:-$NOWTIME}
 export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
-export RESULT_DIR="/tmp/tests/B2G_tests.$RUN_ID"
+export RESULT_DIR=${RESULT_DIR:-"/tmp/tests/B2G_tests.$RUN_ID"}
 [ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
 
 # Exit codes so the we know how the test runner script ended.
@@ -64,22 +65,6 @@ export EXIT_PASSED=0
 export EXIT_FAILED=1
 export EXIT_BLOCKED=2
 
-# Variables related to building the HTML pages.
-export TMP_VAR_FILE="$RESULT_DIR/.tmp_var_file"
-export HTML_LINES="$RESULT_DIR/.html_lines"
-export OUTHTML="http://owd-qa-server/owd_tests/$(basename $RESULT_DIR)"
-
-echo "
-
-*********************************************************************
-
-To view the interactive test results for this run, please click this: 
-
-$OUTHTML
-
-*********************************************************************
-
-"
 
 ################################################################################
 #
@@ -153,7 +138,15 @@ EOF
 #
 # Establsh connection to device (or quit if there was a problem).
 #
-$OWD_TEST_TOOLKIT_BIN/connect_device.sh
+if [ "$INSTALL_LOG" ]
+then
+	#
+	# We're catching the output (usually means we're on the ci server).
+	#
+    $OWD_TEST_TOOLKIT_BIN/connect_device.sh > ${INSTALL_LOG}Connect_device
+else
+    $OWD_TEST_TOOLKIT_BIN/connect_device.sh
+fi
 [ $? -ne 0 ] && exit 1
 
 #
@@ -279,14 +272,17 @@ do
     #    
     # OUTPUT SUMMARY FOR HTML PAGE BUILDER.
     #
-    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
-           "$test_num"    \
-           "$test_failed" \
-           "$test_passes" \
-           "$test_total"  \
-           "$test_desc"   \
-           "$test_time"   \
-           "$test_repeat" >> $HTML_LINES
+    if [ "$HTML_WEBDIR" ]
+    then
+	    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
+	           "$test_num"    \
+	           "$test_failed" \
+	           "$test_passes" \
+	           "$test_total"  \
+	           "$test_desc"   \
+	           "$test_time"   \
+	           "$test_repeat" >> $HTML_SUMMARIES
+    fi
     
     #
     # OUTPUT SUMMARY TO STDOUT.

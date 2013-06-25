@@ -38,6 +38,9 @@ tr{
     background-color:#eeeeee;
     color:#000000;
 }
+tr.install_log{
+    background-color:#ffffff;
+}
 tr.failed{
     background-color:#ff9999;
 }
@@ -55,6 +58,9 @@ th{
     padding-left: 8px;
     padding-right: 8px;
     font-size:12px;
+}
+th.install_head{
+    text-align: left;
 }
 th.desc{
     text-align: left;
