@@ -19,6 +19,7 @@ export DEVICE=${1:-"unagi"}
 export BRANCH=${2:-"v1-train"}
 export TEST_TYPE=${3:-"REGRESSION"}
 
+[ ! -d "$RESULT_DIR" ] && mkdir $RESULT_DIR
 cp /dev/null $HTML_SUMMARIES
 
 #

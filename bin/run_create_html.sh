@@ -48,7 +48,7 @@ echo "  <tr class=\"install_log\"><th class=\"install_head\" colspan=4>Installat
 counter=1
 ls -lrt $INSTALL_LOG* | awk '{print $NF}' | while read fnam
 do
-	logname=$HTML_FILEDIR/$(basename $fnam).html
+    logfile=$HTML_FILEDIR/$(basename $fnam).html
 
     #
     # Turn this result file into an html file.
@@ -58,12 +58,14 @@ do
         <base target=\"_blank\">
         <link rel="stylesheet" type="text/css" href="run_html.css">
     </head>
-    <body class=\"details\">" > $logname
+    <body class=\"details\">" > $logfile
     sed -e "s/$/<br>/" $fnam | \
-    sed -e "s/ /\&nbsp/g"    >> $logname
+    sed -e "s/ /\&nbsp/g"    >> $logfile
     echo "
     </body>
-</html>" >> $logname
+</html>" >> $logfile
+
+    logname=$(basename $logfile)
     
 	
 	logdesc=$(echo $fnam | awk 'BEGIN{FS="."}{print $2}')
@@ -71,7 +73,7 @@ do
     echo "  <tr class=\"install_log\">
                 <td colspan=4>
                     <div title=\"Click this to see the details.\">
-                        <a href=\"$logname\">
+                        <a href=\"./$logname\">
                         <b>${counter}.</b> $logdesc
                         </a>
                     </div>
