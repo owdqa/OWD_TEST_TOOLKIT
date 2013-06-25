@@ -195,7 +195,6 @@ do
     #
     test_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
 
-
     #
     # Gather the test run details.
     #
@@ -236,6 +235,7 @@ do
             TCFAILED=$(($TCFAILED+1))
 	    fi
     fi
+
     TCTOTAL=$(($TCTOTAL+1))
     [ "$test_blocked" ] && BLOCKED=$(($BLOCKED+1))
     
@@ -252,7 +252,7 @@ do
     then
         export test_num=$($GET_XREF "$TEST_TYPE" "$test_num")
     fi
-    
+
     #
     # Put the elapsed time for this test into a nice format.
     #

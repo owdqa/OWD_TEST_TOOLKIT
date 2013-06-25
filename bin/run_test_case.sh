@@ -136,6 +136,5 @@ printf "#%s\t%s\t%s\t%s\t%s\t%s\n" \
 	   "$test_failed"              \
 	   "$test_passes"              \
 	   "$test_total"               \
-	   "$test_repeat$test_desc"    \
-	   "$test_time"                > $SUM_FILE
+	   "$test_repeat$test_desc"    > $SUM_FILE
 
