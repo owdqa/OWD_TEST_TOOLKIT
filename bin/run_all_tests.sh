@@ -241,8 +241,9 @@ do
     
     [ "$test_passes" = "?" ] && tp=0 || tp=$test_passes
     [ "$test_total"  = "?" ] && tt=0 || tt=$test_total
-    PASSED=$(($PASSED+$tp))
-    TOTAL=$(($TOTAL+$tt))
+    
+    [ $(echo "$tp" | egrep "^[0-9]*$") ] && PASSED=$(($PASSED+$tp))
+    [ $(echo "$tt" | egrep "^[0-9]*$") ] && TOTAL=$(($TOTAL+$tt))
 
         
     #
