@@ -7,8 +7,4 @@ f_split_run_details(){
     test_passes=$(  echo "$1" | awk 'BEGIN{FS="\t"}{print $3}')
     test_total=$(   echo "$1" | awk 'BEGIN{FS="\t"}{print $4}')
     test_desc=$(    echo "$1" | awk 'BEGIN{FS="\t"}{print $5}' | sed -e "s/^[ \t]*//" | sed -e "s/\"//g")
-
-    x=$(            echo "$1" | awk 'BEGIN{FS="\t"}{print $6}')
-    
-    [ "$x" ] && test_time="$x"
 }
