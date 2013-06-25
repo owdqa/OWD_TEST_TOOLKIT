@@ -1,5 +1,9 @@
 #!/bin/bash
-. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION 2> /dev/null
+
+#
+# Now continue with the rest of the setup ...
+#
 . $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
 
 mkdir /tmp/tests 2>/dev/null
