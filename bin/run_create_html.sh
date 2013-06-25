@@ -2,22 +2,17 @@
 #
 # Script to create the html summary file etc...
 #
-# NOTE: This is intended to be run via the 'run_all_tests.sh' script.
+# NOTE: This is intended to be run via the 'run_all_tests.sh' script
+# and only works on the CI server (or if "$INSTALL_LOG" is set).
 #
+[ ! "$INSTALL_LOG" ] && exit
+
 . $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
 
-#
-# This is where the test run details will be put.
-#
-RUN_DIR=$(basename $RESULT_DIR)
-OUTDIR=/var/www/html/owd_tests/$RUN_DIR
-OUTHTML=${OUTHTML:-"http://owd-qa-server/owd_tests/$RUN_DIR"}
-export SUMMARY_HTML=$RESULT_DIR/index.html
-
-if [ ! -d "$OUTDIR" ]
+if [ ! -d "$HTML_FILEDIR" ]
 then
-	sudo mkdir -p $OUTDIR
-	sudo chmod 777 $OUTDIR
+	sudo mkdir -p $HTML_FILEDIR
+	sudo chmod 777 $HTML_FILEDIR
 fi
 
 ##########################################################################
@@ -36,26 +31,77 @@ echo "<html>
     <body>
         <h1>Results summary for test run id $RUN_ID</h1>
         <h2>($RUN_TIME)</h2>
-" > $SUMMARY_HTML
+" > $HTML_INDEX
 
 
 
 #
-# Summary details in a table.
+# Start the table to display the results nicely.
 #
 echo "
-        <table>
+        <table>" >> $HTML_INDEX
+
+#
+# Report the installation details (in order).
+#
+echo "  <tr class=\"install_log\"><th class=\"install_head\" colspan=4>Installation details ... </td></tr>" >> $HTML_INDEX
+counter=1
+ls -lrt $INSTALL_LOG* | awk '{print $NF}' | while read fnam
+do
+	logname=$HTML_FILEDIR/$(basename $fnam).html
+
+    #
+    # Turn this result file into an html file.
+    #
+    echo "<html>
+    <head>
+        <base target=\"_blank\">
+        <link rel="stylesheet" type="text/css" href="run_html.css">
+    </head>
+    <body class=\"details\">" > $logname
+    sed -e "s/$/<br>/" $fnam | \
+    sed -e "s/ /\&nbsp/g"    >> $logname
+    echo "
+    </body>
+</html>" >> $logname
+    
+	
+	logdesc=$(echo $fnam | awk 'BEGIN{FS="."}{print $2}')
+    logdesc=$(echo $logdesc | sed -e "s/_/ /g")
+    echo "  <tr class=\"install_log\">
+                <td colspan=4>
+                    <div title=\"Click this to see the details.\">
+                        <a href=\"$logname\">
+                        <b>${counter}.</b> $logdesc
+                        </a>
+                    </div>
+                </td>
+            </tr>" >> $HTML_INDEX
+     
+     counter=$(($counter+1))
+
+done
+
+#
+# 'blank row'.
+#
+echo "  <tr class=\"install_log\"><td colspan=4> </td></tr>" >> $HTML_INDEX
+
+#
+# Start the summary details.
+#  
+echo "
             <tr>
                 <th               >Test ID</th>
                 <th               >Time<br>taken</th>
                 <th               >Test<br>actions<br>passed</th>
                 <th class=\"desc\">Description</th>
-            </tr>" >> $SUMMARY_HTML
+            </tr>" >> $HTML_INDEX
 
 #
 # Put the FAILED tests at the top so they're quick to debug.
 #
-sort -t$'\t' -k2,2r -k1,1 $HTML_LINES | while read line
+sort -t$'\t' -k2,2r -k1,1 $HTML_SUMMARIES | while read line
 do
 	f_split_run_details "$line"
 	
@@ -81,13 +127,13 @@ do
                 <td class=\"time\"   >$test_time</td>
                 <td class=\"results\">$test_passes / $test_total</td>
                 <td class=\"desc\"   >$test_desc $test_repeat</td>
-            </tr>" >> $SUMMARY_HTML
+            </tr>" >> $HTML_INDEX
 done
 
 echo "        </table>       
     </body>
 </html>
-" >> $SUMMARY_HTML
+" >> $HTML_INDEX
 
 
 ##########################################################################
@@ -114,7 +160,7 @@ do
     #
     sed -e "s/$/<br>/" $fnam | \
     sed -e "s/ /\&nbsp/g"    | \
-    sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">"$OUTHTML"\2<\/a>,g"  >> $fnam.html
+    sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">"$HTML_WEBDIR"\2<\/a>,g"  >> $fnam.html
     	
 	#
 	# Finish the file off.
@@ -135,7 +181,7 @@ cp $OWD_TEST_TOOLKIT_BIN/run_html.css $RESULT_DIR
 
 ##########################################################################
 #
-# COPY EVERYTHING INTO THE OUTDIR.
+# COPY EVERYTHING INTO THE HTML_FILEDIR.
 #
 cd $RESULT_DIR
-cp * $OUTDIR 2> /dev/null
+cp * $HTML_FILEDIR 2> /dev/null
