@@ -1,5 +1,9 @@
 #!/bin/bash
-. $HOME/.OWD_TEST_TOOLKIT_LOCATION
+. $HOME/.OWD_TEST_TOOLKIT_LOCATION 2> /dev/null
+
+#
+# Now continue with the rest of the setup ...
+#
 . $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
 
 mkdir /tmp/tests 2>/dev/null
@@ -55,17 +59,27 @@ export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
 export RESULT_DIR="/tmp/tests/B2G_tests.$RUN_ID"
 [ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
 
-# Variables related to building the HTML pages.
-export TMP_VAR_FILE="$RESULT_DIR/.tmp_var_file"
-export HTML_LINES="$RESULT_DIR/.html_lines"
-
-
 # Exit codes so the we know how the test runner script ended.
 export EXIT_PASSED=0
 export EXIT_FAILED=1
 export EXIT_BLOCKED=2
 
+# Variables related to building the HTML pages.
+export TMP_VAR_FILE="$RESULT_DIR/.tmp_var_file"
+export HTML_LINES="$RESULT_DIR/.html_lines"
+export OUTHTML="http://owd-qa-server/owd_tests/$(basename $RESULT_DIR)"
 
+echo "
+
+*********************************************************************
+
+To view the interactive test results for this run, please click this: 
+
+$OUTHTML
+
+*********************************************************************
+
+"
 
 ################################################################################
 #

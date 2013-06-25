@@ -11,7 +11,7 @@
 #
 RUN_DIR=$(basename $RESULT_DIR)
 OUTDIR=/var/www/html/owd_tests/$RUN_DIR
-OUTHTML="http://owd-qa-server/owd_tests/$RUN_DIR"
+OUTHTML=${OUTHTML:-"http://owd-qa-server/owd_tests/$RUN_DIR"}
 export SUMMARY_HTML=$RESULT_DIR/index.html
 
 if [ ! -d "$OUTDIR" ]
@@ -139,5 +139,3 @@ cp $OWD_TEST_TOOLKIT_BIN/run_html.css $RESULT_DIR
 #
 cd $RESULT_DIR
 cp * $OUTDIR 2> /dev/null
-
-printf "\nTo analyse the details of this run, navigate to: $OUTHTML\n\n"
