@@ -89,6 +89,8 @@ fi
 #
 # There are some 'special' tests we can run (like 'blocked').
 #
+cd $HOME/projects/owd_test_cases
+
 if [ "$TEST_TYPE" = "BLOCKED" ]
 then
 	printf "\nRunning BLOCKED test cases only ...\n\n"
