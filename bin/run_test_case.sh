@@ -14,17 +14,18 @@ done
 # Function to run a test case ...
 #
 f_run_test(){
-    #
-    # Run the test and update the variables with the results.
-    #
-    if [ ! "$test_blocked" ]
-    then
-	    x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE)
-	    [ "$x" ] && RESTART="--restart"
-    fi
+	#
+	# Does this test require a 'clear_and_reboot' before running?
+	#
+    x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE)
+    [ "$x" ] && $OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
+
 	TESTVARS="--testvars=${OWD_TEST_TOOLKIT_BIN}/gaiatest_testvars.json"
 	ADDRESS="--address=localhost:2828"
 	
+    #
+    # Run the test and update the variables with the results.
+    #
 	gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE >$ERR_FILE 2>&1
 	f_split_run_details "$(cat $SUM_FILE)"
 	
@@ -59,10 +60,8 @@ f_2nd_chance(){
 	    	# This is an ADB 'reboot' (which sometimes solves a
 	    	# problem that gaiatest 'restart' doesn't).
 	    	#
-			sudo adb reboot
-			sudo adb wait-for-device
-			sleep 20
-			$OWD_TEST_TOOLKIT_BIN/connect_device.sh >/dev/null
+			$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
+#			$OWD_TEST_TOOLKIT_BIN/connect_device.sh >/dev/null
 
             f_run_test
             
