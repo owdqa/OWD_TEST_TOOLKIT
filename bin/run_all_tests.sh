@@ -10,6 +10,15 @@ mkdir /tmp/tests 2>/dev/null
 chmod 777 /tmp/tests 2> /dev/null
 
 
+
+#
+# Function to return 'something' if this test is blocked.
+#
+f_check_blocked(){
+    egrep "^[^#]*_Description *= *.*BLOCKED BY" $1
+}
+
+
 ################################################################################
 #
 # SET UP REQUIRED TEST VARIABLES
@@ -123,11 +132,21 @@ TEST_TMP="$TESTS"
 TESTS=""
 while read testnum
 do
+	[ ! "$testnum" ] && continue
+	
+    #
+    # If this test is blocked AND OWD_NO_BLOCKED is set, then ignore it.
+    #
+    export test_blocked=$(f_check_blocked ./tests/test_${testnum}.py)
+    if [ "$test_blocked" ] && [ "$OWD_NO_BLOCKED" ]
+    then
+        continue
+    fi
+    
 	TESTS="$TESTS $testnum"
 done << EOF
 $(echo "$TEST_TMP" | sed -e "s/ /\n/g" | sort -nu)
 EOF
-
 
 
 ################################################################################
@@ -183,11 +202,7 @@ do
 	#
 	# If this test is blocked AND OWD_NO_BLOCKED is set, then ignore it.
 	#
-	export test_blocked=$(egrep "^[^#]*_Description *= *.*BLOCKED BY" $TEST_FILE)
-	if [ "$test_blocked" ] && [ "$OWD_NO_BLOCKED" ]
-	then
-		continue
-	fi
+	export test_blocked=$(f_check_blocked $TEST_FILE)
 	
 	#
 	# Set up some 'test id dependant' variables.
