@@ -46,6 +46,8 @@ $HTML_WEBDIR
 printf "\n\nFlashing device with BRANCH $BRANCH...\n\n"
 flash_device.sh $DEVICE eng $BRANCH NODOWNLOAD          > ${INSTALL_LOG}Flash_the_device 2>&1
 
+printf "Tests running against build: "
+egrep "^Unpacking " | awk '{print $2}'
 
 
 #

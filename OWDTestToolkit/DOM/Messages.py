@@ -1,6 +1,7 @@
 frame_locator          = ('src', 'app://sms.gaiamobile.org/index.html')
 
-statusbar_new_sms      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[text()='%s']")
+#statusbar_new_sms      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[text()='%s']")
+statusbar_new_sms      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'%s')]")
 lockscreen_notif_xpath = "//*[@id='desktop-notifications-container']//div[text()='%s']"
 create_new_message_btn = ('id', 'icon-add')
 
