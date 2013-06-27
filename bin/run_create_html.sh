@@ -21,7 +21,7 @@ fi
 #
 
 #
-# HTML file header.
+# HEADER
 #
 echo "<html>
     <head>
@@ -29,26 +29,30 @@ echo "<html>
         <link rel="stylesheet" type="text/css" href="run_html.css">
     </head>
     <body>
-        <h1>Results summary for test run id $RUN_ID</h1>
-        <h2>($RUN_TIME)</h2>
 " > $HTML_INDEX
 
 
 
 #
-# Start the table to display the results nicely.
+# INSTALLATION DETAILS.
 #
+[ "$OWD_NO_BLOCKED" ] && blocked="No" || blocked="Yes"
+[ "$OWD_USE_2ND_CHANCE" ] && chance2="Yes" || chance2="No"
 echo "
-        <table>" >> $HTML_INDEX
-
-#
-# Report the installation details (in order).
-#
-echo "  <tr class=\"install_log\"><th class=\"install_head\" colspan=4>Installation details ... </td></tr>" >> $HTML_INDEX
-counter=1
+        <table>
+            <tr class=\"install\"><th class=\"install\">JOB NAME:</th><td class=\"job\">$JOB_NAME</td></tr>
+            <tr class=\"install\"><th class=\"install\">BUILD NUMBER:</th><td class=\"job\">$BUILD_NUMBER</td></tr>
+            <tr class=\"install\"><th class=\"install\">Run time:</th><td>$RUN_TIME</td></tr>
+            <tr class=\"install\"><th class=\"install\">Run blocked tests:</th><td>$blocked</td></tr>
+            <tr class=\"install\"><th class=\"install\">Try fails twice:</th><td>$chance2</td></tr>" >> $HTML_INDEX
+        
 ls -lrt $INSTALL_LOG* | awk '{print $NF}' | while read fnam
 do
-    logfile=$HTML_FILEDIR/$(basename $fnam).html
+	tmp=$(basename $fnam)
+    logHead=$(echo $tmp | awk 'BEGIN{FS="@"}{print $2}')
+    logDets=$(echo $tmp | awk 'BEGIN{FS="@"}{print $3}')
+    logfile=$HTML_FILEDIR/$logHead.html
+    logname=$(basename $logfile)
 
     #
     # Turn this result file into an html file.
@@ -64,40 +68,38 @@ do
     echo "
     </body>
 </html>" >> $logfile
-
-    logname=$(basename $logfile)
     
-	
-	logdesc=$(echo $fnam | awk 'BEGIN{FS="."}{print $2}')
-    logdesc=$(echo $logdesc | sed -e "s/_/ /g")
-    echo "  <tr class=\"install_log\">
-                <td colspan=4>
-                    <div title=\"Click this to see the details.\">
+    logtitle=$(echo $logHead | sed -e "s/_/ /g")
+    logdesc=$( echo $logDets | sed -e "s/_/ /g")
+
+    echo "
+            <tr class=\"install\">
+                <th class=\"install\">$logtitle:</th>
+                <td>
+                    <div title=\"Click this to see the details of this part of the installation.\">
                         <a href=\"./$logname\">
-                        <b>${counter}.</b> $logdesc
+                        $logdesc
                         </a>
                     </div>
                 </td>
             </tr>" >> $HTML_INDEX
-     
-     counter=$(($counter+1))
 
 done
 
-#
-# 'blank row'.
-#
-echo "  <tr class=\"install_log\"><td colspan=4> </td></tr>" >> $HTML_INDEX
+# Close the table.
+echo "        </table><br>" >> $HTML_INDEX
+
 
 #
-# Start the summary details.
+# SUMMARY DETAILS.
 #  
 echo "
+        <table>
             <tr>
-                <th               >Test ID</th>
-                <th               >Time<br>taken</th>
-                <th               >Test<br>actions<br>passed</th>
-                <th class=\"desc\">Description</th>
+                <th class=\"center\">Test ID</th>
+                <th class=\"center\">Time<br>taken</th>
+                <th class=\"center\">Test<br>actions<br>passed</th>
+                <th                 >Description</th>
             </tr>" >> $HTML_INDEX
 
 #
@@ -119,16 +121,16 @@ do
     #
     echo "
             <tr class=\"$rowclass\">
-                <td class=\"id\"     >
+                <td class=\"center\"     >
                     <div title=\"Click this to see the test run details.\">
 	                    <a href=\"./${test_num}_detail.html\">
 	                        ${test_num}
 	                    </a>
                     </div>
                 </td>
-                <td class=\"time\"   >$test_time</td>
-                <td class=\"results\">$test_passes / $test_total</td>
-                <td class=\"desc\"   >$test_desc $test_repeat</td>
+                <td class=\"center\"   >$test_time</td>
+                <td class=\"center\"   >$test_passes / $test_total</td>
+                <td class=\"desc\"     >$test_desc $test_repeat</td>
             </tr>" >> $HTML_INDEX
 done
 

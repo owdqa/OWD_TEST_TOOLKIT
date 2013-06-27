@@ -2,6 +2,15 @@
 #
 # Prepare the dependencies for running OWD tests on the CI server.
 #
+# NOTE: If you create a file called "${INSTALL_LOG}...something" it
+#       will be included in the 'setup' part of the results web page.
+#       The filename must have 2 sections in it, separated by "@",
+#       i.e.:
+#               ${INSTALL_LOG}@title@description
+#
+#       The 'description' part will become a link you can click to
+#       see the file contents.
+#
 [ ! "$HOME" ] && export HOME=/home/develenv
 [ ! -d "$HOME/projects" ] && mkdir $HOME/projects
 cd $HOME/projects
@@ -26,7 +35,7 @@ cp /dev/null $HTML_SUMMARIES
 # Use this filename convention to store details for the html page results
 # for this run.
 #
-export INSTALL_LOG="/tmp/B2GtestRun."
+export INSTALL_LOG="/tmp/B2GtestRun"
 rm ${INSTALL_LOG}* 2>/dev/null
 
 echo "
@@ -54,28 +63,31 @@ then
     #
     printf "\n\nFlashing device with BRANCH $BRANCH...\n\n"
     flash_device.sh $DEVICE eng $BRANCH NODOWNLOAD          > /tmp/flash_device 2>&1
-    buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}')
-    mv /tmp/flash_device ${INSTALL_LOG}Flash_device_with_build_${buildname}
+    
+    buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}' | sed -e "s/^\(.*\).tgz$/\1/")
+    cp /tmp/flash_device ${INSTALL_LOG}@Build_name@${buildname}
     
     # (for the CI output)
-    printf "Tests running against build: $buildname."
-    
-	
-	#
-	# Install correct versions of the test toolkit and test cases etc...
-	#
-    echo "Setting up OWD_TEST_TOOLKIT ..."                 >> ${INSTALL_LOG}Install_toolkit_and_tests 2>&1
-	cd $HOME/projects/OWD_TEST_TOOLKIT
-	export REINSTALL_OWD_TEST_CASES="Y"
-    ./install.sh $LOGFILE $BRANCH                          >> ${INSTALL_LOG}Install_toolkit_and_tests 2>&1
+    printf "Tests running against build: $buildname\n"
+
+    cd $HOME/projects/OWD_TEST_TOOLKIT
+    export REINSTALL_OWD_TEST_CASES="Y"
+    echo "Setting up OWD_TEST_TOOLKIT ..."  >> ${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc... 2>&1
+    ./install.sh $LOGFILE $BRANCH           >> ${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc... 2>&1
+
 
 else
 
-    buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}')
-    cp /tmp/flash_device ${INSTALL_LOG}Flash_device_with_build_${buildname}
+    buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}' | sed -e "s/^\(.*\).tgz$/\1/")
+    cp /tmp/flash_device ${INSTALL_LOG}@Build_name@${buildname}
     
     # (for the CI output)
-    printf "Tests running against build: $buildname."
+    printf "Tests running against build: $buildname\n"
+
+    cd $HOME/projects/OWD_TEST_TOOLKIT
+    unset REINSTALL_OWD_TEST_CASES
+    echo "Setting up OWD_TEST_TOOLKIT ..."  >> ${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc... 2>&1
+    ./install.sh $LOGFILE $BRANCH           >> ${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc... 2>&1
 
 	#
 	# Run a quick test case I can test whatever I'm testing.
