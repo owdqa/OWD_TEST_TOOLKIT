@@ -40,43 +40,45 @@ $HTML_WEBDIR
 *********************************************************************
 "
 
-#
-# Flash device.
-#
-printf "\n\nFlashing device with BRANCH $BRANCH...\n\n"
-flash_device.sh $DEVICE eng $BRANCH NODOWNLOAD          > ${INSTALL_LOG}Flash_the_device 2>&1
-
-printf "Tests running against build: "
-egrep "^Unpacking " | awk '{print $2}'
-
-
-#
-# Install correct versions of the test suite.
-#
-
-# Clear out everything (using sudo, so be paranoid about the folder we're in!!!).
-cd
-sudo rm -rf projects/*
-
-printf "\nCloning OWD_TEST_TOOLKIT and test cases (takes a few minutes) ...\n\n"
-cd $HOME/projects
-git clone https://github.com/owdqa/OWD_TEST_TOOLKIT.git > ${INSTALL_LOG}Install_toolkit_and_tests 2>&1
-
-cd $HOME/projects/OWD_TEST_TOOLKIT
-export REINSTALL_OWD_TEST_CASES="Y"
-./install.sh $LOGFILE $BRANCH                          >> ${INSTALL_LOG}Install_toolkit_and_tests 2>&1
-
-
 
 #################################################
 #
-# A quick 'hack' so I can test Jenkins changes away from the 'live' builds.
-# I've kept this totally separate so I can put it anywhere in this script that I like.
+# A quick 'hack' so I can test changes to this script
+# without losing my own local repos!
 #
-if [ "$TEST_TYPE" = "ROYTEST" ]
+if [ "$TEST_TYPE" != "ROYTEST" ]
 then
+
+    #
+    # Flash device.
+    #
+    printf "\n\nFlashing device with BRANCH $BRANCH...\n\n"
+    flash_device.sh $DEVICE eng $BRANCH NODOWNLOAD          > /tmp/flash_device 2>&1
+    buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}')
+    mv /tmp/flash_device ${INSTALL_LOG}Flash_device_with_build_${buildname}
+    
+    # (for the CI output)
+    printf "Tests running against build: $buildname."
+    
+	
 	#
-	# Run a couple of quick test cases so I can test whatever I'm testing.
+	# Install correct versions of the test toolkit and test cases etc...
+	#
+    echo "Setting up OWD_TEST_TOOLKIT ..."                 >> ${INSTALL_LOG}Install_toolkit_and_tests 2>&1
+	cd $HOME/projects/OWD_TEST_TOOLKIT
+	export REINSTALL_OWD_TEST_CASES="Y"
+    ./install.sh $LOGFILE $BRANCH                          >> ${INSTALL_LOG}Install_toolkit_and_tests 2>&1
+
+else
+
+    buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}')
+    cp /tmp/flash_device ${INSTALL_LOG}Flash_device_with_build_${buildname}
+    
+    # (for the CI output)
+    printf "Tests running against build: $buildname."
+
+	#
+	# Run a quick test case I can test whatever I'm testing.
 	#
 	cd $HOME/projects/owd_test_cases
 	./run_tests.sh 19354
