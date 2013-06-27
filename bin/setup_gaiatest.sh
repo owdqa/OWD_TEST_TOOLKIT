@@ -44,9 +44,9 @@ git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>&1
 # Install gaiatest.
 cd gaia-ui-tests
 printf "\n* Switching to branch \"$BRANCH\" of gaiatest ... (ask on #mozwebqa about errors - this changes sometimes!)\n\n" | tee -a $LOGFILE
-git checkout $BRANCH  2> >( tee $LOGFILE)
+git checkout $BRANCH  2> >( tee -a $LOGFILE)
 printf "\n* Installing gaiatest for branch \"$(git branch | grep '*')\" ...\n\n" | tee -a $LOGFILE
-sudo python setup.py develop | tee /tmp/gaiatest_setup.log >> $LOGFILE
+sudo python setup.py develop >> $LOGFILE 2>&1
 
 #
 # Sometimes a bad network connection causes an error in this installation.
