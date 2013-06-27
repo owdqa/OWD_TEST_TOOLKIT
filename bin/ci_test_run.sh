@@ -79,7 +79,7 @@ then
 else
 
     buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}' | sed -e "s/^\(.*\).tgz$/\1/")
-    cp /tmp/flash_device ${INSTALL_LOG}@Build_name@${buildname}
+    cp /tmp/flash_device ${INSTALL_LOG}@Device_build_name@${buildname}
     
     # (for the CI output)
     printf "Tests running against build: $buildname\n"
