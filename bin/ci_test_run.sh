@@ -60,36 +60,22 @@ buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}' | sed -e "s
 cp /tmp/flash_device ${INSTALL_LOG}@Build_name@${buildname}
 
 # (for the CI output)
-printf "\nTests running against build: $buildname\n"
+printf "\n\nTests running against build: $buildname\n"
 
 cd $HOME/projects/OWD_TEST_TOOLKIT
 printf "\nInstalling toolkit (can take a few minutes) ...\n"
 echo "Setting up OWD_TEST_TOOLKIT ..."  >> ${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc... 2>&1
 
+cd $HOME/projects/owd_test_cases
+
+
 
 #################################################
 #
-# A quick 'hack' at this point, so I can test changes to this script
-# without losing my own local repos!
+# A quick 'hack' at this point, so I can test changes to this script.
 #
-if [ "$TEST_TYPE" != "ROYTEST" ]
+if [ "$TEST_TYPE" = "ROYTEST" ]
 then
-
-    export REINSTALL_OWD_TEST_CASES="Y"
-    
-    ./install.sh $LOGFILE $BRANCH           >> ${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc... 2>&1
-
-
-else
-
-    unset REINSTALL_OWD_TEST_CASES
-
-    ./install.sh $LOGFILE $BRANCH           >> ${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc... 2>&1
-
-	#
-	# Run a quick test case so I can just check this script works.
-	#
-	cd $HOME/projects/owd_test_cases
 	./run_tests.sh 19354
 	
 	exit
@@ -97,13 +83,9 @@ fi
 #################################################
 
 
-
-
 #
 # There are some 'special' tests we can run (like 'blocked').
 #
-cd $HOME/projects/owd_test_cases
-
 if [ "$TEST_TYPE" = "BLOCKED" ]
 then
 	printf "\nRunning BLOCKED test cases only ...\n\n"
