@@ -62,37 +62,61 @@ cp /tmp/flash_device ${INSTALL_LOG}@Build_name@${buildname}
 # (for the CI output)
 printf "\n\nTests running against build: $buildname\n"
 
+#
+# Set up the toolkit.
+#
 cd $HOME/projects/OWD_TEST_TOOLKIT
 printf "\nInstalling toolkit (can take a few minutes) ...\n"
-echo "Setting up OWD_TEST_TOOLKIT ..."  >> ${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc... 2>&1
+
+export LOGFILE=${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc...
+echo "Setting up OWD_TEST_TOOLKIT ..."  > $LOGFILE 2>&1
+
 ./install.sh
-
-cd $HOME/projects/owd_test_cases
-
 
 
 #################################################
 #
-# A quick 'hack' at this point, so I can test changes to this script.
+# Re-install the test cases (default to yes)?
 #
-if [ "$TEST_TYPE" = "ROYTEST" ]
+export REINSTALL_OWD_TEST_CASES=${REINSTALL_OWD_TEST_CASES:-"Y"}
+
+if [ "$REINSTALL_OWD_TEST_CASES" = "Y" ]
 then
-	./run_tests.sh 19354
-	
-	exit
+    #
+    # Install the owd test cases.
+    #
+    printf "\n\nInstalling owd_test_cases..." | tee -a $LOGFILE
+    printf "\n============================\n" | tee -a $LOGFILE
+    cd $OWD_TEST_TOOLKIT_DIR/..
+    rm -rf owd_test_cases 2>/dev/null
+
+    git clone https://github.com/owdqa/owd_test_cases.git 2> >( tee -a $LOGFILE)
+    cd owd_test_cases
+
+    printf "\n* Switching to branch $BRANCH of owd_test_cases ...\n\n" | tee -a $LOGFILE
+    git checkout $BRANCH  2> >( tee -a $LOGFILE)
+    printf "\n* Now using owd_test_cases branch \"$(git branch | grep '*')\".\n\n"
+else
+    printf "\n\n*** NOTE: Not refreshing owd_test_cases! *** \n\n"
 fi
+
 #################################################
 
 
 #
 # There are some 'special' tests we can run (like 'blocked').
 #
+    cd $HOME/projects/owd_test_cases
 if [ "$TEST_TYPE" = "BLOCKED" ]
 then
 	printf "\nRunning BLOCKED test cases only ...\n\n"
 	TEST_LIST=$(egrep -l "^[ \t]*_Description *= *.*BLOCKED BY" tests/test_*.py | awk 'BEGIN{FS="/"}{print $NF}' | awk 'BEGIN{FS="_"}{print $2}' | awk 'BEGIN{FS="."}{print $1}')
 
 	./run_tests.sh $TEST_LIST
+elif [ "$TEST_TYPE" = "ROYTEST" ]
+then
+    # Just a quick random test.
+    ./run_tests.sh 19354
 else
 	./run_tests.sh {$TEST_TYPE}
 fi
