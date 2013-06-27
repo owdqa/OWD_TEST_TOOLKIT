@@ -6,6 +6,7 @@ export MYPATH=$(dirname $0)
 export CURRPATH=$(pwd)
 
 export BRANCH=${1:-"v1-train"}
+LOGFILE=${LOGFILE:-/tmp/gaiatest_setup.log}
 
 printf "\n\nInstalling gaiatest (for $BRANCH) and Marionette ..." | tee -a $LOGFILE
 printf "\n====================================================\n" | tee -a $LOGFILE
@@ -38,7 +39,7 @@ sudo rm -rf gaia-ui-tests 2>/dev/null
 # Now re-install everything.
 #
 printf "\n* Cloning gaiatest - this make take a few minutes, please wait ...\n\n" | tee -a $LOGFILE
-git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>>$LOGFILE
+git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>&1
 
 # Install gaiatest.
 cd gaia-ui-tests
