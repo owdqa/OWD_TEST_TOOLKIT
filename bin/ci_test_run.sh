@@ -65,6 +65,7 @@ printf "\n\nTests running against build: $buildname\n"
 cd $HOME/projects/OWD_TEST_TOOLKIT
 printf "\nInstalling toolkit (can take a few minutes) ...\n"
 echo "Setting up OWD_TEST_TOOLKIT ..."  >> ${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc... 2>&1
+./install.sh
 
 cd $HOME/projects/owd_test_cases
 
