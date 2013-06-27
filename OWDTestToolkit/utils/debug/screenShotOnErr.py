@@ -11,7 +11,7 @@ class main(GaiaTestCase):
         # Build the error filename.
         #
         self.errNum = self.errNum + 1
-        fnam = self.testNum + "_err_" + str(self.errNum)
+        fnam = self.testNum + "_" + str(self.errNum)
         
         #
         # Record the screenshot.

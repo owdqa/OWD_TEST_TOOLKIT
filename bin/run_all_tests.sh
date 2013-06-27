@@ -162,7 +162,7 @@ then
 	#
 	# We're catching the output (usually means we're on the ci server).
 	#
-    $OWD_TEST_TOOLKIT_BIN/connect_device.sh > ${INSTALL_LOG}Connect_device
+    $OWD_TEST_TOOLKIT_BIN/connect_device.sh > ${INSTALL_LOG}@Connect_device@Click_here_for_details
 else
     $OWD_TEST_TOOLKIT_BIN/connect_device.sh
 fi

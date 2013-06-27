@@ -3,22 +3,6 @@ a:visited {color:#0000ff;text-decoration:none;}
 a:hover   {color:#0000ff;text-decoration:none;background-color:#ffffff;}
 a:active  {color:#0000ff;text-decoration:none;}
 
-h1{
-    color:#222222;
-    text-align:center;
-    font-family:"sans";
-    font-weight:"bold";
-    font-size:20px;
-}
-
-h2{
-    color:#444444;
-    text-align:center;
-    font-family:"sans";
-    font-weight:"normal";
-    font-size:14px;
-}
-
 body{
     background-color:#ffffff;
 }
@@ -38,7 +22,7 @@ tr{
     background-color:#eeeeee;
     color:#000000;
 }
-tr.install_log{
+tr.install{
     background-color:#ffffff;
 }
 tr.failed{
@@ -48,40 +32,40 @@ tr.passed{
     background-color:#99ffaa;
 }
 
-
-
-
-
 th{
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-left: 8px;
     padding-right: 8px;
     font-size:12px;
-}
-th.install_head{
     text-align: left;
 }
-th.desc{
-    text-align: left;
+th.install{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 5px;
+    text-align: right;
 }
+
 td{
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
     font-size:12px;
 }
-td.id{
-    text-align: center;
-}
-td.time{
-    text-align: center;
-}
-td.results{
-    text-align: center;
+td.job{
+    background-color:#000000;
+    text-align:center;
+    color:white;
+    font-size:12pt;
+    font-weight:bold;
 }
 td.desc{
-    text-align: left;
     font-size:10px;
 }
+
+.left{
+    text-align: left;
+}
+.center{
+    text-align: center;
+}
+
