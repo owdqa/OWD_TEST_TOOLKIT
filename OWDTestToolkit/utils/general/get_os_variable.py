@@ -13,7 +13,7 @@ class main(GaiaTestCase):
             try:
                 x = os.environ[p_name]
             except:
-                self.logResult("info", "WARNING: Unable to set OS variable '" + p_name + "'!")
+                self.logResult("info", "NOTE: OS variable '" + p_name + "' was not set.")
                 
                 if p_validate:
                     self.reportResults()
