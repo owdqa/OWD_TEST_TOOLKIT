@@ -53,9 +53,16 @@ class UTILS(app.main        ,
         #
         # Get run details from the OS.
         #
+        varStr = "Setting OS variables ..."
         self.testNum        = self.get_os_variable("TEST_NUM")
         self.det_fnam       = self.get_os_variable("DET_FILE")
-        self.sum_fnam       = self.get_os_variable("SUM_FILE")        
+        self.sum_fnam       = self.get_os_variable("SUM_FILE")
+        self.logResult("info", "Get OS variables ...|" +\
+                               "self.testNum  = '" + str(self.testNum)  + "'.|" +\
+                               "self.det_fnam = '" + str(self.det_fnam) + "'.|" +\
+                               "self.sum_fnam = '" + str(self.sum_fnam) + "'."
+                               )
+                
         try:
             self.testDesc   = self.parent._Description
         except:
@@ -65,12 +72,13 @@ class UTILS(app.main        ,
         #
         # Set device defaults.
         #
-        self.data_layer.set_setting("vibration.enabled", True)
-        self.data_layer.set_setting("audio.volume.notification", 0)
-        self.data_layer.set_setting('ril.radio.disabled', False)
-
-        self.apps.set_permission('Camera', 'geolocation', 'deny')
-        self.apps.set_permission('Homescreen', 'geolocation', 'deny')
+        self.setSetting("vibration.enabled", True)
+        self.setSetting("audio.volume.notification", 0)
+        self.setSetting('ril.radio.disabled', False)
+    
+        self.setPermission('Camera', 'geolocation', 'deny')
+        self.setPermission('Homescreen', 'geolocation', 'deny')
+            
 
         self.marionette.set_search_timeout(20)
 
@@ -82,3 +90,4 @@ class UTILS(app.main        ,
         # Unlock (if necessary).
         #
         self.parent.lockscreen.unlock()
+        
