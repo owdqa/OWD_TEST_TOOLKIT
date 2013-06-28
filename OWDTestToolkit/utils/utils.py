@@ -49,35 +49,42 @@ class UTILS(app.main        ,
         # Other globals ...
         #
         self._DEFAULT_ELEMENT_TIMEOUT = 5
+        try:
+            self.testDesc   = self.parent._Description
+        except:
+            self.testDesc   = "(no description found!)"        
 
         #
         # Get run details from the OS.
         #
         varStr = "Setting OS variables ..."
-        self.testNum        = self.get_os_variable("TEST_NUM")
-        self.det_fnam       = self.get_os_variable("DET_FILE")
-        self.sum_fnam       = self.get_os_variable("SUM_FILE")
-        self.logResult("info", "Get OS variables ...|" +\
-                               "self.testNum  = '" + str(self.testNum)  + "'.|" +\
-                               "self.det_fnam = '" + str(self.det_fnam) + "'.|" +\
-                               "self.sum_fnam = '" + str(self.sum_fnam) + "'."
+        self.testNum        = self.get_os_variable("TEST_NUM", True)
+        self.det_fnam       = self.get_os_variable("DET_FILE", True)
+        self.sum_fnam       = self.get_os_variable("SUM_FILE", True)
+        self.logResult("info", "Get OS variables ..." +\
+                               "|self.testNum  = '" + str(self.testNum)  + "'." +\
+                               "|self.det_fnam = '" + str(self.det_fnam) + "'." +\
+                               "|self.sum_fnam = '" + str(self.sum_fnam) + "'."
                                )
                 
-        try:
-            self.testDesc   = self.parent._Description
-        except:
-            self.testDesc   = "(no description found!)"
-        
-
         #
         # Set device defaults.
         #
-        self.setSetting("vibration.enabled", True)
-        self.setSetting("audio.volume.notification", 0)
-        self.setSetting('ril.radio.disabled', False)
+        a=self.setSetting("vibration.enabled",          True,   True)
+        b=self.setSetting("audio.volume.notification",  0,      True)
+        c=self.setSetting('ril.radio.disabled',         False,  True)
+        self.logResult("info", "Default device settings ..." +\
+                               "|Set 'vibration.enabled'         = True  " + ("[OK]" if a else "[UNABLE TO SET!]!") +\
+                               "|Set 'audio.volume.notification' = 0     " + ("[OK]" if b else "[UNABLE TO SET!]!") +\
+                               "|Set 'ril.radio.disabled'        = False " + ("[OK]" if c else "[UNABLE TO SET!]!")
+                                )
     
-        self.setPermission('Camera', 'geolocation', 'deny')
-        self.setPermission('Homescreen', 'geolocation', 'deny')
+        a=self.setPermission('Camera', 'geolocation', 'deny', True)
+        b=self.setPermission('Homescreen', 'geolocation', 'deny', True)
+        self.logResult("info", "Default app permissions ..." +\
+                               "|Set 'Camera'     -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!") +\
+                               "|Set 'Homescreen' -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!")
+                               )
             
 
         self.marionette.set_search_timeout(20)

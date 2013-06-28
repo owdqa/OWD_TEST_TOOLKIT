@@ -16,6 +16,7 @@ class main(GaiaTestCase):
                 self.logResult("info", "WARNING: Unable to set OS variable '" + p_name + "'!")
                 
                 if p_validate:
+                    self.reportResults()
                     os._exit(1)
                     
                 return False
