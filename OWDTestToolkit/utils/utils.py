@@ -89,9 +89,15 @@ class UTILS(app.main        ,
 
         self.marionette.set_search_timeout(20)
 
-        self.setTimeToNow()
+        try:
+            self.setTimeToNow()
+        except:
+            self.logResult("info", "WARNING: Failed to set the current time on this device!")
         
-        self.setupDataConn()
+        try:
+            self.setupDataConn()
+        except:
+            self.logResult("info", "WARNING: Failed to set up the data conn details (APN etc...)!")
          
         #
         # Unlock (if necessary).

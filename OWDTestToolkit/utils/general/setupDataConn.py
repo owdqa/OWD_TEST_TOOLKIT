@@ -12,26 +12,19 @@ class main(GaiaTestCase):
         HOST = "10.138.255.133"
         PORT = "8080"
         
-        self.logResult("info", "ENSURING DATA CONN SETTINGS ARE CORRECT.")
-        logstr = "Before ..."
-        logstr = logstr + "|APN            = \"" + self.data_layer.get_setting("ril.data.apn") + "\""
-        logstr = logstr + "|Identifier     = \"" + self.data_layer.get_setting("ril.data.user") + "\""
-        logstr = logstr + "|Password       = \"" + self.data_layer.get_setting("ril.data.passwd") + "\""
-        logstr = logstr + "|HTTPproxy_host = \"" + self.data_layer.get_setting("ril.data.httpProxyHost") + "\""
-        logstr = logstr + "|HTTPproxy_port = \"" + self.data_layer.get_setting("ril.data.httpProxyPort") + "\""
-        self.logResult("info", logstr)
+        self.logResult("info", "Ensuring dataconn settings (APN etc...) are correct.")
 
-        self.data_layer.set_setting("ril.data.apn"          , APN)
-        self.data_layer.set_setting("ril.data.user"         , ID)
-        self.data_layer.set_setting("ril.data.passwd"       , PASS)
-        self.data_layer.set_setting("ril.data.httpProxyHost", HOST)
-        self.data_layer.set_setting("ril.data.httpProxyPort", PORT)
+        self._setIt("ril.data.apn"          , APN)
+        self._setIt("ril.data.user"         , ID)
+        self._setIt("ril.data.passwd"       , PASS)
+        self._setIt("ril.data.httpProxyHost", HOST)
+        self._setIt("ril.data.httpProxyPort", PORT)
 
-        logstr = "After ..."
-        logstr = logstr + "|APN            = \"" + self.data_layer.get_setting("ril.data.apn") + "\""
-        logstr = logstr + "|Identifier     = \"" + self.data_layer.get_setting("ril.data.user") + "\""
-        logstr = logstr + "|Password       = \"" + self.data_layer.get_setting("ril.data.passwd") + "\""
-        logstr = logstr + "|HTTPproxy_host = \"" + self.data_layer.get_setting("ril.data.httpProxyHost") + "\""
-        logstr = logstr + "|HTTPproxy_port = \"" + self.data_layer.get_setting("ril.data.httpProxyPort") + "\""
-        self.logResult("info", logstr)
+        self.logResult("info", "Done.")
 
+    def _setIt(self, p_item, p_val):
+        #
+        # Just a quick function to report issues setting this.
+        #
+        try: self.data_layer.set_setting(p_item, p_val)
+        except: self.logResult(False, "Unable to set '" + p_item + "' to '" + p_val + "'.")
