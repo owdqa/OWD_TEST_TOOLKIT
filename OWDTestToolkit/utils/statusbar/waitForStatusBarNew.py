@@ -10,7 +10,7 @@ class main(GaiaTestCase):
         self.marionette.switch_to_frame()
 
         x = self.waitForElements(p_dom,
-                             "Required statusbar icon (within " + str(p_timeOut) + " seconds)",
+                             "This statusbar icon",
                              p_displayed,
                              p_timeOut)
         
