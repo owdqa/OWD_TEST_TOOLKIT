@@ -173,7 +173,7 @@ fi
 #
 if [ "$OWD_NO_BLOCKED" ]
 then
-	printf "** NOTE: 'OWD_NO_BLOCKED' is set - ignoring blocked test cases. **\n\n"
+	printf "\n** NOTE: 'OWD_NO_BLOCKED' is set - ignoring blocked test cases. **\n"
 fi
 
 #
