@@ -173,7 +173,7 @@ fi
 #
 if [ "$OWD_NO_BLOCKED" ]
 then
-	printf "** NOTE: 'OWD_NO_BLOCKED' is set - ignoring blocked test cases. **\n\n"
+	printf "\n** NOTE: 'OWD_NO_BLOCKED' is set - ignoring blocked test cases. **\n"
 fi
 
 #
@@ -220,20 +220,27 @@ do
     #
     # Gather the test run details.
     #
+    test_num=""
     test_failed=""
+    test_passes=""
+    test_total=""
+    test_desc=""
+    test_time=""
+    test_repeat=""
     [ -f "$SUM_FILE" ] && f_split_run_details "$(tail -1 $SUM_FILE)"
 
-    if [ ! "$test_failed" ]
-    then
-        #
-        # Total failure - didn't even get to the test part!
-        #
-        test_num="$TEST_NUM"
-        test_failed="1" #(no. of fails - this just marks the test as 'did not pass')
-        test_passes="?"
-        test_total="?"
-        test_desc=$(grep "_Description" $TEST_FILE | awk 'BEGIN{FS="="}{print $2}')
-    fi
+    #
+    # A bit 'hacky', but if, for ANY reason, these are still
+    # not set, then set them to 'something'.
+    # (I'm finding certain build issues can cause a mess here!)
+    #
+    test_num=${test_num:-"$TEST_NUM"}
+    test_failed=${test_failed:-"1"}
+    test_passes=${test_passes:-"?"}
+    test_total=${test_total:-"?"}
+    test_desc=${test_desc:-$(grep "_Description" $TEST_FILE | awk 'BEGIN{FS="="}{print $2}' | sed -e "s/^[ \t]*\"\([^\"]*\)\"/\1/")}
+    test_time=${test_time:-"?"}
+    test_repeat=${test_repeat:-""}
 
     #
     # Update the final summary totals.
