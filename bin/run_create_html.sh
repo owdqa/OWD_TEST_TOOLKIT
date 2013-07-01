@@ -105,7 +105,7 @@ echo "
 #
 # Put the FAILED tests at the top so they're quick to debug.
 #
-sort -t$'\t' -k2,2r -k1,1 $HTML_SUMMARIES | while read line
+cat $HTML_SUMMARIES | while read line
 do
 	f_split_run_details "$line"
 	
