@@ -302,8 +302,7 @@ do
 	           "$test_passes" \
 	           "$test_total"  \
 	           "$test_desc"   \
-	           "$test_time"   \
-	           "$test_repeat" >> $HTML_SUMMARIES
+	           "$test_time"   >> $HTML_SUMMARIES
     fi
     
     #
