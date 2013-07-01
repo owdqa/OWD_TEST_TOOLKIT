@@ -53,32 +53,36 @@ $HTML_WEBDIR
 #
 # Flash device.
 #
-printf "\nFlashing device with BRANCH $BRANCH...\n"
-flash_device.sh $DEVICE eng $BRANCH NODOWNLOAD          > /tmp/flash_device 2>&1
+if [ "$TEST_TYPE" != "ROYTEST" ]
+then
+    printf "\nFlashing device with BRANCH $BRANCH...\n"
+    flash_device.sh $DEVICE eng $BRANCH NODOWNLOAD          > /tmp/flash_device 2>&1
 
-buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}' | sed -e "s/^\(.*\).tgz$/\1/")
-cp /tmp/flash_device ${INSTALL_LOG}@Build_name@${buildname}
+    buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}' | sed -e "s/^\(.*\).tgz$/\1/")
+    cp /tmp/flash_device ${INSTALL_LOG}@Build_name@${buildname}
 
-# (for the CI output)
-printf "\n\nTests running against build: $buildname\n"
+    # (for the CI output)
+    printf "\n\nTests running against build: $buildname\n"
 
-#
-# Set up the toolkit.
-#
-cd $HOME/projects/OWD_TEST_TOOLKIT
-printf "\nInstalling toolkit (can take a few minutes) ...\n"
+    #
+    # Set up the toolkit.
+    #
+    cd $HOME/projects/OWD_TEST_TOOLKIT
+    printf "\nInstalling toolkit (can take a few minutes) ...\n"
 
-export LOGFILE=${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc...
-echo "Setting up OWD_TEST_TOOLKIT ..."  > $LOGFILE 2>&1
+    export LOGFILE=${INSTALL_LOG}@Dependencies@Clone_and_install_toolkit_etc...
+    echo "Setting up OWD_TEST_TOOLKIT ..."  > $LOGFILE 2>&1
 
-./install.sh
+    ./install.sh
 
-
-#################################################
-#
-# Re-install the test cases (default to yes)?
-#
-export REINSTALL_OWD_TEST_CASES=${REINSTALL_OWD_TEST_CASES:-"Y"}
+    #################################################
+    #
+    # Re-install the test cases (default to yes)?
+    #
+    export REINSTALL_OWD_TEST_CASES=${REINSTALL_OWD_TEST_CASES:-"Y"}
+else
+    REINSTALL_OWD_TEST_CASES=""
+fi
 
 if [ "$REINSTALL_OWD_TEST_CASES" = "Y" ]
 then
@@ -106,7 +110,7 @@ fi
 #
 # There are some 'special' tests we can run (like 'blocked').
 #
-    cd $HOME/projects/owd_test_cases
+cd $HOME/projects/owd_test_cases
 if [ "$TEST_TYPE" = "BLOCKED" ]
 then
 	printf "\nRunning BLOCKED test cases only ...\n\n"
