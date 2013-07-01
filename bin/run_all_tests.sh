@@ -215,7 +215,7 @@ do
     #
     # Run the test and record the time taken...
     #
-    test_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
+    test_run_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
 
     #
     # Gather the test run details.
@@ -225,8 +225,6 @@ do
     test_passes=""
     test_total=""
     test_desc=""
-    test_time=""
-    test_repeat=""
     [ -f "$SUM_FILE" ] && f_split_run_details "$(tail -1 $SUM_FILE)"
 
     #
@@ -239,8 +237,6 @@ do
     test_passes=${test_passes:-"?"}
     test_total=${test_total:-"?"}
     test_desc=${test_desc:-$(grep "_Description" $TEST_FILE | awk 'BEGIN{FS="="}{print $2}' | sed -e "s/^[ \t]*\"\([^\"]*\)\"/\1/")}
-    test_time=${test_time:-"?"}
-    test_repeat=${test_repeat:-""}
 
     #
     # Update the final summary totals.
@@ -286,10 +282,10 @@ do
     #
     # Put the elapsed time for this test into a nice format.
     #
-    z=$(echo "$test_time" | egrep "^real" | awk '{print $2}' | awk 'BEGIN{FS="."}{print $1}')
+    z=$(echo "$test_run_time" | egrep "^real" | awk '{print $2}' | awk 'BEGIN{FS="."}{print $1}')
     z_mm=$(echo "$z" | awk 'BEGIN{FS="m"}{print $1}' | awk '{printf "%.2d", $0}')
     z_ss=$(echo "$z" | awk 'BEGIN{FS="m"}{print $2}' | awk '{printf "%.2d", $0}')
-    export test_time="$z_mm:$z_ss"
+    export test_run_time="$z_mm:$z_ss"
 
     #    
     # OUTPUT SUMMARY FOR HTML PAGE BUILDER.
@@ -297,12 +293,12 @@ do
     if [ "$HTML_WEBDIR" ]
     then
 	    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
-	           "$test_num"    \
-	           "$test_failed" \
-	           "$test_passes" \
-	           "$test_total"  \
-	           "$test_desc"   \
-	           "$test_time"   >> $HTML_SUMMARIES
+	           "$test_num"     \
+	           "$test_failed"  \
+	           "$test_passes"  \
+	           "$test_total"   \
+	           "$test_desc"    \
+	           "$test_run_time">> $HTML_SUMMARIES
     fi
     
     #
@@ -313,11 +309,11 @@ do
     [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
     
     printf "#%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
-           "$test_num"    \
-           "$test_failed" \
-           "$test_time"   \
-           "$test_passes" \
-           "$test_total"  \
+           "$test_num"      \
+           "$test_failed"   \
+           "$test_run_time" \
+           "$test_passes"   \
+           "$test_total"    \
            "$test_desc"   
 
     
