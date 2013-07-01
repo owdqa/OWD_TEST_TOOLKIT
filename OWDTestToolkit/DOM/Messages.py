@@ -1,8 +1,6 @@
 frame_locator          = ('src', 'app://sms.gaiamobile.org/index.html')
 
-#statusbar_new_sms      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[text()='%s']")
 statusbar_new_sms      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'%s')]")
-#lockscreen_notif_xpath = "//*[@id='desktop-notifications-container']//div[text()='%s']"
 lockscreen_notif_xpath = "//*[@id='desktop-notifications-container']//div[contains(text(),'%s')]"
 create_new_message_btn = ('id', 'icon-add')
 
@@ -14,7 +12,6 @@ cancel_add_contact     = ("id", "cancel_activity")
 contact_no_phones_msg  = ("xpath", "//form[@id='confirmation-message']//p[text()='No phones']")
 contact_no_phones_ok   = ("xpath", "//form[@id='confirmation-message']//button[text()='OK']")
 
-input_message_area     = ('id', 'messages-input')
 input_message_area     = ('id', 'messages-input')
 
 send_message_button    = ('id', 'messages-send-button')
@@ -45,3 +42,6 @@ edit_msgs_sel_all_btn  = ("id","messages-check-all-button")
 
 airplane_warning_header= ("id", "dialog-title")
 airplane_warning_ok    = ("id", "dialog-no")
+
+create_new_contact_btn = ("xpath", "//button[text()='Create new contact']")
+add_to_contact_btn     = ("xpath", "//button[text()='Add to an existing contact']")
