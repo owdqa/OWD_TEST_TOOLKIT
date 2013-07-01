@@ -113,10 +113,6 @@ then
 	TEST_LIST=$(egrep -l "^[ \t]*_Description *= *.*BLOCKED BY" tests/test_*.py | awk 'BEGIN{FS="/"}{print $NF}' | awk 'BEGIN{FS="_"}{print $2}' | awk 'BEGIN{FS="."}{print $1}')
 
 	./run_tests.sh $TEST_LIST
-elif [ "$TEST_TYPE" = "ROYTEST" ]
-then
-    # Just a quick random test.
-    ./run_tests.sh 19354
 else
 	./run_tests.sh {$TEST_TYPE}
 fi
