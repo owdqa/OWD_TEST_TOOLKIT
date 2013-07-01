@@ -34,6 +34,10 @@ import  addContactToThisSMS                ,\
         threadExists                       ,\
         timeOfLastMessageInThread          ,\
         timeOfThread                       ,\
+        header_sendMessage                 ,\
+        header_addToContact                ,\
+        header_call                        ,\
+        header_createContact               ,\
         waitForReceivedMsgInThisThread     ,\
         waitForSMSNotifier                 
 
@@ -70,6 +74,10 @@ class Messages (
             threadEditModeON.main,
             threadType.main,
             threadExists.main,
+            header_sendMessage.main,
+            header_addToContact.main,
+            header_call.main,
+            header_createContact.main,
             timeOfLastMessageInThread.main,
             timeOfThread.main,
             waitForReceivedMsgInThisThread.main,

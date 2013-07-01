@@ -59,6 +59,12 @@ class current_frame():
             self.filename_screenshot = LOGDIR + filename + ".png"
             self.filename_htmldump   = LOGDIR + filename + ".html"
             
+            #
+            # This iframe gives me problems sometimes, so I'm ignoring it for now.
+            #
+            if appname == "costcontrol":
+                continue
+            
             print ""
             print "Iframe for app \"" + appname + "\" ..."
         
