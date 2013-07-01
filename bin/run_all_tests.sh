@@ -120,7 +120,7 @@ else
 	    do
 	        TESTS="$TESTS $line"
 	    done <<EOF
-	    $(ls ./tests/test_*.py | sed -e "s/^.*test_//" | sed -e "s/\..*//")
+	$(find ./tests -name "test_*.py" | sed -e "s/^.*test_//" | sed -e "s/\..*//")
 EOF
     fi
 fi
@@ -137,7 +137,7 @@ do
     #
     # If this test is blocked AND OWD_NO_BLOCKED is set, then ignore it.
     #
-    export test_blocked=$(f_check_blocked ./tests/test_${testnum}.py)
+    export test_blocked=$(f_check_blocked $(find ./tests -name test_${testnum}.py))
     if [ "$test_blocked" ] && [ "$OWD_NO_BLOCKED" ]
     then
         continue
@@ -192,7 +192,7 @@ do
 	#
 	# Make sure there is a test file for this test id.
 	#
-    export TEST_FILE="./tests/test_${i}.py"
+    export TEST_FILE=$(find ./tests -name test_${i}.py)
 	if [ ! -f $TEST_FILE ]
 	then
 		echo "ERROR: $TEST_FILE not found, cannot find test for \"$i\"!"
