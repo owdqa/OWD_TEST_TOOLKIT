@@ -1,5 +1,6 @@
 import GLOBAL
 frame_locator          = ("src","app://communications.gaiamobile.org/contacts/index.html")
+frame_locator_dfo      = ("data-frame-origin","app://communications.gaiamobile.org/contacts/index.html")
 view_all_header        = ('xpath', GLOBAL.app_head_specific % 'Contacts')
 view_all_contact_xpath = '//*[@data-order="%s"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")

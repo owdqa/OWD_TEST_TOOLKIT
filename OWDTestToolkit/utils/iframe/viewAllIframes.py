@@ -43,7 +43,7 @@ class main(GaiaTestCase):
                 stoppos  = frame_src.index('.')
                 
                 appname  = frame_src[startpos:stoppos]
-                filename = appname
+                filename = appname                
             else:
                 ucount = ucount + 1
                 appname  = "(unknown)"
@@ -64,6 +64,13 @@ class main(GaiaTestCase):
             filename_details    = LOGDIR + filename + "_iframe_details.txt"
             filename_screenshot = LOGDIR + filename + ".png"
             filename_htmldump   = LOGDIR + filename + ".html"
+
+            #
+            # I have random problems with 'costcontrol', so
+            # since I'm not testing it I'll ignore it.
+            #
+            if appname == "costcontrol":
+                continue
               
             self.msg = extra_bit + "Iframe for app \"" + appname + "\" ..."
              

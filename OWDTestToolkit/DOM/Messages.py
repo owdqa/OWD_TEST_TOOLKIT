@@ -21,7 +21,7 @@ header_back_button     = ("id","messages-back-button")
 
 threads                = ("xpath", "//p[@class='name']")
 threads_list           = ('xpath', '//article[@id="threads-container"]//li')
-thread_selector_xpath  = "//*[@id='threads-container']//li//a/p[text()='%s']"
+thread_selector_xpath  = "//*[@id='threads-container']//li//a/p[contains(text(),'%s')]"
 thread_timestamp_xpath = thread_selector_xpath + "/..//time"
 no_threads_message     = ("id", "no-result-message")
 edit_threads_button    = ("id", "threads-edit-icon")
@@ -43,5 +43,8 @@ edit_msgs_sel_all_btn  = ("id","messages-check-all-button")
 airplane_warning_header= ("id", "dialog-title")
 airplane_warning_ok    = ("id", "dialog-no")
 
-create_new_contact_btn = ("xpath", "//button[text()='Create new contact']")
-add_to_contact_btn     = ("xpath", "//button[text()='Add to an existing contact']")
+header_call_btn                 = ("xpath", "//button[text()='Call']")
+header_send_message_btn         = ("xpath", "//button[text()='Send message']")
+header_create_new_contact_btn   = ("xpath", "//button[text()='Create new contact']")
+header_add_to_contact_btn       = ("xpath", "//button[text()='Add to an existing contact']")
+header_cancel_btn               = ("xpath", "//button[text()='Cancel']")
