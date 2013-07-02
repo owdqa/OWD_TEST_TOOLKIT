@@ -14,6 +14,9 @@ class main(GaiaTestCase):
         # Create output files (summary, which is displayed and
         # details, which is not displayed).
         #
+        # NOTE: "XXDESCXX" is a marker that 'run_all_tests.sh' switches
+        #       to the correct test description.
+        #
         pass_str      = "passed"
         fail_str      = "FAILED"
         test_time     = time.time() - self.start_time
@@ -24,7 +27,8 @@ class main(GaiaTestCase):
         SUM_FILE    = open(self.sum_fnam, "w")
 
         DET_FILE.write("Test case  : %s\n" % self.testNum)
-        DET_FILE.write("Description: %s\n" % self.testDesc)
+        DET_FILE.write("Test desc  : XXDESCXX\n")
+        
         DET_FILE.write("Time taken : %s (not including restarting device etc...)\n" % str(test_time))
 
         boolStart = False
@@ -40,18 +44,12 @@ class main(GaiaTestCase):
         #
         # Get total number of tests performed.
         #
-        x = self.passed + self.failed
-        y = x - self.failed
+        total_tests = self.passed + self.failed
 
         #
         # Return summary information to stdout.
         #
-        SUM_FILE.write("#%s\t%s\t%s\t%s\t%s" % (self.testNum,
-                                                  self.failed,
-                                                  str(y),
-                                                  str(x),
-                                                  self.testDesc
-                                                  )
+        SUM_FILE.write("%s\t%s\t%s" % (self.passed, self.failed, total_tests)
                        )
         
         #

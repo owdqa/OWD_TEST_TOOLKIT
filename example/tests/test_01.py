@@ -11,14 +11,7 @@ from OWDTestToolkit import *
 #
 from tests.mock_data.contacts import MockContacts
 
-class test_7(GaiaTestCase):
-    #
-    # (MANDATORY) 
-    # The test description MUST be defined in this way (the test runner 
-    # uses this line to capture the description of this test for reporting).
-    #
-    _Description = "Create a contact via the contacts app."
- 
+class test_main(GaiaTestCase):
     #
     # Things that will happen before "test_()" methods are run.
     #

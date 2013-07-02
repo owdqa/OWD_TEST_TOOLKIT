@@ -48,11 +48,7 @@ class UTILS(app.main        ,
         #
         # Other globals ...
         #
-        self._DEFAULT_ELEMENT_TIMEOUT = 5
-        try:
-            self.testDesc   = self.parent._Description
-        except:
-            self.testDesc   = "(no description found!)"        
+        self._DEFAULT_ELEMENT_TIMEOUT = 5   
 
         #
         # Get run details from the OS.
