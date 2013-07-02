@@ -107,7 +107,12 @@ echo "
 #
 cat $HTML_SUMMARIES | while read line
 do
-	f_split_run_details "$line"
+    test_num=$(     echo "$line" | awk 'BEGIN{FS="\t"}{print $1}')
+    test_failed=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $2}')
+    test_passes=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $3}')
+    test_total=$(   echo "$line" | awk 'BEGIN{FS="\t"}{print $4}')
+    test_desc=$(    echo "$line" | awk 'BEGIN{FS="\t"}{print $5}')
+    test_time=$(    echo "$line" | awk 'BEGIN{FS="\t"}{print $6}')
 	
 	#
 	# Make 'Blocked' bold so it's clear.
@@ -162,8 +167,8 @@ do
     #
     # Put the file contents in the html (change newlines to html code etc...).
     #
-    sed -e "s/$/<br>/" $fnam | \
-    sed -e "s/ /\&nbsp/g"    | \
+    sed -e "s/$/<br>/" $fnam              | \
+    sed -e "s/ /\&nbsp/g"                 | \
     sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">"$HTML_WEBDIR"\2<\/a>,g"  >> $fnam.html
     	
 	#

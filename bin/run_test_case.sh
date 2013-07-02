@@ -61,14 +61,9 @@ f_2nd_chance(){
 	    	# problem that gaiatest 'restart' doesn't).
 	    	#
 			$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
-#			$OWD_TEST_TOOLKIT_BIN/connect_device.sh >/dev/null
 
             f_run_test
             
-            #
-            # Add the repeat to the end of the test summary file.
-            #
-            test_repeat="(x2) "
         fi
     fi
 }
@@ -77,7 +72,6 @@ f_2nd_chance(){
 # Run the test.
 #
 RESTART=""
-test_repeat=""
 f_run_test
 
 #
@@ -89,7 +83,10 @@ f_2nd_chance
 #
 # Get the summary details
 #
-f_split_run_details "$(cat $SUM_FILE)"
+line="$(tail -1 $SUM_FILE)"
+test_passes=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $1}')
+test_failed=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $2}')
+test_total=$(   echo "$line" | awk 'BEGIN{FS="\t"}{print $3}')
 
 
 #
@@ -130,10 +127,8 @@ fi
 #
 # Update the summary file (because Marionette issues won't be caught in it yet).
 #
-printf "#%s\t%s\t%s\t%s\t%s\t%s\n" \
-       "$test_num"                 \
-	   "$test_failed"              \
-	   "$test_passes"              \
-	   "$test_total"               \
-	   "$test_repeat$test_desc"    > $SUM_FILE
+printf "%s\t%s\t%s\t%s\t%s\n" \
+	   "$test_passes"         \
+       "$test_failed"         \
+	   "$test_total"          > $SUM_FILE
 

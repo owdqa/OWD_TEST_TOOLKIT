@@ -114,7 +114,7 @@ cd $HOME/projects/owd_test_cases
 if [ "$TEST_TYPE" = "BLOCKED" ]
 then
 	printf "\nRunning BLOCKED test cases only ...\n\n"
-	TEST_LIST=$(egrep -l "^[ \t]*_Description *= *.*BLOCKED BY" tests/test_*.py | awk 'BEGIN{FS="/"}{print $NF}' | awk 'BEGIN{FS="_"}{print $2}' | awk 'BEGIN{FS="."}{print $1}')
+	TEST_LIST=$(egrep -v "^$|^#" Docs/blocked_tests | awk 'BEGIN{FS="|"}{print $1}')
 
 	./run_tests.sh $TEST_LIST
 else

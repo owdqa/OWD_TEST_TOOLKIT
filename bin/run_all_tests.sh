@@ -1,22 +1,9 @@
 #!/bin/bash
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION 2> /dev/null
 
-#
-# Now continue with the rest of the setup ...
-#
-. $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
-
 mkdir /tmp/tests 2>/dev/null
 chmod 777 /tmp/tests 2> /dev/null
 
-
-
-#
-# Function to return 'something' if this test is blocked.
-#
-f_check_blocked(){
-    egrep "^[^#]*_Description *= *.*BLOCKED BY" $1
-}
 
 
 ################################################################################
@@ -137,7 +124,7 @@ do
     #
     # If this test is blocked AND OWD_NO_BLOCKED is set, then ignore it.
     #
-    export test_blocked=$(f_check_blocked $(find ./tests -name test_${testnum}.py))
+    test_blocked=$($OWD_TEST_TOOLKIT_BIN/is_test_blocked.sh $testnum)
     if [ "$test_blocked" ] && [ "$OWD_NO_BLOCKED" ]
     then
         continue
@@ -187,27 +174,33 @@ BLOCKED=0
 TCPASS=0
 TCTOTAL=0
 TCFAILED=0
-for i in $(echo $TESTS)
+for TEST_NUM in $(echo $TESTS)
 do
 	#
 	# Make sure there is a test file for this test id.
 	#
-    export TEST_FILE=$(find ./tests -name test_${i}.py)
+    export TEST_FILE=$(find ./tests -name test_${TEST_NUM}.py)
 	if [ ! -f $TEST_FILE ]
 	then
-		echo "ERROR: $TEST_FILE not found, cannot find test for \"$i\"!"
+		echo "ERROR: $TEST_FILE not found, cannot find test for \"$TEST_NUM\"!"
 		continue
 	fi
 	
 	#
-	# If this test is blocked AND OWD_NO_BLOCKED is set, then ignore it.
+	# Sort out the test description.
 	#
-	export test_blocked=$(f_check_blocked $TEST_FILE)
+	test_blocked=$($OWD_TEST_TOOLKIT_BIN/is_test_blocked.sh $TEST_NUM)
+	test_blocked=${test_blocked:+"(BLOCKED BY $test_blocked) "}
+
+    test_desc=$(egrep "^$TEST_NUM\|" $OWD_TEST_TOOLKIT_DIR/../owd_test_cases/Docs/test_descriptions)
+    test_desc=$(echo "$test_desc" | awk 'BEGIN{FS="|"}{print $2}')
+
+    export test_desc="$test_blocked$test_desc"
 	
 	#
 	# Set up some 'test id dependant' variables.
 	#
-	export TEST_NUM=$i
+	export TEST_NUM
 	export ERR_FILE=${RESULT_DIR}/error_output
 	export SUM_FILE=${RESULT_DIR}/${TEST_NUM}_summary
 	export DET_FILE=${RESULT_DIR}/${TEST_NUM}_detail
@@ -218,25 +211,35 @@ do
     test_run_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
 
     #
+    # Update the description.
+    #
+    test_desc_sedsafe=$(echo "$test_desc" | sed -e "s/\//\\\\\//g")
+    sed -e "s/XXDESCXX/$test_desc_sedsafe/" $DET_FILE > $DET_FILE.tmp
+    mv $DET_FILE.tmp $DET_FILE
+
+
+    #
     # Gather the test run details.
     #
-    test_num=""
     test_failed=""
     test_passes=""
     test_total=""
-    test_desc=""
-    [ -f "$SUM_FILE" ] && f_split_run_details "$(tail -1 $SUM_FILE)"
+    if [ -f "$SUM_FILE" ]
+    then
+    	line="$(tail -1 $SUM_FILE)"
+        test_passes=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $1}')
+	    test_failed=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $2}')
+	    test_total=$(   echo "$line" | awk 'BEGIN{FS="\t"}{print $3}')
+    fi
 
     #
     # A bit 'hacky', but if, for ANY reason, these are still
     # not set, then set them to 'something'.
     # (I'm finding certain build issues can cause a mess here!)
     #
-    test_num=${test_num:-"$TEST_NUM"}
-    test_failed=${test_failed:-"1"}
     test_passes=${test_passes:-"?"}
+    test_failed=${test_failed:-"1"}
     test_total=${test_total:-"?"}
-    test_desc=${test_desc:-$(grep "_Description" $TEST_FILE | awk 'BEGIN{FS="="}{print $2}' | sed -e "s/^[ \t]*\"\([^\"]*\)\"/\1/")}
 
     #
     # Update the final summary totals.
@@ -270,14 +273,6 @@ do
     [ $(echo "$tp" | egrep "^[0-9]*$") ] && PASSED=$(($PASSED+$tp))
     [ $(echo "$tt" | egrep "^[0-9]*$") ] && TOTAL=$(($TOTAL+$tt))
 
-        
-    #
-    # Get the xref test number to report against (if applicable).
-    #
-    if [ "$TEST_TYPE" ]
-    then
-        export test_num=$($GET_XREF "$TEST_TYPE" "$test_num")
-    fi
 
     #
     # Put the elapsed time for this test into a nice format.
@@ -293,7 +288,7 @@ do
     if [ "$HTML_WEBDIR" ]
     then
 	    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n" \
-	           "$test_num"     \
+	           "$TEST_NUM"     \
 	           "$test_failed"  \
 	           "$test_passes"  \
 	           "$test_total"   \
@@ -309,7 +304,7 @@ do
     [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
     
     printf "#%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
-           "$test_num"      \
+           "$TEST_NUM"      \
            "$test_failed"   \
            "$test_run_time" \
            "$test_passes"   \
