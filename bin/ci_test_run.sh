@@ -117,6 +117,9 @@ then
 	TEST_LIST=$(egrep -v "^$|^#" Docs/blocked_tests | awk 'BEGIN{FS="|"}{print $1}')
 
 	./run_tests.sh $TEST_LIST
+elif [ "$TEST_TYPE" = "ROYTEST" ]
+then
+	./run_tests.sh 19191 19192 19227 19204
 else
 	./run_tests.sh {$TEST_TYPE}
 fi

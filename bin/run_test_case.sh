@@ -1,6 +1,5 @@
 #!/bin/bash
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
-. $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
 
 #
 # Make sure gaiatest isn't still running (sometimes a process is left after the run).

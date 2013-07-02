@@ -7,8 +7,6 @@
 #
 [ ! "$INSTALL_LOG" ] && exit
 
-. $OWD_TEST_TOOLKIT_BIN/run_common_functions.sh
-
 if [ ! -d "$HTML_FILEDIR" ]
 then
 	sudo mkdir -p $HTML_FILEDIR
