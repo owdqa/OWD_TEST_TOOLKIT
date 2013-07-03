@@ -38,7 +38,7 @@ class main(GaiaTestCase):
         # A couple of checks to wait for 'anything' to be Connected (only look for 'present' because it
         # might be off the bottom of the page).
         #
-        self.UTILS.waitForElements(DOM.Settings.wifi_connected, "Connected Wifi network", False, 30)
+        self.UTILS.waitForElements(DOM.Settings.wifi_connected, "Connected Wifi network", False, 60)
         
         self.UTILS.TEST(self.data_layer.get_setting("wifi.enabled"),
             "Wifi connection to '" + p_wifi_name + "' established.", True)

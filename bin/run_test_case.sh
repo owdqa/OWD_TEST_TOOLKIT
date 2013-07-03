@@ -26,7 +26,10 @@ f_run_test(){
     # Run the test and update the variables with the results.
     #
 	gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE >$ERR_FILE 2>&1
-	f_split_run_details "$(cat $SUM_FILE)"
+    line="$(tail -1 $SUM_FILE)"
+    test_passes=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $1}')
+    test_failed=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $2}')
+    test_total=$(   echo "$line" | awk 'BEGIN{FS="\t"}{print $3}')
 	
 	if [ "$test_failed" = "0" ]
 	then
@@ -98,7 +101,7 @@ then
 	#
 	# Set the test result status to 'something failed'.
 	#
-	test_failed="1"
+	[ "$test_failed" -le 0 ] && test_failed=1
 	
 	#
 	# Append the marionette stacktrace to the end of the details file.
