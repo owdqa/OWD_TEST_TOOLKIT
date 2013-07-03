@@ -101,7 +101,7 @@ echo "
             </tr>" >> $HTML_INDEX
 
 #
-# Put the FAILED tests at the top so they're quick to debug.
+# Process the summaries file and build the web page.
 #
 cat $HTML_SUMMARIES | while read line
 do
@@ -117,7 +117,29 @@ do
 	#
 	test_desc=$(echo "$test_desc" | sed -e "s/\(blocked\)/<b>\1<\/b>/I")
 	
-	[ "$test_failed" ] && rowclass="failed" || rowclass="passed"
+	#
+	# Color this row depending on what happened.
+	#
+	title="Click this to see the test run details."
+	linkme="y"
+	if [ "$test_failed" ]
+	then
+		if [ "$test_failed" = "$IGNORED_TEST_STR" ]
+		then
+			linkme=""
+            rowclass="ignored"
+            title="This test was ignored."
+        elif [ "$test_failed" = "$NO_TEST_STR" ]
+        then
+        	linkme=""
+            rowclass="no_test"
+            title="This test has not been automated yet."
+        else
+            rowclass="failed"
+	    fi
+	else
+        rowclass="passed"
+    fi
 	
     #
     # Add test case summary line.
@@ -125,10 +147,19 @@ do
     echo "
             <tr class=\"$rowclass\">
                 <td class=\"center\"     >
-                    <div title=\"Click this to see the test run details.\">
+                    <div title=\"$title\">" >> $HTML_INDEX
+    if [ "$linkme" ]
+    then
+    	echo "
 	                    <a href=\"./${test_num}_detail.html\">
 	                        ${test_num}
-	                    </a>
+	                    </a>" >> $HTML_INDEX
+    else
+        echo "
+                            ${test_num}" >> $HTML_INDEX
+    fi
+    
+    echo "
                     </div>
                 </td>
                 <td class=\"center\"   >$test_time</td>

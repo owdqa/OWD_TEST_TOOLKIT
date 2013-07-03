@@ -4,7 +4,12 @@
 mkdir /tmp/tests 2>/dev/null
 chmod 777 /tmp/tests 2> /dev/null
 
+export NO_TEST_STR="NOTEST"
+export IGNORED_TEST_STR="IGNORED"
+export BLOCKED_STR="(blocked)"
+export FAILED_STR="*FAILED*"
 
+[ -f "$HTML_SUMMARIES" ] && cp /dev/null $HTML_SUMMARIES
 
 ################################################################################
 #
@@ -113,28 +118,10 @@ EOF
 fi
 	
 #
-# Order the list (uniquely and in order).
+# Order the list uniquely.
 #
-TEST_TMP="$TESTS"
-TESTS=""
-while read testnum
-do
-	[ ! "$testnum" ] && continue
-	
-    #
-    # If this test is blocked AND OWD_NO_BLOCKED is set, then ignore it.
-    #
-    test_blocked=$($OWD_TEST_TOOLKIT_BIN/is_test_blocked.sh $testnum)
-    if [ "$test_blocked" ] && [ "$OWD_NO_BLOCKED" ]
-    then
-        continue
-    fi
-    
-	TESTS="$TESTS $testnum"
-done << EOF
-$(echo "$TEST_TMP" | sed -e "s/ /\n/g" | sort -nu)
-EOF
-
+x=$(echo "$TESTS" | sed -e "s/ /\n/g" | sort -nu)
+export TESTS="$x"
 
 ################################################################################
 #
@@ -177,26 +164,15 @@ TCFAILED=0
 for TEST_NUM in $(echo $TESTS)
 do
 	#
-	# Make sure there is a test file for this test id.
-	#
-    export TEST_FILE=$(find ./tests -name test_${TEST_NUM}.py)
-	if [ ! -f $TEST_FILE ]
-	then
-		echo "ERROR: $TEST_FILE not found, cannot find test for \"$TEST_NUM\"!"
-		continue
-	fi
-	
-	#
-	# Sort out the test description.
+	# Get the test description.
 	#
 	test_blocked=$($OWD_TEST_TOOLKIT_BIN/is_test_blocked.sh $TEST_NUM)
 	test_blocked=${test_blocked:+"(BLOCKED BY $test_blocked) "}
 
-    test_desc=$(egrep "^$TEST_NUM\|" $OWD_TEST_TOOLKIT_DIR/../owd_test_cases/Docs/test_descriptions)
-    test_desc=$(echo "$test_desc" | awk 'BEGIN{FS="|"}{print $2}')
-
+    test_desc=$($OWD_TEST_TOOLKIT_BIN/get_test_desc.sh $TEST_NUM)
     export test_desc="$test_blocked$test_desc"
-	
+    
+
 	#
 	# Set up some 'test id dependant' variables.
 	#
@@ -205,18 +181,37 @@ do
 	export SUM_FILE=${RESULT_DIR}/${TEST_NUM}_summary
 	export DET_FILE=${RESULT_DIR}/${TEST_NUM}_detail
 
-    #
-    # Run the test and record the time taken...
-    #
-    test_run_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
+    export TEST_FILE=$(find ./tests -name test_${TEST_NUM}.py)
 
     #
-    # Update the description.
+    # Mark if this test will be run or not.
     #
-    test_desc_sedsafe=$(echo "$test_desc" | sed -e "s/\//\\\\\//g")
-    sed -e "s/XXDESCXX/$test_desc_sedsafe/" $DET_FILE > $DET_FILE.tmp
-    mv $DET_FILE.tmp $DET_FILE
+    if ([ "$OWD_NO_BLOCKED" ] && [ "$test_blocked" ]) || [ ! -f "$TEST_FILE" ]
+    then
+    	RUN_TEST=""
+    else
+        RUN_TEST="Y"
+    fi
 
+    if [ ! "$RUN_TEST" ]
+    then
+        #
+        # This test isn't to be run - just report a blank.
+        #
+        printf "0\t0\t0"  >$SUM_FILE
+    else
+        #
+        # Run the test and record the time taken.
+        #
+        test_run_time=$( (time $OWD_TEST_TOOLKIT_BIN/run_test_case.sh) 2>&1 )
+        
+        #
+        # Update the description in the details file.
+        #
+        test_desc_sedsafe=$(echo "$test_desc" | sed -e "s/\//\\\\\//g")
+        sed -e "s/XXDESCXX/$test_desc_sedsafe/" $DET_FILE > $DET_FILE.tmp
+        mv $DET_FILE.tmp $DET_FILE
+    fi
 
     #
     # Gather the test run details.
@@ -244,27 +239,39 @@ do
     #
     # Update the final summary totals.
     #
-    if [ "$test_failed" = "0" ]
+    if [ ! "$RUN_TEST" ]
     then
-    	#
-    	# Passed.
-    	#
-        TCPASS=$(($TCPASS+1))
-        [ "$test_blocked" ] && test_failed="*unblock?*" || test_failed=""
+	    if [ ! "$TEST_FILE" ]
+	    then
+            # test hasn't ben written yet.
+	        test_failed="$NO_TEST_STR"
+	    else
+            # Test is blocked, and we aren't running blocked tests this time.
+            test_failed="$IGNORED_TEST_STR"
+        fi
     else
-        #
-        # Failed.
-        #
-        if [ "$test_blocked" ]
-        then
-        	test_failed="(blocked)"
-        else
-            test_failed="*FAILED*"        
-            TCFAILED=$(($TCFAILED+1))
+	    TCTOTAL=$(($TCTOTAL+1))
+	    if [ "$test_failed" = "0" ]
+	    then
+	    	#
+	    	# Passed.
+	    	#
+	        TCPASS=$(($TCPASS+1))
+	        [ "$test_blocked" ] && test_failed="*unblock?*" || test_failed=""
+	    else
+	        #
+	        # Failed.
+	        #
+	        if [ "$test_blocked" ]
+	        then
+	        	test_failed="$BLOCKED_STR"
+	        else
+	            test_failed="$FAILED_STR"        
+	            TCFAILED=$(($TCFAILED+1))
+		    fi
 	    fi
     fi
 
-    TCTOTAL=$(($TCTOTAL+1))
     [ "$test_blocked" ] && BLOCKED=$(($BLOCKED+1))
     
     [ "$test_passes" = "?" ] && tp=0 || tp=$test_passes
@@ -297,19 +304,22 @@ do
     fi
     
     #
-    # OUTPUT SUMMARY TO STDOUT.
-    #    
-    # Pad the description to 70 chars - if it's over that put "..." on the end.
-    x=${#test_desc}
-    [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
-    
-    printf "#%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
-           "$TEST_NUM"      \
-           "$test_failed"   \
-           "$test_run_time" \
-           "$test_passes"   \
-           "$test_total"    \
-           "$test_desc"   
+    # OUTPUT SUMMARY TO STDOUT (only if we ran this test).
+    #
+    if [ "$RUN_TEST" ]
+    then
+	    # Pad the description to 70 chars - if it's over that put "..." on the end.
+	    x=${#test_desc}
+	    [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
+	    
+	    printf "#%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
+	           "$TEST_NUM"      \
+	           "$test_failed"   \
+	           "$test_run_time" \
+	           "$test_passes"   \
+	           "$test_total"    \
+	           "$test_desc"   
+    fi
 
     
 done

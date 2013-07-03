@@ -28,6 +28,14 @@ tr.install{
 tr.failed{
     background-color:#ff9999;
 }
+tr.ignored{
+    background-color:#eeeeee;
+    color:#888888;
+}
+tr.no_test{
+    background-color:#eeeeee;
+    color:#888888;
+}
 tr.passed{
     background-color:#99ffaa;
 }
