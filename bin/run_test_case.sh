@@ -101,7 +101,7 @@ then
 	#
 	# Set the test result status to 'something failed'.
 	#
-	test_failed="1"
+	[ "$test_failed" -le 0 ] && test_failed=1
 	
 	#
 	# Append the marionette stacktrace to the end of the details file.
