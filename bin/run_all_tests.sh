@@ -71,51 +71,67 @@ export EXIT_BLOCKED=2
 #
 # Set up test list (using test type, if specified, or test numbers.
 #
-export TEST_TYPE=$(echo "$@" | awk 'BEGIN{FS="{"}{print $2}' | awk 'BEGIN{FS="}"}{print $1}')
-if [ "$TEST_TYPE" ]
-then
-	#
-	# This is a specific test - get the list ...
-	#
-	TESTS=""
-    while read orig
-    do
-    	# The first line is the header - just ignore it.
-    	if [ ! "$TESTS" ]
-    	then
-    		TESTS=" "
-    		continue
-    	fi
-    	
-    	# Use the function to return a test (if there is one!)
-        NEW=$($GET_XREF "$TEST_TYPE" "$orig")
-    	if [ "$NEW" ]
-    	then
-    	   # This test is part of this test type.
-    	   TESTS="$TESTS $orig"
-    	fi
-    done << EOF
-    $(cat $OWD_XREF_FILE | awk 'BEGIN{FS=","}{print $1}')
-EOF
-else
-
-	#
-	# Did the caller just want to run certain tests?
-	#
-	TESTS="$@"
-	if [ ! "$TESTS" ]
-	then
-	    #
-	    # No specific tests requested, so default to all tests.
-	    #
-	    while read line
-	    do
-	        TESTS="$TESTS $line"
-	    done <<EOF
-	$(find ./tests -name "test_*.py" | sed -e "s/^.*test_//" | sed -e "s/\..*//")
-EOF
+TESTS=""
+printf "\nOrganising test case list ...\n"
+for tnum in $(echo "$@")
+do
+    x=$($OWD_TEST_TOOLKIT_DIR/../owd_test_cases/bin/get_child_test_cases.sh $tnum)
+    if [ "$x" ]
+    then
+    	# This matched a parent code for jira, so add these children to the test list.
+    	TESTS="$TESTS $x"
+    else
+        # This didn't match a parent code, so assume it's a test case.
+        TESTS="$TESTS $tnum"
     fi
-fi
+done
+
+
+#export TEST_TYPE=$(echo "$@" | awk 'BEGIN{FS="{"}{print $2}' | awk 'BEGIN{FS="}"}{print $1}')
+#if [ "$TEST_TYPE" ]
+#then
+#	#
+#	# This is a specific test - get the list ...
+#	#
+#	TESTS=""
+#    while read orig
+#    do
+#    	# The first line is the header - just ignore it.
+#    	if [ ! "$TESTS" ]
+#    	then
+#    		TESTS=" "
+#    		continue
+#    	fi
+#    	
+#    	# Use the function to return a test (if there is one!)
+#        NEW=$($GET_XREF "$TEST_TYPE" "$orig")
+#    	if [ "$NEW" ]
+#    	then
+#    	   # This test is part of this test type.
+#    	   TESTS="$TESTS $orig"
+#    	fi
+#    done << EOF
+#    $(cat $OWD_XREF_FILE | awk 'BEGIN{FS=","}{print $1}')
+#EOF
+#else
+#
+#	#
+#	# Did the caller just want to run certain tests?
+#	#
+#	TESTS="$@"
+#	if [ ! "$TESTS" ]
+#	then
+#	    #
+#	    # No specific tests requested, so default to all tests.
+#	    #
+#	    while read line
+#	    do
+#	        TESTS="$TESTS $line"
+#	    done <<EOF
+#	$(find ./tests -name "test_*.py" | sed -e "s/^.*test_//" | sed -e "s/\..*//")
+#EOF
+#    fi
+#fi
 	
 #
 # Order the list uniquely.
@@ -171,7 +187,6 @@ do
 
     test_desc=$($OWD_TEST_TOOLKIT_BIN/get_test_desc.sh $TEST_NUM)
     export test_desc="$test_blocked$test_desc"
-    
 
 	#
 	# Set up some 'test id dependant' variables.
