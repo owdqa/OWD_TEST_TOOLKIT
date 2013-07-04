@@ -16,13 +16,21 @@ body.details{
 table{
     font-family:"sans";
     font-size:14px;
+    border: 1px solid #ffffff;
 }
 
 tr{
-    background-color:#eeeeee;
+    background-color:#cccccc;
     color:#000000;
 }
 tr.install{
+    background-color:#ffffff;
+}
+tr.items{
+    cursor: pointer;
+    background-color:#ffffff;
+}
+tr.item_table{
     background-color:#ffffff;
 }
 tr.failed{
@@ -34,7 +42,7 @@ tr.ignored{
 }
 tr.no_test{
     background-color:#eeeeee;
-    color:#888888;
+    color:#444444;
 }
 tr.passed{
     background-color:#99ffaa;
@@ -55,9 +63,34 @@ th.install{
     padding-right: 5px;
     text-align: right;
 }
+th.items, th.items_none{
+    background:#f8f8f8;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 0px;
+    padding-right: 0px;
+    color: #0000ff;
+    text-align: left;
+    cursor:pointer;
+}
+th.items:hover{
+    background:#6666ff;
+    color:#ffffff;
+}
+th.items_none{
+    cursor:auto;
+    color: #aaaaaa;
+}
+th.items_none:hover{
+    background:#f4f4f8;
+}
 
 td{
     font-size:12px;
+}
+td.blank{
+    width: 20px;
+    background-color:#ffffff;
 }
 td.job{
     background-color:#000000;

@@ -9,6 +9,8 @@ export IGNORED_TEST_STR="IGNORED"
 export BLOCKED_STR="(blocked)"
 export FAILED_STR="*FAILED*"
 
+export USER_STORIES_BASEURL="https://jirapdi.tid.es/browse/OWD-"
+
 [ -f "$HTML_SUMMARIES" ] && cp /dev/null $HTML_SUMMARIES
 
 ################################################################################
@@ -72,66 +74,83 @@ export EXIT_BLOCKED=2
 # Set up test list (using test type, if specified, or test numbers.
 #
 TESTS=""
-printf "\nOrganising test case list ...\n"
-for tnum in $(echo "$@")
-do
-    x=$($OWD_TEST_TOOLKIT_DIR/../owd_test_cases/bin/get_child_test_cases.sh $tnum)
-    if [ "$x" ]
-    then
-    	# This matched a parent code for jira, so add these children to the test list.
-    	TESTS="$TESTS $x"
-    else
-        # This didn't match a parent code, so assume it's a test case.
-        TESTS="$TESTS $tnum"
-    fi
-done
 
+# ROY - this is mid-development, this 'toggle' just lets me continue to develop
+#       the new section of code without removing the current code (everything after the 'else').
+ROYTEST="Y"
+if [ "$ROYTEST" ]
+then
+	CREATE_HTML_SCRIPT="run_create_html2.sh"
+	printf "\nOrganising test case list ...\n"
+	for user_story in $(echo "$@")
+	do
+		x=$(echo "$user_story" | egrep "^[0-9]+$")
+		if [ "$x" ]
+		then
+			#
+			# This is an id - no need to get the children for it.
+			#
+			TESTS="$TESTS $user_story"
+			continue
+		else
+		    x=$($OWD_TEST_TOOLKIT_DIR/../owd_test_cases/bin/get_child_test_cases.sh $user_story)
+		    if [ "$x" ]
+		    then
+		    	# This matched a parent code for jira, so add these children to the test list.
+		    	TESTS="$TESTS $x"
+		    fi
+	   fi
+	done
+else
+    CREATE_HTML_SCRIPT="run_create_html.sh"
+    # ROY - all of this section can be removed once the JIRA user stories are sorted.
 
-#export TEST_TYPE=$(echo "$@" | awk 'BEGIN{FS="{"}{print $2}' | awk 'BEGIN{FS="}"}{print $1}')
-#if [ "$TEST_TYPE" ]
-#then
-#	#
-#	# This is a specific test - get the list ...
-#	#
-#	TESTS=""
-#    while read orig
-#    do
-#    	# The first line is the header - just ignore it.
-#    	if [ ! "$TESTS" ]
-#    	then
-#    		TESTS=" "
-#    		continue
-#    	fi
-#    	
-#    	# Use the function to return a test (if there is one!)
-#        NEW=$($GET_XREF "$TEST_TYPE" "$orig")
-#    	if [ "$NEW" ]
-#    	then
-#    	   # This test is part of this test type.
-#    	   TESTS="$TESTS $orig"
-#    	fi
-#    done << EOF
-#    $(cat $OWD_XREF_FILE | awk 'BEGIN{FS=","}{print $1}')
-#EOF
-#else
-#
-#	#
-#	# Did the caller just want to run certain tests?
-#	#
-#	TESTS="$@"
-#	if [ ! "$TESTS" ]
-#	then
-#	    #
-#	    # No specific tests requested, so default to all tests.
-#	    #
-#	    while read line
-#	    do
-#	        TESTS="$TESTS $line"
-#	    done <<EOF
-#	$(find ./tests -name "test_*.py" | sed -e "s/^.*test_//" | sed -e "s/\..*//")
-#EOF
-#    fi
-#fi
+	export TEST_TYPE=$(echo "$@" | awk 'BEGIN{FS="{"}{print $2}' | awk 'BEGIN{FS="}"}{print $1}')
+	if [ "$TEST_TYPE" ]
+	then
+		#
+		# This is a specific test - get the list ...
+		#
+		TESTS=""
+	    while read orig
+	    do
+	    	# The first line is the header - just ignore it.
+	    	if [ ! "$TESTS" ]
+	    	then
+	    		TESTS=" "
+	    		continue
+	    	fi
+	    	
+	    	# Use the function to return a test (if there is one!)
+	        NEW=$($GET_XREF "$TEST_TYPE" "$orig")
+	    	if [ "$NEW" ]
+	    	then
+	    	   # This test is part of this test type.
+	    	   TESTS="$TESTS $orig"
+	    	fi
+	    done << EOF
+	    $(cat $OWD_XREF_FILE | awk 'BEGIN{FS=","}{print $1}')
+EOF
+	else
+	
+		#
+		# Did the caller just want to run certain tests?
+		#
+		TESTS="$@"
+		if [ ! "$TESTS" ]
+		then
+		    #
+		    # No specific tests requested, so default to all tests.
+		    #
+		    while read line
+		    do
+		        TESTS="$TESTS $line"
+		    done <<EOF
+		$(find ./tests -name "test_*.py" | sed -e "s/^.*test_//" | sed -e "s/\..*//")
+EOF
+	    fi
+	fi
+fi
 	
 #
 # Order the list uniquely.
@@ -353,7 +372,7 @@ printf "\nDONE.\n\n"
 #
 # RUN THE HTML PAGE BUILDER.
 #
-$OWD_TEST_TOOLKIT_BIN/run_create_html.sh
+$OWD_TEST_TOOLKIT_BIN/$CREATE_HTML_SCRIPT
 
 
 #
