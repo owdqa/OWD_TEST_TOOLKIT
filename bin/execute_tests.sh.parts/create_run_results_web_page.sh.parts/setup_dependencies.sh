@@ -29,5 +29,13 @@ HTML_WEBDIR="http://owd-qa-server/owd_tests/$RUN_ID"
 #
 . $OWD_TEST_TOOLKIT_CONFIG/jira_user_stories.sh
 
+#
+# Functions for this script.
+#
+. $0.parts/f_sub_variables_into_webpage.sh
+
+#
+# Some final variables before we start.
+#
 [ "$OWD_NO_BLOCKED" ] && blocked="No" || blocked="Yes"
 [ "$OWD_USE_2ND_CHANCE" ] && chance2="Yes" || chance2="No"
