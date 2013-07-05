@@ -4,18 +4,12 @@
 # If the file already exists, this will keep the current values.
 # Any values that aren't present will be added (and set to nothing).
 #
-. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 params_file=$HOME/.OWD_TEST_PARAMETERS
 array_count=0
 declare -a NEW_PARAMETERS
 [ -f "$params_file" ] && file_exists="y" || file_exists=""
 
 
-
-###################################################################
-#
-# Functions.
-#
 
 #
 # Function to add to the 'new PARAMETERS' array.
@@ -25,13 +19,6 @@ addToArray(){
     array_count=${#NEW_PARAMETERS[@]}
 }
 
-
-
-
-###################################################################
-#
-# Begin...
-#
 
 #
 # If the file doesn't exist then start by
@@ -64,7 +51,7 @@ do
 		addToArray "$param"
 	fi
 done << EOF
-$($OWD_TEST_TOOLKIT_BIN/get_parameter_list.sh)
+$(. $0.parts/get_parameter_list.sh)
 EOF
 
 
@@ -108,4 +95,24 @@ then
 	exit 1
 fi
 
-exit 0
+
+#
+# If we get to here then it's okay - load variables from this file.
+#
+export PARAM_FILE="$HOME/.OWD_TEST_PARAMETERS"
+if [ -f "$PARAM_FILE" ]
+then
+    while read line
+    do
+        var=$(echo $line | awk 'BEGIN{FS="="}{print $1}' | awk '{print $NF}')
+        x=$(eval echo \$${var})
+        if [ ! "$x" ]
+        then
+            x=$(echo "$line" | grep "export ")
+            [ ! "$x" ] && line="export $line"
+            eval $line
+        fi
+    done <<EOF
+    $(egrep -v "^#" $PARAM_FILE)
+EOF
+fi

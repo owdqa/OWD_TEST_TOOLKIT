@@ -1,7 +1,7 @@
 #!/bin/bash
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
-PROJNAM=${1:?"Please specify the project to search for."}
+PROJNAM=${1:?"Please specify the python project to search for."}
 
 # Use PYTHONPATH to get the location of $PROJNAM etc...
 x=$(python <<!

@@ -2,7 +2,6 @@
 #
 # Returns a list of the variables that will be required by the test cases.
 #
-. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 #
 # Some variables are set during the tests (this list shouldn't change very often).
@@ -67,6 +66,14 @@ excludeCheck(){
 }
 
 #
+# Function to look for a string in relevant files
+# recursively.
+#
+f_findme(){
+	egrep $1 $(find . -name "*.py" | grep -v gaiatest | grep -v "/build/") | sort
+}
+
+#
 # Function to get the variables into the inclusion array.
 #
 getVariables(){
@@ -84,10 +91,10 @@ getVariables(){
         #
         addToArray "$parameter"
     done <<EOF
-    $(  $OWD_TEST_TOOLKIT_BIN/findme.sh get_os_variable     | \
-        sed -e "s/^.*get_os_variable//"                     | \
-        grep "(\""                                          | \
-        awk '{FS=","}{print $1}'                            | \
+    $(  f_findme get_os_variable        | \
+        sed -e "s/^.*get_os_variable//" | \
+        grep "(\""                      | \
+        awk '{FS=","}{print $1}'        | \
         sed -e "s/[()\"]//g")
 EOF
 }

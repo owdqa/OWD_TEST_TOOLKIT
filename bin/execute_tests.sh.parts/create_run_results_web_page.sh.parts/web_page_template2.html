@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_blank">
+        <link rel="stylesheet" type="text/css" href="run_html.css">
+        
+        <script type="text/javascript"> 
+            function toggleVisibility(selectedItem){ 
+                // Get a list of content divs 
+                var item_table = document.getElementsByClassName('item_table'); 
+                  
+                // Loop through all divs and toggle visibility of the selected one.
+                for(var i=0; i<item_table.length; i++){ 
+                    if(item_table[i].id == selectedItem){ 
+                        if ( item_table[i].style.display == 'block' )
+                           { item_table[i].style.display = 'none'; } 
+                        else
+                           { item_table[i].style.display = 'block';} 
+                    } 
+                } 
+            } 
+        </script> 
+    </head>
+    <body>
+
+        <table>
+        <tr class="install"><th class="install">JOB NAME:</th><td class="job">roy.job</td></tr>
+        <tr class="install"><th class="install">BUILD NUMBER:</th><td class="job">123</td></tr>
+        <tr class="install"><th class="install">Run time:</th><td>16:08 05/07/2013</td></tr>
+        <tr class="install"><th class="install">Run blocked tests:</th><td>Yes</td></tr>
+        <tr class="install"><th class="install">Try fails twice:</th><td>No</td></tr>
+        
+            <tr class="install">
+                <th class="install">Build name:</th>
+                <td>
+                    <div title="Click this to see the details of this part of the installation.">
+                        <a href="./Build_name.html">
+                        unagi-ICS.eng.v1-train.Rel0.4.Sprint12.B-145.Gecko-e7708d4.Gaia-4964656
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            <tr class="install">
+                <th class="install">Connect device:</th>
+                <td>
+                    <div title="Click this to see the details of this part of the installation.">
+                        <a href="./Connect_device.html">
+                        Click here for details
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table><br>
+        
+        <table name="summaries">
+        
+            <tr class="items"><th class="items_none">Failed test cases</th></tr> 
+            <tr class="items"><th class="items_none">Passed test cases</th></tr> 
+            <tr class="items"><th class="items_none">Ignored test cases.</th></tr> 
+            <tr class="items"><th class="items_none">Test cases which have not been automated yet.</th></tr>
+        </table>
+        
+    </body>
+</html>

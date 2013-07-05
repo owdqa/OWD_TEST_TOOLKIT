@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <base target="_blank">
+        <link rel="stylesheet" type="text/css" href="run_html.css">
+        
+        <script type="text/javascript"> 
+            function toggleVisibility(selectedItem){ 
+                // Get a list of content divs 
+                var item_table = document.getElementsByClassName('item_table'); 
+                  
+                // Loop through all divs and toggle visibility of the selected one.
+                for(var i=0; i<item_table.length; i++){ 
+                    if(item_table[i].id == selectedItem){ 
+                        if ( item_table[i].style.display == 'block' )
+                           { item_table[i].style.display = 'none'; } 
+                        else
+                           { item_table[i].style.display = 'block';} 
+                    } 
+                } 
+            } 
+        </script> 
+    </head>
+    <body>
+
+        <table>
+        <tr class="install"><th class="install">JOB NAME:</th><td class="job">@JOB_NAME@</td></tr>
+        <tr class="install"><th class="install">BUILD NUMBER:</th><td class="job">@BUILD_NUMBER@</td></tr>
+        <tr class="install"><th class="install">Run time:</th><td>@RUN_TIME@</td></tr>
+        <tr class="install"><th class="install">Run blocked tests:</th><td>@blocked@</td></tr>
+        <tr class="install"><th class="install">Try fails twice:</th><td>@chance2@</td></tr>
+        @DYNAMIC_LIST@
+        </table><br>
+        
+        <table name="summaries">
+        @SUMMARIES@
+        </table>
+        
+    </body>
+</html>
