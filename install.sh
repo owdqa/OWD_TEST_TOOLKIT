@@ -3,6 +3,7 @@
 # Create file containing the required vars...
 export OWD_TEST_TOOLKIT_DIR=$(pwd)
 cat >  $HOME/.OWD_TEST_TOOLKIT_LOCATION << EOF
+export owd_test_cases_DIR=$OWD_TEST_TOOLKIT_DIR/../owd_test_cases
 export OWD_TEST_TOOLKIT_DIR=$OWD_TEST_TOOLKIT_DIR
 export OWD_TEST_TOOLKIT_BIN=$OWD_TEST_TOOLKIT_DIR/bin
 export PATH=$PATH:$OWD_TEST_TOOLKIT_DIR/bin

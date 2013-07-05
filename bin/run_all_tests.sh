@@ -8,6 +8,7 @@ export NO_TEST_STR="NOTEST"
 export IGNORED_TEST_STR="IGNORED"
 export BLOCKED_STR="(blocked)"
 export FAILED_STR="*FAILED*"
+export START_TIME="$(date)"
 
 export USER_STORIES_BASEURL="https://jirapdi.tid.es/browse/OWD-"
 
@@ -40,19 +41,6 @@ then
 EOF
 fi
 
-# Check the xref file variable was set and is a readable file.
-export GET_XREF="$OWD_TEST_TOOLKIT_BIN/get_xref.sh"
-if [ ! "$OWD_XREF_FILE" ]
-then
-    printf "\n'OWD_XREF_FILE' variable not set!\n\n"
-    exit 1
-fi
-if [ ! -f "$OWD_XREF_FILE" ]
-then
-    printf "\n$OWD_XREF_FILE is not a readable file!\n\n"
-    exit 1
-fi
-
 # Location of test scripts.
 export TESTDIR="./tests"
 
@@ -74,84 +62,26 @@ export EXIT_BLOCKED=2
 # Set up test list (using test type, if specified, or test numbers.
 #
 TESTS=""
-
-# ROY - this is mid-development, this 'toggle' just lets me continue to develop
-#       the new section of code without removing the current code (everything after the 'else').
-ROYTEST="Y"
-if [ "$ROYTEST" ]
-then
-	CREATE_HTML_SCRIPT="run_create_html2.sh"
-	printf "\nOrganising test case list ...\n"
-	for user_story in $(echo "$@")
-	do
-		x=$(echo "$user_story" | egrep "^[0-9]+$")
-		if [ "$x" ]
-		then
-			#
-			# This is an id - no need to get the children for it.
-			#
-			TESTS="$TESTS $user_story"
-			continue
-		else
-		    x=$($OWD_TEST_TOOLKIT_DIR/../owd_test_cases/bin/get_child_test_cases.sh $user_story)
-		    if [ "$x" ]
-		    then
-		    	# This matched a parent code for jira, so add these children to the test list.
-		    	TESTS="$TESTS $x"
-		    fi
-	   fi
-	done
-else
-    CREATE_HTML_SCRIPT="run_create_html.sh"
-    # ROY - all of this section can be removed once the JIRA user stories are sorted.
-
-	export TEST_TYPE=$(echo "$@" | awk 'BEGIN{FS="{"}{print $2}' | awk 'BEGIN{FS="}"}{print $1}')
-	if [ "$TEST_TYPE" ]
+for user_story in $(echo "$@")
+do
+	x=$(echo "$user_story" | egrep "^[0-9]+$")
+	if [ "$x" ]
 	then
 		#
-		# This is a specific test - get the list ...
+		# This is an id - no need to get the children for it.
 		#
-		TESTS=""
-	    while read orig
-	    do
-	    	# The first line is the header - just ignore it.
-	    	if [ ! "$TESTS" ]
-	    	then
-	    		TESTS=" "
-	    		continue
-	    	fi
-	    	
-	    	# Use the function to return a test (if there is one!)
-	        NEW=$($GET_XREF "$TEST_TYPE" "$orig")
-	    	if [ "$NEW" ]
-	    	then
-	    	   # This test is part of this test type.
-	    	   TESTS="$TESTS $orig"
-	    	fi
-	    done << EOF
-	    $(cat $OWD_XREF_FILE | awk 'BEGIN{FS=","}{print $1}')
-EOF
+		TESTS="$TESTS $user_story"
+		continue
 	else
-	
-		#
-		# Did the caller just want to run certain tests?
-		#
-		TESTS="$@"
-		if [ ! "$TESTS" ]
-		then
-		    #
-		    # No specific tests requested, so default to all tests.
-		    #
-		    while read line
-		    do
-		        TESTS="$TESTS $line"
-		    done <<EOF
-		$(find ./tests -name "test_*.py" | sed -e "s/^.*test_//" | sed -e "s/\..*//")
-EOF
+	    x=$($OWD_TEST_TOOLKIT_DIR/../owd_test_cases/bin/get_child_test_cases.sh $user_story)
+	    if [ "$x" ]
+	    then
+	    	# This matched a parent code for jira, so add these children to the test list.
+	    	TESTS="$TESTS $x"
 	    fi
-	fi
-fi
-	
+   fi
+done	
+
 #
 # Order the list uniquely.
 #
@@ -166,7 +96,7 @@ export TESTS="$x"
 #
 # Establsh connection to device (or quit if there was a problem).
 #
-if [ "$INSTALL_LOG" ]
+if [ "$ON_CI_SERVER" ]
 then
 	#
 	# We're catching the output (usually means we're on the ci server).
@@ -177,25 +107,21 @@ else
 fi
 [ $? -ne 0 ] && exit 1
 
-#
-# Check to see if we are running blocked tests or ignoring them.
-#
-if [ "$OWD_NO_BLOCKED" ]
-then
-	printf "\n** NOTE: 'OWD_NO_BLOCKED' is set - ignoring blocked test cases. **\n"
-fi
+
 
 #
-# Now run tests as required.
+# RUN THE TESTS ...
 #
-printf "\n\n(Temporary store for test run files = \"${RESULT_DIR}\".)\n\n"
-
 PASSED=0
 TOTAL=0
 BLOCKED=0
+IGNORED=0
+UNWRITTEN=0
 TCPASS=0
 TCTOTAL=0
 TCFAILED=0
+NUMBER_OF_TESTS=$(echo "$TESTS" | wc -w)
+cp /dev/null $RESULT_DIR/current_running_summary
 for TEST_NUM in $(echo $TESTS)
 do
 	#
@@ -206,6 +132,22 @@ do
 
     test_desc=$($OWD_TEST_TOOLKIT_BIN/get_test_desc.sh $TEST_NUM)
     export test_desc="$test_blocked$test_desc"
+
+
+    # Pad the description to 70 chars - if it's over that put "..." on the end.
+    x=${#test_desc}
+    [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
+
+    # Output start of the summary ...    
+    x=$(printf "(%s tests left) #%-6s $dots %s: " \
+           "$NUMBER_OF_TESTS" \
+           "$TEST_NUM"        \
+           "$test_desc"       )
+
+    [ "$ON_CI_SERVER" ] && printf "$x" >> $RESULT_DIR/current_running_summary || printf "$x"
+           
+    NUMBER_OF_TESTS=$(($NUMBER_OF_TESTS-1))
+
 
 	#
 	# Set up some 'test id dependant' variables.
@@ -232,7 +174,7 @@ do
         #
         # This test isn't to be run - just report a blank.
         #
-        printf "0\t0\t0"  >$SUM_FILE
+        printf "0\t0\t0"  >$SUM_FILE        
     else
         #
         # Run the test and record the time taken.
@@ -277,11 +219,17 @@ do
     then
 	    if [ ! "$TEST_FILE" ]
 	    then
-            # test hasn't ben written yet.
+	    	#
+            # Test hasn't been written yet.
+            #
 	        test_failed="$NO_TEST_STR"
+	        UNWRITTEN=$(($UNWRITTEN+1))
 	    else
+	        #
             # Test is blocked, and we aren't running blocked tests this time.
+            #
             test_failed="$IGNORED_TEST_STR"
+            IGNORED=$(($IGNORED+1))
         fi
     else
 	    TCTOTAL=$(($TCTOTAL+1))
@@ -306,7 +254,7 @@ do
 	    fi
     fi
 
-    [ "$test_blocked" ] && BLOCKED=$(($BLOCKED+1))
+    ([ "$test_blocked" ] && [ ! "$OWD_NO_BLOCKED" ]) && BLOCKED=$(($BLOCKED+1))
     
     [ "$test_passes" = "?" ] && tp=0 || tp=$test_passes
     [ "$test_total"  = "?" ] && tt=0 || tt=$test_total
@@ -338,41 +286,37 @@ do
     fi
     
     #
-    # OUTPUT SUMMARY TO STDOUT (only if we ran this test).
+    # OUTPUT SUMMARY (only if we ran this test).
     #
     if [ "$RUN_TEST" ]
-    then
-	    # Pad the description to 70 chars - if it's over that put "..." on the end.
-	    x=${#test_desc}
-	    [ "$x" -gt 70 ] && dots="%-.70s..." || dots="%-70s   "
-	    
-	    printf "#%-6s %-10s (%s - %3s / %-3s): $dots %s\n" \
-	           "$TEST_NUM"      \
-	           "$test_failed"   \
-	           "$test_run_time" \
-	           "$test_passes"   \
-	           "$test_total"    \
-	           "$test_desc"   
+    then	           
+	    x=$(printf "(%s) %s\\\n" "$test_run_time" "$test_failed")
+	    [ "$ON_CI_SERVER" ] && printf "$x" >> $RESULT_DIR/current_running_summary || printf "$x"
+    else
+        x=$(printf "(not run)\\\n")
+        [ "$ON_CI_SERVER" ] && printf "$x" >> $RESULT_DIR/current_running_summary || printf "$x"
     fi
-
     
 done
 
-printf "\n*******************\n\n"
-printf "Unexpected failures: %4s\n" $TCFAILED
-printf "\n*******************\n\n"
-
-printf "Test cases passed  : %4s / %-4s\n" $TCPASS $TCTOTAL 
-printf "Test actions passed: %4s / %-4s\n" $PASSED $TOTAL
-printf "Total blocked tests: %4s\n\n" $BLOCKED
-
-printf "\nDONE.\n\n"
-
-
 #
-# RUN THE HTML PAGE BUILDER.
+# This is the only part we want emailed.
 #
-$OWD_TEST_TOOLKIT_BIN/$CREATE_HTML_SCRIPT
+sep=$(printf "%0.1s" "#"{1..95})
+printf "\n\n$sep\n\n"                          
+printf "Unexpected failures : %s\n\n" $TCFAILED
+printf "Interactive report  : %s\n" "$($OWD_TEST_TOOLKIT_BIN/run_create_html.sh)"
+printf "\n$sep\n\n"                          
+
+printf "Start time          : %s\n" "$START_TIME"
+printf "End time            : %s\n\n" "$(date)"              
+
+printf "Test cases passed   : %4s / %-4s\n" $TCPASS $TCTOTAL 
+printf "Test actions passed : %4s / %-4s\n" $PASSED $TOTAL   
+printf "Expected failures   : %4s\n" $BLOCKED              
+printf "Ignored test cases  : %4s\n" $IGNORED              
+printf "Unwritten test cases: %4s\n\n\n" $UNWRITTEN
+
 
 
 #
