@@ -1,7 +1,8 @@
 #
-# Install the toolkit and dependencies.
+# Install the toolkit and dependencies (assume we've just cloned it and 
+# are still in the parent directory).
 #
-cd $OWD_TEST_TOOLKIT_DIR
+cd OWD_TEST_TOOLKIT
 
 ./install.sh > $RESULT_DIR/OWD_TEST_TOOLKIT_install.log
 

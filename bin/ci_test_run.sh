@@ -12,9 +12,9 @@ export TEST_TYPE=${3:-"REGRESSION"}
 
 . $0.parts/set_up_parameters.sh
 
-. $0.parts/flash_device.sh
-
 . $0.parts/install_toolkit_and_test_cases.sh
+
+. $0.parts/flash_device.sh
 
 
 #
