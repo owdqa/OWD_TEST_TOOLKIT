@@ -11,9 +11,11 @@ LOGFILE=${LOGFILE:-/tmp/gaiatest_setup.log}
 printf "\n\nInstalling gaiatest (for $BRANCH) and Marionette ..." | tee -a $LOGFILE
 printf "\n====================================================\n" | tee -a $LOGFILE
 
+
 #
-# Remove any previous marionette
-# (using 'sudo', so be paranoid about "rm -rf"!!!).
+# Remove everything relating to gaiatest ...
+#
+# (NOTE: using 'sudo', so be paranoid about "rm -rf"!!!).
 #
 install_dir=$($OWD_TEST_TOOLKIT_BIN/get_python_dist_path.sh marionette)
 if [ "$install_dir" ]
@@ -25,16 +27,15 @@ then
 	sudo rm gaiatest* 2>/dev/null
 fi
 
-
-# Remove the exec files too.
 x=$(which marionette 2>/dev/null)
 [ "$x" ] && sudo rm $x
 x=$(which gaiatest 2>/dev/null)
 [ "$x" ] && sudo rm $x
 
-# ...and the current dir (if it's there)
 sudo rm -rf gaia-ui-tests 2>/dev/null
-	
+
+
+
 #
 # Now re-install everything.
 #

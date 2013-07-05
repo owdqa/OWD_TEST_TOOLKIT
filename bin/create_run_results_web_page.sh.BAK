@@ -7,26 +7,12 @@
 #
 if [ ! "$ON_CI_SERVER" ]
 then
-	printf "(No report generated: we're not on the ci server.)"
+	printf "(No results web page generated: we're not on the ci server.)"
 	exit
 fi
 
-HTML_WEBDIR="http://owd-qa-server/owd_tests/$RUN_ID"
-HTML_FILEDIR=/var/www/html/owd_tests/$RUN_ID
+. $0.parts/setup_dependencies.sh
 
-if [ ! -d "$HTML_FILEDIR" ]
-then
-	sudo mkdir -p $HTML_FILEDIR
-	sudo chmod 777 $HTML_FILEDIR
-fi
-
-# 'sudo rm' so be paranoid!
-if [ "$HTML_FILEDIR" ]
-then
-	cd $HTML_FILEDIR
-    sudo rm -f * 2>/dev/null
-    cd - >/dev/null
-fi
 
 ##########################################################################
 #

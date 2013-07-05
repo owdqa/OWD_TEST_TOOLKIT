@@ -3,25 +3,26 @@
 # Create file containing the required vars...
 export OWD_TEST_TOOLKIT_DIR=$(pwd)
 cat >  $HOME/.OWD_TEST_TOOLKIT_LOCATION << EOF
-export owd_test_cases_DIR=$OWD_TEST_TOOLKIT_DIR/../owd_test_cases
 export OWD_TEST_TOOLKIT_DIR=$OWD_TEST_TOOLKIT_DIR
+export owd_test_cases_DIR=$OWD_TEST_TOOLKIT_DIR/../owd_test_cases
 export OWD_TEST_TOOLKIT_BIN=$OWD_TEST_TOOLKIT_DIR/bin
+export OWD_TEST_TOOLKIT_CONFIG=$OWD_TEST_TOOLKIT_DIR/config
 export PATH=$PATH:$OWD_TEST_TOOLKIT_DIR/bin
 EOF
+
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 # Log file for 'everything'.
 export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%H%M%Y%m%d).log"}
 
-# Branch for gaiatest etc...1
 export BRANCH=${2:-"v1-train"}
 [ "$BRANCH" = "1.0.1" ] && export BRANCH="v1.0.1"
+
 
 #
 # CHECK DEPENDENCIES ...
 #
-
 # Python 2.7
 x=$(which python2.7 2>/dev/null)
 if [ ! "$x" ]
@@ -51,7 +52,7 @@ fi
 #
 # Install gaiatest and marionette.
 #
-[ ! -d ./gaia-ui-tests ] && $OWD_TEST_TOOLKIT_BIN/setup_gaiatest.sh "$BRANCH"
+[ ! -d ./gaia-ui-tests ] && $OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
 
 
 
