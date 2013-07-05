@@ -1,10 +1,8 @@
 #
 # Flash device.
 #
-flash_device.sh $DEVICE eng $BRANCH NODOWNLOAD >/tmp/flash_device 2>&1
+flash_device.sh $DEVICE eng $BRANCH NODOWNLOAD >$RESULT_DIR/flash_device 2>&1
 
-buildname=$(egrep "^Unpacking " /tmp/flash_device | awk '{print $2}' | sed -e "s/^\(.*\).tgz$/\1/")
-cp /tmp/flash_device ${INSTALL_LOG}@Build_name@${buildname}
+export DEVICE_BUILDNAME=$(egrep "^Unpacking " $RESULT_DIR/flash_device | awk '{print $2}' | sed -e "s/^\(.*\).tgz$/\1/")
+mv $RESULT_DIR/flash_device ${RESULT_DIR}/@Build_name@${DEVICE_BUILDNAME}
 
-# (for the CI output)
-printf "\n\nTests running against build: $buildname\n"

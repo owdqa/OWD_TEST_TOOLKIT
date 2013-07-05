@@ -101,7 +101,7 @@ then
 	#
 	# We're catching the output (usually means we're on the ci server).
 	#
-    $OWD_TEST_TOOLKIT_BIN/connect_device.sh > ${INSTALL_LOG}@Connect_device@Click_here_for_details
+    $OWD_TEST_TOOLKIT_BIN/connect_device.sh > ${RESULT_DIR}/@Connect_device@Click_here_for_details
 else
     $OWD_TEST_TOOLKIT_BIN/connect_device.sh
 fi
@@ -303,10 +303,12 @@ done
 # This is the only part we want emailed.
 #
 sep=$(printf "%0.1s" "#"{1..95})
-printf "\n\n$sep\n\n"                          
+printf "\n\n$sep\n\n"
+printf "BUILD BEING TESTED  : %s\n\n" $DEVICE_BUILDNAME               
+
 printf "Unexpected failures : %s\n\n" $TCFAILED
-printf "Interactive report  : %s\n" "$($OWD_TEST_TOOLKIT_BIN/run_create_html.sh)"
-printf "\n$sep\n\n"                          
+
+printf "Interactive report  : %s\n\n" "$($OWD_TEST_TOOLKIT_BIN/run_create_html.sh)"
 
 printf "Start time          : %s\n" "$START_TIME"
 printf "End time            : %s\n\n" "$(date)"              
@@ -315,7 +317,8 @@ printf "Test cases passed   : %4s / %-4s\n" $TCPASS $TCTOTAL
 printf "Test actions passed : %4s / %-4s\n" $PASSED $TOTAL   
 printf "Expected failures   : %4s\n" $BLOCKED              
 printf "Ignored test cases  : %4s\n" $IGNORED              
-printf "Unwritten test cases: %4s\n\n\n" $UNWRITTEN
+printf "Unwritten test cases: %4s\n" $UNWRITTEN
+printf "\n$sep\n\n\n"                          
 
 
 

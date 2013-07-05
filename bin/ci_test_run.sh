@@ -16,6 +16,7 @@ export TEST_TYPE=${3:-"REGRESSION"}
 
 . $0.parts/install_toolkit_and_test_cases.sh
 
+
 #
 # There are some 'special' tests we can run (like 'blocked').
 #

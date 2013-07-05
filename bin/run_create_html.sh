@@ -5,7 +5,7 @@
 # NOTE: This is intended to be run via the 'run_all_tests.sh' script
 # and only works on the CI server (or if "$INSTALL_LOG" is set).
 #
-if [ ! "$INSTALL_LOG" ]
+if [ ! "$ON_CI_SERVER" ]
 then
 	printf "(No report generated: we're not on the ci server.)"
 	exit
@@ -230,8 +230,6 @@ echo "<!DOCTYPE html>
     <body>
 " > $HTML_INDEX
 
-
-
 #
 # INSTALLATION DETAILS.
 #
@@ -245,7 +243,7 @@ echo "
             <tr class=\"install\"><th class=\"install\">Run blocked tests:</th><td>$blocked</td></tr>
             <tr class=\"install\"><th class=\"install\">Try fails twice:</th><td>$chance2</td></tr>" >> $HTML_INDEX
         
-ls -lrt $INSTALL_LOG* | awk '{print $NF}' | while read fnam
+ls -lrt $RESULT_DIR/@* | awk '{print $NF}' | while read fnam
 do
 	tmp=$(basename $fnam)
     logHead=$(echo $tmp | awk 'BEGIN{FS="@"}{print $2}')
