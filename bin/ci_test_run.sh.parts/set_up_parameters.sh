@@ -18,23 +18,6 @@ fi
 
 export ON_CI_SERVER="Y"
 
-#
-# If we have installed this before now, then use that
-# configuration, else default to $HOME/projects.
-#
-if [ ! -f "$HOME/.OWD_TEST_TOOLKIT_LOCATION" ]
-then
-    [ ! "$HOME" ] && export HOME=/home/develenv
-    [ ! -d "$HOME/projects" ] && mkdir $HOME/projects
-
-    export OWD_TEST_TOOLKIT_DIR=$HOME/projects/OWD_TEST_TOOLKIT
-    export owd_test_cases_DIR=$OWD_TEST_TOOLKIT_DIR/../owd_test_cases
-    export OWD_TEST_TOOLKIT_BIN=$OWD_TEST_TOOLKIT_DIR/bin
-else
-    . $HOME/.OWD_TEST_TOOLKIT_LOCATION 
-fi
-
-export PATH=$PATH:/usr/android-sdk/platform-tools/adb:$OWD_TEST_TOOLKIT_DIR/bin
 export RUN_ID=${JOB_NAME}_${BUILD_NUMBER}
 
 export RESULT_DIR="/tmp/tests/$RUN_ID"
