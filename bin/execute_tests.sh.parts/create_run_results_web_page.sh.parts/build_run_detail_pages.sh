@@ -18,7 +18,7 @@ do
     #
     sed -e "s/$/<br>/" $fnam              | \
     sed -e "s/ /\&nbsp/g"                 | \
-    sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">"$HTML_WEBDIR"\2<\/a>,g"  >> $fnam.html
+    sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">"$HTML_WEBDIR/"\2<\/a>,g"  >> $fnam.html
         
     #
     # Finish the file off.
