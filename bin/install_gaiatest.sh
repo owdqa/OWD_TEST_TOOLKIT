@@ -15,12 +15,15 @@ printf "\n\nInstalling gaiatest (for $BRANCH) and Marionette ..." | tee -a $LOGF
 printf "\n====================================================\n" | tee -a $LOGFILE
 
 
+
+# Leaving this here for a little while in case we need it again, but after some
+# testing it seems that gaiatest handles this (and it perhaps means that if there's
+# a problem, then the tests will still run).
 #
 # Remove everything relating to gaiatest ...
 #
 # (NOTE: using 'sudo', so be paranoid about "rm -rf"!!!).
 #
-
 #install_dir=$($OWD_TEST_TOOLKIT_BIN/get_python_dist_path.sh marionette)
 #if [ "$install_dir" ]
 #then
@@ -37,6 +40,7 @@ printf "\n====================================================\n" | tee -a $LOGF
 #[ "$x" ] && sudo rm $x
 #
 #sudo rm -rf gaia-ui-tests 2>/dev/null
+
 
 
 
