@@ -22,20 +22,90 @@
             } 
         </script> 
     </head>
+    
     <body>
+    
+    <table>
+	    <tr><td>
+	    
+	        <table class="container width100">
+	            <tr class="install">
+		           <td class="job">
+		           <span class="bold size16">@JOB_NAME@</span> - build: <b>@BUILD_NUMBER@</b></td>
+	            </tr>
 
-        <table>
-        <tr class="install"><th class="install">JOB NAME:</th><td class="job">@JOB_NAME@</td></tr>
-        <tr class="install"><th class="install">BUILD NUMBER:</th><td class="job">@BUILD_NUMBER@</td></tr>
-        <tr class="install"><th class="install">Run time:</th><td>@RUN_TIME@</td></tr>
-        <tr class="install"><th class="install">Run blocked tests:</th><td>@blocked@</td></tr>
-        <tr class="install"><th class="install">Try fails twice:</th><td>@chance2@</td></tr>
-        @EXTRA_SETUP_DETAILS@
-        </table><br>
+                <tr class="install">
+                    <th class="@UNEXFAIL_VALUE@">
+                    <span class="bold size16">@PERCENT_PASSED@</span> of executed test cases passed.</td>
+                </tr>
+	        </table>
+	
+        </td></tr>
+        <tr><td></td></tr>
+	    <tr><td>
+
+	        <table class="width100">
+	            <tr class="install">
+	            <td class="container">
+
+		            <table class="width100">
+				        <tr class="install">
+				            <td class="right">Test cases passed:</th>
+				            <td class="left">@TCPASS@ / @TCTOTAL@</td>
+				        </tr>
+				        <tr class="install">
+				            <td class="right">Test actions passed:</th>
+				            <td class="left">@PASSED@ / @TOTAL@</td>
+				        </tr>
+				        <tr class="install">
+				            <td class="right">Expected failures:</th>
+				            <td class="left">@BLOCKED@</td>
+				        </tr>
+				        <tr class="install">
+				            <td class="right">Ignored test cases:</th>
+				            <td class="left">@IGNORED@</td>
+				        </tr>
+				        <tr class="install">
+				            <td class="right">unwritten test cases:</th>
+				            <td class="left">@UNWRITTEN@</td>
+				        </tr>
+			        </table>
+			        
+	            </td>
+	            
+	            <td class="blank"></td>
+	            
+	            <td class="container top">
+	
+		            <table class="width100">
+			            <tr class="install">
+			                <th class="summary normal">Run time:</th>
+			                <td class="left">@RUN_TIME@ -> @END_TIME@</td>
+			            </tr>
+			            <tr class="install">
+			                <th class="install normal">Run blocked tests:</th>
+			                <td class="left">@blocked@</td>
+			            </tr>
+			            <tr class="install">
+			                <th class="install normal">Try fails twice:</th>
+			                <td class="left">@chance2@</td>
+			            </tr>
+                        <tr class="install"><td></td><td></td></tr>
+			            @EXTRA_SETUP_DETAILS@
+		            </table>
+		            
+	            </td>
+	            </tr>
+	        </table>
         
-        <table name="summaries">
-        @SUMMARIES@
-        </table>
+    </td></tr>
+    </table>
+
+    <br>
         
+    <table name="summaries" class="summary_category">
+    @SUMMARIES@
+    </table>
+                
     </body>
 </html>
