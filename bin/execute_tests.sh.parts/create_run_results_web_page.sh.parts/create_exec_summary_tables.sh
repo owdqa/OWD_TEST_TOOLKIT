@@ -37,8 +37,8 @@ f_create_summary_table(){
                     $DESC
                 </th>
             </tr>
-            <tr id=\"$TYPE\" class=\"item_table\" style=\"display:none\">
-                <td class=\"blank\"></td><td>"
+            <tr id=\"$TYPE\"  class=\"item_table\" style=\"display:none\">
+                <td class=\"item_table\">"
     
         . $0.parts/start_summary_table.sh
 

@@ -7,6 +7,9 @@ f_sub_variables_into_webpage(){
     do
         z=$(echo "${!i}")
         
+        export reps=$(grep -c "@$i@" $HTML_INDEX)
+        [ $reps -eq 0 ] && continue
+        
         for line in "$(cat $HTML_INDEX)"
         do
             x=$(echo "$line" | grep "@$i@")

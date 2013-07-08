@@ -47,3 +47,18 @@ fi
 
 [ $(echo "$tp" | egrep "^[0-9]*$") ] && PASSED=$(($PASSED+$tp))
 [ $(echo "$tt" | egrep "^[0-9]*$") ] && TOTAL=$(($TOTAL+$tt))
+
+#
+# It's easier to see all the variables we're setting if I finalize them here!
+#
+export CFAILED=${CFAILED:-"0"}
+export TCPASS=${TCPASS:-"0"}
+export TCFAILED=${TCFAILED:-"0"}
+export TCTOTAL=${TCTOTAL:-"0"}
+export PASSED=${PASSED:-"0"}
+export TOTAL=${TOTAL:-"0"}
+export BLOCKED=${BLOCKED:-"0"}
+export IGNORED=${IGNORED:-"0"}
+export UNWRITTEN=${UNWRITTEN:-"0"}
+
+

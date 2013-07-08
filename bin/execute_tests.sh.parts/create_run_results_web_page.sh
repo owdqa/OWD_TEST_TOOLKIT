@@ -19,12 +19,12 @@ fi
 #
 # Build table of any 'extra' setup details that are required.
 #
-. $0.parts/create_extra_setup_details_table.sh
+. $0.parts/create_extra_setup_detail_rows.sh
 
 #
 # Build table of test case executions summaries.
 #
-. $0.parts/create_test_case_execution_summary_table.sh
+. $0.parts/create_exec_summary_tables.sh
 
 #
 # Build the final details web page by substituting the variables into the template.
@@ -32,15 +32,38 @@ fi
 # (NOTE: for now, every variable that needs to be substituted has to be listed here.)
 #
 page_title="${JOB_NAME}-${BUILD_NUMBER}"
-f_sub_variables_into_webpage    page_title  \
-                                JOB_NAME    \
-                                BUILD_NUMBER\
-                                RUN_TIME    \
-                                blocked     \
-                                chance2     \
-                                EXTRA_SETUP_DETAILS\
-                                SUMMARIES
 
+[ "$TCFAILED" = "0" ] && UNEXFAIL_VALUE="unexfail_value_pass" || UNEXFAIL_VALUE="unexfail_value_fail"
+
+if [ "$TCTOTAL" -gt 0 ]
+then
+	PERCENT_PASSED=$(($TCPASS * 100))
+	PERCENT_PASSED=$(($PERCENT_PASSED / $TCTOTAL))
+else
+    PERCENT_PASSED="100"
+fi
+PERCENT_PASSED="$PERCENT_PASSED%"
+
+f_sub_variables_into_webpage    page_title          \
+                                JOB_NAME            \
+                                BUILD_NUMBER        \
+                                RUN_TIME            \
+                                blocked             \
+                                chance2             \
+                                EXTRA_SETUP_DETAILS \
+                                SUMMARIES           \
+                                END_TIME            \
+                                TCFAILED            \
+                                TCPASS              \
+                                TCTOTAL             \
+                                PASSED              \
+                                TOTAL               \
+                                BLOCKED             \
+                                IGNORED             \
+                                UNWRITTEN           \
+                                UNEXFAIL_VALUE      \
+                                PERCENT_PASSED
+                                
 . $0.parts/build_run_detail_pages.sh
     
 ##########################################################################

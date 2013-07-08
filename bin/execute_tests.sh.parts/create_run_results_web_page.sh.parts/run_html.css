@@ -13,14 +13,21 @@ body.details{
     font-size:11px;
 }
 
-table{
+table,table.container, table.summary_category, table.summary_list{
     font-family:"sans";
     font-size:14px;
     border: 1px solid #ffffff;
+    background-color: #ffffff;
+}
+table.summary_category{
+    border-collapse:separate;
+}
+table.summary_list{
+    border-collapse:separate;
 }
 
 tr{
-    background-color:#cccccc;
+    background-color:#ffffff;
     color:#000000;
 }
 tr.install{
@@ -28,9 +35,6 @@ tr.install{
 }
 tr.items{
     cursor: pointer;
-    background-color:#ffffff;
-}
-tr.item_table{
     background-color:#ffffff;
 }
 tr.failed{
@@ -49,26 +53,40 @@ tr.passed{
 }
 
 th{
+    font-size:12px;
+    text-align: left;
+}
+th.unexfail_value_pass,th.unexfail_value_fail{
+    font-size:12px;
+    text-align:center;
+    font-weight:normal;
+}
+th.unexfail_value_pass{
+    background-color:#99ffaa;
+    color:#006600;
+}
+th.unexfail_value_fail{
+    background-color:#ff9999;
+    color:#660000;
+}
+
+th.sum_table_header{
+    background-color:#eeeeee;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 8px;
     padding-right: 8px;
-    font-size:12px;
-    text-align: left;
 }
-th.install{
-    padding-top: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
+th.install, th.summary, td.summary{
     padding-right: 5px;
     text-align: right;
 }
 th.items, th.items_none{
-    background:#f8f8f8;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 0px;
-    padding-right: 0px;
+    background:#e8e8f8;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
     color: #0000ff;
     text-align: left;
     cursor:pointer;
@@ -82,31 +100,46 @@ th.items_none{
     color: #aaaaaa;
 }
 th.items_none:hover{
-    background:#f4f4f8;
+    background:#d4d4f8;
 }
 
 td{
     font-size:12px;
+    font-weight:normal;
+    text-align:left;
+    vertical-center;
+}
+td.container{
+    border: 1px solid #777777;
 }
 td.blank{
-    width: 20px;
+    width: 5px;
     background-color:#ffffff;
 }
 td.job{
-    background-color:#000000;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color:#777777;
     text-align:center;
-    color:white;
-    font-size:12pt;
-    font-weight:bold;
+    color:yellow;
+    font-size:12px;
+    font-weight:normal;
+    width:100%;
 }
 td.desc{
     font-size:10px;
 }
-
-.left{
-    text-align: left;
-}
-.center{
-    text-align: center;
+td.item_table{
+    background-color:#ffffff;
+    border-left: 10px solid #ffffff;
+    border-bottom: 15px solid #ffffff;
 }
 
+.black    { color:#000000;      }
+.bold     { font-weight:bold;   }
+.normal   { font-weight:normal; }
+.left     { text-align: left;   }
+.right    { text-align: right;  }
+.center   { text-align: center; }
+.width100 { width: 100%;        }
+.size16   { font-size: 16px;    }

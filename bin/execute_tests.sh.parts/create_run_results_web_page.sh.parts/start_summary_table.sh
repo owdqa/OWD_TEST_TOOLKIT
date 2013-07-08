@@ -2,7 +2,7 @@
 # Start the summary table.
 #
 echo "
-            <table>
+            <table class=\"summary_list\">
                 <tr>"
     
 if [ "$linkme" ]
@@ -11,11 +11,11 @@ then
     # This test was executed, so report the full details.
     #
     echo "
-                    <th class=\"center\">Test ID</th>
-                    <th class=\"center\">Run details</th>
-                    <th class=\"center\">Time<br>taken</th>
-                    <th class=\"center\">Test<br>actions<br>passed</th>
-                    <th                 >Description</th>
+                    <th class=\"sum_table_header center\">Test ID</th>
+                    <th class=\"sum_table_header center\">Run details</th>
+                    <th class=\"sum_table_header center\">Time<br>taken</th>
+                    <th class=\"sum_table_header center\">Test<br>actions<br>passed</th>
+                    <th class=\"sum_table_header\">Description</th>
                 </tr>"
 else
     #
@@ -23,7 +23,7 @@ else
     # test description.
     #
     echo " 
-                    <th class=\"center\">Test ID</th>
-                    <th                 >Description</th>
+                    <th class=\"sum_table_header center\">Test ID</th>
+                    <th class=\"sum_table_header\">Description</th>
                 </tr>"
 fi

@@ -27,7 +27,7 @@ do
 
     EXTRA_SETUP_DETAILS="$EXTRA_SETUP_DETAILS
             <tr class=\"install\">
-                <th class=\"install\">$logtitle:</th>
+                <th class=\"install normal\">$logtitle:</th>
                 <td>
                     <div title=\"Click this to see the details of this part of the installation.\">
                         <a href=\"./$logname\">
