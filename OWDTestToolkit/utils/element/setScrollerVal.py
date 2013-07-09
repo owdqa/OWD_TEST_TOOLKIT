@@ -10,6 +10,9 @@ class main(GaiaTestCase):
         #
         # Get the current setting for this scroller.
         #
+        x = self.getElement( ("id", "value-indicator-wrapper"), "roytest")
+        self.logResult("info", "VALUE m: " + x.text)
+        self.quitTest()
         currVal = p_scrollerElement.find_element(*DOM.GLOBAL.scroller_curr_val).text
         
         #
@@ -27,7 +30,38 @@ class main(GaiaTestCase):
             currVal = p_scrollerElement.find_element(*DOM.GLOBAL.scroller_curr_val).text
                 
 
+    #
+    # From gaiatest Clock -> regions -> alarm.py
+    #
+    def _flick_menu_up(self, locator):
+        self.wait_for_element_displayed(*self._current_element(*locator))
+        current_element = self.marionette.find_element(*self._current_element(*locator))
+        next_element = self.marionette.find_element(*self._next_element(*locator))
 
+        #TODO: update this with more accurate Actions
+        action = Actions(self.marionette)
+        action.press(next_element)
+        action.move(current_element)
+        action.release()
+        action.perform()
+
+    def _flick_menu_down(self, locator):
+        self.wait_for_element_displayed(*self._current_element(*locator))
+        current_element = self.marionette.find_element(*self._current_element(*locator))
+        next_element = self.marionette.find_element(*self._next_element(*locator))
+
+        #TODO: update this with more accurate Actions
+        action = Actions(self.marionette)
+        action.press(current_element)
+        action.move(next_element)
+        action.release()
+        action.perform()
+
+    def _current_element(self, method, target):
+        return (method, '%s.picker-unit.active' % target)
+
+    def _next_element(self, method, target):
+        return (method, '%s.picker-unit.active + div' % target)
 
 
 
