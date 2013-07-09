@@ -77,6 +77,7 @@ then
 		# This one failed too - exit with an error code, so the test run knows the situation.
 		#
 		echo "Failed 2nd attempt to install gaiatest properly! See $LOGFILE for details."
+		$OWD_TEST_TOOLKIT_BIN/add_runtime_setup_warning.sh "Error while installing gaiatest dependencies."
 		exit 1
 	else
 		#

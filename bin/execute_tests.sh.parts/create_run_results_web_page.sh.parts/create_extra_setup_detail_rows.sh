@@ -40,3 +40,20 @@ do
 done <<EOF
 $(ls -lrt $RESULT_DIR/@* | awk '{print $NF}')
 EOF
+
+#
+# Check for warnings.
+#
+if [ -s $RUNTIME_WARNINGS ]
+then
+	#
+	# We had some warnings during setup - just put up a message.
+	#
+    EXTRA_SETUP_DETAILS="$EXTRA_SETUP_DETAILS
+            <tr class=\"install\">
+                <td colspan=2 class=\"setup_warnings\">
+                <br>
+                <b>NOTE:</b><br>There were some warnings during setup.<br>Check the links above for details.</td>
+            </tr>"
+	
+fi

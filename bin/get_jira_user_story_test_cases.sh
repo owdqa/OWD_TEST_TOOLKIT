@@ -105,20 +105,25 @@ done | tee $CACHE_BASE.$TYPE.tmp
 x=$(wc -l $CACHE_BASE.$TYPE.tmp 2>/dev/null | awk '{print $1}')
 if [ "$x" == "0" ]
 then
+	#
+	# Update the 'setup warnings' file and try using the cache.
+	#
+	$OWD_TEST_TOOLKIT_BIN/add_runtime_setup_warning.sh "Could not get jira test case id's from Jira system." 
+	
 	rm $CACHE_BASE.$TYPE.tmp
-	printf "$0: WARNING - Unable to return Jira test cases for $TYPE, trying previous list ..." >> $LOGFILE
+	printf "$0: WARNING - Unable to return Jira test cases for $TYPE, trying cache ..." >> $LOGFILE
 	
 	if [ -f $CACHE_BASE.$TYPE ]
 	then
 		cat $CACHE_BASE.$TYPE
-        printf "\n$0:           Sucess!\n\n" >> $LOGFILE
+        printf "$0:           Sucess!\n\n" >> $LOGFILE
 	else
-	    printf "\n$0:           Failed!! Cannot find previous list, sorry!\n\n" >> $LOGFILE
+	    printf "$0:           Failed!! Cannot find test cases in jira cache for $TYPE, sorry!\n\n" >> $LOGFILE
 	    exit 1
 	fi
 else
     #
-    # We got the list - refresh the previous list with the new one.
+    # We got the list - refresh the previous cache with the new list.
     #
     mv $CACHE_BASE.$TYPE.tmp $CACHE_BASE.$TYPE
 fi
