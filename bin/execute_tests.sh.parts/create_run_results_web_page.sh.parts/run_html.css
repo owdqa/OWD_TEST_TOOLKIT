@@ -3,6 +3,15 @@ a:visited {color:#0000ff;text-decoration:none;}
 a:hover   {color:#0000ff;text-decoration:none;background-color:#ffffff;}
 a:active  {color:#0000ff;text-decoration:none;}
 
+.black    { color:#000000;      }
+.bold     { font-weight:bold;   }
+.normal   { font-weight:normal; }
+.left     { text-align: left;   }
+.right    { text-align: right;  }
+.center   { text-align: center; }
+.width100 { width: 100%;        }
+.size16   { font-size: 16px;    }
+
 body{
     background-color:#ffffff;
 }
@@ -135,11 +144,3 @@ td.item_table{
     border-bottom: 15px solid #ffffff;
 }
 
-.black    { color:#000000;      }
-.bold     { font-weight:bold;   }
-.normal   { font-weight:normal; }
-.left     { text-align: left;   }
-.right    { text-align: right;  }
-.center   { text-align: center; }
-.width100 { width: 100%;        }
-.size16   { font-size: 16px;    }

@@ -6,7 +6,7 @@ class main(GaiaTestCase):
         #
         # Select the result of a search 
         #
-        y = self.UTILS.getElements(DOM.Contacts.search_results_list, "Search results list")
+        y = self.UTILS.getElements(DOM.Contacts.search_results_list, "Search results list", True, 10)
         for i in y:
             if p_contactName in i.text:
                 i.tap()

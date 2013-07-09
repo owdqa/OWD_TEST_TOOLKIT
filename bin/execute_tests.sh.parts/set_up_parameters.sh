@@ -20,6 +20,8 @@ export RESULT_DIR=${RESULT_DIR:-"/tmp/tests/B2G_tests.$RUN_ID"}
 # you can still monitor the current position of the test run).
 REALTIME_SUMMARY=$RESULT_DIR/realtime_summary
 
+# File to record any warnings during setup.
+RUNTIME_WARNINGS=$RESULT_DIR/.setup_warnings
 
 # Exit codes so the we know how the test runner script ended, plus
 # the exit strings.
