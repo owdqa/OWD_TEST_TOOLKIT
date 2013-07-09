@@ -14,7 +14,7 @@ class main(GaiaTestCase):
         self.marionette.switch_to_frame()
 
         #
-        # Find and click the list item (it may be off the scree, so 'displayed' would be false, but
+        # Find and click the list item (it may be off the screen, so 'displayed' would be false, but
         # Marionette will scroll it into view automtically so it can be clicked just as it
         # would it real life).
         #
