@@ -118,6 +118,11 @@ td{
     text-align:left;
     vertical-center;
 }
+td.setup_warnings{
+    color: #ff3333;
+    font-weight:normal;
+    text-align:center;
+}
 td.container{
     border: 1px solid #777777;
 }
