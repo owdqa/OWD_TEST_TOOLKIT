@@ -1,8 +1,13 @@
 #
 # BUild the test description.
 #
-test_blocked=$(egrep "^$TEST_NUM\|" $owd_test_cases_DIR/Docs/blocked_tests | awk 'BEGIN{FS="|"}{print $2}')
-test_blocked=${test_blocked:+"(BLOCKED BY $test_blocked) "}
+test_blocked=$(egrep "^$TEST_NUM\|" $owd_test_cases_DIR/Docs/blocked_tests | awk 'BEGIN{FS="|"}{print $2}' | awk '{print $NF}')
+
+#
+# If it's there, turn the bug into a hyperlink.
+#
+test_blocked=${test_blocked:+"<a href=\"https://bugzilla.mozilla.org/show_bug.cgi?id=$test_blocked\">$test_blocked</a>"}
+test_blocked=${test_blocked:+"(BLOCKED BY BUG $test_blocked) "}
 
 test_desc=$(egrep "^$TEST_NUM\|" $owd_test_cases_DIR/Docs/test_descriptions | awk 'BEGIN{FS="|"}{print $2}')
 
