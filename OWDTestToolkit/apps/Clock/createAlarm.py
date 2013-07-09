@@ -23,11 +23,11 @@ class main(GaiaTestCase):
         self.UTILS.logComment("Creating new alarm for " + str(t_hour) + ":" + str(p_min).zfill(2) + " " + t_ampm)
     
         scroller_hours = self.UTILS.getElement(
-            (DOM.Clock.time_picker_column[0],DOM.Clock.time_scroller[1] % p_component),
+            (DOM.Clock.time_scroller[0],DOM.Clock.time_scroller[1] % p_component),
             "Scroller for 'hours'")
         
         scroller_minutes = self.UTILS.getElement(
-            (DOM.Clock.time_picker_column[0],DOM.Clock.time_scroller[1] % p_component),
+            (DOM.Clock.time_scroller[0],DOM.Clock.time_scroller[1] % p_component),
             "Scroller for 'minutes'")
 
         #
