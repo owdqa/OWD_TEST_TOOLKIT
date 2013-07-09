@@ -10,9 +10,6 @@ class main(GaiaTestCase):
         #
         # Get the current setting for this scroller.
         #
-        x = self.getElement( ("id", "value-indicator-wrapper"), "roytest")
-        self.logResult("info", "VALUE m: " + x.text)
-        self.quitTest()
         currVal = p_scrollerElement.find_element(*DOM.GLOBAL.scroller_curr_val).text
         
         #
