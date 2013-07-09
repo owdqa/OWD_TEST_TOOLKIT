@@ -17,11 +17,6 @@ class main(GaiaTestCase):
 							p_validate=True, 
 							p_remove_keyboard=False)
         
-        #
-        # Need to click this one for some reason.
-        #
-        x = self.UTILS.getElement(DOM.EME.search_field, "Search field (just to click it)")
-        x.click()
         
         #
         # Tap the first suggestion.
