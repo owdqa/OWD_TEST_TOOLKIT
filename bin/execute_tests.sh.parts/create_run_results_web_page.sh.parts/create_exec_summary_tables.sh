@@ -3,7 +3,11 @@ f_create_summary_table(){
     # Creates a summary table for this "$TYPE"
     #
     TYPE="$1"
-    DESC="$2"
+    VAR="$2"
+    DESC="$3"
+    
+    VAR_VAL="${!VAR}"
+    DESC="$VAR_VAL $DESC"
     
     #
     # Only create the 'run detail' column if it's relevant.
@@ -60,7 +64,7 @@ f_create_summary_table(){
 #
 # Now 'do it' for these various types ...
 #
-SUMMARIES="$(f_create_summary_table 'failed'  'Failed test cases')"
-SUMMARIES="$SUMMARIES $(f_create_summary_table 'passed'  'Passed test cases')"
-SUMMARIES="$SUMMARIES $(f_create_summary_table 'ignored' 'Ignored test cases.')"
-SUMMARIES="$SUMMARIES $(f_create_summary_table 'no_test' 'Test cases which have not been automated yet.')"
+SUMMARIES="$(f_create_summary_table 'failed' 'TCFAILED' 'failed test cases')"
+SUMMARIES="$SUMMARIES $(f_create_summary_table 'passed' 'TCPASS' 'passed test cases')"
+SUMMARIES="$SUMMARIES $(f_create_summary_table 'ignored' 'IGNORED' 'ignored test cases')"
+SUMMARIES="$SUMMARIES $(f_create_summary_table 'no_test' 'UNWRITTEN' 'test cases not automated yet')"
