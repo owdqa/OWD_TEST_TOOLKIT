@@ -4,9 +4,10 @@ class main(GaiaTestCase):
 
     def createContactFromThisNum(self):
         #
-        # Creates a new contact from this number 
+        # Creates a new contact from the number currently in the dialler 
         # (doesn't fill in the contact details).
         #
+        self.UTILS.switchToFrame(*DOM.Phone.frame_locator)
         
         x = self.UTILS.getElement(DOM.Phone.add_to_contacts_button, "Add to contacts button")
         x.tap()
@@ -17,8 +18,5 @@ class main(GaiaTestCase):
         #
         # Switch to the contacts frame.
         #
-        self.marionette.switch_to_frame()
-        x = (DOM.Contacts.frame_locator[0],
-             DOM.Contacts.frame_locator[1] + "?new")
-        self.UTILS.switchToFrame(*x)
+        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
         

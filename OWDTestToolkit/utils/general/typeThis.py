@@ -63,7 +63,7 @@ class main(GaiaTestCase):
             # Tap the element to get the keyboard to popup.
             #
             self.logResult("info", "(Sending '" + p_str + "' to this field using the keyboard.)")
-            x.click()
+            x.tap()
 
             #
             # Type the string.

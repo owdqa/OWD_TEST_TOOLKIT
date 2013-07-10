@@ -17,10 +17,7 @@ class main(GaiaTestCase):
         # Switch to the contacts frame.
         #
         orig_iframe = self.UTILS.currentIframe()
-        self.marionette.switch_to_frame()
-        
-        self.UTILS.switchToFrame(DOM.Contacts.frame_locator[0],
-                                 DOM.Contacts.frame_locator[1] + "?pick")
+        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
         
         return orig_iframe
         
