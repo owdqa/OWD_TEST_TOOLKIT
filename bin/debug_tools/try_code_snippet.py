@@ -58,6 +58,7 @@ class current_frame():
         self.marionette = Marionette(host='localhost', port=2828)  
         self.marionette.start_session()
         self.marionette.set_search_timeout(1000)
+        self.actions    = Actions(self.marionette)
         
         #
         # Switch to the correct iframe (unless it's "()").
