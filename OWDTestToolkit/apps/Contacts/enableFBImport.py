@@ -43,13 +43,11 @@ class main(GaiaTestCase):
             self.launch()
             self.tapSettingsButton()
 
-            self.marionette.switch_to_frame()
             self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
 
             x = self.UTILS.getElement(DOM.Contacts.settings_fb_enable, "Enable facebook button")
             x.tap()
 
-        self.marionette.switch_to_frame()
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
 
         time.sleep(2) # Just to be sure!

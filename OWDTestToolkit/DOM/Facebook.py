@@ -13,8 +13,6 @@ install_fbowd_button = ("id", "grant_clicked")
 
 import_frame         = ("mozbrowser", "")
 
-friends_iframe_1     = ("src", "app://communications.gaiamobile.org/contacts/index.html")
-friends_iframe_2     = ("src", "app://communications.gaiamobile.org/facebook/curtain.html")
 friends_select_all   = ('id', 'select-all')
 friends_deselect_all = ('id', 'deselect-all')
 friends_import       = ('id', 'import-action')

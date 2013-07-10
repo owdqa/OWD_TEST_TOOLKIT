@@ -20,6 +20,7 @@ class main(GaiaTestCase):
         #
         # The header should now say how many receipients.
         #
+        time.sleep(2) # give the header time to change.
         num_recs = len(p_nums)
         search_str = " recipient" if num_recs == 1 else " recipients"
         self.UTILS.headerCheck(str(num_recs) + search_str)

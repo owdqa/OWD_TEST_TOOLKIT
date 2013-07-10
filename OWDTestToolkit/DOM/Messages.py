@@ -1,4 +1,4 @@
-frame_locator          = ('src', 'app://sms.gaiamobile.org/index.html')
+frame_locator          = ('src', 'sms')
 
 statusbar_new_sms      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'%s')]")
 lockscreen_notif_xpath = "//*[@id='desktop-notifications-container']//div[contains(text(),'%s')]"

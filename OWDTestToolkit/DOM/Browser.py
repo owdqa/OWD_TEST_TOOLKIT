@@ -1,4 +1,4 @@
-frame_locator           = ('src', 'app://browser.gaiamobile.org/index.html')
+frame_locator           = ('src', 'browser')
 browser_page_frame      = ('mozbrowser', "")
 url_input               = ('id', 'url-input')
 url_go_button           = ('id', 'url-button')

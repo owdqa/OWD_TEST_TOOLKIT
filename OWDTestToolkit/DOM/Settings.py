@@ -1,5 +1,5 @@
 import GLOBAL
-frame_locator          = ('src', 'app://settings.gaiamobile.org/index.html#root')
+frame_locator          = ('src', "settings")
 settings_header        = ('xpath', GLOBAL.app_head_specific % 'Settings')
 back_button            = ('class name', 'icon icon-back')
 

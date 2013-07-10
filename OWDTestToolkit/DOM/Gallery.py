@@ -1,5 +1,4 @@
-# frame_locator                   = ("src", "app://gallery.gaiamobile.org/index.html#pick")
-frame_locator                   = ("data-frame-origin", "app://gallery.gaiamobile.org")
+frame_locator                   = ("src", "gallery")
 thumbnail_items                 = ('css selector', 'li.thumbnail')
 thumbnail_list_section          = ('id', 'thumbnail-list-view')
 thumbnail_select_mode_btn       = ("id", "thumbnails-select-button")

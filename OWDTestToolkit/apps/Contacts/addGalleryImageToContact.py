@@ -50,5 +50,4 @@ class main(GaiaTestCase):
             time.sleep(1)
         
         # Back to contacts app iframe.
-        self.marionette.switch_to_frame()
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)

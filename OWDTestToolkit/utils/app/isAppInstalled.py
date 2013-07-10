@@ -6,8 +6,7 @@ class main(GaiaTestCase):
         #
         # Return whether an app is present on the homescreen (i.e. 'installed').
         #
-        self.marionette.switch_to_frame()
-        self.switchToFrame(*DOM.Home.homescreen_iframe)
+        self.switchToFrame(*DOM.Home.frame_locator)
 
         x = ('css selector', DOM.Home.app_icon_css % p_appName)
         try:
