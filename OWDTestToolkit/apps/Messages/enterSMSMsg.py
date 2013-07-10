@@ -7,6 +7,7 @@ class main(GaiaTestCase):
         # Create and send a message (assumes we are in a new 'create new message'
         # screen with the destination number filled in already).
         #
+        time.sleep(1) # Trying to remove an intermittent issue.
         self.UTILS.typeThis(DOM.Messages.input_message_area, 
                             "Input message area",
                             p_msg,
