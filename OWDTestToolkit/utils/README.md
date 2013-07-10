@@ -41,8 +41,8 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
     <tr>
         <td align=center>switchToFrame</td>
-        <td align=left>p_tag<br>p_str<br>p_quitOnError=True</td>
-        <td align=left>Switch to a different iframe based on tag and value.<br>  NOTE: You *usually* need to use self.marionette.switch_to_frame() first.</td>
+        <td align=left>p_attrib<br>p_str<br>p_quitOnError=True<br>p_viaRootFrame=True</td>
+        <td align=left>Switch to the iframe containing the attribute value <b>p_str</b>.<br>  For example: ("src", "contacts") or ("src", "sms") etc...<br><br>  NOTE: You *usually* need to do this via the 'root' frame (almost all iframes  are contained in the root-level frame).</td>
     </tr>
 
 
