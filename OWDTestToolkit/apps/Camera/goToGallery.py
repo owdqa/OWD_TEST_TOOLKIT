@@ -9,6 +9,5 @@ class main(GaiaTestCase):
         #
         galleryBTN = self.UTILS.getElement(DOM.Camera.gallery_button, "Gallery button")
         galleryBTN.tap()
-        self.marionette.switch_to_frame()
         self.UTILS.switchToFrame(*DOM.Gallery.frame_locator)
         

@@ -17,3 +17,4 @@ import Phone
 import Settings
 import Statusbar
 import Video
+import Keyboard

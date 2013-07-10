@@ -17,6 +17,5 @@ class main(GaiaTestCase):
 		#
 		# Switch to correct iframe.
 		#
-        self.marionette.switch_to_frame()
-        self.UTILS.switchToFrame(*DOM.Phone.frame_locator_from_sms)
+        self.UTILS.switchToFrame(*DOM.Phone.frame_locator)
 

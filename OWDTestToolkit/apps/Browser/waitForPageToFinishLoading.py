@@ -9,4 +9,4 @@ class main(GaiaTestCase):
         self.UTILS.waitForElements(   DOM.Browser.throbber, "Animated 'wait' icon", True, 5, False)
         self.UTILS.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 90, False)
         
-    
+     	time.sleep(2)

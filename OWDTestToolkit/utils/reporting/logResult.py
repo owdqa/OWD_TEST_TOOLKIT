@@ -27,8 +27,11 @@ class main(GaiaTestCase):
         
         # If we have filename details then add them to the message as note lines.
         if p_fnam:
-            p_msg = p_msg + "|current html source = " + p_fnam[0]
-            p_msg = p_msg + "|current screenshot  = " + p_fnam[1]
+            if len(p_fnam) == 2:
+                p_msg = p_msg + "|current html source = " + p_fnam[0]
+                p_msg = p_msg + "|current screenshot  = " + p_fnam[1]
+            else:
+                p_msg = p_msg + "|" + p_fnam
 
         #
         # The double brackets is intentional (add a 2 part

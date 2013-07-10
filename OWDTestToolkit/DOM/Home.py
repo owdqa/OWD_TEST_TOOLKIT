@@ -1,4 +1,4 @@
-homescreen_iframe    = ('src', 'app://homescreen.gaiamobile.org/index.html#root')
+frame_locator        = ("src", "homescreen")
 cards_view           = ('id', 'cards-view')
 lockscreen_frame     = ('id', 'lockscreen')
 dock                 = ("class name", "dockWrapper")

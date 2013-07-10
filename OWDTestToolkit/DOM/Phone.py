@@ -1,5 +1,4 @@
-frame_locator_main     = ('css selector', 'iframe[src="app://communications.gaiamobile.org/index.html"]')
-frame_locator_from_sms = ("src", "app://communications.gaiamobile.org/dialer/index.html#keyboard-view")
+frame_locator          = ('src', 'communications')
 frame_locator_calling  = ('name', 'call_screen0')
 
 add_to_contacts_button = ("id", "keypad-callbar-add-contact")

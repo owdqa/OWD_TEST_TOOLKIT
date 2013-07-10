@@ -33,6 +33,5 @@ class main(GaiaTestCase):
         # Switch back and wait for contact details page to re-appear.
         #
         time.sleep(2)
-        self.marionette.switch_to_frame()
-        self.UTILS.switchToFrame(*DOM.Facebook.friends_iframe_1)
+        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
 

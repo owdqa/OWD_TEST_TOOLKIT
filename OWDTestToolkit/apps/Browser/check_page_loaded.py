@@ -20,7 +20,7 @@ class main(GaiaTestCase):
 #        self.UTILS.switchToFrame("src", x.get_attribute("src"))        iframe_dom = ("class name", "browser-tab")
 
         self.waitForPageToFinishLoading()
-        self.UTILS.switchToFrame(*DOM.Browser.website_frame)
+        self.UTILS.switchToFrame(*DOM.Browser.website_frame, p_viaRootFrame=False)
         
 #         time.sleep(10)
 

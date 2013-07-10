@@ -27,7 +27,7 @@ class main(GaiaTestCase):
                 
         if retries <= 0:
             msg =   "Cannot find the iframe containing the clock! ('" + \
-                    DOM.Clock.alarm_alert_iframe[0] + "', '" + \
+                    DOM.Clock.alarm_alert_iframe[0] + "' contains '" + \
                     DOM.Clock.alarm_alert_iframe[1] + "')."
             self.UTILS.quitTest(msg)
             

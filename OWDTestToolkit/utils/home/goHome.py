@@ -13,9 +13,8 @@ class main(GaiaTestCase):
         self.touchHomeButton()
         
         self.apps.kill_all()
-        self.marionette.switch_to_frame()
         
-        self.switchToFrame(*DOM.Home.homescreen_iframe, p_quitOnError=False)
+        self.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
             
         time.sleep(1)
 
