@@ -45,6 +45,8 @@ UNWRITTEN=0
 TCPASS=0
 TCTOTAL=0
 TCFAILED=0
+TCBLOCKPASS=0
+TCBLOCKFAIL=0
 
 #
 # Get the function used to run test files.
