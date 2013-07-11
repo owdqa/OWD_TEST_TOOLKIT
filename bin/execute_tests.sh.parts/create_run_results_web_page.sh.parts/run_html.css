@@ -1,84 +1,124 @@
 a:link    {color:#0000ff;text-decoration:none;}
 a:visited {color:#0000ff;text-decoration:none;}
-a:hover   {color:#0000ff;text-decoration:none;background-color:#ffffff;}
+a:hover   {color:#0000ff;text-decoration:none;}
 a:active  {color:#0000ff;text-decoration:none;}
 
-.black    { color:#000000;      }
-.bold     { font-weight:bold;   }
-.normal   { font-weight:normal; }
 .left     { text-align: left;   }
 .right    { text-align: right;  }
 .center   { text-align: center; }
 .width100 { width: 100%;        }
-.size16   { font-size: 16px;    }
+.size10   { font-size: 10px;    }
+.padding5 { padding:5px;        }
+.pass     { background-color: #99ffaa; color:#006600; }
+.fail     { background-color: #ffaaaa; color:#660000; }
+.neutral  { background-color: #ffffaa; color:#222222; }
 
-body{
-    background-color:#ffffff;
+
+/* High-level settings. */
+body{  background-color:#ffffff;}
+
+table{ font-family:"sans";      }
+
+tr{    background-color:#ffffff;}
+
+td{    font-size:12px;
+       font-weight:normal;
+       text-align:left;
+       vertical-center;
 }
 
-body.details{
+
+
+/* Test case run details pages (gives us the indents). */
+pre{
     font-family:"monospace";
     font-weight:"normal";
     font-size:11px;
 }
 
-table,table.container, table.summary_category, table.summary_list{
-    font-family:"sans";
-    font-size:14px;
-    border: 1px solid #ffffff;
-    background-color: #ffffff;
+
+
+/* Main header info (build config details etc..). */
+table.build_pass,table.build_fail{
+    padding: 2px;
+    text-align:center;
+    font-size:12px;
+    font-weight:normal;
 }
-table.summary_category{
-    border-collapse:separate;
+td.build_header{
+    padding: 10px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
 }
-table.summary_list{
-    border-collapse:separate;
+td.build_detail{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.invisible{
+    background:none;
+    border: 0px solid;
+    color:inherit;
+}
+td.setup_warnings{
+    color: #ff3333;
+    font-weight:normal;
+    text-align:center;
+    padding: 5px;
+    border: 5px solid #ff0000;
 }
 
-tr{
-    background-color:#ffffff;
-    color:#000000;
+
+
+/* Summary types. */
+table.summary_types{
+    background-color: #ffffff;
+    border-collapse:collapse;
+    border: 0px solid;
 }
-tr.install{
-    background-color:#ffffff;
+td.summary_type{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border:1px solid #ffffff;
+    text-align: left;
+    color: #ffffff;
+    font-family:"sans";
+    font-size:12px;
+    font-weight: bold;
 }
-tr.items{
-    cursor: pointer;
-    background-color:#ffffff;
+td.with_data{
+    background:#6666ff;
+    cursor:pointer;
 }
-tr.failed{
-    background-color:#ff9999;
+td.with_data:hover{
+    border:2px solid #0000ff;
 }
-tr.ignored{
+td.without_data{
     background-color:#eeeeee;
     color:#888888;
 }
-tr.no_test{
-    background-color:#eeeeee;
-    color:#444444;
-}
-tr.passed{
-    background-color:#99ffaa;
+td.special_notice{
+    font-size:17px;
 }
 
-th{
-    font-size:12px;
-    text-align: left;
-}
-th.unexfail_value_pass,th.unexfail_value_fail{
-    font-size:12px;
-    text-align:center;
-    font-weight:normal;
-}
-th.unexfail_value_pass{
-    background-color:#99ffaa;
-    color:#006600;
-}
-th.unexfail_value_fail{
-    background-color:#ff9999;
-    color:#660000;
-}
 
+/* Summary details. */
+td.summary_table{
+    padding: 0px;
+    padding-left: 15px;
+    padding-bottom: 15px;
+    border:0px solid;
+}
+table.summary{
+    background-color: inherited;
+    border: 1px solid #ffffff;
+    border-left: 1px solid #0000ff;
+    border-bottom: 1px solid #0000ff;
+    color: #000000;
+}
 th.sum_table_header{
     background-color:#eeeeee;
     padding-top: 5px;
@@ -86,66 +126,3 @@ th.sum_table_header{
     padding-left: 8px;
     padding-right: 8px;
 }
-th.install, th.summary, td.summary{
-    padding-right: 5px;
-    text-align: right;
-}
-th.items, th.items_none{
-    background:#e8e8f8;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
-    color: #0000ff;
-    text-align: left;
-    cursor:pointer;
-}
-th.items:hover{
-    background:#6666ff;
-    color:#ffffff;
-}
-th.items_none{
-    cursor:auto;
-    color: #aaaaaa;
-}
-th.items_none:hover{
-    background:#d4d4f8;
-}
-
-td{
-    font-size:12px;
-    font-weight:normal;
-    text-align:left;
-    vertical-center;
-}
-td.setup_warnings{
-    color: #ff3333;
-    font-weight:normal;
-    text-align:center;
-}
-td.container{
-    border: 1px solid #777777;
-}
-td.blank{
-    width: 5px;
-    background-color:#ffffff;
-}
-td.job{
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color:#777777;
-    text-align:center;
-    color:yellow;
-    font-size:12px;
-    font-weight:normal;
-    width:100%;
-}
-td.desc{
-    font-size:10px;
-}
-td.item_table{
-    background-color:#ffffff;
-    border-left: 10px solid #ffffff;
-    border-bottom: 15px solid #ffffff;
-}
-

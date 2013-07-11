@@ -24,7 +24,7 @@ fi
 #
 # Build table of test case executions summaries.
 #
-. $0.parts/create_exec_summary_tables.sh
+. $0.parts/create_summary_types.sh
 
 #
 # Build the final details web page by substituting the variables into the template.
@@ -33,12 +33,12 @@ fi
 #
 page_title="${JOB_NAME}-${BUILD_NUMBER}"
 
-[ "$TCFAILED" = "0" ] && UNEXFAIL_VALUE="unexfail_value_pass" || UNEXFAIL_VALUE="unexfail_value_fail"
+[ "$UNEX_FAILS" = "0" ] && BUILD_RESULT="pass" || BUILD_RESULT="fail"
 
-if [ "$TCTOTAL" -gt 0 ]
+if [ "$ASSERTS_PASSED" -lt "$ASSERTS_TOTAL" ]
 then
-	PERCENT_PASSED=$(($TCPASS * 100))
-	PERCENT_PASSED=$(($PERCENT_PASSED / $TCTOTAL))
+	PERCENT_PASSED=$(($ASSERTS_PASSED * 100))
+	PERCENT_PASSED=$(($PERCENT_PASSED / $ASSERTS_TOTAL))
 else
     PERCENT_PASSED="100"
 fi
@@ -53,15 +53,15 @@ f_sub_variables_into_webpage    page_title          \
                                 EXTRA_SETUP_DETAILS \
                                 SUMMARIES           \
                                 END_TIME            \
-                                TCFAILED            \
-                                TCPASS              \
-                                TCTOTAL             \
-                                PASSED              \
-                                TOTAL               \
-                                BLOCKED             \
+                                UNEX_PASSES         \
+                                UNEX_FAILS          \
+                                EX_FAILS            \
+                                EX_PASSES           \
+                                ASSERTS_PASSED      \
+                                ASSERTS_TOTAL       \
                                 IGNORED             \
                                 UNWRITTEN           \
-                                UNEXFAIL_VALUE      \
+                                BUILD_RESULT        \
                                 PERCENT_PASSED
                                 
 . $0.parts/build_run_detail_pages.sh

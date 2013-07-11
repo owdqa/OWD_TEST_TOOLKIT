@@ -2,7 +2,7 @@
 # Start the summary table.
 #
 echo "
-            <table class=\"summary_list\">
+            <table class=\"summary\">
                 <tr>"
     
 if [ "$linkme" ]
@@ -27,3 +27,14 @@ else
                     <th class=\"sum_table_header\">Description</th>
                 </tr>"
 fi
+
+#
+# Add the rows and finish the table off.
+#
+cat $HTML_INDEX.tmp
+rm $HTML_INDEX.tmp 2>/dev/null
+
+echo "
+            </table>
+        </td>
+    </tr>"

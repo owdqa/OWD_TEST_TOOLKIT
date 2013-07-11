@@ -18,17 +18,17 @@ _f_run_test(){
 	gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE >$ERR_FILE 2>&1
     line="$(tail -1 $SUM_FILE)"
     test_passes=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $1}')
-    test_failed=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $2}')
+    test_result=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $2}')
     test_total=$(   echo "$line" | awk 'BEGIN{FS="\t"}{print $3}')
 	
-	if [ "$test_failed" = "0" ]
+	if [ "$test_result" = "0" ]
 	then
 		# Passed our tests, but check if marionette reported an error.
 		#
         x=$(egrep -i "error|exception" $ERR_FILE)
         if [ "$x" ]
         then
-        	test_failed="1"
+        	test_result="1"
         fi
 	fi
 }
@@ -46,7 +46,7 @@ _f_2nd_chance(){
     #
     if [ ! "$test_blocked" ] && [ "$OWD_USE_2ND_CHANCE" ]
     then
-	    if [ "$test_failed" != "0" ]
+	    if [ "$test_result" != "0" ]
 	    then
 	    	#
 	    	# This is an ADB 'reboot' (which sometimes solves a
@@ -86,7 +86,7 @@ f_execute_test_file(){
 	#
 	line="$(tail -1 $SUM_FILE)"
 	test_passes=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $1}')
-	test_failed=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $2}')
+	test_result=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $2}')
 	test_total=$(   echo "$line" | awk 'BEGIN{FS="\t"}{print $3}')
 	
 	
@@ -100,7 +100,7 @@ f_execute_test_file(){
 		#
 		# Set the test result status to 'something failed'.
 		#
-		[ "$test_failed" -le 0 ] && test_failed=1
+		[ "$test_result" -le 0 ] && test_result=1
 		
 		#
 		# Append the marionette stacktrace to the end of the details file.
@@ -130,6 +130,6 @@ $(cat $ERR_FILE)
 	#
 	printf "%s\t%s\t%s\t%s\t%s\n" \
 		   "$test_passes"         \
-	       "$test_failed"         \
+	       "$test_result"         \
 		   "$test_total"          > $SUM_FILE	
 }
