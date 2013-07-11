@@ -11,20 +11,18 @@ do
         <base target=\"_blank\">
         <link rel="stylesheet" type="text/css" href="run_html.css">
     </head>
-    <body class=\"details\">" > $fnam.html
+    <body><pre>" > $fnam.html
     
     #
-    # Put the file contents in the html (change newlines to html code etc...).
+    # Put the file contents in the html (change file links to hyperlinks).
     #
-    sed -e "s/$/<br>/" $fnam              | \
-    sed -e "s/ /\&nbsp/g"                 | \
-    sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">"$HTML_WEBDIR/"\2<\/a>,g"  >> $fnam.html
+    sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">"$HTML_WEBDIR/"\2<\/a>,g" $fnam >> $fnam.html
         
     #
     # Finish the file off.
     #
     echo "
-    </body>
+    </pre></body>
 </html>" >> $fnam.html
     
 done

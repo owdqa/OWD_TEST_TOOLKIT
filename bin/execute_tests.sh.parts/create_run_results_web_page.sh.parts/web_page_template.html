@@ -8,7 +8,7 @@
         <script type="text/javascript"> 
             function toggleVisibility(selectedItem){ 
                 // Get a list of content divs 
-                var item_table = document.getElementsByClassName('item_table'); 
+                var item_table = document.getElementsByClassName('summary_table'); 
                   
                 // Loop through all divs and toggle visibility of the selected one.
                 for(var i=0; i<item_table.length; i++){ 
@@ -25,85 +25,41 @@
     
     <body>
     
-    <table>
-	    <tr><td>
-	    
-	        <table class="container width100">
-	            <tr class="install">
-		           <td class="job">
-		           <span class="bold size16">@JOB_NAME@</span> - build: <b>@BUILD_NUMBER@</b></td>
-	            </tr>
-
-                <tr class="install">
-                    <th class="@UNEXFAIL_VALUE@">
-                    <span class="bold size16">@PERCENT_PASSED@</span> of executed test cases passed.</td>
-                </tr>
-	        </table>
-	
-        </td></tr>
-        <tr><td></td></tr>
-	    <tr><td>
-
-	        <table class="width100">
-	            <tr class="install">
-	            <td class="container">
-
-		            <table class="width100">
-				        <tr class="install">
-				            <td class="right">Test cases passed:</th>
-				            <td class="left">@TCPASS@ / @TCTOTAL@</td>
-				        </tr>
-				        <tr class="install">
-				            <td class="right">Test actions passed:</th>
-				            <td class="left">@PASSED@ / @TOTAL@</td>
-				        </tr>
-				        <tr class="install">
-				            <td class="right">Expected failures:</th>
-				            <td class="left">@BLOCKED@</td>
-				        </tr>
-				        <tr class="install">
-				            <td class="right">Ignored test cases:</th>
-				            <td class="left">@IGNORED@</td>
-				        </tr>
-				        <tr class="install">
-				            <td class="right">unwritten test cases:</th>
-				            <td class="left">@UNWRITTEN@</td>
-				        </tr>
-			        </table>
-			        
-	            </td>
-	            
-	            <td class="blank"></td>
-	            
-	            <td class="container top">
-	
-		            <table class="width100">
-			            <tr class="install">
-			                <th class="summary normal">Run time:</th>
-			                <td class="left">@RUN_TIME@ -> @END_TIME@</td>
+        <table class="@BUILD_RESULT@">
+            <tr class="invisible">
+	           <td class="build_header">
+	              @JOB_NAME@ - @BUILD_NUMBER@
+	           </td>
+	        </tr>
+            <tr class="invisible">
+                <td class="invisible center padding5">
+                   @ASSERTS_PASSED@ / @ASSERTS_TOTAL@ total assertions passed (@PERCENT_PASSED@)</td>
+                </td>
+            </tr>
+		    <tr class="invisible">
+                <td>
+		            <table class="invisible width100">
+	                    <tr>
+	                        <td class="build_detail right">Run time:</td>
+	                        <td class="build_detail left">@RUN_TIME@ -> @END_TIME@</td>
+	                    </tr>
+			            <tr>
+			                <td class="build_detail right">Run blocked tests:</td>
+			                <td class="build_detail left">@blocked@</td>
 			            </tr>
-			            <tr class="install">
-			                <th class="install normal">Run blocked tests:</th>
-			                <td class="left">@blocked@</td>
+			            <tr>
+			                <td class="build_detail right">Try fails twice:</td>
+			                <td class="build_detail left">@chance2@</td>
 			            </tr>
-			            <tr class="install">
-			                <th class="install normal">Try fails twice:</th>
-			                <td class="left">@chance2@</td>
-			            </tr>
-                        <tr class="install"><td></td><td></td></tr>
 			            @EXTRA_SETUP_DETAILS@
 		            </table>
-		            
-	            </td>
-	            </tr>
-	        </table>
-        
-    </td></tr>
-    </table>
+                </td>
+	        </tr>
+        </table>
 
     <br>
         
-    <table name="summaries" class="summary_category">
+    <table name="summaries" class="summary_types">
     @SUMMARIES@
     </table>
                 

@@ -49,7 +49,7 @@ done
 #
 # For Jenkins - if we didn't pass every tests then exit as 'fail' (non-zero).
 #
-if [ $TCPASS -lt $TCTOTAL ]
+if [ $UNEX_FAILS -gt 0 ]
 then
     exit 1
 fi

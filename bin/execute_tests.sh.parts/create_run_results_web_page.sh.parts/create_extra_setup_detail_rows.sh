@@ -26,9 +26,9 @@ do
     logdesc=$( echo $logDets | sed -e "s/_/ /g")
 
     EXTRA_SETUP_DETAILS="$EXTRA_SETUP_DETAILS
-            <tr class=\"install\">
-                <th class=\"install normal\">$logtitle:</th>
-                <td>
+            <tr>
+                <td class=\"build_detail right\">$logtitle:</td>
+                <td class=\"build_detail left\">
                     <div title=\"Click this to see the details of this part of the installation.\">
                         <a href=\"./$logname\">
                         $logdesc
@@ -50,9 +50,8 @@ then
 	# We had some warnings during setup - just put up a message.
 	#
     EXTRA_SETUP_DETAILS="$EXTRA_SETUP_DETAILS
-            <tr class=\"install\">
+            <tr>
                 <td colspan=2 class=\"setup_warnings\">
-                <br>
                 <b>NOTE:</b><br>There were some warnings during setup.<br>Check the links above for details.</td>
             </tr>"
 	
