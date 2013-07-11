@@ -40,8 +40,8 @@ edit_messages_icon     = ("id","messages-edit-icon")
 edit_msgs_delete_btn   = ("id","messages-delete-button")
 edit_msgs_sel_all_btn  = ("id","messages-check-all-button")
 
-airplane_warning_header= ("id", "dialog-title")
-airplane_warning_ok    = ("id", "dialog-no")
+airplane_warning_message= ("xpath", "//p/*[contains(text(),'Airplane')]")
+airplane_warning_ok    = ("xpath", "//button[text()='OK']")
 
 header_call_btn                 = ("xpath", "//button[text()='Call']")
 header_send_message_btn         = ("xpath", "//button[text()='Send message']")

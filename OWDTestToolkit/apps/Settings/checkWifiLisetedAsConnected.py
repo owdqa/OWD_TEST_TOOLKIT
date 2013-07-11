@@ -16,7 +16,7 @@ class main(GaiaTestCase):
         # Compare the available networks - if one's connected then check it's the
         # one we expect (starts at array 3).
         #
-        x = self.UTILS.getElements(DOM.Settings.wifi_available_networks, "Available networks list", False, 20, False)
+        x = self.UTILS.getElements(DOM.Settings.wifi_available_networks, "Available networks list", False, 30, False)
         for i in range(3, len(x)):
             connStatus = self.marionette.find_element('xpath', DOM.Settings.wifi_available_status % i)
             connName   = self.marionette.find_element('xpath', DOM.Settings.wifi_available_name   % i)

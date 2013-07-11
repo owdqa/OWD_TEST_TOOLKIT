@@ -25,7 +25,17 @@ else
         # Passed.
         #
         TCPASS=$(($TCPASS+1))
-        [ "$test_blocked" ] && test_failed="*unblock?*" || test_failed=""
+        
+        if [ "$test_blocked" ]
+        then
+        	#
+        	# It's blocked, but it passed!
+        	#
+            test_failed="*unblock?*"
+            TCBLOCKPASS=$(($TCBLOCKPASS+1))
+        else
+            test_failed=""
+        fi
     else
         #
         # Failed.
@@ -33,6 +43,7 @@ else
         if [ "$test_blocked" ]
         then
             test_failed="$BLOCKED_STR"
+            TCBLOCKFAIL=$(($TCBLOCKFAIL+1))
         else
             test_failed="$FAILED_STR"        
             TCFAILED=$(($TCFAILED+1))
@@ -51,7 +62,6 @@ fi
 #
 # It's easier to see all the variables we're setting if I finalize them here!
 #
-export CFAILED=${CFAILED:-"0"}
 export TCPASS=${TCPASS:-"0"}
 export TCFAILED=${TCFAILED:-"0"}
 export TCTOTAL=${TCTOTAL:-"0"}

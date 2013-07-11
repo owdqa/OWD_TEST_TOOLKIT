@@ -64,7 +64,8 @@ f_create_summary_table(){
 #
 # Now 'do it' for these various types ...
 #
-SUMMARIES="$(f_create_summary_table 'failed' 'TCFAILED' 'failed test cases')"
+SUMMARIES="$(f_create_summary_table 'failed' 'TCFAILED' 'unexpected failures')"
+SUMMARIES="$SUMMARIES $(f_create_summary_table 'blocked' 'BLOCKED' 'expected failures')"
 SUMMARIES="$SUMMARIES $(f_create_summary_table 'passed' 'TCPASS' 'passed test cases')"
 SUMMARIES="$SUMMARIES $(f_create_summary_table 'ignored' 'IGNORED' 'ignored test cases')"
 SUMMARIES="$SUMMARIES $(f_create_summary_table 'no_test' 'UNWRITTEN' 'test cases not automated yet')"
