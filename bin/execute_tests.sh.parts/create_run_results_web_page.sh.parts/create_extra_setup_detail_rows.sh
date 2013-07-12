@@ -8,16 +8,17 @@ total_success=0
 while read fnam
 do
 	counter=$(($counter+1))
-    fnam_base=$(basename $fnam)
+	fnam_base=$(basename $fnam)
     logHead=$(echo $fnam_base | awk 'BEGIN{FS="@"}{print $2}')
     logDets=$(echo $fnam_base | awk 'BEGIN{FS="@"}{print $3}')
+    linkFile=${logHead}.html
 
     #
     # Turn this result file into an html file.
     #
     f_convert_textfile_to_html $fnam
-    mv $fnam.html $HTML_FILEDIR
-    
+    mv $fnam.html ${HTML_FILEDIR}/$linkFile
+
     #
     # Split the filename into title and description parts.
     #
@@ -43,7 +44,7 @@ do
                             <td class=\"center\">:</td>
                             <td class=\"build_detail left\">
                                 <div title=\"$title_str\">
-                                    <a href=\"./$fnam_base.html\">
+                                    <a href=\"./$linkFile\">
                                     $logdesc
                                     </a>
                                 </div>
