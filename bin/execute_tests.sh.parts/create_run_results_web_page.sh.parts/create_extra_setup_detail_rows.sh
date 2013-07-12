@@ -39,7 +39,8 @@ do
 	    
     TMP_ROWS="$TMP_ROWS
                         <tr class=\"$setup_success\">
-                            <td class=\"setup_title\"><b>$counter.</b> $logtitle:</td>
+                            <td class=\"left\"><b>$counter.</b> $logtitle</td>
+                            <td class=\"center\">:</td>
                             <td class=\"build_detail left\">
                                 <div title=\"$title_str\">
                                     <a href=\"./$fnam_base.html\">

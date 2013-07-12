@@ -75,9 +75,6 @@ tr.setup_ok{
     outline:1px solid #ffffff;
     color:#11aa33;
 }
-td.setup_title{
-    text-align:right;
-}
 td.extra_info_ok{
     background-color: #eeffee;
     padding: 4px;
