@@ -1,7 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
 import  addContactToThisSMS                ,\
-        addNumberInToField                 ,\
+        addNumbersInToField                 ,\
         checkAirplaneModeWarning           ,\
         checkIsInToField                   ,\
         checkNumberIsInToField             ,\
@@ -43,7 +43,7 @@ import  addContactToThisSMS                ,\
 
 class Messages (
             addContactToThisSMS.main,
-            addNumberInToField.main,
+            addNumbersInToField.main,
             checkAirplaneModeWarning.main,
             checkIsInToField.main,
             checkNumberIsInToField.main,
