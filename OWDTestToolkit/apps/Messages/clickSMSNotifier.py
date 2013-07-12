@@ -16,7 +16,7 @@ class main(GaiaTestCase):
         x=( DOM.Messages.statusbar_new_sms[0],
             DOM.Messages.statusbar_new_sms[1] % p_num)
         x = self.UTILS.getElement(x, "Statusbar notification for " + p_num)
-        x.click()
+        x.tap()
 
         #
         # Switch back to the messaging app.
