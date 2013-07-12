@@ -14,6 +14,8 @@ ME=$(basename $0)
 #LOGFILE=${LOGFILE:-"/tmp/_$ME.log"}
 export LOGFILE=${RESULT_DIR}/@Get_Jira_test_ids@Click_here_for_details
 
+echo "Gathering Jira ids for the requested user story (if it exists)." > $LOGFILE
+
 #
 # Get the jira id's for the user stories.
 #
@@ -34,22 +36,24 @@ else
     	   #
     	   # Run 'everything'.
     	   #
+    	   echo "'REGRESSION' requested - get all jira ids for all known user stories ..." >> $LOGFILE
     	   for i in "${JIRA_PARENTS[@]}"
            do
                $0 $(echo "$i" | awk '{print $1}')
            done;;
            
-        "SMOKE")  
+        "SMOKE")
            #
            # Run smoketests.
            #
-           # NOT SET UP YET, WE NEED THE JIRA PARENT ID FOR THIS!!!
+           echo "'SMOKE' requested - THIS IS NOT SET UP YET, WE NEED THE JIRA PARENT ID FOR THIS!!!" >> $LOGFILE
            ROOTIDs="";;
            
         *)
            #
            # Run all test cases for this particular type.
-           #           
+           #    
+           echo "$TYPE requested - gathering all ids for this ..." >> $LOGFILE       
            for i in "${JIRA_PARENTS[@]}"
            do
                PARENT=$(echo "$i" | awk '{print $1}')
@@ -64,13 +68,18 @@ else
     esac
 fi
 
-[ ! "$ROOTIDs" ] && exit
+if [ ! "$ROOTIDs" ]
+then
+	echo "WARNING: No user stories found for this selection." >> $LOGFILE
+	exit
+fi
 
 #
 # We may have more than one ROOTID for this type ...
 #
 for ROOTID in $(echo "$ROOTIDs")
 do
+	echo "Getting ID's from Jira for user story #$ROOTID ..." >> $LOGFILE
 	#
 	# Go to JIRA and get the ids (requires you to be in the intranet or VPN).
 	#
