@@ -22,7 +22,7 @@ f_create_summary_table(){
             COUNT="$UNEX_PASSES"
             linkme="Y"
             pass_or_fail="pass"
-            tooltip="We were expecting these to fail - perhaps they are no longer blocked? Please investigate."
+            tooltip="We were expecting these to fail - if any test cases are listed here, please investigate."
             DESC="unexpected passes";;
     	"3")
             TYPE="$EX_FAILS_STR"
@@ -50,7 +50,7 @@ f_create_summary_table(){
             COUNT="$UNWRITTEN"
             linkme=""
             pass_or_fail="neutral"
-            tooltip="Test cases that have not automated yet."
+            tooltip="Test cases that have not been automated yet."
             DESC="unwritten test cases";;
     esac
             

@@ -11,7 +11,8 @@ CACHE_BASE=$HOME/tmp/_jira_test_cases
 [ ! -d "$HOME/tmp" ] && mkdir $HOME/tmp
 
 ME=$(basename $0)
-LOGFILE=${LOGFILE:-"/tmp/_$ME.log"}
+#LOGFILE=${LOGFILE:-"/tmp/_$ME.log"}
+export LOGFILE=${RESULT_DIR}/@Get_Jira_test_ids@Click_here_for_details
 
 #
 # Get the jira id's for the user stories.
@@ -106,19 +107,17 @@ x=$(wc -l $CACHE_BASE.$TYPE.tmp 2>/dev/null | awk '{print $1}')
 if [ "$x" == "0" ]
 then
 	#
-	# Update the 'setup warnings' file and try using the cache.
+	# Try using the cache.
 	#
-	$OWD_TEST_TOOLKIT_BIN/add_runtime_setup_warning.sh "Could not get jira test case id's from Jira system." 
-	
 	rm $CACHE_BASE.$TYPE.tmp
-	printf "$0: WARNING - Unable to return Jira test cases for $TYPE, trying cache ..." >> $LOGFILE
+	printf "\nERROR - Unable to return Jira test cases for $TYPE, trying cache ..." >> $LOGFILE
 	
 	if [ -f $CACHE_BASE.$TYPE ]
 	then
 		cat $CACHE_BASE.$TYPE
-        printf "$0:           Sucess!\n\n" >> $LOGFILE
+        printf "\n         Sucess!\n\n" >> $LOGFILE
 	else
-	    printf "$0:           Failed!! Cannot find test cases in jira cache for $TYPE, sorry!\n\n" >> $LOGFILE
+	    printf "\n         Failed!! Cannot find test cases in jira cache for $TYPE, sorry!\n\n" >> $LOGFILE
 	    exit 1
 	fi
 else

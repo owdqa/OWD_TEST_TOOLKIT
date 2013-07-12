@@ -9,10 +9,10 @@ a:active  {color:#0000ff;text-decoration:none;}
 .width100 { width: 100%;        }
 .size10   { font-size: 10px;    }
 .padding5 { padding:5px;        }
-.pass     { background-color: #99ffaa; color:#006600; }
+.pass     { background-color: #99ffcc; color:#006600; }
 .fail     { background-color: #ffaaaa; color:#660000; }
 .neutral  { background-color: #ffffaa; color:#222222; }
-
+.black    { color: black;       }
 
 /* High-level settings. */
 body{  background-color:#ffffff;}
@@ -39,12 +39,6 @@ pre{
 
 
 /* Main header info (build config details etc..). */
-table.build_pass,table.build_fail{
-    padding: 2px;
-    text-align:center;
-    font-size:12px;
-    font-weight:normal;
-}
 td.build_header{
     padding: 10px;
     padding-bottom: 5px;
@@ -61,12 +55,36 @@ td.build_detail{
     border: 0px solid;
     color:inherit;
 }
-td.setup_warnings{
-    color: #ff3333;
-    font-weight:normal;
+table.extra_info{
+    background-color: #ffffff; 
+    padding: 3px;
+}
+
+td.extra_info_ok, td.extra_info_warnings{
+    color:#0000ee;
     text-align:center;
-    padding: 5px;
-    border: 5px solid #ff0000;
+}
+tr.setup_warnings,tr.setup_ok{
+    background-color: #ffffff;
+}
+tr.setup_warnings{
+    outline:1px solid #ff0000;
+    color:#ff0000;
+}
+tr.setup_ok{
+    outline:1px solid #ffffff;
+    color:#11aa33;
+}
+td.setup_title{
+    text-align:right;
+}
+td.extra_info_ok{
+    background-color: #eeffee;
+    padding: 4px;
+}
+td.extra_info_warnings{
+    background-color: #ffeeee;
+    padding: 4px;
 }
 
 

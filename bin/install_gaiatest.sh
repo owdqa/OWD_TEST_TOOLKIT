@@ -50,12 +50,24 @@ printf "\n====================================================\n" | tee -a $LOGF
 printf "\n* Cloning gaiatest from github - this make take a few minutes, please wait ...\n\n" | tee -a $LOGFILE
 git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>&1
 
+
+#
 # Install gaiatest.
+#
 cd gaia-ui-tests
+
+#
+# Switch to correct branch.
+#
 printf "\n* Switching to branch \"$BRANCH\" of gaiatest ...\n\n" | tee -a $LOGFILE
 git checkout $BRANCH  2> >( tee -a $LOGFILE)
+
+#
+# Install gaiatest and dependencies.
+#
 printf "\n* Installing gaiatest for branch \"$(git branch | grep '*')\" ...\n\n" | tee -a $LOGFILE
 sudo python setup.py develop >> $LOGFILE 2>&1
+
 
 #
 # Sometimes a bad network connection causes an error in this installation.
@@ -76,8 +88,7 @@ then
 		#
 		# This one failed too - exit with an error code, so the test run knows the situation.
 		#
-		echo "Failed 2nd attempt to install gaiatest properly! See $LOGFILE for details."
-		$OWD_TEST_TOOLKIT_BIN/add_runtime_setup_warning.sh "Error while installing gaiatest dependencies."
+		echo "ERROR: Failed 2nd attempt to install gaiatest properly! See $LOGFILE for details."
 		exit 1
 	else
 		#

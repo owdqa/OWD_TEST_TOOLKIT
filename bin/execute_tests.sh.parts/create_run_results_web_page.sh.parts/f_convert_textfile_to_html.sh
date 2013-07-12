@@ -1,10 +1,13 @@
 #
-# Create html versions of all the test case execution detail files.
+# Create html version of the flat text file that is passed in.
 #
-ls $RESULT_DIR/*_detail 2>/dev/null | while read fnam
-do
+f_convert_textfile_to_html(){
+	
+	fnam=$1
+	
     #
-    # Add some header info.
+    # Add some header info and make this a 'pre' (maintains any leading spaces and
+    # lets us use our css styling for font etc...).
     #
     echo "<html>
     <head>
@@ -14,7 +17,7 @@ do
     <body><pre>" > $fnam.html
     
     #
-    # Put the file contents in the html (change file links to hyperlinks).
+    # Put any possible 'real files' listed in here in a hyperlink.
     #
     sed -e "s,\("$RESULT_DIR"\/\)\([^<]*\),<a href=\"\2\">"$HTML_WEBDIR/"\2<\/a>,g" $fnam >> $fnam.html
         
@@ -25,4 +28,4 @@ do
     </pre></body>
 </html>" >> $fnam.html
     
-done
+}
