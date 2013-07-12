@@ -55,6 +55,7 @@ PERCENT_PASSED="$PERCENT_PASSED%"
 f_sub_variables_into_webpage    page_title          \
                                 JOB_NAME            \
                                 BUILD_NUMBER        \
+                                RUN_INPUT_LIST      \
                                 RUN_TIME            \
                                 blocked             \
                                 chance2             \
@@ -70,7 +71,7 @@ f_sub_variables_into_webpage    page_title          \
                                 IGNORED             \
                                 UNWRITTEN           \
                                 BUILD_RESULT        \
-                                PERCENT_PASSED
+                                PERCENT_PASSED      
                                 
 
 #

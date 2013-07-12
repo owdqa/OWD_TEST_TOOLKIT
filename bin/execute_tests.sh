@@ -2,6 +2,8 @@
 #
 # Manage the execution and reporting of all required tests.
 #
+export RUN_INPUT_LIST="$@"
+
 . $0.parts/set_up_parameters.sh
 
 . $0.parts/process_parameters_file.sh
