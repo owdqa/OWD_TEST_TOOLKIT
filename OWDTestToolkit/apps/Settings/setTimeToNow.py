@@ -18,7 +18,7 @@ class main(GaiaTestCase):
          
         x = ("id", "clock-date")
         el = self.UTILS.getElement(x, "Date setting")
-        el.click()
+        el.tap()
          
         time.sleep(2)        
         self.marionette.switch_to_frame()

@@ -15,3 +15,9 @@ class main(GaiaTestCase):
         
         self.UTILS.TEST(self.check_page_loaded(p_url), "Web page loaded correctly.")
         
+        #
+        # Take a screenshot.
+        #
+        fnam = self.UTILS.screenShotOnErr()
+        self.UTILS.logResult("info", "Screenshot:|" + fnam[1])
+        
