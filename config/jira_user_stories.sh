@@ -31,8 +31,8 @@ JIRA_PARENTS=(
 "CONTACTS        26946 27032"
 "DIALER          26945 27004"
 "OTA             26944"
-"MMS             27003"
 "SMS             26942 26940"
 "OTHER_FEATURES  25657"
 )
 
+#"MMS             27003" #(empty at the moment)
