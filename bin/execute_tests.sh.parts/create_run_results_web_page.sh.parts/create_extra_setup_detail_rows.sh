@@ -17,7 +17,7 @@ do
     # Turn this result file into an html file.
     #
     f_convert_textfile_to_html $fnam
-    mv $fnam.html ${HTML_FILEDIR}/$linkFile
+    cp $fnam.html ${HTML_FILEDIR}/$linkFile
 
     #
     # Split the filename into title and description parts.
