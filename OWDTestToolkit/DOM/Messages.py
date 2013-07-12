@@ -39,6 +39,7 @@ message_header         = ("id", "messages-header-text")
 received_messages      = ('xpath', "//li[@class='bubble'][a[@class='received']]")
 edit_messages_icon     = ("id","messages-edit-icon")
 edit_msgs_delete_btn   = ("id","messages-delete-button")
+edit_msgs_header       = ("id","messages-edit-mode")
 edit_msgs_sel_all_btn  = ("id","messages-check-all-button")
 
 airplane_warning_message= ("xpath", "//p/*[contains(text(),'Airplane')]")
