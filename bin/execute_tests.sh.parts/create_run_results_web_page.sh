@@ -33,9 +33,17 @@ fi
 #
 page_title="${JOB_NAME}-${BUILD_NUMBER}"
 
+#
+# Using only the 'unexpected fails' means the build can 'pass'
+# even if there are expected failures (i.e. blocked tests that
+# fail will not 'fail' the entire build).
+#
+UNEX_FAILS=${UNEX_FAILS:-"0"}
 [ "$UNEX_FAILS" = "0" ] && BUILD_RESULT="pass" || BUILD_RESULT="fail"
 
-if [ "$ASSERTS_PASSED" -lt "$ASSERTS_TOTAL" ]
+ASSERTS_PASSED=${ASSERTS_PASSED:-0}
+ASSERTS_TOTAL=${ASSERTS_TOTAL:-0}
+if [ $ASSERTS_PASSED -lt $ASSERTS_TOTAL ]
 then
 	PERCENT_PASSED=$(($ASSERTS_PASSED * 100))
 	PERCENT_PASSED=$(($PERCENT_PASSED / $ASSERTS_TOTAL))
@@ -64,7 +72,15 @@ f_sub_variables_into_webpage    page_title          \
                                 BUILD_RESULT        \
                                 PERCENT_PASSED
                                 
-. $0.parts/build_run_detail_pages.sh
+
+#
+# Convert the run detail pages into html.
+#
+ls $RESULT_DIR/*_detail 2>/dev/null | while read fnam
+do
+    f_convert_textfile_to_html $fnam
+done
+
     
 ##########################################################################
 #

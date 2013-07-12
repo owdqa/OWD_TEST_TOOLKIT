@@ -33,6 +33,7 @@ HTML_WEBDIR="http://owd-qa-server/owd_tests/$RUN_ID"
 # Functions for this script.
 #
 . $0.parts/f_sub_variables_into_webpage.sh
+. $0.parts/f_convert_textfile_to_html.sh
 
 #
 # Some final variables before we start.

@@ -33,7 +33,8 @@
 	        </tr>
             <tr class="invisible">
                 <td class="invisible center padding5">
-                   @ASSERTS_PASSED@ / @ASSERTS_TOTAL@ total assertions passed (@PERCENT_PASSED@)</td>
+                   (<b>@ASSERTS_PASSED@</b> / <b>@ASSERTS_TOTAL@</b> total assertions passed:
+                   <b>@PERCENT_PASSED@</b> success)
                 </td>
             </tr>
 		    <tr class="invisible">
@@ -51,6 +52,7 @@
 			                <td class="build_detail right">Try fails twice:</td>
 			                <td class="build_detail left">@chance2@</td>
 			            </tr>
+			            <tr class="invisible"><td> </td></tr>
 			            @EXTRA_SETUP_DETAILS@
 		            </table>
                 </td>

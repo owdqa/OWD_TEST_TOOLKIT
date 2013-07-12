@@ -1,58 +1,79 @@
 #
-# Build dynamic list of other installation details.
+# Build dynamic list of other installation details (in the order that they happened).
 #
-EXTRA_SETUP_DETAILS=""
+
+TMP_ROWS=""
+counter=0
+total_success=0
 while read fnam
 do
-    tmp=$(basename $fnam)
-    logHead=$(echo $tmp | awk 'BEGIN{FS="@"}{print $2}')
-    logDets=$(echo $tmp | awk 'BEGIN{FS="@"}{print $3}')
-    logfile=$HTML_FILEDIR/$logHead.html
-    logname=$(basename $logfile)
+	counter=$(($counter+1))
+    fnam_base=$(basename $fnam)
+    logHead=$(echo $fnam_base | awk 'BEGIN{FS="@"}{print $2}')
+    logDets=$(echo $fnam_base | awk 'BEGIN{FS="@"}{print $3}')
 
     #
     # Turn this result file into an html file.
     #
-    echo "<html>
-    <head>
-        <base target=\"_blank\">
-        <link rel="stylesheet" type="text/css" href="run_html.css">
-    </head>
-    <body class=\"details\">" > $logfile
-    sed -e "s/$/<br>/" $fnam | \
-    sed -e "s/ /\&nbsp/g"    >> $logfile
+    f_convert_textfile_to_html $fnam
+    mv $fnam.html $HTML_FILEDIR
     
+    #
+    # Split the filename into title and description parts.
+    #
     logtitle=$(echo $logHead | sed -e "s/_/ /g")
     logdesc=$( echo $logDets | sed -e "s/_/ /g")
 
-    EXTRA_SETUP_DETAILS="$EXTRA_SETUP_DETAILS
-            <tr>
-                <td class=\"build_detail right\">$logtitle:</td>
-                <td class=\"build_detail left\">
-                    <div title=\"Click this to see the details of this part of the installation.\">
-                        <a href=\"./$logname\">
-                        $logdesc
-                        </a>
-                    </div>
-                </td>
-            </tr>"
+    #
+	# Check for warnings.
+	#
+	setup_success="setup_ok"
+	title_str="Click this to see the details of this part of the installation."
+	x=$(grep -i error $fnam)
+	if [ "$x" ]
+	then
+		setup_success="setup_warnings"
+		total_success=1
+		title_str="WARNING: Problems were reported during this part of the installation."
+	fi
+	    
+    TMP_ROWS="$TMP_ROWS
+                        <tr class=\"$setup_success\">
+                            <td class=\"setup_title\"><b>$counter.</b> $logtitle:</td>
+                            <td class=\"build_detail left\">
+                                <div title=\"$title_str\">
+                                    <a href=\"./$fnam_base.html\">
+                                    $logdesc
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>"
 
 done <<EOF
 $(ls -lrt $RESULT_DIR/@* | awk '{print $NF}')
 EOF
 
-#
-# Check for warnings.
-#
-if [ -s $RUNTIME_WARNINGS ]
+if [ "$total_success" = "0" ]
 then
-	#
-	# We had some warnings during setup - just put up a message.
-	#
-    EXTRA_SETUP_DETAILS="$EXTRA_SETUP_DETAILS
-            <tr>
-                <td colspan=2 class=\"setup_warnings\">
-                <b>NOTE:</b><br>There were some warnings during setup.<br>Check the links above for details.</td>
-            </tr>"
-	
+    extra_info_success="extra_info_ok"
+else
+    warning_str="<br>(<b>WARNING:</b> problems found!)"
+    extra_info_success="extra_info_warnings"
 fi
+
+EXTRA_SETUP_DETAILS="
+            <tr>
+                <td class=\"$extra_info_success\" colspan=2>
+                    <div style=\"cursor:pointer;padding:5px;\"
+                         onclick=\"toggleVisibility('setup_details')\"
+                         title=\"Click here to see the setup and installation results.\">
+                        Click here to show / hide installation and setup details $warning_str
+                    </div>
+                    <table class=\"summary_table extra_info\" id=\"setup_details\" style=\"display:none\">
+                       <tr class=\"invisible\"><td> </td></tr>
+                       $TMP_ROWS
+                       </tr>
+                    </table>
+                </td>
+            </tr>"
+                    
