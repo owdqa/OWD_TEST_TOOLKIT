@@ -30,12 +30,12 @@ do
 	#
 	setup_success="setup_ok"
 	title_str="Click this to see the details of this part of the installation."
-	x=$(grep -i error $fnam)
+	x=$(egrep -i "error|warning" $fnam)
 	if [ "$x" ]
 	then
 		setup_success="setup_warnings"
 		total_success=1
-		title_str="WARNING: Problems were reported during this part of the installation."
+		title_str="WARNING: Possible issues were reported during this part of the installation."
 	fi
 	    
     TMP_ROWS="$TMP_ROWS
@@ -59,7 +59,7 @@ if [ "$total_success" = "0" ]
 then
     extra_info_success="extra_info_ok"
 else
-    warning_str="<br>(<b>WARNING:</b> problems found!)"
+    warning_str="<br>(<b>WARNING:</b> possible issues detected!)"
     extra_info_success="extra_info_warnings"
 fi
 
