@@ -11,7 +11,7 @@ f_create_summary_table(){
     case "$TYPE" in
     	"1")
             TYPE="$UNEX_FAILS_STR"
-            COUNT="$UNEX_FAILS"
+            COUNT=${UNEX_FAILS:-0}
             linkme="Y"
             pass_or_fail="fail"
             special_notice="special_notice"
@@ -19,35 +19,35 @@ f_create_summary_table(){
             DESC="unexpected failures";;
         "2")
             TYPE="$UNEX_PASSES_STR"
-            COUNT="$UNEX_PASSES"
+            COUNT=${UNEX_PASSES:-0}
             linkme="Y"
             pass_or_fail="pass"
             tooltip="We were expecting these to fail - if any test cases are listed here, please investigate."
             DESC="unexpected passes";;
     	"3")
             TYPE="$EX_FAILS_STR"
-            COUNT="$EX_FAILS"
+            COUNT=${EX_FAILS:-0}
             linkme="Y"
             pass_or_fail="fail"
             tooltip="Expected failures (blocked by other bugs etc...)."
             DESC="expected failures";;
         "4")
             TYPE="$EX_PASSES_STR"
-            COUNT="$EX_PASSES"
+            COUNT=${EX_PASSES:-0}
             linkme="Y"
             pass_or_fail="pass"
             tooltip="Test cases which passed."
             DESC="expected passes";;
         "5")
             TYPE="$IGNORED_STR"
-            COUNT="$IGNORED"
+            COUNT=${IGNORED:-0}
             linkme=""
             pass_or_fail="neutral"
             tooltip="Test cases we ignored during this run."
             DESC="ignored test cases";;
         "6")
             TYPE="$UNWRITTEN_STR"
-            COUNT="$UNWRITTEN"
+            COUNT=${UNWRITTEN:-0}
             linkme=""
             pass_or_fail="neutral"
             tooltip="Test cases that have not been automated yet."
