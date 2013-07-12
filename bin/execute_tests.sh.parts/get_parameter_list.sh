@@ -45,6 +45,7 @@ include_count=${#INCLUDE_LIST[@]}
 # Function to add variable names to the inclusion array.
 #
 addToArray(){
+
 	INCLUDE_LIST[$include_count]="$1"
     include_count=${#INCLUDE_LIST[@]}
 }
@@ -95,7 +96,7 @@ getVariables(){
         sed -e "s/^.*get_os_variable//" | \
         grep "(\""                      | \
         awk '{FS=","}{print $1}'        | \
-        sed -e "s/[()\"]//g")
+        sed -e "s/[]()\"]//g")
 EOF
 }
 

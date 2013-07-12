@@ -6,6 +6,7 @@ create_new_message_btn = ('id', 'icon-add')
 
 type_and_carrier_field = ("xpath", "//*[@id='contact-carrier']")
 
+target_numbers_empty   = ("xpath", "//*[@id='messages-recipients-list']/span[@data-number='']")
 target_numbers         = ("xpath", "//*[@id='messages-recipients-list']/span")
 add_contact_button     = ("id", "messages-contact-pick-button")
 cancel_add_contact     = ("id", "cancel_activity")

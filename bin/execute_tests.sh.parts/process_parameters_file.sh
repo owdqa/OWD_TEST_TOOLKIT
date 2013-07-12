@@ -32,7 +32,6 @@ then
 #
 # There must be no space between the = and your value.
 #
-OWD_XREF_FILE=$OWD_TEST_TOOLKIT_BIN/../owd_test_cases/Docs/xref_tests_table.txt
 " > $params_file
 fi
 

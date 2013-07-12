@@ -12,10 +12,9 @@ class main(GaiaTestCase):
         self.startNewSMS()
         
         #
-        # Enter the number.
+        # Enter the numbers.
         #
-        for p_num in p_nums:
-            self.addNumberInToField(p_num)
+        self.addNumbersInToField(p_nums)
             
         #
         # The header should now say how many receipients.
