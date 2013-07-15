@@ -14,7 +14,7 @@ ME=$(basename $0)
 #LOGFILE=${LOGFILE:-"/tmp/_$ME.log"}
 export LOGFILE=${RESULT_DIR}/@Get_Jira_test_ids@Click_here_for_details
 
-echo "Gathering Jira ids for the requested user story (if it exists)." > $LOGFILE
+echo "Gathering Jira ids for $TYPE (if it exists)." > $LOGFILE
 
 #
 # Get the jira id's for the user stories.
