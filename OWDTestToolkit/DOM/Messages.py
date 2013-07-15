@@ -22,6 +22,7 @@ header_back_button     = ("id","messages-back-button")
 
 threads                = ("xpath", "//p[@class='name']")
 threads_list           = ('xpath', '//article[@id="threads-container"]//li')
+thread_target_names    = ('xpath', '//article[@id="threads-container"]//li//p[@class="name"]')
 thread_selector_xpath  = "//*[@id='threads-container']//li//a/p[contains(text(),'%s')]"
 thread_timestamp_xpath = thread_selector_xpath + "/..//time"
 no_threads_message     = ("id", "no-result-message")

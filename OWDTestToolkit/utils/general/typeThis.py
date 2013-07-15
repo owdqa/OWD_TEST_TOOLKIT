@@ -69,6 +69,7 @@ class main(GaiaTestCase):
             # Type the string.
             #
             self.parent.keyboard.send(p_str)
+        
              
         #
         # Tap ENTER on the keyboard (helps to remove the kayboard even if
