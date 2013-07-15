@@ -8,6 +8,7 @@ import  clearGeolocPermission,\
         selectFromSystemDialog,\
         setupDataConn,\
         switch_24_12,\
+        setTimeToSpecific,\
         setSetting
         
 class main ( 
@@ -19,6 +20,7 @@ class main (
             selectFromSystemDialog.main,
             setupDataConn.main,
             switch_24_12.main,
+            setTimeToSpecific.main,
             setSetting.main):
 
     def __init__(self):
