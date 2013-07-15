@@ -10,12 +10,13 @@ class main(GaiaTestCase):
         h = str(p_hour)
         m = str(p_minute)
         s = str(p_seconds)
+        
         _seconds_since_epoch = self.marionette.execute_script("""
                 var today = new Date();
                 var yr = today.getFullYear();
                 var mth = today.getMonth();
                 var day = today.getDate();
-                return new Date(yr, mth, day, " + h + ", " + m + ", " + s + ").getTime();""")
+                return new Date(yr, mth, day, %s, %s, %s).getTime();""" % (h, m, s) )
 
         self.today = datetime.datetime.fromtimestamp(_seconds_since_epoch / 1000)
 
