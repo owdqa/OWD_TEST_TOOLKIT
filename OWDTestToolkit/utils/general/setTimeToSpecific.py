@@ -2,25 +2,46 @@ from OWDTestToolkit.global_imports import *
     
 class main(GaiaTestCase):
 
-    def setTimeToSpecific(self, p_hour, p_minute, p_seconds):
+    def setTimeToSpecific(self, p_hour, p_minute):
         #
         # Sets the device time to a specific time based on the parameters
         # (hour is in 24 hour format).
         #
         h = str(p_hour)
         m = str(p_minute)
-        s = str(p_seconds)
+        
+        self.logResult("info", "h: " + h + ", m: " + m)
         
         _seconds_since_epoch = self.marionette.execute_script("""
                 var today = new Date();
                 var yr = today.getFullYear();
                 var mth = today.getMonth();
                 var day = today.getDate();
-                return new Date(yr, mth, day, %s, %s, %s).getTime();""" % (h, m, s) )
+                return new Date(yr, mth, day, %s, %s, 1).getTime();""" % (h, m) )
 
         self.today = datetime.datetime.fromtimestamp(_seconds_since_epoch / 1000)
 
         # set the system date to the time
         self.data_layer.set_time(_seconds_since_epoch)
+        
+        #
+        # I can't find a setting to justgetthe device time, so I look at the clock
+        # in the homescreen.
+        #
+        myFrame = self.currentIframe()
+        self.switchToFrame(*DOM.Home.frame_locator)
+        
+        if p_minute < 10:
+            m = m.zfill(2)
+            
+        x = self.switch_24_12(p_hour)
+        h = str(x[0])
+        ampm = x[1]
+            
+        self.waitForElements( ("xpath", "//*[@id='landing-clock']/span[@class='numbers' and text()='" + h + ":" + m + "']"), 
+                                    "Device showing current time is now " + h + ":" + m, False, 150)
 
-    
+        self.waitForElements( ("xpath", "//*[@id='landing-clock']/span[@class='meridiem' and text()='" + ampm + "'])"), False, 5)
+
+
+        self.switchToFrame(myFrame)
