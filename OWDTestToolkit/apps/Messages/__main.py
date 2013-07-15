@@ -39,6 +39,8 @@ import  addContactToThisSMS                ,\
         header_call                        ,\
         header_createContact               ,\
         waitForReceivedMsgInThisThread     ,\
+        waitForNewSMSPopup_by_msg          ,\
+        waitForNewSMSPopup_by_number       ,\
         waitForSMSNotifier                 
 
 class Messages (
@@ -81,6 +83,8 @@ class Messages (
             timeOfLastMessageInThread.main,
             timeOfThread.main,
             waitForReceivedMsgInThisThread.main,
+            waitForNewSMSPopup_by_msg.main,
+            waitForNewSMSPopup_by_number.main,
             waitForSMSNotifier.main):
     
     def __init__(self, p_parent):
