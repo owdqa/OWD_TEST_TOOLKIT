@@ -21,7 +21,13 @@ class main(GaiaTestCase):
 
         self.waitForPageToFinishLoading()
         self.UTILS.switchToFrame(*DOM.Browser.website_frame, p_viaRootFrame=False)
-        
+
+		#
+		# Take a screenshot.
+		#
+        fnam = self.UTILS.screenShotOnErr()
+        self.UTILS.logResult("info", "Screenshot:|" + fnam[1])
+		        
 #         time.sleep(10)
 
         try:
