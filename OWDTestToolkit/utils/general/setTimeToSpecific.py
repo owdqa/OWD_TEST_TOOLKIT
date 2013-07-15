@@ -41,7 +41,8 @@ class main(GaiaTestCase):
         self.waitForElements( ("xpath", "//*[@id='landing-clock']/span[@class='numbers' and text()='" + h + ":" + m + "']"), 
                                     "Device showing current time is now " + h + ":" + m, False, 150)
 
-        self.waitForElements( ("xpath", "//*[@id='landing-clock']/span[@class='meridiem' and text()='" + ampm + "'])"), False, 5)
+        self.waitForElements( ("xpath", "//*[@id='landing-clock']/span[@class='meridiem' and text()='" + ampm + "'])"), 
+                              "AM/PM setting is correct", False, 5)
 
 
         self.switchToFrame(myFrame)
