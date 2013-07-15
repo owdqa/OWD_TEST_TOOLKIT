@@ -7,6 +7,8 @@ class main(GaiaTestCase):
         # Waits for a new SMS popup notification which
         # is from this 'p_num' number.
         #
+        myIframe = self.UTILS.currentIframe()
+        
         self.marionette.switch_to_frame()
         x = (DOM.Messages.new_sms_popup_num[0], DOM.Messages.new_sms_popup_num[1] % str(p_num))
         self.UTILS.waitForElements( x,
@@ -14,3 +16,4 @@ class main(GaiaTestCase):
 									True,
 									30)
 
+        self.UTILS.switch_to_frame("src", myIframe)
