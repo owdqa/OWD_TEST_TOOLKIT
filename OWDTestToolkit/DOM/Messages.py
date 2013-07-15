@@ -1,6 +1,8 @@
 frame_locator          = ('src', 'sms')
 
 statusbar_new_sms      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'%s')]")
+new_sms_popup_msg      = ("xpath", "//div[@id='toaster-detail' and contains(text(),'%s')]")
+new_sms_popup_num      = ("xpath", "//div[@id='toaster-title' and contains(text(),'%s')]")
 lockscreen_notif_xpath = "//*[@id='desktop-notifications-container']//div[contains(text(),'%s')]"
 create_new_message_btn = ('id', 'icon-add')
 
