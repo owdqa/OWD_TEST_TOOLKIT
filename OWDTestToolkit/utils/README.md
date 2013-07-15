@@ -313,6 +313,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>setTimeToSpecific</td>
+        <td align=left>p_hour<br>p_minute<br>p_seconds</td>
+        <td align=left>Sets the device time to a specific time based on the parameters  (hour is in 24 hour format).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>get_os_variable</td>
         <td align=left>p_name<br>p_validate=True</td>
         <td align=left>Get a variable from the OS.</td>
