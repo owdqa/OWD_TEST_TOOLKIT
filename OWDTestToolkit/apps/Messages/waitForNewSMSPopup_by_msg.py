@@ -16,4 +16,4 @@ class main(GaiaTestCase):
 									True,
 									30)
 
-        self.UTILS.switch_to_frame("src", myIframe)
+        self.UTILS.switchToFrame("src", myIframe)
