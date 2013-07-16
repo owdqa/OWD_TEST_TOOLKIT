@@ -14,8 +14,7 @@ export TEST_TYPE=${3:-"REGRESSION"}
 
 . $0.parts/install_toolkit_and_test_cases.sh
 
-printf "\n\nROY NOT FLASHING!\n\n"
-#. $0.parts/flash_device.sh
+. $0.parts/flash_device.sh
 
 
 #
@@ -30,7 +29,7 @@ then
 	./run_tests.sh $TEST_LIST
 elif [ "$TEST_TYPE" = "ROYTEST" ]
 then
-	./run_tests.sh 26849
+	./run_tests.sh 123456
 else
 	./run_tests.sh $TEST_TYPE
 fi
