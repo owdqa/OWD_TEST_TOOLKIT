@@ -8,4 +8,9 @@ class main(GaiaTestCase):
         #
         p_field.clear()
         p_field.send_keys(p_str)
+        
+        #
+        # Verify this value is now in this field.
+        #
+        self.UTILS.TEST(p_field.text == p_str, "This field now contains '%s'." % p_str)
 

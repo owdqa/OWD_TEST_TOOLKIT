@@ -44,7 +44,7 @@ class main(GaiaTestCase):
         ampm = x[1]
             
         self.waitForElements( ("xpath", "//*[@id='landing-clock']/span[@class='numbers' and text()='" + h + ":" + m + "']"), 
-                                    "Device showing current time is now " + h + ":" + m, False, 150)
+                                    "Device showing current time is now " + h + ":" + m, False, 180)
 
         self.waitForElements( ("xpath", "//*[@id='landing-clock']/span[@class='meridiem' and text()='" + ampm + "']"), 
                               "AM/PM setting is correct", False, 5)
