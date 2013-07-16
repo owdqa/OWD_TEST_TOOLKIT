@@ -7,8 +7,12 @@ class main(GaiaTestCase):
         # Take a screenshot.
         #
         outFile = os.environ['RESULT_DIR'] + "/" + p_fileSuffix + ".png"
-        screenshot = self.marionette.screenshot()[22:] 
-        with open(outFile, 'w') as f:
-            f.write(base64.decodestring(screenshot))        
-        return outFile
+        
+        try:
+            screenshot = self.marionette.screenshot()[22:] 
+            with open(outFile, 'w') as f:
+                f.write(base64.decodestring(screenshot))        
+            return outFile
+        except:
+            return "(Unable to capture screenshot: possible Marionette issue.)"
 

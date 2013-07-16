@@ -22,6 +22,11 @@ class main(GaiaTestCase):
         # Dump the current page's html source too.
         #
         htmlDump = os.environ['RESULT_DIR'] + "/" + fnam + ".html"
-        self.savePageHTML(htmlDump)
+        
+        try:
+            self.savePageHTML(htmlDump)
+        except:
+            htmlDump = "(Unable to dump html for this page: possible Marionette issue.)"
+            
         return (htmlDump, screenDump)
 
