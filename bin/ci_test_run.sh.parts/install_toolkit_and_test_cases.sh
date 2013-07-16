@@ -23,3 +23,5 @@ cd $owd_test_cases_DIR
 
 printf "\n<b>Switching to branch $BRANCH of owd_test_cases ...</b>\n\n" >> $LOGFILE
 git checkout $BRANCH  >> $LOGFILE 2>&1
+printf "\n<b>Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".</b>\n\n" | tee -a $LOGFILE
+

@@ -84,5 +84,5 @@ fi
 
 cd $OWD_TEST_TOOLKIT_DIR
 sudo python setup.py clean --all > /dev/null 2>&1
-sudo python setup.py install >/dev/null 2>> $LOGFILE
+sudo python setup.py install 2> >( tee -a $LOGFILE)
 
