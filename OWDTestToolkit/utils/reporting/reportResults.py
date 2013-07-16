@@ -26,7 +26,8 @@ class main(GaiaTestCase):
         DET_FILE    = open(self.det_fnam, "w")
         SUM_FILE    = open(self.sum_fnam, "w")
 
-        DET_FILE.write("Test case  : %s\n" % self.testNum)
+        DET_FILE.write("<span style=\"font-size:14px\">")
+        DET_FILE.write("Test case  : <b>%s</b>\n" % self.testNum)
         DET_FILE.write("Test desc  : XXDESCXX\n")
         
         DET_FILE.write("Time taken : %s (not including restarting device etc...)\n" % str(test_time))
@@ -58,6 +59,7 @@ class main(GaiaTestCase):
         DET_FILE.write("Passed     : %s\n" % str(self.passed))
         DET_FILE.write("Failed     : %s\n" % str(self.failed))
         DET_FILE.write("RESULT     : %s\n" % res_str)
+        DET_FILE.write("</span>")
         DET_FILE.write("\n")
 
         x = len(self._resultArray)
