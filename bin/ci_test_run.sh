@@ -29,7 +29,7 @@ then
 	./run_tests.sh $TEST_LIST
 elif [ "$TEST_TYPE" = "ROYTEST" ]
 then
-	./run_tests.sh 26849
+	./run_tests.sh 123456
 else
 	./run_tests.sh $TEST_TYPE
 fi

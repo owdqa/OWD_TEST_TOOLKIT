@@ -30,7 +30,7 @@ do
 	#
 	setup_success="setup_ok"
 	title_str="Click this to see the details of this part of the installation."
-	x=$(egrep -i "error|warning" $fnam)
+	x=$(egrep -i "error|warning" $fnam | grep -v "OWDTestToolkit")
 	if [ "$x" ]
 	then
 		setup_success="setup_warnings"
@@ -52,7 +52,7 @@ do
                         </tr>"
 
 done <<EOF
-$(ls -lrt $RESULT_DIR/@* | awk '{print $NF}')
+$(ls -lrt $RESULT_DIR/@* | egrep -v "\.html$" | awk '{print $NF}')
 EOF
 
 if [ "$total_success" = "0" ]
