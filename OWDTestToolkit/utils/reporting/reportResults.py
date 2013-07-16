@@ -68,7 +68,7 @@ class main(GaiaTestCase):
                     if i[1]:
                         DET_FILE.write(" " * (len(fail_str) + 2))
                     else:
-                        DET_FILE.write("*" + fail_str + "*")
+                        DET_FILE.write("<span style=\"font-weight:bold;color:#ff0000\">*" + fail_str + "*</span>")
                     
                     DET_FILE.write(" ")                      
                 except:
