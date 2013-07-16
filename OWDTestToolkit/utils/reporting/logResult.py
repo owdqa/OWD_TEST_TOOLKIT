@@ -22,6 +22,7 @@ class main(GaiaTestCase):
         if str(p_result).lower() == "info":
             timestamp = self._no_time 
         else: 
+            p_msg="<b>" + p_msg + "</b>"
             timestamp = time_now
 
         

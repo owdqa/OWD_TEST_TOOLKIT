@@ -88,12 +88,12 @@ then
 		#
 		# This one failed too - exit with an error code, so the test run knows the situation.
 		#
-		echo "<b>ERROR: Failed 2nd attempt to install gaiatest properly! See $LOGFILE for details.</b>"
+		echo "<b>ERROR: Failed 2nd attempt to install gaiatest properly! See $LOGFILE for details.</b>" | tee -a $LOGFILE
 		exit 1
 	else
 		#
 		# The 2nd attempt succeeded.
 		#
-		echo "<b>2nd attempt succeeded!</b>"
+		echo "<b>2nd attempt succeeded!</b>" | tee -a $LOGFILE
 	fi
 fi

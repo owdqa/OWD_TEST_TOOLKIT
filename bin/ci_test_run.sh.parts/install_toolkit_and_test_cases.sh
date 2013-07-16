@@ -4,7 +4,7 @@
 #
 cd OWD_TEST_TOOLKIT
 
-./install.sh >> $LOGFILE 2>&1
+./install.sh >/dev/null 2>&1
 
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION

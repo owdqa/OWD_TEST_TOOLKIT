@@ -27,7 +27,7 @@ export BRANCH=${2:-"v1-train"}
 x=$(which python2.7 2>/dev/null)
 if [ ! "$x" ]
 then
-    echo "<b>Python 2.7 not found - please install and try again!</b>"
+    echo "<b>Python 2.7 not found - please install and try again!</b>" | tee -a $LOGFILE
     exit 1
 fi
 
@@ -35,7 +35,7 @@ fi
 x=$(which adb 2>/dev/null)
 if [ ! "$x" ]
 then
-    echo "<b>ADB not found - please install and try again!</b>"
+    echo "<b>ADB not found - please install and try again!</b>" | tee -a $LOGFILE
     exit 1
 fi
 
@@ -43,7 +43,7 @@ fi
 x=$(which easy_install 2>/dev/null)
 if [ ! "$x" ]
 then
-    echo "<b>'easy_install' (python-setuptools) not found - please install and try again!</b>"
+    echo "<b>'easy_install' (python-setuptools) not found - please install and try again!</b>" | tee -a $LOGFILE
     exit 1
 fi
 
@@ -52,7 +52,7 @@ fi
 #
 # Install gaiatest and marionette.
 #
-[ ! -d ./gaia-ui-tests ] && $OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
+[ ! -d ./gaia-ui-tests ] &&	$OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
 
 
 
@@ -79,10 +79,10 @@ then
     # Deleting as root, so be paranoid about where you are!!
     cd /tmp
     cd $install_dir
-    sudo rm -rf OWDTestToolkit OWD_TEST_TOOLKIT*egg*
+    sudo rm -rf OWDTestToolkit OWD_TEST_TOOLKIT*egg* 2>/dev/null
 fi
 
 cd $OWD_TEST_TOOLKIT_DIR
-sudo python setup.py clean --all > /dev/null 2>&1
-sudo python setup.py install 2> >( tee -a $LOGFILE)
+sudo python setup.py clean --all >> $LOGFILE 2>&1
+sudo python setup.py install >> $LOGFILE 2>&1
 
