@@ -52,7 +52,7 @@ do
                         </tr>"
 
 done <<EOF
-$(ls -lrt $RESULT_DIR/@* | awk '{print $NF}')
+$(ls -lrt $RESULT_DIR/@* | egrep -v "\.html$" | awk '{print $NF}')
 EOF
 
 if [ "$total_success" = "0" ]
