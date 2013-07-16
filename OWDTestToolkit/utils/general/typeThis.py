@@ -81,7 +81,6 @@ class main(GaiaTestCase):
         #
         # Switch back to the frame we were in and get the element again.
         #
-        self.marionette.switch_to_frame()
         self.switchToFrame("src", orig_frame)
          
         #

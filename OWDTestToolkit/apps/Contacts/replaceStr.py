@@ -9,8 +9,7 @@ class main(GaiaTestCase):
         p_field.clear()
         p_field.send_keys(p_str)
         
-        #
-        # Verify this value is now in this field.
-        #
-        self.UTILS.TEST(p_field.text == p_str, "This field now contains '%s'." % p_str)
-
+        x = self.marionette.find_element("tag name", "h1")
+        x.tap()
+        
+        self.checkMatch(p_field, p_str, "After replacing the string, this field now")
