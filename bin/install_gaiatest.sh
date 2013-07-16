@@ -66,19 +66,19 @@ git checkout $BRANCH  2> >( tee -a $LOGFILE)
 # Install gaiatest and dependencies.
 #
 printf "\n<b>Installing gaiatest for branch \"$(git branch | grep '*')\" ... </b>\n\n" | tee -a $LOGFILE
-sudo python setup.py develop >> $LOGFILE 2>&1
+sudo python setup.py develop > $LOGFILE.tmp 2>&1
 
 
 #
 # Sometimes a bad network connection causes an error in this installation.
 # If this happens, wait 1 minute then try again.
 #
-x=$(grep -i error $LOGFILE)
+x=$(grep -i error $LOGFILE.tmp)
 if [ "$x" ]
 then
 	printf "\n<b>ERRORS detected while setting up gaiatest dependencies! Trying once more in 1 minute ...<b>\n\n" | tee -a $LOGFILE
 	sleep 60
-	sudo python setup.py develop >> $LOGFILE.tmp
+	sudo python setup.py develop > $LOGFILE.tmp
 
 	x=$(grep -i error $LOGFILE.tmp)
     cat $LOGFILE.tmp >>$LOGFILE
@@ -96,4 +96,7 @@ then
 		#
 		echo "<b>2nd attempt succeeded!</b>" | tee -a $LOGFILE
 	fi
+else
+    cat $LOGFILE.tmp >> $LOGFILE
+    rm $LOGFILE.tmp
 fi

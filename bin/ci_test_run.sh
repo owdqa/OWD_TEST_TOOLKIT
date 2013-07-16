@@ -14,7 +14,8 @@ export TEST_TYPE=${3:-"REGRESSION"}
 
 . $0.parts/install_toolkit_and_test_cases.sh
 
-. $0.parts/flash_device.sh
+printf "\n\nROY NOT FLASHING!\n\n"
+#. $0.parts/flash_device.sh
 
 
 #
