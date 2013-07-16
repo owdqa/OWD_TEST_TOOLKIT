@@ -11,8 +11,8 @@ export CURRPATH=$(pwd)
 export BRANCH=${1:-"v1-train"}
 LOGFILE=${LOGFILE:-/tmp/gaiatest_setup.log}
 
-printf "\n\nInstalling gaiatest (for $BRANCH) and Marionette ..." | tee -a $LOGFILE
-printf "\n====================================================\n" | tee -a $LOGFILE
+printf "\n\n<b>Installing gaiatest (for $BRANCH) and Marionette ...</b>" | tee -a $LOGFILE
+printf "\n<b>====================================================</b>\n" | tee -a $LOGFILE
 
 
 
@@ -59,13 +59,13 @@ cd gaia-ui-tests
 #
 # Switch to correct branch.
 #
-printf "\n* Switching to branch \"$BRANCH\" of gaiatest ...\n\n" | tee -a $LOGFILE
+printf "\n<b>Switching to branch \"$BRANCH\" of gaiatest ...</b>\n\n" | tee -a $LOGFILE
 git checkout $BRANCH  2> >( tee -a $LOGFILE)
 
 #
 # Install gaiatest and dependencies.
 #
-printf "\n* Installing gaiatest for branch \"$(git branch | grep '*')\" ...\n\n" | tee -a $LOGFILE
+printf "\n<b>Installing gaiatest for branch \"$(git branch | grep '*')\" ... </b>\n\n" | tee -a $LOGFILE
 sudo python setup.py develop >> $LOGFILE 2>&1
 
 
@@ -76,7 +76,7 @@ sudo python setup.py develop >> $LOGFILE 2>&1
 x=$(grep -i error $LOGFILE)
 if [ "$x" ]
 then
-	printf "\n* ERRORS detected while setting up gaiatest dependencies! Trying once more in 1 minute ...\n\n" | tee -a $LOGFILE
+	printf "\n<b>ERRORS detected while setting up gaiatest dependencies! Trying once more in 1 minute ...<b>\n\n" | tee -a $LOGFILE
 	sleep 60
 	sudo python setup.py develop >> $LOGFILE.tmp
 
@@ -88,12 +88,12 @@ then
 		#
 		# This one failed too - exit with an error code, so the test run knows the situation.
 		#
-		echo "ERROR: Failed 2nd attempt to install gaiatest properly! See $LOGFILE for details."
+		echo "<b>ERROR: Failed 2nd attempt to install gaiatest properly! See $LOGFILE for details.</b>"
 		exit 1
 	else
 		#
 		# The 2nd attempt succeeded.
 		#
-		echo "2nd attempt succeeded!"
+		echo "<b>2nd attempt succeeded!</b>"
 	fi
 fi

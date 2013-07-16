@@ -27,7 +27,7 @@ export BRANCH=${2:-"v1-train"}
 x=$(which python2.7 2>/dev/null)
 if [ ! "$x" ]
 then
-    echo "Python 2.7 not found - please install and try again!"
+    echo "<b>Python 2.7 not found - please install and try again!</b>"
     exit 1
 fi
 
@@ -35,7 +35,7 @@ fi
 x=$(which adb 2>/dev/null)
 if [ ! "$x" ]
 then
-    echo "ADB not found - please install and try again!"
+    echo "<b>ADB not found - please install and try again!</b>"
     exit 1
 fi
 
@@ -43,7 +43,7 @@ fi
 x=$(which easy_install 2>/dev/null)
 if [ ! "$x" ]
 then
-    echo "'easy_install' (python-setuptools) not found - please install and try again!"
+    echo "<b>'easy_install' (python-setuptools) not found - please install and try again!</b>"
     exit 1
 fi
 
@@ -59,13 +59,13 @@ fi
 #
 # Install me.
 #
-printf "\n\nCompleting install of OWD_TEST_TOOLKIT..." | tee -a $LOGFILE
-printf "\n=========================================\n" | tee -a $LOGFILE
-printf "\n* Switching to branch $BRANCH of OWD_TEST_TOOLKIT ...\n\n" | tee -a $LOGFILE
+printf "\n\n<b>Completing install of OWD_TEST_TOOLKIT...</b>" | tee -a $LOGFILE
+printf "\n<b>=========================================</b>\n" | tee -a $LOGFILE
+printf "\n<b>Switching to branch $BRANCH of OWD_TEST_TOOLKIT ...</b>\n\n" | tee -a $LOGFILE
 git checkout $BRANCH 2> >( tee -a $LOGFILE)
-printf "\n* Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".\n\n" | tee -a $LOGFILE
+printf "\n<b>Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".</b>\n\n" | tee -a $LOGFILE
 
-printf "\n* Installing OWD_TEST_TOOLKIT...\n\n" | tee -a $LOGFILE
+printf "\n<b>Installing OWD_TEST_TOOLKIT...</b>\n\n" | tee -a $LOGFILE
 install_dir=$(dirname $(sudo python setup.py install --dry-run | grep Writing | awk '{print $2}'))
 	
 if [ ! "$install_dir" ]
