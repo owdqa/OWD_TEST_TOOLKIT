@@ -22,9 +22,7 @@ class main(GaiaTestCase):
         if str(p_result).lower() == "info":
             timestamp = self._no_time 
         else: 
-            p_msg="<b>" + p_msg + "</b>"
-            timestamp = time_now
-
+            timestamp = "<b>" + time_now + "</b>"
         
         # If we have filename details then add them to the message as note lines.
         if p_fnam:
@@ -39,8 +37,16 @@ class main(GaiaTestCase):
         # array: true/false/info + message).
         #
         msgArr = p_msg.split("|")
-        self._resultArray.append((self._no_time, "info", " "))          # (blank newline)
-        self._resultArray.append((timestamp, p_result, msgArr[0])) # (the main message)
+        
+        msgMain = msgArr[0]
+        if str(p_result).lower() != "info":
+            #
+            # This is a 'test' item so make it bold.
+            #
+            msgMain = "<b>" + msgMain + "</b>"
+            
+        self._resultArray.append((self._no_time, "info", " "))     # (blank newline)
+        self._resultArray.append((timestamp, p_result, msgMain)) # (the main message)
         
         if not str(p_result) == "info":
             if p_result:            
