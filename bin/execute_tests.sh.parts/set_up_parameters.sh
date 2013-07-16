@@ -16,7 +16,7 @@ export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
 NOWTIME=$(date +%Y%m%d%H%M)
 export RUN_ID=${RUN_ID:-$NOWTIME}
 export RESULT_DIR=${RESULT_DIR:-"/tmp/tests/B2G_tests.$RUN_ID"}
-[ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR || rm -f $RESULT_DIR/* 2>/dev/null
+[ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
 
 #
 # File for realtime summary (so even though the CI output is minimal,

@@ -21,9 +21,13 @@ class main(GaiaTestCase):
         
         if str(p_result).lower() == "info":
             timestamp = self._no_time 
-        else: 
-            timestamp = time_now
-
+        else:
+            #
+            # Set up timestamp and mark this as pass or fail.
+            #
+            _color = "#ff0000" if not p_result else "#00aa00"
+            span_tag = '<span style="color:' + _color + '">'
+            timestamp = span_tag + time_now + "</span>"
         
         # If we have filename details then add them to the message as note lines.
         if p_fnam:
@@ -38,8 +42,16 @@ class main(GaiaTestCase):
         # array: true/false/info + message).
         #
         msgArr = p_msg.split("|")
-        self._resultArray.append((self._no_time, "info", " "))          # (blank newline)
-        self._resultArray.append((timestamp, p_result, msgArr[0])) # (the main message)
+        
+        msgMain = msgArr[0]
+        if str(p_result).lower() != "info":
+            #
+            # This is a 'test' item so make it bold.
+            #
+            msgMain = span_tag + msgMain + "</span>"
+            
+        self._resultArray.append((self._no_time, "info", " "))     # (blank newline)
+        self._resultArray.append((timestamp, p_result, msgMain)) # (the main message)
         
         if not str(p_result) == "info":
             if p_result:            
