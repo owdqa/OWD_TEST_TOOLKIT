@@ -107,7 +107,7 @@ f_execute_test_file(){
 		#
 	    echo "
 
-
+<span style=\"color:#ff0000\">
 ################################################################################
 #
 # AN ISSUE WAS REPORTED BY MARIONETTE ....
@@ -115,6 +115,7 @@ f_execute_test_file(){
 #
 
 $(cat $ERR_FILE)
+</span>
 " >> $DET_FILE
 
 	    #
