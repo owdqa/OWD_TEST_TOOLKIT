@@ -78,10 +78,12 @@ tr.setup_ok{
 td.extra_info_ok{
     background-color: #eeffee;
     padding: 4px;
+    border: 1px solid #00ff00;
 }
 td.extra_info_warnings{
     background-color: #ffeeee;
     padding: 4px;
+    border: 1px solid #ff0000;
 }
 
 

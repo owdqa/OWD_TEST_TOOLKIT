@@ -59,7 +59,7 @@ if [ "$total_success" = "0" ]
 then
     extra_info_success="extra_info_ok"
 else
-    warning_str="<br>(<b>WARNING:</b> possible issues detected!)"
+    warning_str="<br><br><span style=\"color:#ff0000\">(<b>WARNING:</b> possible issues detected!)</span>"
     extra_info_success="extra_info_warnings"
 fi
 
