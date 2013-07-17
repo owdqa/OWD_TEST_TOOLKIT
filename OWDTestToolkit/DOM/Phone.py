@@ -1,5 +1,10 @@
-frame_locator          = ('src', 'communications')
+frame_locator          = ('src', 'dialer')
 frame_locator_calling  = ('name', 'call_screen0')
+
+
+# Beware: this number may have a country code prefix on it.
+phone_number_xpath     = ('id', 'phone-number-view')
+
 
 add_to_contacts_button = ("id", "keypad-callbar-add-contact")
 create_new_contact_btn = ("id", "create-new-contact-menuitem")

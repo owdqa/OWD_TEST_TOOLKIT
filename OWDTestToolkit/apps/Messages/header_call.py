@@ -10,10 +10,18 @@ class main(GaiaTestCase):
         #
         x = self.UTILS.getElement(DOM.Messages.message_header, "Thread header")
         x.tap()
-        
-        x = self.UTILS.getElement(DOM.Messages.header_call_btn, "'Call' button")
-        x.tap()
-        
+		
+		#
+		# If we tapped this from a contact header then we will already be in the
+		# dialer so this won't be necessary.
+		#
+        if x.get_attribute("data-is-contact") != "true":
+        	#
+        	# Select dialer option.
+        	#
+            x = self.UTILS.getElement(DOM.Messages.header_call_btn, "'Call' button")
+            x.tap()
+	        
 		#
 		# Switch to correct iframe.
 		#
