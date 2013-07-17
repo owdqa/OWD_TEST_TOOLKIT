@@ -331,6 +331,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>selectContactFromAll</td>
+        <td align=left>p_contactName</td>
+        <td align=left>Select the result of a search</td>
+    </tr>
+
+
+    <tr>
         <td align=center>enableFBImport</td>
         <td align=left></td>
         <td align=left>Enable fb import.</td>
