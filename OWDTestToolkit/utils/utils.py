@@ -94,6 +94,12 @@ class UTILS(app.main        ,
             self.setupDataConn()
         except:
             self.logResult("info", "WARNING: Failed to set up the data conn details (APN etc...)!")
+            
+        #
+        # Remove any current contacts (it would be nice to do more, but at the
+        # moment this will do).
+        #
+        self.data_layer.remove_all_contacts()
          
         #
         # Unlock (if necessary).
