@@ -15,7 +15,7 @@ class main(GaiaTestCase):
         if self.device.has_wifi:
             # Turn off wifi.
             self.data_layer.disable_wifi()
-        if self.data_layer.bt_is_bluetooth_enabled:
+        if self.data_layer.bluetooth_is_enabled:
             # Turn off bluetooth.
-            self.data_layer.bt_disable_bluetooth()
+            self.data_layer.bluetooth_disable()
             
