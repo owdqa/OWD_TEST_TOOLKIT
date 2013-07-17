@@ -15,7 +15,11 @@ export RESULT_DIR=${RESULT_DIR:-"/tmp/tests/ad-hoc"}
 
 export LOGFILE=${RESULT_DIR}/@Get_Jira_test_ids@Click_here_for_details
 
-echo "Gathering Jira ids for user story \"$TYPE\" (if it exists)." > $LOGFILE
+# For reporting.
+WARNING="<span style=\"color:#ee0000;font-weight:bold;font-size:14px\">WARNING:</span>"
+
+printf "===================================\n\n" >> $LOGFILE
+printf "Gathering Jira ids for user story \"$TYPE\" (if it exists).\n\n" >> $LOGFILE
 
 #
 # Get the jira id's for the user stories.
@@ -37,24 +41,25 @@ else
            #
            # Run 'everything'.
            #
-           echo "'REGRESSION' requested - get all jira ids for all known user stories ..." >> $LOGFILE
+           printf "'REGRESSION' requested - get all jira ids for all known user stories ...\n\n" >> $LOGFILE
            for i in "${JIRA_PARENTS[@]}"
            do
-               $0 $(echo "$i" | awk '{print $1}')
-           done;;
+               $0 $(echo "$i" | awk '{print $1}' | sed -e 's/\"//g')
+           done
+           exit;;
            
         "SMOKE")
            #
            # Run smoketests.
            #
-           echo "'SMOKE' requested - THIS IS NOT SET UP YET, WE NEED THE JIRA PARENT ID FOR THIS!!!" >> $LOGFILE
+           printf "'SMOKE' requested - THIS IS NOT SET UP YET, WE NEED THE JIRA PARENT ID FOR THIS!\n\n" >> $LOGFILE
            ROOTIDs="";;
            
         *)
            #
            # Run all test cases for this particular type.
            #    
-           echo "$TYPE requested - gathering all ids for this ..." >> $LOGFILE       
+           printf "$TYPE requested - gathering all ids for this ...\n\n" >> $LOGFILE       
            for i in "${JIRA_PARENTS[@]}"
            do
                PARENT=$(echo "$i" | awk '{print $1}')
@@ -71,16 +76,18 @@ fi
 
 if [ ! "$ROOTIDs" ]
 then
-    echo "WARNING: No user stories found for this selection." >> $LOGFILE
+    printf "$WARNING No user stories found for \"$TYPE\".\n\n" >> $LOGFILE
     exit
 fi
+
 
 #
 # We may have more than one ROOTID for this type ...
 #
 for ROOTID in $(echo "$ROOTIDs")
 do
-    echo "Getting ID's from Jira for user story #$ROOTID ..." >> $LOGFILE
+    printf "Getting ID's from Jira for user story #$ROOTID ...\n\n" >> $LOGFILE
+    
     #
     # Go to JIRA and get the ids (requires you to be in the intranet or VPN).
     #
@@ -120,14 +127,14 @@ then
     # Try using the cache.
     #
     rm $CACHE_BASE.$TYPE.tmp
-    printf "\nERROR - Unable to return Jira test cases for $TYPE, trying cache ..." >> $LOGFILE
+    printf "\n$WARNING Unable to return Jira test cases for $TYPE, trying cache ..." >> $LOGFILE
     
     if [ -f $CACHE_BASE.$TYPE ]
     then
         cat $CACHE_BASE.$TYPE
         printf "\n         Sucess!\n\n" >> $LOGFILE
     else
-        printf "\n         Failed!! Cannot find test cases in jira cache for $TYPE, sorry!\n\n" >> $LOGFILE
+        printf "\n         ${ERROR}Failed!!</span> Cannot find test cases in jira cache for $TYPE, sorry!\n\n" >> $LOGFILE
         exit 1
     fi
 else
@@ -137,4 +144,4 @@ else
     mv $CACHE_BASE.$TYPE.tmp $CACHE_BASE.$TYPE
 fi
 
-echo "Found $(wc -l $CACHE_BASE.$TYPE | awk '{print $1}') IDs. " >> $LOGFILE
+printf "Found $(wc -l $CACHE_BASE.$TYPE | awk '{print $1}') IDs. \n\n" >> $LOGFILE
