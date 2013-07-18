@@ -18,8 +18,7 @@ export LOGFILE=${RESULT_DIR}/@Get_Jira_test_ids@Click_here_for_details
 # For reporting.
 WARNING="<span style=\"color:#ee0000;font-weight:bold;font-size:14px\">WARNING:</span>"
 
-printf "===================================\n\n" >> $LOGFILE
-printf "Gathering Jira ids for user story \"$TYPE\" (if it exists).\n\n" >> $LOGFILE
+printf "\n<u>Gathering Jira ids for user story <b>$TYPE</b> (if it exists).</u>\n\n" >> $LOGFILE
 
 #
 # Get the jira id's for the user stories.
@@ -41,7 +40,7 @@ else
            #
            # Run 'everything'.
            #
-           printf "'REGRESSION' requested - get all jira ids for all known user stories ...\n\n" >> $LOGFILE
+           printf "<b>'REGRESSION' requested - get all jira ids for all known user stories ...</b>\n\n" >> $LOGFILE
            for i in "${JIRA_PARENTS[@]}"
            do
                $0 $(echo "$i" | awk '{print $1}' | sed -e 's/\"//g')
@@ -52,14 +51,13 @@ else
            #
            # Run smoketests.
            #
-           printf "'SMOKE' requested - THIS IS NOT SET UP YET, WE NEED THE JIRA PARENT ID FOR THIS!\n\n" >> $LOGFILE
+           printf "<b>'SMOKE' requested - THIS IS NOT SET UP YET, WE NEED THE JIRA PARENT ID FOR THIS!</b>\n\n" >> $LOGFILE
            ROOTIDs="";;
            
         *)
            #
            # Run all test cases for this particular type.
            #    
-           printf "$TYPE requested - gathering all ids for this ...\n\n" >> $LOGFILE       
            for i in "${JIRA_PARENTS[@]}"
            do
                PARENT=$(echo "$i" | awk '{print $1}')
@@ -86,7 +84,7 @@ fi
 #
 for ROOTID in $(echo "$ROOTIDs")
 do
-    printf "Getting ID's from Jira for user story #$ROOTID ...\n\n" >> $LOGFILE
+    printf "Getting test cases from Jira for user story #$ROOTID ...\n" >> $LOGFILE
     
     #
     # Go to JIRA and get the ids (requires you to be in the intranet or VPN).
@@ -127,14 +125,14 @@ then
     # Try using the cache.
     #
     rm $CACHE_BASE.$TYPE.tmp
-    printf "\n$WARNING Unable to return Jira test cases for $TYPE, trying cache ..." >> $LOGFILE
+    printf "$WARNING Unable to return Jira test cases for $TYPE, trying cache ..." >> $LOGFILE
     
     if [ -f $CACHE_BASE.$TYPE ]
     then
         cat $CACHE_BASE.$TYPE
         printf "\n         Sucess!\n\n" >> $LOGFILE
     else
-        printf "\n         ${ERROR}Failed!!</span> Cannot find test cases in jira cache for $TYPE, sorry!\n\n" >> $LOGFILE
+        printf "\n         ${WARNING}Failed!!</span> Cannot find test cases in jira cache for $TYPE, sorry!\n\n" >> $LOGFILE
         exit 1
     fi
 else
@@ -144,4 +142,4 @@ else
     mv $CACHE_BASE.$TYPE.tmp $CACHE_BASE.$TYPE
 fi
 
-printf "Found $(wc -l $CACHE_BASE.$TYPE | awk '{print $1}') IDs. \n\n" >> $LOGFILE
+printf "\nFound <b>$(wc -l $CACHE_BASE.$TYPE | awk '{print $1}')</b> IDs. \n\n" >> $LOGFILE
