@@ -32,10 +32,16 @@ class main(GaiaTestCase):
         
         boolOK=False
         for i in x:
-            try:
-                self.marionette.switch_to_frame(i)
-                boolOK=True
-            except:
-                pass
+            #
+            # Some iframes have > 1 'version' (such as the web page frame in browser app).
+            # The only way to reliably tell them apart is to switch to the displayed one.
+            #
+            if i.is_displayed():
+                try:
+                    self.marionette.switch_to_frame(i)
+                    boolOK=True
+                    break
+                except:
+                    pass
             
         self.TEST(boolOK, "Successfully switched to iframe.")
