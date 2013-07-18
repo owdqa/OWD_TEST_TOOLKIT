@@ -1,7 +1,6 @@
 from OWDTestToolkit.global_imports import *
 
-import  addContactToThisSMS                ,\
-        addNumbersInToField                 ,\
+import  addNumbersInToField                 ,\
         checkAirplaneModeWarning           ,\
         checkIsInToField                   ,\
         checkNumberIsInToField             ,\
@@ -22,7 +21,7 @@ import  addContactToThisSMS                ,\
         openThread                         ,\
         readLastSMSInThread                ,\
         readNewSMS                         ,\
-        removeFromToField                  ,\
+        removeContactFromToField           ,\
         selectAddContactButton             ,\
         sendSMS                            ,\
         startNewSMS                        ,\
@@ -44,7 +43,6 @@ import  addContactToThisSMS                ,\
         waitForSMSNotifier                 
 
 class Messages (
-            addContactToThisSMS.main,
             addNumbersInToField.main,
             checkAirplaneModeWarning.main,
             checkIsInToField.main,
@@ -66,7 +64,7 @@ class Messages (
             openThread.main,
             readLastSMSInThread.main,
             readNewSMS.main,
-            removeFromToField.main,
+            removeContactFromToField.main,
             selectAddContactButton.main,
             sendSMS.main,
             startNewSMS.main,
