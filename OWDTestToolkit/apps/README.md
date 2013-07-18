@@ -835,13 +835,6 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>addContactToThisSMS</td>
-        <td align=left>p_contactName</td>
-        <td align=left>Uses the 'add contact' button to add a contact to SMS.</td>
-    </tr>
-
-
-    <tr>
         <td align=center>createAndSendSMS</td>
         <td align=left>p_nums<br>p_msg</td>
         <td align=left>Create and send a new SMS.<br>  <b>Note:</b> The p_nums field must be an array of numbers  or contact names.</td>
@@ -905,6 +898,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>removeContactFromToField</td>
+        <td align=left>p_target</td>
+        <td align=left>Removes p_target from the "To" field of this SMS.<br>  Returns True if it found the target, or False if not.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>waitForNewSMSPopup_by_msg</td>
         <td align=left>p_msg</td>
         <td align=left>Waits for a new SMS popup notification which  matches this 'p_msg' string.</td>
@@ -964,13 +964,6 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>timeOfLastMessageInThread</td>
         <td align=left></td>
         <td align=left>Returns the time of the last message in the current thread.</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>removeFromToField</td>
-        <td align=left>p_target</td>
-        <td align=left>Removes p_target from the "To" field of this SMS.<br>  Returns True if it found the target, or False if not.</td>
     </tr>
 
 
