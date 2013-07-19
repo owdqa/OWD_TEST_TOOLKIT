@@ -294,7 +294,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>setTimeToSpecific</td>
         <td align=left>p_year="NOW"<br>p_month="NOW"<br>p_day="NOW"<br>p_hour="NOW"<br>p_minute="NOW"</td>
-        <td align=left>Sets the device time to a specific time (always today) based on the parameters:<br>  <pre>  <b>p_year :</b> <i>YYYY</i>, i.e. "2013"  <b>p_month :</b> <i>mm</i>, i.e. "1" -> "12"  <b>p_day :</b> <i>dd</i>, i.e. "1" -> "31"  <b>p_hour :</b> <i>HH</i>, i.e. "0" -> "23"  <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"  </pre><br>  All parameters will default to 'now'.</td>
+        <td align=left>Sets the device time to a specific time (always today) based on the parameters:<br>  <pre>  <b>p_year :</b> <i>YYYY</i>, i.e. "2013"<br>  <b>p_month :</b> <i>mm</i>, i.e. "1" -> "12"<br>  <b>p_day :</b> <i>dd</i>, i.e. "1" -> "31"<br>  <b>p_hour :</b> <i>HH</i>, i.e. "0" -> "23"<br>  <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>  </pre><br>  All parameters will default to 'now'.</td>
     </tr>
 
 
@@ -308,7 +308,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>getDateTimeFromEpochSecs</td>
         <td align=left>p_seconds_since_epoch</td>
-        <td align=left>Returns struct containing date and time strings  converted from 'seconds since epoch' (now = "time.time()").<br>  The result array elements are as follows:<br>  <pre>  Attribute Field Values  tm_year 4-digit year 2008  tm_mon Month 1 to 12  tm_mday Day 1 to 31  tm_hour Hour 0 to 23  tm_min Minute 0 to 59  tm_sec Second 0 to 61 (60 or 61 are leap-seconds)  tm_wday Day of Week 0 to 6 (0 is Monday)  tm_yday Day of year 1 to 366 (Julian day)  tm_isdst Daylight savings -1, 0, 1, -1 means library determines DST  </pre>  <br>  Example:<br>  <pre>  x = self.UTILS.getDateTimeFromEpochSecs(_myTime)  self.UTILS.logResults(x.tm_wday)  <pre></td>
+        <td align=left>Returns struct containing date and time strings  converted from 'seconds since epoch' (now = "time.time()").<br>  The result array elements are as follows:<br>  <pre>  Attribute Field Values<br>  tm_year 4-digit year 2008<br>  tm_mon Month 1 to 12<br>  tm_mday Day 1 to 31<br>  tm_hour Hour 0 to 23<br>  tm_min Minute 0 to 59<br>  tm_sec Second 0 to 61 (60 or 61 are leap-seconds)<br>  tm_wday Day of Week 0 to 6 (0 is Monday)<br>  tm_yday Day of year 1 to 366 (Julian day)<br>  tm_isdst Daylight savings -1, 0, 1, -1 means library determines DST<br>  </pre>  <br>  Example:<br>  <pre>  x = self.UTILS.getDateTimeFromEpochSecs(_myTime)<br>  self.UTILS.logResults(x.tm_wday)<br>  <pre></td>
     </tr>
 
 
