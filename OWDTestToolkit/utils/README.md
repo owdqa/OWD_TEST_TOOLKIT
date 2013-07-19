@@ -285,6 +285,48 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>setTimeToNow</td>
+        <td align=left>p_continent=False<br>p_city=False</td>
+        <td align=left>Set the phone's time (using gaia data_layer instead of the UI).  <b>NOTE:</b> Also sets the timezone (continent and city).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>setTimeToSpecific</td>
+        <td align=left>p_year="NOW"<br>p_month="NOW"<br>p_day="NOW"<br>p_hour="NOW"<br>p_minute="NOW"</td>
+        <td align=left>Sets the device time to a specific time (always today) based on the parameters:<br>  <pre>  <b>p_year :</b> <i>YYYY</i>, i.e. "2013"  <b>p_month :</b> <i>mm</i>, i.e. "1" -> "12"  <b>p_day :</b> <i>dd</i>, i.e. "1" -> "31"  <b>p_hour :</b> <i>HH</i>, i.e. "0" -> "23"  <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"  </pre><br>  All parameters will default to 'now'.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getEpochSecsFromDateTime</td>
+        <td align=left>p_dateTime</td>
+        <td align=left>Converts a date-time struct into epoch seconds.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getDateTimeFromEpochSecs</td>
+        <td align=left>p_seconds_since_epoch</td>
+        <td align=left>Returns struct containing date and time strings  converted from 'seconds since epoch' (now = "time.time()").<br>  The result array elements are as follows:<br>  <pre>  Attribute Field Values  tm_year 4-digit year 2008  tm_mon Month 1 to 12  tm_mday Day 1 to 31  tm_hour Hour 0 to 23  tm_min Minute 0 to 59  tm_sec Second 0 to 61 (60 or 61 are leap-seconds)  tm_wday Day of Week 0 to 6 (0 is Monday)  tm_yday Day of year 1 to 366 (Julian day)  tm_isdst Daylight savings -1, 0, 1, -1 means library determines DST  </pre>  <br>  Example:<br>  <pre>  x = self.UTILS.getDateTimeFromEpochSecs(_myTime)  self.UTILS.logResults(x.tm_wday)  <pre></td>
+    </tr>
+
+
+    <tr>
+        <td align=center>switch_24_12</td>
+        <td align=left>p_hour</td>
+        <td align=left>Switches a 24-hour number to 12-hour format.  Returns array: ["hour" (12 hour format), "ampm"] based on a 24hour "p_hour".</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>waitForDeviceTimeToBe</td>
+        <td align=left>p_year="NOW"<br>p_month="NOW"<br>p_day="NOW"<br>p_hour="NOW"<br>p_minute="NOW"</td>
+        <td align=left>Waits until the clock in the homescreen shows the date and time  represented by the parameters.<br>  All parameters are numeric, 24-hour and default to 'now'.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>typeThis</td>
         <td align=left>p_element_array<br>p_desc<br>p_str<br>p_no_keyboard=False<br>p_clear=True<br>p_enter=True<br>p_validate=True<br>p_remove_keyboard=True</td>
         <td align=left>Types this string into this element.  If p_no_keyboard = True then it doesn't use the keyboard.  <b>NOTE:</b> If os variable "NO_KEYBOARD" is set (to anything),  then regardless of what you send to this method, it will never  use the keyboard.</td>
@@ -292,30 +334,9 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
-        <td align=center>setDeviceDefaults</td>
-        <td align=left></td>
-        <td align=left>Set the device defaults before testing.</td>
-    </tr>
-
-
-    <tr>
         <td align=center>setupDataConn</td>
         <td align=left></td>
         <td align=left>Set the phone's details for data conn (APN etc...).</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>setTimeToNow</td>
-        <td align=left>p_continent=False<br>p_city=False</td>
-        <td align=left>Set the phone's time (using gaia data_layer instead of the UI).</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>setTimeToSpecific</td>
-        <td align=left>p_hour<br>p_minute</td>
-        <td align=left>Sets the device time to a specific time based on the parameters  (hour is in 24 hour format).</td>
     </tr>
 
 
@@ -351,13 +372,6 @@ self.UTILS.TEST(True, "I am using the utils classes!")
         <td align=center>selectFromSystemDialog</td>
         <td align=left>p_str</td>
         <td align=left>Selects an item from a system select box (such as country / timezone etc...).</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>switch_24_12</td>
-        <td align=left>p_hour</td>
-        <td align=left>Switches a 24-hour number to 12-hour format.  Returns array: ["hour" (12 hour format), "ampm"] based on a 24hour "p_hour".</td>
     </tr>
 
 
