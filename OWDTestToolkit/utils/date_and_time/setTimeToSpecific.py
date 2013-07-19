@@ -11,11 +11,11 @@ class main(GaiaTestCase):
         #
         # Sets the device time to a specific time (always today) based on the parameters:<br>
         # <pre>
-        # <b>p_year   :</b> <i>YYYY</i>, i.e. "2013"
-        # <b>p_month  :</b> <i>mm</i>, i.e. "1" -> "12"
-        # <b>p_day    :</b> <i>dd</i>, i.e. "1" -> "31"
-        # <b>p_hour   :</b> <i>HH</i>, i.e. "0" -> "23"
-        # <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"
+        # <b>p_year   :</b> <i>YYYY</i>, i.e. "2013"<br>
+        # <b>p_month  :</b> <i>mm</i>, i.e. "1" -> "12"<br>
+        # <b>p_day    :</b> <i>dd</i>, i.e. "1" -> "31"<br>
+        # <b>p_hour   :</b> <i>HH</i>, i.e. "0" -> "23"<br>
+        # <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>
         # </pre><br>
         # All parameters will default to 'now'.
         #

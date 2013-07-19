@@ -8,22 +8,22 @@ class main(GaiaTestCase):
         # converted from 'seconds since epoch' (now = "time.time()").<br>
         # The result array elements are as follows:<br>
         # <pre>
-        # Attribute   Field               Values
-        # tm_year     4-digit year        2008
-        # tm_mon      Month               1 to 12
-        # tm_mday     Day                 1 to 31
-        # tm_hour     Hour                0 to 23
-        # tm_min      Minute              0 to 59
-        # tm_sec      Second              0 to 61 (60 or 61 are leap-seconds)
-        # tm_wday     Day of Week         0 to 6 (0 is Monday)
-        # tm_yday     Day of year         1 to 366 (Julian day)
-        # tm_isdst    Daylight savings    -1, 0, 1, -1 means library determines DST
+        # Attribute   Field               Values<br>
+        # tm_year     4-digit year        2008<br>
+        # tm_mon      Month               1 to 12<br>
+        # tm_mday     Day                 1 to 31<br>
+        # tm_hour     Hour                0 to 23<br>
+        # tm_min      Minute              0 to 59<br>
+        # tm_sec      Second              0 to 61 (60 or 61 are leap-seconds)<br>
+        # tm_wday     Day of Week         0 to 6 (0 is Monday)<br>
+        # tm_yday     Day of year         1 to 366 (Julian day)<br>
+        # tm_isdst    Daylight savings    -1, 0, 1, -1 means library determines DST<br>
         # </pre>
         # <br>
         # Example:<br>
         # <pre>
-        # x = self.UTILS.getDateTimeFromEpochSecs(_myTime)
-        # self.UTILS.logResults(x.tm_wday)
+        # x = self.UTILS.getDateTimeFromEpochSecs(_myTime)<br>
+        # self.UTILS.logResults(x.tm_wday)<br>
         # <pre>
         #
         return time.localtime(p_seconds_since_epoch)
