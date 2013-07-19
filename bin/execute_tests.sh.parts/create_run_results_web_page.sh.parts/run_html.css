@@ -109,6 +109,7 @@ td.summary_type{
 td.with_data{
     background:#6666ff;
     cursor:pointer;
+    border:2px solid #ffffff;
 }
 td.with_data:hover{
     border:2px solid #0000ff;
@@ -116,9 +117,17 @@ td.with_data:hover{
 td.without_data{
     background-color:#eeeeee;
     color:#888888;
+    border:2px solid #ffffff;
 }
-td.special_notice{
+td.unexpected_fail{
     font-size:17px;
+    color: #000000;
+    background-color:#ffaaaa;
+    border:2px solid #ff0000;
+}
+td.unexpected_fail:hover{
+    background-color:#ff4444;
+    border:2px solid #ff0000;
 }
 
 
