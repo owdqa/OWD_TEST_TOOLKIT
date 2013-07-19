@@ -3,11 +3,11 @@ from OWDTestToolkit.global_imports import *
 class main(GaiaTestCase):
 
     def waitForDeviceTimeToBe(self, 
-                                  p_year=False,
-                                  p_month=False,
-                                  p_day=False,
-                                  p_hour=False, 
-                                  p_minute=False):
+                                  p_year="NOW",
+                                  p_month="NOW",
+                                  p_day="NOW",
+                                  p_hour="NOW", 
+                                  p_minute="NOW"):
         #
         # Waits until the clock in the homescreen shows the date and time
         # represented by the parameters.<br>
@@ -16,48 +16,39 @@ class main(GaiaTestCase):
         _now_epoch_secs=time.time()
         _now = self.getDateTimeFromEpochSecs(_now_epoch_secs)
 
-        if not p_year   : p_year    = _now.tm_year
-        if not p_month  : p_month   = _now.tm_mon
-        if not p_day    : p_day     = _now.tm_mday
-        if not p_hour   : p_hour    = _now.tm_hour
-        if not p_minute : p_minute  = _now.tm_min
+        if p_year   == "NOW": p_year    = _now.tm_year
+        if p_month  == "NOW": p_month   = _now.tm_mon
+        if p_day    == "NOW": p_day     = _now.tm_mday
+        if p_hour   == "NOW": p_hour    = _now.tm_hour
+        if p_minute == "NOW": p_minute  = _now.tm_min
 
-        myFrame = self.currentIframe()
+        #
+        # Wait for device date and time to match (1 minite timeout).
+        #
+        time_match = False
+        for i in range(1,30):
+            x = self.marionette.execute_script("""
+                    var today = new Date();
+                    var yr = today.getFullYear();
+                    var mth = today.getMonth() + 1;
+                    var day = today.getDate();
+                    var hours = today.getHours();
+                    var mins = today.getMinutes();
+                    var x = yr + "," + mth + "," + day + "," + hours + "," + mins;
+                    return x;""")
         
-        p_minute = p_minute + 1 #(It can take > 1 min before the device shows the new time!)
-        
-        x    = self.switch_24_12(p_hour)
-        hh   = x[0]
-        ampm = x[1]
-        
-        Day   = self.convertDay_NumToStr(p_day)
-        Month = self.convertMonth_NumToStr(p_month)
-        
-        #
-        # Switch to homescreen frame.
-        #
-        self.switchToFrame(*DOM.Home.frame_locator)
-        
-        #
-        # Wait for time to match.
-        #
-        self.waitForElements( ("xpath", 
-                               "//*[@id='landing-clock']/span[@class='numbers' and text()='%s:%s']" % (hh, mm) ), 
-                                    "Device showing current time is now '%s:%s'" % (hh, mm), False, 60, False)
-
-        self.waitForElements( ("xpath", 
-                               "//*[@id='landing-clock']/span[@class='meridiem' and text()='%s']" % ampm ), 
-                                    "Device showing current AM / PM is now '%s'" % ampm, False, 60, False)
-
-        #
-        # Wait for date to match.
-        #
-        self.waitForElements( ("xpath", 
-                               "//*[@id='landing-date' and text()='%s, %s %s']" % (Day, Month, DayNum) ), 
-                                    "Device showing current date is now '%s, %s %s'" % (Day, Month, p_day), False, 60, False)
-
-        if myFrame != "":
-            self.switchToFrame("src", myFrame)
-
-
+            _devtime = x.split(",")
+            
+            t_expected = "%s/%s/%s %s:%s" % (p_year, p_month, p_day, p_hour, p_minute)
+            t_actual   = "%s/%s/%s %s:%s" % (_devtime[0], _devtime[1], _devtime[2], _devtime[3], _devtime[4])
+            
+            if  t_expected == t_actual:
+                time_match = True
+                break
+            
+            time.sleep(2)
+                
+        self.TEST(time_match, "Device time matched \"%s/%s/%s %s:%s\" within 60s (It was \"%s/%s/%s %s:%s\")" % \
+                              (p_year, p_month, p_day, p_hour, p_minute,
+                               _devtime[0], _devtime[1], _devtime[2], _devtime[3], _devtime[4]))
 

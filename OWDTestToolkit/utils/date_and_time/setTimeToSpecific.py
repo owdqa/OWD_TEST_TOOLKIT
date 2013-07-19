@@ -3,11 +3,11 @@ from OWDTestToolkit.global_imports import *
 class main(GaiaTestCase):
 
     def setTimeToSpecific(self, 
-                          p_year=False,
-                          p_month=False,
-                          p_day=False,
-                          p_hour=False, 
-                          p_minute=False):
+                          p_year="NOW",
+                          p_month="NOW",
+                          p_day="NOW",
+                          p_hour="NOW", 
+                          p_minute="NOW"):
         #
         # Sets the device time to a specific time (always today) based on the parameters:<br>
         # <pre>
@@ -22,14 +22,11 @@ class main(GaiaTestCase):
         _now_epoch_secs=time.time()
         _now = self.getDateTimeFromEpochSecs(_now_epoch_secs)
 
-        if not p_year   : p_year    = _now.tm_year
-        if not p_month  : p_month   = _now.tm_mon
-        if not p_day    : p_day     = _now.tm_mday
-        if not p_hour   : p_hour    = _now.tm_hour
-        if not p_minute : p_minute  = _now.tm_min
-        
-        self.logResult("info", "p_day : %s" % p_day)
-        self.logResult("info", "nowday: %s" % _now.tm_mday)
+        if p_year   == "NOW": p_year    = _now.tm_year
+        if p_month  == "NOW": p_month   = _now.tm_mon
+        if p_day    == "NOW": p_day     = _now.tm_mday
+        if p_hour   == "NOW": p_hour    = _now.tm_hour
+        if p_minute == "NOW": p_minute  = _now.tm_min
         
         y = time.strptime("%s/%s/%s %s:%s" % \
                           (p_year,
@@ -38,12 +35,9 @@ class main(GaiaTestCase):
                            p_hour,
                            p_minute), 
                           "%Y/%m/%d %H:%M")
-        self.logResult("info", "y: %s" % y)
+
         _seconds_since_epoch = self.getEpochSecsFromDateTime(y)
-        
-        self.logResult("info", "_now                : %s" % _now_epoch_secs)
-        self.logResult("info", "_seconds_since_epoch: %s" % _seconds_since_epoch)
-        
+                
         self.data_layer.set_time(_seconds_since_epoch * 1000)
         
         self.waitForDeviceTimeToBe(p_year,
