@@ -1,6 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
 import  app         ,\
+        date_and_time,\
         debug       ,\
         element     ,\
         general     ,\
@@ -13,6 +14,7 @@ import  app         ,\
 
 
 class UTILS(app.main        ,
+            date_and_time.main,
             debug.main      ,
             element.main    ,
             general.main    ,

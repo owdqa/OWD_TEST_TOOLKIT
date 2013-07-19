@@ -7,14 +7,14 @@ f_create_summary_table(){
     #
     # create relevant variables for this TYPE.
     #
-    special_notice=""
+    unexpected_fail=""
     case "$TYPE" in
     	"1")
             TYPE="$UNEX_FAILS_STR"
             COUNT=${UNEX_FAILS:-0}
             linkme="Y"
             pass_or_fail="fail"
-            special_notice="special_notice"
+            unexpected_fail="unexpected_fail"
             tooltip="Unexpected failures - please investigate."
             DESC="unexpected failures";;
         "2")
@@ -76,7 +76,7 @@ f_create_summary_table(){
     	#
         echo "
             <tr>
-                <td class=\"summary_type $special_notice with_data\" 
+                <td class=\"summary_type $unexpected_fail with_data\" 
                     onclick=\"toggleVisibility('$TYPE')\"
                     title=\"$tooltip\">
                         $DESC

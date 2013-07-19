@@ -5,6 +5,7 @@ class main(GaiaTestCase):
     def setTimeToNow(self, p_continent=False, p_city=False):
         #
         # Set the phone's time (using gaia data_layer instead of the UI).
+        # <b>NOTE:</b> Also sets the timezone (continent and city).
         #
         _continent = p_continent if p_continent else self.get_os_variable("GLOBAL_YOUR_CONTINENT")
         _city      = p_city      if p_city      else self.get_os_variable("GLOBAL_YOUR_CITY")
