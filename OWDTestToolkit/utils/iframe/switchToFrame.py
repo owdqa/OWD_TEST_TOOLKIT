@@ -27,8 +27,7 @@ class main(GaiaTestCase):
             x = self.getElements( ("xpath", "//iframe[contains(@" + p_attrib + ", '" + p_str + "')]"),
                                  "Iframe where '" + p_attrib + "' contains '" + p_str + "'", False)
         
-        
-        self.logResult("info", "(Switching to this frame.)")
+        self.logResult("info", "Found %s iframes matching this." % str(len(x)))
         
         boolOK=False
         for i in x:
@@ -43,5 +42,18 @@ class main(GaiaTestCase):
                     break
                 except:
                     pass
-            
-        self.TEST(boolOK, "Successfully switched to iframe.")
+                
+        #
+        # If we didn't manage to switch, then try frames that are not
+        # displayed (sometime this is the case).
+        #
+        if not boolOK:
+            for i in x:
+                try:
+                    self.marionette.switch_to_frame(i)
+                    boolOK=True
+                    break
+                except:
+                    pass
+             
+        self.TEST(boolOK, "Successfully switched to iframe where '" + p_attrib + "' = '" + p_str + "'.")
