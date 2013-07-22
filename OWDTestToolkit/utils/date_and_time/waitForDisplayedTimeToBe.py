@@ -56,14 +56,14 @@ class main(GaiaTestCase):
         
         # Time.
         self.waitForElements( ("xpath", DOM.Home.datetime_time_xpath % _time_str),
-                                    "Time matching '%s'" % _time_str, True, 30, False)
+                                    "Time matching '%s'" % _time_str, True, 60, False)
         
         self.waitForElements( ("xpath", DOM.Home.datetime_ampm_xpath % _ampm_str),
-                                    "AM / PM matching '%s'" % _ampm_str, True, 30, False)
+                                    "AM / PM matching '%s'" % _ampm_str, True, 60, False)
         
         
         self.waitForElements( ("xpath", DOM.Home.datetime_date_xpath % _date_str),
-                                    "Day name is '%s'" % _date_str, True, 30, False)
+                                    "Day name is '%s'" % _date_str, True, 60, False)
         
         if myFrame != '':
             self.UTILS.switchToFrame("src", myFrame)
