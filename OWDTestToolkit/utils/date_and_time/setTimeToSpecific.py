@@ -28,7 +28,7 @@ class main(GaiaTestCase):
         if p_hour   == "NOW": p_hour    = _now.tm_hour
         if p_minute == "NOW": p_minute  = _now.tm_min
         
-        y = time.strptime("%s/%s/%s %s:%s" % \
+        _dateTime = time.strptime("%s/%s/%s %s:%s" % \
                           (p_year,
                            p_month,
                            p_day,
@@ -36,7 +36,7 @@ class main(GaiaTestCase):
                            p_minute), 
                           "%Y/%m/%d %H:%M")
 
-        _seconds_since_epoch = self.getEpochSecsFromDateTime(y)
+        _seconds_since_epoch = self.getEpochSecsFromDateTime(_dateTime)
                 
         self.data_layer.set_time(_seconds_since_epoch * 1000)
         
@@ -46,7 +46,7 @@ class main(GaiaTestCase):
                                    p_hour,
                                    p_minute)
 
-
+        self.waitForDisplayedTimeToBe(_dateTime)
 
     
     

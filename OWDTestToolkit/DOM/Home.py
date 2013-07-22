@@ -13,4 +13,7 @@ app_cards            = ('css selector', '#cards-view li.card')
 #app_card             = ('xpath', '//*[@data-origin="app://%s.gaiamobile.org"]')
 app_close            = ('css selector', '#cards-view li.card[data-origin*="%s"] .close-card')
 
+datetime_time_xpath  = "//p[@id='landing-clock']//span[@class='numbers' and text()='%s']"
+datetime_ampm_xpath  = "//p[@id='landing-clock']//span[@class='meridiem' and text()='%s']"
+datetime_date_xpath  = "//div[@id='landing-time']//p[@id='landing-date' and text()='%s']"
 

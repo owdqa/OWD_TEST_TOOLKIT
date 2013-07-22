@@ -5,7 +5,8 @@ import  getEpochSecsFromDateTime,\
         switch_24_12,\
         setTimeToSpecific,\
         getDateTimeFromEpochSecs,\
-        waitForDeviceTimeToBe
+        waitForDeviceTimeToBe,\
+        waitForDisplayedTimeToBe
         
 class main ( 
             getEpochSecsFromDateTime.main,
@@ -13,7 +14,8 @@ class main (
             switch_24_12.main,
             setTimeToSpecific.main,
             getDateTimeFromEpochSecs.main,
-            waitForDeviceTimeToBe.main):
+            waitForDeviceTimeToBe.main,
+            waitForDisplayedTimeToBe.main):
 
     def __init__(self):
         return
