@@ -35,6 +35,7 @@ check_all_messages_btn = ("id", "messages-check-all-button")
 delete_threads_button  = ("id", "threads-delete-button")
 
 message_list           = ('xpath', '//article[@id="messages-container"]//li')
+message_timestamps     = ("xpath", "//article[@id='messages-container']/header")
 unread_message         = ('css selector', 'li > a.unread')
 messages_from_num      = "//*[contains(@id, '%s')]"
 message_timestamps     = ("xpath", ".//*[@id='messages-container']/header")

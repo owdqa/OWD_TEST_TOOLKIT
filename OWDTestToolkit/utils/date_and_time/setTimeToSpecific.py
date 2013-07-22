@@ -17,7 +17,8 @@ class main(GaiaTestCase):
         # <b>p_hour   :</b> <i>HH</i>, i.e. "0" -> "23"<br>
         # <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>
         # </pre><br>
-        # All parameters will default to 'now'.
+        # All parameters will default to 'now'.<br>
+        # Returns a 'dateTime' object for the new date and time.
         #
         _now_epoch_secs=time.time()
         _now = self.getDateTimeFromEpochSecs(_now_epoch_secs)
@@ -28,7 +29,7 @@ class main(GaiaTestCase):
         if p_hour   == "NOW": p_hour    = _now.tm_hour
         if p_minute == "NOW": p_minute  = _now.tm_min
         
-        y = time.strptime("%s/%s/%s %s:%s" % \
+        _dateTime = time.strptime("%s/%s/%s %s:%s" % \
                           (p_year,
                            p_month,
                            p_day,
@@ -36,7 +37,7 @@ class main(GaiaTestCase):
                            p_minute), 
                           "%Y/%m/%d %H:%M")
 
-        _seconds_since_epoch = self.getEpochSecsFromDateTime(y)
+        _seconds_since_epoch = self.getEpochSecsFromDateTime(_dateTime)
                 
         self.data_layer.set_time(_seconds_since_epoch * 1000)
         
@@ -46,8 +47,8 @@ class main(GaiaTestCase):
                                    p_hour,
                                    p_minute)
 
+#         self.waitForDisplayedTimeToBe(_dateTime)
 
-
-    
+        return _dateTime
     
     

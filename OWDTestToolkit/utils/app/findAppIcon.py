@@ -36,6 +36,7 @@ class main(GaiaTestCase):
                         # Found it - return tihs list item!
                         #
                         myEl = self.marionette.find_element("xpath", xpath_str)
+                        self.logResult("info", "Found app icon for <b>%s</b>." % p_appName)
                         return myEl
                     except:
                         pass
@@ -50,5 +51,6 @@ class main(GaiaTestCase):
         #
         # If we get here, we didn't find it!
         #
+        self.logResult("info", "Could not find icon for app <b>%s</b>." % p_appName)
         return False
     
