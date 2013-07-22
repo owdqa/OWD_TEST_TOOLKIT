@@ -17,7 +17,8 @@ class main(GaiaTestCase):
         # <b>p_hour   :</b> <i>HH</i>, i.e. "0" -> "23"<br>
         # <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>
         # </pre><br>
-        # All parameters will default to 'now'.
+        # All parameters will default to 'now'.<br>
+        # Returns a 'dateTime' object for the new date and time.
         #
         _now_epoch_secs=time.time()
         _now = self.getDateTimeFromEpochSecs(_now_epoch_secs)
@@ -46,8 +47,8 @@ class main(GaiaTestCase):
                                    p_hour,
                                    p_minute)
 
-        self.waitForDisplayedTimeToBe(_dateTime)
+#         self.waitForDisplayedTimeToBe(_dateTime)
 
-    
+        return _dateTime
     
     
