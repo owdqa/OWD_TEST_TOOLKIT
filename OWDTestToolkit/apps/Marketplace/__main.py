@@ -33,4 +33,5 @@ class Marketplace (
                                       self.__class__.__name__ + " app - loading icon",
                                       True,
                                       30)
+        return self.app
 
