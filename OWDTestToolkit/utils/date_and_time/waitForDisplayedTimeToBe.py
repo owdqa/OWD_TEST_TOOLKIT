@@ -4,7 +4,7 @@ class main(GaiaTestCase):
 
     def waitForDisplayedTimeToBe(self, p_dateTime):
         #
-        # Waits for the homescreen todisplay the desired
+        # Waits for the homescreen to display the desired
         # date and time (takes a 'datetime' object).
         #
         
@@ -66,6 +66,9 @@ class main(GaiaTestCase):
                                     "Day name is '%s'" % _date_str, True, 60, False)
         
         if myFrame != '':
+            #
+            # Switch back to the frame we started in.
+            #
             self.UTILS.switchToFrame("src", myFrame)
         
         

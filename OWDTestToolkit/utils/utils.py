@@ -102,7 +102,7 @@ class UTILS(app.main        ,
         # moment this will do).
         #
         self.data_layer.remove_all_contacts()
-         
+        
         #
         # Unlock (if necessary).
         #
