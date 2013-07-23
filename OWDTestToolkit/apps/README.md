@@ -956,7 +956,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
     <tr>
         <td align=center>deleteAllThreads</td>
         <td align=left></td>
-        <td align=left>Deletes all threads.</td>
+        <td align=left>Deletes all threads (assumes the messagin app is already open).</td>
     </tr>
 
 
