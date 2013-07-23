@@ -7,14 +7,17 @@ _f_run_test(){
 	# Does this test require a 'clear_and_reboot' before running?
 	#
     x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE)
-    [ "$x" ] && $OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
-    
-    #
-    # Did the autho want to prevent this test from ever attempting
-    # 2nd chance on fail?
-    #
-    x=$(egrep "^[^#]*_NO_2ND_CHANCE *= *True" $TEST_FILE)
-    [ "$x" ] && export NO_2ND_CHANCE="Y" || export NO_2ND_CHANCE=""
+    if [ "$x" ]
+    then
+    	$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
+    	
+    	#
+    	# This test gets no 2nd chance if this is set.
+    	#
+    	export NO_2ND_CHANCE="Y"
+    else
+        unset NO_2ND_CHANCE
+    fi
 
 	TESTVARS="--testvars=${OWD_TEST_TOOLKIT_CONFIG}/gaiatest_testvars.json"
 	ADDRESS="--address=localhost:2828"
