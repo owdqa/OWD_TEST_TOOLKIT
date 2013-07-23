@@ -52,10 +52,14 @@ else
 fi
 PERCENT_PASSED="$PERCENT_PASSED%"
 
+x=$(ls $RESULT_DIR/@Flash_device* 2> /dev/null | egrep -v "html$" | awk 'BEGIN{FS="@"}{print $NF}')
+[ "$x" ] && B2G_BUILD_NAME="$x" || B2G_BUILD_NAME="(unspecified)"
+
 f_sub_variables_into_webpage    page_title          \
                                 JOB_NAME            \
                                 BUILD_NUMBER        \
                                 RUN_INPUT_LIST      \
+                                B2G_BUILD_NAME      \
                                 RUN_TIME            \
                                 blocked             \
                                 chance2             \
