@@ -8,7 +8,7 @@ class main(GaiaTestCase):
         # displayed in the "To: " field of a compose message.<br>
         # (Uses 'caseless' search for this.)
         #
-        x = self.UTILS.getElements(DOM.Messages.target_numbers, "'To:' field contents")
+        x = self.UTILS.getElements(DOM.Messages.target_numbers, "'To:' field contents", False)
         
         boolOK = False
         for i in x:
