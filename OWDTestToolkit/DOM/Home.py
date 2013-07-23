@@ -9,7 +9,7 @@ app_delete_icon_xpath= "//li[@class='icon'][.//span[text()='%s']]//span[@class='
 app_confirm_delete   = ('id', 'confirm-dialog-confirm-button')
 
 app_card_xpath       = "//div[@id='cards-view']//li[@class='card' and contains(@data-origin,'%s')]"
-app_cards            = ('css selector', '#cards-view li.card')
+app_card             = ('css selector', '#cards-view li.card')
 #app_card             = ('xpath', '//*[@data-origin="app://%s.gaiamobile.org"]')
 app_close            = ('css selector', '#cards-view li.card[data-origin*="%s"] .close-card')
 
