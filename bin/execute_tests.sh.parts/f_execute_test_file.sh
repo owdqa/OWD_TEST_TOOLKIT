@@ -7,7 +7,17 @@ _f_run_test(){
 	# Does this test require a 'clear_and_reboot' before running?
 	#
     x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE)
-    [ "$x" ] && $OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
+    if [ "$x" ]
+    then
+    	$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
+    	
+    	#
+    	# This test gets no 2nd chance if this is set.
+    	#
+    	export NO_2ND_CHANCE="Y"
+    else
+        unset NO_2ND_CHANCE
+    fi
 
 	TESTVARS="--testvars=${OWD_TEST_TOOLKIT_CONFIG}/gaiatest_testvars.json"
 	ADDRESS="--address=localhost:2828"
@@ -44,7 +54,7 @@ _f_2nd_chance(){
     # - if not blocked.
     # - restart device always on 2nd chance.
     #
-    if [ ! "$test_blocked" ] && [ "$OWD_USE_2ND_CHANCE" ]
+    if [ ! "$test_blocked" ] && [ "$OWD_USE_2ND_CHANCE" ] && [ ! "$NO_2ND_CHANCE" ]
     then
 	    if [ "$test_result" != "0" ]
 	    then

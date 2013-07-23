@@ -49,6 +49,6 @@ class main(GaiaTestCase):
             time.sleep(2)
                 
         self.TEST(time_match, "Device time matched \"%s/%s/%s %s:%s\" within 60s (It was \"%s/%s/%s %s:%s\")" % \
-                              (p_year, p_month, p_day, p_hour, p_minute,
-                               _devtime[0], _devtime[1], _devtime[2], _devtime[3], _devtime[4]))
+                              (p_year, p_month, p_day, str(p_hour).zfill(2), str(p_minute).zfill(2),
+                               _devtime[0], _devtime[1], _devtime[2], str(_devtime[3]).zfill(2), str(_devtime[4]).zfill(2)))
 

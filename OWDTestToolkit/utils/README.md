@@ -294,7 +294,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>setTimeToSpecific</td>
         <td align=left>p_year="NOW"<br>p_month="NOW"<br>p_day="NOW"<br>p_hour="NOW"<br>p_minute="NOW"</td>
-        <td align=left>Sets the device time to a specific time (always today) based on the parameters:<br>  <pre>  <b>p_year :</b> <i>YYYY</i>, i.e. "2013"<br>  <b>p_month :</b> <i>mm</i>, i.e. "1" -> "12"<br>  <b>p_day :</b> <i>dd</i>, i.e. "1" -> "31"<br>  <b>p_hour :</b> <i>HH</i>, i.e. "0" -> "23"<br>  <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>  </pre><br>  All parameters will default to 'now'.</td>
+        <td align=left>Sets the device time to a specific time (always today) based on the parameters:<br>  <pre>  <b>p_year :</b> <i>YYYY</i>, i.e. "2013"<br>  <b>p_month :</b> <i>mm</i>, i.e. "1" -> "12"<br>  <b>p_day :</b> <i>dd</i>, i.e. "1" -> "31"<br>  <b>p_hour :</b> <i>HH</i>, i.e. "0" -> "23"<br>  <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>  </pre><br>  All parameters will default to 'now'.<br>  Returns a 'dateTime' object for the new date and time.</td>
     </tr>
 
 
@@ -302,6 +302,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
         <td align=center>getEpochSecsFromDateTime</td>
         <td align=left>p_dateTime</td>
         <td align=left>Converts a date-time struct into epoch seconds.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>waitForDisplayedTimeToBe</td>
+        <td align=left>p_dateTime</td>
+        <td align=left>Waits for the homescreen todisplay the desired  date and time (takes a 'datetime' object).</td>
     </tr>
 
 

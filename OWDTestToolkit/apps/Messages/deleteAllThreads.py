@@ -4,7 +4,7 @@ class main(GaiaTestCase):
 
     def deleteAllThreads(self):
         #
-        # Deletes all threads.
+        # Deletes all threads (assumes the messagin app is already open).
         #
         x = self.marionette.find_element(*DOM.Messages.no_threads_message)
         if x.is_displayed():
