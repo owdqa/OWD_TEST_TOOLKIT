@@ -26,7 +26,6 @@ class Camera (
         #
         # Launch the app.
         #
-        self.apps.kill_all()
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
