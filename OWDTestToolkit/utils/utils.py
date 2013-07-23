@@ -104,11 +104,6 @@ class UTILS(app.main        ,
         self.data_layer.remove_all_contacts()
         
         #
-        # Kill any app currently running.
-        #
-        self.apps.kill_all()
-         
-        #
         # Unlock (if necessary).
         #
         self.parent.lockscreen.unlock()
