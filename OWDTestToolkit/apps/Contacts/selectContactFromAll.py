@@ -11,7 +11,8 @@ class main(GaiaTestCase):
             if p_contactName in i.text:
                 self.UTILS.logResult("info", "Contact '%s' found in all contacts." % p_contactName)
                 i.tap()
-                break
+                self.UTILS.waitForElements( ("xpath", "//h1[text()='%s']" % p_contactName), "View contact screen header")
+                return
                 
         self.UTILS.logResult("info", "Contact '%s' was <b>not</b> found in all contacts." % p_contactName)
 
