@@ -25,5 +25,5 @@ class main(GaiaTestCase):
 		#
 		# Switch to correct iframe.
 		#
-        self.UTILS.switchToFrame(*DOM.Phone.frame_locator)
+        self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)
 

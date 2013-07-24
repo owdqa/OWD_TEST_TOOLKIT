@@ -9,6 +9,7 @@ class main(GaiaTestCase):
         # (run only once, at the end of each test case).
         #
         self.clearAllStatusBarNotifs(p_silent=True)
+        self.data_layer.kill_active_call()
 
         #
         # Create output files (summary, which is displayed and
