@@ -2,15 +2,15 @@ frame_locator          = ('src', 'dialer')
 frame_locator_calling  = ('name', 'call_screen0')
 
 
-# Beware: this number may have a country code prefix on it.
-phone_number           = ('id', 'phone-number-view')
+phone_number           = ('id', 'phone-number-view') # Beware: this number may have a country code prefix on it.
 
 add_to_contacts_button = ("id", "keypad-callbar-add-contact")
 create_new_contact_btn = ("id", "create-new-contact-menuitem")
 call_number_button     = ("id", "keypad-callbar-call-action")
 
 outgoing_call_locator  = ('css selector', 'div.direction.outgoing')
-outgoing_call_number   = ("class name", "number font-light noAdditionalContactInfo")
+outgoing_call_number   = ("class name", "number font-light noAdditionalContactInfo") #Note: maybe + prefix.
+outgoing_call_numberXP = "//*[@class='number font-light noAdditionalContactInfo' and contains(text(), '%s')]" #Note: maybe + prefix.
 hangup_bar_locator     = ('id', 'callbar-hang-up-action')
 
 dialler_button_xpath   = "//div[@class='keypad-key' and @data-value='%s']"

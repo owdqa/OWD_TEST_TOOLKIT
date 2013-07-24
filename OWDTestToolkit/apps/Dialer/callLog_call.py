@@ -17,5 +17,5 @@ class main(GaiaTestCase):
 		
 		self.UTILS.switchToFrame(*DOM.Dialer.frame_locator_calling)
 		
-		x = self.UTILS.getElement(DOM.Dialer.outgoing_call_number, "Number being called")
-		self.UTILS.logResult("info", "X: %s, %s" % (x.get_attribute("value"), x.text))
+		self.UTILS.waitForElements( ("xpath", DOM.Dialer.outgoing_call_numberXP % p_num),
+									"Outgoing call number matching %s" % p_num)
