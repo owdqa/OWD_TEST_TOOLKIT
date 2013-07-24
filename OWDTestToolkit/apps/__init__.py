@@ -13,4 +13,4 @@ from Marketplace import *
 from Messages import *
 from Settings import *
 from Video import *
-from Phone import *
+from Dialer import *

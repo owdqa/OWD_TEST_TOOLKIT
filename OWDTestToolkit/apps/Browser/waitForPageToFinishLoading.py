@@ -11,6 +11,6 @@ class main(GaiaTestCase):
         	self.wait_for_element_displayed(*DOM.Browser.throbber)
     	except:
     		pass
-        self.UTILS.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 90, False)
+        self.UTILS.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 120, False)
         
      	time.sleep(2)

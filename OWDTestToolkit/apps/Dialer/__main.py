@@ -2,12 +2,18 @@ from OWDTestToolkit.global_imports import *
 
 import  callThisNumber                     ,\
         createContactFromThisNum           ,\
-        hangUp                             
+        hangUp                             ,\
+        enterNumber                        ,\
+        openCallLog                 ,\
+        callLog_call
 
-class Phone (
+class Dialer (
             callThisNumber.main,
             createContactFromThisNum.main,
-            hangUp.main):
+            hangUp.main,
+            enterNumber.main,
+            openCallLog.main,
+            callLog_call.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
@@ -18,9 +24,9 @@ class Phone (
 
     def launch(self):
         #
-        # Launch the app.
+        # Launch the app (it's called a different name to the everyone knows it as, so hardcode it!).
         #
-        self.app = self.apps.launch(self.__class__.__name__)
+        self.app = self.apps.launch("Phone")
         self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 

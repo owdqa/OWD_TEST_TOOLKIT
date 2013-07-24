@@ -13,7 +13,7 @@ import GLOBAL
 import Home
 import Market
 import Messages
-import Phone
+import Dialer
 import Settings
 import Statusbar
 import Video
