@@ -6,14 +6,24 @@ class main(GaiaTestCase):
         #
         # Hangs up (assuming we're in the 'calling' frame).
         #
+        
+        # The call may already be terminated, s odon't throw an error if
+        # the hangup bar isn't there.
         try:
-	        x = self.UTILS.getElement(DOM.Dialer.hangup_bar_locator, "Hangup bar", True, 5, False)
-	        x.tap()
+        	self.maroinette.switch_to_frame()
+        	x = self.marionette.find_element("xpath", "//iframe[contains(@%s, '%s')]" % \
+													DOM.Dialer.frame_locator_calling[0],
+													DOM.Dialer.frame_locator_calling[1])
+        	if x:
+				self.marionette.switch_to_frame(x)
+				x = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
+				if x: x.tap()
         except:
-        	self.UTILS.logResult("info", "<b>NOTE:</b> Could not hangup using the hangup bar!")
         	pass
 
 	 	#
 	 	# Just to be sure!
 	 	#    
      	self.data_layer.kill_active_call()
+     	
+     	self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)

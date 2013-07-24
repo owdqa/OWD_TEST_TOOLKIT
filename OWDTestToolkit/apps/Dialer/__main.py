@@ -1,11 +1,12 @@
 from OWDTestToolkit.global_imports import *
 
-import  callThisNumber                     ,\
-        createContactFromThisNum           ,\
-        hangUp                             ,\
-        enterNumber                        ,\
+import  callThisNumber              ,\
+        createContactFromThisNum    ,\
+        hangUp                      ,\
+        enterNumber                 ,\
         openCallLog                 ,\
-        callLog_call
+        callLog_call                ,\
+        callLog_createContact
 
 class Dialer (
             callThisNumber.main,
@@ -13,7 +14,8 @@ class Dialer (
             hangUp.main,
             enterNumber.main,
             openCallLog.main,
-            callLog_call.main):
+            callLog_call.main,
+            callLog_createContact.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
