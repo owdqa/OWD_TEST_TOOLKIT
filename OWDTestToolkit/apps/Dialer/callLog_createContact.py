@@ -17,4 +17,4 @@ class main(GaiaTestCase):
 		x.tap()
 		
 		self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
-		
+		self.UTILS.waitForElements(DOM.Contacts.add_contact_header, "'Add contact' header")
