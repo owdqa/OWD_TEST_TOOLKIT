@@ -20,6 +20,8 @@ class main(GaiaTestCase):
         #
         pass_str      = "passed"
         fail_str      = "FAILED"
+        pass_span     = "<span style='color:#00aa00'>"
+        fail_span     = "<span style='color:#ff0000'>"
         test_time     = time.time() - self.start_time
         test_time     = round(test_time, 0)
         test_time     = str(datetime.timedelta(seconds=test_time))
@@ -28,20 +30,25 @@ class main(GaiaTestCase):
         SUM_FILE    = open(self.sum_fnam, "w")
 
         DET_FILE.write("<span style=\"font-size:14px\">")
-        DET_FILE.write("Test case  : <b>%s</b>\n" % self.testNum)
-        DET_FILE.write("Test desc  : XXDESCXX\n")
+        DET_FILE.write("<b>Test case</b>      : <b>%s</b>\n" % self.testNum)
+        DET_FILE.write("<b>Test desc</b>      : XXDESCXX\n")
         
-        DET_FILE.write("Time taken : %s (not including restarting device etc...)\n" % str(test_time))
+        DET_FILE.write("<b>Time taken</b>     : %s (not including restarting device etc...)\n" % str(test_time))
 
         boolStart = False
         for i in self._commentArray:
             if not boolStart:
                 boolStart = True
-                DET_FILE.write("Comments   : %s\n" % i)
+                DET_FILE.write("<b>Comments</b>       : %s\n" % i)
             else:
-                DET_FILE.write("           : %s\n" % i)
+                DET_FILE.write("               : %s\n" % i)
         
-        res_str = pass_str if self.failed == 0 else fail_str
+        if self.failed == 0:
+            res_str  = pass_str
+            res_span = pass_span
+        else:
+            res_str  = fail_str
+            res_span = fail_span
 
         #
         # Get total number of tests performed.
@@ -57,9 +64,9 @@ class main(GaiaTestCase):
         #
         # Update details file.
         #
-        DET_FILE.write("Passed     : %s\n" % str(self.passed))
-        DET_FILE.write("Failed     : %s\n" % str(self.failed))
-        DET_FILE.write("RESULT     : %s\n" % res_str)
+        DET_FILE.write("<b>Asserts passed</b> : %s\n" % str(self.passed))
+        DET_FILE.write("<b>Asserts failed</b> : %s\n" % str(self.failed))
+        DET_FILE.write("<b>Asserts result</b> : <b>%s%s</span></b>\n" % (res_span,res_str))
         DET_FILE.write("</span>")
         DET_FILE.write("\n")
 

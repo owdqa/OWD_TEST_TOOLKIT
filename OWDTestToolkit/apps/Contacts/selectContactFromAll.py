@@ -14,5 +14,5 @@ class main(GaiaTestCase):
                 self.UTILS.waitForElements( ("xpath", "//h1[text()='%s']" % p_contactName), "View contact screen header")
                 return
                 
-        self.UTILS.logResult("info", "Contact '%s' was <b>not</b> found in all contacts." % p_contactName)
+        self.UTILS.logResult("info", "Contact '%s' was <b>not</b> found in the contacts list." % p_contactName)
 
