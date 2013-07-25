@@ -308,7 +308,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>waitForDisplayedTimeToBe</td>
         <td align=left>p_dateTime</td>
-        <td align=left>Waits for the homescreen todisplay the desired  date and time (takes a 'datetime' object).</td>
+        <td align=left>Waits for the homescreen to display the desired  date and time (takes a 'datetime' object).</td>
     </tr>
 
 
