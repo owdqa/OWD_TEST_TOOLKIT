@@ -36,23 +36,8 @@ class main(GaiaTestCase):
 		self.UTILS.waitForElements(DOM.Contacts.edit_contact_header, "'Edit contact' header")
 
 		# Test for an input field for number_<x> contaiing our number.
-		i = 0
-		boolOK = False
-		while True:
-			
-			x = self.marionette.find_element("id", DOM.Contacts.phone_field_idmatch % i)
-			if not x:
-				# There's no more fields to check.
-				break
-			
-			cont_num = x.get_attribute("value")
-			if p_num in cont_num:
-				boolOK = True
-				break
-			
-			i = i + 1
-		
-		self.UTILS.TEST(boolOK, "%s is one of the contact's numbers." % p_num)
+		self.UTILS.waitForElements( ("xpath", DOM.Contacts.phone_field_xpath % p_num),
+									"Phone field contaiing %s" % p_num)
 		
 		#
 		# Hit 'update' to save the changes to this contact.
