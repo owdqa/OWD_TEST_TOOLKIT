@@ -14,6 +14,7 @@ class main(GaiaTestCase):
 		
 		x = self.UTILS.getElement( DOM.Dialer.call_log_numtap_call, "Call button")
 		x.tap()
+		time.sleep(1)
 		
 		self.UTILS.switchToFrame(*DOM.Dialer.frame_locator_calling)
 		
