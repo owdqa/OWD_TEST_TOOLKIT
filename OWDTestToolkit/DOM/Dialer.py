@@ -29,3 +29,5 @@ call_log_numtap_create_new      = ("id", "create-new-contact-menuitem")
 call_log_numtap_add_to_existing = ("id", "add-to-existing-contact-menuitem")
 call_log_numtap_cancel          = ("id", "cancel-action-menu")
 
+call_log_contact_name_iframe    = ("id", "iframe-contacts")
+call_log_number_cont_highlight  = "//button[contains(@id, 'call-or-pick') and @class='activity icon icon-call remark' and contains(@data-tel, '%s')]"
