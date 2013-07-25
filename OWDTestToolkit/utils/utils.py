@@ -102,6 +102,8 @@ class UTILS(app.main        ,
         # moment this will do).
         #
         self.data_layer.remove_all_contacts()
+        self.apps.kill_all()
+        time.sleep(2)
         
         #
         # Unlock (if necessary).

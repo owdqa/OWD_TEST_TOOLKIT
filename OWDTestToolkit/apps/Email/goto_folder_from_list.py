@@ -6,6 +6,8 @@ class main(GaiaTestCase):
         #
         # Goto a specific folder in the folder list screen.
         #
+        x = self.UTILS.screenShotOnErr()
+        self.UTILS.logResult("info", "Screen shot:", x)
         x = self.UTILS.getElement(('xpath', DOM.Email.folderList_name_xpath % p_name), "Link to folder '" + p_name + "'")
         x.tap()
         
