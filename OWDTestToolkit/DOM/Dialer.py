@@ -4,9 +4,10 @@ frame_locator_calling  = ('name', 'call_screen0')
 
 phone_number           = ('id', 'phone-number-view') # Beware: this number may have a country code prefix on it.
 
-add_to_contacts_button = ("id", "keypad-callbar-add-contact")
-create_new_contact_btn = ("id", "create-new-contact-menuitem")
-call_number_button     = ("id", "keypad-callbar-call-action")
+add_to_contacts_button      = ("id", "keypad-callbar-add-contact")
+create_new_contact_btn      = ("id", "create-new-contact-menuitem")
+add_to_existing_contact_btn = ("id", "add-to-existing-contact-menuitem")
+call_number_button          = ("id", "keypad-callbar-call-action")
 
 add_to_conts_cancel_btn= ("id", "cancel_activity")
 

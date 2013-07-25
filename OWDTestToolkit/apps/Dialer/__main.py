@@ -7,7 +7,8 @@ import  callThisNumber              ,\
         openCallLog                 ,\
         callLog_call                ,\
         callLog_createContact       ,\
-        callLog_addToContact
+        callLog_addToContact        ,\
+        addThisNumberToContact
 
 class Dialer (
             callThisNumber.main,
@@ -17,7 +18,8 @@ class Dialer (
             openCallLog.main,
             callLog_call.main,
             callLog_createContact.main,
-            callLog_addToContact.main):
+            callLog_addToContact.main,
+            addThisNumberToContact.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
