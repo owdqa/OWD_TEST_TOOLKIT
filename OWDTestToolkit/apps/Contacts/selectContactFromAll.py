@@ -6,7 +6,7 @@ class main(GaiaTestCase):
         #
         # Select the result of a search 
         #
-        y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list")
+        y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False)
         for i in y:
             if p_contactName in i.text:
                 self.UTILS.logResult("info", "Contact '%s' found in all contacts." % p_contactName)
