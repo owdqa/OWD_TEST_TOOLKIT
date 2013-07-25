@@ -5,6 +5,8 @@ view_all_contact_xpath = '//*[@data-order="%s"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath  = "//li[@class='contact-item']//p[@data-order='%s']"
 
+view_contact_tel_field = ("id", "call-or-pick-0")
+
 search_field           = ("xpath", ".//*[@id='search-start']/input")
 search_contact_input   = ("id", "search-contact")
 search_results_list    = ("xpath",".//*[@id='search-list']/li")
@@ -50,6 +52,7 @@ email_field            = ('id', "email_0")
 add_email_button       = ("id","add-new-email")
 email_fields           = ("xpath", "//input[@type='email']")
 phone_field            = ('id', "number_0")
+phone_field_idmatch    = "number_%s"
 street_field           = ('id', "streetAddress_0")
 zip_code_field         = ('id', "postalCode_0")
 city_field             = ('id', 'locality_0')

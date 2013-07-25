@@ -407,6 +407,68 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
     </tr>
 
 </table>
+#Dialer
+<table>
+  <tr>
+    <th>Method</th><th>Parameters and defaults</th><th>Description</th>
+  </tr>
+
+    <tr>
+        <td align=center>hangUp</td>
+        <td align=left></td>
+        <td align=left>Hangs up (assuming we're in the 'calling' frame).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>callLog_call</td>
+        <td align=left>p_num</td>
+        <td align=left>Calls a number from the call log.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>callLog_createContact</td>
+        <td align=left>p_num</td>
+        <td align=left>Creates a new contact from the call log (only  as far as the contacts app opening).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>openCallLog</td>
+        <td align=left></td>
+        <td align=left>Opens the call log.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>callThisNumber</td>
+        <td align=left></td>
+        <td align=left>Calls the current number.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>enterNumber</td>
+        <td align=left>p_num</td>
+        <td align=left>Enters a number into the dialler using the keypad.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>createContactFromThisNum</td>
+        <td align=left></td>
+        <td align=left>Creates a new contact from the number currently in the dialler  (doesn't fill in the contact details).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>callLog_addToContact</td>
+        <td align=left>p_num<br>p_name</td>
+        <td align=left>Adds this number in the call log to an existing contact  (and returns you to the call log).</td>
+    </tr>
+
+</table>
 #Email
 <table>
   <tr>
@@ -999,33 +1061,6 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>editAndSelectThreads</td>
         <td align=left>p_target_array</td>
         <td align=left>Puts this thread into Edit mode and selects  the messages listed in p_msg_array.<br>  p_target_array is an array of target numbers  or contacts which identify the threads to be selected.</td>
-    </tr>
-
-</table>
-#Phone
-<table>
-  <tr>
-    <th>Method</th><th>Parameters and defaults</th><th>Description</th>
-  </tr>
-
-    <tr>
-        <td align=center>hangUp</td>
-        <td align=left></td>
-        <td align=left>Hangs up (assuming we're in the 'calling' frame).</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>callThisNumber</td>
-        <td align=left></td>
-        <td align=left>Calls the current number.</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>createContactFromThisNum</td>
-        <td align=left></td>
-        <td align=left>Creates a new contact from the number currently in the dialler  (doesn't fill in the contact details).</td>
     </tr>
 
 </table>
