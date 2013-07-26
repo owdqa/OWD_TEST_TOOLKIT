@@ -7,15 +7,14 @@ class main(GaiaTestCase):
         # Turns off all network settings (wifi, dataconn, bluetooth and airplane mode).
         #
         if self.data_layer.get_setting('ril.radio.disabled'):
-            # Turn off airplane mode.
             self.data_layer.set_setting('ril.radio.disabled', False)
+
         if self.device.has_mobile_connection:
-            # Turn off dataconn.
             self.data_layer.disable_cell_data()
+
+        self.data_layer.disable_cell_roaming()
+
         if self.device.has_wifi:
-            # Turn off wifi.
+            self.data_layer.enable_wifi()
+            self.data_layer.forget_all_networks()
             self.data_layer.disable_wifi()
-        if self.data_layer.bluetooth_is_enabled:
-            # Turn off bluetooth.
-            self.data_layer.bluetooth_disable()
-            
