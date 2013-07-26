@@ -8,6 +8,11 @@ class main(GaiaTestCase):
         # (either wifi or dataConn).
         #
         
+        # The other methods seem to hit a marionette error just now,
+        # but gaiatest has this method so I'll stick to that if it works.
+        self.connect_to_network()
+        return
+    
         # make sure airplane mode is off.
         if self.isNetworkTypeEnabled("airplane"):
             self.toggleViaStatusBar("airplane")
