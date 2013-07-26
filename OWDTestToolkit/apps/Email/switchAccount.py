@@ -13,10 +13,16 @@ class main(GaiaTestCase):
         # Are we already in this account?
         #
         x = self.UTILS.getElement(DOM.GLOBAL.app_head, "Header")
+        self.UTILS.logResult("info", 
+							"Currently using email account '%s' (looking to be in account '%s')." % \
+							(x.text, p_address))
         if x.text == p_address:
-            # Already here - just go to the Inbox.
-            self.goto_folder_from_list("Inbox")
-            return True
+			self.UTILS.logResult("info", "Already in the account we want - switch back to inbox.")
+			self.goto_folder_from_list("Inbox")
+			return True
+		
+        self.UTILS.logResult("info", "Need to switch from account '%s' to account '%s' ..." % \
+							 		(x.text, p_address))
         
         #
         # We're not in this account already, so let's look for it.
