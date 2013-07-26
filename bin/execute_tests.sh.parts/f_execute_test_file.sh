@@ -5,9 +5,11 @@
 _f_run_test(){
 	#
 	# Does this test require a 'clear_and_reboot' before running?
+	# (if we're coming from '2nd chance' then the device will
+	# have just been rebooted, so we don't need to do this).
 	#
     x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE)
-    if [ "$x" ]
+    if [ "$x" ] && [ ! "$RESTART" ]
     then
     	$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
     fi
@@ -56,6 +58,8 @@ _f_2nd_chance(){
 	    	# problem that gaiatest 'restart' doesn't).
 	    	#
 			$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
+			
+			RESTART="--restart"
 
             _f_run_test
             
