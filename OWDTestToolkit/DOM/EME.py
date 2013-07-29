@@ -12,3 +12,4 @@ search_suggestions      = ('css selector', '#helper ul li[data-index]')
 searching_spinner       = ("class name", "loading-apps")
 search_result_icon_xpath= "//li[@data-name='%s']"
 search_result_area      = ("id", "evmeApps")
+app_installed_banner    = ("id","evmeBanner")
