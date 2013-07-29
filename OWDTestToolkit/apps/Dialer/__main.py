@@ -37,4 +37,7 @@ class Dialer (
         self.app = self.apps.launch("Phone")
         self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
-
+        
+        
+        
+        

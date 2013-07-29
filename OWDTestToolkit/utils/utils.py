@@ -109,4 +109,3 @@ class UTILS(app.main        ,
         # Unlock (if necessary).
         #
         self.parent.lockscreen.unlock()
-        

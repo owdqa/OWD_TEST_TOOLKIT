@@ -16,8 +16,6 @@ class main(GaiaTestCase):
             
             self.UTILS.waitForElements(DOM.Messages.send_message_button, "'Send' button")
         except:
-        	self.UTILS.logResult("info", "<b>NOTE:</b> The thread <i>may</i> have failed to open.")
-#             boolOK = False
-#          
-#         self.UTILS.TEST(boolOK, "Thread '" + p_num + "' opened successfully.")
-        
+        	x = self.UTILS.screenShotOnErr()
+        	self.UTILS.logResult("info", "<b>NOTE:</b> The thread <i>may</i> have failed to open.", x)
+        	

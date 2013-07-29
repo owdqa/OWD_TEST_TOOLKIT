@@ -4,15 +4,22 @@ import  findAppIcon,\
         launchAppViaHomescreen,\
         isAppInstalled,\
         uninstallApp,\
-        setPermission
+        setPermission,\
+        killApp,\
+        switchToApp, \
+        _getAppDOM
         
 class main ( 
             findAppIcon.main,
             launchAppViaHomescreen.main,
             isAppInstalled.main,
             uninstallApp.main,
-            setPermission.main):
+            setPermission.main,
+            killApp.main,
+            switchToApp.main,
+            _getAppDOM.main):
 
     def __init__(self):
         return
+
 
