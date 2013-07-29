@@ -1,3 +1,5 @@
+frame_locator           = ('src', 'clock')
+
 analog_face             = ("id", "analog-clock-svg")
 digital_face            = ("id", "digital-clock-display")
 new_alarm_btn           = ('id', 'alarm-new')
