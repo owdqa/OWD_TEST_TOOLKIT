@@ -449,6 +449,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>addThisNumberToContact</td>
+        <td align=left>p_name</td>
+        <td align=left>Adds the current number to existing contact.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>enterNumber</td>
         <td align=left>p_num</td>
         <td align=left>Enters a number into the dialler using the keypad.</td>

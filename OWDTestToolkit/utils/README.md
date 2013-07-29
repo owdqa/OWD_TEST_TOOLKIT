@@ -103,6 +103,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>killApp</td>
+        <td align=left>p_name</td>
+        <td align=left>Kills the app specified by p_name.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>launchAppViaHomescreen</td>
         <td align=left>p_appName</td>
         <td align=left>Launch an app via the homescreen.</td>
