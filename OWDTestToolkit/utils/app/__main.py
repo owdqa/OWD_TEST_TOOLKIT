@@ -5,7 +5,9 @@ import  findAppIcon,\
         isAppInstalled,\
         uninstallApp,\
         setPermission,\
-        killApp
+        killApp,\
+        switchToApp, \
+        _getAppDOM
         
 class main ( 
             findAppIcon.main,
@@ -13,7 +15,9 @@ class main (
             isAppInstalled.main,
             uninstallApp.main,
             setPermission.main,
-            killApp.main):
+            killApp.main,
+            switchToApp.main,
+            _getAppDOM.main):
 
     def __init__(self):
         return
