@@ -64,3 +64,11 @@ sms_button             = ('id', 'send-sms-button-0')
 sms_button_specific_id = 'send-sms-button-%s'
 email_button_spec_id   = 'email-or-pick-%s'
 link_button            = ('id', "link_button") # WARNING: >1 element has this id!
+
+gmail_button            = ("xpath", "//button[text()='Gmail']")
+gmail_frame             = ("data-url", "google")
+gmail_throbber          = ("id", "popup-throbber")
+gmail_username          = ("id", "Email")
+gmail_password          = ("id", "Passwd")
+gmail_signIn_button     = ("id", "signIn")
+gmail_login_error_msg   = ("id", "errormsg_0_Passwd")

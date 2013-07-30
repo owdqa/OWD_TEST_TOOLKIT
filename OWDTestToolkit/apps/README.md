@@ -289,6 +289,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>importFromGmail_login</td>
+        <td align=left>p_name<br>p_pass</td>
+        <td align=left>Presses the Settings button, then Gmail, then logs in using  p_name and p_pass (to begin the process of importing contacts).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>verifyFieldContents</td>
         <td align=left>p_contact_json_obj</td>
         <td align=left>Verify the contents of the contact fields in this screen (assumes  you are in the correct screen since this could be view or edit).  <br><br>  <b>p_contact_json_obj</b> must be an object in the same format as the  one in ./example/tests/mock_data/contacts.py.</td>
@@ -947,7 +954,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
     <tr>
         <td align=center>waitForReceivedMsgInThisThread</td>
-        <td align=left>p_timeOut=20</td>
+        <td align=left>p_timeOut=30</td>
         <td align=left>Waits for the last message in this thread to be a 'received' message  and returns the element for this message.</td>
     </tr>
 
