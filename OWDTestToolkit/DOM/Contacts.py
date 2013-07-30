@@ -13,6 +13,7 @@ search_field           = ("xpath", ".//*[@id='search-start']/input")
 search_contact_input   = ("id", "search-contact")
 search_results_list    = ("xpath",".//*[@id='search-list']/li")
 search_cancel_btn      = ('id', 'cancel-search')
+search_no_contacts_found = ("id", "no-result")
 favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//p[@data-order='%s']"
 
 social_network_contacts= ('class name', "icon-social icon-fb notorg")
