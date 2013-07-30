@@ -12,8 +12,8 @@ call_number_button          = ("id", "keypad-callbar-call-action")
 add_to_conts_cancel_btn= ("id", "cancel_activity")
 
 outgoing_call_locator  = ('css selector', 'div.direction.outgoing')
-outgoing_call_number   = ("class name", "number font-light noAdditionalContactInfo") #Note: maybe + prefix.
-outgoing_call_numberXP = "//*[@class='number font-light noAdditionalContactInfo' and contains(text(), '%s')]" #Note: maybe + prefix.
+outgoing_call_number   = ("xpath", "//*[contains(@class,'number font-light')]") #Note: maybe + prefix.
+outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '%s')]" #Note: maybe + prefix.
 hangup_bar_locator     = ('id', 'callbar-hang-up-action')
 
 dialler_button_xpath   = "//div[@class='keypad-key' and @data-value='%s']"

@@ -7,6 +7,7 @@ view_all_contact_name_xpath  = "//li[@class='contact-item']//p[@data-order='%s']
 
 view_contact_tel_field = ("id", "call-or-pick-0")
 view_contact_tels_xpath= "//*[contains(@id, 'call-or-pick-') and contains(@data-tel, '%s')]"
+dialer_frame           = ("data-url", "oncall")
 
 search_field           = ("xpath", ".//*[@id='search-start']/input")
 search_contact_input   = ("id", "search-contact")
