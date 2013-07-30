@@ -2,12 +2,15 @@ from OWDTestToolkit.global_imports import *
 	
 class main(GaiaTestCase):
 
-    def callLog_addToContact(self, p_num, p_name):
+    def callLog_addToContact(self, p_num, p_name, p_openCallLog=True):
         #
         # Adds this number in the call log to an existing contact
         # (and returns you to the call log).
-        #
-		self.openCallLog()
+		# If p_openCallLog is set to False it will assume you are
+		# already in the call log.
+		#
+		if p_openCallLog:
+			self.openCallLog()
 
 		x = self.UTILS.getElement( ("xpath", DOM.Dialer.call_log_number_xpath % p_num),
 								   "The call log for number %s" % p_num)
