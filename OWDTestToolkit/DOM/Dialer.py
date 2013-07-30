@@ -1,5 +1,5 @@
 frame_locator          = ('src', 'dialer')
-frame_locator_calling  = ('name', 'call_screen0')
+frame_locator_calling  = ('name', 'call_screen')
 
 
 phone_number           = ('id', 'phone-number-view') # Beware: this number may have a country code prefix on it.
@@ -12,8 +12,8 @@ call_number_button          = ("id", "keypad-callbar-call-action")
 add_to_conts_cancel_btn= ("id", "cancel_activity")
 
 outgoing_call_locator  = ('css selector', 'div.direction.outgoing')
-outgoing_call_number   = ("class name", "number font-light noAdditionalContactInfo") #Note: maybe + prefix.
-outgoing_call_numberXP = "//*[@class='number font-light noAdditionalContactInfo' and contains(text(), '%s')]" #Note: maybe + prefix.
+outgoing_call_number   = ("xpath", "//*[contains(@class,'number font-light')]") #Note: maybe + prefix.
+outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '%s')]" #Note: maybe + prefix.
 hangup_bar_locator     = ('id', 'callbar-hang-up-action')
 
 dialler_button_xpath   = "//div[@class='keypad-key' and @data-value='%s']"
@@ -23,6 +23,7 @@ call_log_btn           = ("id", "option-recents")
 call_log_filter        = ("id", "call-log-filter")
 call_log_numbers       = ("xpath", "//li[contains(@class,'log-item')")
 call_log_number_xpath  = "//li[contains(@class,'log-item') and contains(@data-phone-number,'%s')]"
+call_log_edit_btn      = ("id", "call-log-icon-edit")
 
 call_log_numtap_call            = ("id", "call-menuitem")
 call_log_numtap_create_new      = ("id", "create-new-contact-menuitem")

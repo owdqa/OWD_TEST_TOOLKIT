@@ -5,13 +5,19 @@ view_all_contact_xpath = '//*[@data-order="%s"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath  = "//li[@class='contact-item']//p[@data-order='%s']"
 
+view_details_title     = ('id', 'contact-name-title')
 view_contact_tel_field = ("id", "call-or-pick-0")
+view_contact_email_field = ("id", "email-or-pick-0")
+view_contact_address    = ("xpath", "//li[@id='address-details-template-0']//a[@class='action action-block']/b")
+view_contact_comments  = ("id", "note-details-template-0")
 view_contact_tels_xpath= "//*[contains(@id, 'call-or-pick-') and contains(@data-tel, '%s')]"
+dialer_frame           = ("data-url", "oncall")
 
 search_field           = ("xpath", ".//*[@id='search-start']/input")
 search_contact_input   = ("id", "search-contact")
 search_results_list    = ("xpath",".//*[@id='search-list']/li")
 search_cancel_btn      = ('id', 'cancel-search')
+search_no_contacts_found = ("id", "no-result")
 favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//p[@data-order='%s']"
 
 social_network_contacts= ('class name', "icon-social icon-fb notorg")
@@ -24,7 +30,6 @@ settings_fb_logout_wait= ('id', 'progress-title')
 settings_done_button   = ('id', 'settings-done')
 add_contact_button     = ('id', 'add-contact-button')
 add_contact_header     = ('xpath', GLOBAL.app_head_specific % 'Add contact')
-view_details_title     = ('id', 'contact-form-title')
 favourite_button       = ('id','toggle-favorite')
 favourite_marker       = ('id', 'favorite-star')
 details_back_button    = ('id', 'details-back')
@@ -63,3 +68,12 @@ sms_button             = ('id', 'send-sms-button-0')
 sms_button_specific_id = 'send-sms-button-%s'
 email_button_spec_id   = 'email-or-pick-%s'
 link_button            = ('id', "link_button") # WARNING: >1 element has this id!
+
+gmail_button            = ("xpath", "//button[text()='Gmail']")
+gmail_frame             = ("data-url", "google")
+gmail_throbber          = ("id", "popup-throbber")
+gmail_cancel_login      = ("id", "popup-close")
+gmail_username          = ("id", "Email")
+gmail_password          = ("id", "Passwd")
+gmail_signIn_button     = ("id", "signIn")
+gmail_login_error_msg   = ("id", "errormsg_0_Passwd")

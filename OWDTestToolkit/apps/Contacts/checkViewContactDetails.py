@@ -26,4 +26,4 @@ class main(GaiaTestCase):
         #
         # Correct details are in the contact fields.
         #
-        self.verifyFieldContents(p_contact_json_obj)
+        self.verifyFieldContents(p_contact_json_obj, True)
