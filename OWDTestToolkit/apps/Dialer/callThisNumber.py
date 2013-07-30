@@ -9,8 +9,7 @@ class main(GaiaTestCase):
         x = self.UTILS.getElement(DOM.Dialer.call_number_button, "Call number button")
         x.tap()
         
-        time.sleep(2)
-        
         self.UTILS.switchToFrame(*DOM.Dialer.frame_locator_calling)
         self.UTILS.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call element")
+     	
         
