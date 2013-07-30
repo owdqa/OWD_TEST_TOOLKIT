@@ -13,6 +13,11 @@ class main(GaiaTestCase):
         x = self.UTILS.getElement(DOM.Clock.new_alarm_btn, "New alarm button")
         x.tap()
         
+        #
+        # Just set the time in the element for now (the UI isn't working for Marionette atm).
+        #
+        x = self.UTILS.getElement( ("xpath", "//button[@id='time-menu']"), "Time button")
+        
         x = self.UTILS.getElement(DOM.Clock.time_button, "Time button")
         x.tap()
         
@@ -35,6 +40,9 @@ class main(GaiaTestCase):
         scroller_minutes = self.UTILS.getElement(
             (DOM.Clock.time_scroller[0],DOM.Clock.time_scroller[1] % "minutes"),
             "Scroller for 'minutes'")
+        
+        self.UTILS.logResult("info", "H: %s, M: %s" % (scroller_hours.text, scroller_minutes.text))
+        return
 
         #
         # Set the hour.
