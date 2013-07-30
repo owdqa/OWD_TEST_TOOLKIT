@@ -5,7 +5,11 @@ view_all_contact_xpath = '//*[@data-order="%s"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath  = "//li[@class='contact-item']//p[@data-order='%s']"
 
+view_details_title     = ('id', 'contact-name-title')
 view_contact_tel_field = ("id", "call-or-pick-0")
+view_contact_email_field = ("id", "email-or-pick-0")
+view_contact_address    = ("xpath", "//li[@id='address-details-template-0']//a[@class='action action-block']/b")
+view_contact_comments  = ("id", "note-details-template-0")
 view_contact_tels_xpath= "//*[contains(@id, 'call-or-pick-') and contains(@data-tel, '%s')]"
 dialer_frame           = ("data-url", "oncall")
 
@@ -26,7 +30,6 @@ settings_fb_logout_wait= ('id', 'progress-title')
 settings_done_button   = ('id', 'settings-done')
 add_contact_button     = ('id', 'add-contact-button')
 add_contact_header     = ('xpath', GLOBAL.app_head_specific % 'Add contact')
-view_details_title     = ('id', 'contact-form-title')
 favourite_button       = ('id','toggle-favorite')
 favourite_marker       = ('id', 'favorite-star')
 details_back_button    = ('id', 'details-back')
