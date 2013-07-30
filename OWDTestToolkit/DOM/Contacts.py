@@ -68,6 +68,7 @@ link_button            = ('id', "link_button") # WARNING: >1 element has this id
 gmail_button            = ("xpath", "//button[text()='Gmail']")
 gmail_frame             = ("data-url", "google")
 gmail_throbber          = ("id", "popup-throbber")
+gmail_cancel_login      = ("id", "popup-close")
 gmail_username          = ("id", "Email")
 gmail_password          = ("id", "Passwd")
 gmail_signIn_button     = ("id", "signIn")
