@@ -30,6 +30,7 @@ class main(GaiaTestCase):
         self.logResult("info", self.msg)
 
         frames = self.marionette.find_elements("tag name", "iframe")
+        ucount=0
         for fnum in range (0, len(frames)):
             
             #
