@@ -3,7 +3,7 @@ frame_locator          = ("src","contacts")
 view_all_header        = ('xpath', GLOBAL.app_head_specific % 'Contacts')
 view_all_contact_xpath = '//*[@data-order="%s"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
-view_all_contact_name_xpath  = "//li[@class='contact-item']//p[@data-order='%s']"
+view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-order,'%s')]"
 
 view_details_title     = ('id', 'contact-name-title')
 view_contact_tel_field = ("id", "call-or-pick-0")
@@ -80,6 +80,8 @@ gmail_login_error_msg   = ("id", "errormsg_0_Passwd")
 
 gmail_import_frame      = ("src", "gmail")  # It's in the contacts iframe.
 gmail_import_import_btn = ("id", "import-action")
+gmail_import_select_all = ("id", "select-all")
+gmail_import_desel_all  = ("id", "deselect-all")
 gmail_import_conts_list = ("xpath", "//*[@id='groups-list']//li[@class='block-item']")
 gmail_import_conts_xp   = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
 
