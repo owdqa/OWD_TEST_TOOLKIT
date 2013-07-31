@@ -77,3 +77,13 @@ gmail_username          = ("id", "Email")
 gmail_password          = ("id", "Passwd")
 gmail_signIn_button     = ("id", "signIn")
 gmail_login_error_msg   = ("id", "errormsg_0_Passwd")
+
+gmail_import_frame      = ("src", "gmail")  # It's in the contacts iframe.
+gmail_import_import_btn = ("id", "import-action")
+gmail_import_conts_list = ("xpath", "//*[@id='groups-list']//li[@class='block-item']")
+gmail_import_conts_xp   = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
+
+
+
+
+

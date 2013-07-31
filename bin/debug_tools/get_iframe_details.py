@@ -130,7 +130,7 @@ except:
 if not LOGDIR:
     LOGDIR  = "/tmp/tests/current_screen/"
     os.system("mkdir -p " + LOGDIR + " > /dev/null")
-    os.system("rm " + LOGDIR + "* > /dev/null")
+    os.system("rm " + LOGDIR + "* > /dev/null 2>&1")
 
 # Do it!
 current_frame().main(LOGDIR)

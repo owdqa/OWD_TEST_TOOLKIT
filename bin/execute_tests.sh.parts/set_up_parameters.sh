@@ -16,6 +16,7 @@ export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
 if [ ! "$RESULT_DIR" ]
 then
 	. $0.parts/fake_ci_server.sh
+	rm -f $RESULT_DIR/*
 fi
 #NOWTIME=$(date +%Y%m%d%H%M)
 #export RUN_ID=${RUN_ID:-$NOWTIME}
