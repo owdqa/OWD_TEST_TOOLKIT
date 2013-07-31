@@ -18,9 +18,9 @@ fi
 if [ "$RUN_TEST" ]
 then               
     x="($test_run_time) $test_result_str"
-    [ "$ON_CI_SERVER" ] && printf "$x\n" >> $REALTIME_SUMMARY || printf "$x\n"
+    [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ] && printf "$x\n" >> $REALTIME_SUMMARY || printf "$x\n"
 else
     x="(not run)"
-    [ "$ON_CI_SERVER" ] && printf "$x\n" >> $REALTIME_SUMMARY || printf "$x\n"
+    [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ] && printf "$x\n" >> $REALTIME_SUMMARY || printf "$x\n"
 fi
 
