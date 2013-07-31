@@ -13,10 +13,14 @@ export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
 #
 # Directory for all output (only required if not coming from ci_test_run.sh).
 #
-NOWTIME=$(date +%Y%m%d%H%M)
-export RUN_ID=${RUN_ID:-$NOWTIME}
-export RESULT_DIR=${RESULT_DIR:-"/tmp/tests/B2G_tests.$RUN_ID"}
-[ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
+if [ ! "$RESULT_DIR" ]
+then
+	. $0.parts/fake_ci_server.sh
+fi
+#NOWTIME=$(date +%Y%m%d%H%M)
+#export RUN_ID=${RUN_ID:-$NOWTIME}
+#export RESULT_DIR=${RESULT_DIR:-"/tmp/tests/B2G_tests.$RUN_ID"}
+#[ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR
 
 #
 # File for realtime summary (so even though the CI output is minimal,

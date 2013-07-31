@@ -23,4 +23,7 @@ printf "Ignored test cases        : %4s\n" $IGNORED
 printf "Unwritten test cases      : %4s\n" $UNWRITTEN
 printf "\n$sep\n\n\n"                          
 
-
+if [ "$FAKE_CI_SERVER" ]
+then
+	printf "For debugging etc... point your browser to: file:///var/www/html/owd_tests/test_123/index.html\n\n"
+fi
