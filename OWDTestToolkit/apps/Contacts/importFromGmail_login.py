@@ -9,6 +9,8 @@ class main(GaiaTestCase):
         # <br>
         # If p_clickSignIn is set to True then this method will also click
         # the Sign in button (defaults to true).
+        # <br>
+        # Returns False if the login failed, else True.
         #
         x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
@@ -65,6 +67,19 @@ class main(GaiaTestCase):
                 if p_clickSignIn:
                     x = self.UTILS.getElement(DOM.Contacts.gmail_signIn_button, "Sign In button")
                     x.tap()
+                    
+                    #
+                    # Check to see if sigin failed. If it did then stay here.
+                    #
+                    try:
+                        self.wait_for_element_displayed(*DOM.Contacts.gmail_login_error_msg)
+                        
+                        x = self.UTILS.screenShotOnErr()
+                        self.UTILS.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
+                        return False
+                    except:
+                        pass
+
                 else:
                     return
         except:
@@ -80,4 +95,4 @@ class main(GaiaTestCase):
         
         self.UTILS.waitForElements(DOM.Contacts.gmail_import_conts_list, "Contacts list")
         
-        
+        return True
