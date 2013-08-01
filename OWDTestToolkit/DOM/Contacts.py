@@ -86,6 +86,7 @@ gmail_import_conts_list = ("xpath", "//*[@id='groups-list']//li[@class='block-it
 gmail_import_search_list= ("xpath", "//*[@id='search-list']//li[@class='block-item']")
 gmail_import_conts_xp   = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
 
+hotmail_button            = ("xpath", "//button[text()='Outlook']")
 
 
 
