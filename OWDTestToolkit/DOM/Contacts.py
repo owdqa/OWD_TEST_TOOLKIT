@@ -83,6 +83,7 @@ gmail_import_import_btn = ("id", "import-action")
 gmail_import_select_all = ("id", "select-all")
 gmail_import_desel_all  = ("id", "deselect-all")
 gmail_import_conts_list = ("xpath", "//*[@id='groups-list']//li[@class='block-item']")
+gmail_import_search_list= ("xpath", "//*[@id='search-list']//li[@class='block-item']")
 gmail_import_conts_xp   = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
 
 
