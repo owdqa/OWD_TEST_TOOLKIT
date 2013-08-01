@@ -25,7 +25,7 @@ fi
 DEVICE=$1
 TYPE=$2
 VERSION=$3
-LOG_FILE=/tmp/${DEVICE}_flash_download.log
+LOGFILE=/tmp/${DEVICE}_flash_download.log
 TARGET_DIR=$HOME/Downloads/device_flash_files
 
 #
