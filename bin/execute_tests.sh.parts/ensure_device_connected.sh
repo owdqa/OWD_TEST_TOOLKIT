@@ -6,7 +6,7 @@ then
     #
     # We're catching the output (usually means we're on the ci server).
     #
-    $OWD_TEST_TOOLKIT_BIN/connect_device.sh > ${RESULT_DIR}/@Connect_device@Click_here_for_details
+    $OWD_TEST_TOOLKIT_BIN/connect_device.sh > ${RESULT_DIR}/@Test_device_connection@Click_here_for_details
 else
     $OWD_TEST_TOOLKIT_BIN/connect_device.sh
     echo ""

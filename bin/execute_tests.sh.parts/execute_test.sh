@@ -7,6 +7,13 @@ then
     export test_run_time="00:00"
 else
     #
+    # Ensure the device is connected (reset each time to be sure nothing
+    # 'old' is kicking around).
+    #
+    sudo adb kill-server
+    $OWD_TEST_TOOLKIT_BIN/connect_device.sh >/dev/null 2>&1
+
+    #
     # Run the test and record the time taken.
     #
     test_run_time=$( (time f_execute_test_file) 2>&1 )
