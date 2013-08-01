@@ -6,7 +6,7 @@ class main(GaiaTestCase):
         #
         # Opens the call log.
         #
-        x = self.UTILS.getElement(DOM.Dialer.call_log_btn, "Call number button")
+        x = self.UTILS.getElement(DOM.Dialer.option_bar_call_log, "Call log button")
         x.tap()
         
         self.UTILS.waitForElements(DOM.Dialer.call_log_filter, "Call log filter")
