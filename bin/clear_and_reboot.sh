@@ -7,10 +7,11 @@ sudo adb shell rm -r "/data/local/indexedDB"
 sudo adb shell rm -r "data/b2g/mozilla"
 sudo adb reboot
 sudo adb wait-for-device
-sleep 30
+sleep 35
 sudo adb kill-server
 sudo adb start-server
 sudo adb forward tcp:2828 tcp:2828
+sleep 2
 
 #/usr/bin/python2.7 <<!
 #from marionette import Marionette
