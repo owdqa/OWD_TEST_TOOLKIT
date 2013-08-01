@@ -10,9 +10,12 @@ class main(GaiaTestCase):
         # In some cases you don't want this to check the header (if the contact has no name
         # for example). In that case, set p_HeaderCheck=False.
         #
+        contnam = p_contact_name.replace(" ","")
+        matcher = DOM.Contacts.view_all_contact_xpath % contnam
+        x = ("xpath", matcher)
         
-        x = ("xpath", DOM.Contacts.view_all_contact_xpath % p_contact_name.replace(" ",""))
-        contact_found = self.UTILS.getElement(x, "Contact '" + p_contact_name + "'")
+        self.UTILS.logResult("info", "Using '%s' ..." % matcher)
+        contact_found = self.UTILS.getElement(x, "Contact '%s'" % p_contact_name)
         contact_found.tap()
         
         self.UTILS.waitForElements(DOM.Contacts.view_details_title, "'View contact details' title")

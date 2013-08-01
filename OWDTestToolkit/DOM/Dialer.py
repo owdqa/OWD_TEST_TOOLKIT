@@ -1,6 +1,9 @@
 frame_locator          = ('src', 'dialer')
 frame_locator_calling  = ('name', 'call_screen')
 
+option_bar_call_log    = ("id", "option-recents")
+option_bar_contacts    = ("id", "option-contacts")
+option_bar_keypad      = ("id", "option-keypad")
 
 phone_number           = ('id', 'phone-number-view') # Beware: this number may have a country code prefix on it.
 
