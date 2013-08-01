@@ -117,8 +117,8 @@ f_execute_test_file(){
 <span style=\"color:#ff0000\">
 ################################################################################
 #
-# AN ISSUE WAS REPORTED BY MARIONETTE ....
-# ========================================
+# <b>AN ISSUE WAS REPORTED BY MARIONETTE ....</b>
+# <b>========================================</b>
 #
 
 $(cat $ERR_FILE)
