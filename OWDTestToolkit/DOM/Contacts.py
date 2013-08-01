@@ -87,13 +87,18 @@ gmail_import_search_list= ("xpath", "//*[@id='search-list']//li[@class='block-it
 gmail_import_conts_xp   = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
 
 hotmail_button            = ("xpath", "//button[text()='Outlook']")
-hotmail_frame             = ("data-url", "login.live.com")
+hotmail_frame             = ("data-url", ".live.com")
 hotmail_throbber          = ("id", "popup-throbber")
 hotmail_cancel_login      = ("id", "popup-close")
-hotmail_username          = ("id", "idDiv_PWD_UsernameExample")
-hotmail_password          = ("id", "idDiv_PWD_PasswordExample")
+hotmail_username          = ("id", "i0116")
+hotmail_password          = ("id", "i0118")
 hotmail_signIn_button     = ("id", "idSIButton9")
 hotmail_login_error_msg   = ("id", "idTd_PWD_Error")
+
+hotmail_import_frame      = ("src", "live")  # It's in the contacts iframe.
+hotmail_import_conts_list = ("xpath", "//*[@id='groups-list']//li[@class='block-item']")
+hotmail_import_search_list= ("xpath", "//*[@id='search-list']//li[@class='block-item']")
+
 
 
 
