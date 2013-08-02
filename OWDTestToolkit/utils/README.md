@@ -397,6 +397,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>checkMarionetteOK</td>
+        <td align=left></td>
+        <td align=left>Sometimes marionette session 'vanishes', so this makes sure we have one still.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>logComment</td>
         <td align=left>p_str</td>
         <td align=left>Add a comment to the comment array.</td>
