@@ -96,6 +96,9 @@ hotmail_signIn_button     = ("id", "idSIButton9")
 hotmail_login_error_msg   = ("id", "idTd_PWD_Error")
 
 hotmail_import_frame      = ("src", "live")  # It's in the contacts iframe.
+hotmail_import_import_btn = ("id", "import-action")
+hotmail_import_select_all = ("id", "select-all")
+hotmail_import_desel_all  = ("id", "deselect-all")
 hotmail_import_conts_list = ("xpath", "//*[@id='groups-list']//li[@class='block-item']")
 hotmail_import_search_list= ("xpath", "//*[@id='search-list']//li[@class='block-item']")
 

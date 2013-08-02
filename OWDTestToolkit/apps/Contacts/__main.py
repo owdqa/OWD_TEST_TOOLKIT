@@ -32,7 +32,7 @@ import  countEmailAddressesWhileEditing , \
         selectContactFromAll            , \
         addAnotherEmailAddress          , \
         importFromGmail_login           , \
-        toggleSelectGmailContact        , \
+        toggleSelectImportContact       , \
         importFromGmail_importAll       , \
         importFromHotmail_login
 
@@ -69,7 +69,7 @@ class Contacts(  countEmailAddressesWhileEditing.main,
                     deleteContact.main,
                     addAnotherEmailAddress.main,
                     importFromGmail_login.main,
-                    toggleSelectGmailContact.main,
+                    toggleSelectImportContact.main,
                     importFromGmail_importAll.main,
                     importFromHotmail_login.main):
     

@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 
 class main(GaiaTestCase):
 
-    def toggleSelectGmailContact(self, p_num):
+    def toggleSelectImportContact(self, p_num):
         #
         # Toggles select / de-select a gmail contact( marionette doesn't work here yet, so use JS).
         # p_num is the actualt contact number (1 -> x).
