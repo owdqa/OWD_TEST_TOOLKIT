@@ -198,6 +198,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>import_ImportAll</td>
+        <td align=left></td>
+        <td align=left>Assumes you're already in the gmail import screen (after logging in etc...).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>tapSettingsButton</td>
         <td align=left></td>
         <td align=left>Tap the settings button.</td>
@@ -247,6 +254,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>import_GmailLogin</td>
+        <td align=left>p_name<br>p_pass<br>p_clickSignIn=True</td>
+        <td align=left>Presses the Settings button, then Gmail, then logs in using  p_name and p_pass (to begin the process of importing contacts).  <br>  If p_clickSignIn is set to True then this method will also click  the Sign in button (defaults to true).  <br>  Returns False if the login failed, else True.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>selectSearchResultSeveralPhones</td>
         <td align=left>p_contactName<br>p_num</td>
         <td align=left>Select the result of a search</td>
@@ -289,13 +303,6 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>importFromGmail_login</td>
-        <td align=left>p_name<br>p_pass</td>
-        <td align=left>Presses the Settings button, then Gmail, then logs in using  p_name and p_pass (to begin the process of importing contacts).</td>
-    </tr>
-
-
-    <tr>
         <td align=center>verifyFieldContents</td>
         <td align=left>p_contact_json_obj<br>p_view=False</td>
         <td align=left>Verify the contents of the contact fields in this screen (assumes  you are in the correct screen since this could be view or edit).  <br><br>  <b>p_contact_json_obj</b> must be an object in the same format as the  one in ./example/tests/mock_data/contacts.py.<br>  <b>p_view</b> selects whether this is the 'view contact' screen or not (defaults to False -> edit screen).</td>
@@ -304,8 +311,15 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
     <tr>
         <td align=center>viewContact</td>
-        <td align=left>p_contact_name</td>
-        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen).</td>
+        <td align=left>p_contact_name<br>p_HeaderCheck=True</td>
+        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen).  <br>  In some cases you don't want this to check the header (if the contact has no name  for example). In that case, set p_HeaderCheck=False.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>import_HotmailLogin</td>
+        <td align=left>p_name<br>p_pass<br>p_clickSignIn=True</td>
+        <td align=left>Presses the Settings button, then Hotmail, then logs in using  p_name and p_pass (to begin the process of importing contacts).  <br>  If p_clickSignIn is set to True then this method will also click  the Sign in button (defaults to true).  <br>  Returns False if the login failed, else True.</td>
     </tr>
 
 
@@ -341,6 +355,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>selectContactFromAll</td>
         <td align=left>p_contactName</td>
         <td align=left>Select the result of a search</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>import_toggleSelectContact</td>
+        <td align=left>p_num</td>
+        <td align=left>Toggles select / de-select a gmail contact( marionette doesn't work here yet, so use JS).  p_num is the actualt contact number (1 -> x).</td>
     </tr>
 
 
