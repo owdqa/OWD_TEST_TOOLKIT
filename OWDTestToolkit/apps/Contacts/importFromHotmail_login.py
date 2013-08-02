@@ -39,10 +39,14 @@ class main(GaiaTestCase):
                 self.UTILS.waitForNotElements(DOM.Contacts.hotmail_throbber, "Animated 'loading' indicator")        
         
                 #
-                # Send the login information.
+                # Send the login information (sometimes the username isn't required, just the password).
                 #
-                x = self.UTILS.getElement(DOM.Contacts.hotmail_username, "Email name field")
-                x.send_keys(p_name)
+                try:
+                    x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
+                    x.send_keys(p_name)
+                except:
+                    pass
+                
                 x = self.UTILS.getElement(DOM.Contacts.hotmail_password, "Password field")
                 x.send_keys(p_pass)
             
