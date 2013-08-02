@@ -6,7 +6,8 @@ import  clearGeolocPermission,\
         addFileToDevice,\
         selectFromSystemDialog,\
         setupDataConn,\
-        setSetting
+        setSetting,\
+        checkMarionetteOK
         
 class main ( 
             clearGeolocPermission.main,
@@ -15,7 +16,8 @@ class main (
             addFileToDevice.main,
             selectFromSystemDialog.main,
             setupDataConn.main,
-            setSetting.main):
+            setSetting.main,
+            checkMarionetteOK.main):
 
     def __init__(self):
         return

@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 
 class main(GaiaTestCase):
 
-    def importFromGmail_login(self, p_name, p_pass, p_clickSignIn=True):
+    def import_GmailLogin(self, p_name, p_pass, p_clickSignIn=True):
         #
         # Presses the Settings button, then Gmail, then logs in using
         # p_name and p_pass (to begin the process of importing contacts).
@@ -36,7 +36,7 @@ class main(GaiaTestCase):
                 #
                 self.UTILS.switchToFrame(*DOM.Contacts.gmail_frame)
                 time.sleep(2)
-                self.UTILS.waitForNotElements(DOM.Contacts.gmail_throbber, "Animated 'loading' indicator")        
+                self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")        
         
                 #
                 # Sometimes a message about permissions appears (since this is the only place
@@ -52,7 +52,7 @@ class main(GaiaTestCase):
                     if x:
                         x.tap()
                         time.sleep(2)
-                        self.UTILS.waitForNotElements(DOM.Contacts.gmail_throbber, "Animated 'loading' indicator")
+                        self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
                     else:
                         break
         
@@ -93,6 +93,6 @@ class main(GaiaTestCase):
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.switchToFrame(*DOM.Contacts.gmail_import_frame, p_viaRootFrame=False)
         
-        self.UTILS.waitForElements(DOM.Contacts.gmail_import_conts_list, "Contacts list")
+        self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list")
         
         return True

@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 
 class main(GaiaTestCase):
 
-    def importFromHotmail_login(self, p_name, p_pass, p_clickSignIn=True):
+    def import_HotmailLogin(self, p_name, p_pass, p_clickSignIn=True):
         #
         # Presses the Settings button, then Hotmail, then logs in using
         # p_name and p_pass (to begin the process of importing contacts).
@@ -36,7 +36,7 @@ class main(GaiaTestCase):
                 #
                 self.UTILS.switchToFrame(*DOM.Contacts.hotmail_frame)
                 time.sleep(2)
-                self.UTILS.waitForNotElements(DOM.Contacts.hotmail_throbber, "Animated 'loading' indicator")        
+                self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")        
         
                 #
                 # Send the login information (sometimes the username isn't required, just the password).
@@ -83,7 +83,7 @@ class main(GaiaTestCase):
                         x.send_keys(p_pass)
                         x = self.UTILS.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
                         x.tap()
-                        self.UTILS.waitForNotElements(DOM.Contacts.hotmail_throbber, "Animated 'loading' indicator")
+                        self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
             
                 else:
                     return
@@ -95,9 +95,10 @@ class main(GaiaTestCase):
         #
         # Journey back to the import iframe.
         #
+        time.sleep(2)
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.switchToFrame(*DOM.Contacts.hotmail_import_frame, p_viaRootFrame=False)
         
-        self.UTILS.waitForElements(DOM.Contacts.hotmail_import_conts_list, "Contacts list")
+        self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list")
         
         return True

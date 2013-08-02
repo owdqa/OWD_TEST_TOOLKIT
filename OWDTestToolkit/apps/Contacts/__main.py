@@ -31,10 +31,10 @@ import  countEmailAddressesWhileEditing , \
         deleteContact                   , \
         selectContactFromAll            , \
         addAnotherEmailAddress          , \
-        importFromGmail_login           , \
-        toggleSelectImportContact       , \
-        importFromGmail_importAll       , \
-        importFromHotmail_login
+        import_toggleSelectContact      , \
+        import_ImportAll                , \
+        import_GmailLogin               , \
+        import_HotmailLogin
 
 
 class Contacts(  countEmailAddressesWhileEditing.main,
@@ -68,10 +68,10 @@ class Contacts(  countEmailAddressesWhileEditing.main,
                     pressDeleteContactButton.main,
                     deleteContact.main,
                     addAnotherEmailAddress.main,
-                    importFromGmail_login.main,
-                    toggleSelectImportContact.main,
-                    importFromGmail_importAll.main,
-                    importFromHotmail_login.main):
+                    import_toggleSelectContact.main,
+                    import_ImportAll.main,
+                    import_GmailLogin.main,
+                    import_HotmailLogin.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
