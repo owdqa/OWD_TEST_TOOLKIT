@@ -28,8 +28,11 @@ class main(GaiaTestCase):
         time.sleep(5)
         self.marionette.switch_to_frame()
         try:
-            x = self.marionette.find_element("xpath", "//iframe[contains(@%s, '%s')]" % \
-                                             (DOM.Contacts.hotmail_frame[0], DOM.Contacts.hotmail_frame[1]))
+            el_name = "//iframe[contains(@%s, '%s')]" % \
+                      (DOM.Contacts.hotmail_frame[0], DOM.Contacts.hotmail_frame[1])
+            
+            self.wait_for_element_present("xpath", el_name, 2)
+            x = self.marionette.find_element("xpath", el_name)
             if x:
                 #
                 # Switch to the hotmail login frame.
@@ -43,6 +46,7 @@ class main(GaiaTestCase):
                 # Send the login information (sometimes the username isn't required, just the password).
                 #
                 try:
+                    self.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
                     x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
                     x.send_keys(p_name)
                 except:
@@ -74,7 +78,9 @@ class main(GaiaTestCase):
                     #
                     x=False
                     try:
-                        x = self.marionette.find_element("id", "idBtn_Accept")
+                        elname = ("id", "idBtn_Accept")
+                        self.wait_for_element_displayed(*elname, timeout=2)
+                        x = self.marionette.find_element(*elname)
                     except:
                         x = False
                             
