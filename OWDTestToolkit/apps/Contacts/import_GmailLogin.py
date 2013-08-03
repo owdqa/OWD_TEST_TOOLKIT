@@ -45,6 +45,7 @@ class main(GaiaTestCase):
                 #
                 for i in range(1,5):
                     try:
+                        self.wait_for_element_displayed("id", "submit_approve_access", 2)
                         x = self.marionette.find_element("id", "submit_approve_access")
                     except:
                         x = False

@@ -36,7 +36,8 @@ class main(GaiaTestCase):
                 #
                 self.UTILS.switchToFrame(*DOM.Contacts.hotmail_frame)
                 time.sleep(2)
-                self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")        
+                self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
+                time.sleep(2)       
         
                 #
                 # Send the login information (sometimes the username isn't required, just the password).
