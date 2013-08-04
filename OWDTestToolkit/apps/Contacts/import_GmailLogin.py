@@ -28,6 +28,8 @@ class main(GaiaTestCase):
         time.sleep(5)
         self.marionette.switch_to_frame()
         try:
+            self.wait_for_element_present("xpath", "//iframe[contains(@%s, '%s')]" % \
+                                             (DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]))
             x = self.marionette.find_element("xpath", "//iframe[contains(@%s, '%s')]" % \
                                              (DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]))
             if x:
