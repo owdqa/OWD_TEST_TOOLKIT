@@ -79,16 +79,21 @@ class main(GaiaTestCase):
                     return False
                 except:
                     pass
+            else:
+                return True
 
         except:
             pass
                 
-        time.sleep(2)
+        time.sleep(5)
         
         #
         # Journey back to the import iframe.
         #
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
+        self.wait_for_element_present("xpath","//iframe[contains(@%s, '%s')]" % \
+                                      (DOM.Contacts.gmail_import_frame[0],DOM.Contacts.gmail_import_frame[1]),
+                                      timeout=30)
         self.UTILS.switchToFrame(*DOM.Contacts.gmail_import_frame, p_viaRootFrame=False)
         self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
         
