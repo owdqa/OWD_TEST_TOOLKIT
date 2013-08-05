@@ -12,6 +12,8 @@ class main(GaiaTestCase):
         # <br>
         # Returns False if the login failed, else True.
         #
+        self.UTILS.logResult("info", "Logging in with '%s'/'%s'." % (p_name, p_pass))
+
         x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
         
@@ -30,60 +32,54 @@ class main(GaiaTestCase):
             self.wait_for_element_present("xpath", "//iframe[contains(@%s, '%s')]" % \
                                              (DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]),
                                              timeout=5)
-            x = self.marionette.find_element("xpath", "//iframe[contains(@%s, '%s')]" % \
-                                             (DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]))
-            if x:
-                #
-                # Switch to the gmail login frame.
-                #
-                self.UTILS.switchToFrame(*DOM.Contacts.gmail_frame)
-                time.sleep(2)
-                self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")        
-        
-                #
-                # Sometimes a message about permissions appears.
-                # Seems to happen a few times, so loop through 5 just in case ...
-                #
-                for i in range(1,5):
-                    try:
-                        self.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
-                        x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
-                    except:
-                        x = False
-                        
-                    if x:
-                        x.tap()
-                        time.sleep(2)
-                        self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
-                    else:
-                        break
-        
-                #
-                # Send the login information.
-                #
-                x = self.UTILS.getElement(DOM.Contacts.gmail_username, "Email field")
-                x.send_keys(p_name)
-                x = self.UTILS.getElement(DOM.Contacts.gmail_password, "Password field")
-                x.send_keys(p_pass)
+            #
+            # Switch to the gmail login frame.
+            #
+            self.UTILS.switchToFrame(*DOM.Contacts.gmail_frame)
             
-                if p_clickSignIn:
-                    x = self.UTILS.getElement(DOM.Contacts.gmail_signIn_button, "Sign In button")
-                    x.tap()
+            time.sleep(2)
+            self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")        
+    
+            #
+            # PERMISSIONS (sometimes appears).
+            # Seems to happen a few times, so loop through 5 just in case ...
+            #
+            for i in range(1,5):
+                try:
+                    self.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
                     
-                    #
-                    # Check to see if sigin failed. If it did then stay here.
-                    #
-                    try:
-                        self.wait_for_element_displayed(*DOM.Contacts.gmail_login_error_msg)
-                        
-                        x = self.UTILS.screenShotOnErr()
-                        self.UTILS.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
-                        return False
-                    except:
-                        pass
+                    x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
+                    x.tap()
+                    time.sleep(2)
+                    self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
+    
+                except:
+                    break
+        
+            #
+            # Send the login information.
+            #
+            x = self.UTILS.getElement(DOM.Contacts.gmail_username, "Email field")
+            x.send_keys(p_name)
 
-                else:
-                    return
+            x = self.UTILS.getElement(DOM.Contacts.gmail_password, "Password field")
+            x.send_keys(p_pass)
+        
+            if p_clickSignIn:
+                x = self.UTILS.getElement(DOM.Contacts.gmail_signIn_button, "Sign In button")
+                x.tap()
+                
+                #
+                # Check to see if sigin failed. If it did then stay here.
+                #
+                try:
+                    self.wait_for_element_displayed(*DOM.Contacts.gmail_login_error_msg, timeout=2)
+                    x = self.UTILS.screenShotOnErr()
+                    self.UTILS.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
+                    return False
+                except:
+                    pass
+
         except:
             pass
                 
@@ -94,7 +90,6 @@ class main(GaiaTestCase):
         #
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.switchToFrame(*DOM.Contacts.gmail_import_frame, p_viaRootFrame=False)
-        
-        self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list")
+        self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
         
         return True

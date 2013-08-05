@@ -19,5 +19,6 @@ class main(GaiaTestCase):
         orig_iframe = self.UTILS.currentIframe()
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
         
+        time.sleep(2)
         return orig_iframe
         
