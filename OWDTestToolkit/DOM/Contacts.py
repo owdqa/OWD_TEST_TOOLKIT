@@ -87,6 +87,7 @@ gmail_frame             = ("data-url", "google")
 gmail_username          = ("id", "Email")
 gmail_password          = ("id", "Passwd")
 gmail_signIn_button     = ("id", "signIn")
+gmail_permission_accept = ("id", "submit_approve_access")
 gmail_login_error_msg   = ("id", "errormsg_0_Passwd")
 gmail_import_frame      = ("src", "gmail")  # It's in the contacts iframe.
 
@@ -95,6 +96,7 @@ hotmail_frame             = ("data-url", ".live.com")
 hotmail_username          = ("id", "i0116")
 hotmail_password          = ("id", "i0118")
 hotmail_signIn_button     = ("id", "idSIButton9")
+hotmail_permission_accept = ("id", "idBtn_Accept")
 hotmail_login_extra_msg   = ("id", "idDiv_FSI_HeaderInfo")
 hotmail_login_error_msg   = ("id", "idTd_PWD_Error")
 hotmail_import_frame      = ("src", "live")  # It's in the contacts iframe.

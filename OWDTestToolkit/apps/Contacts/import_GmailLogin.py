@@ -25,11 +25,11 @@ class main(GaiaTestCase):
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
         #
-        time.sleep(5)
         self.marionette.switch_to_frame()
         try:
             self.wait_for_element_present("xpath", "//iframe[contains(@%s, '%s')]" % \
-                                             (DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]))
+                                             (DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]),
+                                             timeout=5)
             x = self.marionette.find_element("xpath", "//iframe[contains(@%s, '%s')]" % \
                                              (DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]))
             if x:
@@ -41,14 +41,13 @@ class main(GaiaTestCase):
                 self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")        
         
                 #
-                # Sometimes a message about permissions appears (since this is the only place
-                # I think I'll need this DOM def, I'm just putting it here).
+                # Sometimes a message about permissions appears.
                 # Seems to happen a few times, so loop through 5 just in case ...
                 #
                 for i in range(1,5):
                     try:
-                        self.wait_for_element_displayed("id", "submit_approve_access", 2)
-                        x = self.marionette.find_element("id", "submit_approve_access")
+                        self.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
+                        x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
                     except:
                         x = False
                         
@@ -61,7 +60,7 @@ class main(GaiaTestCase):
         
                 #
                 # Send the login information.
-                #        
+                #
                 x = self.UTILS.getElement(DOM.Contacts.gmail_username, "Email field")
                 x.send_keys(p_name)
                 x = self.UTILS.getElement(DOM.Contacts.gmail_password, "Password field")
