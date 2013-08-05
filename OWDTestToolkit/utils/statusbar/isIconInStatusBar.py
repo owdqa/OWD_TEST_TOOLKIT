@@ -9,8 +9,13 @@ class main(GaiaTestCase):
         #
         orig_iframe = self.currentIframe()
         self.marionette.switch_to_frame()
-        x = self.marionette.find_element(*p_dom)
-        isThere = x.is_displayed()
+        
+        isThere = False
+        try:
+            self.wait_for_element_displayed(*p_dom, timeout=1)
+            isThere = True
+        except:
+            pass
         
         if orig_iframe:
             self.switchToFrame("src", orig_iframe)

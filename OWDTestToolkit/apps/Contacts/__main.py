@@ -29,7 +29,6 @@ import  countEmailAddressesWhileEditing , \
         checkSearchResults              , \
         pressDeleteContactButton        , \
         deleteContact                   , \
-        selectContactFromAll            , \
         addAnotherEmailAddress          , \
         import_toggleSelectContact      , \
         import_ImportAll                , \
@@ -48,7 +47,6 @@ class Contacts(  countEmailAddressesWhileEditing.main,
                     startCreateNewContact.main,
                     populateContactFields.main,
                     verifyImageInAllContacts.main,
-                    selectContactFromAll.main,
                     viewContact.main,
                     tapSettingsButton.main,
                     checkViewContactDetails.main,

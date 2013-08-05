@@ -25,13 +25,12 @@ class main(GaiaTestCase):
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
         #
-        time.sleep(5)
         self.marionette.switch_to_frame()
         try:
             el_name = "//iframe[contains(@%s, '%s')]" % \
                       (DOM.Contacts.hotmail_frame[0], DOM.Contacts.hotmail_frame[1])
             
-            self.wait_for_element_present("xpath", el_name, 2)
+            self.wait_for_element_present("xpath", el_name, timeout=5)
             x = self.marionette.find_element("xpath", el_name)
             if x:
                 #
@@ -40,11 +39,13 @@ class main(GaiaTestCase):
                 self.UTILS.switchToFrame(*DOM.Contacts.hotmail_frame)
                 time.sleep(2)
                 self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
-                time.sleep(2)       
         
                 #
                 # Send the login information (sometimes the username isn't required, just the password).
+                # I 'know' that the password field will appear though, so wait for that before checking
+                # to see if the username field has also appeared.
                 #
+                self.wait_for_element_displayed(*DOM.Contacts.hotmail_password, timeout=30)
                 try:
                     self.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
                     x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
@@ -72,15 +73,12 @@ class main(GaiaTestCase):
                         pass
 
                     #
-                    # Sometimes a message about permissions appears (since this is the only place
-                    # I think I'll need this DOM def, I'm just putting it here).
-                    # Seems to happen a few times, so loop through 5 just in case ...
+                    # Sometimes a message about permissions appears.
                     #
                     x=False
                     try:
-                        elname = ("id", "idBtn_Accept")
-                        self.wait_for_element_displayed(*elname, timeout=2)
-                        x = self.marionette.find_element(*elname)
+                        self.wait_for_element_displayed(*DOM.Contacts.hotmail_permission_accept, timeout=2)
+                        x = self.marionette.find_element(*DOM.Contacts.hotmail_permission_accept)
                     except:
                         x = False
                             
@@ -97,8 +95,6 @@ class main(GaiaTestCase):
         except:
             pass
                 
-        time.sleep(2)
-        
         #
         # Journey back to the import iframe.
         #

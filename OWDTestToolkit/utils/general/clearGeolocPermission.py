@@ -9,13 +9,17 @@ class main(GaiaTestCase):
         # This method clears the Geolocation permission dialog
         # (if necessary) with p_allow.
         #
+        permission_yes = ("id", "permission-yes")
+        permission_no  = ("id", "permission-no")
         orig_frame = self.currentIframe()
         self.marionette.switch_to_frame()
         try:
             if p_allow:
-                x = self.marionette.find_element("id", "permission-yes")
+                self.wait_for_element_displayed(*permission_yes, timeout=2)
+                x = self.marionette.find_element(*permission_yes)
             else:
-                x = self.marionette.find_element("id", "permission-no")
+                self.wait_for_element_displayed(*permission_no, timeout=2)
+                x = self.marionette.find_element(*permission_no)
                 
             x.tap()
             

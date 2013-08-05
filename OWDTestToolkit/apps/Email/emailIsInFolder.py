@@ -16,7 +16,7 @@ class main(GaiaTestCase):
                 #
                 # Look through any entries found in the folder ...
                 #
-                self.wait_for_element_displayed(*DOM.Email.folder_subject_list)
+                self.wait_for_element_displayed(*DOM.Email.folder_subject_list, timeout=2)
                 z = self.marionette.find_elements(*DOM.Email.folder_subject_list)
                 pos=0
                 for i in z:

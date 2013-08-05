@@ -28,13 +28,17 @@ class main(GaiaTestCase):
     
                 boolKBD=False
                 self.marionette.switch_to_frame()
-                x = self.marionette.find_element("xpath",
-                                                 "//iframe[contains(@" + DOM.Keyboard.frame_locator[0]+ \
-                                                 ",'" + DOM.Keyboard.frame_locator[1] + "')]")
-                if x.is_displayed():
+                
+                try:
+                    #
+                    # A 'silent' check to see if the keyboard iframe appears.
+                    elDef = ("xpath", "//iframe[contains(@%s, '%s')]" % \
+                             (DOM.Keyboard.frame_locator[0],DOM.Keyboard.frame_locator[1]))
+                    self.wait_for_element_displayed(*elDef, timeout=2)
                     boolKBD = True
-                else:
+                except:
                     boolKBD=False
+                    
                 self.UTILS.TEST(boolKBD, "Keyboard is displayed when 'To' field is clicked.")
     
                 self.UTILS.switchToFrame(*DOM.Messages.frame_locator)

@@ -31,7 +31,7 @@ class main(GaiaTestCase):
     # From gaiatest Clock -> regions -> alarm.py
     #
     def _flick_menu_up(self, locator):
-        self.wait_for_element_displayed(*self._current_element(*locator))
+        self.wait_for_element_displayed(*self._current_element(*locator), timeout=2)
         current_element = self.marionette.find_element(*self._current_element(*locator))
         next_element = self.marionette.find_element(*self._next_element(*locator))
 
@@ -43,7 +43,7 @@ class main(GaiaTestCase):
         action.perform()
 
     def _flick_menu_down(self, locator):
-        self.wait_for_element_displayed(*self._current_element(*locator))
+        self.wait_for_element_displayed(*self._current_element(*locator), timeout=2)
         current_element = self.marionette.find_element(*self._current_element(*locator))
         next_element = self.marionette.find_element(*self._next_element(*locator))
 

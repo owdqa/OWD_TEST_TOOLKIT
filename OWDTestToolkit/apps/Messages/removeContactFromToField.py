@@ -20,6 +20,7 @@ class main(GaiaTestCase):
                 	#
                 	# This contact was added via 'add contact' icon.
                 	#
+                	self.wait_for_element_displayed("xpath", "//button[text()='Remove']", timeout=2)
                  	y = self.marionette.find_element("xpath", "//button[text()='Remove']")
                 	self.UTILS.logResult("info", "Tapping 'Remove' button.")
                 	y.tap()

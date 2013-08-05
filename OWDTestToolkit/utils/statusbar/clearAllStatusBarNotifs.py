@@ -11,6 +11,7 @@ class main(GaiaTestCase):
         if p_silent:
             try:
                 self.displayStatusBar()
+                self.wait_for_element_displayed(*DOM.Statusbar.clear_all_button, timeout=1)
                 x = self.marionette.find_element(*DOM.Statusbar.clear_all_button)
                 x.tap()
                 time.sleep(1)

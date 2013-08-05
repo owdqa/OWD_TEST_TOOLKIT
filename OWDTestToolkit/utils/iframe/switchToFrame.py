@@ -56,6 +56,25 @@ class main(GaiaTestCase):
                     break
                 except:
                     pass
-             
-        self.TEST(boolOK, "Successfully switched to iframe where '" + p_attrib + "' = '" + p_str + "'.")
+                
+        if boolOK:
+            self.logResult("info", "Sucessfully switched to iframe where %s contains '%s'." % (p_attrib, p_str))
+        else:
+            self.logResult(p_quitOnError, "<b>NOTE: </b>Failed to switch to iframe where %s contains '%s'." % (p_attrib, p_str))
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         

@@ -23,6 +23,7 @@ class main(GaiaTestCase):
                 # Might need to do this again for Geoloc. ...
                 #
                 try:
+                    self.wait_for_element_displayed(*DOM.EME.add_app_to_homescreen, timeout=3)
                     x = self.marionette.find_element(*DOM.EME.add_app_to_homescreen)
                     x.tap()
                                    
