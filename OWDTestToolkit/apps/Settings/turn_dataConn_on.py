@@ -11,6 +11,7 @@ class main(GaiaTestCase):
         # First, make sure we're in "Settings".
         #
         try:
+            self.wait_for_element_present(*DOM.Settings.frame_locator, timeout=2)
             x = self.marionette.find_element(*DOM.Settings.frame_locator)
         except:
             #
@@ -32,10 +33,9 @@ class main(GaiaTestCase):
             self.marionette.switch_to_frame()
             self.UTILS.switchToFrame(*DOM.Settings.frame_locator)
             
-            self.UTILS.waitForElements(DOM.Settings.celldata_DataConn, 
+            x = self.UTILS.getElement(DOM.Settings.celldata_DataConn, 
                                       "Connect to cellular and data switch",
                                       False, 5, False)
-            x = self.marionette.find_element(*DOM.Settings.celldata_DataConn)
             try:
                 x.tap()
             except:
@@ -60,6 +60,7 @@ class main(GaiaTestCase):
         #
         time.sleep(2)
         try:
+            self.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON, timeout=2)
             x = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
             if x.is_displayed():
                 x.tap()

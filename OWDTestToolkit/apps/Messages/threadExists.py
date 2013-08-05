@@ -4,13 +4,12 @@ class main(GaiaTestCase):
 
     def threadExists(self, p_num):
 		#
-		# Verifies that a thread exists for this number (just return True or False).
+		# Verifies that a thread exists for this number (returns True or False).
 		#
 		boolOK=False
 		try:
-			thread_el = ("xpath", DOM.Messages.thread_selector_xpath % p_num)
-			x = self.marionette.find_element(*thread_el)
-			boolOK=x
+			self.wait_for_element_present("xpath", DOM.Messages.thread_selector_xpath % p_num, 1)
+			boolOK=True
 		except:
 			boolOK=False
 		    

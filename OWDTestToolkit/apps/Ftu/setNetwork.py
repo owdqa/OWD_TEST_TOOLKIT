@@ -19,11 +19,13 @@ class main(GaiaTestCase):
         # In case we are asked for a username and password ...
         #
         time.sleep(2)
-        wifi_login_user = self.marionette.find_element(*DOM.FTU.wifi_login_user)
-        if wifi_login_user.is_displayed():
+        try:
+            self.wait_for_element_displayed(*DOM.FTU.wifi_login_user, timeout=2)
+            wifi_login_user = self.marionette.find_element(*DOM.FTU.wifi_login_user)
             wifi_login_pass = self.marionette.find_element(*DOM.FTU.wifi_login_pass)
             wifi_login_join = self.marionette.find_element(*DOM.FTU.wifi_login_join)
             wifi_login_user.send_keys(p_userName)
             wifi_login_pass.send_keys(p_password)
             wifi_login_join.tap()
-        
+        except:
+        	pass

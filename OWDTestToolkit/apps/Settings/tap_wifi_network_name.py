@@ -17,15 +17,17 @@ class main(GaiaTestCase):
         # In case we are asked for a username and password ...
         #
         time.sleep(2)
-        wifi_login_user = self.marionette.find_element(*DOM.Settings.wifi_login_user)
-        if wifi_login_user.is_displayed():
-            wifi_login_pass = self.UTILS.getElement(DOM.Settings.wifi_login_pass, "Wifi password field")
-            wifi_login_user.send_keys(p_user)
-            wifi_login_pass.send_keys(p_pass)
-            time.sleep(1)
-            wifi_login_ok   = self.UTILS.getElement(DOM.Settings.wifi_login_ok_btn, "Ok button")
-            wifi_login_ok.tap()
-        else:
+        try:
+	        self.wait_for_element_displayed(*DOM.Settings.wifi_login_user, timeout=3)
+	        wifi_login_user = self.marionette.find_element(*DOM.Settings.wifi_login_user)
+	        if wifi_login_user.is_displayed():
+	            wifi_login_pass = self.UTILS.getElement(DOM.Settings.wifi_login_pass, "Wifi password field")
+	            wifi_login_user.send_keys(p_user)
+	            wifi_login_pass.send_keys(p_pass)
+	            time.sleep(1)
+	            wifi_login_ok   = self.UTILS.getElement(DOM.Settings.wifi_login_ok_btn, "Ok button")
+	            wifi_login_ok.tap()
+        except:
             #
             # We were not asked, so go back to the list.
             #

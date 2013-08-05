@@ -34,7 +34,7 @@ class main(GaiaTestCase):
             y.tap()
             
             #
-            # Disactivate edit mode  (just tap the search field).
+            # Deactivate edit mode  (just tap the search field).
             #
             x = self.marionette.find_element(*DOM.EME.search_field)
             x.tap()

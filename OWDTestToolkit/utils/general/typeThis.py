@@ -103,6 +103,7 @@ class main(GaiaTestCase):
             # Try to tap the header to remove the keyboard now that we've finished.
             #
             try:
+                self.wait_for_element_displayed(*DOM.GLOBAL.app_head, timeout=1)
                 x = self.marionette.find_element(*DOM.GLOBAL.app_head)
                 x.tap()
                 time.sleep(0.5)

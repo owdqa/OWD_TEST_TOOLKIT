@@ -12,6 +12,7 @@ class main(GaiaTestCase):
         #
         while True:
             try:
+            	self.wait_for_element_present(*DOM.Clock.alarm_preview_alarms, timeout=3)
                 x = self.marionette.find_elements(*DOM.Clock.alarm_preview_alarms)
             except:
                 #

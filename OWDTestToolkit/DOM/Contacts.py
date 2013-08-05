@@ -6,6 +6,7 @@ view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-order,'%s')]"
 
 view_details_title     = ('id', 'contact-name-title')
+view_contact_image     = ("id", "cover-img")
 view_contact_tel_field = ("id", "call-or-pick-0")
 view_contact_email_field = ("id", "email-or-pick-0")
 view_contact_address    = ("xpath", "//li[@id='address-details-template-0']//a[@class='action action-block']/b")

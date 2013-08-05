@@ -29,9 +29,12 @@ class main(GaiaTestCase):
                 for i_li in range(1,17):
                     try:
                         xpath_str = "//div[@class='page'][%s]//li[%s]" % (i_page, i_li)
-                        x = self.marionette.find_element("xpath",
-                                                         xpath_str + "//span[text()='" + p_appName + "']")
-
+                        self.wait_for_element_present("xpath",
+                                                      xpath_str + "//span[text()='" + p_appName + "']",
+                                                      timeout=1)
+                        
+                        time.sleep(1)
+                        
                         #
                         # Found it - return tihs list item!
                         #
