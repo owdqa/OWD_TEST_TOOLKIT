@@ -42,6 +42,7 @@ export EX_FAILS_STR="(blocked)"
 export EX_PASSES_STR="passed"
 export UNEX_PASSES_STR="* unblock? *"
 export UNEX_FAILS_STR="*FAILED*"
+export AUTOMATION_FAILS_STR="(automation fail)"
 
 #
 # Used for keeping running totals etc... as the tests are executed.
