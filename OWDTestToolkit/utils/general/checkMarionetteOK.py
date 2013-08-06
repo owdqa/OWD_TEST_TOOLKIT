@@ -8,7 +8,7 @@ class main(GaiaTestCase):
         #
         try:
             self.marionette.start_session()
-            self.logResult("info", "(<b>NOTE:</b> Marionette session crashed, but it was restarted successfully.)")
+            self.logResult("info", "<i>(<b>NOTE:</b> Marionette session crashed, but it was restarted successfully.)</i>")
         except:
             pass
 

@@ -16,7 +16,7 @@ class main(GaiaTestCase):
 
         x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
-        
+
         #
         # Press the Gmail button.
         #
@@ -32,6 +32,7 @@ class main(GaiaTestCase):
             self.wait_for_element_present("xpath", "//iframe[contains(@%s, '%s')]" % \
                                              (DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]),
                                              timeout=5)
+
             #
             # Switch to the gmail login frame.
             #
@@ -47,9 +48,10 @@ class main(GaiaTestCase):
             for i in range(1,5):
                 try:
                     self.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
-                    
+                                
                     x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
                     x.tap()
+
                     time.sleep(2)
                     self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
     
@@ -74,6 +76,7 @@ class main(GaiaTestCase):
                 #
                 try:
                     self.wait_for_element_displayed(*DOM.Contacts.gmail_login_error_msg, timeout=2)
+            
                     x = self.UTILS.screenShotOnErr()
                     self.UTILS.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
                     return False
@@ -94,7 +97,9 @@ class main(GaiaTestCase):
         self.wait_for_element_present("xpath","//iframe[contains(@%s, '%s')]" % \
                                       (DOM.Contacts.gmail_import_frame[0],DOM.Contacts.gmail_import_frame[1]),
                                       timeout=30)
+
         self.UTILS.switchToFrame(*DOM.Contacts.gmail_import_frame, p_viaRootFrame=False)
+
         self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
-        
+
         return True
