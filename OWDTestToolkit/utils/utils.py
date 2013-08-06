@@ -85,7 +85,8 @@ class UTILS(app.main        ,
                                )
             
 
-        self.marionette.set_search_timeout(20)
+        self.marionette.set_search_timeout(10000)
+        self.marionette.set_script_timeout(10000)
 
         try:
             self.setTimeToNow()
