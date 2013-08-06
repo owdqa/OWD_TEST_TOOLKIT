@@ -29,6 +29,7 @@ class main(GaiaTestCase):
         # Switch to Gallery iframe.
         time.sleep(2)
         self.UTILS.switchToFrame(*DOM.Gallery.frame_locator)
+        self.UTILS.waitForNotElements(DOM.Gallery.loading_bar, "Loading bar", True, 10)
         
         # Select the thumbnail (assume it's the only one).
         x = self.UTILS.getElements(DOM.Contacts.picture_thumbnails, "Thumbnails for pictures")

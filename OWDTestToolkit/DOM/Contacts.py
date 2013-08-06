@@ -74,7 +74,9 @@ link_button            = ('id', "link_button") # WARNING: >1 element has this id
 #
 # Importing from gmail / hotmail etc...
 #
+import_all_imported_msg = ("xpath", "//*[@id='friends-msg' and contains(text(), 'your friends are imported')]")
 import_cancel_login = ("id", "popup-close")
+import_close_icon   = ("id", "import-close")
 import_throbber     = ("id", "popup-throbber")
 import_select_all   = ("id", "select-all")
 import_desel_all    = ("id", "deselect-all")

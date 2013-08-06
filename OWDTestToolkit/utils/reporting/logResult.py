@@ -12,19 +12,18 @@ class main(GaiaTestCase):
         # (will be put on a separate line with _subnote prefixed).
         #
 
-        # Get timestamp.        
-        time_now   = time.time() - self.last_timestamp
-        time_now   = round(time_now, 0)
-        time_now   = "[" + str(datetime.timedelta(seconds=time_now)) + "]"
-
-        self.last_timestamp = time.time()
-        
         if str(p_result).lower() == "info":
             timestamp = self._no_time 
         else:
             #
             # Set up timestamp and mark this as pass or fail.
             #
+            time_now   = time.time() - self.last_timestamp
+            time_now   = round(time_now, 0)
+            time_now   = "[" + str(datetime.timedelta(seconds=time_now)) + "]"
+    
+            self.last_timestamp = time.time()
+        
             _color = "#ff0000" if not p_result else "#00aa00"
             span_tag = '<span style="color:' + _color + '">'
             timestamp = span_tag + time_now + "</span>"
