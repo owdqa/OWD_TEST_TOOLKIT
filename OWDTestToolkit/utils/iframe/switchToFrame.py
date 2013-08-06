@@ -8,7 +8,7 @@ class main(GaiaTestCase):
         # For example: ("src", "contacts") or ("src", "sms") etc...<br><br>
         # NOTE: You *usually* need to do this via the 'root' frame (almost all iframes
         # are contained in the root-level frame).
-        #        
+        #
         if p_viaRootFrame:
             self.checkMarionetteOK()
             self.logResult("info", "Switching to root-level iframe.")
