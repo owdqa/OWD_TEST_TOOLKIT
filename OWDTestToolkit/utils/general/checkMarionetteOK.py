@@ -8,9 +8,12 @@ class main(GaiaTestCase):
         #
         try:
             self.marionette.delete_session()
-#             if self.marionette.check_for_crash():
+        except:
+            pass
+
+        try:
             self.marionette.start_session()
-            self.logResult("info", "<i>(The Marionette session was restarted to avoid a potential crash.)</i>")
+            self.logResult("info", "<i>(The Marionette session was restarted to avoid a possible crash.)</i>")
         except:
             pass
 

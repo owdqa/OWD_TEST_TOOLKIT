@@ -58,8 +58,15 @@ else
             #
             # Not expected to fail.
             #
-            test_result_str="$UNEX_FAILS_STR"        
-            UNEX_FAILS=$(($UNEX_FAILS+1))
+            x=$(egrep -i "error|exception" $ERR_FILE)
+            if [ "$x" ]
+            then
+            	test_result_str="$AUTOMATION_FAILS_STR"
+            	AUTOMATION_FAILS=$(($AUTOMATION_FAILS+1))
+            else
+	            test_result_str="$UNEX_FAILS_STR"        
+	            UNEX_FAILS=$(($UNEX_FAILS+1))
+            fi
         fi
     fi
 fi
@@ -79,6 +86,7 @@ fi
 #
 export ASSERTS_PASSED=${ASSERTS_PASSED:-"0"}
 export ASSERTS_TOTAL=${ASSERTS_TOTAL:-"0"}
+export AUTOMATION_FAILS=${AUTOMATION_FAILS:-"0"}
 export UNEX_FAILS=${UNEX_FAILS:-"0"}
 export EX_PASSES=${EX_PASSES:-"0"}
 export UNEX_PASSES=${UNEX_PASSES:-"0"}

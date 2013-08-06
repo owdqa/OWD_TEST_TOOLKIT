@@ -39,6 +39,7 @@ class main(GaiaTestCase):
         # Go to the hotmail import iframe.
         #
         time.sleep(2)
+        self.UTILS.checkMarionetteOK()
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.switchToFrame(*DOM.Contacts.hotmail_import_frame, p_viaRootFrame=False)
         

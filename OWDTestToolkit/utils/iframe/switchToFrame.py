@@ -10,8 +10,8 @@ class main(GaiaTestCase):
         # are contained in the root-level frame).
         #
         if p_viaRootFrame:
-            self.checkMarionetteOK()
             self.logResult("info", "Switching to root-level iframe.")
+            self.checkMarionetteOK()
             self.marionette.switch_to_frame()
             
         #
