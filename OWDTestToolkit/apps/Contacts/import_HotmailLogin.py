@@ -148,22 +148,32 @@ class main(GaiaTestCase):
         #
         # Check to see if the message "All your friends are imported" is being displayed.
         #
+        boolYES = False
         try:
+            x = self.UTILS.screenShotOnErr() # For some reaosn this is needed before the message can be seen!
             self.wait_for_element_displayed(*DOM.Contacts.import_all_imported_msg, timeout=2)
-            x = self.UTILS.screenShotOnErr()
-            self.UTILS.logResult("info", "Apparently all your friends are imported - see screenshot for details", x)
+            boolYES = True
+        except:
+            pass
+        
+        if boolYES:
+            self.UTILS.logResult("info", 
+                                 "<b>NOTE:</b> Apparently all your friends are already imported - " + \
+                                 "see the following screenshots for details", x)
             
-            x = self.UTILS.getElement(DOM.Contacts.import_close_icon, "Close icon")
-            x.tap()
+            self.marionette.execute_script("document.getElementById('%s').click()" % DOM.Contacts.import_close_icon[1])
+            time.sleep(1)
+#             x = self.UTILS.getElement(DOM.Contacts.import_close_icon, "Close icon")
+#             x.tap()
             
             #
             # Switch back to the contacts app frame and wait for the hotmail frame to go away.
             #
             self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
-            self.UTILS.waitForNotElements(DOM.Contacts.hotmail_frame)
+            time.sleep(1)
             
             #
-            # Close the import screen.
+            # Close the settings screen.
             #
             x = self.UTILS.getElement(DOM.Contacts.settings_done_button, "Contacts app settings 'done' button")
             x.tap()
@@ -171,15 +181,15 @@ class main(GaiaTestCase):
             #
             # Record the contacts we currently have imported (in case this test fails and this is why).
             #
-            self.UTILS.waitForElements(DOM.Contacts.view_all_contact_list, "All contacts", True, 2)
+            self.UTILS.waitForElements(DOM.Contacts.view_all_header, "All contacts main screen", True, 2)
                         
             x = self.UTILS.screenShotOnErr()
             self.UTILS.logResult("info", 
-                                 "Apparently all your friends are imported from hotmail. " +\
+                                 "<b>NOTE:</b> Apparently all your friends are imported from hotmail. " +\
                                  "These are the contacts you have in the COntacts app:", x)
             
             return True
-        except:
+        else:
             return False
 
 
