@@ -10,7 +10,7 @@ class main(GaiaTestCase):
         # If p_clickSignIn is set to True then this method will also click
         # the Sign in button (defaults to true).
         # <br>
-        # Returns False if the login failed, else True.
+        # Returns False if the login failed, "1" if all your contacts are already imported else True.
         #
         x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
@@ -49,7 +49,7 @@ class main(GaiaTestCase):
         #
         all_imported = self._check_all_friends_imported()
         if all_imported:
-            return True
+            return 1
         else:
             #
             # Wait for the hotmail contacts for this p_user to be displayed.
