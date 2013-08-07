@@ -13,19 +13,25 @@ class main(GaiaTestCase):
         if p_name == "SMS"                          : p_name = "Messages"
         if p_name == "Market"                       : p_name = "Marketplace"
         
-        self.touchHomeButton()
+        app_frame = self._getAppFrame(p_name)
         
-        # This throws an error (even though the app launches). 'Hacky', but it works.
-        self.checkMarionetteOK()
+        self.marionette.switch_to_frame()
         try:
-            self.marionette.execute_async_script("GaiaApps.launchWithName('%s')" % p_name, script_timeout=5)
+            self.wait_for_element_present("xpath", "//iframe[contains(@%s, '%s')]" % (app_frame[0], app_frame[1]), timeout=1)
+            self.switchToFrame(*app_frame)
         except:
-            pass
+            #
+            # The app isn't open yet, so try to launch it.
+            #
+            # (This throws an error, even though the app launches. 'Hacky', but it works.)
+            try:
+                self.marionette.execute_async_script("GaiaApps.launchWithName('%s')" % p_name, script_timeout=5)
+                self.waitForNotElements(DOM.GLOBAL.loading_overlay, "%s app loading 'overlay'" % p_name)
+                self.switchToFrame(*app_frame)
+            except:
+                pass
 
-        app_dom = self._getAppDOM(p_name)
-        self.switchToFrame(*app_dom)
 
-        self.waitForNotElements(DOM.GLOBAL.loading_overlay, "%s app loading 'overlay'" % p_name)
 
 
         
