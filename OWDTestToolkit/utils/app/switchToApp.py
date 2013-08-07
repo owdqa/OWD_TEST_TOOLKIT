@@ -16,6 +16,7 @@ class main(GaiaTestCase):
         self.touchHomeButton()
         
         # This throws an error (even though the app launches). 'Hacky', but it works.
+        self.checkMarionetteOK()
         try:
             self.marionette.execute_async_script("GaiaApps.launchWithName('%s')" % p_name, script_timeout=5)
         except:

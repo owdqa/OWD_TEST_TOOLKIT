@@ -16,7 +16,7 @@ printf "End time                           : %s\n\n" "$END_TIME"
 P=$(($EX_PASSES + $UNEX_PASSES))
 F=$(($EX_FAILS + $UNEX_FAILS))
 T=$(($P + $F))
-printf "Automation failures                : %s\n" $AUTOMATION_FAILS 
+printf "Automation failures                : %4s\n" $AUTOMATION_FAILS 
 printf "Test cases passed                  : %4s / %-4s\n" $P $T 
 printf "Assertions passed                  : %4s / %-4s\n" $ASSERTS_PASSED $ASSERTS_TOTAL   
 printf "Expected failures                  : %4s\n" $EX_FAILS               
