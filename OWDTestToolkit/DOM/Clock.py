@@ -1,9 +1,13 @@
+frame_locator           = ('src', 'clock')
+
 analog_face             = ("id", "analog-clock-svg")
 digital_face            = ("id", "digital-clock-display")
 new_alarm_btn           = ('id', 'alarm-new')
 
-time_scroller           = ('xpath', "//div[@id='value-picker-%s']")
-time_scroller_ampm      = ('xpath', "//div[@id='value-picker-hour24-state']")
+time_button             = ('id', "time-menu")
+time_scroller           = ('css selector', '.value-picker-%s div')
+time_scroller_ampm      = ('css selector', '.value-picker-hour24-state div')
+time_picker_ok          = ("xpath", "//button[text()='OK']")
 alarm_label             = ("name", "alarm.label")
 alarm_done              = ('id', 'alarm-done')
 alarm_delete_button     = ("id", "alarm-delete")

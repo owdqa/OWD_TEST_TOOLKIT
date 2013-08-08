@@ -9,12 +9,14 @@ class main(GaiaTestCase):
         orig_iframe = self.UTILS.currentIframe()
         x = self.UTILS.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
         x.tap()
-        self.UTILS.quitTest()
+#         self.marionette.execute_script("document.getElementById('threads-delete-button').click();")
         
-        time.sleep(1)
+        time.sleep(2)
         self.marionette.switch_to_frame()
-        x = self.UTILS.getElement(DOM.GLOBAL.modal_ok_button, "OK button in question dialog")
+        x = self.UTILS.getElement(DOM.GLOBAL.modal_ok_button1, "OK button in question dialog")
         x.tap()
+#         self.marionette.execute_script("document.getElementById('modal-dialog-confirm-ok').click();")
+
         
         #
         # For some reason after you do this, you can't enter a 'to' number anymore.

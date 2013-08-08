@@ -198,6 +198,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>import_ImportAll</td>
+        <td align=left></td>
+        <td align=left>Assumes you're already in the gmail import screen (after logging in etc...).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>tapSettingsButton</td>
         <td align=left></td>
         <td align=left>Tap the settings button.</td>
@@ -206,8 +213,8 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
     <tr>
         <td align=center>getContactFields</td>
-        <td align=left></td>
-        <td align=left>Return 3-d array of contact details (from view or edit contacts screen  - the identifiers should be the same ... *should* ...)</td>
+        <td align=left>p_view=False</td>
+        <td align=left>Return 3-d array of contact details.  if p_view is set, it will use the DOM specs for the view screen. Otherwise  it will assume you are in the edit screen.</td>
     </tr>
 
 
@@ -226,6 +233,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>selectSearchResult</td>
+        <td align=left>p_contactName</td>
+        <td align=left>Select the result of a search</td>
+    </tr>
+
+
+    <tr>
         <td align=center>populateContactFields</td>
         <td align=left>p_contact_json_obj</td>
         <td align=left>Put the contact details into each of the fields.  <br><br>  <b>p_contact_json_obj</b> must be an object in the same format as the  one in ./example/tests/mock_data/contacts.py.</td>
@@ -236,6 +250,20 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>pressCancelEditButton</td>
         <td align=left></td>
         <td align=left>Presses the Edit contact button when vieweing a contact.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>import_GmailLogin</td>
+        <td align=left>p_name<br>p_pass<br>p_clickSignIn=True</td>
+        <td align=left>Presses the Settings button, then Gmail, then logs in using  p_name and p_pass (to begin the process of importing contacts).  <br>  If p_clickSignIn is set to True then this method will also click  the Sign in button (defaults to true).  <br>  Returns False if the login failed, else True.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>selectSearchResultSeveralPhones</td>
+        <td align=left>p_contactName<br>p_num</td>
+        <td align=left>Select the result of a search</td>
     </tr>
 
 
@@ -276,15 +304,22 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
     <tr>
         <td align=center>verifyFieldContents</td>
-        <td align=left>p_contact_json_obj</td>
-        <td align=left>Verify the contents of the contact fields in this screen (assumes  you are in the correct screen since this could be view or edit).  <br><br>  <b>p_contact_json_obj</b> must be an object in the same format as the  one in ./example/tests/mock_data/contacts.py.</td>
+        <td align=left>p_contact_json_obj<br>p_view=False</td>
+        <td align=left>Verify the contents of the contact fields in this screen (assumes  you are in the correct screen since this could be view or edit).  <br><br>  <b>p_contact_json_obj</b> must be an object in the same format as the  one in ./example/tests/mock_data/contacts.py.<br>  <b>p_view</b> selects whether this is the 'view contact' screen or not (defaults to False -> edit screen).</td>
     </tr>
 
 
     <tr>
         <td align=center>viewContact</td>
-        <td align=left>p_contact_name</td>
-        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen).</td>
+        <td align=left>p_contact_name<br>p_HeaderCheck=True</td>
+        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen).  <br>  In some cases you don't want this to check the header (if the contact has no name  for example). In that case, set p_HeaderCheck=False.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>import_HotmailLogin</td>
+        <td align=left>p_name<br>p_pass<br>p_clickSignIn=True</td>
+        <td align=left>Presses the Settings button, then Hotmail, then logs in using  p_name and p_pass (to begin the process of importing contacts).  <br>  If p_clickSignIn is set to True then this method will also click  the Sign in button (defaults to true).  <br>  Returns False if the login failed, else True.</td>
     </tr>
 
 
@@ -313,6 +348,20 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>checkViewContactDetails</td>
         <td align=left>p_contact_json_obj<br>p_imageCheck = False</td>
         <td align=left>Validate the details of a contact in the 'view contact' screen.  <br><br>  <b>p_contact_json_obj</b> must be an object in the same format as the  one in ./example/tests/mock_data/contacts.py.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>selectContactFromAll</td>
+        <td align=left>p_contactName</td>
+        <td align=left>Select the result of a search</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>import_toggleSelectContact</td>
+        <td align=left>p_num</td>
+        <td align=left>Toggles select / de-select a gmail contact( marionette doesn't work here yet, so use JS).  p_num is the actualt contact number (1 -> x).</td>
     </tr>
 
 
@@ -383,6 +432,82 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>checkSearchResults</td>
         <td align=left>p_contactName<br>p_present=True</td>
         <td align=left>Checks the results of a search() to see  if the contact is present or not (depending  on the 'p_present' setting).</td>
+    </tr>
+
+</table>
+#Dialer
+<table>
+  <tr>
+    <th>Method</th><th>Parameters and defaults</th><th>Description</th>
+  </tr>
+
+    <tr>
+        <td align=center>hangUp</td>
+        <td align=left></td>
+        <td align=left>Hangs up (assuming we're in the 'calling' frame).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>callLog_call</td>
+        <td align=left>p_num</td>
+        <td align=left>Calls a number from the call log.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>callLog_createContact</td>
+        <td align=left>p_num<br>p_openCallLog=True</td>
+        <td align=left>Creates a new contact from the call log (only  as far as the contacts app opening).  If p_openCallLog is set to False it will assume you are  already in the call log.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>openCallLog</td>
+        <td align=left></td>
+        <td align=left>Opens the call log.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>callThisNumber</td>
+        <td align=left></td>
+        <td align=left>Calls the current number.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>addThisNumberToContact</td>
+        <td align=left>p_name</td>
+        <td align=left>Adds the current number to existing contact.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>enterNumber</td>
+        <td align=left>p_num</td>
+        <td align=left>Enters a number into the dialler using the keypad.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>createContactFromThisNum</td>
+        <td align=left></td>
+        <td align=left>Creates a new contact from the number currently in the dialler  (doesn't fill in the contact details).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>callLog_addToContact</td>
+        <td align=left>p_num<br>p_name<br>p_openCallLog=True</td>
+        <td align=left>Adds this number in the call log to an existing contact  (and returns you to the call log).  If p_openCallLog is set to False it will assume you are  already in the call log.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>createMultipleCallLogEntries</td>
+        <td align=left>p_num<br>p_amount</td>
+        <td align=left>Put a number in the call log multiple times  (done by manipulating the device time).  Leaves you in the call log.</td>
     </tr>
 
 </table>
@@ -716,13 +841,6 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>addNumberInToField</td>
-        <td align=left>p_num</td>
-        <td align=left>Add the number (or contact name) in the 'To'  field of this sms message.  Assums you are in 'create sms' screen.</td>
-    </tr>
-
-
-    <tr>
         <td align=center>threadEditModeON</td>
         <td align=left></td>
         <td align=left>Turns on Edit mode while in the SMS threads screen.</td>
@@ -751,9 +869,23 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>header_addToContact</td>
+        <td align=left></td>
+        <td align=left>Taps the header and tries to tap the 'Add to an existsing contact' button.  - Assumes we are looking at a message thread already.  - Leaves you in the correct iframe to continue (contacts).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>threadEditModeOFF</td>
         <td align=left></td>
         <td align=left>Turns off Edit mode while in the SMS threads screen.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>threadExists</td>
+        <td align=left>p_num</td>
+        <td align=left>Verifies that a thread exists for this number (just return True or False).</td>
     </tr>
 
 
@@ -786,6 +918,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>checkThreadHeader</td>
+        <td align=left>p_header</td>
+        <td align=left>Verifies if a string is contained in the header</td>
+    </tr>
+
+
+    <tr>
         <td align=center>checkIsInToField</td>
         <td align=left>p_target<br>p_targetIsPresent=True</td>
         <td align=left>Verifies if a number (or contact name) is  displayed in the "To: " field of a compose message.<br>  (Uses 'caseless' search for this.)</td>
@@ -800,16 +939,16 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>addContactToThisSMS</td>
-        <td align=left>p_contactName</td>
-        <td align=left>Uses the 'add contact' button to add a contact to SMS.</td>
+        <td align=center>createAndSendSMS</td>
+        <td align=left>p_nums<br>p_msg</td>
+        <td align=left>Create and send a new SMS.<br>  <b>Note:</b> The p_nums field must be an array of numbers  or contact names.</td>
     </tr>
 
 
     <tr>
-        <td align=center>createAndSendSMS</td>
-        <td align=left>p_nums<br>p_msg</td>
-        <td align=left>Create and send a new SMS.<br>  <b>Note:</b> The p_nums field must be an array of numbers  or contact names.</td>
+        <td align=center>waitForNewSMSPopup_by_number</td>
+        <td align=left>p_num</td>
+        <td align=left>Waits for a new SMS popup notification which  is from this 'p_num' number.</td>
     </tr>
 
 
@@ -835,9 +974,23 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>header_call</td>
+        <td align=left></td>
+        <td align=left>Taps the header and tries to tap the 'send message' button.  - Assumes we are looking at a message thread already.  - Leaves you in the correct iframe to continue.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>waitForReceivedMsgInThisThread</td>
-        <td align=left>p_timeOut=20</td>
+        <td align=left>p_timeOut=30</td>
         <td align=left>Waits for the last message in this thread to be a 'received' message  and returns the element for this message.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>header_createContact</td>
+        <td align=left></td>
+        <td align=left>Taps the header and tries to tap the 'send message' button.  - Assumes we are looking at a message thread already.  - Leaves you in the correct iframe to continue.</td>
     </tr>
 
 
@@ -845,6 +998,20 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>closeThread</td>
         <td align=left></td>
         <td align=left>Closes the current thread (returns you to the  'thread list' SMS screen).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>removeContactFromToField</td>
+        <td align=left>p_target</td>
+        <td align=left>Removes p_target from the "To" field of this SMS.<br>  Returns True if it found the target, or False if not.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>waitForNewSMSPopup_by_msg</td>
+        <td align=left>p_msg</td>
+        <td align=left>Waits for a new SMS popup notification which  matches this 'p_msg' string.</td>
     </tr>
 
 
@@ -859,6 +1026,20 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>deleteMessagesInThisThread</td>
         <td align=left>p_msg_array=False</td>
         <td align=left>Enters edit mode, selects the required messages and  deletes them.<br>  p_msg_array is an array of numbers.  If it's not specified then all messages in this  thread will be deleted.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>addNumbersInToField</td>
+        <td align=left>p_nums</td>
+        <td align=left>Add the numbers (or contact name) in the 'To'  field of this sms message.  Assumes you are in 'create sms' screen.  <br>  <b>p_nums</b> must be an array.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getThreadText</td>
+        <td align=left>p_num</td>
+        <td align=left>Returns the preview text for the thread for this number (if it exists),  or False if either the thread doesn't exist or can't be found.</td>
     </tr>
 
 
@@ -879,7 +1060,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
     <tr>
         <td align=center>deleteAllThreads</td>
         <td align=left></td>
-        <td align=left>Deletes all threads.</td>
+        <td align=left>Deletes all threads (assumes the messagin app is already open).</td>
     </tr>
 
 
@@ -887,13 +1068,6 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>timeOfLastMessageInThread</td>
         <td align=left></td>
         <td align=left>Returns the time of the last message in the current thread.</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>removeFromToField</td>
-        <td align=left>p_target</td>
-        <td align=left>Removes p_target from the "To" field of this SMS.<br>  Returns True if it found the target, or False if not.</td>
     </tr>
 
 
@@ -919,36 +1093,16 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>header_sendMessage</td>
+        <td align=left></td>
+        <td align=left>Taps the header and tries to tap the 'send message' button.  - Assumes we are looking at a message thread already.  - Leaves you in the correct iframe to continue.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>editAndSelectThreads</td>
         <td align=left>p_target_array</td>
         <td align=left>Puts this thread into Edit mode and selects  the messages listed in p_msg_array.<br>  p_target_array is an array of target numbers  or contacts which identify the threads to be selected.</td>
-    </tr>
-
-</table>
-#Phone
-<table>
-  <tr>
-    <th>Method</th><th>Parameters and defaults</th><th>Description</th>
-  </tr>
-
-    <tr>
-        <td align=center>hangUp</td>
-        <td align=left></td>
-        <td align=left>Hangs up (assuming we're in the 'calling' frame).</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>callThisNumber</td>
-        <td align=left></td>
-        <td align=left>Calls the current number.</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>createContactFromThisNum</td>
-        <td align=left></td>
-        <td align=left>Creates a new contact from this number  (doesn't fill in the contact details).</td>
     </tr>
 
 </table>

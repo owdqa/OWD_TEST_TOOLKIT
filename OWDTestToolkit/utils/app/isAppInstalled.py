@@ -6,13 +6,14 @@ class main(GaiaTestCase):
         #
         # Return whether an app is present on the homescreen (i.e. 'installed').
         #
-        self.marionette.switch_to_frame()
-        self.switchToFrame(*DOM.Home.homescreen_iframe)
+        self.switchToFrame(*DOM.Home.frame_locator)
 
         x = ('css selector', DOM.Home.app_icon_css % p_appName)
         try:
             self.marionette.find_element(*x)
+            self.logResult("info", "App <b>%s</b> is currently installed." % p_appName)
             return True
         except:
+            self.logResult("info", "App <b>%s</b> is not currently installed." % p_appName)
             return False
 

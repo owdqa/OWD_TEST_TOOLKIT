@@ -23,5 +23,8 @@ class main(GaiaTestCase):
                 break
         self.UTILS.TEST(boolOK, str(p_count) + " thumbnails appear in under 10s (" + str(x) + " found).", p_failOnErr)
         
+        x = self.UTILS.screenShot("expecting_" + str(p_count) + "_thumbnails")
+        self.UTILS.logResult("info", "Screenshot: " + x)
+        
         return boolOK
 

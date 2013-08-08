@@ -41,8 +41,8 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
     <tr>
         <td align=center>switchToFrame</td>
-        <td align=left>p_tag<br>p_str<br>p_quitOnError=True</td>
-        <td align=left>Switch to a different iframe based on tag and value.<br>  NOTE: You *usually* need to use self.marionette.switch_to_frame() first.</td>
+        <td align=left>p_attrib<br>p_str<br>p_quitOnError=True<br>p_viaRootFrame=True</td>
+        <td align=left>Switch to the iframe containing the attribute value <b>p_str</b>.<br>  For example: ("src", "contacts") or ("src", "sms") etc...<br><br>  NOTE: You *usually* need to do this via the 'root' frame (almost all iframes  are contained in the root-level frame).</td>
     </tr>
 
 
@@ -56,7 +56,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>viewAllIframes</td>
         <td align=left></td>
-        <td align=left>DEV TOOL: this will loop through every iframe, report the "src",  take a screenshot and capture the html.   Because this is only meant as a dev aid (and shouldn't be in any released test  scripts), it reports to ERROR instead of COMMENT.</td>
+        <td align=left>DEV TOOL: this will loop through every iframe,  report all attributes ("src","id" etc...), take a screenshot and capture the html.   Because this is only meant as a dev aid (and shouldn't be in any released test  scripts), it reports to ERROR instead of COMMENT.</td>
     </tr>
 
 
@@ -103,6 +103,20 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>switchToApp</td>
+        <td align=left>p_name</td>
+        <td align=left>Switches to the app (or launches it if it's not open).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>killApp</td>
+        <td align=left>p_name</td>
+        <td align=left>Kills the app specified by p_name.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>launchAppViaHomescreen</td>
         <td align=left>p_appName</td>
         <td align=left>Launch an app via the homescreen.</td>
@@ -120,6 +134,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
         <td align=center>uninstallApp</td>
         <td align=left>p_appName</td>
         <td align=left>Remove an app using the UI.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>setPermission</td>
+        <td align=left>p_app<br>p_item<br>p_val<br>p_silent=False</td>
+        <td align=left>Just a container function to catch any issues when using gaiatest's  'set_permission()' function.</td>
     </tr>
 
 
@@ -278,6 +299,55 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>setTimeToNow</td>
+        <td align=left>p_continent=False<br>p_city=False</td>
+        <td align=left>Set the phone's time (using gaia data_layer instead of the UI).  <b>NOTE:</b> Also sets the timezone (continent and city).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>setTimeToSpecific</td>
+        <td align=left>p_year="NOW"<br>p_month="NOW"<br>p_day="NOW"<br>p_hour="NOW"<br>p_minute="NOW"</td>
+        <td align=left>Sets the device time to a specific time (always today) based on the parameters:<br>  <pre>  <b>p_year :</b> <i>YYYY</i>, i.e. "2013"<br>  <b>p_month :</b> <i>mm</i>, i.e. "1" -> "12"<br>  <b>p_day :</b> <i>dd</i>, i.e. "1" -> "31"<br>  <b>p_hour :</b> <i>HH</i>, i.e. "0" -> "23"<br>  <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>  </pre><br>  All parameters will default to 'now'.<br>  Returns a 'dateTime' object for the new date and time.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getEpochSecsFromDateTime</td>
+        <td align=left>p_dateTime</td>
+        <td align=left>Converts a date-time struct into epoch seconds.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>waitForDisplayedTimeToBe</td>
+        <td align=left>p_dateTime</td>
+        <td align=left>Waits for the homescreen to display the desired  date and time (takes a 'datetime' object).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getDateTimeFromEpochSecs</td>
+        <td align=left>p_seconds_since_epoch</td>
+        <td align=left>Returns struct containing date and time strings  converted from 'seconds since epoch' (now = "time.time()").<br>  The result array elements are as follows:<br>  <pre>  Attribute Field Values<br>  tm_year 4-digit year 2008<br>  tm_mon Month 1 to 12<br>  tm_mday Day 1 to 31<br>  tm_hour Hour 0 to 23<br>  tm_min Minute 0 to 59<br>  tm_sec Second 0 to 61 (60 or 61 are leap-seconds)<br>  tm_wday Day of Week 0 to 6 (0 is Monday)<br>  tm_yday Day of year 1 to 366 (Julian day)<br>  tm_isdst Daylight savings -1, 0, 1, -1 means library determines DST<br>  </pre>  <br>  Example:<br>  <pre>  x = self.UTILS.getDateTimeFromEpochSecs(_myTime)<br>  self.UTILS.logResults(x.tm_wday)<br>  <pre></td>
+    </tr>
+
+
+    <tr>
+        <td align=center>switch_24_12</td>
+        <td align=left>p_hour</td>
+        <td align=left>Switches a 24-hour number to 12-hour format.  Returns array: ["hour" (12 hour format), "ampm"] based on a 24hour "p_hour".</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>waitForDeviceTimeToBe</td>
+        <td align=left>p_year="NOW"<br>p_month="NOW"<br>p_day="NOW"<br>p_hour="NOW"<br>p_minute="NOW"</td>
+        <td align=left>Waits until the clock in the homescreen shows the date and time  represented by the parameters.<br>  All parameters are numeric, 24-hour and default to 'now'.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>typeThis</td>
         <td align=left>p_element_array<br>p_desc<br>p_str<br>p_no_keyboard=False<br>p_clear=True<br>p_enter=True<br>p_validate=True<br>p_remove_keyboard=True</td>
         <td align=left>Types this string into this element.  If p_no_keyboard = True then it doesn't use the keyboard.  <b>NOTE:</b> If os variable "NO_KEYBOARD" is set (to anything),  then regardless of what you send to this method, it will never  use the keyboard.</td>
@@ -285,9 +355,9 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
-        <td align=center>setTimeToNow</td>
-        <td align=left>p_continent=False<br>p_city=False</td>
-        <td align=left>Set the phone's time (using gaia data_layer instead of the UI).</td>
+        <td align=center>setupDataConn</td>
+        <td align=left></td>
+        <td align=left>Set the phone's details for data conn (APN etc...).</td>
     </tr>
 
 
@@ -306,6 +376,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>setSetting</td>
+        <td align=left>p_item<br>p_val<br>p_silent=False</td>
+        <td align=left>Just a container function to catch any issues when using gaiatest's  'set_setting()' function.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>addFileToDevice</td>
         <td align=left>p_file<br>count=1<br>destination=''</td>
         <td align=left>Put a file onto the device (path is relative to the dir  you are physically in when running the tests).</td>
@@ -320,9 +397,9 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
-        <td align=center>switch_24_12</td>
-        <td align=left>p_hour</td>
-        <td align=left>Switches a 24-hour number to 12-hour format.  Returns array: ["hour" (12 hour format), "ampm"] based on a 24hour "p_hour".</td>
+        <td align=center>checkMarionetteOK</td>
+        <td align=left></td>
+        <td align=left>Sometimes marionette session 'vanishes', so this makes sure we have one still.</td>
     </tr>
 
 

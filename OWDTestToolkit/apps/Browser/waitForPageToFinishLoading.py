@@ -6,7 +6,11 @@ class main(GaiaTestCase):
         #
         # Waits for the current url to finish loading.
         #
-        self.UTILS.waitForElements(   DOM.Browser.throbber, "Animated 'wait' icon", True, 5, False)
-        self.UTILS.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 90, False)
+        time.sleep(3)
+        try:
+        	self.wait_for_element_displayed(*DOM.Browser.throbber)
+    	except:
+    		pass
+        self.UTILS.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 120, False)
         
-    
+     	time.sleep(2)

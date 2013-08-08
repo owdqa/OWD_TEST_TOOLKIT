@@ -18,6 +18,8 @@ import  countEmailAddressesWhileEditing , \
         pressCancelEditButton           , \
         checkEditContactDetails         , \
         editContact                     , \
+        selectSearchResult              , \
+        selectSearchResultSeveralPhones , \
         switchToFacebook                , \
         tapLinkContact                  , \
         enableFBImport                  , \
@@ -27,7 +29,11 @@ import  countEmailAddressesWhileEditing , \
         checkSearchResults              , \
         pressDeleteContactButton        , \
         deleteContact                   , \
-        addAnotherEmailAddress
+        addAnotherEmailAddress          , \
+        import_toggleSelectContact      , \
+        import_ImportAll                , \
+        import_GmailLogin               , \
+        import_HotmailLogin
 
 
 class Contacts(  countEmailAddressesWhileEditing.main,
@@ -48,6 +54,8 @@ class Contacts(  countEmailAddressesWhileEditing.main,
                     pressCancelEditButton.main,
                     checkEditContactDetails.main,
                     editContact.main,
+                    selectSearchResult.main,
+                    selectSearchResultSeveralPhones.main,
                     switchToFacebook.main,
                     tapLinkContact.main,
                     enableFBImport.main,
@@ -57,7 +65,11 @@ class Contacts(  countEmailAddressesWhileEditing.main,
                     checkSearchResults.main,
                     pressDeleteContactButton.main,
                     deleteContact.main,
-                    addAnotherEmailAddress.main):
+                    addAnotherEmailAddress.main,
+                    import_toggleSelectContact.main,
+                    import_ImportAll.main,
+                    import_GmailLogin.main,
+                    import_HotmailLogin.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
@@ -70,7 +82,7 @@ class Contacts(  countEmailAddressesWhileEditing.main,
         #
         # Launch the app.
         #
-        self.apps.kill_all()
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
-        
+        return self.app
+

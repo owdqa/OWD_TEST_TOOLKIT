@@ -9,7 +9,7 @@ class main(GaiaTestCase):
         #
         boolOK = False
         try:
-            self.wait_for_element_present(*DOM.GLOBAL.app_head)
+            self.wait_for_element_present(*DOM.GLOBAL.app_head, timeout=1)
             headerNames = self.marionette.find_elements(*DOM.GLOBAL.app_head)
             for i in headerNames:
                 if i.text == p_str:

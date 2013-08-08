@@ -11,7 +11,7 @@ class main(GaiaTestCase):
         # Build the error filename.
         #
         self.errNum = self.errNum + 1
-        fnam = self.testNum + "_err_" + str(self.errNum)
+        fnam = self.testNum + "_" + str(self.errNum)
         
         #
         # Record the screenshot.
@@ -22,6 +22,11 @@ class main(GaiaTestCase):
         # Dump the current page's html source too.
         #
         htmlDump = os.environ['RESULT_DIR'] + "/" + fnam + ".html"
-        self.savePageHTML(htmlDump)
+        
+        try:
+            self.savePageHTML(htmlDump)
+        except:
+            htmlDump = "(Unable to dump html for this page: possible Marionette issue.)"
+            
         return (htmlDump, screenDump)
 

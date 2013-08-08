@@ -6,6 +6,7 @@ class main(GaiaTestCase):
         #
         # Pick a group from the main icons.
         #
+        self.UTILS.logResult("info", "<b>Choosing group '%s' ...</b>" % p_name)
         x = self.UTILS.getElements(DOM.EME.groups, "EME group list")
         boolOK = False
         for groupLink in x:

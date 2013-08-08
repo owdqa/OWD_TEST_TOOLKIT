@@ -8,9 +8,8 @@ class main(GaiaTestCase):
         # finding the facebook app launched via contacts app.
         #
         time.sleep(2)
-        self.marionette.switch_to_frame()
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)        
-        self.UTILS.switchToFrame(*DOM.Contacts.settings_fb_frame)        
+        self.UTILS.switchToFrame(*DOM.Contacts.settings_fb_frame, p_viaRootFrame=False)        
 
         #
         # Wait for the fb page to start.

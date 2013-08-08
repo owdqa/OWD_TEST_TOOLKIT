@@ -29,13 +29,17 @@ class main(GaiaTestCase):
                 for i_li in range(1,17):
                     try:
                         xpath_str = "//div[@class='page'][%s]//li[%s]" % (i_page, i_li)
-                        x = self.marionette.find_element("xpath",
-                                                         xpath_str + "//span[text()='" + p_appName + "']")
-
+                        self.wait_for_element_present("xpath",
+                                                      xpath_str + "//span[text()='" + p_appName + "']",
+                                                      timeout=1)
+                        
+                        time.sleep(1)
+                        
                         #
                         # Found it - return tihs list item!
                         #
                         myEl = self.marionette.find_element("xpath", xpath_str)
+                        self.logResult("info", "Found app icon for <b>%s</b>." % p_appName)
                         return myEl
                     except:
                         pass
@@ -50,5 +54,6 @@ class main(GaiaTestCase):
         #
         # If we get here, we didn't find it!
         #
+        self.logResult("info", "Could not find icon for app <b>%s</b>." % p_appName)
         return False
     

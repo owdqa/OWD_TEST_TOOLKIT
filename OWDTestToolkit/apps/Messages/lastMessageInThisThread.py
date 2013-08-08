@@ -7,10 +7,13 @@ class main(GaiaTestCase):
         # Returns an object of the last message in the current thread.
         #
         time.sleep(2)
-        x = self.marionette.find_elements(*DOM.Messages.thread_messages)
-        
-        if len(x) > 1:
-            return x[-1]
-        else:
-            return x[0]
-    
+        try:
+        	self.wait_for_element_present(*DOM.Messages.message_list, timeout=2)
+	        x = self.marionette.find_elements(*DOM.Messages.message_list)
+	        
+	        if len(x) > 1:
+	            return x[-1]
+	        else:
+	            return x[0]
+    	except:
+    		return False

@@ -6,6 +6,7 @@ class main(GaiaTestCase):
         #
         # Remove an app using the UI.
         #
+        self.logResult("info", "Making sure app <b>%s</b> is uninstalled." % p_appName)
 
         #
         # Verify that the app is installed.

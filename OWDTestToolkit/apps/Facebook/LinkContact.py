@@ -16,12 +16,12 @@ class main(GaiaTestCase):
         for i in x:
             if i.is_displayed():
                 #
-                # Keep the name and email detais for this contact.
+                # Keep the name and email details for this contact.
                 #
                 thisContact = i.find_elements("tag name", "p")[1]
                 if thisContact.text == p_contactEmail:
-                    i.tap()
                     email = p_contactEmail
+                    thisContact.tap()
                     break
 
         self.UTILS.TEST(email, "Desired link contact's email address is displayed.")
@@ -33,6 +33,5 @@ class main(GaiaTestCase):
         # Switch back and wait for contact details page to re-appear.
         #
         time.sleep(2)
-        self.marionette.switch_to_frame()
-        self.UTILS.switchToFrame(*DOM.Facebook.friends_iframe_1)
+        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
 

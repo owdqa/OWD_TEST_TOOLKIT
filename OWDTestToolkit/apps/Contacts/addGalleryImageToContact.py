@@ -29,6 +29,7 @@ class main(GaiaTestCase):
         # Switch to Gallery iframe.
         time.sleep(2)
         self.UTILS.switchToFrame(*DOM.Gallery.frame_locator)
+        self.UTILS.waitForNotElements(DOM.Gallery.loading_bar, "Loading bar", True, 10)
         
         # Select the thumbnail (assume it's the only one).
         x = self.UTILS.getElements(DOM.Contacts.picture_thumbnails, "Thumbnails for pictures")
@@ -50,5 +51,4 @@ class main(GaiaTestCase):
             time.sleep(1)
         
         # Back to contacts app iframe.
-        self.marionette.switch_to_frame()
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)

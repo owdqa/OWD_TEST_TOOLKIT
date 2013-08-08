@@ -4,12 +4,14 @@ class main(GaiaTestCase):
 
     def deleteAllThreads(self):
         #
-        # Deletes all threads.
+        # Deletes all threads (assumes the messagin app is already open).
         #
-        x = self.marionette.find_element(*DOM.Messages.no_threads_message)
-        if x.is_displayed():
-            self.UTILS.logResult("info", "(No message threads to delete.)")
-        else:
+        try:
+            self.wait_for_element_displayed(*DOM.Messages.no_threads_message, timeout=2)
+            x = self.marionette.find_element(*DOM.Messages.no_threads_message)
+            if x.is_displayed():
+	            self.UTILS.logResult("info", "(No message threads to delete.)")
+        except:
             self.UTILS.logResult("info", "Deleting message threads ...")
  
             x = self.threadEditModeON()

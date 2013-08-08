@@ -8,6 +8,8 @@ back_btn                = ('id', 'button-clear')
 add_app_to_homescreen   = ('id', 'modal-dialog-confirm-ok')
 connection_warning_msg  = ("class name", "connection-message")
 search_field            = ("id", "search-q")
+search_suggestions      = ('css selector', '#helper ul li[data-index]')
 searching_spinner       = ("class name", "loading-apps")
 search_result_icon_xpath= "//li[@data-name='%s']"
 search_result_area      = ("id", "evmeApps")
+app_installed_banner    = ("id","evmeBanner")

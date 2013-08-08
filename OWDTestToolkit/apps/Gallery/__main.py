@@ -28,7 +28,8 @@ class Gallery (
         #
         # Launch the app.
         #
-        self.apps.kill_all()
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.waitForNotElements(DOM.Gallery.loading_bar, "Loading bar", True, 10)
+        return self.app
 

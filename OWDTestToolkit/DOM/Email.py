@@ -1,5 +1,4 @@
-# frame_locator           = ('css selector', 'iframe[src="app://email.gaiamobile.org/index.html"]')
-frame_locator           = ("data-frame-origin", "app://email.gaiamobile.org")
+frame_locator           = ("src", "email")
 username                = ('class name', 'sup-info-name')
 email_addr              = ('class name', 'sup-info-email')
 password                = ('class name', 'sup-info-password')
@@ -20,9 +19,9 @@ compose_msg             = ('class name', 'cmp-body-text') # Caution: there's >1 
 
 compose_send_btn        = ('class name', 'icon icon-send')
 compose_send_failed_msg = ('xpath', './/*[text()="Sending email failed"]')
+compose_send_failed_ok  = ("id", "cmp-send-failed-ok")
 compose_sending_spinner = ('class name', 'cmp-messages-sending')
 
-# settings_menu_btn       = ('class name', 'icon icon-menu')
 settings_menu_btn       = ('xpath', '//header//a[@class="msg-folder-list-btn"]')
 
 settings_set_btn        = ('class name', 'fld-nav-settings-btn bottom-btn')

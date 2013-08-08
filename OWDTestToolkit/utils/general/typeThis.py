@@ -63,12 +63,13 @@ class main(GaiaTestCase):
             # Tap the element to get the keyboard to popup.
             #
             self.logResult("info", "(Sending '" + p_str + "' to this field using the keyboard.)")
-            x.click()
+            x.tap()
 
             #
             # Type the string.
             #
             self.parent.keyboard.send(p_str)
+        
              
         #
         # Tap ENTER on the keyboard (helps to remove the kayboard even if
@@ -80,7 +81,6 @@ class main(GaiaTestCase):
         #
         # Switch back to the frame we were in and get the element again.
         #
-        self.marionette.switch_to_frame()
         self.switchToFrame("src", orig_frame)
          
         #
@@ -103,6 +103,7 @@ class main(GaiaTestCase):
             # Try to tap the header to remove the keyboard now that we've finished.
             #
             try:
+                self.wait_for_element_displayed(*DOM.GLOBAL.app_head, timeout=1)
                 x = self.marionette.find_element(*DOM.GLOBAL.app_head)
                 x.tap()
                 time.sleep(0.5)

@@ -7,7 +7,7 @@ class main(GaiaTestCase):
         # Returns the number of messages in this thread
         # (assumes you're already in the thread).
         #
-        x = self.UTILS.getElements(DOM.Messages.thread_messages,"Messages")
+        x = self.UTILS.getElements(DOM.Messages.message_list,"Messages")
         x = len(x)
         
         return x

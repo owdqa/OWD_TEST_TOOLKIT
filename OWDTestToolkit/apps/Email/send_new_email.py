@@ -12,7 +12,7 @@ class main(GaiaTestCase):
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.getElement(('xpath', DOM.GLOBAL.app_head_specific % "Compose message"),
+        x = self.UTILS.getElement(('xpath', DOM.GLOBAL.app_head_specific % "Compose"),
                                   "Compose message header")
         
         #

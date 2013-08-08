@@ -19,11 +19,19 @@ class main(GaiaTestCase):
             #
             # Verify that an image is displayed.
             #
-            x = self.marionette.find_element("id", "cover-img")
-            x_style = x.get_attribute("style")
-            self.UTILS.TEST("blob" in x_style, "Contact's image contains 'something' in contact details screen.")
+            boolOK = False
+            try:
+                self.wait_for_element_displayed(*DOM.Contacts.view_contact_image, timeout=1)
+                x = self.marionette.find_element(*DOM.Contacts.view_contact_image)
+                x_style = x.get_attribute("style")
+                if "blob" in x_style:
+                    boolOK = True
+            except:
+                pass
+            
+            self.UTILS.TEST(boolOK, "Contact's image contains 'something' in contact details screen.")
 
         #
         # Correct details are in the contact fields.
         #
-        self.verifyFieldContents(p_contact_json_obj)
+        self.verifyFieldContents(p_contact_json_obj, True)

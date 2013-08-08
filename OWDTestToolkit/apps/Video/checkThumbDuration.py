@@ -12,7 +12,7 @@ class main(GaiaTestCase):
         if not durations:
         	return False
         
-        myDur = durations[p_thumb_num].text
+        myDur = durations[p_thumb_num].text.strip()
         
         #
         # Video length didn't match exactly, but is it within the acceptable error margin?

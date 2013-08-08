@@ -13,9 +13,7 @@ class main(GaiaTestCase):
         # Make sure we are in the contacts app.
         #
         try:
-            x = self.marionette.find_element("xpath", "//h1[text() = 'Contacts']")
-            if not x.is_displayed():
-                self.launch()
+            self.wait_for_element_displayed("xpath", "//h1[text() = 'Contacts']", timeout=1)
         except:
             self.launch()
         

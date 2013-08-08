@@ -9,8 +9,8 @@ class main(GaiaTestCase):
         #
         x = self.UTILS.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
-        time.sleep(2)
-                
+        self.UTILS.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
+		
         #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
@@ -19,5 +19,5 @@ class main(GaiaTestCase):
 
         x = ('xpath', DOM.GLOBAL.app_head_specific % "Inbox")
         y = self.UTILS.waitForElements(x, "Inbox", True, 120)
-        
-        
+		
+        return True

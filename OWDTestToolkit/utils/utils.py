@@ -1,6 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
 import  app         ,\
+        date_and_time,\
         debug       ,\
         element     ,\
         general     ,\
@@ -13,6 +14,7 @@ import  app         ,\
 
 
 class UTILS(app.main        ,
+            date_and_time.main,
             debug.main      ,
             element.main    ,
             general.main    ,
@@ -48,38 +50,62 @@ class UTILS(app.main        ,
         #
         # Other globals ...
         #
-        self._DEFAULT_ELEMENT_TIMEOUT = 5
+        self._DEFAULT_ELEMENT_TIMEOUT = 5   
 
         #
         # Get run details from the OS.
         #
-        self.testNum        = self.get_os_variable("TEST_NAME")
-        self.testDesc       = self.get_os_variable("TEST_DESC")
-        self.det_fnam       = self.get_os_variable("DET_FILE")
-        self.sum_fnam       = self.get_os_variable("SUM_FILE")
-        
+        varStr = "Setting OS variables ..."
+        self.testNum        = self.get_os_variable("TEST_NUM", True)
+        self.det_fnam       = self.get_os_variable("DET_FILE", True)
+        self.sum_fnam       = self.get_os_variable("SUM_FILE", True)
+        self.logResult("info", "Get OS variables ..." +\
+                               "|self.testNum  = '" + str(self.testNum)  + "'." +\
+                               "|self.det_fnam = '" + str(self.det_fnam) + "'." +\
+                               "|self.sum_fnam = '" + str(self.sum_fnam) + "'."
+                               )
+                
         #
-        # Default device to 'silent + vibrate'.
+        # Set device defaults.
         #
-        self.data_layer.set_setting("vibration.enabled", True)
-        self.data_layer.set_setting("audio.volume.notification", 0)
-        
-        #
-        # Default permissions.
-        #
-        self.apps.set_permission('Camera', 'geolocation', 'deny')
+        a=self.setSetting("vibration.enabled",          True,   True)
+        b=self.setSetting("audio.volume.notification",  0,      True)
+        c=self.setSetting('ril.radio.disabled',         False,  True)
+        self.logResult("info", "Default device settings ..." +\
+                               "|Set 'vibration.enabled'         = True  " + ("[OK]" if a else "[UNABLE TO SET!]!") +\
+                               "|Set 'audio.volume.notification' = 0     " + ("[OK]" if b else "[UNABLE TO SET!]!") +\
+                               "|Set 'ril.radio.disabled'        = False " + ("[OK]" if c else "[UNABLE TO SET!]!")
+                                )
+    
+        a=self.setPermission('Camera', 'geolocation', 'deny', True)
+        b=self.setPermission('Homescreen', 'geolocation', 'deny', True)
+        self.logResult("info", "Default app permissions ..." +\
+                               "|Set 'Camera'     -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!") +\
+                               "|Set 'Homescreen' -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!")
+                               )
+            
 
-         
+        self.marionette.set_search_timeout(10000)
+        self.marionette.set_script_timeout(10000)
+
+        try:
+            self.setTimeToNow()
+        except:
+            self.logResult("info", "WARNING: Failed to set the current time on this device!")
+        
+        try:
+            self.setupDataConn()
+        except:
+            self.logResult("info", "WARNING: Failed to set up the data conn details (APN etc...)!")
+            
         #
-        # Default timeout for element searches.
+        # Remove any current contacts (it would be nice to do more, but at the
+        # moment this will do).
         #
-        self.marionette.set_search_timeout(20)
-         
-        #
-        # Set the current time to 'now'.
-        #
-        self.setTimeToNow()
-         
+        self.data_layer.remove_all_contacts()
+        self.apps.kill_all()
+        time.sleep(2)
+        
         #
         # Unlock (if necessary).
         #

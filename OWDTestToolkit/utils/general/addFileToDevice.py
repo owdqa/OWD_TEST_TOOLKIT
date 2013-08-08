@@ -8,5 +8,4 @@ class main(GaiaTestCase):
         # you are physically in when running the tests).
         #
         self.parent.device.push_file(p_file, count, '/'.join(['sdcard', destination]))
-
     

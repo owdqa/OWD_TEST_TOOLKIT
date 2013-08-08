@@ -6,7 +6,7 @@ class main(GaiaTestCase):
         #
         # Delete the currently selected messages in this thread.
         #
-        x= self.UTILS.getElement(DOM.Messages.delete_messages_button, "Delete message" )
+        x= self.UTILS.getElement(DOM.Messages.edit_msgs_delete_btn, "Delete message" )
         x.tap()
         
         self.marionette.switch_to_frame()

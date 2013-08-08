@@ -20,8 +20,6 @@ class Marketplace (
         #
         # Launch the app.
         #
-        self.apps.kill_all()
-        
         # WARNING: Marketplace is in a weird place - you need to use "Marketplace Dev"!!
 #         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.logResult("info", 
@@ -33,4 +31,5 @@ class Marketplace (
                                       self.__class__.__name__ + " app - loading icon",
                                       True,
                                       30)
+        return self.app
 

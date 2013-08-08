@@ -9,17 +9,17 @@ class main(GaiaTestCase):
         if p_name == "ENTER":
             return ""
         else:
+            x = False
             try:
                 x = os.environ[p_name]
             except:
-                x = False
-            
-            if p_validate:
-                self.TEST(x, "Variable '" + p_name + "' set to: " + str(x) + ".", True)
+                self.logResult("info", "NOTE: OS variable '" + p_name + "' was not set.")
+                
+                if p_validate:
+                    self.reportResults()
+                    os._exit(1)
+                    
+                return False
                 
             return x
 
-    #
-    # (Can't use the 'push_resource' from gaiatest because I want to use
-    # *any* directory specified by the caller.)
-    #
