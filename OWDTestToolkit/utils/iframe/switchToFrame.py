@@ -10,7 +10,7 @@ class main(GaiaTestCase):
         # are contained in the root-level frame).
         #
         if p_viaRootFrame:
-            self.logResult("info", "Switching to root-level iframe.")
+            self.logResult("info", "<i>(Switching to root-level iframe.)</i>")
             self.checkMarionetteOK()
             self.marionette.switch_to_frame()
             
@@ -58,7 +58,7 @@ class main(GaiaTestCase):
                     pass
                 
         if boolOK:
-            self.logResult("info", "Sucessfully switched to iframe where %s contains '%s'." % (p_attrib, p_str))
+            self.logResult("info", "<i>(Sucessfully switched to iframe where %s contains '%s'.)</i>" % (p_attrib, p_str))
         else:
             self.logResult(p_quitOnError, "<b>NOTE: </b>Failed to switch to iframe where %s contains '%s'." % (p_attrib, p_str))
         

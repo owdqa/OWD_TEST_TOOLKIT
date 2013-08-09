@@ -64,9 +64,14 @@ then
 	#
 	# Get list of files available in the release directory (in order of last modified descending).
 	#
+	attempts=10
 	wget -O $DATES_AVAILABLE --no-check-certificate $SOURCE_DIR?C=M;O=D
     while read reldate
     do
+    	attempts=$((attempts-1))
+    	[ $attempts -le 0 ] && break
+    	
+    	echo "Looking in folder for $reldate for this build ..."
 		#
 		# Set this to be the name of the directory.
 		#
@@ -75,12 +80,12 @@ then
 		#
 		# Get list of files available in the release directory (in order of last modified descending).
 		#
-		wget -O $LIST_FILE --no-check-certificate $NEW_SOURCE_DIR?C=M;O=D
+		wget -O $LIST_FILE --no-check-certificate $NEW_SOURCE_DIR?C=M;O=D 
 		
 		#
 		# Get the name of the newest release (which is at the top of the list).
 		#
-		REL_FILE=$(egrep -i "${DEVICE}.*${TYPE}.*${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
+		REL_FILE=$(egrep -i "${DEVICE}.*\.${TYPE}\.${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
 		
 		#
 		# Download the release file (takes about 15-20 mins on free network).
@@ -104,7 +109,7 @@ else
 	#
 	# Get the name of the newest 'eng' release (which is at the top of the list).
 	#
-	REL_FILE=$(egrep -i "${DEVICE}.*${TYPE}.*${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
+	REL_FILE=$(egrep -i "${DEVICE}.*\.${TYPE}\.${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
 fi
 
 #
@@ -128,7 +133,7 @@ then
 	
     x=$(wget --no-check-certificate $SOURCE_DIR/$REL_FILE | tee $LOG_FILE)
 else
-	echo "No new \"$TYPE\" build found for $DEVICE in $SOURCE_DIR."
+	echo "No new \"$VERSION\" build found for $DEVICE ($TYPE) in $SOURCE_DIR."
     exit 0
 fi
 
