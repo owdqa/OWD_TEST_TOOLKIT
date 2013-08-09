@@ -33,6 +33,7 @@ class main(GaiaTestCase):
                         self.logResult("info", "<i>(Avoiding 'endless loop' where src=\"%s\"...)</i>" % new_src)
                         return
                     else:
+                        new_src = new_src if len(new_src) > 0 else "<i>(nothing)</i>"
                         self._src   = "value of 'src'      = \"%s\"" % new_src
 #                         frame_dets  = "iframe details file =  %s" % self._getFrameDetails()
                     
@@ -62,11 +63,11 @@ class main(GaiaTestCase):
         #
         # Private method to return the iframe path in a 'nice' format.
         #
-        pathStr = "(root level)"
+        pathStr = "<i>(root level)</i><b>"
         for i in self._framepath:
             pathStr = "%s -> %s" % (pathStr, i)
             
-        return "<i>%s</i>" % pathStr
+        return pathStr + "</b>"
                 
 
     def _getFrameDetails(self):
