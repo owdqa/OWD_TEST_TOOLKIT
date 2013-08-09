@@ -4,7 +4,7 @@
 #
 cd OWD_TEST_TOOLKIT
 
-./install.sh >/dev/null 2>&1
+./install.sh $BRANCH >/dev/null 2>&1
 
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
@@ -17,7 +17,6 @@ printf "\n<b>============================</b>\n" >> $LOGFILE
 cd $OWD_TEST_TOOLKIT_DIR/..
 rm -rf owd_test_cases 2>/dev/null
 
-#git clone https://github.com/owdqa/owd_test_cases.git 2> >( tee -a $LOGFILE)
 git clone https://github.com/owdqa/owd_test_cases.git >> $LOGFILE 2>&1
 cd $owd_test_cases_DIR
 

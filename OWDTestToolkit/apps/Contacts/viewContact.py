@@ -22,7 +22,7 @@ class main(GaiaTestCase):
             self.UTILS.logResult("info", "'%s'" % y[i].text)
             if p_contactName in y[i].text:
                 boolFound = True
-                self.UTILS.logResult("info", "Contact '%s' found in all contacts." % p_contactName)
+                self.UTILS.logResult("info", "Contact '%s' found in all contacts - selecting this contact ..." % p_contactName)
                 self.marionette.execute_script("document.getElementsByClassName('contact-item')[%s].click()" % i)
                 self.UTILS.waitForElements(DOM.Contacts.view_details_title, "View contact details screen")
                 break

@@ -186,7 +186,7 @@ class main(GaiaTestCase):
             x = self.UTILS.screenShotOnErr()
             self.UTILS.logResult("info", 
                                  "<b>NOTE:</b> Apparently all your friends are imported from hotmail. " +\
-                                 "These are the contacts you have in the COntacts app:", x)
+                                 "These are the contacts you have in the Contacts app:", x)
             
             return True
         else:
