@@ -6,6 +6,8 @@ new_sms_popup_num      = ("xpath", "//div[@id='toaster-title' and contains(text(
 lockscreen_notif_xpath = "//*[@id='desktop-notifications-container']//div[contains(text(),'%s')]"
 create_new_message_btn = ('id', 'icon-add')
 
+edit_mode_wrapper      = ("xpath", "//article[@id='main-wrapper' and @class='wrapper edit']")
+
 type_and_carrier_field = ("xpath", "//*[@id='contact-carrier']")
 
 target_numbers_empty   = ("xpath", "//*[@id='messages-recipients-list']/span[@data-number='']")
