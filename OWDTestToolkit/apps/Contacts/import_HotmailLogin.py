@@ -10,7 +10,7 @@ class main(GaiaTestCase):
         # If p_clickSignIn is set to True then this method will also click
         # the Sign in button (defaults to true).
         # <br>
-        # Returns False if the login failed, "1" if all your contacts are already imported else True.
+        # Returns False if the login failed, "ALLIMPORTED" if all your contacts are already imported else True.
         #
         x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
@@ -30,10 +30,10 @@ class main(GaiaTestCase):
 
         if not p_clickSignIn:
             #
-            # If we're just entering the login details but not clicking sing in, 
+            # If we're just entering the login details but not clicking sign in, 
             # then here's where we finish.
             #
-            return
+            return True
                 
         #
         # Go to the hotmail import iframe.
@@ -48,17 +48,18 @@ class main(GaiaTestCase):
         # displayed.
         #
         all_imported = self._check_all_friends_imported()
+    
         if all_imported:
-            return 1
-        else:
-            #
-            # Wait for the hotmail contacts for this p_user to be displayed.
-            #
-            self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list")
+            return "ALLIMPORTED"
         
-            x = self.UTILS.screenShotOnErr()
-            self.UTILS.logResult("info", "Contacts list in the Hotmail / Outlook app:", x)
-            
+        #
+        # Wait for the hotmail contacts for this p_user to be displayed.
+        #
+        self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list")
+    
+        x = self.UTILS.screenShotOnErr()
+        self.UTILS.logResult("info", "Contacts list in the Hotmail / Outlook app:", x)
+        
         return True
     
     
