@@ -4,6 +4,7 @@ lockscreen_frame     = ('id', 'lockscreen')
 dock                 = ("class name", "dockWrapper")
 
 app_icon_css         = 'li.icon[aria-label="%s"]'
+app_icon_pages       = ("xpath", "//div[@class='page']")
 # app_delete_icon      = ('css selector', 'span.options')
 app_delete_icon_xpath= "//li[@class='icon'][.//span[text()='%s']]//span[@class='options']"
 app_confirm_delete   = ('id', 'confirm-dialog-confirm-button')
