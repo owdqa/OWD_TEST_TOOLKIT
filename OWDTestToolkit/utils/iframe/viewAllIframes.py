@@ -4,7 +4,7 @@ class main(GaiaTestCase):
     
     _framepath  = []
     _MAXLOOPS   = 20
-    _src        = ""
+    _old_src    = ""
     
     def viewAllIframes(self):
         #
@@ -18,6 +18,7 @@ class main(GaiaTestCase):
         #
         # Climb up from 'root level' iframe to the starting position ...
         #
+        srcSTR=""
         self.marionette.switch_to_frame()
         time.sleep(0.5)
         frame_dets = "<i>(unknown)</i>"
@@ -28,25 +29,26 @@ class main(GaiaTestCase):
                     # We're at the target iframe - record its "src" value.
                     new_src = self.marionette.find_elements("tag name", "iframe")[int(i)].get_attribute("src")
                     
-                    if new_src != "" and new_src == self._src:
+                    if new_src != "" and new_src == self._old_src:
                         # This is an endless loop (some iframes seem to do this) - ignore it and move on.
                         self.logResult("info", "<i>(Avoiding 'endless loop' where src=\"%s\"...)</i>" % new_src)
                         return
-                    else:
-                        new_src = new_src if len(new_src) > 0 else "<i>(nothing)</i>"
-                        self._src   = "value of 'src'      = \"%s\"" % new_src
-#                         frame_dets  = "iframe details file =  %s" % self._getFrameDetails()
+
+                    self._old_src   = new_src
+                    new_src         = new_src if len(new_src) > 0 else "<i>(nothing)</i>"
+                    srcSTR          = "value of 'src'      = \"%s\"" % new_src
                     
                 self.marionette.switch_to_frame(int(i))
             
         x = self.screenShotOnErr()
-        self.logResult("info",  "Iframe details for frame with path: %s|%s" % (self._frametPathStr(), self._src), x)
+        self.logResult("info",  "Iframe details for frame with path: %s|%s" % (self._framePathStr(), srcSTR), x)
 
         #
         # Do the same for all iframes in this iframe 
         #
         ignoreme = -1
         x = self.marionette.find_elements("tag name", "iframe")
+        
         if len(x) > 0:
                 
             for i2 in range(0, len(x)):                 
@@ -59,7 +61,7 @@ class main(GaiaTestCase):
                 # Remove this iframe number from the array.
                 del self._framepath[-1]
                 
-    def _frametPathStr(self):
+    def _framePathStr(self):
         #
         # Private method to return the iframe path in a 'nice' format.
         #
