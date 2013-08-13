@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 
 class main(GaiaTestCase):
 
-    def editContact(self, p_contact_curr_json_obj, p_contact_new_json_obj):
+    def editContact(self, p_contact_name, p_contact_new_json_obj):
         #
         # Replace the details of one contact with another via the edit screen.
         # <br><br>
@@ -15,7 +15,7 @@ class main(GaiaTestCase):
         #
         # Go to the view details screen for this contact.
         #
-        self.viewContact(p_contact_curr_json_obj['name'])
+        self.viewContact(p_contact_name)
                 
         #
         # Tap the Edit button to go to the edit details page.

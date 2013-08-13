@@ -3,13 +3,19 @@
 # Script to capture screenshots / html and attribute info.
 # about all current iframes on a device.
 #
-import base64, sys, os
+import base64, sys, os, time
 from marionette import Marionette
 
 class current_frame():
     
     filename_screenshot = ""
     filename_htmldump   = ""
+    LOGDIR              = ""
+    
+    errNum      = 0
+    _framepath  = []
+    _MAXLOOPS   = 20
+    _old_src    = ""
     
     def main(self, LOGDIR):
         #
@@ -23,93 +29,121 @@ class current_frame():
         #
         # Now loop through all the iframes, gathering details about each one.
         #
-        print ""
-        print "Iframe for 'top level' () ..."
-        self.filename_screenshot = LOGDIR + "top_level" + ".png"
-        self.filename_htmldump   = LOGDIR + "top_level" + ".html"
+        self.LOGDIR = LOGDIR
+        self.viewAllIframes()
+
+
+
+    def viewAllIframes(self):
+        #
+        # Dumps details of all iframes (recursively) into the run log.
+        #
+        
+        # Just in case we end up in an endless loop ...
+        self._MAXLOOPS = self._MAXLOOPS - 1
+        if self._MAXLOOPS < 0: return
+        
+        #
+        # Climb up from 'root level' iframe to the starting position ...
+        #
+        srcSTR=""
         self.marionette.switch_to_frame()
-        self.record_frame()
-        
-        frames = self.marionette.find_elements("tag name", "iframe")
-        for fnum in range (0, len(frames)):
-          
-            #
-            # App name is usually in the "src" attribute, so it's worth a shot..
-            #
-            frame_src = frames[fnum].get_attribute("src")
-              
-            if frame_src != "":
-                startpos = frame_src.index('/') + 2
-                stoppos  = frame_src.index('.')
-                appname  = frame_src[startpos:stoppos]
-                filename = appname
-            else:
-                ucount = ucount + 1
-                appname  = "(unknown)"
-                filename = "unknown_" + str(ucount)
+        time.sleep(0.5)
+        frame_dets = "<i>(unknown)</i>"
+        if len(self._framepath) > 0:
+            for i in self._framepath:
+                
+                if i == self._framepath[-1]:
+                    # We're at the target iframe - record its "src" value.
+                    new_src = self.marionette.find_elements("tag name", "iframe")[int(i)].get_attribute("src")
+                    
+                    if new_src != "" and new_src == self._old_src:
+                        # This is an endless loop (some iframes seem to do this) - ignore it and move on.
+                        return
+
+                    self._old_src   = new_src
+                    new_src         = new_src if len(new_src) > 0 else "<i>(nothing)</i>"
+                    srcSTR          = "value of 'src'      = \"%s\"" % new_src
+                    
+                self.marionette.switch_to_frame(int(i))
             
-            #
-            # Because we call this script sometimes when we hit a Marionette issue,
-            # these filenames may already exist (and we'd overwrite them!), so
-            # add 'DEBUG_' to the start of the filename.
-            #
-            filename = "DEBUG_" + filename
+        self.screenShotOnErr()
+
+        #
+        # Do the same for all iframes in this iframe 
+        #
+        ignoreme = -1
+        x = self.marionette.find_elements("tag name", "iframe")
+        
+        if len(x) > 0:
+                
+            for i2 in range(0, len(x)):                 
+                # Add this iframe number to the array.
+                self._framepath.extend(str(i2))
                  
-            filename_details         = LOGDIR + filename + "_iframe_details.txt"
-            self.filename_screenshot = LOGDIR + filename + ".png"
-            self.filename_htmldump   = LOGDIR + filename + ".html"
+                # Process this iframe.
+                self.viewAllIframes()
+                 
+                # Remove this iframe number from the array.
+                del self._framepath[-1]
+                
+    def _framePathStr(self):
+        #
+        # Private method to return the iframe path in a 'nice' format.
+        #
+        pathStr = "<i>(root level)</i><b>"
+        for i in self._framepath:
+            pathStr = "%s -> %s" % (pathStr, i)
             
-            #
-            # This iframe gives me problems sometimes, so I'm ignoring it for now.
-            #
-            if appname == "costcontrol":
-                continue
-            
-            print ""
-            print "Iframe for app \"" + appname + "\" ..."
+        return pathStr + "</b>"
+                
+
+    def screenShot(self, p_fileSuffix):
+        #
+        # Take a screenshot.
+        #
+        outFile = "%s/DEBUG_%s.png" % (self.LOGDIR,p_fileSuffix)
         
-            #
-            # Record the iframe details (pretty verbose, but 'execute_script' 
-            # wasn't letting me use 'for' loops in js for some reason).
-            #
-            print "    |_ iframe details saved to : " + filename_details
-            f = open(filename_details, 'w')
-            f.write("Attributes for this iframe ...\n")
-            num_attribs = self.marionette.execute_script("return document.getElementsByTagName('iframe')[" + str(fnum) + "].attributes.length;")
-            for i in range(0,num_attribs):
-                attrib_name  = self.marionette.execute_script("return document.getElementsByTagName('iframe')[" + str(fnum) + "].attributes[" + str(i) + "].nodeName;")
-                attrib_value = self.marionette.execute_script("return document.getElementsByTagName('iframe')[" + str(fnum) + "].attributes[" + str(i) + "].nodeValue;")
-        
-                f.write("    |_ " + attrib_name.ljust(20) + ": \"" + attrib_value + "\"\n")   
-            f.close()
-            
-            #
-            # Switch to this frame.
-            #
-            self.marionette.switch_to_frame(fnum)
-                   
-            self.record_frame()
-         
-            self.marionette.switch_to_frame()
+        try:
+            screenshot = self.marionette.screenshot()[22:] 
+            with open(outFile, 'w') as f:
+                f.write(base64.decodestring(screenshot))        
+            return outFile
+        except:
+            return "(Unable to capture screenshot: possible Marionette issue.)"
 
 
-    def record_frame(self):
+    def savePageHTML(self, p_fileSuffix):
         #
-        # Take the screenshot and save it to the file.
+        # Save the HTML of the current page to the specified file.
         #
-        print "    |_ screenshot saved to     : " + self.filename_screenshot
-        screenshot = self.marionette.screenshot()[22:]
-        with open(self.filename_screenshot, 'w') as f:
-            f.write(base64.decodestring(screenshot))
-        f.close()
-              
+        outFile = "%s/DEBUG_%s.html" % (self.LOGDIR, p_fileSuffix)
+        f = open(outFile, 'w')
+        f.write( self.marionette.page_source.encode('ascii', 'ignore') )
+
+
+
+    def screenShotOnErr(self):
         #
-        # Take the html dump and save it to the file.
+        # Take a screenshot on error (increments the file number).
         #
-        print "    |_ html dump saved to      : " + self.filename_htmldump
-        f = open(self.filename_htmldump, 'w')
-        f.write(self.marionette.page_source.encode('ascii', 'ignore') )
-        f.close()
+
+        #
+        # Build the error filename.
+        #
+        self.errNum = self.errNum + 1
+        
+        #
+        # Record the screenshot.
+        #
+        screenDump = self.screenShot(self.errNum)
+        
+        #
+        # Dump the current page's html source too.
+        #
+        self.savePageHTML(self.errNum)
+            
+
 
 
 #########################################
