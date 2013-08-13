@@ -7,7 +7,8 @@ lockscreen_notif_xpath = "//*[@id='desktop-notifications-container']//div[contai
 create_new_message_btn = ('id', 'icon-add')
 
 edit_mode_wrapper      = ("xpath", "//article[@id='main-wrapper' and @class='wrapper edit']")
-service_unavailable_msg= ("id", "sendGeneralErrorTitle")
+service_unavailable_msg= ("xpath", "//*[@data-l10n-id='sendGeneralErrorTitle']")
+service_unavailable_ok = ("xpath", "//*[@data-l10n-id='sendGeneralErrorBtnOk']")
 
 type_and_carrier_field = ("xpath", "//*[@id='contact-carrier']")
 
