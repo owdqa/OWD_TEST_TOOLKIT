@@ -28,9 +28,6 @@ class EverythingMe (
         
         self.UTILS.goHome()
         
-        #
-        # Scroll to the left to expose the 'everything.me' screen.
-        #
         x = self.UTILS.getElement(DOM.EME.search_field, "Search field")
         x.tap()
         self.UTILS.waitForElements(DOM.EME.groups, "EME groups", True, 30)
