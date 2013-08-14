@@ -13,6 +13,7 @@ class main(GaiaTestCase):
         time.sleep(1)
         self.UTILS.checkMarionetteOK()
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator, p_quitOnError=False)
+        time.sleep(1)
         y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
         
         self.UTILS.logResult("info", "%s contacts listed." % str(len(y)))
