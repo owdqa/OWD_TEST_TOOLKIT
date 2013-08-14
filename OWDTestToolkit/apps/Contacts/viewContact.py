@@ -20,7 +20,7 @@ class main(GaiaTestCase):
         boolFound=False
         for i in range(0,ymax):   
             self.UTILS.logResult("info", "'%s'" % y[i].text)
-            if p_contactName in y[i].text:
+            if p_contactName.lower() in y[i].text.lower():
                 boolFound = True
                 self.UTILS.logResult("info", "Contact '%s' found in all contacts - selecting this contact ..." % p_contactName)
                 self.marionette.execute_script("document.getElementsByClassName('contact-item')[%s].click()" % i)
