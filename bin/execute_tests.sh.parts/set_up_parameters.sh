@@ -16,9 +16,13 @@ export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
 if [ ! "$RESULT_DIR" ]
 then
 	. $0.parts/fake_ci_server.sh
-	rm -f $RESULT_DIR/* >/dev/null 2>&1
-	rm -f $RESULT_DIR/.* >/dev/null 2>&1
+	mkdir -p $RESULT_DIR >/dev/null 2>&1
+	cd $RESULT_DIR
+	rm -f * >/dev/null 2>&1
+	rm -f .* >/dev/null 2>&1
 fi
+mkdir -p $RESULT_DIR >/dev/null 2>&1
+
 
 #
 # File for realtime summary (so even though the CI output is minimal,
