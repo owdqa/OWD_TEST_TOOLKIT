@@ -13,6 +13,7 @@ class main(GaiaTestCase):
         time.sleep(1)
         self.UTILS.checkMarionetteOK()
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator, p_quitOnError=False)
+        time.sleep(1)
         y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
         
         self.UTILS.logResult("info", "%s contacts listed." % str(len(y)))
@@ -20,7 +21,7 @@ class main(GaiaTestCase):
         boolFound=False
         for i in range(0,ymax):   
             self.UTILS.logResult("info", "'%s'" % y[i].text)
-            if p_contactName in y[i].text:
+            if p_contactName.lower() in y[i].text.lower():
                 boolFound = True
                 self.UTILS.logResult("info", "Contact '%s' found in all contacts - selecting this contact ..." % p_contactName)
                 self.marionette.execute_script("document.getElementsByClassName('contact-item')[%s].click()" % i)
