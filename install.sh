@@ -21,6 +21,21 @@ export BRANCH=${1:-"v1-train"}
 
 
 #
+# First check you have the jira login file.
+#
+if [ ! -f $HOME/.jira_login ]
+then
+    echo "$HOME/.jira_login not found, please enter these details (only required once):"
+    printf "JIRA username: "
+    read username
+    printf "JIRA password: "
+    read password
+    printf "USERNAME $username\nPASSWORD $password\n" > $HOME/.jira_login
+    chmod go-rwx ~/.jira_login
+fi
+
+
+#
 # CHECK DEPENDENCIES ...
 #
 # Python 2.7
