@@ -11,14 +11,10 @@ chmod 777 /tmp/tests 2> /dev/null
 export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
 
 #
-# Directory for all output (only required if not coming from ci_test_run.sh).
+# Directory for all output (or fake it if not coming from ci_test_run.sh).
 #
-if [ ! "$RESULT_DIR" ]
-then
-	. $0.parts/fake_ci_server.sh
-	rm -f $RESULT_DIR/* >/dev/null 2>&1
-	rm -f $RESULT_DIR/.* >/dev/null 2>&1
-fi
+[ ! "$RESULT_DIR" ] && . $0.parts/fake_ci_server.sh
+
 
 #
 # File for realtime summary (so even though the CI output is minimal,

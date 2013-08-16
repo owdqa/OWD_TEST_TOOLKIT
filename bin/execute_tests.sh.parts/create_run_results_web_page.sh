@@ -105,6 +105,11 @@ cp * $HTML_FILEDIR 2> /dev/null
 #
 # Output the web page link.
 #
-printf "$HTML_WEBDIR"
+if [ "$FAKE_CI_SERVER" ]
+then
+    printf "file://%s/index.html" "$HTML_FILEDIR"
+else
+    printf "$HTML_WEBDIR"
+fi
 
 
