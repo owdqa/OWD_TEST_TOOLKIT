@@ -33,7 +33,7 @@ import  countEmailAddressesWhileEditing , \
         import_toggleSelectContact      , \
         import_ImportAll                , \
         import_GmailLogin               , \
-        import_HotmailLogin
+        import_HotmailLogin             
 
 
 class Contacts(  countEmailAddressesWhileEditing.main,
