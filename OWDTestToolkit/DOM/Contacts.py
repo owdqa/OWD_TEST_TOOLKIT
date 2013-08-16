@@ -19,6 +19,7 @@ search_contact_input   = ("id", "search-contact")
 search_results_list    = ("xpath",".//*[@id='search-list']/li")
 search_cancel_btn      = ('id', 'cancel-search')
 search_no_contacts_found = ("id", "no-result")
+favourites_section     = ("id", "contacts-list-favorites")
 favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//p[@data-order='%s']"
 
 social_network_contacts= ('class name', "icon-social icon-fb notorg")
@@ -36,6 +37,7 @@ favourite_marker       = ('id', 'favorite-star')
 details_back_button    = ('id', 'details-back')
 
 reset_field_xpath      = ".//*[@id='%s']//button[@id='img-delete-button']"
+edit_image             = ("id", "thumbnail-action")
 edit_contact_header    = ('xpath', GLOBAL.app_head_specific % 'Edit contact')
 edit_update_button     = ('id', 'save-button')
 edit_details_button    = ('id', 'edit-contact-button')
