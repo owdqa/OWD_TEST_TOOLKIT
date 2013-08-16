@@ -8,14 +8,7 @@ printf "BUILD BEING TESTED                 : %s\n\n\n" $DEVICE_BUILDNAME
 
 printf "Possible regression failures       : %s\n\n\n" $UNEX_FAILS
 
-
-if [ "$FAKE_CI_SERVER" ]
-then
-printf "To debug, point your browser to    : file:///var/www/html/owd_tests/test_123/index.html\n\n"
-else
 printf "CLICK HERE FOR RUN DETAILS         : %s\n\n" "$($0.parts/create_run_results_web_page.sh)"
-fi
-
 
 printf "Start time                         : %s\n" "$RUN_TIME"
 printf "End time                           : %s\n\n" "$END_TIME"              
