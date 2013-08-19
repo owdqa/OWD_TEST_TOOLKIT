@@ -6,6 +6,13 @@ class main(GaiaTestCase):
         #
         # Scroll around the homescreen until we find our app icon.
         #
+        
+        #
+        # I had all kinds of weird issues when returning to this method,
+        # this awful solution works.
+        #
+        self.goHome()
+        time.sleep(1)
         self.goHome()
         
         self.scrollHomescreenRight()
