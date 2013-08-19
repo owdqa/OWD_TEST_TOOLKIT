@@ -29,5 +29,5 @@ class main(GaiaTestCase):
                     self.logResult("info", "Icon for %s found on page %s." % (p_appName, ICON_POS))
                     return i
              
-        self.logResult("info", "<b>NOTE:</b> Icon for '%s' not found!" % p_appName)
+        self.logResult("info", "Icon for '%s' not found on the homescreen." % p_appName)
         return False
