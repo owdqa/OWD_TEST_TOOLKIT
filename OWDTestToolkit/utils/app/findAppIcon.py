@@ -10,7 +10,7 @@ class main(GaiaTestCase):
         
         self.scrollHomescreenRight()
         time.sleep(1)
-        x = self.getElements( ("xpath", "//div[@id='icongrid']/div[@class='page']"), "blah")
+        x = self.getElements(DOM.Home.app_icon_pages, "Icon pages on homescreen")
          
         ICON_POS = False
         for pagenum in x:
