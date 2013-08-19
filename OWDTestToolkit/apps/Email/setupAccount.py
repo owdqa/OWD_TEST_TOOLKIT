@@ -54,20 +54,6 @@ class main(GaiaTestCase):
         btn = self.UTILS.getElement(DOM.Email.login_next_btn, "Login - 'next' button")
         btn.tap()
         
-#         time.sleep(5)
-#         self.UTILS.switchToFrame(*DOM.Email.frame_locator)
-        
-        self.UTILS.waitForElements(DOM.Email.sup_header, "Email header", True, 20, False)
-        
-        #
-        # Click the 'continue ...' button.
-        #
-        x = self.UTILS.getElement(DOM.Email.sup_next_btn, "'Next' button")
-        x.tap()
-        
-#         self.waitForDone()
-        time.sleep(5)
-        
         #
         # Click the 'continue to mail' button.
         #
