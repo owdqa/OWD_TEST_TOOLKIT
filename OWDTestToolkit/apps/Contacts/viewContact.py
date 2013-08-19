@@ -7,8 +7,8 @@ class main(GaiaTestCase):
         # Navigate to the 'view details' screen for a contact (assumes we are in the
         # 'view all contacts' screen).
         # <br>
-        # In some cases you don't want this to check the header (if the contact has no name
-        # for example). In that case, set p_HeaderCheck=False.
+        # In some cases you don't want this to check the header (if the contact has no name,
+        # or you're just using the given name etc..). In that case, set p_HeaderCheck=False.
         #
         time.sleep(1)
         self.UTILS.checkMarionetteOK()

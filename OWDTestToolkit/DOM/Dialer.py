@@ -14,6 +14,10 @@ call_number_button          = ("id", "keypad-callbar-call-action")
 
 add_to_conts_cancel_btn= ("id", "cancel_activity")
 
+suggestion_count        = ("id", "suggestion-count")
+suggestion_list         = ("xpath", "//ul[@id='suggestion-list']/li")
+suggestion_list_cancel  = ("id", "suggestion-overlay-cancel")
+
 outgoing_call_locator  = ('css selector', 'div.direction.outgoing')
 outgoing_call_number   = ("xpath", "//*[contains(@class,'number font-light')]") #Note: maybe + prefix.
 outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '%s')]" #Note: maybe + prefix.
