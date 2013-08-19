@@ -15,6 +15,7 @@ call_number_button          = ("id", "keypad-callbar-call-action")
 add_to_conts_cancel_btn= ("id", "cancel_activity")
 
 suggestion_count        = ("id", "suggestion-count")
+suggestion_item         = ("class name", "suggestion-item")
 suggestion_list         = ("xpath", "//ul[@id='suggestion-list']/li")
 suggestion_list_cancel  = ("id", "suggestion-overlay-cancel")
 
