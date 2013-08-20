@@ -24,7 +24,7 @@ outgoing_call_number   = ("xpath", "//*[contains(@class,'number font-light')]") 
 outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '%s')]" #Note: maybe + prefix.
 hangup_bar_locator     = ('id', 'callbar-hang-up-action')
 
-dialler_button_xpath   = "//div[@class='keypad-key' and @data-value='%s']"
+dialler_button_xpath   = "//section[@id='keypad']//div[contains(@class,'keypad-key') and @data-value='%s']"
 phone_number_area      = ("id", "fake-phone-number-view")
 
 call_log_btn           = ("id", "option-recents")
