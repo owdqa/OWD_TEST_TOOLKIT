@@ -10,7 +10,7 @@ class main(GaiaTestCase):
         x.tap()
         
         self.marionette.switch_to_frame()
-        x = self.UTILS.getElement(DOM.GLOBAL.modal_ok_button, "OK button in question dialog")
+        x = self.UTILS.getElement(DOM.GLOBAL.modal_alert_ok, "OK button in question dialog")
         x.tap()
         self.UTILS.switchToFrame(*DOM.Messages.frame_locator)
         time.sleep(2)
