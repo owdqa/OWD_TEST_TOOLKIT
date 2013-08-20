@@ -69,6 +69,11 @@ _f_2nd_chance(){
 
 f_execute_test_file(){
 	#
+	# We've had some problems which were only solved by a 'quick reboot', so ...
+	#
+    #$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh NOCLEAR
+    
+	#
 	# Make sure gaiatest isn't still running (sometimes a process is left after the run).
 	#
 	ps -ef | grep gaiatest | grep -v "grep" | awk '{print $2}' | while read pid

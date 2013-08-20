@@ -11,6 +11,7 @@ class main(GaiaTestCase):
         boolOK = False
         for groupLink in x:
             if groupLink.get_attribute("data-query") == p_name:
+            	self.UTILS.logResult("info", "Group found - tapping it ...")
                 groupLink.tap()
                 time.sleep(10)
                 boolOK = True

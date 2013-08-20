@@ -32,8 +32,8 @@ do
 	. $0.parts/add_new_test_to_realtime_summary.sh
 
     . $0.parts/mark_test_as_execute_or_not.sh
-    
-    
+
+
     . $0.parts/execute_test.sh
     
     
