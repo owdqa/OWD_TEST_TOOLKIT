@@ -13,7 +13,7 @@ class main(GaiaTestCase):
         
         time.sleep(2)
         self.marionette.switch_to_frame()
-        x = self.UTILS.getElement(DOM.GLOBAL.modal_ok_button1, "OK button in question dialog")
+        x = self.UTILS.getElement(DOM.GLOBAL.modal_confirm_ok, "OK button in question dialog")
         x.tap()
 #         self.marionette.execute_script("document.getElementById('modal-dialog-confirm-ok').click();")
 
