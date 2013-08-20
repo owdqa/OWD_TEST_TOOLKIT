@@ -16,4 +16,5 @@ class main(GaiaTestCase):
         #
         x = self.UTILS.getElement(DOM.Dialer.phone_number, "Phone number field", False)
         dialer_num = x.get_attribute("value")
-        self.UTILS.TEST(str(p_num) in dialer_num, "'%s' contains '%s'." % (dialer_num, str(p_num)))
+        self.UTILS.TEST(str(p_num) in dialer_num, "After entering '%s', phone number field contains '%s'." % \
+					   								(dialer_num, str(p_num)))

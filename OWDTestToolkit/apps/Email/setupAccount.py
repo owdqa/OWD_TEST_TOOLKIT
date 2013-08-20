@@ -32,17 +32,6 @@ class main(GaiaTestCase):
         # (At this point we are now in the 'New account' screen by one path or
         # another.)
         #
-#         u = self.UTILS.getElement(DOM.Email.username, "Username field")
-#         e = self.UTILS.getElement(DOM.Email.email_addr, "Email address field")
-#         p = self.UTILS.getElement(DOM.Email.password, "Password field")
-# 
-#         if p_user != "":
-#             u.send_keys(p_user)
-#         if p_email != "":
-#             e.send_keys(p_email)
-#         if p_pass != "":
-#             p.send_keys(p_pass)
-
         self.UTILS.typeThis(DOM.Email.username  , "Username field", p_user , True, True)
         self.UTILS.typeThis(DOM.Email.email_addr, "Address field" , p_email, True, True)
         self.UTILS.typeThis(DOM.Email.password  , "Password field", p_pass , True, True)
