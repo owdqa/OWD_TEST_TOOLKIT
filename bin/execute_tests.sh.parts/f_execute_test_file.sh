@@ -9,9 +9,13 @@ _f_run_test(){
 	# have just been rebooted, so we don't need to do this).
 	#
     x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE)
-    if [ "$x" ] && [ ! "$RESTART" ]
+#    if [ "$x" ] && [ ! "$RESTART" ]
+#    then
+#    	$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
+#    fi
+    if [ "$x" ]
     then
-    	$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
+    	RESTART="--restart"
     fi
 
 	TESTVARS="--testvars=${OWD_TEST_TOOLKIT_CONFIG}/gaiatest_testvars.json"
@@ -20,6 +24,7 @@ _f_run_test(){
     #
     # Run the test and update the variables with the results.
     #
+    RESTART="--restart" #(just until this problem with gaiatest goes away)
 	gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE >$ERR_FILE 2>&1
     line="$(tail -1 $SUM_FILE)"
     test_passes=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $1}')
@@ -57,7 +62,7 @@ _f_2nd_chance(){
 	    	# This is an ADB 'reboot' (which sometimes solves a
 	    	# problem that gaiatest 'restart' doesn't).
 	    	#
-			$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh
+			$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh NOCLEAR
 			
 			RESTART="--restart"
 
