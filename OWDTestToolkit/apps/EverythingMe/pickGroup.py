@@ -13,7 +13,22 @@ class main(GaiaTestCase):
             if groupLink.get_attribute("data-query") == p_name:
             	self.UTILS.logResult("info", "Group found - tapping it ...")
                 groupLink.tap()
-                time.sleep(10)
+#                 time.sleep(10)
+                
+                # I've had 'odd' problems with this tap not doing anything
+                # randomly, so I'm adding another chance.
+                boolChk = False
+                try:
+                	self.wait_for_element_present(*DOM.EME.apps, timeout=10)
+                	boolChk = True
+            	except:
+            		pass
+            	if not boolChk:
+            		groupLink.tap()
+            		
+            	self.UTILS.waitForElements(DOM.EME.apps, "Apps list for group %s" % p_name)
+            		
+            	
                 boolOK = True
                 break
         
@@ -22,6 +37,7 @@ class main(GaiaTestCase):
         # if it can remember our location.
         #
         self.UTILS.clearGeolocPermission()
+        
         
         return boolOK
     
