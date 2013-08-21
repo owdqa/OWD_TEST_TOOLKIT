@@ -25,23 +25,22 @@ class EverythingMe (
         #
         # Launch the app.
         #
-        
         self.UTILS.goHome()
         
         #
         # If EME has already been launched, then the DOM has changed.
         #
+        self.UTILS.logResult("info", "Launching Everything ME.")
         boolOK = False
         try:
-            x = self.marionette.find_element(*DOM.EME.search_field)
-            if x.is_displayed():
-                x.tap()
-                self.UTILS.logResult("info", "Everything ME was already 'running', so just tapped the search field.")
-                boolOK = True
-        except:
-            self.UTILS.logResult("info", "Launching Everything ME.")
-            x = self.UTILS.getElement(DOM.EME.start_eme_icon, "EME launch icon")
+            self.wait_for_element_displayed(*DOM.EME.start_eme_icon, timeout=1)
+            x = self.marionette.find_element(*DOM.EME.start_eme_icon)
             x.tap()
+            boolOK = True
+        except:
+            self.UTILS.logResult("info", "Everything ME is already 'running', so just tapping the search field.")
+            x = self.marionette.find_element(*DOM.EME.search_field)
+            x.click()
             boolOK = True
             
         self.UTILS.TEST(boolOK, "EME Started.")
