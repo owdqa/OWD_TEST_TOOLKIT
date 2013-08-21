@@ -43,7 +43,7 @@ class EverythingMe (
             x.click()
             boolOK = True
             
-        self.UTILS.TEST(boolOK, "EME Started.")
+        self.UTILS.TEST(boolOK, "EME Starting up ...")
             
         self.UTILS.waitForElements(DOM.EME.groups, "EME groups", True, 30)
 
