@@ -62,6 +62,10 @@ cd gaia-ui-tests
 printf "\n<b>Switching to branch \"$BRANCH\" of gaiatest ...</b>\n\n" | tee -a $LOGFILE
 git checkout $BRANCH  2> >( tee -a $LOGFILE)
 
+# Temporary hack...
+$OWD_TEST_TOOLKIT_BIN/tmp_hack.sh
+
+
 #
 # Install gaiatest and dependencies.
 #
