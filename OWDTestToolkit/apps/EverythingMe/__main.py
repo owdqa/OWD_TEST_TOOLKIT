@@ -31,14 +31,20 @@ class EverythingMe (
         #
         # If EME has already been launched, then the DOM has changed.
         #
+        boolOK = False
         try:
             x = self.marionette.find_element(*DOM.EME.search_field)
-            x.tap()
-            self.UTILS.logResult("info", "Everything ME was already 'running', so just tapped the search field.")
+            if x.is_displayed():
+                x.tap()
+                self.UTILS.logResult("info", "Everything ME was already 'running', so just tapped the search field.")
+                boolOK = True
         except:
             self.UTILS.logResult("info", "Launching Everything ME.")
             x = self.UTILS.getElement(DOM.EME.start_eme_icon, "EME launch icon")
             x.tap()
+            boolOK = True
+            
+        self.UTILS.TEST(boolOK, "EME Started.")
             
         self.UTILS.waitForElements(DOM.EME.groups, "EME groups", True, 30)
 
