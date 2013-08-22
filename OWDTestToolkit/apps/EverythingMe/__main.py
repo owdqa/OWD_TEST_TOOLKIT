@@ -39,11 +39,25 @@ class EverythingMe (
             boolOK = True
         except:
             self.UTILS.logResult("info", "Everything ME is already 'running', so just tapping the search field.")
-            x = self.marionette.find_element(*DOM.EME.search_field)
-            x.click()
+            self._relaunch()
+            try:
+                self.wait_for_element_displayed(*DOM.EME.groups)
+            except:
+                self._relaunch()
             boolOK = True
             
         self.UTILS.TEST(boolOK, "EME Starting up ...")
             
-        self.UTILS.waitForElements(DOM.EME.groups, "EME groups", True, 30)
+        self.UTILS.waitForElements(DOM.EME.groups, "EME groups", True, 10)
 
+    def _relaunch(self):
+        #
+        # Private function to re-launch.
+        # This gets complicated:
+        # 1. el.tap() and el.click() only work *sometimes*, so use the keyboard to relaunch.
+        # 2. Sometimes the messges app randomly launches instead of evme!
+        #
+        self.UTILS.goHome()
+        self.UTILS.typeThis(DOM.EME.search_field, "Search field", "x", p_validate=False, p_enter=False, p_remove_keyboard=False)
+        self.parent.keyboard.tap_backspace()
+        self.UTILS.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
