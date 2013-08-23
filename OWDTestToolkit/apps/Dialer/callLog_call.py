@@ -6,7 +6,10 @@ class main(GaiaTestCase):
         #
         # Calls a number from the call log.
         #
-		self.openCallLog()
+		try:
+			self.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
+		except:
+			self.openCallLog()
 
 		x = self.UTILS.getElement( ("xpath", DOM.Dialer.call_log_number_xpath % p_num),
 								   "The call log for number %s" % p_num)

@@ -6,6 +6,13 @@ class main(GaiaTestCase):
         #
         # Enters a number into the dialler using the keypad.
         #
+        try:
+        	self.wait_for_element_displayed(*DOM.Dialer.phone_number, timeout=1)
+    	except:
+    		x = self.UTILS.getElement(DOM.Dialer.option_bar_keypad, "Keypad option selector")
+    		x.tap()
+    		self.UTILS.waitForElements(DOM.Dialer.phone_number, "Phone number area")
+        		
         for i in str(p_num):
         	x = self.UTILS.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % i),
 									"keypad number %s." % i)
