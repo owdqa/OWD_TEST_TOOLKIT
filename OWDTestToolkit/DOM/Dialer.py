@@ -5,7 +5,12 @@ option_bar_call_log    = ("id", "option-recents")
 option_bar_contacts    = ("id", "option-contacts")
 option_bar_keypad      = ("id", "option-keypad")
 
+keypad                 = ("id", "keypad")
+dialler_button_xpath   = "//section[@id='keypad']//div[contains(@class,'keypad-key') and @data-value='%s']"
+phone_number_area      = ("id", "fake-phone-number-view")
 phone_number           = ('id', 'phone-number-view') # Beware: this number may have a country code prefix on it.
+
+contacts_sub_iframe    = ("id", "iframe-contacts")
 
 add_to_contacts_button      = ("id", "keypad-callbar-add-contact")
 create_new_contact_btn      = ("id", "create-new-contact-menuitem")
@@ -24,14 +29,15 @@ outgoing_call_number   = ("xpath", "//*[contains(@class,'number font-light')]") 
 outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '%s')]" #Note: maybe + prefix.
 hangup_bar_locator     = ('id', 'callbar-hang-up-action')
 
-dialler_button_xpath   = "//section[@id='keypad']//div[contains(@class,'keypad-key') and @data-value='%s']"
-phone_number_area      = ("id", "fake-phone-number-view")
-
 call_log_btn           = ("id", "option-recents")
 call_log_filter        = ("id", "call-log-filter")
 call_log_numbers       = ("xpath", "//li[contains(@class,'log-item')")
 call_log_number_xpath  = "//li[contains(@class,'log-item') and contains(@data-phone-number,'%s')]"
+call_log_name_xpath    = "//li[contains(@class,'log-item')]//span[@class='primary-info-main' and text()='%s']"
 call_log_edit_btn      = ("id", "call-log-icon-edit")
+call_log_edit_selAll   = ("id", "select-all-threads")
+call_log_edit_delete   = ("id", "delete-button")
+call_log_no_calls_msg  = ("id", "no-result-message")
 
 call_log_numtap_call            = ("id", "call-menuitem")
 call_log_numtap_create_new      = ("id", "create-new-contact-menuitem")

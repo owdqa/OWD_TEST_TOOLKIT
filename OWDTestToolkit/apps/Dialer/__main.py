@@ -10,7 +10,8 @@ import  callThisNumber              ,\
         callLog_addToContact        ,\
         addThisNumberToContact      ,\
         _complete_addNumberToContact,\
-        createMultipleCallLogEntries
+        createMultipleCallLogEntries,\
+        callLog_clearAll
 
 class Dialer (
             callThisNumber.main,
@@ -23,7 +24,8 @@ class Dialer (
             callLog_addToContact.main,
             addThisNumberToContact.main,
             _complete_addNumberToContact.main,
-            createMultipleCallLogEntries.main):
+            createMultipleCallLogEntries.main,
+            callLog_clearAll.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
