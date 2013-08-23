@@ -41,7 +41,7 @@ class EverythingMe (
             self.UTILS.logResult("info", "Everything ME is already 'running', so just tapping the search field.")
             self._relaunch()
             try:
-                self.wait_for_element_displayed(*DOM.EME.groups)
+                self.wait_for_element_displayed(*DOM.EME.groups, timeout=10)
             except:
                 self._relaunch()
             boolOK = True
@@ -59,5 +59,20 @@ class EverythingMe (
         #
         self.UTILS.goHome()
         self.UTILS.typeThis(DOM.EME.search_field, "Search field", "x", p_validate=False, p_enter=False, p_remove_keyboard=False)
-        self.parent.keyboard.tap_backspace()
+
+        self.marionette.switch_to_frame()
+        x = self.UTILS.screenShotOnErr()
+        self.UTILS.logResult("info", "x", x)
         self.UTILS.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
+        x = self.UTILS.screenShotOnErr()
+        self.UTILS.logResult("info", "x", x)
+        x = self.UTILS.getElement(DOM.EME.search_field, "Search field (to make sure it's clear from earlier launches)")
+        x_val = x.get_attribute("value")
+        self.UTILS.logResult("info", "x_val: %s" % x_val)
+        self.UTILS.logResult("info", "len(x_val): %s" % len(x_val))
+
+        for i in range (0,len(x_val)):
+            self.parent.keyboard.tap_backspace()
+
+        self.UTILS.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
+

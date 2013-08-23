@@ -12,7 +12,10 @@ class main(GaiaTestCase):
                 from marionette import Actions
                 actions = Actions(self.marionette)
                 actions.press(appLink).wait(2).release()
-                actions.perform()
+                try:
+                	actions.perform()
+            	except:
+            		pass
                 
                 self.marionette.switch_to_frame()
                 x = self.UTILS.getElement(DOM.EME.add_app_to_homescreen, "Add app to homescreen button")
