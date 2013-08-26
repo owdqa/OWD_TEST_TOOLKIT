@@ -11,7 +11,8 @@ import  callThisNumber              ,\
         addThisNumberToContact      ,\
         _complete_addNumberToContact,\
         createMultipleCallLogEntries,\
-        callLog_clearAll
+        callLog_clearAll            ,\
+        callLog_clearSome
 
 class Dialer (
             callThisNumber.main,
@@ -25,7 +26,8 @@ class Dialer (
             addThisNumberToContact.main,
             _complete_addNumberToContact.main,
             createMultipleCallLogEntries.main,
-            callLog_clearAll.main):
+            callLog_clearAll.main,
+            callLog_clearSome.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
