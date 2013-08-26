@@ -46,8 +46,7 @@ class main(GaiaTestCase):
         #
         myIframe = self.UTILS.currentIframe()
         self.marionette.switch_to_frame()
-        x = self.UTILS.getElement(DOM.Gallery.thumbnail_trash_confirm_btn, "Confirm ok button")
-        x.tap()
+        self.marionette.execute_script("document.getElementById('%s').click()" % DOM.GLOBAL.modal_confirm_ok[1])
         self.UTILS.switchToFrame("src", myIframe)
         
         #
