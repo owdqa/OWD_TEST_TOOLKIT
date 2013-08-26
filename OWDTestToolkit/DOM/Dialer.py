@@ -35,6 +35,7 @@ call_log_numbers       = ("xpath", "//li[contains(@class,'log-item')")
 call_log_number_xpath  = "//li[contains(@class,'log-item') and contains(@data-phone-number,'%s')]"
 call_log_name_xpath    = "//li[contains(@class,'log-item')]//span[@class='primary-info-main' and text()='%s']"
 call_log_edit_btn      = ("id", "call-log-icon-edit")
+call_log_edit_header   = ("id", "edit-mode-header")
 call_log_edit_selAll   = ("id", "select-all-threads")
 call_log_edit_delete   = ("id", "delete-button")
 call_log_no_calls_msg  = ("id", "no-result-message")
