@@ -1,3 +1,5 @@
+frame_locator                   = ("src", "camera")
+
 capture_button           = ('id', 'capture-button')
 thumbnail                = ('class name', 'thumbnail')
 thumbnail_preview_marker = ('id', 'preview')
