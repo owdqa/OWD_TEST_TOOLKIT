@@ -29,7 +29,9 @@ then
     printf "JIRA username: "
     read username
     printf "JIRA password: "
+    stty -echo
     read password
+    stty echo
     printf "USERNAME $username\nPASSWORD $password\n" > $HOME/.jira_login
     chmod go-rwx ~/.jira_login
 fi
