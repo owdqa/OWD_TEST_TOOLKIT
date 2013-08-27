@@ -3,6 +3,8 @@ frame_locator          = ('src', "settings")
 settings_header        = ('xpath', GLOBAL.app_head_specific % 'Settings')
 back_button            = ('class name', 'icon icon-back')
 
+airplane_mode_switch   = ("id", "menuItem-airplaneMode")
+
 app_permissions        = ('id', "menuItem-appPermissions")
 app_permissions_header = ('xpath', GLOBAL.app_head_specific % 'App permissions')
 app_perm_camera        = ('xpath', './/*[@id="appPermissions"]//a[text()="Camera"]')
