@@ -63,7 +63,7 @@ printf "\n<b>Switching to branch \"$BRANCH\" of gaiatest ...</b>\n\n" | tee -a $
 git checkout $BRANCH  2> >( tee -a $LOGFILE)
 
 # Temporary hack...
-#$OWD_TEST_TOOLKIT_BIN/tmp_hack.sh
+$OWD_TEST_TOOLKIT_BIN/tmp_hack.sh
 
 
 #

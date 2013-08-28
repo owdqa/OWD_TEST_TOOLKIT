@@ -76,28 +76,27 @@ class UTILS(app.main        ,
                                "|Set 'audio.volume.notification' = 0     " + ("[OK]" if b else "[UNABLE TO SET!]!") +\
                                "|Set 'ril.radio.disabled'        = False " + ("[OK]" if c else "[UNABLE TO SET!]!")
                                 )
-    
+   
         a=self.setPermission('Camera', 'geolocation', 'deny', True)
         b=self.setPermission('Homescreen', 'geolocation', 'deny', True)
         self.logResult("info", "Default app permissions ..." +\
                                "|Set 'Camera'     -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!") +\
                                "|Set 'Homescreen' -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!")
                                )
-            
-
+ 
         self.marionette.set_search_timeout(10000)
         self.marionette.set_script_timeout(10000)
-
+      
         try:
             self.setTimeToNow()
         except:
             self.logResult("info", "WARNING: Failed to set the current time on this device!")
-        
+              
         try:
             self.setupDataConn()
         except:
             self.logResult("info", "WARNING: Failed to set up the data conn details (APN etc...)!")
-            
+                 
         #
         # Remove any current contacts (it would be nice to do more, but at the
         # moment this will do).
