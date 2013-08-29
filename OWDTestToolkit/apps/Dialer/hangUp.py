@@ -27,7 +27,10 @@ class main(GaiaTestCase):
 
 	 	#
 	 	# Just to be sure!
-	 	#    
-     	self.data_layer.kill_active_call()
+	 	#
+	 	try:
+	 		self.data_layer.kill_active_call()
+ 		except:
+ 			pass
      	
      	self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)
