@@ -50,8 +50,8 @@ class UTILS(app.main        ,
         #
         # Other globals ...
         #
-        self._DEFAULT_ELEMENT_TIMEOUT = 5   
-
+        self._DEFAULT_ELEMENT_TIMEOUT = 5
+        
         #
         # Get run details from the OS.
         #
@@ -59,53 +59,33 @@ class UTILS(app.main        ,
         self.testNum        = self.get_os_variable("TEST_NUM", True)
         self.det_fnam       = self.get_os_variable("DET_FILE", True)
         self.sum_fnam       = self.get_os_variable("SUM_FILE", True)
-        self.logResult("info", "Get OS variables ..." +\
-                               "|self.testNum  = '" + str(self.testNum)  + "'." +\
-                               "|self.det_fnam = '" + str(self.det_fnam) + "'." +\
-                               "|self.sum_fnam = '" + str(self.sum_fnam) + "'."
-                               )
-                
-        #
-        # Set device defaults.
-        #
-        a=self.setSetting("vibration.enabled",          True,   True)
-        b=self.setSetting("audio.volume.notification",  0,      True)
-        c=self.setSetting('ril.radio.disabled',         False,  True)
-        self.logResult("info", "Default device settings ..." +\
-                               "|Set 'vibration.enabled'         = True  " + ("[OK]" if a else "[UNABLE TO SET!]!") +\
-                               "|Set 'audio.volume.notification' = 0     " + ("[OK]" if b else "[UNABLE TO SET!]!") +\
-                               "|Set 'ril.radio.disabled'        = False " + ("[OK]" if c else "[UNABLE TO SET!]!")
-                                )
-   
-        a=self.setPermission('Camera', 'geolocation', 'deny', True)
-        b=self.setPermission('Homescreen', 'geolocation', 'deny', True)
-        self.logResult("info", "Default app permissions ..." +\
-                               "|Set 'Camera'     -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!") +\
-                               "|Set 'Homescreen' -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!")
-                               )
- 
+
         self.marionette.set_search_timeout(10000)
         self.marionette.set_script_timeout(10000)
-      
-        try:
-            self.setTimeToNow()
-        except:
-            self.logResult("info", "WARNING: Failed to set the current time on this device!")
-              
-        try:
-            self.setupDataConn()
-        except:
-            self.logResult("info", "WARNING: Failed to set up the data conn details (APN etc...)!")
-                 
-        #
-        # Remove any current contacts (it would be nice to do more, but at the
-        # moment this will do).
-        #
-        self.data_layer.remove_all_contacts()
-        self.apps.kill_all()
-        time.sleep(2)
-        
-        #
-        # Unlock (if necessary).
-        #
-        self.parent.lockscreen.unlock()
+
+        _t = time.time() - self.start_time
+        _t = str(datetime.timedelta(seconds=_t))
+        self.logResult("info", "(Initializing 'UTILS' took %s seconds.)" % _t)
+
+#         #
+#         # The following used to be set here - I've left them in incase
+#         # it causes an issue later.
+#         #
+#         a=self.setSetting("vibration.enabled",          True,   True)
+#         b=self.setSetting("audio.volume.notification",  0,      True)
+#         c=self.setSetting('ril.radio.disabled',         False,  True)
+#         a=self.setPermission('Camera', 'geolocation', 'deny', True)
+#         b=self.setPermission('Homescreen', 'geolocation', 'deny', True)
+#         try:
+#             self.setTimeToNow()
+#         except:
+#             self.logResult("info", "WARNING: Failed to set the current time on this device!")
+#         try:
+#             self.setupDataConn()
+#         except:
+#             self.logResult("info", "WARNING: Failed to set up the data conn details (APN etc...)!")
+#         self.data_layer.remove_all_contacts()
+#         self.apps.kill_all()
+#         time.sleep(2)
+#         self.parent.lockscreen.unlock()
+
