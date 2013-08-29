@@ -64,13 +64,15 @@ class UTILS(app.main        ,
         self.marionette.set_script_timeout(10000)
 
         _t = time.time() - self.start_time
+        _t = round(_t, 0)
         _t = str(datetime.timedelta(seconds=_t))
         self.logResult("info", "(Initializing 'UTILS' took %s seconds.)" % _t)
 
-#         #
-#         # The following used to be set here - I've left them in incase
-#         # it causes an issue later.
-#         #
+        #
+        # The following items used to be set here - I've left them in incase
+        # it causes an issue later. In the meantime it's best to set these
+        # in specific test cases for speed.
+        #
 #         a=self.setSetting("vibration.enabled",          True,   True)
 #         b=self.setSetting("audio.volume.notification",  0,      True)
 #         c=self.setSetting('ril.radio.disabled',         False,  True)

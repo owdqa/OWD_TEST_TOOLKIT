@@ -16,6 +16,7 @@ export RUN_INPUT_LIST="$@"
 # RUN THE TESTS ...
 #
 cp /dev/null $REALTIME_SUMMARY
+_scheduled_restart_counter=0
 for TEST_NUM in $(echo $TESTS)
 do
     #
@@ -33,6 +34,32 @@ do
 
     . $0.parts/mark_test_as_execute_or_not.sh
 
+    #
+    # Restart the device every few test cases (should help a little)
+    # unless it's set by a test case anyway.
+    #
+    if [ "$RUN_TEST" ]
+	then
+		#
+		# If this test will reset the device anyway, then
+		# just reset the counter.
+		#
+		x=$(egrep "^[^#]*_RESTART_DEVICE *= *True" $TEST_FILE)
+		if [ "$x" ]
+		then
+            _scheduled_restart_counter=0
+		else
+            _scheduled_restart_counter=$(($_scheduled_restart_counter+1))
+			unset SCHEDULED_RESTART
+			
+		    if [ $_scheduled_restart_counter -ge 5 ]
+		    then
+		        export SCHEDULED_RESTART="Y"
+		        _scheduled_restart_counter=0
+		    fi
+		fi
+	fi
+    
 
     . $0.parts/execute_test.sh
     

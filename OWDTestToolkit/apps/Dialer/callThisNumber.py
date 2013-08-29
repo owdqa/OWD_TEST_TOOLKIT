@@ -9,8 +9,6 @@ class main(GaiaTestCase):
         x = self.UTILS.getElement(DOM.Dialer.call_number_button, "Call number button")
         x.tap()
         
-        self.UTILS.switchToFrame(*DOM.Dialer.frame_locator_calling)
-        
         self.UTILS.checkMarionetteOK()
         
         self.UTILS.switchToFrame(*DOM.Dialer.frame_locator_calling)
