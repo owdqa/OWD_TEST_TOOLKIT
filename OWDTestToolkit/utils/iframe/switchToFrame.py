@@ -31,14 +31,14 @@ class main(GaiaTestCase):
         self.logResult("info", "Found %s iframes matching this." % str(len(x)))
         
         boolOK=False
-        for i in x:
+        for i in range(0,len(x)):
             #
             # Some iframes have > 1 'version' (such as the web page frame in browser app).
             # The only way to reliably tell them apart is to switch to the displayed one.
             #
-            if i.is_displayed():
+            if x[i].is_displayed():
                 try:
-                    self.marionette.switch_to_frame(i)
+                    self.marionette.switch_to_frame(x[i])
                     boolOK=True
                     break
                 except:
@@ -49,9 +49,9 @@ class main(GaiaTestCase):
         # displayed (sometime this is the case).
         #
         if not boolOK:
-            for i in x:
+            for i in range(0,len(x)):
                 try:
-                    self.marionette.switch_to_frame(i)
+                    self.marionette.switch_to_frame(x[i])
                     boolOK=True
                     break
                 except:
