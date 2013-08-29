@@ -31,8 +31,11 @@ class main(GaiaTestCase):
             #
             # We were not asked, so go back to the list.
             #
-            backBTN = self.UTILS.getElement(DOM.Settings.back_button, "Back button")
-            backBTN.tap()
+            try:
+	            backBTN = self.marionette.find-element(*DOM.Settings.back_button)
+	            backBTN.tap()
+            except:
+            	pass
 
             self.UTILS.TEST(self.UTILS.headerCheck("Wi-Fi"), "Header is 'Wi-Fi'.")
         
