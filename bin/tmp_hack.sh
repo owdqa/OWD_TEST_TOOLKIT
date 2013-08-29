@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# We have problems with the cleanUp() method of gaia_test.py sometimes, in the "wifi"
+# section.
+#
+# This script just comments out this specific section of cleanup().
+#
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 export GAIATEST=$OWD_TEST_TOOLKIT_DIR/gaia-ui-tests/gaiatest/gaia_test.py
