@@ -10,6 +10,8 @@ class main(GaiaTestCase):
         x.tap()
         
         self.UTILS.switchToFrame(*DOM.Dialer.frame_locator_calling)
+        
+        self.UTILS.checkMarionetteOK()
         self.UTILS.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call element")
      	
         
