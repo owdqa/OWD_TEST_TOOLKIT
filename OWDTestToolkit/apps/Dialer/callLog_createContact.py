@@ -16,7 +16,7 @@ class main(GaiaTestCase):
 								   "The call log for number %s" % p_num)
 		x.tap()
 		
-		x = self.UTILS.getElement( DOM.Dialer.call_log_numtap_create_new, "Create new contact button")
+		x = self.UTILS.getElement( DOM.Dialer.call_log_numtap_create_new, "Create new contact button", True, 20)
 		x.tap()
 		
 		self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)

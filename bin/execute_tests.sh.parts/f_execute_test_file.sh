@@ -17,6 +17,11 @@ _f_run_test(){
     then
     	RESTART="--restart"
     fi
+    
+    #
+    # If there's a scheduled restart, then do it.
+    #
+    [ "$SCHEDULED_RESTART" ] && RESTART="--restart"
 
 	TESTVARS="--testvars=${OWD_TEST_TOOLKIT_CONFIG}/gaiatest_testvars.json"
 	ADDRESS="--address=localhost:2828"
@@ -64,7 +69,7 @@ _f_2nd_chance(){
 	    	#
 			$OWD_TEST_TOOLKIT_BIN/clear_and_reboot.sh NOCLEAR
 			
-			RESTART="--restart"
+			#RESTART="--restart"
 
             _f_run_test
             

@@ -25,3 +25,6 @@ class main(GaiaTestCase):
         dialer_num = x.get_attribute("value")
         self.UTILS.TEST(str(p_num) in dialer_num, "After entering '%s', phone number field contains '%s'." % \
 					   								(dialer_num, str(p_num)))
+        
+        x = self.UTILS.screenShotOnErr()
+        self.UTILS.logResult("info", "Screenshot:", x)
