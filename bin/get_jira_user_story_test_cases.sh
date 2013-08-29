@@ -130,9 +130,9 @@ then
     if [ -f $CACHE_BASE.$TYPE ]
     then
         cat $CACHE_BASE.$TYPE
-        printf "\n         Sucess!\n\n" >> $LOGFILE
+        printf " sucess!\n\n" >> $LOGFILE
     else
-        printf "\n         ${WARNING}Failed!!</span> Cannot find test cases in jira cache for $TYPE, sorry!\n\n" >> $LOGFILE
+        printf " <b>Failed!</b> Cannot find test cases in jira cache for $TYPE, sorry!\n\n" >> $LOGFILE
         exit 1
     fi
 else
