@@ -12,6 +12,7 @@ event_delete            = ('xpath', ".//*[@data-l10n-id='event-delete']")
 event_save_btn          = ('class name', "save")
 
 view_type               = ('xpath', ".//*[@id='view-selector']//li[@class='%s']")
+view_today              = ('xpath', ".//*[@id='view-selector']//li[@class='today']")
 view_month              = ('xpath', ".//*[@id='view-selector']//li[@class='month']")
 view_week               = ('xpath', ".//*[@id='view-selector']//li[@class='week']")
 view_day                = ('xpath', ".//*[@id='view-selector']//li[@class='day']")
@@ -25,3 +26,5 @@ view_events_title_month  = ".//h5[text()='%s']"
 view_events_title_day    = ".//h5[text()='%s']"
 view_events_title_week   = ".//div[text()='%s']"
 view_events_locat        = "//*[@class='location' and text()='%s']"
+
+mview_selected_day_title    = ("id", "selected-day-title")

@@ -4,9 +4,9 @@ class main(GaiaTestCase):
 
     def setView(self, p_type):
         #
-        # Set to view type (day / week / month).
+        # Set to view type (today / day / week / month).
         #
-        x = self.UTILS.getElement((DOM.Calendar.view_type[0], DOM.Calendar.view_type[1] % p_type),
+        x = self.UTILS.getElement((DOM.Calendar.view_type[0], DOM.Calendar.view_type[1] % p_type.lower()),
                                   "'" + p_type + "' view type selector")
         x.tap()
         
