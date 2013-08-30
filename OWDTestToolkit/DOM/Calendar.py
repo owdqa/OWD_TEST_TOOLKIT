@@ -27,5 +27,10 @@ view_events_title_day    = ".//h5[text()='%s']"
 view_events_title_week   = ".//div[text()='%s']"
 view_events_locat        = "//*[@class='location' and text()='%s']"
 
+mview_container             = ("id", "month-view")
 mview_selected_day_title    = ("id", "selected-day-title")
 mview_header                = ("id", "current-month-year")
+
+wview_container             = ("id", "week-view")
+
+dview_container             = ("id", "day-view")
