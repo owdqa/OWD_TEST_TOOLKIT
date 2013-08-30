@@ -59,10 +59,16 @@ class main(GaiaTestCase):
                     break
         
             #
-            # Send the login information.
+            # Send the login information (the email field isn't always displayed).
             #
-            x = self.UTILS.getElement(DOM.Contacts.gmail_username, "Email field")
-            x.send_keys(p_name)
+            self.wait_for_element_displayed(*DOM.Contacts.gmail_password, timeout=30)
+            try:
+                self.wait_for_element_displayed(*DOM.Contacts.gmail_username, timeout=2)
+    
+                x = self.marionette.find_element(*DOM.Contacts.gmail_username)
+                x.send_keys(p_name)
+            except:
+                pass
 
             x = self.UTILS.getElement(DOM.Contacts.gmail_password, "Password field")
             x.send_keys(p_pass)
