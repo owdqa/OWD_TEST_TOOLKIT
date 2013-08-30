@@ -91,7 +91,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
     <tr>
         <td align=center>setView</td>
         <td align=left>p_type</td>
-        <td align=left>Set to view type (day / week / month).</td>
+        <td align=left>Set to view type (today / day / week / month).</td>
     </tr>
 
 </table>
@@ -312,7 +312,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
     <tr>
         <td align=center>viewContact</td>
         <td align=left>p_contactName<br>p_HeaderCheck=True</td>
-        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen).  <br>  In some cases you don't want this to check the header (if the contact has no name  for example). In that case, set p_HeaderCheck=False.</td>
+        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen).  <br>  In some cases you don't want this to check the header (if the contact has no name,  or you're just using the given name etc..). In that case, set p_HeaderCheck=False.</td>
     </tr>
 
 
@@ -456,6 +456,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>callLog_clearAll</td>
+        <td align=left></td>
+        <td align=left>Wipes all entries from the csll log.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>openCallLog</td>
         <td align=left></td>
         <td align=left>Opens the call log.</td>
@@ -501,6 +508,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>createMultipleCallLogEntries</td>
         <td align=left>p_num<br>p_amount</td>
         <td align=left>Put a number in the call log multiple times  (done by manipulating the device time).  Leaves you in the call log.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>callLog_clearSome</td>
+        <td align=left>p_entryNumbers</td>
+        <td align=left>Wipes entries from the call log, using p_entryNumbers as an array of  numbers. For example: callLog_clearSome([1,2,3]) will remove the first 3.  <br><b>NOTE:</b> the first item is 1, <i>not</i> 0.</td>
     </tr>
 
 </table>
