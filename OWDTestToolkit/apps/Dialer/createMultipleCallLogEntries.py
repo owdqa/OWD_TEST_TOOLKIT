@@ -11,15 +11,15 @@ class main(GaiaTestCase):
 		x = self.UTILS.getDateTimeFromEpochSecs(time.time())
 		
 		for i in range(0, p_amount):
-			_day = x.tm_mday-i
-			_mon = x.tm_mon
+			_day = x.mday-i
+			_mon = x.mon
 			
 			if _day < 1:
 				#
 				# Jump back a month as well.
 				#
 				_day = 28 #(just to be sure!)
-				_mon = x.tm_mon -1
+				_mon = x.mon -1
 				
 			self.UTILS.setTimeToSpecific(p_day=_day, p_month=_mon)
 			

@@ -28,3 +28,4 @@ view_events_title_week   = ".//div[text()='%s']"
 view_events_locat        = "//*[@class='location' and text()='%s']"
 
 mview_selected_day_title    = ("id", "selected-day-title")
+mview_header                = ("id", "current-month-year")

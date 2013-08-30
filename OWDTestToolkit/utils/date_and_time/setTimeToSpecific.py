@@ -23,11 +23,11 @@ class main(GaiaTestCase):
         _now_epoch_secs=time.time()
         _now = self.getDateTimeFromEpochSecs(_now_epoch_secs)
 
-        if p_year   == "NOW": p_year    = _now.tm_year
-        if p_month  == "NOW": p_month   = _now.tm_mon
-        if p_day    == "NOW": p_day     = _now.tm_mday
-        if p_hour   == "NOW": p_hour    = _now.tm_hour
-        if p_minute == "NOW": p_minute  = _now.tm_min
+        if p_year   == "NOW": p_year    = _now.year
+        if p_month  == "NOW": p_month   = _now.mon
+        if p_day    == "NOW": p_day     = _now.mday
+        if p_hour   == "NOW": p_hour    = _now.hour
+        if p_minute == "NOW": p_minute  = _now.min
         
         _dateTime = time.strptime("%s/%s/%s %s:%s" % \
                           (p_year,
