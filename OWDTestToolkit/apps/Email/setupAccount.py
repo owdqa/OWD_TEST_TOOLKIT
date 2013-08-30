@@ -39,9 +39,16 @@ class main(GaiaTestCase):
         self.parent.lockscreen.unlock()
         self.marionette.switch_to_frame()
         self.UTILS.switchToFrame(*DOM.Email.frame_locator)
-
-        btn = self.UTILS.getElement(DOM.Email.login_next_btn, "Login - 'next' button")
-        btn.tap()
+        
+        #
+        # (doesn't always appear when using hotmail)
+        #
+        try:
+			self.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
+			btn = self.marionette.find_element(*DOM.Email.login_next_btn)
+			btn.tap()
+        except:
+        	pass
         
         #
         # Click the 'continue to mail' button.
