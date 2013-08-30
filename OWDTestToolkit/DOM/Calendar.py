@@ -1,5 +1,7 @@
 add_event_btn           = ('xpath', ".//a[@href='/event/add/']")
 
+current_view_header     = ("id", "current-month-year")
+
 event_title             = ('xpath', ".//input[@name='title']")
 event_location          = ('xpath', ".//input[@name='location']")
 event_allDay            = ('xpath', ".//input[@name='allday']")
@@ -27,10 +29,13 @@ view_events_title_day    = ".//h5[text()='%s']"
 view_events_title_week   = ".//div[text()='%s']"
 view_events_locat        = "//*[@class='location' and text()='%s']"
 
+
 mview_container             = ("id", "month-view")
 mview_selected_day_title    = ("id", "selected-day-title")
-mview_header                = ("id", "current-month-year")
+
 
 wview_container             = ("id", "week-view")
+wview_active_days           = ("xpath", "//section[contains(@class, 'weekday active')]//h1")
+
 
 dview_container             = ("id", "day-view")
