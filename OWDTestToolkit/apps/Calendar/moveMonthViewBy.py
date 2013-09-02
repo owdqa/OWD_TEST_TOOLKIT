@@ -21,7 +21,7 @@ class main(GaiaTestCase):
  		numMoves = p_num
  		y2 = 0
  		if numMoves > 0:
- 			el = 6
+ 			el = -1
  			y2 = -500
  		if numMoves < 0:
  			el = 0
@@ -39,7 +39,7 @@ class main(GaiaTestCase):
  		# Work out what the header should now be.
  		#
 		x = self.UTILS.getDateTimeAdjusted(p_months=p_num)
-		_expect = _newday.month_name.lower() + " " + str(x.year).lower()
+		_expect = x.month_name.lower() + " " + str(x.year).lower()
 		_actual = self.UTILS.getElement(DOM.Calendar.current_view_header, "Header").text.lower()
 		
 		self.UTILS.TEST(_expect in _actual, "Expecting header to contain '%s' (it was '%s')" % (_expect, _actual))

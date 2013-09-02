@@ -13,17 +13,17 @@ class main(GaiaTestCase):
 		#
 		self.actions	= Actions(self.marionette)
 		
-# 		_days	  = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-# 		_month_end = [31,28,31,30,31,30,31,31,30,31,30,31]
 		_now_secs  = time.time()
 		_now_diff  = int(_now_secs) + (86400*p_numDays)
-#		 _today	 = self.UTILS.getDateTimeFromEpochSecs(_now_secs)
+		_now_today = self.UTILS.getDateTimeFromEpochSecs(_now_secs)
 		_new_today = self.UTILS.getDateTimeFromEpochSecs(_now_diff)
 					
 		#
 		# Switch to month view and tap this day, then switch back to our view.
 		#
-		self.moveMonthViewBy(p_numDays)
+		if _now_today.mon != _new_today.mon:
+			x = _new_today.mon - _now_today.mon
+			self.moveMonthViewBy(x)
 			
 		el_id_str = "d-%s-%s-%s" % (_new_today.year, _new_today.mon-1, _new_today.mday)
 		x = self.UTILS.getElement( ("xpath", 

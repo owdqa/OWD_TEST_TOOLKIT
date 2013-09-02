@@ -32,14 +32,9 @@ class main(GaiaTestCase):
         #
         _val = time.localtime(p_seconds_since_epoch)
         
-        _days   = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        
-        _months = ["January"    , "February"    , "March"   , "April", 
-                   "May"        , "June"        , "July"    , "August", 
-                   "September"  , "October"     , "November", "December"]
-        
-        _day_name   = _days[_val.tm_wday]
-        _month_name = _months[_val.tm_mon-1]
+        x           = datetime.date(_val.tm_year,_val.tm_mon,_val.tm_mday)
+        _day_name   = x.strftime("%A")
+        _month_name = x.strftime("%B")
 
         from collections import namedtuple        
         x = namedtuple("x", 

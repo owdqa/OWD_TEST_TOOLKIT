@@ -31,14 +31,14 @@ class main(GaiaTestCase):
         # self.UTILS.logResult("info", "New month is: %s." % _today.mon)
         # <pre>
         #
-        _val = time.localtime(int(time.time()))
+        _now = time.localtime(int(time.time()))
         
         
         #
         # Adjust MONTHS.
         #
-        _mon  = _val.tm_mon
-        _year = _val.tm_year
+        _mon  = _now.tm_mon
+        _year = _now.tm_year
         
         _num  = p_months
         _step = 1
@@ -51,7 +51,7 @@ class main(GaiaTestCase):
             if _mon < 1:
                 _mon  = len(_months)
                 _year = _year -1
-            elif _mon > 11:
+            elif _mon > 12:
                 _mon  = 1
                 _year = _year + 1
 
@@ -59,14 +59,19 @@ class main(GaiaTestCase):
         #
         # Buld the return object.
         #
-        _days   = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        _month_end  = [31,28,31,30,31,30,31,31,30,31,30,31]
         
-        _months = ["January"    , "February"    , "March"   , "April", 
-                   "May"        , "June"        , "July"    , "August", 
-                   "September"  , "October"     , "November", "December"]
+        # Don't let the day / month be impossible.
+        _mday = _now.tm_mday
+        if _mday > _month_end[_mon]:
+            _mday = _month_end[_mon]
+            
+        x           = datetime.date(_year,_mon,_mday)
+        _day_name   = x.strftime("%A")
+        _month_name = x.strftime("%B")
         
-        _day_name   = _days[_val.tm_wday]
-        _month_name = _months[_mon-1]
+#         _day_name   = _days[_now.tm_wday]
+#         _month_name = _months[_mon-1]
         
         from collections import namedtuple        
         x = namedtuple("x", 
@@ -85,13 +90,13 @@ class main(GaiaTestCase):
 
         return x(_year,
                  _mon,
-                 _val.tm_mday,
-                 _val.tm_hour,
-                 _val.tm_min,
-                 _val.tm_sec,
-                 _val.tm_wday,
-                 _val.tm_yday,
-                 _val.tm_isdst,
+                 _mday,
+                 _now.tm_hour,
+                 _now.tm_min,
+                 _now.tm_sec,
+                 _now.tm_wday,
+                 _now.tm_yday,
+                 _now.tm_isdst,
                  _day_name,
                  _month_name)
     
