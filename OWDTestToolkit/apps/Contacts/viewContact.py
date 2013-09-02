@@ -3,7 +3,7 @@ from OWDTestToolkit.global_imports import *
 class main(GaiaTestCase):
 
     def viewContact(self, p_contactName, p_HeaderCheck=True):
-        #
+                #
         # Navigate to the 'view details' screen for a contact (assumes we are in the
         # 'view all contacts' screen).
         # <br>
@@ -12,7 +12,14 @@ class main(GaiaTestCase):
         #
         time.sleep(1)
         self.UTILS.checkMarionetteOK()
-        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator, p_quitOnError=False)
+
+        if self.apps.displayed_app.name == "Phone":
+            self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)
+            self.UTILS.switchToFrame(*DOM.Dialer.call_log_contact_name_iframe, p_viaRootFrame=False)
+
+        else:
+            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator, p_quitOnError=False)
+
         time.sleep(1)
         y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
         
@@ -35,7 +42,7 @@ class main(GaiaTestCase):
             self.UTILS.checkMarionetteOK()
             self.UTILS.switchToFrame(*DOM.Contacts.frame_locator, p_quitOnError=False)
             y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False)
-
+            
         if not boolFound:
             self.UTILS.logResult("info", "FYI: Contact '%s' was <b>not</b> found in the contacts list." % p_contactName)
             return
@@ -43,7 +50,18 @@ class main(GaiaTestCase):
         #
         # TEST: Correct contact name is in the page header.
         #
+        
         if p_HeaderCheck:
             self.UTILS.headerCheck(p_contactName)
+        
+        if self.apps.displayed_app.name == "Phone":
+            self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)
+            self.UTILS.switchToFrame(*DOM.Dialer.call_log_contact_name_iframe, p_viaRootFrame=False)
+            self.wait_for_element_present(*DOM.Contacts.view_details_title, timeout=1)
+            self.headerName = self.marionette.find_elements(*DOM.Contacts.view_details_title)
+            
+            for i in self.headerName:
+
+                self.UTILS.TEST(p_contactName in i.text, "Name is in the title")
             
         time.sleep(2)
