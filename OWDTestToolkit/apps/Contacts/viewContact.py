@@ -58,10 +58,7 @@ class main(GaiaTestCase):
             self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)
             self.UTILS.switchToFrame(*DOM.Dialer.call_log_contact_name_iframe, p_viaRootFrame=False)
             self.wait_for_element_present(*DOM.Contacts.view_details_title, timeout=1)
-            self.headerName = self.marionette.find_elements(*DOM.Contacts.view_details_title)
-            
-            for i in self.headerName:
-
-                self.UTILS.TEST(p_contactName in i.text, "Name is in the title")
+            x = self.marionette.find_element(*DOM.Contacts.view_details_title)
+            self.UTILS.TEST(p_contactName in x.text, "Name is in the title")
             
         time.sleep(2)
