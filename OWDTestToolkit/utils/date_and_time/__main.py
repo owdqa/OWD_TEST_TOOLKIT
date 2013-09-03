@@ -6,8 +6,7 @@ import  getEpochSecsFromDateTime,\
         setTimeToSpecific,\
         getDateTimeFromEpochSecs,\
         waitForDeviceTimeToBe,\
-        waitForDisplayedTimeToBe,\
-        getDateTimeAdjusted
+        waitForDisplayedTimeToBe
         
 class main ( 
             getEpochSecsFromDateTime.main,
@@ -16,8 +15,7 @@ class main (
             setTimeToSpecific.main,
             getDateTimeFromEpochSecs.main,
             waitForDeviceTimeToBe.main,
-            waitForDisplayedTimeToBe.main,
-            getDateTimeAdjusted.main):
+            waitForDisplayedTimeToBe.main):
 
     def __init__(self):
         return
