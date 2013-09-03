@@ -70,9 +70,6 @@ class main(GaiaTestCase):
         _day_name   = x.strftime("%A")
         _month_name = x.strftime("%B")
         
-#         _day_name   = _days[_now.tm_wday]
-#         _month_name = _months[_mon-1]
-        
         from collections import namedtuple        
         x = namedtuple("x", 
                        "year    " \

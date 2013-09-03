@@ -11,10 +11,6 @@ class main(GaiaTestCase):
  		self.setView("week")
  		self.setView("today")
  		
- 		x = self.UTILS.screenShotOnErr()
- 		self.UTILS.logResult("info", "x: ", x)
- 		return
- 		
  		if p_num == 0:
  			return
  		
@@ -32,18 +28,45 @@ class main(GaiaTestCase):
  			y2 = 500
  			numMoves = numMoves * -1
  		
+ 		#
+ 		# Keep track of how many days we're adjusting the display by (so we can check
+ 		# we're looking at the correct display at the end).
+ 		#
+ 		_days_offset = 0
+ 		_now         = self.UTILS.getDateTimeFromEpochSecs(int(time.time()))
+ 		_now_str	 = "%s %s %02d %s" % (_now.day_name[:3], _now.month_name[:3], _now.mday, _now.year)
+
+		x = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+		for i in range(0,len(x)):
+			if _now_str in x[i].get_attribute("data-date"):
+				_startpos = i+1
+				break
+		if numMoves < 0:
+			_days_offset = _startpos
+		else:
+			_days_offset = len(x) - _startpos
+
+ 		self.UTILS.logResult("info", "(%s vs %s) X: '%s'" % (_startpos, len(x), _days_offset))
+ 		return
+		
+ 		
  		for i in range (0,numMoves):
- 			# Flick the display to show the date we're aiming for.
- 			x = self.UTILS.getElements(DOM.Calendar.mview_first_row_for_flick, "First row of dates")[el]
- 			self.actions.flick(x,0,0,y2,0).perform()
- 
+			x = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+			
+			#
+			# Get the count of days we're adjusting (so we can check later).
+			#
+			_days_offset = _days_offset + len(x)
+				
+			#
+			# Flick the screen to move it.
+			#
+ 			self.actions.flick(x[el],0,0,y2,0).perform()
+ 			
  		time.sleep(0.3)
  
  		#
- 		# Work out what the header should now be.
- 		#
-		x = self.UTILS.getDateTimeAdjusted(p_months=p_num)
-		_expect = x.month_name.lower() + " " + str(x.year).lower()
-		_actual = self.UTILS.getElement(DOM.Calendar.current_view_header, "Header").text.lower()
-		
-		self.UTILS.TEST(_expect in _actual, "Expecting header to contain '%s' (it was '%s')" % (_expect, _actual))
+ 		# Work out what the display should now be.
+ 		# header shoudl be month + year, now + _days_offset shoudl be in active days.
+ 		x = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+ 
