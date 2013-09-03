@@ -11,8 +11,10 @@ class main(GaiaTestCase):
 		# <b>p_viewType</b> is the calendar view to return to (today / day / week / month)<br> 
 		# Returns a modified DateTime object from <i>UTILS.getDateTimeFromEpochSecs()</i>.
 		#
+ 		self.setView("month")
+ 		self.setView("today")
+
 		self.actions	= Actions(self.marionette)
-		
 		_now_secs  = time.time()
 		_now_diff  = int(_now_secs) + (86400*p_numDays)
 		_now_today = self.UTILS.getDateTimeFromEpochSecs(_now_secs)
