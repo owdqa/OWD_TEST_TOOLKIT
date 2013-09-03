@@ -7,7 +7,7 @@ class main(GaiaTestCase):
 		# Switches to week view, then moves 'p_num' weeks in the future or past (if the p_num is 
 		# positive or negative) relative to today.
 		#
-		self.UTILS.logResult("info","<b>Adjusting month view by %s months ...</b>" % p_num)
+		self.UTILS.logResult("info","<b>Adjusting week view by %s screens ...</b>" % p_num)
  		self.setView("week")
  		self.setView("today")
  		
@@ -19,13 +19,13 @@ class main(GaiaTestCase):
  		# direction we need to flick the display.
  		#
  		numMoves = p_num
- 		y2 = 0
+ 		x2 = 0
  		if numMoves > 0:
  			el = -1
- 			y2 = -500
+ 			x2 = -500
  		if numMoves < 0:
  			el = 0
- 			y2 = 500
+ 			x2 = 500
  			numMoves = numMoves * -1
  		
  		#
@@ -33,40 +33,66 @@ class main(GaiaTestCase):
  		# we're looking at the correct display at the end).
  		#
  		_days_offset = 0
- 		_now         = self.UTILS.getDateTimeFromEpochSecs(int(time.time()))
+ 		_now_epoch	 = int(time.time())
+ 		_now         = self.UTILS.getDateTimeFromEpochSecs(_now_epoch)
  		_now_str	 = "%s %s %02d %s" % (_now.day_name[:3], _now.month_name[:3], _now.mday, _now.year)
 
-		x = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
-		for i in range(0,len(x)):
-			if _now_str in x[i].get_attribute("data-date"):
-				_startpos = i+1
+		_displayed_days = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+		for i in range(0,len(_displayed_days)):
+			if _now_str in _displayed_days[i].get_attribute("data-date"):
+				_startpos = i - 1
 				break
-		if numMoves < 0:
+			
+		if p_num < 0:
 			_days_offset = _startpos
 		else:
-			_days_offset = len(x) - _startpos
+			_days_offset = len(_displayed_days) - _startpos - 2
 
- 		self.UTILS.logResult("info", "(%s vs %s) X: '%s'" % (_startpos, len(x), _days_offset))
- 		return
-		
- 		
+ 		#
+ 		# Now move to the desired screen.
+ 		#
  		for i in range (0,numMoves):
-			x = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+			#
+			# Flick the screen to move it.
+			#
+ 			self.actions.flick(_displayed_days[el],0,0,x2,0).perform()
 			
 			#
 			# Get the count of days we're adjusting (so we can check later).
 			#
-			_days_offset = _days_offset + len(x)
+			_displayed_days = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+			_days_offset = _days_offset + len(_displayed_days)
 				
-			#
-			# Flick the screen to move it.
-			#
- 			self.actions.flick(x[el],0,0,y2,0).perform()
  			
  		time.sleep(0.3)
  
  		#
- 		# Work out what the display should now be.
- 		# header shoudl be month + year, now + _days_offset shoudl be in active days.
- 		x = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+ 		# Work out what the display should now be:
+ 		#
+ 		# 1. Today + _days_offset should be displayed.
+ 		# 2. Header should be month + year, now + _days_offset shoudl be in active days.
+ 		#
+ 		if p_num < 0:
+ 			_new_epoch = _now_epoch - (_days_offset * 24 * 60 * 60)
+		else:
+ 			_new_epoch = _now_epoch + (_days_offset * 24 * 60 * 60)
+			  
+ 		_new_now       = self.UTILS.getDateTimeFromEpochSecs(_new_epoch)
+ 		
+ 		_new_now_str   = "%s %s %02d %s" % (_new_now.day_name[:3], _new_now.month_name[:3], _new_now.mday, _new_now.year)
+
+		x = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+		boolOK = False
+		for i in range(0,len(x)):
+			if _new_now_str in x[i].get_attribute("data-date"):
+				boolOK = True
+				break
  
+ 		self.UTILS.TEST(boolOK, "The column for date '<b>%s</b>' displayed." % _new_now_str)
+
+		x = self.UTILS.getElement(DOM.Calendar.current_view_header, "Current view header")
+		self.UTILS.TEST(_new_now.month_name in x.text, "'<b>%s</b>' is in header ('%s')." % (_new_now.month_name, x.text))
+		self.UTILS.TEST(str(_new_now.year) in x.text, "'<b>%s</b>' is in header ('%s')." % (_new_now.year, x.text))
+
+ 		x = self.UTILS.screenShotOnErr()
+ 		self.UTILS.logResult("info", "Week view screen after moving %s pages: " % p_num, x)

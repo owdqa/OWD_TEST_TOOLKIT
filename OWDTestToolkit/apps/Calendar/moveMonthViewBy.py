@@ -19,19 +19,19 @@ class main(GaiaTestCase):
  		# direction we need to flick the display.
  		#
  		numMoves = p_num
- 		y2 = 0
+ 		x2 = 0
  		if numMoves > 0:
  			el = -1
- 			y2 = -500
+ 			x2 = -500
  		if numMoves < 0:
  			el = 0
- 			y2 = 500
+ 			x2 = 500
  			numMoves = numMoves * -1
  		
  		for i in range (0,numMoves):
  			# Flick the display to show the date we're aiming for.
- 			x = self.UTILS.getElements(DOM.Calendar.mview_first_row_for_flick, "First row of dates")[el]
- 			self.actions.flick(x,0,0,y2,0).perform()
+ 			_el = self.UTILS.getElements(DOM.Calendar.mview_first_row_for_flick, "First row of dates")[el]
+ 			self.actions.flick(_el,0,0,x2,0).perform()
  
  		time.sleep(0.3)
  
