@@ -39,3 +39,4 @@ wview_container             = ("id", "week-view")
 wview_active_days           = ("xpath", "//*[@id='week-view']//section[@class='active']")
 
 dview_container             = ("id", "day-view")
+dview_events                = ("xpath", "//section[@id='day-view' and @class='active']//div[@class='events']")
