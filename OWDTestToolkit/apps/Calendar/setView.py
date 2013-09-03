@@ -16,3 +16,5 @@ class main(GaiaTestCase):
 						   "day"  : DOM.Calendar.dview_container}
 	        
 	        self.UTILS.waitForElements(_viewTypes[p_type], "Container for '%s' view" % p_type)
+        else:
+        	time.sleep(0.5)

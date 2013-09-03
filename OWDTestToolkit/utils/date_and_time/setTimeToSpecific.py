@@ -18,7 +18,20 @@ class main(GaiaTestCase):
         # <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>
         # </pre><br>
         # All parameters will default to 'now'.<br>
-        # Returns a 'dateTime' object for the new date and time.
+        # Returns a 'dateTime' object for the new date and time:
+        # <pre>
+        # Attribute   Field            Values<br>
+        # tm_mday     Day                 1 to 31<br>
+        # tm_year     4-digit year        2008 etc...<br>
+        # tm_mon      Month               1 to 12<br>
+        # tm_mday     Day                 1 to 31<br>
+        # tm_hour     Hour                0 to 23<br>
+        # tm_min      Minute              0 to 59<br>
+        # tm_sec      Second              0 to 61 (60 or 61 are leap-seconds)<br>
+        # tm_wday     Day of Week         0 to 6 (0 is Monday)<br>
+        # tm_yday     Day of year         1 to 366 (Julian day)<br>
+        # tm_isdst    Daylight savings    -1, 0, 1, -1 means library determines DST<br>
+        # </pre>
         #
         _now_epoch_secs=time.time()
         _now = self.getDateTimeFromEpochSecs(_now_epoch_secs)
