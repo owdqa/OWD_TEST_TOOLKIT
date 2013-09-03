@@ -53,11 +53,12 @@ class main(GaiaTestCase):
         
         if p_HeaderCheck:
             self.UTILS.headerCheck(p_contactName)
-            
+        
         if self.apps.displayed_app.name == "Phone":
             self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)
             self.UTILS.switchToFrame(*DOM.Dialer.call_log_contact_name_iframe, p_viaRootFrame=False)
-            x = self.UTILS.getElement(DOM.Contacts.view_details_title, "View details title")
+            self.wait_for_element_present(*DOM.Contacts.view_details_title, timeout=1)
+            x = self.marionette.find_element(*DOM.Contacts.view_details_title)
             self.UTILS.TEST(p_contactName in x.text, "Name is in the title")
             
         time.sleep(2)

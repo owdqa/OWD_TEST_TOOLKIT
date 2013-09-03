@@ -23,10 +23,10 @@ class main(GaiaTestCase):
             # Use "=" because we want this field to be an empty string. 
             #           
             x = self.getElements( ("xpath", "//iframe[@" + p_attrib + "='" + p_str + "']"),
-                                 "Iframe where '" + p_attrib + "' = '" + p_str + "'", False)
+                                 "Iframe where '" + p_attrib + "' = '" + p_str + "'", False, 20)
         else:
             x = self.getElements( ("xpath", "//iframe[contains(@" + p_attrib + ", '" + p_str + "')]"),
-                                 "Iframe where '" + p_attrib + "' contains '" + p_str + "'", False)
+                                 "Iframe where '" + p_attrib + "' contains '" + p_str + "'", False, 20)
         
         self.logResult("info", "Found %s iframes matching this." % str(len(x)))
         

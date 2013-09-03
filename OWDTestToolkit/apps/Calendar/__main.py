@@ -1,15 +1,24 @@
 from OWDTestToolkit.global_imports import *
 
-import  addEvent                           ,\
-        createEvent                        ,\
-        getEventPreview                    ,\
-        setView                            
+import  addEvent            ,\
+        createEvent         ,\
+        getEventPreview     ,\
+        setView             ,\
+        moveDayViewBy       ,\
+        moveWeekViewBy      ,\
+        moveMonthViewBy     ,\
+        changeDay
 
 class Calendar (
             addEvent.main,
             createEvent.main,
             getEventPreview.main,
-            setView.main):
+            setView.main,
+            moveDayViewBy.main,
+            moveWeekViewBy.main,
+            moveMonthViewBy.main,
+            changeDay.main
+            ):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
