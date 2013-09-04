@@ -1,7 +1,6 @@
 from OWDTestToolkit.global_imports import *
 
-import  addEvent            ,\
-        createEvent         ,\
+import  createEvent         ,\
         getEventPreview     ,\
         setView             ,\
         moveDayViewBy       ,\
@@ -10,7 +9,6 @@ import  addEvent            ,\
         changeDay
 
 class Calendar (
-            addEvent.main,
             createEvent.main,
             getEventPreview.main,
             setView.main,

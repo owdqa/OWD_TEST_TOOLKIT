@@ -57,7 +57,7 @@ class main(GaiaTestCase):
             self.UTILS.switchToFrame(*DOM.Dialer.call_log_contact_name_iframe, p_viaRootFrame=False)
             x = self.UTILS.getElement(DOM.Contacts.view_details_title,"View details title")
             self.UTILS.TEST(p_contactName in x.text, "Name is in the title")
-        else:
+        elif self.apps.displayed_app.name == "Contacts":
             #
             # This shouldn't be necessary, but for some reason it is!
             #
