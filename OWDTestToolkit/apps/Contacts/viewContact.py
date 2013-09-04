@@ -5,20 +5,15 @@ class main(GaiaTestCase):
     def viewContact(self, p_contactName, p_HeaderCheck=True):
         #
         # Navigate to the 'view details' screen for a contact (assumes we are in the
-        # 'view all contacts' screen).
+        # 'view all contacts' screen, either from Contacts app, or Dialer app).
         # <br>
         # In some cases you don't want this to check the header (if the contact has no name,
         # or you're just using the given name etc..). In that case, set p_HeaderCheck=False.
         #
         time.sleep(1)
         self.UTILS.checkMarionetteOK()
-
-        if self.apps.displayed_app.name == "Phone":
-            self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)
-            self.UTILS.switchToFrame(*DOM.Dialer.call_log_contact_name_iframe, p_viaRootFrame=False)
-
-        else:
-            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator, p_quitOnError=False)
+        
+        self._findThisFrame()
 
         y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
         
@@ -52,15 +47,37 @@ class main(GaiaTestCase):
         if p_HeaderCheck:
             self.UTILS.headerCheck(p_contactName)
         
-        if self.apps.displayed_app.name == "Phone":
-            self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)
-            self.UTILS.switchToFrame(*DOM.Dialer.call_log_contact_name_iframe, p_viaRootFrame=False)
+        x = self._findThisFrame()
+
+        if x == "Dialer":
             x = self.UTILS.getElement(DOM.Contacts.view_details_title,"View details title")
             self.UTILS.TEST(p_contactName in x.text, "Name is in the title")
-        elif self.apps.displayed_app.name == "Contacts":
-            #
-            # This shouldn't be necessary, but for some reason it is!
-            #
-            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
 
         time.sleep(2)
+        
+    def _findThisFrame(self):
+        #
+        # Private method to cater for the fact that *SOMETIMES* the 
+        # frame is different if coming from Dialer.
+        #
+        try:
+            self.marionette.switch_to_frame()
+            self.marionette.switch_to_frame("xpath", 
+                                            "//iframe[contains(@%s,'%s')]" % \
+                                            (DOM.Dialer.frame_locator[0],
+                                             DOM.Dialer.frame_locator[1]))
+            self.marionette.switch_to_frame("xpath", 
+                                            "//iframe[contains(@%s,'%s')]" % \
+                                            (DOM.Dialer.call_log_contact_name_iframe[0],
+                                             DOM.Dialer.call_log_contact_name_iframe[1]))
+            self.UTILS.logResult("info", "<i>Switched to dialer -> contacts iframe.)</i>")
+            _frame = "Dialer"
+        except:
+            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
+            _frame = "Contacts"
+            
+        return _frame
+
+        
+        
+        
