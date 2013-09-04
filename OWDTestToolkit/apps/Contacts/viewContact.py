@@ -3,7 +3,7 @@ from OWDTestToolkit.global_imports import *
 class main(GaiaTestCase):
 
     def viewContact(self, p_contactName, p_HeaderCheck=True):
-                #
+        #
         # Navigate to the 'view details' screen for a contact (assumes we are in the
         # 'view all contacts' screen).
         # <br>
