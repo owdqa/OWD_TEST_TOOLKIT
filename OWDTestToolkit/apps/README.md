@@ -68,13 +68,6 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>addEvent</td>
-        <td align=left></td>
-        <td align=left>Press the 'add event' button.</td>
-    </tr>
-
-
-    <tr>
         <td align=center>moveMonthViewBy</td>
         <td align=left>p_num</td>
         <td align=left>Switches to month view, then moves 'p_num' months in the future or past (if the p_num is  positive or negative) relative to today.</td>
@@ -104,7 +97,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
     <tr>
         <td align=center>createEvent</td>
-        <td align=left>p_title<br>p_location<br>p_allDay<br>p_startDate<br>p_startTime<br>p_endDate<br>p_endTime<br>p_notes</td>
+        <td align=left></td>
         <td align=left>Create a new event - use 'False' in the following fields if you want to leave them at default:   start date,  end date,  location,  notes</td>
     </tr>
 
@@ -340,7 +333,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
     <tr>
         <td align=center>viewContact</td>
         <td align=left>p_contactName<br>p_HeaderCheck=True</td>
-        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen).  <br>  In some cases you don't want this to check the header (if the contact has no name,  or you're just using the given name etc..). In that case, set p_HeaderCheck=False.</td>
+        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen, either from Contacts app, or Dialer app).  <br>  In some cases you don't want this to check the header (if the contact has no name,  or you're just using the given name etc..). In that case, set p_HeaderCheck=False.</td>
     </tr>
 
 
