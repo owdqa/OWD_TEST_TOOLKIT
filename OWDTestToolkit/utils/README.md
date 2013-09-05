@@ -334,13 +334,6 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
-        <td align=center>getDateTimeAdjusted</td>
-        <td align=left>p_months=0</td>
-        <td align=left>Returns struct containing date and time strings for today adjusted  by the parameters passed in (only months so far but I'll add more as I need to).<br>  The result array elements are as follows:<br>  <pre>  Attribute Field Values<br>  day_name Day "Monday" to "Friday"<br>  month_name Day "january" to "December"<br>  mday Day 1 to 31<br>  year 4-digit year 2008 etc...<br>  mon Month 1 to 12<br>  mday Day 1 to 31<br>  hour Hour 0 to 23<br>  min Minute 0 to 59<br>  sec Second 0 to 61 (60 or 61 are leap-seconds)<br>  wday Day of Week 0 to 6 (0 is Monday)<br>  yday Day of year 1 to 366 (Julian day)<br>  isdst Daylight savings -1, 0, 1, -1 means library determines DST<br>  </pre>  <br>  Examples:<br>  <pre>  _today = self.UTILS.getDateTimeAdjusted(p_months=24)<br>  _today = self.UTILS.getDateTimeAdjusted(p_months=2)<br>  _today = self.UTILS.getDateTimeAdjusted(p_months=-8)<br>  self.UTILS.logResult("info", "New month is: %s." % _today.mon)  <pre></td>
-    </tr>
-
-
-    <tr>
         <td align=center>switch_24_12</td>
         <td align=left>p_hour</td>
         <td align=left>Switches a 24-hour number to 12-hour format.  Returns array: ["hour" (12 hour format), "ampm"] based on a 24hour "p_hour".</td>
