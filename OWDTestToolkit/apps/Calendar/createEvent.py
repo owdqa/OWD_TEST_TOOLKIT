@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 	
 class main(GaiaTestCase):
 
-    def createEvent(self, p_title, p_location, p_allDay, p_startDate, p_startTime, p_endDate, p_endTime, p_notes):
+    def createEvent(self):
         #
         # Create a new event - use 'False' in the following fields if you want to leave them at default:
         # 
@@ -11,97 +11,37 @@ class main(GaiaTestCase):
         #   location,
         #   notes
         #
-        self.addEvent()
-        
-        #
-        # Set the title.
-        #
-        x = self.UTILS.getElement(DOM.Calendar.event_title, "'Title' field")
-        x.send_keys(p_title)
+		x = self.UTILS.getElement(DOM.Calendar.add_event_btn, "Add event button")
+		x.tap()
+		
+		title			= ("xpath"	, "//input[@name='title']")
+		where			= ("xpath"	, "//input[@name='location']")
+		allday			= ("xpath"	, "//li[@class='allday']")		#<-- checkbox, True False (use tap())
+		start_date		= ("xpath"	, "//li[@class='start-date']")
+		start_time		= ("id"		, "start-time-locale")
+		end_date		= ("id"		, "end-date-locale")
+		end_time		= ("id"		, "end-time-locale")
+		reminders 		= ("xpath"	, "//select[@name='alarm[]']/option") # *
+		notes			= ("xpath"	, "//textarea[@name='description']")
 
-        #
-        # Set the location.
-        #
-        if p_location:
-            x = self.UTILS.getElement(DOM.Calendar.event_location, "'Location' field")
-            x.send_keys(p_location)
+		x = self.UTILS.getElement(title		, "Title", True, 10)
+		x.send_keys("hello title")
+		
+		x = self.UTILS.getElement(where		, "Where")
+		x.send_keys("hello where")
+		
+  		x = self.UTILS.getElement(allday	, "All day")
+  		x.tap()
+  		
+  		self.marionette.execute_script("document.getElementById('start-date-locale').click()")
+#  		x = self.UTILS.getElement(start_date	, "sdate", False)
+#  		x.tap()
 
-        #
-        # Set the 'all day' marker.
-        #
-        if p_allDay:
-            x = self.UTILS.getElement(DOM.Calendar.event_allDay, "All day marker")
-            x.tap()
-
-        #
-        # Set start date.
-        #
-        if p_startDate: 
-            x = self.UTILS.getElement(DOM.Calendar.event_start_date, "'Start date' field")
-            x.send_keys(p_startDate)
-        
-        #
-        # Start start time.
-        #
-        self.UTILS.logResult("info", "ROY: Time settings have changed to a scroller - make Clock scroller functionality available to this!!")
-        return
-        x = self.UTILS.getElement( ("id", "start-time-locale"), "Start time field")
-        x.tap()
-        
-        #
-        # Set the time usin ghte scrollers.
-        #
-        
-        #
-        # Set the time using the scroller.
-        #
-        scroller_hours = self.UTILS.getElement(
-            (DOM.Clock.time_picker_column[0],DOM.Clock.time_scroller[1] % p_component),
-            "Scroller for 'hours'")
-        
-        scroller_minutes = self.UTILS.getElement(
-            (DOM.Clock.time_picker_column[0],DOM.Clock.time_scroller[1] % p_component),
-            "Scroller for 'minutes'")
-
-        self.UTILS.setScrollerVal(scroller_hours, 5)
-        self.UTILS.setScrollerVal(scroller_minutes, 01)
-        scroller = self.UTILS.getElement(DOM.Clock.time_scroller_ampm, "AM/PM picker")
-        currVal  = scroller.find_element(*DOM.GLOBAL.scroller_curr_val).text
-        
-        if t_ampm != currVal:
-            if currVal == "AM":
-                self.UTILS.moveScroller(scroller, True)
-            else:
-                self.UTILS.moveScroller(scroller, False)
-
-        self.UTILS.screenShotOnErr()
-        
-        return
-        x.send_keys(p_startTime)
-        
-        #
-        # Set end date.
-        #
-        if p_endDate: 
-            x = self.UTILS.getElement(DOM.Calendar.event_end_date, "'End date' field")
-            x.send_keys(p_endDate)
-        
-        #
-        # Set end time.
-        #
-        x = self.UTILS.getElement(DOM.Calendar.event_end_time, "'End time' field")
-        x.send_keys(p_endTime)
-        
-        #
-        # Set notes.
-        #
-        if p_notes: 
-            x = self.UTILS.getElement(DOM.Calendar.event_notes, "'Notes' field")
-            x.send_keys(p_notes)
-        
-        #
-        # Save it.
-        #
-        x = self.UTILS.getElement(DOM.Calendar.event_save_btn, "Save button")
-        x.tap()
-        
+# 		self.UTILS.typeThis(start_time	, "stime", "Hello stime", p_no_keyboard=False, p_validate=False)
+# 		self.UTILS.typeThis(end_date	, "edate", "Hello edate", p_no_keyboard=False, p_validate=False)
+# 		self.UTILS.typeThis(end_time	, "etime", "Hello etime", p_no_keyboard=False, p_validate=False)
+# 		self.UTILS.getElements(reminders, "y", True, 1, False)
+# 		self.UTILS.typeThis(notes		, "Notes", "Hello notes", p_no_keyboard=False, p_validate=False)
+		
+		
+		# * - [ARRAY] available options are in the @value attribute. tap() the select, then tap() the option.

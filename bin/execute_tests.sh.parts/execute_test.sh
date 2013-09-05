@@ -30,6 +30,6 @@ else
     # Update the description in the details file.
     #
     test_desc_sedsafe=$(echo "$test_desc" | sed -e "s/\//\\\\\//g")
-    sed -e "s/XXDESCXX/$test_desc_sedsafe/" $DET_FILE > $DET_FILE.tmp
+    sed -e "s/XXDESCXX/$test_desc_sedsafe/" $DET_FILE > $DET_FILE.tmp 2>/dev/null
     mv $DET_FILE.tmp $DET_FILE
 fi

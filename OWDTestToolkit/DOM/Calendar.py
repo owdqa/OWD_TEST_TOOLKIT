@@ -36,7 +36,7 @@ mview_first_row_for_flick   = ("xpath", "//section[@id='month-view']/section[con
 
 
 wview_container             = ("id", "week-view")
-wview_active_days           = ("xpath", "//*[@id='week-view']//section[@class='active']")
+wview_active_days           = ("xpath", "//section[@id='week-view']//section[contains(@class,'active')]//li//h1")
 
 dview_container             = ("id", "day-view")
 dview_events                = ("xpath", "//section[@id='day-view' and @class='active']//div[@class='events']")

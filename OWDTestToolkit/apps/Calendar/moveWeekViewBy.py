@@ -35,14 +35,17 @@ class main(GaiaTestCase):
  		_days_offset = 0
  		_now_epoch	 = int(time.time())
  		_now         = self.UTILS.getDateTimeFromEpochSecs(_now_epoch)
- 		_now_str	 = "%s %s %02d %s" % (_now.day_name[:3], _now.month_name[:3], _now.mday, _now.year)
+ 		_now_str	 = "%s %s" % (_now.day_name[:3].upper(),_now.mday)
 
 		_displayed_days = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+		_startpos = 0
 		for i in range(0,len(_displayed_days)):
-			if _now_str in _displayed_days[i].get_attribute("data-date"):
-				_startpos = i - 1
-				break
-			
+			x = _displayed_days[i].text
+			if x:
+				if _now_str in x:
+					_startpos = i - 1
+					break
+		
 		if p_num < 0:
 			_days_offset = _startpos
 		else:
@@ -70,7 +73,7 @@ class main(GaiaTestCase):
  		# Work out what the display should now be:
  		#
  		# 1. Today + _days_offset should be displayed.
- 		# 2. Header should be month + year, now + _days_offset shoudl be in active days.
+ 		# 2. Header should be month + year, now + _days_offset should be in active days.
  		#
  		if p_num < 0:
  			_new_epoch = _now_epoch - (_days_offset * 24 * 60 * 60)
@@ -79,14 +82,16 @@ class main(GaiaTestCase):
 			  
  		_new_now       = self.UTILS.getDateTimeFromEpochSecs(_new_epoch)
  		
- 		_new_now_str   = "%s %s %02d %s" % (_new_now.day_name[:3], _new_now.month_name[:3], _new_now.mday, _new_now.year)
+ 		_new_now_str   = "%s %s" % (_new_now.day_name[:3].upper(), _new_now.mday)
 
 		x = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
 		boolOK = False
 		for i in range(0,len(x)):
-			if _new_now_str in x[i].get_attribute("data-date"):
-				boolOK = True
-				break
+			x = _displayed_days[i].text
+			if x:
+				if _new_now_str in x:
+					boolOK = True
+					break
  
  		self.UTILS.TEST(boolOK, "The column for date '<b>%s</b>' displayed." % _new_now_str)
 

@@ -9,8 +9,8 @@ import  callThisNumber              ,\
         callLog_createContact       ,\
         callLog_addToContact        ,\
         addThisNumberToContact      ,\
-        _complete_addNumberToContact,\
         createMultipleCallLogEntries,\
+        _complete_addNumberToContact,\
         callLog_clearAll            ,\
         callLog_clearSome
 
@@ -24,8 +24,8 @@ class Dialer (
             callLog_createContact.main,
             callLog_addToContact.main,
             addThisNumberToContact.main,
-            _complete_addNumberToContact.main,
             createMultipleCallLogEntries.main,
+            _complete_addNumberToContact.main,
             callLog_clearAll.main,
             callLog_clearSome.main):
     

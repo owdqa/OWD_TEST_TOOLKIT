@@ -22,13 +22,18 @@ class main(GaiaTestCase):
             #
             # Use "=" because we want this field to be an empty string. 
             #           
-            x = self.getElements( ("xpath", "//iframe[@" + p_attrib + "='" + p_str + "']"),
-                                 "Iframe where '" + p_attrib + "' = '" + p_str + "'", False, 20)
+            _frameDef = ("xpath", "//iframe[@%s='%s']" % (p_attrib, p_str))
         else:
-            x = self.getElements( ("xpath", "//iframe[contains(@" + p_attrib + ", '" + p_str + "')]"),
-                                 "Iframe where '" + p_attrib + "' contains '" + p_str + "'", False, 20)
-        
-        self.logResult("info", "Found %s iframes matching this." % str(len(x)))
+            _frameDef = ("xpath", "//iframe[contains(@%s,'%s')]" % (p_attrib, p_str))
+            
+        x = ""
+        try:
+            self.wait_for_elements_displayed(*_framedef, timeout=20)
+            x = self.marionette.find_elements(*_frameDef)
+        except:
+            pass
+            
+        self.logResult("info", "Found %s <i>visible</i> iframes where %s." % (str(len(x)), _frameDef[1]))
         
         boolOK=False
         for i in range(0,len(x)):
@@ -44,11 +49,15 @@ class main(GaiaTestCase):
                 except:
                     pass
                 
+            x = self.marionette.find_elements(*_frameDef)
+                
         #
         # If we didn't manage to switch, then try frames that are not
         # displayed (sometime this is the case).
         #
         if not boolOK:
+            x = self.marionette.find_elements(*_frameDef)
+            self.logResult("info", "Found %s <i>present</i> iframes where %s." % (str(len(x)), _frameDef[1]))
             for i in range(0,len(x)):
                 try:
                     self.marionette.switch_to_frame(x[i])
@@ -56,12 +65,10 @@ class main(GaiaTestCase):
                     break
                 except:
                     pass
+
+            x = self.marionette.find_elements(*_frameDef)
                 
-        if boolOK:
-            self.logResult("info", "<i>(Sucessfully switched to iframe where %s contains '%s'.)</i>" % (p_attrib, p_str))
-        else:
-            self.logResult(p_quitOnError, "<b>NOTE: </b>Failed to switch to iframe where %s contains '%s'." % (p_attrib, p_str))
-        
+        self.TEST(boolOK, "<i>(Sucessfully switched to iframe where %s contains '%s'.)</i>" % (p_attrib, p_str), p_quitOnError)
         
         
         
