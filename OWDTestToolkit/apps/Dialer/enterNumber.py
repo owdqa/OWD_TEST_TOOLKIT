@@ -6,6 +6,9 @@ class main(GaiaTestCase):
         #
         # Enters a number into the dialler using the keypad.
         #
+        self.actions=Actions(self.marionette)
+        self.actions.long_press(y,2).perform
+        
         try:
         	self.wait_for_element_displayed(*DOM.Dialer.phone_number, timeout=1)
     	except:
@@ -16,7 +19,7 @@ class main(GaiaTestCase):
         for i in str(p_num):
         	x = self.UTILS.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % i),
 									"keypad number %s." % i)
-        	x.tap()
+       		x.tap()
         
         #
         # Verify that the number field contains the expected number.
