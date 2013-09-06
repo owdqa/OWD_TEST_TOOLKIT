@@ -18,12 +18,12 @@ class main(GaiaTestCase):
 
             if i=="+":
                 x = self.UTILS.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % 0),
-                                    "keypad number %s." % 0)
+                                    "keypad symbol '+'")
                 self.actions=Actions(self.marionette)
                 self.actions.long_press(x,2).perform()
             else:
                 x = self.UTILS.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % i),
-                                    "keypad number %s." % i)
+                                    "keypad number %s" % i)
                 x.tap()
         
         #
