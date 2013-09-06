@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 
 class main(GaiaTestCase):
 
-    def import_HotmailLogin(self, p_name, p_pass, p_clickSignIn=True):
+    def import_HotmailLogin(self, p_name, p_pass, p_clickSignIn=True, p_justSignIn=False):
         #
         # Presses the Settings button in the contacts app, then Hotmail, then logs in using
         # p_name and p_pass (to begin the process of importing contacts).
@@ -28,7 +28,7 @@ class main(GaiaTestCase):
         if not login_success:
             return False
 
-        if not p_clickSignIn:
+        if not p_clickSignIn or p_justSignIn:
             #
             # If we're just entering the login details but not clicking sign in, 
             # then here's where we finish.

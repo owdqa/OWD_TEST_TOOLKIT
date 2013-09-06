@@ -28,7 +28,7 @@ class main(GaiaTestCase):
             
         x = ""
         try:
-            self.wait_for_elements_displayed(*_framedef, timeout=20)
+            self.wait_for_element_displayed(*_frameDef, timeout=20)
             x = self.marionette.find_elements(*_frameDef)
         except:
             pass
