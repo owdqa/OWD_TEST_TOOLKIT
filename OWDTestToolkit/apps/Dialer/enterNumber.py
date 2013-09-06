@@ -6,17 +6,25 @@ class main(GaiaTestCase):
         #
         # Enters a number into the dialler using the keypad.
         #
+   
         try:
-        	self.wait_for_element_displayed(*DOM.Dialer.phone_number, timeout=1)
-    	except:
-    		x = self.UTILS.getElement(DOM.Dialer.option_bar_keypad, "Keypad option selector")
-    		x.tap()
-    		self.UTILS.waitForElements(DOM.Dialer.phone_number, "Phone number area")
-        		
+            self.wait_for_element_displayed(*DOM.Dialer.phone_number, timeout=1)
+        except:
+            x = self.UTILS.getElement(DOM.Dialer.option_bar_keypad, "Keypad option selector")
+            x.tap()
+            self.UTILS.waitForElements(DOM.Dialer.phone_number, "Phone number area")
+                
         for i in str(p_num):
-        	x = self.UTILS.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % i),
-									"keypad number %s." % i)
-        	x.tap()
+
+            if i=="+":
+                x = self.UTILS.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % 0),
+                                    "keypad number %s." % 0)
+                self.actions=Actions(self.marionette)
+                self.actions.long_press(x,2).perform()
+            else:
+                x = self.UTILS.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % i),
+                                    "keypad number %s." % i)
+                x.tap()
         
         #
         # Verify that the number field contains the expected number.
@@ -24,7 +32,7 @@ class main(GaiaTestCase):
         x = self.UTILS.getElement(DOM.Dialer.phone_number, "Phone number field", False)
         dialer_num = x.get_attribute("value")
         self.UTILS.TEST(str(p_num) in dialer_num, "After entering '%s', phone number field contains '%s'." % \
-					   								(dialer_num, str(p_num)))
+                                                       (dialer_num, str(p_num)))
         
         x = self.UTILS.screenShotOnErr()
         self.UTILS.logResult("info", "Screenshot:", x)
