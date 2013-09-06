@@ -27,8 +27,11 @@ wifi_connected         = ('xpath', '//small[text()="Connected"]')
 cellData               = ('id', 'menuItem-cellularAndData')
 celldata_header        = ('xpath', GLOBAL.app_head_specific % 'Cellular & Data')
 celldata_DataConn      = ('name', "ril.data.enabled")
-
 celldata_DataConn_ON   = ('xpath', "//button[@data-l10n-id='turnOn']")
+
+bluetooth              = ("id", "menuItem-bluetooth")
+bluetooth_desc         = ("id", "bluetooth-desc")
+
 
 sound                  = ('id', 'menuItem-sound')
 sound_alarm_vol        = ('name', 'audio.volume.alarm')
