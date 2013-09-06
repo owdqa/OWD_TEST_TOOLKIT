@@ -14,8 +14,8 @@ class main(GaiaTestCase):
         return {
             "data"      : self.data_layer.is_cell_data_enabled,
             "wifi"      : self.data_layer.is_wifi_enabled,
-            "airplane"  : self.data_layer.get_setting('ril.radio.disabled')#,
-#             "bluetooth" : self.data_layer.bt_is_bluetooth_enabled
+            "airplane"  : self.data_layer.get_setting('ril.radio.disabled'),
+            "bluetooth" : self.data_layer.bluetooth_is_enabled
             }.get(p_type)
         
         self.TEST(False, "Incorrect parameter '" + str(p_type) + "' passed to UTILS.isNetworkTypeEnabled()!", True)
