@@ -22,7 +22,6 @@ class main(GaiaTestCase):
         
         self._findThisFrame()
 
-        time.sleep(1)
         y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
         
         self.UTILS.logResult("info", "%s contacts listed." % str(len(y)))
@@ -52,23 +51,9 @@ class main(GaiaTestCase):
         #
         # TEST: Correct contact name is in the page header.
         #
-        
         if p_HeaderCheck:
             self.UTILS.headerCheck(p_contactName)
         
-
-
-        if self.apps.displayed_app.name == "Phone":
-            self.UTILS.switchToFrame(*DOM.Dialer.frame_locator)
-            self.UTILS.switchToFrame(*DOM.Dialer.call_log_contact_name_iframe, p_viaRootFrame=False)
-            x = self.UTILS.getElement(DOM.Contacts.view_details_title,"View details title")
-            self.UTILS.TEST(p_contactName in x.text, "Name is in the title")
-        else:
-            #
-            # This shouldn't be necessary, but for some reason it is!
-            #
-            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
-
         x = self._findThisFrame()
 
         if x == "Dialer":
@@ -118,4 +103,3 @@ class main(GaiaTestCase):
         except:
             return False
         
-
