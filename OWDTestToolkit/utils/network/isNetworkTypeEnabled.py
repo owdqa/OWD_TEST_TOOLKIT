@@ -11,6 +11,7 @@ class main(GaiaTestCase):
         # <b>airplane</b><br>
         # <i>bluetooth (**NOT WORKING CURRENTLY!!**)</i>
         #
+        self.checkMarionetteOK()
         return {
             "data"      : self.data_layer.is_cell_data_enabled,
             "wifi"      : self.data_layer.is_wifi_enabled,

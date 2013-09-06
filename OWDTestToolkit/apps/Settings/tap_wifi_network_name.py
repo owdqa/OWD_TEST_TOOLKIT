@@ -6,8 +6,8 @@ class main(GaiaTestCase):
         #
         # Select a network.
         #
-        wifi_name_element = DOM.Settings.wifi_name_xpath % p_wifi_name
-        x= self.UTILS.getElement(('xpath', wifi_name_element), "Wifi '" + p_wifi_name + "'", True, 30, True)
+        _wifi_name_element = ("xpath", DOM.Settings.wifi_name_xpath % p_wifi_name)
+        x= self.UTILS.getElement(_wifi_name_element, "Wifi '" + p_wifi_name + "'", True, 30, True)
         if x:
             x.tap()
         else:
