@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 	
 class main(GaiaTestCase):
 
-    def checkWifiLisetedAsConnected(self, p_name):
+    def checkWifiConnected(self, p_name):
         #
         # Verify the expected network is listed as connected in 'available networks'.
         #

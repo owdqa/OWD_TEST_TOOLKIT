@@ -19,9 +19,9 @@ class main(GaiaTestCase):
         	# Already connected to this wifi (or connected automatically).
             # 'Forget' it (so we can reconnect as-per test) and tap the wifi name again.
         	#
-            self.wait_for_elemnet_displayed(*DOM.Settings.wifi_forget_btn, timeout=3)
+            self.wait_for_element_displayed(*DOM.Settings.wifi_forget_btn, timeout=3)
             self.UTILS.logResult("info", 
-                                 "Automatically connected to '%s' wifi, so forgetting it to test reconnect ..." % \
+                                 "Device automatically connected to '%s' wifi, so forgetting it to test reconnect ..." % \
                                  p_wifi_name)
             x = self.marionette.find_element(*DOM.Settings.wifi_forget_btn)
             x.tap()
@@ -63,8 +63,10 @@ class main(GaiaTestCase):
         # A couple of checks to wait for 'anything' to be Connected (only look for 'present' because it
         # might be off the bottom of the page).
         #
-        self.UTILS.waitForElements(DOM.Settings.wifi_connected, "Connected Wifi network", False, 60)
-        
+        self.UTILS.TEST(
+                self.checkWifiConnected(p_wifi_name),
+                "Wifi '" + p_wifi_name + "' is listed as 'connected' in wifi settings.", False)
+
         self.UTILS.TEST(self.data_layer.get_setting("wifi.enabled"),
             "Wifi connection to '" + p_wifi_name + "' established.", True)
 

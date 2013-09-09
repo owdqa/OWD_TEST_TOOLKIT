@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
     
 class main(GaiaTestCase):
 
-    def isIconInStatusBar(self, p_dom, p_returnFrame=False):
+    def isIconInStatusBar(self, p_dom):
         #
         # Check an icon is in the statusbar, then return to the
         # given frame (doesn't wait, just expects it to be there).
