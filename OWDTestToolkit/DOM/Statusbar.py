@@ -4,6 +4,7 @@ dataConn        = ('id', 'statusbar-data')
 bluetooth       = ('id', 'statusbar-bluetooth')
 airplane        = ('id', 'statusbar-flight-mode')
 signal          = ("id", "statusbar-signal")
+hotspot         = ("id", "statusbar-tethering")
 
 clear_all_button= ('id', 'notification-clear')
 toggle_wifi     = ("id", "quick-settings-wifi")

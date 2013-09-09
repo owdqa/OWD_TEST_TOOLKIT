@@ -9,7 +9,8 @@ import  cellular_and_data                  ,\
         tap_wifi_network_name              ,\
         turn_dataConn_on                   ,\
         turn_wifi_on                       ,\
-        wifi                               
+        wifi                               ,\
+        hotSpot
 
 class Settings (
             cellular_and_data.main,
@@ -21,7 +22,8 @@ class Settings (
             tap_wifi_network_name.main,
             turn_dataConn_on.main,
             turn_wifi_on.main,
-            wifi.main):
+            wifi.main,
+            hotSpot.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
