@@ -22,6 +22,7 @@ wifi_name_xpath        = './/*[@id="wifi-availableNetworks"]//a[text()="%s"]'
 wifi_login_user        = ('name', 'identity')
 wifi_login_pass        = ('name', 'password')
 wifi_login_ok_btn      = ('xpath', ".//button//span[text()='OK']")
+wifi_forget_btn        = ("xpath", ".//button//span[text()='Forget']")
 wifi_connected         = ('xpath', '//small[text()="Connected"]')
 
 cellData               = ('id', 'menuItem-cellularAndData')
