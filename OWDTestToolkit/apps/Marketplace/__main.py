@@ -25,7 +25,8 @@ class Marketplace (
         self.UTILS.logResult("info", 
                        "About to launch the marketplace app from the dev server. " + \
                        "If it's \"not found\" then either try again later, or contact #marketplace mozilla irc channel.")
-        self.app = self.apps.launch("Marketplace Dev")
+#         self.app = self.apps.launch("Marketplace Dev")
+        self.app = self.apps.launch("Marketplace")
 
         self.UTILS.waitForNotElements(DOM.Market.market_loading_icon, 
                                       self.__class__.__name__ + " app - loading icon",
