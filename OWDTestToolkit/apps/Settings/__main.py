@@ -1,33 +1,39 @@
 from OWDTestToolkit.global_imports import *
 
 import  cellular_and_data                  ,\
-        checkWifiConnected                 ,\
+        wifi_list_isConnected              ,\
         goSound                            ,\
         setAlarmVolume                     ,\
         setRingerAndNotifsVolume           ,\
         setTimeToNow                       ,\
-        tap_wifi_network_name              ,\
+        wifi_connect                       ,\
         turn_dataConn_on                   ,\
-        turn_wifi_on                       ,\
+        wifi_switchOn                      ,\
         wifi                               ,\
         hotSpot                            ,\
         enable_hotSpot                     ,\
-        goBack
+        disable_hotSpot                    ,\
+        goBack                             ,\
+        wifi_list_tapName                  ,\
+        wifi_forget
 
 class Settings (
             cellular_and_data.main,
-            checkWifiConnected.main,
+            wifi_list_isConnected.main,
             goSound.main,
             setAlarmVolume.main,
             setRingerAndNotifsVolume.main,
             setTimeToNow.main,
-            tap_wifi_network_name.main,
+            wifi_connect.main,
             turn_dataConn_on.main,
-            turn_wifi_on.main,
+            wifi_switchOn.main,
             wifi.main,
             hotSpot.main,
             enable_hotSpot.main,
-            goBack.main):
+            disable_hotSpot.main,
+            goBack.main,
+            wifi_list_tapName.main,
+            wifi_forget.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps

@@ -2,7 +2,7 @@ from OWDTestToolkit.global_imports import *
 	
 class main(GaiaTestCase):
 
-    def turn_wifi_on(self):
+    def wifi_switchOn(self):
         #
         # Click slider to turn wifi on.
         #
