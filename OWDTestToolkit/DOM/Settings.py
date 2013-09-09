@@ -22,8 +22,15 @@ wifi_name_xpath        = './/*[@id="wifi-availableNetworks"]//a[text()="%s"]'
 wifi_login_user        = ('name', 'identity')
 wifi_login_pass        = ('name', 'password')
 wifi_login_ok_btn      = ('xpath', ".//button//span[text()='OK']")
-wifi_forget_btn        = ("xpath", ".//button//span[text()='Forget']")
 wifi_connected         = ('xpath', '//small[text()="Connected"]')
+wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='%s']"
+
+wifi_details_forget_btn = ("xpath", ".//button//span[text()='Forget']")
+wifi_details_security   = ("xpath", "//a[@data-l10n-id='security']/span")
+wifi_details_signal     = ("xpath", "//a[@data-l10n-id='signalStrength']/span")
+wifi_details_ipaddress  = ("xpath", "//a[@data-l10n-id='ipAddress']/span")
+wifi_details_linkspeed  = ("xpath", "//a[@data-l10n-id='linkSpeed']/span")
+
 
 cellData               = ('id', 'menuItem-cellularAndData')
 celldata_header        = ('xpath', GLOBAL.app_head_specific % 'Cellular & Data')

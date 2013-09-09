@@ -2,32 +2,26 @@ from OWDTestToolkit.global_imports import *
     
 class main(GaiaTestCase):
     
-    def tap_wifi_network_name(self, p_wifi_name, p_user, p_pass):
+    def wifi_connect(self, p_wifi_name, p_user, p_pass):
         #
-        # Tap a wifi network name, and log in to it.
+        # Connects to the wifi specified in the parameters using the Settings app.
         #
-        if not self._tapWifi(p_wifi_name):
-            return False
         
         #
-        # We may already /automatically be connected to this wifi, be asked for just password, 
-        # or be asked for a username and password ...
+        # Are we in the settings app?
         #
-        time.sleep(2)
         try:
-        	#
-        	# Already connected to this wifi (or connected automatically).
-            # 'Forget' it (so we can reconnect as-per test) and tap the wifi name again.
-        	#
-            self.wait_for_element_displayed(*DOM.Settings.wifi_forget_btn, timeout=3)
-            self.UTILS.logResult("info", 
-                                 "Device automatically connected to '%s' wifi, so forgetting it to test reconnect ..." % \
-                                 p_wifi_name)
-            x = self.marionette.find_element(*DOM.Settings.wifi_forget_btn)
-            x.tap()
-            self._tapWifi(p_wifi_name)
+            self.wait_for_element_displayed(*DOM.Settings.wifi)
         except:
-            pass
+            self.launch()
+            
+        self.wifi()
+        
+        self.wifi_list_tapName(p_wifi_name)
+        
+        
+        if self.wifi_forget():
+            self.wifi_list_tapName(p_wifi_name)
         
         try:
         	#
@@ -57,8 +51,9 @@ class main(GaiaTestCase):
             pass
         
         try:
-            wifi_login_ok   = self.marionette.find_element(*DOM.Settings.wifi_login_ok_btn)
+            wifi_login_ok = self.marionette.find_element(*DOM.Settings.wifi_login_ok_btn)
             wifi_login_ok.tap()
+            self.UTILS.logResult("info", "Ok button pressed.")
         except:
             pass
 
@@ -67,24 +62,11 @@ class main(GaiaTestCase):
         # might be off the bottom of the page).
         #
         self.UTILS.TEST(
-                self.checkWifiConnected(p_wifi_name, p_timeOut=60),
+                self.wifi_list_isConnected(p_wifi_name, p_timeOut=60),
                 "Wifi '" + p_wifi_name + "' is listed as 'connected' in wifi settings.", False)
 
         self.UTILS.TEST(self.data_layer.get_setting("wifi.enabled"),
             "Wifi connection to '" + p_wifi_name + "' established.", True)
 
-
-    def _tapWifi(self, p_wifi_name):
-        #
-        # Private method to tap the network.
-        #
-        _wifi_name_element = ("xpath", DOM.Settings.wifi_name_xpath % p_wifi_name)
-        x= self.UTILS.getElement(_wifi_name_element, "Wifi '" + p_wifi_name + "'", True, 30, True)
-        if x:
-            x.tap()
-        else:
-            return False
-        
-        return True
 
 
