@@ -8,6 +8,7 @@ class main(GaiaTestCase):
         #
         x=self.UTILS.getElement(DOM.Browser.url_input, "Url input field")
         self.UTILS.logComment("Using URL " + p_url)
+        x.clear()
         x.send_keys(p_url)
         
         x=self.UTILS.getElement(DOM.Browser.url_go_button, "'Go to url' button")

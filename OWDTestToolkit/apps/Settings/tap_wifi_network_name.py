@@ -57,7 +57,7 @@ class main(GaiaTestCase):
             pass
         
         try:
-            wifi_login_ok   = self.marionette.find_elemnt(*DOM.Settings.wifi_login_ok_btn)
+            wifi_login_ok   = self.marionette.find_element(*DOM.Settings.wifi_login_ok_btn)
             wifi_login_ok.tap()
         except:
             pass
