@@ -56,15 +56,18 @@ class main(GaiaTestCase):
         except:
             pass
         
-        wifi_login_ok   = self.UTILS.getElement(DOM.Settings.wifi_login_ok_btn, "Ok button")
-        wifi_login_ok.tap() 
+        try:
+            wifi_login_ok   = self.marionette.find_elemnt(*DOM.Settings.wifi_login_ok_btn)
+            wifi_login_ok.tap()
+        except:
+            pass
 
         #
         # A couple of checks to wait for 'anything' to be Connected (only look for 'present' because it
         # might be off the bottom of the page).
         #
         self.UTILS.TEST(
-                self.checkWifiConnected(p_wifi_name),
+                self.checkWifiConnected(p_wifi_name, p_timeOut=60),
                 "Wifi '" + p_wifi_name + "' is listed as 'connected' in wifi settings.", False)
 
         self.UTILS.TEST(self.data_layer.get_setting("wifi.enabled"),
