@@ -2,19 +2,19 @@ from OWDTestToolkit.global_imports import *
 	
 class main(GaiaTestCase):
 
-    def enable_hotSpot(self):
+    def disable_hotSpot(self):
         #
         # Enable hotspot (internet sharing) - asusmes Settings app is already open.
         #
-		self.UTILS.logResult("info", "<u>Enabling hotspot ...</u>")
+		self.UTILS.logResult("info", "<u>Disabling hotspot ...</u>")
 		self.hotSpot()
 
 		#
 		# Is it already enabled?
 		#
 		x = self.UTILS.getElement(DOM.Settings.hotspot_settings, "Hotspot settings")
-		if x.get_attribute("disabled") == "true":
-			self.UTILS.logResult("info", "Hotspot is already enabled.")
+		if x.get_attribute("disabled") == "false":
+			self.UTILS.logResult("info", "Hotspot is already disabled.")
 			return True
 		
 		x = self.UTILS.getElement(DOM.Settings.hotspot_switch, "Hotspot switch")
@@ -28,7 +28,7 @@ class main(GaiaTestCase):
 		_tries = 10
 		for i in range(0,_tries):
 			x = self.marionette.find_element(*DOM.Settings.hotspot_settings)
-			if x.get_attribute("disabled") == "true":
+			if x.get_attribute("disabled") == "false":
 				#
 				# It's done.
 				#
@@ -38,5 +38,5 @@ class main(GaiaTestCase):
 
 		boolOK2 = self.UTILS.isIconInStatusBar(DOM.Statusbar.hotspot)
 		
-		self.UTILS.TEST(boolOK1, "Hotspot settings are disabled (because 'hotspot' is now running).")
-		self.UTILS.TEST(boolOK2, "Hotspot icon is present in the status bar.")
+		self.UTILS.TEST(boolOK1, "Hotspot settings are enabled (because 'hotspot' is not running).")
+		self.UTILS.TEST(not boolOK2, "Hotspot icon is not present in the status bar.")

@@ -12,6 +12,7 @@ import  cellular_and_data                  ,\
         wifi                               ,\
         hotSpot                            ,\
         enable_hotSpot                     ,\
+        disable_hotSpot                    ,\
         goBack
 
 class Settings (
@@ -27,6 +28,7 @@ class Settings (
             wifi.main,
             hotSpot.main,
             enable_hotSpot.main,
+            disable_hotSpot.main,
             goBack.main):
     
     def __init__(self, p_parent):
