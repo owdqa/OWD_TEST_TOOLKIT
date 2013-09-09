@@ -1,7 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
 import  cellular_and_data                  ,\
-        checkWifiLisetedAsConnected        ,\
+        checkWifiConnected                 ,\
         goSound                            ,\
         setAlarmVolume                     ,\
         setRingerAndNotifsVolume           ,\
@@ -9,11 +9,14 @@ import  cellular_and_data                  ,\
         tap_wifi_network_name              ,\
         turn_dataConn_on                   ,\
         turn_wifi_on                       ,\
-        wifi                               
+        wifi                               ,\
+        hotSpot                            ,\
+        enable_hotSpot                     ,\
+        goBack
 
 class Settings (
             cellular_and_data.main,
-            checkWifiLisetedAsConnected.main,
+            checkWifiConnected.main,
             goSound.main,
             setAlarmVolume.main,
             setRingerAndNotifsVolume.main,
@@ -21,7 +24,10 @@ class Settings (
             tap_wifi_network_name.main,
             turn_dataConn_on.main,
             turn_wifi_on.main,
-            wifi.main):
+            wifi.main,
+            hotSpot.main,
+            enable_hotSpot.main,
+            goBack.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps

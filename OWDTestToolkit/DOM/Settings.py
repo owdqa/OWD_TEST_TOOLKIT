@@ -33,6 +33,10 @@ celldata_DataConn_ON   = ('xpath', "//button[@data-l10n-id='turnOn']")
 bluetooth              = ("id", "menuItem-bluetooth")
 bluetooth_desc         = ("id", "bluetooth-desc")
 
-
 sound                  = ('id', 'menuItem-sound')
 sound_alarm_vol        = ('name', 'audio.volume.alarm')
+
+hotspot                 = ("id", "menuItem-internetSharing")
+hotspot_header          = ('xpath', GLOBAL.app_head_specific % 'Internet sharing')
+hotspot_switch          = ("xpath", "//a[@data-l10n-id='wifi-hotspot']")
+hotspot_settings        = ("xpath", "//button[@class='hotspot-wifiSettings-btn']")

@@ -26,6 +26,8 @@ class main(GaiaTestCase):
             self.touchHomeButton()
     
             self.TEST(not self.isAppInstalled(p_appName), "App is uninstalled after deletion.")
+        else:
+            self.logResult("info", "(No need to uninstall %s.)" % p_appName)
 
 
 # 
