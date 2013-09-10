@@ -16,5 +16,6 @@ class main(GaiaTestCase):
 
         if self.device.has_wifi:
             self.data_layer.enable_wifi()
+            self.checkMarionetteOK()
             self.data_layer.forget_all_networks()
             self.data_layer.disable_wifi()

@@ -63,9 +63,9 @@ class main(GaiaTestCase):
             #
             self.wait_for_element_displayed(*DOM.Contacts.gmail_password, timeout=30)
             try:
-                self.wait_for_element_displayed(*DOM.Contacts.gmail_username, timeout=2)
+                self.wait_for_element_displayed(*DOM.Contacts.gmail_username, timeout=5)
     
-                x = self.marionette.find_element(*DOM.Contacts.gmail_username)
+                x = self.UTILS.getElement(DOM.Contacts.gmail_username, "Username field")
                 x.send_keys(p_name)
             except:
                 pass
@@ -99,8 +99,10 @@ class main(GaiaTestCase):
         #
         # Journey back to the import iframe.
         #
+        _txt =  "<b>(NOTE: we've had some problems here - if this iframe switch fails " + \
+                "then check at the 'root-level' iframe screenshot for an error message.)</b>"
+        self.UTILS.logResult("info", _txt)
         self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
-
         self.UTILS.switchToFrame(*DOM.Contacts.gmail_import_frame, p_viaRootFrame=False)
 
         self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
