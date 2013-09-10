@@ -2,12 +2,14 @@ from OWDTestToolkit.global_imports import *
 
 import  switchToFrame,\
         currentIframe,\
-        viewAllIframes
+        viewAllIframes,\
+        framePresent
         
 class main ( 
             switchToFrame.main,
             currentIframe.main,
-            viewAllIframes.main):
+            viewAllIframes.main,
+            framePresent.main):
 
     def __init__(self):
         return
