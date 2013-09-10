@@ -2,6 +2,7 @@ from OWDTestToolkit.global_imports import *
 
 import  cellular_and_data                  ,\
         wifi_list_isConnected              ,\
+        wifi_list_isNotConnected           ,\
         goSound                            ,\
         setAlarmVolume                     ,\
         setRingerAndNotifsVolume           ,\
@@ -20,6 +21,7 @@ import  cellular_and_data                  ,\
 class Settings (
             cellular_and_data.main,
             wifi_list_isConnected.main,
+            wifi_list_isNotConnected.main,
             goSound.main,
             setAlarmVolume.main,
             setRingerAndNotifsVolume.main,

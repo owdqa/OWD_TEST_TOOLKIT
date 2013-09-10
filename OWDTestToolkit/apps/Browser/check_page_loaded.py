@@ -8,6 +8,9 @@ class main(GaiaTestCase):
         #
         self.waitForPageToFinishLoading()
         
+        _url = self.loadedURL()
+        self.UTILS.logResult("info", "FYI: The loaded url is now <a href=\"%s\">%s</a>" % (_url,_url))
+                
         self.UTILS.switchToFrame(*DOM.Browser.website_frame, p_viaRootFrame=False)
 
 		#
