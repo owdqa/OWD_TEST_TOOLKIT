@@ -3,8 +3,12 @@ browser_page_frame      = ('mozbrowser', "")
 url_input               = ('id', 'url-input')
 url_go_button           = ('id', 'url-button')
 throbber                = ("xpath", "//*[@id='throbber' and @class='loading']")
-more_tabs               = ("id", "more-tabs")
-new_tab_button          = ("id", "new-tab-button")
+
+new_tab_screen          = ("id", "startscreen")
+
+tab_tray_open           = ("id", "more-tabs")
+tab_tray_screen         = ("class name", "tabs-screen")
+tab_tray_new_tab_btn    = ("id", "new-tab-button")
 
 settings_button         = ("id", "settings-button")
 settings_header         = ("xpath", "//header[@id='settings-header']")
