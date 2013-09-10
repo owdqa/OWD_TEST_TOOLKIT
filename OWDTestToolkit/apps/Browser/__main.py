@@ -2,12 +2,14 @@ from OWDTestToolkit.global_imports import *
 
 import  check_page_loaded                  ,\
         open_url                           ,\
-        waitForPageToFinishLoading         
+        waitForPageToFinishLoading         ,\
+        loadedURL
 
 class Browser (
             check_page_loaded.main,
             open_url.main,
-            waitForPageToFinishLoading.main):
+            waitForPageToFinishLoading.main,
+            loadedURL.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps

@@ -33,8 +33,6 @@ class main(GaiaTestCase):
         except:
             pass
             
-        self.logResult("info", "Found %s <i>visible</i> iframes where %s." % (str(len(x)), _frameDef[1]))
-        
         boolOK=False
         for i in range(0,len(x)):
             #
@@ -57,7 +55,6 @@ class main(GaiaTestCase):
         #
         if not boolOK:
             x = self.marionette.find_elements(*_frameDef)
-            self.logResult("info", "Found %s <i>present</i> iframes where %s." % (str(len(x)), _frameDef[1]))
             for i in range(0,len(x)):
                 try:
                     self.marionette.switch_to_frame(x[i])
