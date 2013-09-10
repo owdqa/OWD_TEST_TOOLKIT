@@ -34,6 +34,10 @@ wifi_details_signal     = ("xpath", "//a[@data-l10n-id='signalStrength']/span")
 wifi_details_ipaddress  = ("xpath", "//a[@data-l10n-id='ipAddress']/span")
 wifi_details_linkspeed  = ("xpath", "//a[@data-l10n-id='linkSpeed']/span")
 
+wifi_advanced_btn       = ("id", "manageNetworks")
+wifi_advanced_mac       = ("xpath", "//small[@data-name='deviceinfo.mac']")
+wifi_advanced_knownNets = ("xpath", "//*[@id='wifi-knownNetworks']/li")
+wifi_advanced_joinHidden= ("id", "joinHidden")
 
 cellData               = ('id', 'menuItem-cellularAndData')
 celldata_header        = ('xpath', GLOBAL.app_head_specific % 'Cellular & Data')
