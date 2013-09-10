@@ -6,9 +6,14 @@ throbber                = ("xpath", "//*[@id='throbber' and @class='loading']")
 
 new_tab_screen          = ("id", "startscreen")
 
+tab_screen              = ("id", "main-screen")
+tab_back_btn            = ("id", "awesomescreen-cancel-button")
+
 tab_tray_open           = ("id", "more-tabs")
 tab_tray_screen         = ("class name", "tabs-screen")
 tab_tray_new_tab_btn    = ("id", "new-tab-button")
+tab_tray_tab_list       = ("xpath", "//div[@id='tabs-list']//li/a")
+tab_tray_tab_list_curr  = ("xpath", "//div[@id='tabs-list']//li[@class='current']/a")
 
 settings_button         = ("id", "settings-button")
 settings_header         = ("xpath", "//header[@id='settings-header']")
