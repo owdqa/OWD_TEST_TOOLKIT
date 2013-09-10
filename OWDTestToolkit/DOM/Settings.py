@@ -38,6 +38,8 @@ wifi_advanced_btn       = ("id", "manageNetworks")
 wifi_advanced_mac       = ("xpath", "//small[@data-name='deviceinfo.mac']")
 wifi_advanced_knownNets = ("xpath", "//*[@id='wifi-knownNetworks']/li")
 wifi_advanced_joinHidden= ("id", "joinHidden")
+wifi_advanced_forgetBtn = ("xpath", "//button[@data-l10n-id='forgetNetwork']")
+wifi_advanced_cancelBtn = ("xpath", "//button[@data-l10n-id='cancel']")
 
 cellData               = ('id', 'menuItem-cellularAndData')
 celldata_header        = ('xpath', GLOBAL.app_head_specific % 'Cellular & Data')
