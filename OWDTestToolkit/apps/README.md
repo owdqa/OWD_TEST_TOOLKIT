@@ -28,6 +28,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
+        <td align=center>loadedURL</td>
+        <td align=left></td>
+        <td align=left>Returns the url of the currently loaded web page.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>check_page_loaded</td>
         <td align=left>p_url</td>
         <td align=left>Check the page didn't have a problem.</td>
@@ -1185,7 +1192,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
     <tr>
         <td align=center>wifi_forget</td>
         <td align=left>p_silent=True</td>
-        <td align=left>Forget the wifi 8assumes you have clicked the wifi name).<br>  If p_silent is True, then it will not assert if this wifi is aready known.<br>  If p_silent is True, then it will assert (and expect) that this wifi is already known.<br>  Either way, it will return True for forgotten, or False for 'not known'.</td>
+        <td align=left>Forget the wifi (assumes you have clicked the wifi name).<br>  If p_silent is True, then it will not assert if this wifi is aready known.<br>  If p_silent is True, then it will assert (and expect) that this wifi is already known.<br>  Either way, it will return True for forgotten, or False for 'not known'.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>wifi_list_isNotConnected</td>
+        <td align=left>p_name<br>p_timeOut=30</td>
+        <td align=left>Verify the expected network is listed as connected in 'available networks'.</td>
     </tr>
 
 
