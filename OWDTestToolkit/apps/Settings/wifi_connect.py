@@ -5,20 +5,26 @@ class main(GaiaTestCase):
     def wifi_connect(self, p_wifi_name, p_user, p_pass):
         #
         # Connects to the wifi specified in the parameters using the Settings app.
+        # Launches Settings if it's not already running.
         #
         
         #
         # Are we in the settings app?
         #
-        try:
-            self.wait_for_element_displayed(*DOM.Settings.wifi)
-        except:
+        if self.UTILS.framePresent(*DOM.Settings.frame_locator):
+            self.UTILS.switchToFrame(*DOM.Settings.frame_locator)
+            try:
+                self.wait_for_element_displayed(*DOM.Settings.wifi)
+                self.wifi()
+            except:
+                pass
+        else:
             self.launch()
+            self.wifi()
             
-        self.wifi()
-        
-        self.wifi_list_tapName(p_wifi_name)
-        
+        self.wifi_switchOn() 
+                        
+        self.wifi_list_tapName(p_wifi_name)        
         
         if self.wifi_forget():
             self.wifi_list_tapName(p_wifi_name)
