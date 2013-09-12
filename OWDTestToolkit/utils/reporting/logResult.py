@@ -31,8 +31,8 @@ class main(GaiaTestCase):
         # If we have filename details then add them to the message as note lines.
         if p_fnam:
             if len(p_fnam) == 2:
-                p_msg = p_msg + "|current html source = " + p_fnam[0]
-                p_msg = p_msg + "|current screenshot  = " + p_fnam[1]
+                p_msg = p_msg + "|current screenshot  = " + p_fnam[0]
+                p_msg = p_msg + "|current html source = " + p_fnam[1]
             else:
                 p_msg = p_msg + "|" + p_fnam
 
