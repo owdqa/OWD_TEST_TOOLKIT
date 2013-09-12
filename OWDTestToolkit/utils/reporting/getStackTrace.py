@@ -4,7 +4,7 @@ class main(GaiaTestCase):
 
     def getStackTrace(self):
         #
-        # Adds the stack trace to the test report.
+        # Adds the stack trace to the test report (called automatically if UTILS.TEST() fails).
         #
         import traceback
         from inspect import stack
