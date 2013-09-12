@@ -15,6 +15,7 @@ class main(GaiaTestCase):
         if not p_result:
             fnam = self.screenShotOnErr()
             self.logResult(p_result, p_msg, fnam)
+            self.getStackTrace()
 
             if p_stop:
                 self.quitTest()

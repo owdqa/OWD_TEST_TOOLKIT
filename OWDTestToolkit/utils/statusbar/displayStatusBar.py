@@ -12,3 +12,4 @@ class main(GaiaTestCase):
         self.marionette.switch_to_frame()
         self.marionette.execute_script("window.wrappedJSObject.UtilityTray.show()")
         
+        self.TEST(False, "ROY")
