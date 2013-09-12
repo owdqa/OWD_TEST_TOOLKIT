@@ -11,7 +11,7 @@ class main(GaiaTestCase):
         
         _style      = "<span style='color:#7a7a7a'>"
             
-        _logstr     = "<u>(CODE TRACE:)</u>"     
+        _logstr     = "CODE TRACE:"     
         _stack      = traceback.extract_stack()
         _counter    = 0
         
