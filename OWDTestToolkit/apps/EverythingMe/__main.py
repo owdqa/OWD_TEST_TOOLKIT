@@ -4,14 +4,16 @@ import  addAppToHomescreen                 ,\
         addGroup                           ,\
         pickGroup                          ,\
         removeGroup                        ,\
-        searchForApp                       
+        searchForApp                       ,\
+        addMultipleGroups
 
 class EverythingMe (
             addAppToHomescreen.main,
             addGroup.main,
             pickGroup.main,
             removeGroup.main,
-            searchForApp.main):
+            searchForApp.main,
+            addMultipleGroups.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
