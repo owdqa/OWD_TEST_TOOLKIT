@@ -11,6 +11,7 @@ class main(GaiaTestCase):
         else:
             msg = p_msg
 
+        self.logResult("info", " ") #(blank line)
         self.logResult(False, msg)
 
         #

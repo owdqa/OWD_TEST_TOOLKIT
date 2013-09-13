@@ -15,12 +15,12 @@ class main(GaiaTestCase):
         #
         self.logResult("info", "Toggling " + p_type + " mode via statusbar ...")
         orig_iframe = self.currentIframe()
-         
+
         #
         # Open the status bar.
         #
         self.displayStatusBar()
-        
+
         #
         # Toggle (and wait).
         #

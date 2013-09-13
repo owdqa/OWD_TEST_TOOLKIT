@@ -4,14 +4,14 @@ class main(GaiaTestCase):
 
     def getStackTrace(self):
         #
-        # Adds the stack trace to the test report.
+        # Adds the stack trace to the test report (called automatically if UTILS.TEST() fails).
         #
         import traceback
         from inspect import stack
         
-        _style      = "<span style='color:#7a7a7a'>"
-            
-        _logstr     = "CODE TRACE:"     
+        _style      = "<span style='color:#7c7c7c'>"
+        
+        _logstr     = "STACK TRACE (code path to this point):"     
         _stack      = traceback.extract_stack()
         _counter    = 0
         

@@ -10,3 +10,5 @@ class main(GaiaTestCase):
         x.tap()
         
         self.UTILS.waitForElements(DOM.Dialer.call_log_filter, "Call log filter")
+        
+        time.sleep(2)

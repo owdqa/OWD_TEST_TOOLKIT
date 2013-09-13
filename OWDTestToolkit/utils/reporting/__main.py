@@ -2,14 +2,12 @@ from OWDTestToolkit.global_imports import *
 
 import  logResult,\
         logComment,\
-        reportResults,\
-        getStackTrace
+        reportResults
         
 class main ( 
             logResult.main,
             logComment.main,
-            reportResults.main,
-            getStackTrace.main):
+            reportResults.main):
 
     def __init__(self):
         return
