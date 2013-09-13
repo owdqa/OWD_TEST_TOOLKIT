@@ -40,7 +40,7 @@ class main(GaiaTestCase):
 				if i in p_groupArray:
 					_boolDoIt = True
 			else:
-				_boolDotIt = True
+				_boolDoIt = True
 			
 			if _boolDoIt:
 				_tmpnam = _list[i].find_element("tag name", "span").text
