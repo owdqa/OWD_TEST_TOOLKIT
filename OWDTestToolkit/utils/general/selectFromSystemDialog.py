@@ -31,8 +31,7 @@ class main(GaiaTestCase):
         #
         # Find and click OK.
         #
-        ok_btn = ('css selector', 'button.value-option-confirm')
-        close_button = self.getElement(ok_btn, "OK button", True, 30)
+        close_button = self.getElement(DOM.GLOBAL.modal_valueSel_ok, "OK button", True, 30)
         close_button.click()
 
         #

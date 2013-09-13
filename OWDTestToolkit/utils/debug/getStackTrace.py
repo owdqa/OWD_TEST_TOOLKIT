@@ -9,9 +9,9 @@ class main(GaiaTestCase):
         import traceback
         from inspect import stack
         
-        _style      = "<span style='color:#7a7a7a'>"
-            
-        _logstr     = "CODE TRACE:"     
+        _style      = "<span style='color:#7c7c7c'>"
+        
+        _logstr     = "STACK TRACE (code path to this point):"     
         _stack      = traceback.extract_stack()
         _counter    = 0
         

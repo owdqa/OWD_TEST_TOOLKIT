@@ -2,12 +2,14 @@ from OWDTestToolkit.global_imports import *
 
 import  screenShot,\
         screenShotOnErr,\
-        savePageHTML
+        savePageHTML,\
+        getStackTrace
         
 class main ( 
             screenShot.main,
             screenShotOnErr.main,
-            savePageHTML.main):
+            savePageHTML.main,
+            getStackTrace.main):
 
     def __init__(self):
         return
