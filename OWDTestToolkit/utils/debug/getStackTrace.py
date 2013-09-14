@@ -26,5 +26,5 @@ class main(GaiaTestCase):
                                  ("<b>" + os.path.basename(i[0]) + "</b>(%s)" % i[1]).ljust(40),
                                  i[3])
         
-        self.logResult("info", "%s%s</span>" % (_style, _logstr))
+        self.logResult("debug", "%s%s</span>" % (_style, _logstr))
 

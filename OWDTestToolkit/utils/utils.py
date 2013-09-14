@@ -66,7 +66,7 @@ class UTILS(app.main        ,
         _t = time.time() - self.start_time
         _t = round(_t, 0)
         _t = str(datetime.timedelta(seconds=_t))
-        self.logResult("info", "(Initializing 'UTILS' took %s seconds.)" % _t)
+        self.logResult("debug", "(Initializing 'UTILS' took %s seconds.)" % _t)
 
         #
         # The following items used to be set here - I've left them in incase
