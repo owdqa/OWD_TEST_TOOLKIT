@@ -6,7 +6,7 @@ class main(GaiaTestCase):
 		#
 		# Adds multiple groups based on an array of numbers (defaults to all available groups).
 		# <br><br>
-		# For example: addMultipleGroups([0,1,2,3,8,11]).
+		# For example: addMultipleGroups([0,1,2,3,8,11]) ... or just: addMultipleGroups()
 		#
 		x = self.UTILS.getElement(DOM.EME.add_group_button, "'More' icon")
 		x.tap()
@@ -18,7 +18,7 @@ class main(GaiaTestCase):
 		self.marionette.switch_to_frame()
 
 		_list_names = [] #(for checking later)
-		_list	   = self.UTILS.getElements(DOM.GLOBAL.modal_valueSel_list, "Groups list", False)
+		_list	    = self.UTILS.getElements(DOM.GLOBAL.modal_valueSel_list, "Groups list", False)
 			
 		for i in range(0,len(_list)):
 			
