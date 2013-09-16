@@ -15,7 +15,9 @@ class main(GaiaTestCase):
         counter = -1
          
         #
-        # Put the groups into edit mode (sometimes takes a while!).
+        # Put the groups into edit mode.
+        # Sometimes this takes a while to happen, so increase the length
+        # of time you press the icon until it works!
         #
         _boolOK = False
         for i in range(0,5):
