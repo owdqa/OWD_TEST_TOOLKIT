@@ -46,7 +46,7 @@ class main(GaiaTestCase):
         msgArr = p_msg.split("|")
         
         msgMain = msgArr[0]
-        if str(p_result).lower() != "info":
+        if str(p_result).lower() != "info" and str(p_result).lower() != "debug":
             #
             # This is a 'test' item so make it bold.
             #
@@ -55,7 +55,7 @@ class main(GaiaTestCase):
         self._resultArray.append((self._no_time, "info", " "))     # (blank newline)
         self._resultArray.append((timestamp, p_result, msgMain)) # (the main message)
         
-        if not str(p_result) == "info":
+        if str(p_result).lower() != "info" and str(p_result).lower() != "debug":
             if p_result:            
                 self.passed = self.passed + 1
                 return
