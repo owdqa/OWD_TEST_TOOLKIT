@@ -3,7 +3,7 @@ from OWDTestToolkit.global_imports import *
 import  addAppToHomescreen                 ,\
         addGroup                           ,\
         pickGroup                          ,\
-        removeGroup                        ,\
+        removeGroups                       ,\
         searchForApp                       ,\
         addMultipleGroups
 
@@ -11,7 +11,7 @@ class EverythingMe (
             addAppToHomescreen.main,
             addGroup.main,
             pickGroup.main,
-            removeGroup.main,
+            removeGroups.main,
             searchForApp.main,
             addMultipleGroups.main):
     
