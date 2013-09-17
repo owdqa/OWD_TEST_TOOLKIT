@@ -5,6 +5,7 @@ import  addAppToHomescreen                 ,\
         pickGroup                          ,\
         removeGroups                       ,\
         searchForApp                       ,\
+        launchFromGroup                    ,\
         addMultipleGroups
 
 class EverythingMe (
@@ -13,7 +14,8 @@ class EverythingMe (
             pickGroup.main,
             removeGroups.main,
             searchForApp.main,
-            addMultipleGroups.main):
+            addMultipleGroups.main,
+            launchFromGroup.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps

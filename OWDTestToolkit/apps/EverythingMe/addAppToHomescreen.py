@@ -6,7 +6,7 @@ class main(GaiaTestCase):
         #
         # Pick an app from the apps listed in this group.
         #
-        x = self.UTILS.getElements(DOM.EME.apps, "Apps list", True, 30)
+        x = self.UTILS.getElements(DOM.EME.apps_not_installed, "List of apps which aren't installed yet", True, 30)
         for appLink in x:
             if appLink.get_attribute("data-name") == p_name:
                 from marionette import Actions
