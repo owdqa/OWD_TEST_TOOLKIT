@@ -664,6 +664,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>launchFromGroup</td>
+        <td align=left>p_appName</td>
+        <td align=left>Function to launch an app directly from an EME group.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>addAppToHomescreen</td>
         <td align=left>p_name</td>
         <td align=left>Pick an app from the apps listed in this group.</td>
