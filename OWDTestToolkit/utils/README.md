@@ -285,6 +285,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>getStackTrace</td>
+        <td align=left></td>
+        <td align=left>Adds the stack trace to the test report (called automatically if UTILS.TEST() fails).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>screenShot</td>
         <td align=left>p_fileSuffix</td>
         <td align=left>Take a screenshot.</td>

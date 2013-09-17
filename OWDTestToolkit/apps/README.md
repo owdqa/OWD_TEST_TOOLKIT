@@ -636,16 +636,16 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>searchForApp</td>
-        <td align=left>p_name</td>
-        <td align=left>Uses the search field to find the app (waits for the  result to appear etc...).<br>  Returns the element for the icon (or False if it's not found).</td>
+        <td align=center>removeGroups</td>
+        <td align=left>p_groupArray=False<br>p_validate=True</td>
+        <td align=left>Removes groups from the EME group page.<br>  <b>p_groupArray</p> is an array of group names (default = all groups).<br>  <b>p_validate</p> check that the groups were removed (default = True).<br>  <br>  For example: <i> removeGroups(["Games","Local"])</td>
     </tr>
 
 
     <tr>
-        <td align=center>removeGroup</td>
-        <td align=left>p_group</td>
-        <td align=left>Removes a group from the EME group page.</td>
+        <td align=center>searchForApp</td>
+        <td align=left>p_name</td>
+        <td align=left>Uses the search field to find the app (waits for the  result to appear etc...).<br>  Returns the element for the icon (or False if it's not found).</td>
     </tr>
 
 
@@ -667,6 +667,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>addAppToHomescreen</td>
         <td align=left>p_name</td>
         <td align=left>Pick an app from the apps listed in this group.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>addMultipleGroups</td>
+        <td align=left>p_groupArray=False</td>
+        <td align=left>Adds multiple groups based on an array of numbers (defaults to all available groups).  <br><br>  For example: addMultipleGroups([0,1,2,3,8,11]) ... or just: addMultipleGroups()</td>
     </tr>
 
 </table>
