@@ -21,4 +21,4 @@ class main(GaiaTestCase):
 		self.UTILS.waitForNotElements(DOM.EME.launched_activity_bar, "Activity notifier", True, 30)
 
 		x = self.UTILS.screenShotOnErr()
-		self.UTILS.logResult("info", "Screenshot of app running:" % x)
+		self.UTILS.logResult("info", "Screenshot of app running:", x)
