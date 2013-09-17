@@ -16,5 +16,11 @@ search_result_icon_xpath= "//li[@data-name='%s']"
 search_result_area      = ("id", "evmeApps")
 app_installed_banner    = ("id","evmeBanner")
 
-launched_activity_bar   = ("id","wrapper-activity-indicator")   # (in the top level frame)
-launched_button_bar     = ("id", "buttonbar")                   # (in the top level frame)
+launched_activity_bar       = ("id","wrapper-activity-indicator")   # (in the top level frame)
+launched_display_button_bar = ("id", "handler")
+launched_button_bar         = ("xpath", "//menu[@type='buttonbar']")                   # (in the top level frame)
+launched_button_back        = ("id", "back-button")
+launched_button_forward     = ("id", "forward-button")
+launched_button_reload      = ("id", "reload-button")
+launched_button_bookmark    = ("id", "bookmark-button")
+launched_button_close       = ("id", "close-button")

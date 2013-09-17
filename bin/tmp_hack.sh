@@ -4,7 +4,7 @@
 #
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
-export GAIATEST=$OWD_TEST_TOOLKIT_DIR/gaia-ui-tests/gaiatest/gaia_test.py
+export GAIATEST=$OWD_TEST_TOOLKIT_DIR/gaia/tests/python/gaia-ui-tests/gaiatest/gaia_test.py
 awk '
 BEGIN{
 	GAIATEST   = ENVIRON["GAIATEST"]

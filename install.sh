@@ -69,7 +69,7 @@ fi
 #
 # Install gaiatest and marionette.
 #
-[ ! -d ./gaia-ui-tests ] &&	$OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
+$OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
 
 
 
