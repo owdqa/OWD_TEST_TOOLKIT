@@ -16,3 +16,4 @@ datetime_time_xpath  = "//p[@id='landing-clock']//span[@class='numbers' and text
 datetime_ampm_xpath  = "//p[@id='landing-clock']//span[@class='meridiem' and text()='%s']"
 datetime_date_xpath  = "//div[@id='landing-time']//p[@id='landing-date' and text()='%s']"
 
+docked_apps          = ("xpath", "//div[@class='dockWrapper']//li[@class='icon']")
