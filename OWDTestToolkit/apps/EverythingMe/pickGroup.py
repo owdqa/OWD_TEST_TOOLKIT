@@ -19,7 +19,7 @@ class main(GaiaTestCase):
                 # randomly, so I'm adding another chance.
                 boolChk = False
                 try:
-                	self.wait_for_element_present(*DOM.EME.apps, timeout=10)
+                	self.wait_for_element_present(*DOM.EME.apps_not_installed, timeout=10)
             	except:
             		x = self.marionette.find_elements(*DOM.EME.groups)
             		if x[i].is_displayed():
@@ -28,11 +28,13 @@ class main(GaiaTestCase):
         		break
             		
     	try:
-    		self.wait_for_element_displayed(*DOM.EME.apps, timeout=10)
+    		self.wait_for_element_displayed(*DOM.EME.apps_not_installed, timeout=20)
     		self.UTILS.logResult("info", "(Apps for group %s were displayed.)" % p_name)
     		boolOK = True
     	except:
-			self.UTILS.logResult("info", "(<b>NOTE:</b>Apps for group %s were not displayed.)" % p_name)
+			x = self.UTILS.screenShotOnErr()
+			self.UTILS.logResult("info", "(<b>NOTE:</b>Apps for group %s were not displayed.)|%s|%s" % \
+								(p_name,x[0],x[1]))
         
         #
         # At this point the geolocation sometimes wants to know
