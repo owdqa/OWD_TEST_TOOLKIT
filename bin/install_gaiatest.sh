@@ -48,7 +48,8 @@ printf "\n<b>====================================================</b>\n" | tee -
 # Now re-install everything.
 #
 printf "\n* Cloning gaiatest from github - this make take a few minutes, please wait ...\n\n" | tee -a $LOGFILE
-git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>&1
+#git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>&1
+git clone https://github.com/mozilla-b2g/gaia/tree/master/tests/python/gaia-ui-tests >> $LOGFILE 2>&1
 
 
 #

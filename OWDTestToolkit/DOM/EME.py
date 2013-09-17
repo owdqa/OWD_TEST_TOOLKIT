@@ -16,4 +16,5 @@ search_result_icon_xpath= "//li[@data-name='%s']"
 search_result_area      = ("id", "evmeApps")
 app_installed_banner    = ("id","evmeBanner")
 
-launched_button_bar     = ("id", "buttonbar") # (in the top level frame)
+launched_activity_bar   = ("id","wrapper-activity-indicator")   # (in the top level frame)
+launched_button_bar     = ("id", "buttonbar")                   # (in the top level frame)
