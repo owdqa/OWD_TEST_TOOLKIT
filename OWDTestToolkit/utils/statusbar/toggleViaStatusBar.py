@@ -17,11 +17,6 @@ class main(GaiaTestCase):
         orig_iframe = self.currentIframe()
 
         #
-        # Open the status bar.
-        #
-        self.displayStatusBar()
-
-        #
         # Toggle (and wait).
         #
         _wifi       = {"name":"wifi"     , "notif":DOM.Statusbar.wifi     , "toggle":DOM.Statusbar.toggle_wifi}
@@ -50,6 +45,11 @@ class main(GaiaTestCase):
         # Don't call this directly, it's used by toggleViaStatusBar().
         #
         boolWasEnabled = self.isNetworkTypeEnabled(p_type)
+
+        #
+        # Open the status bar.
+        #
+        self.displayStatusBar()
 
         x = self.getElement(p_def["toggle"], "Toggle " + p_def["name"] + " icon")
         x.tap()
