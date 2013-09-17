@@ -64,12 +64,21 @@ class EverythingMe (
         self.UTILS.goHome()
         self.UTILS.typeThis(DOM.EME.search_field, "Search field", "x", p_validate=False, p_enter=False, p_remove_keyboard=False)
 
-        self.UTILS.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
+#         self.UTILS.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
 
         x = self.UTILS.getElement(DOM.EME.search_field, "Search field (to make sure it's clear from earlier launches)")
         x_val = x.get_attribute("value")
 
         for i in range (0,len(x_val)):
             self.parent.keyboard.tap_backspace()
-
-        self.UTILS.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
+        
+        #
+        # For some reason this gives us a significant speed increase (if it works!).
+        #
+        try:
+            self.marionette.switch_to_frame()
+            x = self.marionette.find_element("xpath", "//iframe[contains(@%s,'%s')]" % \
+                                            (DOM.Home.frame_locator[0],DOM.Home.frame_locator[1]))
+            self.marionette.switch_to_frame(x)
+        except:
+            self.UTILS.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)

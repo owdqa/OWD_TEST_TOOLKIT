@@ -65,7 +65,7 @@ class main(GaiaTestCase):
 
             x = self.marionette.find_elements(*_frameDef)
                 
-        self.TEST(boolOK, "<i>(Sucessfully switched to iframe where '%s' contains '%s' in 20s.)</i>" % (p_attrib, p_str), p_quitOnError)
+        self.TEST(boolOK, "<i>(Sucessfully switched to iframe where '%s' contains '%s'.)</i>" % (p_attrib, p_str), p_quitOnError)
         
         
         
