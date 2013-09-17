@@ -20,21 +20,21 @@ printf "\n<b>====================================================</b>\n" | tee -
 printf "\n* Installing the latest gaiatest from github: " | tee -a $LOGFILE
 #git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>&1
 
-cd $OWD_TEST_TOOLKIT_DIR
-if [ ! -d "gaia" ]
+if [ ! -d "$GAIATEST_PATH" ]
 then
     printf "(need to clone all of 'gaia' - this will take about 10-15 minutes ...)\n\n" | tee -a $LOGFILE
+    cd $HOME
 	git clone https://github.com/mozilla-b2g/gaia.git --depth 1 >> $LOGFILE 2>&1
 else
     printf "(refreshing 'gaia' - this will take just a minute or so ...)\n\n" | tee -a $LOGFILE
-    cd gaia
+    cd $GAIATEST_PATH/..
     git fetch origin >> $LOGFILE 2>&1
 fi
 
 #
 # Install gaiatest.
 #
-cd $OWD_TEST_TOOLKIT_DIR/gaia/tests/python/gaia-ui-tests
+cd $GAIATEST_PATH/..
 
 #
 # Switch to correct branch.
