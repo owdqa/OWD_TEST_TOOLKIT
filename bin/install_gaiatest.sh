@@ -25,6 +25,12 @@ then
     printf "(need to clone all of 'gaia' - this will take about 10-15 minutes ...)\n\n" | tee -a $LOGFILE
     cd $HOME
 	git clone https://github.com/mozilla-b2g/gaia.git --depth 1 >> $LOGFILE 2>&1
+
+	printf "\n<b>Switching to branch \"$BRANCH\" of gaiatest ...</b>\n\n" | tee -a $LOGFILE
+	git checkout $BRANCH  2> >( tee -a $LOGFILE)
+
+	# Temporary hack...
+	$OWD_TEST_TOOLKIT_BIN/tmp_hack.sh
 else
     printf "(refreshing 'gaia' - this will take just a minute or so ...)\n\n" | tee -a $LOGFILE
     cd $GAIATEST_PATH/..
@@ -35,16 +41,6 @@ fi
 # Install gaiatest.
 #
 cd $GAIATEST_PATH/..
-
-#
-# Switch to correct branch.
-#
-printf "\n<b>Switching to branch \"$BRANCH\" of gaiatest ...</b>\n\n" | tee -a $LOGFILE
-git checkout $BRANCH  2> >( tee -a $LOGFILE)
-
-# Temporary hack...
-$OWD_TEST_TOOLKIT_BIN/tmp_hack.sh
-
 
 #
 # Install gaiatest and dependencies.
