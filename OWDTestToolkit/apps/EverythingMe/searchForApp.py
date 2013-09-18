@@ -1,5 +1,5 @@
 from OWDTestToolkit.global_imports import *
-	
+    
 class main(GaiaTestCase):
 
     def searchForApp(self, p_name):
@@ -8,25 +8,23 @@ class main(GaiaTestCase):
         # result to appear etc...).<br>
         # Returns the element for the icon (or False if it's not found).
         #
-        self.UTILS.typeThis(DOM.EME.search_field, 
-						  	"Search field", 
-						  	p_name, 
-							p_no_keyboard=True, 
-							p_clear=True, 
-							p_enter=True, 
-							p_validate=True, 
-							p_remove_keyboard=False)
+        x = self.UTILS.getElement(DOM.EME.search_field, "Search field")
+        x.clear()
+        x.send_keys(p_name)
+        x.click()
+        time.sleep(0.5)
         
+        x = self.UTILS.getElements(DOM.EME.search_suggestions, "Search suggestions")
+        boolOK = False
+        for i in x:
+            if i.get_attribute("data-suggestion") == p_name:
+                i.tap()
+                boolOK = True
+                break
         
-        #
-        # Tap the first suggestion.
-        #
-        
-        x = self.UTILS.getElements(DOM.EME.search_suggestions, "Search suggestion list")
-        x[0].tap()
-        
+        self.UTILS.TEST(boolOK, "Found '%s' in suggestions." % p_name)
+                
         boolOK = True
-        
         try:
             self.wait_for_element_displayed("xpath", 
                                             DOM.EME.search_result_icon_xpath % p_name,
