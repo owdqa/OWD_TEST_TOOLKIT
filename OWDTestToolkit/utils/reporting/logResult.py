@@ -16,7 +16,7 @@ class main(GaiaTestCase):
             timestamp = self._no_time 
         elif str(p_result).lower() == "debug":
             timestamp = self._no_time
-            p_msg     = '<span style="color:a0a0a0;font-style:italic">' + p_msg + '</span>'
+            p_msg     = '<span style="color:b0b0b0;font-style:italic"><b>DEBUG NOTE:</b> ' + p_msg + '</span>'
         else:
             #
             # Set up timestamp and mark this as pass or fail.
