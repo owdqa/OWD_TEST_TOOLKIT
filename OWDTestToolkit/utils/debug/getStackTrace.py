@@ -9,8 +9,6 @@ class main(GaiaTestCase):
         import traceback
         from inspect import stack
         
-        _style      = "<span style='color:#7c7c7c'>"
-        
         _logstr     = "STACK TRACE (code path to this point):"     
         _stack      = traceback.extract_stack()
         _counter    = 0
@@ -26,5 +24,5 @@ class main(GaiaTestCase):
                                  ("<b>" + os.path.basename(i[0]) + "</b>(%s)" % i[1]).ljust(40),
                                  i[3])
         
-        self.logResult("debug", "%s%s</span>" % (_style, _logstr))
+        self.logResult("debug", _logstr)
 
