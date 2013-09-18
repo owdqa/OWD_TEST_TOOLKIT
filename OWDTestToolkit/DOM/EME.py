@@ -11,7 +11,7 @@ connection_warning_msg  = ("class name", "connection-message")
 search_field            = ("id", "search-q")
 start_eme_icon          = ("id", "evme-activation-icon")
 # search_suggestions      = ('css selector', '#helper ul li[data-index]')
-search_suggestions      = ("xpath", "//div[@id='helper-header']//span[@class='query']")
+search_suggestions      = ("xpath", "//div[@id='helper-header']//*[@id='helper-rapper']//li")
 search_clear            = ("id", "button-clear")
 searching_spinner       = ("class name", "loading-apps")
 search_result_icon_xpath= "//li[@data-name='%s']"
