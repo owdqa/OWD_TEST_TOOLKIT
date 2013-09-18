@@ -16,7 +16,7 @@ class main(GaiaTestCase):
             timestamp = self._no_time 
         elif str(p_result).lower() == "debug":
             timestamp = self._no_time
-            p_msg     = '<span style="color:b0b0b0;font-style:italic"><b>DEBUG NOTE:</b> ' + p_msg + '</span>'
+            p_msg     = '<span style="color:c5c5c5;font-style:italic"><b>DEBUG NOTE:</b> ' + p_msg
         else:
             #
             # Set up timestamp and mark this as pass or fail.
@@ -29,7 +29,7 @@ class main(GaiaTestCase):
         
             _color = "#ff0000" if not p_result else "#00aa00"
             span_tag = '<span style="color:' + _color + '">'
-            timestamp = span_tag + time_now + "</span>"
+            timestamp = span_tag + time_now
         
         # If we have filename details then add them to the message as note lines.
         if p_fnam:
@@ -38,6 +38,8 @@ class main(GaiaTestCase):
                 p_msg = p_msg + "|current html source = " + p_fnam[1]
             else:
                 p_msg = p_msg + "|" + p_fnam
+                
+        p_msg = p_msg + "</span>"
 
         #
         # The double brackets is intentional (add a 2 part

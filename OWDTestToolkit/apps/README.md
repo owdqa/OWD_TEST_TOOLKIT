@@ -650,6 +650,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>bookmarkApp</td>
+        <td align=left>p_appName</td>
+        <td align=left>'Bookmarks' (installs) an app from EME (assumes everything.me is already running).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>pickGroup</td>
         <td align=left>p_name</td>
         <td align=left>Pick a group from the main icons.</td>
