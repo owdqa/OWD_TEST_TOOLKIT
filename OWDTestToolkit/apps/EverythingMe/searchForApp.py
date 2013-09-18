@@ -15,9 +15,9 @@ class main(GaiaTestCase):
         time.sleep(5)
         
         #
-        # Can take a few seconds to appear, so try a few times.
+        # Can take a few seconds to appear, so try a few times (about 1 min).
         #
-        for _trynum in range(1,6):
+        for _trynum in range(1,10):
             x = self.UTILS.screenShotOnErr()
             self.UTILS.logResult("debug", "Looking for '%s' - attempt %s ..." % (p_name, _trynum), x)
 
@@ -46,7 +46,7 @@ class main(GaiaTestCase):
             if boolOK:
                 break
             
-            time.sleep(3)
+            time.sleep(6)
     
         self.UTILS.TEST(boolOK, "Found '%s' in suggestions." % p_name)
                 
