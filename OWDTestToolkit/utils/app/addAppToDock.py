@@ -36,4 +36,5 @@ class main(GaiaTestCase):
         if _AFTERCOUNT > _BEFORECOUNT:
             return True
         else:
+            self.UTILS.logResult("info", "<b>NOTE:</b> Could not add app to dock as it already contains %s." % _AFTERCOUNT)
             return False
