@@ -3,7 +3,11 @@ from OWDTestToolkit.global_imports import *
 class main(GaiaTestCase):
 
     def addAppToDock(self, p_appName):
-        
+        #
+        # Adds <i>p_appName</i> to the homescreen dock if possible
+        # (if the dock already the maximum number of apps in it a message
+        # will be added to the details log and the function will return False).
+        #
         _appIcon = self.findAppIcon(p_appName)
         
         if not _appIcon:
