@@ -103,6 +103,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>putHomeInEditMode</td>
+        <td align=left></td>
+        <td align=left>Just uses the first icon it comes across to put the homescreen into edit mode.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>findAppIcon</td>
         <td align=left>p_appName</td>
         <td align=left>Scroll around the homescreen until we find our app icon.</td>
@@ -117,9 +124,23 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>moveAppFromDock</td>
+        <td align=left>p_name</td>
+        <td align=left>Moves the app 'p_name' from the dock to the homescreen.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>killApp</td>
         <td align=left>p_name</td>
         <td align=left>Kills the app specified by p_name.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>addAppToDock</td>
+        <td align=left>p_appName</td>
+        <td align=left>Adds <i>p_appName</i> to the homescreen dock if possible  (if the dock already the maximum number of apps in it a message  will be added to the details log and the function will return False).</td>
     </tr>
 
 

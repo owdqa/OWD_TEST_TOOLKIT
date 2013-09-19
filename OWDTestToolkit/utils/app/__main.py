@@ -8,7 +8,8 @@ import  findAppIcon,\
         killApp,\
         switchToApp, \
         _getAppFrame,\
-        addAppToDock
+        addAppToDock,\
+        moveAppFromDock
         
 class main ( 
             findAppIcon.main,
@@ -19,7 +20,8 @@ class main (
             killApp.main,
             switchToApp.main,
             _getAppFrame.main,
-            addAppToDock.main):
+            addAppToDock.main,
+            moveAppFromDock.main):
 
     def __init__(self):
         return
