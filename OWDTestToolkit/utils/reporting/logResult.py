@@ -29,7 +29,7 @@ class main(GaiaTestCase):
         
             _color = "#ff0000" if not p_result else "#00aa00"
             span_tag = '<span style="color:' + _color + '">'
-            timestamp = span_tag + time_now
+            timestamp = span_tag + time_now + "</span>"
         
         # If we have filename details then add them to the message as note lines.
         if p_fnam:
