@@ -24,7 +24,6 @@ class main(GaiaTestCase):
             #
             # For each page of icons ...
             #
-            self.scrollHomescreenRight()
             time.sleep(0.5)
             ICON_POS = ICON_POS + 1
             for i in pagenum.find_elements("xpath", "./ol/li[@class='icon']"):
@@ -34,6 +33,8 @@ class main(GaiaTestCase):
                 if i.get_attribute("aria-label") == p_appName:
                     self.logResult("info", "Icon for %s found on page %s." % (p_appName, ICON_POS))
                     return i
+                    break
+            self.scrollHomescreenRight()
              
         self.logResult("info", "Icon for '%s' not found on the homescreen." % p_appName)
         return False
