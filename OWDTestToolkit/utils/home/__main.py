@@ -4,14 +4,16 @@ import  scrollHomescreenRight,\
         scrollHomescreenLeft,\
         touchHomeButton,\
         holdHomeButton,\
-        goHome
+        goHome,\
+        putHomeInEditMode
         
 class main ( 
             scrollHomescreenRight.main,
             scrollHomescreenLeft.main,
             touchHomeButton.main,
             holdHomeButton.main,
-            goHome.main):
+            goHome.main,
+            putHomeInEditMode.main):
 
     def __init__(self):
         return

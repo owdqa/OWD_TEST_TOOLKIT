@@ -16,24 +16,22 @@ class main(GaiaTestCase):
         self.goHome()
         
         self.scrollHomescreenRight()
-        time.sleep(1)
-        x = self.getElements(DOM.Home.app_icon_pages, "Icon pages on homescreen")
-         
-        ICON_POS = False
-        for pagenum in x:
-            #
-            # For each page of icons ...
-            #
+        time.sleep(0.5)
+        
+        
+        _pages = self.getElements(DOM.Home.app_icon_pages, "Homescreen icon pages")        
+        for i in _pages:
+            try:
+                #
+                # If this works, then the icon is visible at the moment.
+                #
+                x = self.marionette.find_element('css selector', DOM.Home.app_icon_css % p_appName)
+                self.logResult("debug", "icon displayed: %s" % str(x.is_displayed()))
+                if x.is_displayed():
+                    return x
+            except:
+                pass
+            
             self.scrollHomescreenRight()
-            time.sleep(0.5)
-            ICON_POS = ICON_POS + 1
-            for i in pagenum.find_elements("xpath", "./ol/li[@class='icon']"):
-                #
-                # For each icon on this page of icons ...
-                #
-                if i.get_attribute("aria-label") == p_appName:
-                    self.logResult("info", "Icon for %s found on page %s." % (p_appName, ICON_POS))
-                    return i
-             
-        self.logResult("info", "Icon for '%s' not found on the homescreen." % p_appName)
+
         return False

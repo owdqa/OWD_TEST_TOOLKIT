@@ -7,7 +7,9 @@ import  findAppIcon,\
         setPermission,\
         killApp,\
         switchToApp, \
-        _getAppFrame
+        _getAppFrame,\
+        addAppToDock,\
+        moveAppFromDock
         
 class main ( 
             findAppIcon.main,
@@ -17,7 +19,9 @@ class main (
             setPermission.main,
             killApp.main,
             switchToApp.main,
-            _getAppFrame.main):
+            _getAppFrame.main,
+            addAppToDock.main,
+            moveAppFromDock.main):
 
     def __init__(self):
         return
