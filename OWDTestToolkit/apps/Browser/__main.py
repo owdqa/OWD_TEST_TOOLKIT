@@ -4,7 +4,7 @@ import  check_page_loaded                  ,\
         open_url                           ,\
         waitForPageToFinishLoading         ,\
         loadedURL                          ,\
-        trayCounterIs,\
+        trayCounterValue,\
         searchUsingUrlField,\
         addNewTab
 
@@ -13,7 +13,7 @@ class Browser (
             open_url.main,
             waitForPageToFinishLoading.main,
             loadedURL.main,
-            trayCounterIs.main,
+            trayCounterValue.main,
             searchUsingUrlField.main,
             addNewTab.main):
     

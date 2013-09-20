@@ -10,7 +10,7 @@ open_in_new_tab_button  = ("xpath", "//button[contains(text(), 'Open link in new
 new_tab_screen          = ("id", "startscreen")
 
 tab_screen              = ("id", "main-screen")
-tab_back_btn            = ("id", "awesomescreen-cancel-button")
+tab_tray_close_btn      = ("id", "awesomescreen-cancel-button")
 
 tab_tray_counter        = ("id", "tabs-badge")
 tab_tray_open           = ("id", "more-tabs")
