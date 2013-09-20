@@ -4,14 +4,16 @@ import  disableAllNetworkSettings,\
         getNetworkConnection,\
         isNetworkTypeEnabled,\
         waitForNetworkItemEnabled,\
-        waitForNetworkItemDisabled
+        waitForNetworkItemDisabled,\
+        waitForNoNetworkActivity
         
 class main ( 
             disableAllNetworkSettings.main,
             getNetworkConnection.main,
             isNetworkTypeEnabled.main,
             waitForNetworkItemEnabled.main,
-            waitForNetworkItemDisabled.main):
+            waitForNetworkItemDisabled.main,
+            waitForNoNetworkActivity.main):
 
     def __init__(self):
         return
