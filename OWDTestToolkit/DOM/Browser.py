@@ -19,6 +19,9 @@ tab_tray_new_tab_btn    = ("id", "new-tab-button")
 tab_tray_tab_panels     = ("xpath", "//div[@id='tab-panels']//li/a")
 tab_tray_tab_list       = ("xpath", "//div[@id='tabs-list']//li/a")
 tab_tray_tab_list_curr  = ("xpath", "//div[@id='tabs-list']//li[@class='current']/a")
+tab_tray_tab_item_close = ("tag name", "button") # Use these with :
+tab_tray_tab_item_image = ("tag name", "div")    #   x = getElement(...tab_tray_tab_list)[0]
+tab_tray_tab_item_title = ("tag name", "span")   #   y = x.find_element(<these>)
 
 settings_button         = ("id", "settings-button")
 settings_header         = ("xpath", "//header[@id='settings-header']")
