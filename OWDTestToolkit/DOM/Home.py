@@ -15,5 +15,5 @@ datetime_time_xpath  = "//p[@id='landing-clock']//span[@class='numbers' and text
 datetime_ampm_xpath  = "//p[@id='landing-clock']//span[@class='meridiem' and text()='%s']"
 datetime_date_xpath  = "//div[@id='landing-time']//p[@id='landing-date' and text()='%s']"
 
-dock                 = ("xpath", "//*[conatins(@class,'dockWrapper')]")
+dock                 = ("xpath", "//*[contains(@class,'dockWrapper')]")
 docked_apps          = ("xpath", "//div[contains(@class,'dockWrapper')]//li[@class='icon']")

@@ -5,6 +5,7 @@ bluetooth       = ('id', 'statusbar-bluetooth')
 airplane        = ('id', 'statusbar-flight-mode')
 signal          = ("id", "statusbar-signal")
 hotspot         = ("id", "statusbar-tethering")
+network_activity= ("id", "statusbar-network-activity")
 
 clear_all_button= ('id', 'notification-clear')
 toggle_wifi     = ("id", "quick-settings-wifi")

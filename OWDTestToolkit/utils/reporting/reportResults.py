@@ -88,7 +88,7 @@ class main(GaiaTestCase):
                     
                 DET_FILE.write(i[0]) # (Timestamp)
 
-                DET_FILE.write(" " + i[2] + "\n")
+                DET_FILE.write(" " + i[2].encode('ascii', 'ignore') + "\n")
         
         DET_FILE.close()
         SUM_FILE.close()

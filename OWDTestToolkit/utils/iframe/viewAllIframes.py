@@ -47,6 +47,7 @@ class main(GaiaTestCase):
         # Do the same for all iframes in this iframe 
         #
         ignoreme = -1
+        self.checkMarionetteOK()
         x = self.marionette.find_elements("tag name", "iframe")
         
         if len(x) > 0:
