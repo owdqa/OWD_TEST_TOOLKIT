@@ -28,6 +28,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
+        <td align=center>searchUsingUrlField</td>
+        <td align=left>p_searchStr</td>
+        <td align=left>Searches for p_searchStr using the URL field.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>loadedURL</td>
         <td align=left></td>
         <td align=left>Returns the url of the currently loaded web page.</td>
@@ -35,9 +42,23 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>trayCounterIs</td>
+        <td align=left>p_num</td>
+        <td align=left>Compares p_num to the tray counter and returns True or False.  Assumes we are in the main browser iframe.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>check_page_loaded</td>
         <td align=left>p_url</td>
         <td align=left>Check the page didn't have a problem.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>addNewTab</td>
+        <td align=left></td>
+        <td align=left>Adds a new tab (assume we are in the main Browser iframe).</td>
     </tr>
 
 
