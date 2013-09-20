@@ -229,6 +229,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>waitForNoNetworkActivity</td>
+        <td align=left>p_timeout=10</td>
+        <td align=left>Waits for the network activity icon in the status bar to dissappear.<br>  <b>NOTE:</b> Leaves you in the root iframe and returns True or False.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>getNetworkConnection</td>
         <td align=left></td>
         <td align=left>Tries several methods to get ANY network connection  (either wifi or dataConn).</td>

@@ -3,13 +3,19 @@ from OWDTestToolkit.global_imports import *
 import  check_page_loaded                  ,\
         open_url                           ,\
         waitForPageToFinishLoading         ,\
-        loadedURL
+        loadedURL                          ,\
+        trayCounterValue,\
+        searchUsingUrlField,\
+        addNewTab
 
 class Browser (
             check_page_loaded.main,
             open_url.main,
             waitForPageToFinishLoading.main,
-            loadedURL.main):
+            loadedURL.main,
+            trayCounterValue.main,
+            searchUsingUrlField.main,
+            addNewTab.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
