@@ -5,7 +5,8 @@ import  check_page_loaded                  ,\
         waitForPageToFinishLoading         ,\
         loadedURL                          ,\
         trayCounterIs,\
-        searchUsingUrlField
+        searchUsingUrlField,\
+        addNewTab
 
 class Browser (
             check_page_loaded.main,
@@ -13,7 +14,8 @@ class Browser (
             waitForPageToFinishLoading.main,
             loadedURL.main,
             trayCounterIs.main,
-            searchUsingUrlField.main):
+            searchUsingUrlField.main,
+            addNewTab.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
