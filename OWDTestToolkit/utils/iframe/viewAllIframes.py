@@ -27,7 +27,10 @@ class main(GaiaTestCase):
                 
                 if i == self._framepath[-1]:
                     # We're at the target iframe - record its "src" value.
-                    new_src = self.marionette.find_elements("tag name", "iframe")[int(i)].get_attribute("src")
+                    try:
+                        new_src = self.marionette.find_elements("tag name", "iframe")[int(i)].get_attribute("src")
+                    except:
+                        return
                     
                     if new_src != "" and new_src == self._old_src:
                         # This is an endless loop (some iframes seem to do this) - ignore it and move on.

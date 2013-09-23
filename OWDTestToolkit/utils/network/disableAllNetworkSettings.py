@@ -15,7 +15,14 @@ class main(GaiaTestCase):
         self.data_layer.disable_cell_roaming()
 
         if self.device.has_wifi:
-            self.data_layer.enable_wifi()
+            self.checkMarionetteOK()            
+            try:    self.data_layer.enable_wifi()
+            except: self.logResult(False, "Enabled wifi")
+            
+            self.checkMarionetteOK()            
+            try:    self.data_layer.forget_all_networks()
+            except: self.logResult(False, "Forgot all wifi networks")
+                        
             self.checkMarionetteOK()
-            self.data_layer.forget_all_networks()
-            self.data_layer.disable_wifi()
+            try:    self.data_layer.disable_wifi()
+            except: self.logResult(False, "Disabled wifi")
