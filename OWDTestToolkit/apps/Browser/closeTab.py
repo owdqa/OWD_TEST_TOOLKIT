@@ -8,13 +8,7 @@ class main(GaiaTestCase):
         # Assumes we are in the main Browser iframe.
         #
         self.UTILS.logResult("info", "Closing tab %s ..." % p_num)
-        try:
-            # We may already be in the 'tray' ...
-            self.wait_for_element_displayed(*DOM.Browser.tab_tray_screen, timeout=1)
-        except:
-            # Nope!
-            x = self.UTILS.getElement(DOM.Browser.tab_tray_open, "Tab tray open button")
-            x.tap()
+        self.openTabTray()
 
         x = self.UTILS.screenShotOnErr()
         self.UTILS.logResult("info", "Screenshot before removing tab:", x)
@@ -36,10 +30,18 @@ class main(GaiaTestCase):
         # Wait for this tab to go.
         #
         time.sleep(1)
-        x = self.UTILS.getElements(DOM.Browser.tab_tray_tab_list, "Tab list after removal")
-        _after_count = len(x)
+        try:
+            self.wait_for_element_displayed(*DOM.Browser.tab_tray_tab_list)
+            
+            x = self.UTILS.getElements(DOM.Browser.tab_tray_tab_list, "Tab list after removal")
+            _after_count = len(x)
+            self.UTILS.TEST(_after_count < _initial_count, "The tab has been removed.")
+        except:
+            #
+            # If this was the only tab, then we'll be taken away from the tab tray automatically.
+            #
+            pass
 
         x = self.UTILS.screenShotOnErr()
         self.UTILS.logResult("info", "Screenshot after removing tab:", x)
 
-        self.UTILS.TEST(_after_count < _initial_count, "The tab has been removed.")

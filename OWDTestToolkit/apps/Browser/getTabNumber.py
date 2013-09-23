@@ -9,13 +9,7 @@ class main(GaiaTestCase):
         # <br>
         # Assumes we're in the main browser frame.
         #
-        try:
-            # We may already be in the 'tray' ...
-            self.wait_for_element_displayed(*DOM.Browser.tab_tray_screen, timeout=1)
-        except:
-            # Nope!
-            x = self.UTILS.getElement(DOM.Browser.tab_tray_open, "Tab tray open button")
-            x.tap()
+        self.openTabTray()
             
         self.UTILS.waitForElements(DOM.Browser.tab_tray_screen, "Tab screen", True, 2, False)
         

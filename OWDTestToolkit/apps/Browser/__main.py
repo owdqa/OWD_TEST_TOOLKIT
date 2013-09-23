@@ -10,7 +10,8 @@ import  check_page_loaded                  ,\
         openTab,\
         getTabNumber,\
         getTabTitle,\
-        closeTab
+        closeTab,\
+        openTabTray
 
 class Browser (
             check_page_loaded.main,
@@ -23,7 +24,8 @@ class Browser (
             openTab.main,
             getTabNumber.main,
             getTabTitle.main,
-            closeTab.main):
+            closeTab.main,
+            openTabTray.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps

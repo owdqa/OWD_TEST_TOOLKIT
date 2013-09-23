@@ -28,6 +28,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
+        <td align=center>closeTab</td>
+        <td align=left>p_num</td>
+        <td align=left>Closes the browser tab p_num (starting at '1').  Assumes we are in the main Browser iframe.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>searchUsingUrlField</td>
         <td align=left>p_searchStr</td>
         <td align=left>Searches for p_searchStr using the URL field.</td>
@@ -42,9 +49,30 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>getTabNumber</td>
+        <td align=left>p_titleContains</td>
+        <td align=left>Returns the number of the browser tab with a title that contains  p_titleContains, or False if it's not found.  <br>  Assumes we're in the main browser frame.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>trayCounterValue</td>
         <td align=left></td>
         <td align=left>Returns the tray counter value (filtering weird characters out).  Assumes we are in the main browser iframe.<br>  <b>NOTE: </b> The value returned from this is a <i>string</i>, not an <i>int</i>.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>openTab</td>
+        <td align=left>p_num</td>
+        <td align=left>Tries to open the tab p_num (starting at 1).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getTabTitle</td>
+        <td align=left>p_num</td>
+        <td align=left>Returns the title of tab p_num (assume we are in the main browser frame).</td>
     </tr>
 
 
