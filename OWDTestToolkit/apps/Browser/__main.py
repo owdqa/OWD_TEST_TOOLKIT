@@ -6,7 +6,11 @@ import  check_page_loaded                  ,\
         loadedURL                          ,\
         trayCounterValue,\
         searchUsingUrlField,\
-        addNewTab
+        addNewTab,\
+        openTab,\
+        getTabNumber,\
+        getTabTitle,\
+        closeTab
 
 class Browser (
             check_page_loaded.main,
@@ -15,7 +19,11 @@ class Browser (
             loadedURL.main,
             trayCounterValue.main,
             searchUsingUrlField.main,
-            addNewTab.main):
+            addNewTab.main,
+            openTab.main,
+            getTabNumber.main,
+            getTabTitle.main,
+            closeTab.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
