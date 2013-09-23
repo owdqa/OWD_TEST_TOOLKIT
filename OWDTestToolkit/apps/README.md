@@ -42,9 +42,9 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>trayCounterIs</td>
-        <td align=left>p_num</td>
-        <td align=left>Compares p_num to the tray counter and returns True or False.  Assumes we are in the main browser iframe.</td>
+        <td align=center>trayCounterValue</td>
+        <td align=left></td>
+        <td align=left>Returns the tray counter value (filtering weird characters out).  Assumes we are in the main browser iframe.<br>  <b>NOTE: </b> The value returned from this is a <i>string</i>, not an <i>int</i>.</td>
     </tr>
 
 
