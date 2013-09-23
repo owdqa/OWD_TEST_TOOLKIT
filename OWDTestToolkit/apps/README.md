@@ -103,6 +103,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=left>Waits for the current url to finish loading.</td>
     </tr>
 
+
+    <tr>
+        <td align=center>openTabTray</td>
+        <td align=left></td>
+        <td align=left>Opens the tab tray (can be one of several methods).</td>
+    </tr>
+
 </table>
 #Calculator
 <table>
