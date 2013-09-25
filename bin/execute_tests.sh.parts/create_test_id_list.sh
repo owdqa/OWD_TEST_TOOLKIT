@@ -13,13 +13,8 @@ do
         TESTS="$TESTS $user_story"
         continue
     else
-#        x=$($OWD_TEST_TOOLKIT_BIN/get_jira_user_story_test_cases.sh $user_story)
         x=$($OWD_TEST_TOOLKIT_BIN/get_test_cases.sh $user_story)
-        if [ "$x" ]
-        then
-            # This matched a parent code for jira, so add these children to the test list.
-            TESTS="$TESTS $x"
-        fi
+        [ "$x" ] && TESTS="$TESTS $x"
    fi
 done    
 
