@@ -13,6 +13,7 @@ a:active  {color:#0000ff;text-decoration:none;}
 .fail     { background-color: #ffaaaa; color:#660000; }
 .neutral  { background-color: #ffffaa; color:#222222; }
 .black    { color: black;       }
+.nodesc   { color:#777777;font-style:italic; }
 
 /* High-level settings. */
 body{  background-color:#ffffff;}

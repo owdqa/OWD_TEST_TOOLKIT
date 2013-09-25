@@ -19,8 +19,7 @@ then
                 </tr>"
 else
     #
-    # This test was not executed, so just report the Jira link and
-    # test description.
+    # This test was not executed, so just report the test description.
     #
     echo " 
                     <th class=\"sum_table_header center\">Test ID</th>
