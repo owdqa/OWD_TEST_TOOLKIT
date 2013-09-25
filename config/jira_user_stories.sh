@@ -1,4 +1,6 @@
 #
+# (For Telefonica only)
+#
 # These 'types' and ids need to match the Jira User Story id's
 # (the ones that contain a list of 'is tested by' test cases).
 #

@@ -22,13 +22,6 @@ fi
 #
 HTML_WEBDIR="http://owd-qa-server/owd_tests/$RUN_ID"
 
-
-#
-# Get the Jira test cases baseurl form here so we ca nlink to 
-# them from our page ....
-#
-. $OWD_TEST_TOOLKIT_CONFIG/jira_user_stories.sh
-
 #
 # Functions for this script.
 #

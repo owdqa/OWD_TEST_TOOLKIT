@@ -17,9 +17,10 @@ test_desc=$(egrep "^$TEST_NUM\|" $owd_test_cases_DIR/Docs/test_descriptions | aw
 if [ ! "$test_desc" ]
 then
     #
-    # Try getting it from Jira using the test cases script.
+    # Get test description.
     #
-    test_desc=$($owd_test_cases_DIR/bin/get_test_description.sh $TEST_NUM)
+    test_desc=$(egrep "^$TEST_NUM|" $owd_test_cases_DIR/Docs/test_descriptions | awk 'BEGIN{FS="|"}{print "$NF"}')
+    [ "$test_desc" ] && test_desc="(no description found in Docs/test_descriptions)"
 fi
 
 export test_desc="$test_blocked$test_desc"
