@@ -42,6 +42,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>getAwesomeList</td>
+        <td align=left>p_tabName</td>
+        <td align=left>Retrns a list of elements from the awesomescreen tabs  (<b>p_tabName</b> must be one of: "top sites", "bookmarks", "history").  Theses elements have some handy attributes:<br>  <br>  href: containing the url (may have 'extra' info in it, so use 'x in y').<br>  .find_element("tag name","h5"): contains the title of this page.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>loadedURL</td>
         <td align=left></td>
         <td align=left>Returns the url of the currently loaded web page.</td>
