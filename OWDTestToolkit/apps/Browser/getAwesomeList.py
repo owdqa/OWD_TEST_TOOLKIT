@@ -40,7 +40,7 @@ class main(GaiaTestCase):
             self.wait_for_element_displayed(*_details[_tab]["links"], timeout=2)
             x = self.UTILS.getElements(_details[_tab]["links"], "%s links" % p_tabName)
         except:
-            self.UTILS.logResult("info", "No list items found for <b>%s</b> tab." % p_tabName)
+            self.UTILS.logResult("info", "<i>(No list items found for <b>%s</b> tab.)</i>" % p_tabName)
             x = ""
             
         return x
