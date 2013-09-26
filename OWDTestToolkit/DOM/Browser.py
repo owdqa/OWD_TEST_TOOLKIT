@@ -4,13 +4,21 @@ url_input               = ('id', 'url-input')
 url_go_button           = ('id', 'url-button')
 throbber                = ("xpath", "//*[@id='throbber' and @class='loading']")
 
+
+awesome_cancel_btn      = ("id", "awesomescreen-cancel-button")
+awesome_top_sites_tab   = ("id", "top-sites-tab")
+awesome_bookmarks_tab   = ("id", "bookmarks-tab")
+awesome_history_tab     = ("id", "history-tab")
+awesome_top_sites_links = ("xpath", "//*[@id='top-sites']//li/a")
+awesome_bookmarks_links = ("xpath", "//*[@id='bookmarks']//li/a")
+awesome_history_links   = ("xpath", "//*[@id='history']//li/a")
+
 search_result_links     = ("xpath", "//div[@id='search']//a")
 
 open_in_new_tab_button  = ("xpath", "//button[contains(text(), 'Open link in new tab')]")
 new_tab_screen          = ("id", "startscreen")
 
 tab_screen              = ("id", "main-screen")
-tab_tray_close_btn      = ("id", "awesomescreen-cancel-button") # Not visible!!!
 
 tab_tray_counter        = ("id", "tabs-badge")
 tab_tray_open           = ("id", "more-tabs")

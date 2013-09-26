@@ -11,7 +11,8 @@ import  check_page_loaded                  ,\
         getTabNumber,\
         getTabTitle,\
         closeTab,\
-        openTabTray
+        openTabTray,\
+        getAwesomeList
 
 class Browser (
             check_page_loaded.main,
@@ -25,7 +26,8 @@ class Browser (
             getTabNumber.main,
             getTabTitle.main,
             closeTab.main,
-            openTabTray.main):
+            openTabTray.main,
+            getAwesomeList.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
