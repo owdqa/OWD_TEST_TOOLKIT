@@ -4,6 +4,7 @@ url_input               = ('id', 'url-input')
 url_go_button           = ('id', 'url-button')
 throbber                = ("xpath", "//*[@id='throbber' and @class='loading']")
 
+browser_iframe_xpath    = ("xpath", "//iframe[@class='browser-tab']")
 
 awesome_cancel_btn      = ("id", "awesomescreen-cancel-button")
 awesome_top_sites_tab   = ("id", "top-sites-tab")
