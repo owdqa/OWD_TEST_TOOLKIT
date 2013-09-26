@@ -6,6 +6,7 @@ class main(GaiaTestCase):
         #
         # Open url.
         #
+        self.UTILS.switchToFrame(*DOM.Browser.frame_locator)
         x=self.UTILS.getElement(DOM.Browser.url_input, "Url input field")
         self.UTILS.logComment("Using URL " + p_url)
         x.clear()
