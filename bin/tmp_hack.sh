@@ -13,8 +13,6 @@ BEGIN{
 	GAIATEST   = ENVIRON["GAIATEST"]
 	IN_CLEANUP = 0
 	IN_WIFI    = 0
-	IN_SLEEP1  = 0
-	IN_SLEEP2  = 0
 	while ( getline < GAIATEST ){
 		#
 		# We have problems just now with the cleanUp() method of gaia_test.py sometimes, 
@@ -47,31 +45,23 @@ BEGIN{
         }
         
         #
-        # Work around for IccHelper problem - STEP 1
+        # Work around for IccHelper problem - sleep for 10s before any async js call.
         #
-        if ( $0 ~ /def start_b2g/ ){
-            IN_SLEEP1 = 1
-        }
-        if ( $0 ~ /def launch/ ){
-            IN_SLEEP2 = 1
+        if ( $0 ~ /self.marionette.execute_async_script/ ){
+        	x = match($0, /[^ ]/) - 1
+        	while (x > 0){
+        		printf " "
+        		x = x - 1
+        	}
+        	print "time.sleep(10)"
         }
         
         #
-        # (Always leave this line in or you'll get a blank file!)
+        # (Always leave this line in or you will get a blank file!)
         #
   		print $0
   		
-        #
-        # Work around for IccHelper problem - STEP 2
-        #
-  		if ( IN_SLEEP1 == 1 && $0 ~ / if self.is_android_build/ ){
-  			print "            time.sleep(10)"
-  			IN_SLEEP1 = 0
-  		}
-        if ( IN_SLEEP2 == 1 && $0 ~ /self.marionette.switch_to_frame/ ){
-            print "        time.sleep(10)"
-            IN_SLEEP2 = 0
-        }
+
 		
 	}
 }' > /tmp/gaiatest.tmp
