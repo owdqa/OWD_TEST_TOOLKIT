@@ -13,6 +13,8 @@ BEGIN{
 	GAIATEST   = ENVIRON["GAIATEST"]
 	IN_CLEANUP = 0
 	IN_WIFI    = 0
+	IN_SLEEP1  = 0
+	IN_SLEEP2  = 0
 	while ( getline < GAIATEST ){
 		#
 		# We have problems just now with the cleanUp() method of gaia_test.py sometimes, 
@@ -37,14 +39,33 @@ BEGIN{
             IN_CLEANUP = 0
 		}
 		
-		#
-		# We don not need the timezone to be reset to USA.
-		#
-		if ( IN_CLEANUP == 1 && $0 ~ /self.data_layer.set_setting/ && $0 ~ /timezone/ ){
-			$0 = "#" $0
-		}
-		
-		print $0
+        #
+        # We do not need the timezone to be reset to USA.
+        #
+        if ( IN_CLEANUP == 1 && $0 ~ /self.data_layer.set_setting/ && $0 ~ /timezone/ ){
+            $0 = "#" $0
+        }
+        
+        #
+        # This is to work around a problem caused by the js returning an exception.
+        #
+        if ( $0 ~ /def start_b2g/ ){
+            IN_SLEEP1 = 1
+        }
+        if ( $0 ~ /def launch/ ){
+            IN_SLEEP2 = 1
+        }
+        
+  		print $0
+  		
+  		if ( IN_SLEEP1 == 1 && $0 ~ / if self.is_android_build/ ){
+  			print "            time.sleep(10)"
+  			IN_SLEEP1 = 0
+  		}
+        if ( IN_SLEEP2 == 1 && $0 ~ /self.marionette.switch_to_frame/ ){
+            print "        time.sleep(10)"
+            IN_SLEEP2 = 0
+        }
 		
 	}
 }' > /tmp/gaiatest.tmp
