@@ -47,7 +47,7 @@ BEGIN{
         }
         
         #
-        # This is to work around a problem caused by the js returning an exception.
+        # Work around for IccHelper problem - STEP 1
         #
         if ( $0 ~ /def start_b2g/ ){
             IN_SLEEP1 = 1
@@ -56,8 +56,14 @@ BEGIN{
             IN_SLEEP2 = 1
         }
         
+        #
+        # (Always leave this line in or you'll get a blank file!)
+        #
   		print $0
   		
+        #
+        # Work around for IccHelper problem - STEP 2
+        #
   		if ( IN_SLEEP1 == 1 && $0 ~ / if self.is_android_build/ ){
   			print "            time.sleep(10)"
   			IN_SLEEP1 = 0
