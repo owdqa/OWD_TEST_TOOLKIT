@@ -27,7 +27,7 @@ class main(GaiaTestCase):
             return False
         
         self.UTILS.logResult("info", "Examining the list of sites for the <b>%s</b> tab ..." % p_tabName)
-        
+        rc
         self.UTILS.switchToFrame(*DOM.Browser.frame_locator)
         x = self.UTILS.getElement(DOM.Browser.url_input, "Search input field")
         x.tap()
