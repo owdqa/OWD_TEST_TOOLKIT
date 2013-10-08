@@ -17,7 +17,7 @@ EOF
 # Log file for 'everything'.
 export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%H%M%Y%m%d).log"}
 
-export BRANCH=${1:-"v1-train"}
+export BRANCH=${1:-"1.2"}
 [ "$BRANCH" = "1.0.1" ] && export BRANCH="v1.0.1"
 
 
