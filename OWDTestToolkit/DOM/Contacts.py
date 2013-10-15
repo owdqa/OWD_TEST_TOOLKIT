@@ -4,6 +4,8 @@ view_all_header        = ('xpath', GLOBAL.app_head_specific % 'Contacts')
 view_all_contact_xpath = '//*[@data-order="%s"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-order,'%s')]"
+view_all_contact_JS    = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
+view_all_contact_JSname= ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li/p/strong")
 
 view_details_title     = ('id', 'contact-name-title')
 view_contact_image     = ("id", "cover-img")
@@ -21,6 +23,7 @@ search_cancel_btn      = ('id', 'cancel-search')
 search_no_contacts_found = ("id", "no-result")
 favourites_section     = ("id", "contacts-list-favorites")
 favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//p[@data-order='%s']"
+favourite_JS           = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 
 social_network_contacts= ('class name', "icon-social icon-fb notorg")
 settings_button        = ('id', 'settings-button')
@@ -48,7 +51,7 @@ confirm_delete_btn     = ('xpath', '//*[@id="confirmation-message"]//button[text
 done_button            = ('id', 'save-button')
 
 add_photo              = ("id", "thumbnail-photo")
-photo_from_gallery     = ("link text", "Gallery")
+photo_from_gallery     = ("xpath", "/html/body/div/form[9]/menu/button")
 cancel_photo_source    = ("xpath", '//button[@data-action="cancel"]')
 picture_thumbnails     = ("xpath", "//*[@id='thumbnails']/li")
 picture_crop_done_btn  = ("id", "crop-done-button")
