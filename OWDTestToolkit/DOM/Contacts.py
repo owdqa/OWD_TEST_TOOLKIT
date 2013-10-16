@@ -6,6 +6,9 @@ view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-order,'%s')]"
 view_all_contact_JS    = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 view_all_contact_JSname= ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li/p/strong")
+view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
+view_all_contact_import= ("xpath", "/html/body/section/article/div[2]/div/section/section[2]/ol/li")
+view_all_contact_import2= ("xpath", "/html/body/section/article/div[2]/div/section/section[2]/ol/li[2]")
 
 view_details_title     = ('id', 'contact-name-title')
 view_contact_image     = ("id", "cover-img")
@@ -90,6 +93,8 @@ import_import_btn   = ("id", "import-action")
 import_conts_list   = ("xpath", "//*[@id='groups-list']//li[@class='block-item']")
 import_search_list  = ("xpath", "//*[@id='search-list']//li[@class='block-item']")
 import_conts_xp     = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
+
+import_contacts     = ("xpath", "/html/body/article/section/article/section/ul[2]/li/button")
 
 gmail_button            = ("xpath", "//button[text()='Gmail']")
 gmail_frame             = ("data-url", "google")
