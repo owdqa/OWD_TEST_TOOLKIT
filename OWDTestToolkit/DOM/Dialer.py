@@ -24,7 +24,7 @@ suggestion_item         = ("class name", "suggestion-item")
 suggestion_list         = ("xpath", "//ul[@id='suggestion-list']/li")
 suggestion_list_cancel  = ("id", "suggestion-overlay-cancel")
 
-outgoing_call_locator  = ('css selector', 'div.direction.outgoing')
+outgoing_call_locator  = ("xpath", "/html/body/article/article/section[3]/div[7]/div")
 outgoing_call_number   = ("xpath", "//*[contains(@class,'number font-light')]") #Note: maybe + prefix.
 outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '%s')]" #Note: maybe + prefix.
 hangup_bar_locator     = ('id', 'callbar-hang-up-action')
