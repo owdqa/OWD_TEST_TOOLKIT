@@ -49,6 +49,10 @@ class main(GaiaTestCase):
 			btn.tap()
         except:
         	pass
+
+        time.sleep(1)
+        x = self.UTILS.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
+        x.tap()
         
         #
         # Click the 'continue to mail' button.
@@ -59,7 +63,7 @@ class main(GaiaTestCase):
         
         self.UTILS.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
         
-        self.UTILS.waitForElements(("xpath", "//h1[text()='Inbox']"), "Inbox")
+        self.UTILS.waitForElements(("xpath", "/html/body/div/div/div/div/div/a[7]/span"), "Inbox")
         time.sleep(2)
         
     

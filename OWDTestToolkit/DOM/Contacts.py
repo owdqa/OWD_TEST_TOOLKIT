@@ -6,6 +6,7 @@ view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-order,'%s')]"
 view_all_contact_JS    = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 view_all_contact_JSname= ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li/p/strong")
+view_all_contact_HM    = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 view_all_contact_import= ("xpath", "/html/body/section/article/div[2]/div/section/section[2]/ol/li")
 view_all_contact_import2= ("xpath", "/html/body/section/article/div[2]/div/section/section[2]/ol/li[2]")

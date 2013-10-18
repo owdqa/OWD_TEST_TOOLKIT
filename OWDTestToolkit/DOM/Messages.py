@@ -16,7 +16,7 @@ target_numbers_empty   = ("xpath", "//*[@id='messages-recipients-list']/span[@da
 target_numbers         = ("xpath", "//*[@id='messages-recipients-list']/span")
 add_contact_button     = ("id", "messages-contact-pick-button")
 cancel_add_contact     = ("id", "cancel_activity")
-contact_no_phones_msg  = ("xpath", "//form[@id='confirmation-message']//p[text()='No phones']")
+contact_no_phones_msg  = ("xpath", "//form[@id='confirmation-message']//p[text()='This contact does not have a phone number']")
 contact_no_phones_ok   = ("xpath", "//form[@id='confirmation-message']//button[text()='OK']")
 
 input_message_area     = ('id', 'messages-input')

@@ -18,7 +18,7 @@ class main(GaiaTestCase):
 							(x.text, p_address))
         if x.text == p_address:
 			self.UTILS.logResult("info", "Already in the account we want - switch back to inbox.")
-			self.goto_folder_from_list("Inbox")
+			self.goto_folder_from_list("Sent Mail")
 			return True
 		
         self.UTILS.logResult("info", "Need to switch from account '%s' to account '%s' ..." % \
@@ -46,7 +46,7 @@ class main(GaiaTestCase):
 	                if i.text == p_address:
 	                    i.tap()
 	                    
-	                    self.goto_folder_from_list("Inbox")
+	                    self.goto_folder_from_list("Sent Mail")
 	                    return True
         except:
         	pass
