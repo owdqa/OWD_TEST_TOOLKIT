@@ -7,6 +7,7 @@ option_bar_keypad      = ("id", "option-keypad")
 
 keypad                 = ("id", "keypad")
 dialler_button_xpath   = "//section[@id='keypad']//div[contains(@class,'keypad-key') and @data-value='%s']"
+dialer_button_1        = ("xpath", "/html/body/section/article[3]/div/article/section/div/div")
 phone_number_area      = ("id", "fake-phone-number-view")
 phone_number           = ('id', 'phone-number-view') # Beware: this number may have a country code prefix on it.
 
