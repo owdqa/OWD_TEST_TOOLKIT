@@ -16,6 +16,7 @@ import  cellular_and_data                  ,\
         disable_hotSpot                    ,\
         goBack                             ,\
         wifi_list_tapName                  ,\
+        first_time_use                     ,\
         wifi_forget
 
 class Settings (
@@ -35,6 +36,7 @@ class Settings (
             disable_hotSpot.main,
             goBack.main,
             wifi_list_tapName.main,
+            first_time_use.main,
             wifi_forget.main):
     
     def __init__(self, p_parent):
