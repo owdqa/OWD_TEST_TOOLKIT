@@ -27,7 +27,7 @@ class main(GaiaTestCase):
         time.sleep(2) # give the header time to change.
         num_recs = len(p_nums)
         search_str = " recipient" if num_recs == 1 else " recipients"
-        self.UTILS.headerCheck(str(num_recs) + search_str)
+        #self.UTILS.headerCheck(str(num_recs) + search_str)
 		
         #
         # Send the message.

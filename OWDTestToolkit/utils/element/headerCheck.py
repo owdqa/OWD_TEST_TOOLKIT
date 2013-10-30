@@ -12,6 +12,7 @@ class main(GaiaTestCase):
             self.wait_for_element_present(*DOM.GLOBAL.app_head, timeout=1)
             headerNames = self.marionette.find_elements(*DOM.GLOBAL.app_head)
             for i in headerNames:
+                self.UTILS.logResult("Header: " + i.text)
                 if i.text == p_str:
                     if i.is_displayed():
                         boolOK = True
@@ -21,4 +22,3 @@ class main(GaiaTestCase):
                 
         self.TEST(boolOK, "Header is \"" + p_str + "\".")
         return boolOK
-        
