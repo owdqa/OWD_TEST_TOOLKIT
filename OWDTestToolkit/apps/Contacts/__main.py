@@ -33,7 +33,8 @@ import  countEmailAddressesWhileEditing , \
         import_toggleSelectContact      , \
         import_ImportAll                , \
         import_GmailLogin               , \
-        import_HotmailLogin             
+        import_HotmailLogin             , \
+        import_MemoryCard
 
 
 class Contacts(  countEmailAddressesWhileEditing.main,
@@ -69,7 +70,8 @@ class Contacts(  countEmailAddressesWhileEditing.main,
                     import_toggleSelectContact.main,
                     import_ImportAll.main,
                     import_GmailLogin.main,
-                    import_HotmailLogin.main):
+                    import_HotmailLogin.main,
+                    import_MemoryCard.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
