@@ -67,7 +67,7 @@ class main(GaiaTestCase):
             self.waitForDeviceTimeToBe(p_year,
                                        p_month,
                                        p_day,
-                                       p_hour - 8,
+                                       p_hour - 9,
                                        p_minute)
 
 #         self.waitForDisplayedTimeToBe(_dateTime)

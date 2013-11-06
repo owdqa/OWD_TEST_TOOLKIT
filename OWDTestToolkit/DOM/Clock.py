@@ -1,7 +1,7 @@
 frame_locator           = ('src', 'clock')
 
-analog_face             = ("id", "analog-clock-svg")
-digital_face            = ("id", "digital-clock-display")
+analog_face             = ("xpath", "//*[@id='analog-clock-face']")
+digital_face            = ("xpath", "//*[@id='digital-clock-face']")
 new_alarm_btn           = ('id', 'alarm-new')
 
 time_button             = ('id', "time-menu")
