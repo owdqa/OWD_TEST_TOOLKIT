@@ -21,13 +21,6 @@ class main(GaiaTestCase):
                                            "keypad symbol '+'")
                 self.actions=Actions(self.marionette)
                 self.actions.long_press(x,2).perform()
-            elif i=="1":
-                self.marionette.execute_script("""
-                var getElementByXpath = function (path) {
-                    return document.evaluate(path, document, null, 9, null).singleNodeValue;
-                };
-                getElementByXpath("/html/body/section/article[3]/div/article/section/div/div").click();
-                """)
             else:
                 x = self.UTILS.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % i),
                                            "keypad number %s" % i)
