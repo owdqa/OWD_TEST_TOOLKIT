@@ -34,6 +34,3 @@ class main(GaiaTestCase):
         self.UTILS.checkMarionetteOK()
         self.launch()
         self.openCallLog()
-
-
-        
