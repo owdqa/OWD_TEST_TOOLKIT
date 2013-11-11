@@ -74,6 +74,5 @@ class main(GaiaTestCase):
 
             n += 1
 
-        for i in p_nums:
-            self.checkIsInToField(i)
-        
+        # for i in p_nums:
+        #     self.checkIsInToField(i)
