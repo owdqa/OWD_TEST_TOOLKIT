@@ -31,7 +31,8 @@ view_events_locat        = "//*[@class='location' and text()='%s']"
 
 
 mview_container             = ("id", "month-view")
-mview_selected_day_title    = ("id", "selected-day-title")
+mview_selected_day_title    = ('class name', "present selected")
+mview_selected_day_title_future = ('class name', "future selected")
 mview_first_row_for_flick   = ("xpath", "//section[@id='month-view']/section[contains(@class,'active')]/ol[@role='row'][1]//li")
 
 
