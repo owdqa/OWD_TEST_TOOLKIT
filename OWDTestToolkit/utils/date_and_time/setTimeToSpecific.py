@@ -35,14 +35,11 @@ class main(GaiaTestCase):
         #
         _now_epoch_secs=time.time()
         _now = self.getDateTimeFromEpochSecs(_now_epoch_secs)
-        hourNotSet = False
 
         if p_year   == "NOW": p_year    = _now.year
         if p_month  == "NOW": p_month   = _now.mon
         if p_day    == "NOW": p_day     = _now.mday
-        if p_hour   == "NOW":
-            p_hour    = _now.hour
-            hourNotSet   = True
+        if p_hour   == "NOW": p_hour    = _now.hour
         if p_minute == "NOW": p_minute  = _now.min
         
         _dateTime = time.strptime("%s/%s/%s %s:%s" % \
@@ -56,20 +53,13 @@ class main(GaiaTestCase):
         _seconds_since_epoch = self.getEpochSecsFromDateTime(_dateTime)
                 
         self.data_layer.set_time(_seconds_since_epoch * 1000)
-        
-        if hourNotSet:
-            self.waitForDeviceTimeToBe(p_year,
+
+        self.waitForDeviceTimeToBe(p_year,
                                        p_month,
                                        p_day,
                                        p_hour,
                                        p_minute)
-        else:
-            self.waitForDeviceTimeToBe(p_year,
-                                       p_month,
-                                       p_day,
-                                       p_hour - 9,
-                                       p_minute)
 
-#         self.waitForDisplayedTimeToBe(_dateTime)
+        #self.waitForDisplayedTimeToBe(_dateTime)
 
         return _dateTime
