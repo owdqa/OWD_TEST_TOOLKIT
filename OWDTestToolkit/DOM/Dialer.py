@@ -48,3 +48,5 @@ call_log_numtap_cancel          = ("id", "cancel-action-menu")
 
 call_log_contact_name_iframe    = ("id", "iframe-contacts")
 call_log_number_cont_highlight  = "//button[contains(@id, 'call-or-pick') and @class='activity icon icon-call remark' and contains(@data-tel, '%s')]"
+
+call_busy_button_ok    = ("xpath", "/html/body/form[3]/menu/button")
