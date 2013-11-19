@@ -4,12 +4,6 @@ class main(GaiaTestCase):
 
     def callLog_call(self, p_num):
         #
-        # Get the current number.
-        #
-        x = self.UTILS.getElement(DOM.Dialer.phone_number, "Phone number field", False)
-        dialer_num = x.get_attribute("value")
-
-        #
         # Get own number.
         #
         own_num = self.UTILS.get_os_variable("GLOBAL_TARGET_SMS_NUM")
@@ -28,10 +22,10 @@ class main(GaiaTestCase):
 
         x = self.UTILS.getElement( DOM.Dialer.call_log_numtap_call, "Call button")
         x.tap()
-        if own_num == dialer_num:
+        if own_num == p_num:
             time.sleep(2)
             #self.marionette.switch_to_frame()
-            x = self.UTILS.getElement(DOM.Dialer.call_busy_button_ok, "OK button")
+            x = self.UTILS.getElement(DOM.Dialer.call_busy_button_ok, "OK button (callLog_call)")
             x.tap()
         else:
             time.sleep(1)

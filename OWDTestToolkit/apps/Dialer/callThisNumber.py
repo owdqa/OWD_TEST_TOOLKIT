@@ -23,7 +23,7 @@ class main(GaiaTestCase):
         if own_num == dialer_num:
             time.sleep(2)
             #self.marionette.switch_to_frame()
-            x = self.UTILS.getElement(DOM.Dialer.call_busy_button_ok, "OK button")
+            x = self.UTILS.getElement(DOM.Dialer.call_busy_button_ok, "OK button (callThisNumber)")
             x.tap()
         else:
             self.UTILS.checkMarionetteOK()
