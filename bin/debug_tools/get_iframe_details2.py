@@ -87,8 +87,9 @@ class current_frame():
             # Switch to this frame.
             #
             self.marionette.switch_to_frame(fnum)
-                   
-            self.record_frame()
+
+            if appname != "keyboard":
+                self.record_frame()
          
             self.marionette.switch_to_frame()
 
@@ -98,11 +99,11 @@ class current_frame():
         # Take the screenshot and save it to the file.
         #
         print "    |_ screenshot saved to     : " + self.filename_screenshot
-        screenshot = self.marionette.screenshot()[22:]
-        #with open(self.filename_screenshot, 'w') as f:
-        #    f.write(base64.decodestring(screenshot))
-        #f.close()
-              
+        screenshot = self.marionette.screenshot()
+        with open(self.filename_screenshot, 'w') as f:
+            f.write(base64.decodestring(screenshot))
+        f.close()
+
         #
         # Take the html dump and save it to the file.
         #
