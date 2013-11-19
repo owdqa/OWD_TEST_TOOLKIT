@@ -88,7 +88,15 @@ class current_frame():
             #
             self.marionette.switch_to_frame(fnum)
 
-            if appname != "keyboard":
+            if appname == "keyboard":
+                #
+                # Take the html dump and save it to the file.
+                #
+                print "    |_ html dump saved to      : " + self.filename_htmldump
+                f = open(self.filename_htmldump, 'w')
+                f.write(self.marionette.page_source.encode('ascii', 'ignore') )
+                f.close()
+            else:
                 self.record_frame()
          
             self.marionette.switch_to_frame()
