@@ -1,7 +1,7 @@
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION 2> /dev/null
 
 mkdir /tmp/tests 2>/dev/null
-chmod 755 /tmp/tests 2> /dev/null
+chmod 777 /tmp/tests 2> /dev/null
 
 [ -f "$HTML_SUMMARIES" ] && cp /dev/null $HTML_SUMMARIES
 
