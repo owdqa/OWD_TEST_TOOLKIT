@@ -101,6 +101,7 @@ cp $0.parts/run_html.css $RESULT_DIR
 #
 cd $RESULT_DIR
 cp * $HTML_FILEDIR 2> /dev/null
+sudo chmod 755 $HTML_FILEDIR
 
 #
 # Output the web page link.

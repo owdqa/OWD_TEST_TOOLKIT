@@ -5,8 +5,8 @@ HTML_FILEDIR=/var/www/html/owd_tests/$RUN_ID
 if [ ! -d "$HTML_FILEDIR" ]
 then
     sudo mkdir -p $HTML_FILEDIR
-    sudo chmod 777 $HTML_FILEDIR
 fi
+sudo chmod 777 $HTML_FILEDIR
 
 # 'sudo rm' so be paranoid!
 if [ "$HTML_FILEDIR" ]
