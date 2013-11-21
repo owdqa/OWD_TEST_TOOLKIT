@@ -40,6 +40,7 @@ call_log_edit_header   = ("id", "edit-mode-header")
 call_log_edit_selAll   = ("id", "select-all-threads")
 call_log_edit_delete   = ("id", "delete-button")
 call_log_no_calls_msg  = ("id", "no-result-message")
+call_log_delete_btn    = ("xpath", "/html/body/form[3]/menu/button[2]")
 
 call_log_numtap_call            = ("id", "call-menuitem")
 call_log_numtap_create_new      = ("id", "create-new-contact-menuitem")
