@@ -22,7 +22,8 @@ f_create_summary_table(){
             COUNT=${AUTOMATION_FAILS:-0}
             linkme="Y"
             pass_or_fail="fail"
-            tooltip="Automation script failures (issues with Marionette etc...)."
+            #tooltip="Automation script failures (issues with Marionette etc...)."
+            tooltip="These are test cases that 'FAILED', but it probably detected that the cause was marionette issuing an error for some reason. This *usually* means either Marionette has a bug, or our test automation code failed (not the device application). We'll investigate test cases that end up in here - it's (almost) definately NOT a geniune bug with the build, just a problem with the automation code"
             DESC="Automation failures";;
         "3")
             TYPE="$UNEX_PASSES_STR"
@@ -36,7 +37,8 @@ f_create_summary_table(){
             COUNT=${EX_FAILS:-0}
             linkme="Y"
             pass_or_fail="fail"
-            tooltip="Expected failures (blocked by other bugs etc...)."
+            #tooltip="Expected failures (blocked by other bugs etc...)."
+            tooltip="If our Jira user story contains test cases that are blocked and 'Run blocked tests: YES' is set, then the blocked test cases will run. If they fail they go in the 'expected failures' category."
             DESC="expected failures";;
         "5")
             TYPE="$EX_PASSES_STR"
@@ -50,7 +52,8 @@ f_create_summary_table(){
             COUNT=${IGNORED:-0}
             linkme=""
             pass_or_fail="neutral"
-            tooltip="Test cases we ignored during this run."
+            #tooltip="Test cases we ignored during this run."
+            tooltip="If our Jira user story for this test (i.e. 'DIALER' or 'SMS' etc...) contains Jira test cases that are blocked currently, and 'Run blocked tests: NO' is set, then these test cases will be ignored. (This just gives us visibility of which test cases are written, but were not run for some reason.)"
             DESC="ignored test cases";;
         "7")
             TYPE="$UNWRITTEN_STR"
