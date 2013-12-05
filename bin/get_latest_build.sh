@@ -58,15 +58,14 @@ SOURCE_DIR=https://owd.tid.es/releases/DEVELOP/lastest-version
 #
 # Get the latest date (if using the ci2-owd build).
 #
-#x=$(echo $SOURCE_DIR | grep ci2-owd)
-x=$(echo $SOURCE_DIR | grep owd.tid.es)
+x=$(echo $SOURCE_DIR | grep ci2-owd)
 if [ "$x" ]
 then
 	#
 	# Get list of files available in the release directory (in order of last modified descending).
 	#
 	attempts=10
-	wget -O $DATES_AVAILABLE --no-check-certificate --user=owdmoz --password=gaia $SOURCE_DIR?C=M;O=D
+	wget -O $DATES_AVAILABLE --no-check-certificate $SOURCE_DIR?C=M;O=D
     while read reldate
     do
     	attempts=$((attempts-1))
@@ -81,7 +80,7 @@ then
 		#
 		# Get list of files available in the release directory (in order of last modified descending).
 		#
-		wget -O $LIST_FILE --no-check-certificate --user=owdmoz --password=gaia $NEW_SOURCE_DIR?C=M;O=D
+		wget -O $LIST_FILE --no-check-certificate $NEW_SOURCE_DIR?C=M;O=D
 		
 		#
 		# Get the name of the newest release (which is at the top of the list).
@@ -104,7 +103,7 @@ else
 	#
 	# Get list of files available in the release directory (in order of last modified descending).
 	#
-	wget -O $LIST_FILE --no-check-certificate $SOURCE_DIR/?C=M;O=D
+	wget -O $LIST_FILE --no-check-certificate --user=owdmoz --password=gaia $SOURCE_DIR/?C=M;O=D
 	
 	
 	#
