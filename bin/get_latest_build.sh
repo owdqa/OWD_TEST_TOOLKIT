@@ -58,8 +58,7 @@ SOURCE_DIR=https://owd.tid.es/releases/DEVELOP/lastest-version
 #
 # Get the latest date (if using the ci2-owd build).
 #
-#x=$(echo $SOURCE_DIR | grep ci2-owd)
-x=$(echo $SOURCE_DIR | grep owd.tid.es)
+x=$(echo $SOURCE_DIR | grep ci2-owd)
 if [ "$x" ]
 then
 	#
