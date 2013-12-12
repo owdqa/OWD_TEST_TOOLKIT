@@ -53,6 +53,7 @@ TARGET_DIR=$HOME/Downloads/device_flash_files
 #
 SOURCE_DIR=https://owd.tid.es/releases/DEVELOP/latest-version
 #SOURCE_DIR=http://ci2-owd/releases/DEVELOP/
+SOURCE_DIR=http://ci-owd-misc-02/releases/DEVELOP/
 
 
 #
@@ -130,8 +131,14 @@ then
             rm -f $fnam
         fi
     done
-	
-    x=$(wget --no-check-certificate --user=owdmoz --password=gaia $SOURCE_DIR/$REL_FILE | tee $LOG_FILE)
+
+    y=$(echo $SOURCE_DIR | grep ci2-owd)
+    if [ "$y" ]
+    then
+        x=$(wget --no-check-certificate $SOURCE_DIR/$REL_FILE | tee $LOG_FILE)
+	else
+        x=$(wget --no-check-certificate --user=owdmoz --password=gaia $SOURCE_DIR/$REL_FILE | tee $LOG_FILE)
+    fi
 else
 	echo "No new \"$VERSION\" build found for $DEVICE ($TYPE) in $SOURCE_DIR."
     exit 0
