@@ -6,7 +6,7 @@
 # (or this script would not exist to run!).
 #
 export DEVICE=${1:-"unagi"}
-export BRANCH=${2:-"v1.2"}
+export BRANCH=${2:-"v1.3"}
 export TEST_TYPE=${3:-"REGRESSION"}
 
 
