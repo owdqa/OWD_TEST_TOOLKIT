@@ -52,6 +52,7 @@ edit_cancel_button     = ('id', 'cancel-edit')
 delete_contact_btn     = ('id', 'delete-contact')
 cancel_delete_btn      = ('xpath', '//*[@id="confirmation-message"]//button[text()="Cancel"]')
 confirm_delete_btn     = ('xpath', '//*[@id="confirmation-message"]//button[text()="Remove"]')
+#confirm_delete_btn     = ("xpath", "/html/body/form[2]/menu/button[2]")
 done_button            = ('id', 'save-button')
 
 add_photo              = ("id", "thumbnail-photo")
