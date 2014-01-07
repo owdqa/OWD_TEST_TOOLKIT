@@ -55,7 +55,7 @@ sound_alarm_vol        = ('name', 'audio.volume.alarm')
 hotspot                 = ("id", "menuItem-internetSharing")
 hotspot_header          = ('xpath', GLOBAL.app_head_specific % 'Internet sharing')
 hotspot_switch          = ("xpath", "//a[@data-l10n-id='wifi-hotspot']")
-hotspot_settings        = ("xpath", "//button[@class='hotspot-wifiSettings-btn']")
+hotspot_settings        = ("xpath", "/html/body/section[27]/div/ul/li[6]/label/button")
 
 device_info             = ("id", "menuItem-deviceInfo")
 device_info_header      = ("xpath", "//*[@id='about']/header/h1")

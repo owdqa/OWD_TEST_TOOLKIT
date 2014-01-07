@@ -50,18 +50,18 @@ class main(GaiaTestCase):
         except:
             pass
 
-        time.sleep(1)
-        x = self.UTILS.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
+        time.sleep(5)
+        x = self.UTILS.getElement(DOM.Email.login_next_btn, "'Next' button", True)
         x.tap()
 
-        time.sleep(1)
-        x = self.UTILS.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
+        time.sleep(5)
+        x = self.UTILS.getElement(DOM.Email.login_next_btn, "'Next' button", True)
         x.tap()
 
         #
         # Click the 'continue to mail' button.
         #
-        time.sleep(1)
+        time.sleep(3)
         x = self.UTILS.getElement(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button", True, 60)
         x.tap()
 
