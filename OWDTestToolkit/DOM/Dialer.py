@@ -30,6 +30,8 @@ outgoing_call_number   = ("xpath", "//*[contains(@class,'number font-light')]") 
 outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '%s')]" #Note: maybe + prefix.
 hangup_bar_locator     = ('id', 'callbar-hang-up-action')
 
+incoming_caller_id_message = ("id", "message")
+
 call_log_btn           = ("id", "option-recents")
 call_log_filter        = ("id", "call-log-filter")
 call_log_numbers       = ("xpath", "//li[contains(@class,'log-item')]")
@@ -51,3 +53,4 @@ call_log_contact_name_iframe    = ("id", "iframe-contacts")
 call_log_number_cont_highlight  = "//button[contains(@id, 'call-or-pick') and @class='activity icon icon-call remark' and contains(@data-tel, '%s')]"
 
 call_busy_button_ok    = ("xpath", "/html/body/form[3]/menu/button")
+call_log_dialog_delete = ("xpath", "//*[@id='confirmation-message']/menu/button[2]")

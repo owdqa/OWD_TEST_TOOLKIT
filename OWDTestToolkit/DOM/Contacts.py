@@ -97,8 +97,10 @@ import_search_list  = ("xpath", "//*[@id='search-list']//li[@class='block-item']
 import_conts_xp     = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
 
 import_contacts     = ("xpath", "/html/body/article/section/article/section/ul[2]/li/button")
+cancel_import_contacts = ("xpath", "//*[@id='cancel-overlay']")
 
 gmail_button            = ("xpath", "//button[text()='Gmail']")
+gmail_button_test       = ("xpath","/html/body/article/section[2]/article/section/ul/li[3]/button")
 gmail_frame             = ("data-url", "google")
 gmail_username          = ("id", "Email")
 gmail_password          = ("id", "Passwd")
@@ -118,5 +120,7 @@ hotmail_login_error_msg   = ("id", "idTd_PWD_Error")
 hotmail_import_frame      = ("src", "live")  # It's in the contacts iframe.
 
 
+memorycard_button = ("xpath", "/html/body/article/section[2]/article/section/ul/li[2]/button")
+#memorycard_import_cancel =("xpath","//*[@id='cancel-overlay']")
 
-
+sim_button =("xpath", "/html/body/article/section[2]/article/section/ul/li/button")
