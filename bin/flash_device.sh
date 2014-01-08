@@ -113,7 +113,12 @@ sudo $cmd_adb forward tcp:2828 tcp:2828 > /dev/null
 # Do the flash.
 #
 printf "\n\nFLASHING DEVICE - DO NOT DISTURB! :)\n"
-sudo ./flash.sh
+if [ "$DEVICE" = "hamachi_light" ]
+then
+    sudo ./update-gecko-gaia.sh 
+else
+    sudo ./flash.sh
+fi
 
 # Need to sleep while the phone boots up ('flash' doesn't track this event).
 sleep 40
