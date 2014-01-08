@@ -30,3 +30,4 @@ launched_button_close       = ("id", "close-button")
 launched_add_to_homescreen  = ("xpath", "//*[@id='modal-dialog-select-one']//button")
 add_to_home_screen_frame    = ("src", "homescreen.gaiamobile.org/save-bookmark")
 add_to_home_screen_btn      = ("id", "button-bookmark-add") # in add_to_home_screen_frame
+installed_apps               = ("xpath", "//*[@id='evmeAppsList']")

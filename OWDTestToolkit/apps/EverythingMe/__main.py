@@ -64,8 +64,4 @@ class EverythingMe (
         # 2. Sometimes the messges app randomly launches instead of evme!
         #
         x = self.marionette.find_element(*DOM.EME.search_field)
-        x.send_keys("waking up evme")
-        
-        x = self.marionette.find_element(*DOM.EME.search_clear)
         x.tap()
-
