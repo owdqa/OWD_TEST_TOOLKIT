@@ -29,6 +29,8 @@ class main(GaiaTestCase):
         #
         updateBTN = self.UTILS.getElement(DOM.Contacts.edit_update_button, "Edit 'update' button")
         updateBTN.tap()
+
+        time.sleep(1)
  
         #
         # Return to the contact list screen.
