@@ -1,6 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
 import  checkVideoLength                   ,\
+        clickThumbMMS                      ,\
         clickThumb                         ,\
         deleteThumbnails                   ,\
         getGalleryItems                    ,\
@@ -11,6 +12,7 @@ import  checkVideoLength                   ,\
 class Gallery (
             checkVideoLength.main,
             clickThumb.main,
+            clickThumbMMS.main,
             deleteThumbnails.main,
             getGalleryItems.main,
             playCurrentVideo.main,

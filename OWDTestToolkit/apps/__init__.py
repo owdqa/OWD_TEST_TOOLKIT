@@ -11,6 +11,7 @@ from Ftu import *
 from Gallery import *
 from Marketplace import *
 from Messages import *
+from Music import *
 from Settings import *
 from Video import *
 from Dialer import *

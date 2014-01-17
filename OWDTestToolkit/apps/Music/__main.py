@@ -1,15 +1,12 @@
 from OWDTestToolkit.global_imports import *
 
-import  checkThumbDuration                 ,\
-        checkVideoLength                   ,\
-        clickOnVideoMMS                    ,\
-        startVideo                         
+import  clickOnSongMMS,\
+        playSong
 
-class Video (
-            checkThumbDuration.main,
-            checkVideoLength.main,
-            clickOnVideoMMS.main,
-            startVideo.main):
+
+class Music (
+            clickOnSongMMS.main,
+            playSong.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
@@ -25,4 +22,3 @@ class Video (
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
-
