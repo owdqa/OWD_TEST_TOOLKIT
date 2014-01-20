@@ -24,7 +24,7 @@ do
         $(
         ls $owd_test_cases_DIR/tests/$TYPE/test_*.py   | \
         awk 'BEGIN{FS="/"}{print $NF}'                 | \
-        sed -e "s/^test_\([0-9]*\).py/\1/"             
+        sed -e "s/^test_\([A-Z0-9a-z]*\).py/\1/"
         )
 EOF
     fi
