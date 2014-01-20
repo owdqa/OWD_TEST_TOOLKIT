@@ -4,8 +4,10 @@
 TESTS=""
 for user_story in $(echo "$@")
 do
-    x=$(echo "$user_story" | egrep "^[0-9]+$")
-    if [ "$x" ]
+    x=$(echo "$user_story" | egrep "[A-Z]+[0-9]+[a-z]+")
+    y=$(echo "$user_story" | egrep "^[0-9]+$")
+
+    if [ $x ] || [ $y ]
     then
         #
         # This is an id - no need to get the children for it.
@@ -16,12 +18,12 @@ do
         x=$($OWD_TEST_TOOLKIT_BIN/get_test_cases.sh $user_story)
         [ "$x" ] && TESTS="$TESTS $x"
    fi
-done    
+done
 
 #
 # Order the list uniquely.
 #
-x=$(echo "$TESTS" | sed -e "s/ /\n/g" | sort -nu)
+x=$(echo "$TESTS")
 TESTS="$x"
 
 NUMBER_OF_TESTS=$(echo "$TESTS" | wc -w)
