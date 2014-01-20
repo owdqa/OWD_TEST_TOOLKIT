@@ -1,7 +1,8 @@
 #
 # The directory that the physical files will be located for the web page.
 #
-HTML_FILEDIR=/var/www/html/owd_tests/$RUN_ID
+#HTML_FILEDIR=/var/www/html/owd_tests/$RUN_ID
+HTML_FILEDIR=/var/www/html/$DEVICE/$BRANCH/owd_tests/$RUN_ID
 if [ ! -d "$HTML_FILEDIR" ]
 then
     sudo mkdir -p $HTML_FILEDIR
@@ -20,7 +21,9 @@ fi
 #
 # The url for this results web page.
 #
-HTML_WEBDIR="http://owd-qa-server/owd_tests/$RUN_ID"
+#HTML_WEBDIR="http://owd-qa-server/owd_tests/$RUN_ID"
+HTML_WEBDIR="http://owd-qa-server/owd_tests/$DEVICE/$BRANCH/$RUN_ID"
+
 
 #
 # Functions for this script.
