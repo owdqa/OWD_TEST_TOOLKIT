@@ -16,3 +16,4 @@ fullscreen_back_button      = ('id', 'fullscreen-back-button')
 no_thumbnails_message       = ("xpath", "//h1[@id='overlay-title' and text()='No photos or videos']")
 
 camera_button               = ("id", "thumbnails-camera-button")
+crop_done                   = ("xpath", "//*[@id='crop-done-button']")

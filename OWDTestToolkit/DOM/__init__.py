@@ -13,6 +13,7 @@ import GLOBAL
 import Home
 import Market
 import Messages
+import Music
 import Dialer
 import Settings
 import Statusbar

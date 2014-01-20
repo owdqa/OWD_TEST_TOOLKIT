@@ -3,12 +3,16 @@ from OWDTestToolkit.global_imports import *
 import  addNumbersInToField                 ,\
         checkAirplaneModeWarning           ,\
         checkIsInToField                   ,\
+        checkMMSIcon                       ,\
         checkNumberIsInToField             ,\
         checkThreadHeader                  ,\
         clickSMSNotifier                   ,\
         closeThread                        ,\
         countMessagesInThisThread          ,\
         createAndSendSMS                   ,\
+        createMMSImage                     ,\
+        createMMSMusic                     ,\
+        createMMSVideo                     ,\
         deleteAllThreads                   ,\
         deleteMessagesInThisThread         ,\
         deleteSelectedMessages             ,\
@@ -40,18 +44,22 @@ import  addNumbersInToField                 ,\
         waitForReceivedMsgInThisThread     ,\
         waitForNewSMSPopup_by_msg          ,\
         waitForNewSMSPopup_by_number       ,\
-        waitForSMSNotifier                 
+        waitForSMSNotifier
 
 class Messages (
             addNumbersInToField.main,
             checkAirplaneModeWarning.main,
             checkIsInToField.main,
+            checkMMSIcon.main,
             checkNumberIsInToField.main,
             checkThreadHeader.main,
             clickSMSNotifier.main,
             closeThread.main,
             countMessagesInThisThread.main,
             createAndSendSMS.main,
+            createMMSImage.main,
+            createMMSMusic.main,
+            createMMSVideo.main,
             deleteAllThreads.main,
             deleteMessagesInThisThread.main,
             deleteSelectedMessages.main,

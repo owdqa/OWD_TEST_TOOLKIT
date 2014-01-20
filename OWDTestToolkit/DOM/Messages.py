@@ -22,6 +22,7 @@ contact_no_phones_ok   = ("xpath", "//form[@id='confirmation-message']//button[t
 input_message_area     = ('id', 'messages-input')
 
 send_message_button    = ('id', 'messages-send-button')
+attach_button          = ('id', 'messages-attach-button')
 message_sending_spinner= ("xpath", "//aside[@class='pack-end'][-1]/progress")
 
 header_back_button     = ("id","messages-back-button")
@@ -59,3 +60,11 @@ header_create_new_contact_btn   = ("xpath", "/html/body/form/menu/button[2]")
 header_add_to_contact_btn       = ("xpath", "/html/body/form/menu/button[3]")
 header_cancel_btn               = ("xpath", "/html/body/form/menu/button[5]")
 header_cancel_btn_no_send       = ("xpath", "/html/body/form/menu/button[4]")
+
+mms_from_video                  = ("xpath", "/html/body/div/form[9]/menu/button")
+mms_from_camera                 = ("xpath", "/html/body/div/form[9]/menu/button[4]")
+mms_from_gallery                = ("xpath", "/html/body/div/form[9]/menu/button[3]")
+mms_from_music                  = ("xpath", "/html/body/div/form[9]/menu/button[2]")
+mms_cancel_button               = ("xpath", "/html/body/div/form[9]/menu/button[5]")
+
+mms_icon                        = ("xpath", "/html/body/article/section/article/ul/li/a/p[2]/span")
