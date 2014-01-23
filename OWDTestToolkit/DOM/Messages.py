@@ -59,6 +59,7 @@ header_send_message_btn         = ("xpath", "//button[text()='Send message']")
 header_create_new_contact_btn   = ("xpath", "//button[text()='Create new contact']")
 header_add_to_contact_btn       = ("xpath", "//button[text()='Add to an existing contact']")
 header_cancel_btn               = ("xpath", "//button[text()='Cancel']")
+header_cancel_btn_no_send       = ("xpath", "/html/body/form/menu/button[4]")
 
 mms_from_video                  = ("xpath", "/html/body/div/form[9]/menu/button")
 mms_from_camera                 = ("xpath", "/html/body/div/form[9]/menu/button[4]")
