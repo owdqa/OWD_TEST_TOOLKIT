@@ -50,11 +50,11 @@ class main(GaiaTestCase):
         except:
             pass
 
-        time.sleep(1)
+        time.sleep(2)
         x = self.UTILS.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
         x.tap()
 
-        time.sleep(1)
+        time.sleep(2)
         x = self.UTILS.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
         x.tap()
 
@@ -67,5 +67,5 @@ class main(GaiaTestCase):
 
         self.UTILS.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
 
-        self.UTILS.waitForElements(("xpath", "/html/body/div/div/div/div/div/a[7]/span"), "Inbox")
+        self.UTILS.waitForElements(('xpath', DOM.GLOBAL.app_head_specific % 'Inbox'), "Inbox")
         time.sleep(2)
