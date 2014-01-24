@@ -87,7 +87,7 @@ done
 P=$(($EX_PASSES + $UNEX_PASSES))
 F=$(($EX_FAILS + $UNEX_FAILS))
 T=$(($P + $F))
-ERROR_RATE=($F*100)/$T
+ERROR_RATE=$((($F*100)/$T))
 
 printf "\n\nERROR RATE = %s\n\n" $ERROR_RATE
 
