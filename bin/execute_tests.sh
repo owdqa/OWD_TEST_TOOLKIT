@@ -83,16 +83,14 @@ done
 #    exit 1
 #fi
 
-# Calculating error rate
-P=$(($EX_PASSES + $UNEX_PASSES))
-F=$(($EX_FAILS + $UNEX_FAILS))
-T=$(($P + $F))
-ERROR_RATE=$((($F*100)/$T))
-
-printf "\n\nERROR RATE = %s\n\n" $ERROR_RATE
-
 if [ $UNEX_FAILS -gt 0 ]
 then
+# Calculating error rate
+    P=$(($EX_PASSES + $UNEX_PASSES))
+    F=$(($EX_FAILS + $UNEX_FAILS))
+    T=$(($P + $F))
+    ERROR_RATE=$((($F*100)/$T))
+    printf "\n\nERROR RATE = %s\n\n" $ERROR_RATE
     if [ $ERROR_RATE -lt 15 ]
     then
         printf "\nJOB_UNSTABLE\n"
