@@ -83,5 +83,5 @@ done
 #    exit 1
 #fi
 
-print "UNSTABLE"
+printf "UNSTABLE"
 exit 1
