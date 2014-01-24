@@ -97,3 +97,6 @@ then
     fi
     exit 1
 fi
+
+printf "\nJOB_UNSTABLE\n"
+exit 1
