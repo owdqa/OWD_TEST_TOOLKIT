@@ -3,6 +3,7 @@ app_head_specific    = "//h1[text()='%s']"
 app_head             = ('tag name', "h1")
 app_titlebar_name    = ('class name', 'titlebarIcon')
 modal_confirm_ok     = ("xpath", "//*[@id='confirm-ok']")
+modal_confirm_ok2    = ("xpath", "/html/body/div/div[3]/div[2]/div[3]/form[2]/menu/button[2]")
 modal_alert_ok       = ("id", "modal-dialog-alert-ok")
 modal_alert_ok2      = ("xpath", "//*[@id='modal-dialog-confirm-ok']")
 modal_alert_msg      = ("id", "modal-dialog-alert-message")
