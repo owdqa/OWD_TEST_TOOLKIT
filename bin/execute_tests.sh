@@ -85,7 +85,7 @@ done
 
 if [ $UNEX_FAILS -gt 0 ]
 then
-# Calculating error rate
+    # Calculating error rate
     P=$(($EX_PASSES + $UNEX_PASSES))
     F=$(($EX_FAILS + $UNEX_FAILS))
     T=$(($P + $F))
@@ -97,6 +97,3 @@ then
     fi
     exit 1
 fi
-
-printf "\nJOB_UNSTABLE\n"
-exit 1
