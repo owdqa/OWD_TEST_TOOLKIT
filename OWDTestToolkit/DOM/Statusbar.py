@@ -1,9 +1,9 @@
 status_bar_new  = ('xpath', "//*[@id='statusbar-notification'][@data-unread='true']")
 wifi            = ('id', 'statusbar-wifi')
-dataConn        = ('id', 'statusbar-data')
+dataConn        = ('xpath', '/html/body/div/div/div[8]/div[2]')
 bluetooth       = ('id', 'statusbar-bluetooth')
 airplane        = ('id', 'statusbar-flight-mode')
-signal          = ("id", "statusbar-signal")
+signal          = ("xpath", "/html/body/div/div/div[8]/div")
 hotspot         = ("id", "statusbar-tethering")
 network_activity= ("id", "statusbar-network-activity")
 
