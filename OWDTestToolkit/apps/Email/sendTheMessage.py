@@ -17,7 +17,7 @@ class main(GaiaTestCase):
         #
         self.UTILS.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
 
-        x = ('xpath', DOM.GLOBAL.app_head_specific % "Sent Mail")
-        y = self.UTILS.waitForElements(x, "Sent Mail", True, 120)
+        x = ('xpath', DOM.GLOBAL.app_head_specific % "Inbox")
+        y = self.UTILS.waitForElements(x, "Inbox", True, 120)
 		
         return True
