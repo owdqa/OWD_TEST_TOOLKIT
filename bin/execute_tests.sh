@@ -84,7 +84,7 @@ done
 #fi
 
 printf "\nJOB_UNSTABLE\n"
-exit 1
+
 
 if [ $UNEX_FAILS -gt 0 ]
 then
