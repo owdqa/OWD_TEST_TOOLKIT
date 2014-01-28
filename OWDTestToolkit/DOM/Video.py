@@ -6,4 +6,4 @@ video_frame             = ('id', 'player')
 video_loaded            = ('css selector', 'video[style]')
 current_video_duration  = ("xpath", "//*[@id='duration-text']")
 
-done_button             = ("xpath", "//*[@id='picker-done']")26
+done_button             = ("xpath", "//*[@id='picker-done']")
