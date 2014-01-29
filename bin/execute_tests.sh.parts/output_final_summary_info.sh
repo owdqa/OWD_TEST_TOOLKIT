@@ -24,3 +24,33 @@ printf "Ignored test cases                 : %4s\n" $IGNORED
 printf "Unwritten test cases               : %4s\n" $UNWRITTEN
 printf "\n$sep\n\n\n"
 
+
+
+# Summary to general file...
+
+
+TOTAL_SUM_FILE="http://owd-qa-server/owd_tests/total_sum_file"
+
+if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ]
+then
+    if [ ! -f "$TOTAL_SUM_FILE" ]
+        # print the header
+        printf "BUILD BEING TESTED\tPossible regression failures\tRUN DETAILS\tStart time\tEnd time\tAutomation failures\tTest cases passed\tAssertions passed\tExpected failures\tIgnored test cases\tUnwritten test cases" > $TOTAL_SUM_FILE
+    fi
+
+    # print results in one line (each item is separated by tab char)
+    printf "\n" >> $TOTAL_SUM_FILE
+    printf "%s\t" $DEVICE_BUILDNAME >> $TOTAL_SUM_FILE
+    printf "%s\t" $UNEX_FAILS >> $TOTAL_SUM_FILE
+    printf "file://%s/index.html\t" "$HTML_FILEDIR" >> $TOTAL_SUM_FILE
+    printf "%s\t" "$RUN_TIME" >> $TOTAL_SUM_FILE
+    printf "%s\t" "$END_TIME" >> $TOTAL_SUM_FILE
+    printf "%4s\n" $AUTOMATION_FAILS >> $TOTAL_SUM_FILE
+    printf "%4s / %-4s\n" $P $T >> $TOTAL_SUM_FILE
+    printf "%4s / %-4s\n" $ASSERTS_PASSED $ASSERTS_TOTAL >> $TOTAL_SUM_FILE
+    printf "%4s\n" $EX_FAILS >> $TOTAL_SUM_FILE
+    printf "%4s\n" $IGNORED >> $TOTAL_SUM_FILE
+    printf "%4s\n" $UNWRITTEN >> $TOTAL_SUM_FILE
+    printf "\n" >> $TOTAL_SUM_FILE
+
+fi
