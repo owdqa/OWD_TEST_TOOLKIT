@@ -46,7 +46,7 @@ then
     printf "%s_%s\t" $JOB_NAME $BUILD_NUMBER | sudo tee -a $TOTAL_SUM_FILE
     printf "%s\t" $DEVICE_BUILDNAME | sudo tee -a $TOTAL_SUM_FILE
     printf "%s\t" $UNEX_FAILS | sudo tee -a $TOTAL_SUM_FILE
-    printf "file://%s/index.html\t" "$HTML_FILEDIR" | sudo tee -a $TOTAL_SUM_FILE
+    printf "%s/index.html\t" "$HTML_FILEDIR" | sudo tee -a $TOTAL_SUM_FILE
     printf "%s\t" "$RUN_TIME" | sudo tee -a $TOTAL_SUM_FILE
     printf "%s\t" "$END_TIME" | sudo tee -a $TOTAL_SUM_FILE
     printf "%4s\n" $AUTOMATION_FAILS | sudo tee -a $TOTAL_SUM_FILE
