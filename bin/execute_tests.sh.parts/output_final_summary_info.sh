@@ -41,18 +41,18 @@ then
     fi
 
     # print results in one line (each item is separated by tab char)
-    printf "\n" | sudo tee $TOTAL_SUM_FILE
-    printf "%s\t" $DEVICE_BUILDNAME | sudo tee $TOTAL_SUM_FILE
-    printf "%s\t" $UNEX_FAILS | sudo tee $TOTAL_SUM_FILE
-    printf "file://%s/index.html\t" "$HTML_FILEDIR" | sudo tee $TOTAL_SUM_FILE
-    printf "%s\t" "$RUN_TIME" | sudo tee $TOTAL_SUM_FILE
-    printf "%s\t" "$END_TIME" | sudo tee $TOTAL_SUM_FILE
-    printf "%4s\n" $AUTOMATION_FAILS | sudo tee $TOTAL_SUM_FILE
-    printf "%4s / %-4s\n" $P $T | sudo tee $TOTAL_SUM_FILE
-    printf "%4s / %-4s\n" $ASSERTS_PASSED $ASSERTS_TOTAL | sudo tee $TOTAL_SUM_FILE
-    printf "%4s\n" $EX_FAILS | sudo tee $TOTAL_SUM_FILE
-    printf "%4s\n" $IGNORED | sudo tee $TOTAL_SUM_FILE
-    printf "%4s\n" $UNWRITTEN | sudo tee $TOTAL_SUM_FILE
-    printf "\n" | sudo tee $TOTAL_SUM_FILE
+    printf "\n" | sudo tee -a $TOTAL_SUM_FILE
+    printf "%s\t" $DEVICE_BUILDNAME | sudo tee -a $TOTAL_SUM_FILE
+    printf "%s\t" $UNEX_FAILS | sudo tee -a $TOTAL_SUM_FILE
+    printf "file://%s/index.html\t" "$HTML_FILEDIR" | sudo tee -a $TOTAL_SUM_FILE
+    printf "%s\t" "$RUN_TIME" | sudo tee -a $TOTAL_SUM_FILE
+    printf "%s\t" "$END_TIME" | sudo tee -a $TOTAL_SUM_FILE
+    printf "%4s\n" $AUTOMATION_FAILS | sudo tee -a $TOTAL_SUM_FILE
+    printf "%4s / %-4s\n" $P $T | sudo tee -a $TOTAL_SUM_FILE
+    printf "%4s / %-4s\n" $ASSERTS_PASSED $ASSERTS_TOTAL | sudo tee -a $TOTAL_SUM_FILE
+    printf "%4s\n" $EX_FAILS | sudo tee -a $TOTAL_SUM_FILE
+    printf "%4s\n" $IGNORED | sudo tee -a $TOTAL_SUM_FILE
+    printf "%4s\n" $UNWRITTEN | sudo tee -a $TOTAL_SUM_FILE
+    printf "\n" | sudo tee -a $TOTAL_SUM_FILE
 
 fi
