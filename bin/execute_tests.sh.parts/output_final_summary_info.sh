@@ -29,7 +29,7 @@ printf "\n$sep\n\n\n"
 # Summary to general file...
 
 
-TOTAL_SUM_FILE="/var/www/html/owd-qa-server/owd_tests/total_sum_file"
+TOTAL_SUM_FILE="/var/www/html/owd_tests/total_sum_file"
 
 if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ]
 then
