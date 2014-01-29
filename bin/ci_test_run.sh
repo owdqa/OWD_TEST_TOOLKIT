@@ -10,11 +10,24 @@ export BRANCH=${2:-"v1.3"}
 export TEST_TYPE=${3:-"REGRESSION"}
 
 
+printf "\n\Antes de set_up_parameters\n\n"
 . $0.parts/set_up_parameters.sh
+printf "\n\nDespués de set_up_parameters\n\n"
+printf "\n\nRUN_ID = %s\n\n" $RUN_ID
+printf "\n\nDEVICE = %s\n\n" $DEVICE
+printf "\n\nBRANCH = %s\n\n" $BRANCH
+printf "\n\nVERSION = %s\n\n" $VERSION
+
 
 . $0.parts/install_toolkit_and_test_cases.sh
 
 . $0.parts/flash_device.sh
+
+printf "\n\nDespués de flash\n\n"
+printf "\n\nRUN_ID = %s\n\n" $RUN_ID
+printf "\n\nDEVICE = %s\n\n" $DEVICE
+printf "\n\nBRANCH = %s\n\n" $BRANCH
+printf "\n\nVERSION = %s\n\n" $VERSION
 
 
 #
