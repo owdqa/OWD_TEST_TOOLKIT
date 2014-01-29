@@ -8,7 +8,9 @@ printf "BUILD BEING TESTED                 : %s\n\n\n" $DEVICE_BUILDNAME
 
 printf "Possible regression failures       : %s\n\n\n" $UNEX_FAILS
 
-printf "CLICK HERE FOR RUN DETAILS         : %s\n\n" "$($0.parts/create_run_results_web_page.sh)"
+HTML_FILEDIR=$($0.parts/create_run_results_web_page.sh)
+#printf "CLICK HERE FOR RUN DETAILS         : %s\n\n" "$($0.parts/create_run_results_web_page.sh)"
+printf "CLICK HERE FOR RUN DETAILS         : %s\n\n" "$HTML_FILEDIR"
 
 printf "Start time                         : %s\n" "$RUN_TIME"
 printf "End time                           : %s\n\n" "$END_TIME"              
