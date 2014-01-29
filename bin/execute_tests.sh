@@ -78,7 +78,24 @@ done
 #
 # For Jenkins - if we didn't pass every tests then exit as 'fail' (non-zero).
 #
+#if [ $UNEX_FAILS -gt 0 ]
+#then
+#    exit 1
+#fi
+
 if [ $UNEX_FAILS -gt 0 ]
 then
+    # Calculating error rate
+    P=$(($EX_PASSES + $UNEX_PASSES))
+    F=$(($EX_FAILS + $UNEX_FAILS))
+    T=$(($P + $F))
+    ERROR_RATE=$((($F*100)/$T))
+    printf "\n\nERROR RATE = %s\n\n" $ERROR_RATE
+    # if error rate less than 20% set build as unstable
+    if [ $ERROR_RATE -lt 20 ]
+    then
+        printf "\nJOB_UNSTABLE\n"
+    fi
     exit 1
 fi
+
