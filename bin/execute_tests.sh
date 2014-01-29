@@ -83,8 +83,6 @@ done
 #    exit 1
 #fi
 
-printf "\nJOB_UNSTABLE\n"
-
 if [ $UNEX_FAILS -gt 0 ]
 then
     # Calculating error rate
