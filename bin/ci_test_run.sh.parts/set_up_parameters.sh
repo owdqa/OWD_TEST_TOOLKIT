@@ -21,10 +21,10 @@ export ON_CI_SERVER="Y"
 export RUN_ID=${JOB_NAME}_${BUILD_NUMBER}
 # set RUN_ID + DEVICE + BRANCH
 #export RUN_ID=${JOB_NAME}_${BUILD_NUMBER}_${DEVICE}_${BRANCH}
-printf "\n\nRUN_ID = %s\n\n" $RUN_ID
-printf "\n\nDEVICE = %s\n\n" $DEVICE
-printf "\n\nBRANCH = %s\n\n" $BRANCH
-printf "\n\nVERSION = %s\n\n" $VERSION
+#printf "\n\nRUN_ID = %s\n\n" $RUN_ID
+#printf "\n\nDEVICE = %s\n\n" $DEVICE
+#printf "\n\nBRANCH = %s\n\n" $BRANCH
+#printf "\n\nVERSION = %s\n\n" $VERSION
 
 
 export RESULT_DIR="/tmp/tests/$RUN_ID"
