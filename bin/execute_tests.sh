@@ -83,8 +83,6 @@ done
 #    exit 1
 #fi
 
-printf "\nJOB_UNSTABLE\n"
-
 if [ $UNEX_FAILS -gt 0 ]
 then
     # Calculating error rate
@@ -93,7 +91,8 @@ then
     T=$(($P + $F))
     ERROR_RATE=$((($F*100)/$T))
     printf "\n\nERROR RATE = %s\n\n" $ERROR_RATE
-    if [ $ERROR_RATE -lt 15 ]
+    # if error rate less than 20% set build as unstable
+    if [ $ERROR_RATE -lt 20 ]
     then
         printf "\nJOB_UNSTABLE\n"
     fi
