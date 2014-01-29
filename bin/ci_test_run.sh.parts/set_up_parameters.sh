@@ -10,9 +10,14 @@
 #       The 'description' part will become a link you can click to
 #       see the file contents.
 #
-if [ ! "$JOB_NAME" ] || [ ! "$BUILD_NUMBER" ]
+#if [ ! "$JOB_NAME" ] || [ ! "$BUILD_NUMBER" ]
+if [ "$JOB_NAME" ] || [ "$BUILD_NUMBER" ]
 then
 	printf "\n** Either JOB_NAME or BUILD_NUMBER are not set (this is not a CI run) - exiting. **\n\n"
+	printf "\n\nRUN_ID = %s\n\n" $RUN_ID
+    printf "\n\nDEVICE = %s\n\n" $DEVICE
+    printf "\n\nBRANCH = %s\n\n" $BRANCH
+    printf "\n\nVERSION = %s\n\n" $VERSION
 	exit 1
 fi
 
