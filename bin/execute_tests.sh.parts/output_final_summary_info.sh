@@ -34,8 +34,10 @@ TOTAL_SUM_FILE="http://owd-qa-server/owd_tests/total_sum_file"
 if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ]
 then
     if [ ! -f "$TOTAL_SUM_FILE" ]
+    then
         # print the header
         printf "BUILD BEING TESTED\tPossible regression failures\tRUN DETAILS\tStart time\tEnd time\tAutomation failures\tTest cases passed\tAssertions passed\tExpected failures\tIgnored test cases\tUnwritten test cases" > $TOTAL_SUM_FILE
+        sudo chmod 755 $TOTAL_SUM_FILE
     fi
 
     # print results in one line (each item is separated by tab char)
