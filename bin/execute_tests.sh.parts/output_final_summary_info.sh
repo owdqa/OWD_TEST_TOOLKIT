@@ -37,12 +37,13 @@ then
     if [ ! -f "$TOTAL_SUM_FILE" ]
     then
         # print the header
-        printf "BUILD BEING TESTED\tPossible regression failures\tRUN DETAILS\tStart time\tEnd time\tAutomation failures\tTest cases passed\tAssertions passed\tExpected failures\tIgnored test cases\tUnwritten test cases" | sudo tee $TOTAL_SUM_FILE
+        printf "JOB NAME\tBUILD BEING TESTED\tPossible regression failures\tRUN DETAILS\tStart time\tEnd time\tAutomation failures\tTest cases passed\tAssertions passed\tExpected failures\tIgnored test cases\tUnwritten test cases" | sudo tee $TOTAL_SUM_FILE
         sudo chmod 755 $TOTAL_SUM_FILE
     fi
 
     # print results in one line (each item is separated by tab char)
     printf "\n" | sudo tee -a $TOTAL_SUM_FILE
+    printf "%s_%s\t" $JOB_NAME $BUILD_NUMBER | sudo tee -a $TOTAL_SUM_FILE
     printf "%s\t" $DEVICE_BUILDNAME | sudo tee -a $TOTAL_SUM_FILE
     printf "%s\t" $UNEX_FAILS | sudo tee -a $TOTAL_SUM_FILE
     printf "file://%s/index.html\t" "$HTML_FILEDIR" | sudo tee -a $TOTAL_SUM_FILE
@@ -57,4 +58,3 @@ then
     printf "\n" | sudo tee -a $TOTAL_SUM_FILE
 
 fi
-
