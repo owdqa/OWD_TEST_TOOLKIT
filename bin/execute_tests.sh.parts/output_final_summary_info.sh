@@ -36,7 +36,7 @@ then
     if [ ! -f "$TOTAL_SUM_FILE" ]
     then
         # print the header
-        printf "BUILD BEING TESTED\tPossible regression failures\tRUN DETAILS\tStart time\tEnd time\tAutomation failures\tTest cases passed\tAssertions passed\tExpected failures\tIgnored test cases\tUnwritten test cases" > $TOTAL_SUM_FILE
+        printf "BUILD BEING TESTED\tPossible regression failures\tRUN DETAILS\tStart time\tEnd time\tAutomation failures\tTest cases passed\tAssertions passed\tExpected failures\tIgnored test cases\tUnwritten test cases" | sudo tee $TOTAL_SUM_FILE
         sudo chmod 755 $TOTAL_SUM_FILE
     fi
 
