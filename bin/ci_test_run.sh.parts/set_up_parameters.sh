@@ -26,8 +26,6 @@ printf "\n\nDEVICE = %s\n\n" $DEVICE
 printf "\n\nBRANCH = %s\n\n" $BRANCH
 printf "\n\nVERSION = %s\n\n" $VERSION
 
-RUN_ID=$RUN_ID$DEVICE$BRANCH
-printf "\n\nRUN_ID = %s\n\n" $RUN_ID
 
 export RESULT_DIR="/tmp/tests/$RUN_ID"
 [ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR || rm $RESULT_DIR/* 2>/dev/null
