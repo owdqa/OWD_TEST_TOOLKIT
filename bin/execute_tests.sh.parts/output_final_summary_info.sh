@@ -53,7 +53,7 @@ then
     printf "%4s / %-4s," $ASSERTS_PASSED $ASSERTS_TOTAL | sudo tee -a $TOTAL_SUM_FILE
     printf "%4s," $EX_FAILS | sudo tee -a $TOTAL_SUM_FILE
     printf "%4s," $IGNORED | sudo tee -a $TOTAL_SUM_FILE
-    printf "%4s," $UNWRITTEN | sudo tee -a $TOTAL_SUM_FILE
+    printf "%4s" $UNWRITTEN | sudo tee -a $TOTAL_SUM_FILE
     printf "\n" | sudo tee -a $TOTAL_SUM_FILE
 
 fi
