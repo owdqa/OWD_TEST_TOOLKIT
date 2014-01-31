@@ -54,7 +54,7 @@ class EverythingMe (
             
         self.UTILS.TEST(boolOK, "EME Starting up ...")
             
-        self.UTILS.waitForElements(DOM.EME.groups, "EME groups", True, 10)
+        # self.UTILS.waitForElements(DOM.EME.groups, "EME groups", True, 10)
 
     def _relaunch(self):
         #
