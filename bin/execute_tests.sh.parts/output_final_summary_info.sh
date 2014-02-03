@@ -60,7 +60,7 @@ fi
 
 # Summary to partial file (device & version)...
 
-PARTIAL_SUM_FILE="/var/www/html/owd_tests/$DEVICE/$BRANCH/$DEVICE_$BRANCH_sum_file.csv"
+PARTIAL_SUM_FILE="/var/www/html/owd_tests/$DEVICE/$BRANCH/partial_sum_file.csv"
 
 if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ]
 then
