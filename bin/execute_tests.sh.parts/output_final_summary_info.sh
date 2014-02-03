@@ -57,3 +57,34 @@ then
     printf "\n" | sudo tee -a $TOTAL_SUM_FILE
 
 fi
+
+# Summary to partial file (device & version)...
+
+PARTIAL_SUM_FILE="/var/www/html/owd_tests/$DEVICE/$BRANCH/$DEVICE_$BRANCH_sum_file.csv"
+
+if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ]
+then
+    if [ ! -f "PARTIAL_SUM_FILE" ]
+    then
+        # print the header
+        printf "JOB NAME,BUILD BEING TESTED,Possible regression failures,RUN DETAILS,Start time,End time,Automation failures,Test cases passed,Assertions passed,Expected failures,Ignored test cases,Unwritten test cases" | sudo tee $PARTIAL_SUM_FILE
+        sudo chmod 755 $PARTIAL_SUM_FILE
+    fi
+
+    # print results in one line (each item is separated by tab char)
+    printf "\n" | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%s_%s," $JOB_NAME $BUILD_NUMBER | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%s," $DEVICE_BUILDNAME | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%s," $UNEX_FAILS | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%s/," "$HTML_FILEDIR" | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%s," "$RUN_TIME" | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%s," "$END_TIME" | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%4s," $AUTOMATION_FAILS | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%4s / %-4s," $P $T | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%4s / %-4s," $ASSERTS_PASSED $ASSERTS_TOTAL | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%4s," $EX_FAILS | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%4s," $IGNORED | sudo tee -a $PARTIAL_SUM_FILE
+    printf "%4s" $UNWRITTEN | sudo tee -a $PARTIAL_SUM_FILE
+    printf "\n" | sudo tee -a $PARTIAL_SUM_FILE
+
+fi
