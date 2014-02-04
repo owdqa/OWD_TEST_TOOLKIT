@@ -40,8 +40,8 @@ then
         printf "TEST SUITE,BUILD BEING TESTED,FAILURES,LINK to RUN DETAILS,Test cases passed\n" | sudo tee $TOTAL_SUM_FILE
         printf "Device: %s\n" $DEVICE | sudo tee $TOTAL_SUM_FILE
         printf "Version: %s\n" $BRANCH | sudo tee $TOTAL_SUM_FILE
-        WEEK="$(date '+%V')"
-        printf "Semana num: %s\n" $WEEK | sudo tee $TOTAL_SUM_FILE
+        #WEEK="$(date '+%V')"
+        printf "Semana num: %s\n" $(date '+%V') | sudo tee $TOTAL_SUM_FILE
         sudo chmod 755 $TOTAL_SUM_FILE
     fi
 
