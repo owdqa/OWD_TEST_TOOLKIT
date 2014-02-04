@@ -62,7 +62,7 @@ PARTIAL_SUM_FILE="/var/www/html/owd_tests/$DEVICE/$BRANCH/partial_sum_file.csv"
 
 if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ]
 then
-    if [ ! -f "PARTIAL_SUM_FILE" ]
+    if [ ! -f "$PARTIAL_SUM_FILE" ]
     then
         # print the header
         printf "JOB NAME,BUILD BEING TESTED,Possible regression failures,RUN DETAILS,Start time,End time,Automation failures,Test cases passed,Assertions passed,Expected failures,Ignored test cases,Unwritten test cases" | sudo tee $PARTIAL_SUM_FILE
