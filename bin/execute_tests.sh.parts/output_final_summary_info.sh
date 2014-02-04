@@ -36,11 +36,12 @@ then
     if [ ! -f "$TOTAL_SUM_FILE" ]
     then
         # print the header
-        #printf "JOB NAME,BUILD BEING TESTED,Possible regression failures,RUN DETAILS,Start time,End time,Automation failures,Test cases passed,Assertions passed,Expected failures,Ignored test cases,Unwritten test cases" | sudo tee $TOTAL_SUM_FILE
-        printf "TEST SUITE,BUILD BEING TESTED,FAILURES,LINK to RUN DETAILS,Test cases passed," | sudo tee $TOTAL_SUM_FILE
-        printf "Device: %s," $DEVICE | sudo tee $TOTAL_SUM_FILE
-        printf "Version: %s," $BRANCH | sudo tee $TOTAL_SUM_FILE
         printf "Semana num: %s\n" $(date '+%V') | sudo tee $TOTAL_SUM_FILE
+        printf "Device: %s\n" $DEVICE | sudo tee $TOTAL_SUM_FILE
+        printf "Version: %s\n" $BRANCH | sudo tee $TOTAL_SUM_FILE
+
+        #printf "JOB NAME,BUILD BEING TESTED,Possible regression failures,RUN DETAILS,Start time,End time,Automation failures,Test cases passed,Assertions passed,Expected failures,Ignored test cases,Unwritten test cases" | sudo tee $TOTAL_SUM_FILE
+        printf "TEST SUITE,BUILD BEING TESTED,FAILURES,LINK to RUN DETAILS,Test cases passed\n" | sudo tee $TOTAL_SUM_FILE
         sudo chmod 755 $TOTAL_SUM_FILE
     fi
 
@@ -64,10 +65,12 @@ then
     if [ ! -f "$PARTIAL_SUM_FILE" ]
     then
         # print the header
-        printf "TEST SUITE,BUILD BEING TESTED,FAILURES,LINK to RUN DETAILS,Test cases passed," | sudo tee $PARTIAL_SUM_FILE
-        printf "Device: %s," $DEVICE | sudo tee $PARTIAL_SUM_FILE
-        printf "Version: %s," $BRANCH | sudo tee $PARTIAL_SUM_FILE
         printf "Semana num: %s\n" $(date '+%V') | sudo tee $PARTIAL_SUM_FILE
+        printf "Device: %s\n" $DEVICE | sudo tee $PARTIAL_SUM_FILE
+        printf "Version: %s\n" $BRANCH | sudo tee $PARTIAL_SUM_FILE
+
+
+        printf "TEST SUITE,BUILD BEING TESTED,FAILURES,LINK to RUN DETAILS,Test cases passed\n" | sudo tee $PARTIAL_SUM_FILE
         sudo chmod 755 $PARTIAL_SUM_FILE
     fi
 
