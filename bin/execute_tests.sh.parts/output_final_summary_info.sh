@@ -41,7 +41,7 @@ then
         printf "Device: %s\n" $DEVICE | sudo tee $TOTAL_SUM_FILE
         printf "Version: %s\n" $BRANCH | sudo tee $TOTAL_SUM_FILE
         #WEEK="$(date '+%V')"
-        #printf "Semana num: %s\n" $(date '+%V') | sudo tee $TOTAL_SUM_FILE
+        printf "Semana num: %s\n" $(date '+%V') | sudo tee $TOTAL_SUM_FILE
         sudo chmod 755 $TOTAL_SUM_FILE
     fi
 
