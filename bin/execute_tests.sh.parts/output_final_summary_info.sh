@@ -37,7 +37,7 @@ then
     if [ ! -f "$TOTAL_SUM_FILE" ]
     then
         # print the header
-        printf "Week num: %d\n" $WEEK | sudo tee $TOTAL_SUM_FILE
+        #printf "Week num: %d\n" $WEEK | sudo tee $TOTAL_SUM_FILE
         printf "Device: %s\n" $DEVICE | sudo tee $TOTAL_SUM_FILE
         printf "Version: %s\n" $BRANCH | sudo tee $TOTAL_SUM_FILE
 
@@ -66,7 +66,7 @@ then
     if [ ! -f "$PARTIAL_SUM_FILE" ]
     then
         # print the header
-        printf "Week num: %d\n" $WEEK | sudo tee $PARTIAL_SUM_FILE
+        #printf "Week num: %d\n" $WEEK | sudo tee $PARTIAL_SUM_FILE
         printf "Device: %s\n" $DEVICE | sudo tee $PARTIAL_SUM_FILE
         printf "Version: %s\n" $BRANCH | sudo tee $PARTIAL_SUM_FILE
 
