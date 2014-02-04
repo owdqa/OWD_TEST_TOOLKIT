@@ -2,6 +2,7 @@
 # (For CI runs this is the only part we want emailed.)
 #
 export END_TIME="$(date '+%H:%M %d/%m/%Y')"
+export WEEK="$(date '+%V')"
 sep=$(printf "%0.1s" "#"{1..95})
 printf "\n\n\n$sep\n\n"
 printf "BUILD BEING TESTED                 : %s\n\n\n" $DEVICE_BUILDNAME
@@ -36,7 +37,7 @@ then
     if [ ! -f "$TOTAL_SUM_FILE" ]
     then
         # print the header
-        printf "Semana num: %s\n" $(date '+%V') | sudo tee $TOTAL_SUM_FILE
+        printf "Week num: %s\n" $WEEK | sudo tee $TOTAL_SUM_FILE
         printf "Device: %s\n" $DEVICE | sudo tee $TOTAL_SUM_FILE
         printf "Version: %s\n" $BRANCH | sudo tee $TOTAL_SUM_FILE
 
@@ -65,7 +66,7 @@ then
     if [ ! -f "$PARTIAL_SUM_FILE" ]
     then
         # print the header
-        printf "Semana num: %s\n" $(date '+%V') | sudo tee $PARTIAL_SUM_FILE
+        printf "Week num: %s\n" $WEEK | sudo tee $PARTIAL_SUM_FILE
         printf "Device: %s\n" $DEVICE | sudo tee $PARTIAL_SUM_FILE
         printf "Version: %s\n" $BRANCH | sudo tee $PARTIAL_SUM_FILE
 
