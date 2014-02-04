@@ -41,7 +41,7 @@ then
         printf "Device: %s\n" $DEVICE | sudo tee $TOTAL_SUM_FILE
         printf "Version: %s\n" $BRANCH | sudo tee $TOTAL_SUM_FILE
         #WEEK="$(date '+%V')"
-        printf "Semana num: %s\n" $(date '+%V') | sudo tee $TOTAL_SUM_FILE
+        #printf "Semana num: %s\n" $(date '+%V') | sudo tee $TOTAL_SUM_FILE
         sudo chmod 755 $TOTAL_SUM_FILE
     fi
 
@@ -51,7 +51,7 @@ then
     printf "%s," $DEVICE_BUILDNAME | sudo tee -a $TOTAL_SUM_FILE
     printf "%s," $UNEX_FAILS | sudo tee -a $TOTAL_SUM_FILE
     printf "%s/," "$HTML_FILEDIR" | sudo tee -a $TOTAL_SUM_FILE
-    printf "%4s / %-4s," $P $T | sudo tee -a $TOTAL_SUM_FILE
+    printf "%4s / %-4s" $P $T | sudo tee -a $TOTAL_SUM_FILE
     printf "\n" | sudo tee -a $TOTAL_SUM_FILE
 
 fi
