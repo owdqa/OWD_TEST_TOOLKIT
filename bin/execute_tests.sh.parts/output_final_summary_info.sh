@@ -68,7 +68,7 @@ then
         # print the header
         printf "Week num: %d\n" $(date '+%V') | sudo tee $PARTIAL_SUM_FILE
         printf "Device: %s\n" $DEVICE | sudo tee -a $PARTIAL_SUM_FILE
-        printf "Version: %s\n" $BRANCH | sudo tee a $PARTIAL_SUM_FILE
+        printf "Version: %s\n" $BRANCH | sudo tee -a $PARTIAL_SUM_FILE
 
         printf "TEST SUITE,BUILD BEING TESTED,FAILURES,LINK to RUN DETAILS,Test cases passed\n" | sudo tee -a $PARTIAL_SUM_FILE
         sudo chmod 755 $PARTIAL_SUM_FILE
