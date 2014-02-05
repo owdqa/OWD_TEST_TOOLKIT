@@ -36,18 +36,16 @@ then
     if [ ! -f "$TOTAL_SUM_FILE" ]
     then
         # print the header
-        printf "Week num: %d\n" $(date '+%V') | sudo tee $TOTAL_SUM_FILE
-        printf "Device: %s\n" $DEVICE | sudo tee -a $TOTAL_SUM_FILE
-        printf "Version: %s\n" $BRANCH | sudo tee -a $TOTAL_SUM_FILE
-
-        #printf "JOB NAME,BUILD BEING TESTED,Possible regression failures,RUN DETAILS,Start time,End time,Automation failures,Test cases passed,Assertions passed,Expected failures,Ignored test cases,Unwritten test cases" | sudo tee $TOTAL_SUM_FILE
-        printf "TEST SUITE,BUILD BEING TESTED,FAILURES,LINK to RUN DETAILS,Test cases passed\n" | sudo tee -a $TOTAL_SUM_FILE
+        printf "WEEK NUMBER: %d\n" $(date '+%V') | sudo tee $TOTAL_SUM_FILE
+        printf "TEST SUITE,DEVICE,VERSION,BUILD BEING TESTED,FAILURES,LINK to RUN DETAILS,Test cases passed\n" | sudo tee -a $TOTAL_SUM_FILE
         sudo chmod 755 $TOTAL_SUM_FILE
     fi
 
     # print results in one line (each item is separated by tab char)
     printf "\n" | sudo tee -a $TOTAL_SUM_FILE
     printf "%s," $JOB_NAME | sudo tee -a $TOTAL_SUM_FILE
+    printf "%s," $DEVICE | sudo tee -a $TOTAL_SUM_FILE
+    printf "%s," $BRANCH | sudo tee -a $TOTAL_SUM_FILE
     printf "%s," $DEVICE_BUILDNAME | sudo tee -a $TOTAL_SUM_FILE
     printf "%s," $UNEX_FAILS | sudo tee -a $TOTAL_SUM_FILE
     printf "%s/," "$HTML_FILEDIR" | sudo tee -a $TOTAL_SUM_FILE
