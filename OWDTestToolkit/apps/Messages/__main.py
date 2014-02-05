@@ -1,6 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
-import  addNumbersInToField                 ,\
+import  addNumbersInToField                ,\
+        addSubject           ,\
         checkAirplaneModeWarning           ,\
         checkIsInToField                   ,\
         checkMMSIcon                       ,\
@@ -48,6 +49,7 @@ import  addNumbersInToField                 ,\
 
 class Messages (
             addNumbersInToField.main,
+            addSubject.main,
             checkAirplaneModeWarning.main,
             checkIsInToField.main,
             checkMMSIcon.main,
