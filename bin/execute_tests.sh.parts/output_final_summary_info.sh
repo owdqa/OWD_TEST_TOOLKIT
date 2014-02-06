@@ -121,7 +121,7 @@ then
     printf "%s/," "$HTML_FILEDIR" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$END_TIME" | sudo tee -a $TOTAL_CSV_FILE
-    printf "%4s / %-4s" $P $T | sudo tee -a $TOTAL_CSV_FILE
+    printf "%4s / %-4s," $P $T | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $UNEX_FAILS | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $AUTOMATION_FAILS | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $UNEX_PASSES | sudo tee -a $TOTAL_CSV_FILE
