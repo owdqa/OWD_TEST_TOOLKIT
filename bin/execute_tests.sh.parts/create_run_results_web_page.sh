@@ -50,7 +50,7 @@ then
 else
     PERCENT_PASSED="100"
 fi
-PERCENT_PASSED="$PERCENT_PASSED%"
+export PERCENT_PASSED="$PERCENT_PASSED%"
 
 x=$(ls $RESULT_DIR/@Flash_device* 2> /dev/null | egrep -v "html$" | awk 'BEGIN{FS="@"}{print $NF}')
 [ "$x" ] && B2G_BUILD_NAME="$x" || B2G_BUILD_NAME="(unspecified)"

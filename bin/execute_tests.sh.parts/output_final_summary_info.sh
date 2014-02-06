@@ -105,8 +105,7 @@ then
     printf "%s," $BUILD_NUMBER | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $DEVICE | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $BRANCH | sudo tee -a $TOTAL_CSV_FILE
-    #printf "%s," $DEVICE_BUILDNAME | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $B2G_BUILD_NAME | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $DEVICE_BUILDNAME | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$HTML_FILEDIR" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$END_TIME" | sudo tee -a $TOTAL_CSV_FILE
@@ -118,7 +117,7 @@ then
     printf "%s," $EX_PASSES | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $IGNORED | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $UNWRITTEN | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $PERCENT_PASSED | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s" $PERCENT_PASSED | sudo tee -a $TOTAL_CSV_FILE
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
 
 fi
