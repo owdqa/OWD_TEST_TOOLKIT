@@ -97,7 +97,7 @@ import_search_list  = ("xpath", "//*[@id='search-list']//li[@class='block-item']
 import_conts_xp     = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
 
 import_contacts     = ("xpath", "/html/body/article/section/article/section/ul[2]/li/button")
-cancel_import_contacts = ("xpath", "//*[@id='cancel-overlay']")
+cancel_import_contacts = ("xpath", "/html/body/form[2]/menu/button")
 
 gmail_button            = ("xpath", "//button[text()='Gmail']")
 gmail_button_test       = ("xpath","/html/body/article/section[2]/article/section/ul/li[3]/button")
