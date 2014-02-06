@@ -22,6 +22,7 @@ import  addNumbersInToField                ,\
         editAndSelectMessages              ,\
         editAndSelectThreads               ,\
         enterSMSMsg                        ,\
+        fordwardMessage                    ,\
         lastMessageInThisThread            ,\
         openThread                         ,\
         readLastSMSInThread                ,\
@@ -70,6 +71,7 @@ class Messages (
             editAndSelectMessages.main,
             editAndSelectThreads.main,
             enterSMSMsg.main,
+            fordwardMessage.main,
             lastMessageInThisThread.main,
             openThread.main,
             readLastSMSInThread.main,
