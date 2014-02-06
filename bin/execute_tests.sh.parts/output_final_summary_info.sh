@@ -99,6 +99,18 @@ then
         sudo chmod 755 $TOTAL_CSV_FILE
     fi
 
+    #calculating pecent assertions passed
+    ASSERTS_PASSED=${ASSERTS_PASSED:-0}
+    ASSERTS_TOTAL=${ASSERTS_TOTAL:-0}
+    if [ $ASSERTS_PASSED -lt $ASSERTS_TOTAL ]
+    then
+	    PERCENT_PASSED=$(($ASSERTS_PASSED * 100))
+	    PERCENT_PASSED=$(($PERCENT_PASSED / $ASSERTS_TOTAL))
+    else
+        PERCENT_PASSED="100"
+    fi
+    PERCENT_PASSED="$PERCENT_PASSED%"
+
     # print results in one line (comma separated)
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $JOB_NAME | sudo tee -a $TOTAL_CSV_FILE
