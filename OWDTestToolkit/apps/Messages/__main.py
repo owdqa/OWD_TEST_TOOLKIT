@@ -1,6 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
-import  addNumbersInToField                 ,\
+import  addNumbersInToField                ,\
+        addSubject           ,\
         checkAirplaneModeWarning           ,\
         checkIsInToField                   ,\
         checkMMSIcon                       ,\
@@ -21,6 +22,7 @@ import  addNumbersInToField                 ,\
         editAndSelectMessages              ,\
         editAndSelectThreads               ,\
         enterSMSMsg                        ,\
+        fordwardMessage                    ,\
         lastMessageInThisThread            ,\
         openThread                         ,\
         readLastSMSInThread                ,\
@@ -48,6 +50,7 @@ import  addNumbersInToField                 ,\
 
 class Messages (
             addNumbersInToField.main,
+            addSubject.main,
             checkAirplaneModeWarning.main,
             checkIsInToField.main,
             checkMMSIcon.main,
@@ -68,6 +71,7 @@ class Messages (
             editAndSelectMessages.main,
             editAndSelectThreads.main,
             enterSMSMsg.main,
+            fordwardMessage.main,
             lastMessageInThisThread.main,
             openThread.main,
             readLastSMSInThread.main,

@@ -10,17 +10,17 @@ class main(GaiaTestCase):
         #
 
         self.startNewSMS()
-        
+
         #
         # Enter the numbers.
         #
         self.addNumbersInToField(p_nums)
-            
+
         #
         # Enter the message.
         #
         self.enterSMSMsg(p_msg)
-         
+
 		#
 		# The header should now say how many receipients.
 		#
@@ -28,7 +28,7 @@ class main(GaiaTestCase):
         num_recs = len(p_nums)
         search_str = " recipient" if num_recs == 1 else " recipients"
         self.UTILS.headerCheck(str(num_recs) + search_str)
-		
+
         #
         # Send the message.
         #

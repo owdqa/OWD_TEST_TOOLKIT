@@ -54,6 +54,17 @@ edit_msgs_sel_all_btn  = ("id","messages-check-all-button")
 airplane_warning_message= ("xpath", "//p/*[contains(text(),'Airplane')]")
 airplane_warning_ok    = ("xpath", "//button[text()='OK']")
 
+received_sms    = ('xpath', "//li[@class='message sms received incoming']/section/div/p")
+received_mms    = ('xpath', "//li[@class='message mms received incoming']/section/div/p")
+received_mms_subject    = ('xpath', "//li[@class='message mms received incoming has-subject']/section/div/p")
+
+fordward_btn_msg_opt    = ('xpath', "/html/body/form/menu/button[1]")
+cancel_btn_msg_opt    = ('xpath', "/html/body/form/menu/button[3]")
+
+messages_options_btn  = ("id","messages-options-icon")
+addsubject_btn_msg_opt    = ('xpath', "/html/body/form/menu/button[1]")
+target_subject  = ("id","messages-subject-input")
+
 header_call_btn                 = ("xpath", "//button[text()='Call']")
 header_send_message_btn         = ("xpath", "//button[text()='Send message']")
 header_create_new_contact_btn   = ("xpath", "//button[text()='Create new contact']")
