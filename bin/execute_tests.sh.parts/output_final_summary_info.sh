@@ -118,7 +118,7 @@ then
     printf "%s," $EX_PASSES | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $IGNORED | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $UNWRITTEN | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s" $ERROR_RATE | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s%%" $ERROR_RATE | sudo tee -a $TOTAL_CSV_FILE
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
 
 fi
