@@ -83,7 +83,6 @@ then
 fi
 
 
-
 # CSV with all data...
 
 TOTAL_CSV_FILE="/var/www/html/owd_tests/total_csv_file.csv"
@@ -94,21 +93,12 @@ then
     then
         # print the header
         printf "WEEK NUMBER: %d\n" $(date '+%V') | sudo tee $TOTAL_CSV_FILE
-        printf "TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,START_TIME,END_TIME,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_PASSED\n" | sudo tee -a $TOTAL_CSV_FILE
+        printf "TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,START_TIME,END_TIME,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $TOTAL_CSV_FILE
         sudo chmod 755 $TOTAL_CSV_FILE
     fi
 
-    #calculating pecent assertions passed
-    ASSERTS_PASSED=${ASSERTS_PASSED:-0}
-    ASSERTS_TOTAL=${ASSERTS_TOTAL:-0}
-    if [ $ASSERTS_PASSED -lt $ASSERTS_TOTAL ]
-    then
-	    PERCENT_PASSED=$(($ASSERTS_PASSED * 100))
-	    PERCENT_PASSED=$(($PERCENT_PASSED / $ASSERTS_TOTAL))
-    else
-        PERCENT_PASSED="100"
-    fi
-    PERCENT_PASSED="$PERCENT_PASSED%"
+    # Calculating error rate
+    ERROR_RATE=$((($F*100)/$T))
 
     # print results in one line (comma separated)
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
@@ -128,7 +118,7 @@ then
     printf "%s," $EX_PASSES | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $IGNORED | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $UNWRITTEN | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s" $PERCENT_PASSED | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s" $ERROR_RATE | sudo tee -a $TOTAL_CSV_FILE
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
 
 fi
