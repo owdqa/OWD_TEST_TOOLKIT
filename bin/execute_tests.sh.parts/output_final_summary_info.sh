@@ -1,3 +1,4 @@
+#!/bin/sh
 #
 # (For CI runs this is the only part we want emailed.)
 #
@@ -123,5 +124,49 @@ then
     printf "%s," $UNWRITTEN | sudo tee -a $TOTAL_CSV_FILE
     printf "%s%%" $ERROR_RATE | sudo tee -a $TOTAL_CSV_FILE
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
+
+fi
+
+# partial (device & version) CSV with all data...
+
+PARTIAL_CSV_FILE="/var/www/html/owd_tests/$DEVICE/$BRANCH/partial_csv_file_NEW.csv"
+
+if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ]
+then
+    if [ ! -f "$PARTIAL_CSV_FILE" ]
+    then
+        # print the header
+        printf "Last test executions. Date: %s\n" $(date '%m-%d-%Y %T') | sudo tee $PARTIAL_CSV_FILE
+        printf "Device: %s\n" $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
+        printf "Version: %s\n" $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
+
+        printf "TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,START_TIME,END_TIME,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $PARTIAL_CSV_FILE
+        sudo chmod 755 $PARTIAL_CSV_FILE
+    fi
+
+    # print results in one line (comma separated)
+    # Calculating error rate
+    ERROR_RATE=$((($F*100)/$T))
+
+    # print results in one line (comma separated)
+    printf "\n" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $JOB_NAME | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $BUILD_NUMBER | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $DEVICE_BUILDNAME | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s/," "$HTML_FILEDIR" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s/," "$RUN_TIME" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s/," "$END_TIME" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%4s / %-4s," $P $T | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $UNEX_FAILS | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $AUTOMATION_FAILS | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $UNEX_PASSES | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $EX_FAILS | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $EX_PASSES | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $IGNORED | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $UNWRITTEN | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s%%" $ERROR_RATE | sudo tee -a $PARTIAL_CSV_FILE
+    printf "\n" | sudo tee -a $PARTIAL_CSV_FILE
 
 fi
