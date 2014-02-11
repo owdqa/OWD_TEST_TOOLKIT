@@ -136,7 +136,7 @@ then
     if [ ! -f "$PARTIAL_CSV_FILE" ]
     then
         # print the header
-        printf "Last test executions. Date: %s\n" $(date '%m-%d-%Y %T') | sudo tee $PARTIAL_CSV_FILE
+        printf "Last test executions, DATE: %s %s\n" $(date '+%m-%d-%Y') $(date '+%T') | sudo tee $PARTIAL_CSV_FILE
         printf "Device: %s\n" $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
         printf "Version: %s\n" $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
 
