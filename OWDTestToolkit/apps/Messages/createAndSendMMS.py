@@ -42,6 +42,25 @@ class main(GaiaTestCase):
 
             self.createMMSImage()
             self.gallery.clickThumbMMS(0)
+
+            #
+            # Click send and wait for the message to be received
+            #
+            self.sendSMS()
+            time.sleep(5)
+
+            #
+            # Obtaining file attached type
+            #
+            x = self.UTILS.getElement(DOM.Messages.attach_preview_img_type, "preview type")
+            type=x.get_attribute("data-attachment-type")
+
+
+            if type != "img":
+                self.UTILS.quitTest("Incorrect file type. The file must be img ")
+
+
+
         elif attached_type=="video":
             #
             # Load an video file into the device.
@@ -50,6 +69,20 @@ class main(GaiaTestCase):
 
             self.createMMSVideo()
             self.video.clickOnVideoMMS(0)
+            self.sendSMS()
+
+
+            #
+            # Obtaining file attached type
+            #
+            x = self.UTILS.getElement(DOM.Messages.attach_preview_video_audio_type, "preview type")
+            type=x.get_attribute("data-attachment-type")
+
+            if type != "video":
+                self.UTILS.quitTest("Incorrect file type. The file must be video")
+
+
+
 
         elif attached_type=="audio":
             #
@@ -60,28 +93,26 @@ class main(GaiaTestCase):
             self.createMMSMusic()
             self.music.clickOnSongMMS()
 
+            #
+            # Click send and wait for the message to be received
+            #
+            self.sendSMS()
+            time.sleep(5)
+
+
+            #
+            # Obtaining file attached type
+            #
+            x = self.UTILS.getElement(DOM.Messages.attach_preview_video_audio_type, "preview type")
+            type=x.get_attribute("data-attachment-type")
+
+            if type != "audio":
+                self.UTILS.quitTest("Incorrect file type. The file must be audio ")
+
+
+
         else:
             #self.UTILS.logResult("info", "incorrect value received")
             self.UTILS.quitTest("FAILED: Incorrect parameter received in createAndSendMMS() . attached_type must being image, video or audio.")
 
 
-
-        #
-        # Click send and wait for the message to be received
-        #
-        self.sendSMS()
-
-
-        #
-        # This step is necessary because our sim cards receive mms with +XXX
-        #
-        x = self.UTILS.getElement(DOM.Messages.header_back_button, "Back button")
-        x.tap()
-
-        self.openThread("+" + self.UTILS.get_os_variable("GLOBAL_TARGET_SMS_NUM"))
-
-        #
-        # Wait for the last message in this thread to be a 'recieved' one.
-        #
-        returnedSMS = self.waitForReceivedMsgInThisThread()
-        self.UTILS.TEST(returnedSMS, "A receieved message appeared in the thread.", True)
