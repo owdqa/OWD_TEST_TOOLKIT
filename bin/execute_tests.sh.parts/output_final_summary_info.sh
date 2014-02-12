@@ -61,7 +61,7 @@ then
     printf "%s," $BRANCH | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $DEVICE_BUILDNAME | sudo tee -a $TOTAL_CSV_FILE
     #printf "%s/," "$HTML_FILEDIR" | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$END_TIME" | sudo tee -a $TOTAL_CSV_FILE
     printf "%4s / %-4s," $P $T | sudo tee -a $TOTAL_CSV_FILE
