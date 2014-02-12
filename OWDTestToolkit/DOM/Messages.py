@@ -65,6 +65,10 @@ messages_options_btn  = ("id","messages-options-icon")
 addsubject_btn_msg_opt    = ('xpath', "/html/body/form/menu/button[1]")
 target_subject  = ("id","messages-subject-input")
 
+attach_preview_img_type             = ("xpath", "//*[@class='attachment-container preview']")
+attach_preview_video_audio_type             = ("xpath", "//*[@class='attachment-container nopreview']")
+
+
 header_call_btn                 = ("xpath", "//button[text()='Call']")
 header_send_message_btn         = ("xpath", "//button[text()='Send message']")
 header_create_new_contact_btn   = ("xpath", "//button[text()='Create new contact']")

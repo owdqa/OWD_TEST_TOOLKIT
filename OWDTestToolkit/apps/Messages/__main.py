@@ -10,6 +10,7 @@ import  addNumbersInToField                ,\
         clickSMSNotifier                   ,\
         closeThread                        ,\
         countMessagesInThisThread          ,\
+        verifyMMSReceived                  ,\
         createAndSendMMS                   ,\
         createAndSendSMS                   ,\
         createMMSImage                     ,\
@@ -60,6 +61,7 @@ class Messages (
             clickSMSNotifier.main,
             closeThread.main,
             countMessagesInThisThread.main,
+            verifyMMSReceived.main,
             createAndSendMMS.main,
             createAndSendSMS.main,
             createMMSImage.main,
