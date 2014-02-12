@@ -21,6 +21,14 @@ P=$(($EX_PASSES + $UNEX_PASSES))
 F=$(($EX_FAILS + $UNEX_FAILS))
 T=$(($P + $F))
 
+# Calculating error rate
+if [$T > 0]
+then
+    ERROR_RATE=$((($F*100)/$T))
+else
+    ERROR_RATE=0
+fi
+
 printf "Automation failures                : %4s\n" $AUTOMATION_FAILS
 printf "Test cases passed                  : %4s / %-4s\n" $P $T
 printf "Assertions passed                  : %4s / %-4s\n" $ASSERTS_PASSED $ASSERTS_TOTAL
@@ -44,9 +52,6 @@ then
         printf "TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,START_TIME,END_TIME,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $TOTAL_CSV_FILE
         sudo chmod 755 $TOTAL_CSV_FILE
     fi
-
-    # Calculating error rate
-    ERROR_RATE=$((($F*100)/$T))
 
     # print results in one line (comma separated)
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
@@ -100,8 +105,6 @@ then
     fi
 
     # print results in one line (comma separated)
-    # Calculating error rate
-    ERROR_RATE=$((($F*100)/$T))
 
     # print results in one line (comma separated)
     printf "\n" | sudo tee -a $PARTIAL_CSV_FILE

@@ -89,7 +89,12 @@ then
     P=$(($EX_PASSES + $UNEX_PASSES))
     F=$(($EX_FAILS + $UNEX_FAILS))
     T=$(($P + $F))
-    ERROR_RATE=$((($F*100)/$T))
+    if [$T > 0]
+    then
+        ERROR_RATE=$((($F*100)/$T))
+    else
+        ERROR_RATE=0
+    fi
     printf "\n\nERROR RATE = %s %%\n\n" $ERROR_RATE
     # if error rate less than 20% set build as unstable
     if [ $ERROR_RATE -lt 20 ]
