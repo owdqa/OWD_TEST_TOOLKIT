@@ -60,7 +60,7 @@ then
     printf "%s," $DEVICE | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $BRANCH | sudo tee -a $TOTAL_CSV_FILE
     # Only first substring of $DEVICE_BUILDNAME
-    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*//g" | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*/,/g" | sudo tee -a $TOTAL_CSV_FILE
     # URL without prefix (http://hostname/owd-qa)
     printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
@@ -114,7 +114,7 @@ then
     printf "%s," $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
     # Only first substring of $DEVICE_BUILDNAME
-    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*//g" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*/,/g" | sudo tee -a $PARTIAL_CSV_FILE
     # URL without prefix (http://hostname/owd-qa)
     printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $PARTIAL_CSV_FILE
