@@ -59,9 +59,9 @@ then
     printf "%s," $BUILD_NUMBER | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $DEVICE | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $BRANCH | sudo tee -a $TOTAL_CSV_FILE
-    #printf "%s," $DEVICE_BUILDNAME | sudo tee -a $TOTAL_CSV_FILE
+    # Only first substring of $DEVICE_BUILDNAME
     printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*//g" | sudo tee -a $TOTAL_CSV_FILE
-    #printf "%s/," "$HTML_FILEDIR" | sudo tee -a $TOTAL_CSV_FILE
+    # URL without prefix (http://hostname/owd-qa)
     printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$END_TIME" | sudo tee -a $TOTAL_CSV_FILE
@@ -76,10 +76,10 @@ then
     printf "%s%%" $ERROR_RATE | sudo tee -a $TOTAL_CSV_FILE
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
 
-    # TODO 1:
+    # TODO 1: Done from Jenkins
     # total_weekly: python que lo genere a partir del total_csv con selección de campos (al final de cada job) order: by date desc
 
-    # TODO 2:
+    # TODO 2: Done from Jenkins
     # partial_weekly: python que lo genere a partir del total_csv con cada device y version. (al final de cada job): order by date desc
 
 
@@ -113,9 +113,9 @@ then
     printf "%s," $BUILD_NUMBER | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
-    #printf "%s," $DEVICE_BUILDNAME | sudo tee -a $PARTIAL_CSV_FILE
+    # Only first substring of $DEVICE_BUILDNAME
     printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*//g" | sudo tee -a $PARTIAL_CSV_FILE
-    #printf "%s/," "$HTML_FILEDIR" | sudo tee -a $PARTIAL_CSV_FILE
+    # URL without prefix (http://hostname/owd-qa)
     printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s/," "$END_TIME" | sudo tee -a $PARTIAL_CSV_FILE
@@ -130,7 +130,7 @@ then
     printf "%s%%" $ERROR_RATE | sudo tee -a $PARTIAL_CSV_FILE
     printf "\n" | sudo tee -a $PARTIAL_CSV_FILE
 
-    # TODO 3:
+    # TODO 3: Done from Jenkins
     # partial_daily: python que lo genere a partir del partial_csv con selección de campos y sólo bugs (al final de cada tanda) order: by bugs desc
 
 fi
