@@ -22,7 +22,7 @@ F=$(($EX_FAILS + $UNEX_FAILS))
 T=$(($P + $F))
 
 # Calculating error rate
-if [ $F -gt 0 ]
+if [ $T -gt 0 ]
 then
     ERROR_RATE=$((($F*100)/$T))
 else
