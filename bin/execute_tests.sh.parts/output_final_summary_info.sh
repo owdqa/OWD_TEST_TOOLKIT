@@ -59,7 +59,8 @@ then
     printf "%s," $BUILD_NUMBER | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $DEVICE | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $BRANCH | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $DEVICE_BUILDNAME | sudo tee -a $TOTAL_CSV_FILE
+    #printf "%s," $DEVICE_BUILDNAME | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*//g" | sudo tee -a $TOTAL_CSV_FILE
     #printf "%s/," "$HTML_FILEDIR" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
@@ -112,7 +113,8 @@ then
     printf "%s," $BUILD_NUMBER | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s," $DEVICE_BUILDNAME | sudo tee -a $PARTIAL_CSV_FILE
+    #printf "%s," $DEVICE_BUILDNAME | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*//g" | sudo tee -a $PARTIAL_CSV_FILE
     #printf "%s/," "$HTML_FILEDIR" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $PARTIAL_CSV_FILE
