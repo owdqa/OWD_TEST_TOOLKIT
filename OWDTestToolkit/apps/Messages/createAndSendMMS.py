@@ -109,8 +109,6 @@ class main(GaiaTestCase):
             if type != "audio":
                 self.UTILS.quitTest("Incorrect file type. The file must be audio ")
 
-
-
         else:
             #self.UTILS.logResult("info", "incorrect value received")
             self.UTILS.quitTest("FAILED: Incorrect parameter received in createAndSendMMS() . attached_type must being image, video or audio.")
