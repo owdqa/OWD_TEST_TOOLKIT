@@ -49,22 +49,18 @@ then
     then
         # print the header
         printf "WEEK NUMBER: %d\n" $(date '+%V') | sudo tee $TOTAL_CSV_FILE
-        printf "TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,START_TIME,END_TIME,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $TOTAL_CSV_FILE
+        #printf "TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,START_TIME,END_TIME,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $TOTAL_CSV_FILE
+        #printf "START_TIME,END_TIME,TEST_SUITE,BUILD_NUMBER,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS\n" | sudo tee -a $TOTAL_CSV_FILE
+        printf "START_TIME,DATE,TEST_SUITE,BUILD_NUMBER,TEST_CASES_PASSED,FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,KNOWN_BUGS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED,DEVICE,VERSION,BUILD,TEST_DETAILS\n" | sudo tee -a $TOTAL_CSV_FILE
         sudo chmod 755 $TOTAL_CSV_FILE
     fi
 
     # print results in one line (comma separated)
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $JOB_NAME | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $BUILD_NUMBER | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $DEVICE | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $BRANCH | sudo tee -a $TOTAL_CSV_FILE
-    # Only first substring of $DEVICE_BUILDNAME
-    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*/,/g" | sudo tee -a $TOTAL_CSV_FILE
-    # URL without prefix (http://hostname/owd-qa)
-    printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s/," "$END_TIME" | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $JOB_NAME | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $BUILD_NUMBER | sudo tee -a $TOTAL_CSV_FILE
     printf "%4s / %-4s," $P $T | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $UNEX_FAILS | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $AUTOMATION_FAILS | sudo tee -a $TOTAL_CSV_FILE
@@ -73,7 +69,13 @@ then
     printf "%s," $EX_PASSES | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $IGNORED | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $UNWRITTEN | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s%%" $ERROR_RATE | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s%%," $ERROR_RATE | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $DEVICE | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $BRANCH | sudo tee -a $TOTAL_CSV_FILE
+    # Only first substring of $DEVICE_BUILDNAME
+    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*/,/g" | sudo tee -a $TOTAL_CSV_FILE
+    # URL without prefix (http://hostname/owd-qa)
+    printf "%s/" "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $TOTAL_CSV_FILE
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
 
     # TODO 1: Done from Jenkins
@@ -101,24 +103,17 @@ then
         printf "Device: %s\n" $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
         printf "Version: %s\n" $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
 
-        printf "TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,START_TIME,END_TIME,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $PARTIAL_CSV_FILE
+        #printf "START_TIME,END_TIME,TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $PARTIAL_CSV_FILE
+        printf "START_TIME,DATE,TEST_SUITE,BUILD_NUMBER,TEST_CASES_PASSED,FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,KNOWN_BUGS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED,DEVICE,VERSION,BUILD,TEST_DETAILS\n" | sudo tee -a $PARTIAL_CSV_FILE
         sudo chmod 755 $PARTIAL_CSV_FILE
     fi
 
     # print results in one line (comma separated)
-
-    # print results in one line (comma separated)
     printf "\n" | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s," $JOB_NAME | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s," $BUILD_NUMBER | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s," $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s," $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
-    # Only first substring of $DEVICE_BUILDNAME
-    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*/,/g" | sudo tee -a $PARTIAL_CSV_FILE
-    # URL without prefix (http://hostname/owd-qa)
-    printf "%s/," "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s/," "$RUN_TIME" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s/," "$END_TIME" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $JOB_NAME | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $BUILD_NUMBER | sudo tee -a $PARTIAL_CSV_FILE
     printf "%4s / %-4s," $P $T | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $UNEX_FAILS | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $AUTOMATION_FAILS | sudo tee -a $PARTIAL_CSV_FILE
@@ -127,7 +122,13 @@ then
     printf "%s," $EX_PASSES | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $IGNORED | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $UNWRITTEN | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s%%" $ERROR_RATE | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s%%," $ERROR_RATE | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
+    # Only first substring of $DEVICE_BUILDNAME
+    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*/,/g" | sudo tee -a $PARTIAL_CSV_FILE
+    # URL without prefix (http://hostname/owd-qa)
+    printf "%s/" "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $PARTIAL_CSV_FILE
     printf "\n" | sudo tee -a $PARTIAL_CSV_FILE
 
     # TODO 3: Done from Jenkins
