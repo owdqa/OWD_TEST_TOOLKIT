@@ -29,6 +29,9 @@ header_back_button     = ("id","messages-back-button")
 
 threads                = ("xpath", "//p[@class='name']")
 threads_list           = ('xpath', '//article[@id="threads-container"]//li')
+
+threads_list_element           = ('xpath', '//article[@id="threads-container"]/div/ul/li/a/p')
+
 thread_target_names    = ('xpath', '//article[@id="threads-container"]//li//p[@class="name"]')
 thread_selector_xpath  = "//*[@id='threads-container']//li//a/p[contains(text(),'%s')]"
 thread_timestamp_xpath = thread_selector_xpath + "/..//time"
@@ -46,7 +49,13 @@ messages_from_num      = "//*[contains(@id, '%s')]"
 message_timestamps     = ("xpath", ".//*[@id='messages-container']/header")
 message_header         = ("id", "messages-header-text")
 received_messages      = ('xpath', "//li[@class='bubble'][a[@class='received']]")
-edit_messages_icon     = ("id","messages-edit-icon")
+
+edit_messages_icon     = ('xpath', "//span[@class='icon icon-options']")
+delete_messages_btn    = ('xpath', "//button[@data-l10n-id='deleteMessages-label']")
+delete_messages_ok_btn    = ('xpath', "//form[@class='modal-dialog-confirm generic-dialog visible']/menu/button[@data-l10n-id='ok']")
+
+message_text    = ('xpath', "/html/body/article/section[2]/article/ul/li[%d]/section/div/p/span")
+
 edit_msgs_delete_btn   = ("id","messages-delete-button")
 edit_msgs_header       = ("id","messages-edit-mode")
 edit_msgs_sel_all_btn  = ("id","messages-check-all-button")
