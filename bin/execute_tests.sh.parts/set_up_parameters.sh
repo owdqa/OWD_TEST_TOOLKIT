@@ -8,7 +8,7 @@ chmod 777 /tmp/tests 2> /dev/null
 #
 # Capture the starting time of this test (nicely formatted).
 #
-export RUN_TIME=$(date "+%H:%M %d/%m/%Y")
+export RUN_TIME=$(date "+%d/%m/%Y %H:%M")
 
 #
 # Directory for all output (or fake it if not coming from ci_test_run.sh).
