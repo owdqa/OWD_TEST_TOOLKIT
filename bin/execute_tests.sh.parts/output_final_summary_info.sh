@@ -2,7 +2,7 @@
 #
 # (For CI runs this is the only part we want emailed.)
 #
-export END_TIME="$(date '+%H:%M %d/%m/%Y')"
+export END_TIME="$(date '+%d/%m/%Y %H:%M')"
 export WEEK="$(date '+%V')"
 sep=$(printf "%0.1s" "#"{1..95})
 printf "\n\n\n$sep\n\n"
@@ -57,8 +57,8 @@ then
 
     # print results in one line (comma separated)
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s/," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s/," "$END_TIME" | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," "$END_TIME" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $JOB_NAME | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $BUILD_NUMBER | sudo tee -a $TOTAL_CSV_FILE
     printf "%4s / %-4s," $P $T | sudo tee -a $TOTAL_CSV_FILE
@@ -110,8 +110,8 @@ then
 
     # print results in one line (comma separated)
     printf "\n" | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s/," "$RUN_TIME" | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s/," "$END_TIME" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," "$RUN_TIME" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," "$END_TIME" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $JOB_NAME | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $BUILD_NUMBER | sudo tee -a $PARTIAL_CSV_FILE
     printf "%4s / %-4s," $P $T | sudo tee -a $PARTIAL_CSV_FILE
