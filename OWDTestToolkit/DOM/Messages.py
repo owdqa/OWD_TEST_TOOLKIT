@@ -29,6 +29,9 @@ header_back_button     = ("id","messages-back-button")
 
 threads                = ("xpath", "//p[@class='name']")
 threads_list           = ('xpath', '//article[@id="threads-container"]//li')
+
+threads_list_element           = ('xpath', '//article[@id="threads-container"]/div/ul/li/a/p')
+
 thread_target_names    = ('xpath', '//article[@id="threads-container"]//li//p[@class="name"]')
 thread_selector_xpath  = "//*[@id='threads-container']//li//a/p[contains(text(),'%s')]"
 thread_timestamp_xpath = thread_selector_xpath + "/..//time"
@@ -46,13 +49,34 @@ messages_from_num      = "//*[contains(@id, '%s')]"
 message_timestamps     = ("xpath", ".//*[@id='messages-container']/header")
 message_header         = ("id", "messages-header-text")
 received_messages      = ('xpath', "//li[@class='bubble'][a[@class='received']]")
-edit_messages_icon     = ("id","messages-edit-icon")
+
+edit_messages_icon     = ('xpath', "//span[@class='icon icon-options']")
+delete_messages_btn    = ('xpath', "//button[@data-l10n-id='deleteMessages-label']")
+delete_messages_ok_btn    = ('xpath', "//form[@class='modal-dialog-confirm generic-dialog visible']/menu/button[@data-l10n-id='ok']")
+
+message_text    = ('xpath', "/html/body/article/section[2]/article/ul/li[%d]/section/div/p/span")
+
 edit_msgs_delete_btn   = ("id","messages-delete-button")
 edit_msgs_header       = ("id","messages-edit-mode")
 edit_msgs_sel_all_btn  = ("id","messages-check-all-button")
 
 airplane_warning_message= ("xpath", "//p/*[contains(text(),'Airplane')]")
 airplane_warning_ok    = ("xpath", "//button[text()='OK']")
+
+received_sms    = ('xpath', "//li[@class='message sms received incoming']/section/div/p")
+received_mms    = ('xpath', "//li[@class='message mms received incoming']/section/div/p")
+received_mms_subject    = ('xpath', "//li[@class='message mms received incoming has-subject']/section/div/p")
+
+fordward_btn_msg_opt    = ('xpath', "/html/body/form/menu/button[1]")
+cancel_btn_msg_opt    = ('xpath', "/html/body/form/menu/button[3]")
+
+messages_options_btn  = ("id","messages-options-icon")
+addsubject_btn_msg_opt    = ('xpath', "/html/body/form/menu/button[1]")
+target_subject  = ("id","messages-subject-input")
+
+attach_preview_img_type             = ("xpath", "//*[@class='attachment-container preview']")
+attach_preview_video_audio_type             = ("xpath", "//*[@class='attachment-container nopreview']")
+
 
 header_call_btn                 = ("xpath", "//button[text()='Call']")
 header_send_message_btn         = ("xpath", "//button[text()='Send message']")

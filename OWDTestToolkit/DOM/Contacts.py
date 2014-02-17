@@ -95,7 +95,7 @@ import_conts_list   = ("xpath", "//*[@id='groups-list']//li[@class='block-item']
 import_search_list  = ("xpath", "//*[@id='search-list']//li[@class='block-item']")
 import_conts_xp     = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
 
-import_contacts     = ("xpath", "/html/body/article/section/article/section/ul[2]/li/button")
+import_contacts      = ("id", "importContacts")
 
 gmail_button            = ("xpath", "//button[text()='Gmail']")
 gmail_frame             = ("data-url", "google")
@@ -116,6 +116,21 @@ hotmail_login_extra_msg   = ("id", "idDiv_FSI_HeaderInfo")
 hotmail_login_error_msg   = ("id", "idTd_PWD_Error")
 hotmail_import_frame      = ("src", "live")  # It's in the contacts iframe.
 
+memorycard_button = ("xpath", "/html/body/article/section[2]/article/section/ul/li[2]/button")
 
+sim_button =("xpath", "/html/body/article/section[2]/article/section/ul/li/button")
+
+#
+#Export
+#
+export_export_btn = ("id", "export-action")
+export_contacts =("id" , "exportContacts")
+export_sd_card = ("id" , "export-sd-option")
+export_select_all = ("id", "select-all")
+export = ("xpath" , "//*[@id='select-action']")
+export_import_banner = ("id" , "statusMsg")
+
+export_sim_card = ("id" , "export-sim-option-8934071100275319352")
+export_bluetooth = ("id" , "export-bluetooth-option")
 
 

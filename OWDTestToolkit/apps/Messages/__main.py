@@ -1,6 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
-import  addNumbersInToField                 ,\
+import  addNumbersInToField                ,\
+        addSubject           ,\
         checkAirplaneModeWarning           ,\
         checkIsInToField                   ,\
         checkMMSIcon                       ,\
@@ -9,6 +10,8 @@ import  addNumbersInToField                 ,\
         clickSMSNotifier                   ,\
         closeThread                        ,\
         countMessagesInThisThread          ,\
+        verifyMMSReceived                  ,\
+        createAndSendMMS                   ,\
         createAndSendSMS                   ,\
         createMMSImage                     ,\
         createMMSMusic                     ,\
@@ -21,6 +24,7 @@ import  addNumbersInToField                 ,\
         editAndSelectMessages              ,\
         editAndSelectThreads               ,\
         enterSMSMsg                        ,\
+        fordwardMessage                    ,\
         lastMessageInThisThread            ,\
         openThread                         ,\
         readLastSMSInThread                ,\
@@ -48,6 +52,7 @@ import  addNumbersInToField                 ,\
 
 class Messages (
             addNumbersInToField.main,
+            addSubject.main,
             checkAirplaneModeWarning.main,
             checkIsInToField.main,
             checkMMSIcon.main,
@@ -56,6 +61,8 @@ class Messages (
             clickSMSNotifier.main,
             closeThread.main,
             countMessagesInThisThread.main,
+            verifyMMSReceived.main,
+            createAndSendMMS.main,
             createAndSendSMS.main,
             createMMSImage.main,
             createMMSMusic.main,
@@ -68,6 +75,7 @@ class Messages (
             editAndSelectMessages.main,
             editAndSelectThreads.main,
             enterSMSMsg.main,
+            fordwardMessage.main,
             lastMessageInThisThread.main,
             openThread.main,
             readLastSMSInThread.main,

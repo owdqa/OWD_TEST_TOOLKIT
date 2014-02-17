@@ -10,9 +10,15 @@ class main(GaiaTestCase):
         #
         
         #
-        # Go into message edit mode..
+        # Go into messages Settings..
         #
         x= self.UTILS.getElement(DOM.Messages.edit_messages_icon, "Edit button" )
+        x.tap()
+
+        #
+        # Go into message edit mode..
+        #
+        x= self.UTILS.getElement(DOM.Messages.delete_messages_btn, "Edit button")
         x.tap()
         
         #
