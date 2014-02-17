@@ -3,6 +3,11 @@ frame_locator          = ('src', "settings")
 settings_header        = ('xpath', GLOBAL.app_head_specific % 'Settings')
 back_button            = ('class name', 'icon icon-back')
 
+call_settings          = ('id', "menuItem-callSettings")
+call_callerID          = ('id', "menuItem-callerId")
+call_log_number_xpath  = ("xpath", "//button[@data-l10n-id='callerId-hide']")
+
+
 airplane_mode_switch   = ("id", "menuItem-airplaneMode")
 wifi_mode_switch       = ("id", "menuItem-wifi")
 wifi_mode_desc         = ("id", "wifi-desc")
