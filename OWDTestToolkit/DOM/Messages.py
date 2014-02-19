@@ -82,6 +82,7 @@ header_call_btn                 = ("xpath", "//button[text()='Call']")
 header_send_message_btn         = ("xpath", "//button[text()='Send message']")
 header_create_new_contact_btn   = ("xpath", "//button[text()='Create new contact']")
 header_add_to_contact_btn       = ("xpath", "//button[text()='Add to an existing contact']")
+header_send_email_btn           = ("xpath", "//button[text()='Send email']")
 header_cancel_btn               = ("xpath", "//button[text()='Cancel']")
 header_cancel_btn_no_send       = ("xpath", "/html/body/form/menu/button[4]")
 
