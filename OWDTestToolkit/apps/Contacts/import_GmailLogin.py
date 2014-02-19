@@ -17,10 +17,12 @@ class main(GaiaTestCase):
         x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
 
+        time.sleep(2)
+
         x = self.UTILS.getElement(DOM.Contacts.import_contacts, "Import button")
         x.tap()
 
-        time.sleep(1)
+        time.sleep(2)
 
         #
         # Press the Gmail button.
@@ -57,7 +59,7 @@ class main(GaiaTestCase):
                     x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
                     x.tap()
 
-                    time.sleep(2)
+                    time.sleep(3)
                     self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
     
                 except:

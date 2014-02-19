@@ -14,7 +14,6 @@ class main(GaiaTestCase):
             'tel'       : self.UTILS.getElement(DOM.Contacts.view_contact_tel_field, "Phone number field", True, 5, False),
             'email'     : self.UTILS.getElement(DOM.Contacts.view_contact_email_field, "Email field", True, 5, False),
             'address'   : self.UTILS.getElement(DOM.Contacts.view_contact_address, "Address field", True, 5, False),
-            'comment'   : self.UTILS.getElement(DOM.Contacts.view_contact_comments, "Comment field", True, 5, False)
             }
         else:
             return {
@@ -26,6 +25,4 @@ class main(GaiaTestCase):
             'zip'       : self.UTILS.getElement(DOM.Contacts.zip_code_field, "Zip code field", True, 5, False),
             'city'      : self.UTILS.getElement(DOM.Contacts.city_field, "City field", True, 5, False),
             'country'   : self.UTILS.getElement(DOM.Contacts.country_field, "Country field", True, 5, False),
-            'comment'   : self.UTILS.getElement(DOM.Contacts.comment_field, "Comment field", True, 5, False)
             }
-        
