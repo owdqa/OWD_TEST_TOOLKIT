@@ -61,7 +61,7 @@ class main(GaiaTestCase):
                     x.tap()
 
                     time.sleep(3)
-                    self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
+                    self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator", True, False, False)
                     boolOK = True
     
                 except:
