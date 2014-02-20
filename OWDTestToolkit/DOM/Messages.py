@@ -85,6 +85,7 @@ header_add_to_contact_btn       = ("xpath", "//button[text()='Add to an existing
 header_send_email_btn           = ("xpath", "//button[text()='Send email']")
 header_cancel_btn               = ("xpath", "//button[text()='Cancel']")
 header_cancel_btn_no_send       = ("xpath", "/html/body/form/menu/button[4]")
+header_cancel_btn_absolute      = ("xpath", "/html/body/form/menu/button[5]")
 
 mms_from_video                  = ("xpath", "/html/body/div/form[9]/menu/button")
 mms_from_camera                 = ("xpath", "/html/body/div/form[9]/menu/button[4]")
