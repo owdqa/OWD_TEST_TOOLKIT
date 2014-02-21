@@ -1,6 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
-import  cellular_and_data                  ,\
+import  callID_verify                      ,\
+        cellular_and_data                  ,\
         wifi_list_isConnected              ,\
         wifi_list_isNotConnected           ,\
         goSound                            ,\
@@ -19,6 +20,7 @@ import  cellular_and_data                  ,\
         wifi_forget
 
 class Settings (
+            callID_verify.main,
             cellular_and_data.main,
             wifi_list_isConnected.main,
             wifi_list_isNotConnected.main,
