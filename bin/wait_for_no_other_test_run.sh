@@ -19,11 +19,11 @@ do
 	else
 	   if [ "$FIRST_TIME" = "Y" ]
 	   then
-	       FIRST_TIME="N"
-           printf "\nA conflicting test is currently running, waiting for it to stop ..."
+               FIRST_TIME="N"
+               printf "\nA conflicting test is currently running, waiting for it to stop ..."
 	   else
 	       printf "."
 	   fi
-	   sleep 10
+	   sleep 2
     fi
 done
