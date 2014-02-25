@@ -93,3 +93,7 @@ mms_cancel_button               = ("xpath", "/html/body/div/form[9]/menu/button[
 
 mms_icon                        = ("xpath", "/html/body/article/section/article/ul/li/a/p[2]/span")
 
+
+
+
+

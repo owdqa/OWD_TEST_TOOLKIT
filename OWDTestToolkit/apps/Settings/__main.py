@@ -1,6 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
 import  cellular_and_data                  ,\
+        configureMMSAutoRetrieve           ,\
         wifi_list_isConnected              ,\
         wifi_list_isNotConnected           ,\
         goSound                            ,\
@@ -9,6 +10,7 @@ import  cellular_and_data                  ,\
         setTimeToNow                       ,\
         wifi_connect                       ,\
         turn_dataConn_on                   ,\
+        verify_autoRetrieve_SelectedItem   ,\
         wifi_switchOn                      ,\
         wifi                               ,\
         hotSpot                            ,\
@@ -20,6 +22,7 @@ import  cellular_and_data                  ,\
 
 class Settings (
             cellular_and_data.main,
+            configureMMSAutoRetrieve.main,
             wifi_list_isConnected.main,
             wifi_list_isNotConnected.main,
             goSound.main,
@@ -28,6 +31,7 @@ class Settings (
             setTimeToNow.main,
             wifi_connect.main,
             turn_dataConn_on.main,
+            verify_autoRetrieve_SelectedItem.main,
             wifi_switchOn.main,
             wifi.main,
             hotSpot.main,

@@ -56,3 +56,17 @@ hotspot                 = ("id", "menuItem-internetSharing")
 hotspot_header          = ('xpath', GLOBAL.app_head_specific % 'Internet sharing')
 hotspot_switch          = ("xpath", "/html/body/section[32]/div/ul/li/label")
 hotspot_settings        = ("xpath", "/html/body/section[32]/div/ul/li[6]/label/button")
+
+msg_settings             = ("xpath", "//*[@data-l10n-id='messagingSettings']")
+auto_retrieve_select_btn     = ("name","ril.mms.retrieval_mode")
+
+auto_retrieve_select_off           = ("xpath", "//section[@id='value-selector-container']/ol/li[1]")
+auto_retrieve_select_roaming       = ("xpath", "//section[@id='value-selector-container']/ol/li[2]")
+auto_retrieve_select_no_roaming    = ("xpath", "//section[@id='value-selector-container']/ol/li[3]")
+
+auto_retrieve_selected_item    = ("xpath", "//section[@id='value-selector-container']/ol/li[@aria-selected='true']")
+
+ok_btn             = ("xpath", "//menu[@id='select-options-buttons']/button")
+
+
+
