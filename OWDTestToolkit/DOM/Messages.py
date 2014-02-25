@@ -92,4 +92,3 @@ mms_from_music                  = ("xpath", "/html/body/div/form[9]/menu/button[
 mms_cancel_button               = ("xpath", "/html/body/div/form[9]/menu/button[5]")
 
 mms_icon                        = ("xpath", "/html/body/article/section/article/ul/li/a/p[2]/span")
-
