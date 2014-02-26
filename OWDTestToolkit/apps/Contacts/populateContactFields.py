@@ -19,5 +19,7 @@ class main(GaiaTestCase):
         self.UTILS.waitForElements(DOM.Contacts.view_all_header, "View all contacts header")
         
         # Now check the contact's name is displayed here too.
-        x = ("xpath", DOM.Contacts.view_all_contact_xpath % p_contact_json_obj['name'].replace(" ",""))
+        x = ("xpath", 
+            DOM.Contacts.view_all_contact_xpath.format(p_contact_json_obj['name'].replace(" ","")))
+
         self.UTILS.waitForElements(x, "Contact '" + p_contact_json_obj['name'] + "'")
