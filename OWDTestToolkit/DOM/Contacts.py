@@ -1,7 +1,7 @@
 import GLOBAL
 frame_locator          = ("src","contacts")
 view_all_header        = ('xpath', GLOBAL.app_head_specific % 'Contacts')
-view_all_contact_xpath = '//*[@data-order="%s"]'
+view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-search,'%s')]"
 view_all_contact_JS    = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li")
