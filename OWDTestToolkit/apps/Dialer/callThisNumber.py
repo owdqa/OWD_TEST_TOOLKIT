@@ -20,12 +20,6 @@ class main(GaiaTestCase):
         x = self.UTILS.getElement(DOM.Dialer.call_number_button, "Call number button")
         x.tap()
 
-        # if own_num == dialer_num:
-        #     time.sleep(2)
-        #     #self.marionette.switch_to_frame()
-        #     x = self.UTILS.getElement(DOM.Dialer.call_busy_button_ok, "OK button (callThisNumber)")
-        #     x.tap()
-        # else:
         self.UTILS.checkMarionetteOK()
         self.UTILS.switchToFrame(*DOM.Dialer.frame_locator_calling)
         self.UTILS.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call element", True, 5)
