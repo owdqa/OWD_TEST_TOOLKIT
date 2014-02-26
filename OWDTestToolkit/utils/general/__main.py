@@ -4,6 +4,7 @@ import  clearGeolocPermission,\
         createIncomingCall,\
         typeThis,\
         get_os_variable,\
+        insertContact,\
         addFileToDevice,\
         selectFromSystemDialog,\
         setupDataConn,\
@@ -15,6 +16,7 @@ class main (
             createIncomingCall.main,
             typeThis.main,
             get_os_variable.main,
+            insertContact.main,
             addFileToDevice.main,
             selectFromSystemDialog.main,
             setupDataConn.main,

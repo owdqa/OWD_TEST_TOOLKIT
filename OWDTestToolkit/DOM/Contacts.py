@@ -1,15 +1,15 @@
 import GLOBAL
 frame_locator          = ("src","contacts")
 view_all_header        = ('xpath', GLOBAL.app_head_specific % 'Contacts')
-view_all_contact_xpath = '//*[@data-order="%s"]'
+view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
-view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-order,'%s')]"
-view_all_contact_JS    = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
-view_all_contact_JSname= ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li/p/strong")
+view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-search,'%s')]"
+view_all_contact_JS    = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li")
+view_all_contact_JSname= ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
 view_all_contact_HM    = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
-view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
-view_all_contact_import= ("xpath", "/html/body/section/article/div[2]/div/section/section[2]/ol/li")
-view_all_contact_import2= ("xpath", "/html/body/section/article/div[2]/div/section/section[2]/ol/li[2]")
+view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
+view_all_contact_import= ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li/p/strong")
+view_all_contact_import2= ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li[2]/p/strong")
 
 view_details_title     = ('id', 'contact-name-title')
 view_contact_image     = ("id", "cover-img")
@@ -26,7 +26,7 @@ search_results_list    = ("xpath",".//*[@id='search-list']/li")
 search_cancel_btn      = ('id', 'cancel-search')
 search_no_contacts_found = ("id", "no-result")
 favourites_section     = ("id", "contacts-list-favorites")
-favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//p[@data-order='%s']"
+favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//li[@data-order='%s']"
 favourite_JS           = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 
 social_network_contacts= ('class name', "icon-social icon-fb notorg")

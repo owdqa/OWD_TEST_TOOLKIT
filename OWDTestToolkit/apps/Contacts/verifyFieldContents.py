@@ -20,7 +20,6 @@ class main(GaiaTestCase):
             self._viewTest("Name"       , p_contact_json_obj['name']                , contFields['name'   ].text)
             self._viewTest("Telephone"  , p_contact_json_obj['tel']['value']        , contFields['tel'    ].text)
             self._viewTest("Email"      , p_contact_json_obj['email']['value']      , contFields['email'  ].text)
-            self._viewTest("Comment"    , p_contact_json_obj['comment']             , contFields['comment'].text)
             self._viewTest("Street"     , p_contact_json_obj['adr']['streetAddress'], contFields['address'].text)
             self._viewTest("Post code"  , p_contact_json_obj['adr']['postalCode']   , contFields['address'].text)
             self._viewTest("Locality"   , p_contact_json_obj['adr']['locality']     , contFields['address'].text)
@@ -35,5 +34,4 @@ class main(GaiaTestCase):
             self.checkMatch(contFields['zip'       ] , p_contact_json_obj['adr']['postalCode']    , "Zip")
             self.checkMatch(contFields['city'      ] , p_contact_json_obj['adr']['locality']      , "City")
             self.checkMatch(contFields['country'   ] , p_contact_json_obj['adr']['countryName']   , "Country")
-            self.checkMatch(contFields['comment'   ] , p_contact_json_obj['comment']              , "COMMENTS")
 
