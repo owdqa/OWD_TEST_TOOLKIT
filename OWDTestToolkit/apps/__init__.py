@@ -1,4 +1,3 @@
-from Browser import *
 from Calculator import *
 from Calendar import *
 from Camera import *
