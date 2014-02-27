@@ -37,9 +37,8 @@ else
     cd $HOME/gaia
     git stash
     git fetch
-    sudo git merge origin/$BRANCH
     sudo git checkout $BRANCH  2> >( tee -a $LOGFILE)
-    git stash pop
+    sudo git merge origin/$BRANCH
 fi
 
 #
