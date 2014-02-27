@@ -62,7 +62,7 @@ $OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
 #
 printf "\n\n<b>Completing install of OWD_TEST_TOOLKIT...</b>" | tee -a $LOGFILE
 printf "\n<b>=========================================</b>\n" | tee -a $LOGFILE
-printf "\n<b>Switching to branch "integration-"$BRANCH of OWD_TEST_TOOLKIT ...</b>\n\n" | tee -a $LOGFILE
+printf "\n<b>Switching to branch $INTEGRATION$BRANCH of OWD_TEST_TOOLKIT ...</b>\n\n" | tee -a $LOGFILE
 git checkout $INTEGRATION"$BRANCH 2> >( tee -a $LOGFILE)
 printf "\n<b>Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".</b>\n\n" | tee -a $LOGFILE
 
