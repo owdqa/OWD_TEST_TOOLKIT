@@ -21,7 +21,7 @@ class main(GaiaTestCase):
         #
         for i in p_target_array:
             x = self.UTILS.getElement(("xpath", 
-                                       DOM.Messages.thread_selector_xpath % i),
+                                       DOM.Messages.thread_selector_xpath.format(i)),
                                       "Thread checkbox for '" + i + "'")
             x.click()
         
