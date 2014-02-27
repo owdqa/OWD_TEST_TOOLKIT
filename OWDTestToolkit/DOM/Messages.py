@@ -33,7 +33,7 @@ threads_list           = ('xpath', '//article[@id="threads-container"]//li')
 threads_list_element           = ('xpath', '//article[@id="threads-container"]/div/ul/li/a/p')
 
 thread_target_names    = ('xpath', '//article[@id="threads-container"]//li//p[@class="name"]')
-thread_selector_xpath  = "//*[@id='threads-container']//li//a/p[contains(text(),'%s')]"
+thread_selector_xpath  = "//*[@id='threads-container']//li//a/p[contains(text(),'{}')]"
 thread_timestamp_xpath = thread_selector_xpath + "/..//time"
 no_threads_message     = ("id", "no-result-message")
 edit_threads_button    = ("id", "threads-edit-icon")
