@@ -17,10 +17,12 @@ class main(GaiaTestCase):
         x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
 
+        time.sleep(3)
+
         x = self.UTILS.getElement(DOM.Contacts.import_contacts, "Import button")
         x.tap()
 
-        time.sleep(1)
+        time.sleep(3)
 
         #
         # Press the Gmail button.
@@ -50,18 +52,20 @@ class main(GaiaTestCase):
             # PERMISSIONS (sometimes appears).
             # Seems to happen a few times, so loop through 5 just in case ...
             #
-            for i in range(1,5):
+            boolOK = False
+            while boolOK == False:
                 try:
                     self.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
                                 
                     x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
                     x.tap()
 
-                    time.sleep(2)
-                    self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
+                    time.sleep(3)
+                    self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator", True, False, False)
+                    boolOK = True
     
                 except:
-                    break
+                    pass
         
             #
             # Send the login information (the email field isn't always displayed).

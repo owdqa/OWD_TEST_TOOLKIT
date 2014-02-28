@@ -13,9 +13,21 @@ class main(GaiaTestCase):
         if p_msg_array:
             self.editAndSelectMessages(p_msg_array)
         else:
-            x= self.UTILS.getElement(DOM.Messages.edit_messages_icon, "Edit button" )
+            #
+            # Go into messages Settings..
+            #
+            x= self.UTILS.getElement(DOM.Messages.edit_messages_icon, "Edit button")
             x.tap()
-            
+
+            #
+            # Go into message edit mode..
+            #
+            x= self.UTILS.getElement(DOM.Messages.delete_messages_btn, "Edit button")
+            x.tap()
+
+            #
+            # Press select all button.
+            #
             x = self.UTILS.getElement(DOM.Messages.check_all_messages_btn, "'Select all' button")
             x.tap()
             

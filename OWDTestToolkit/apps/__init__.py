@@ -1,7 +1,3 @@
-from Browser import *
-from Calculator import *
-from Calendar import *
-from Camera import *
 from Clock import *
 from Contacts import *
 from Email import *

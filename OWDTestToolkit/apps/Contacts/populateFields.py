@@ -24,5 +24,3 @@ class main(GaiaTestCase):
         self.replaceStr(contFields['zip'        ] , p_contact_json_obj["adr"]["postalCode"])
         self.replaceStr(contFields['city'       ] , p_contact_json_obj["adr"]["locality"])
         self.replaceStr(contFields['country'    ] , p_contact_json_obj["adr"]["countryName"])
-        self.replaceStr(contFields['comment'    ] , p_contact_json_obj["comment"])
-

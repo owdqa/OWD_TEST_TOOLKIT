@@ -1,7 +1,8 @@
 from OWDTestToolkit.global_imports import *
 
-import  callID_verify                      ,\
-        cellular_and_data                  ,\
+import  cellular_and_data                  ,\
+		callID_verify                      ,\
+        configureMMSAutoRetrieve           ,\
         wifi_list_isConnected              ,\
         wifi_list_isNotConnected           ,\
         goSound                            ,\
@@ -10,6 +11,7 @@ import  callID_verify                      ,\
         setTimeToNow                       ,\
         wifi_connect                       ,\
         turn_dataConn_on                   ,\
+        verify_autoRetrieve_SelectedItem   ,\
         wifi_switchOn                      ,\
         wifi                               ,\
         hotSpot                            ,\
@@ -22,6 +24,7 @@ import  callID_verify                      ,\
 class Settings (
             callID_verify.main,
             cellular_and_data.main,
+            configureMMSAutoRetrieve.main,
             wifi_list_isConnected.main,
             wifi_list_isNotConnected.main,
             goSound.main,
@@ -30,6 +33,7 @@ class Settings (
             setTimeToNow.main,
             wifi_connect.main,
             turn_dataConn_on.main,
+            verify_autoRetrieve_SelectedItem.main,
             wifi_switchOn.main,
             wifi.main,
             hotSpot.main,
@@ -39,12 +43,12 @@ class Settings (
             wifi_list_tapName.main,
             wifi_forget.main):
     
-    def __init__(self, p_parent):
-        self.apps       = p_parent.apps
-        self.data_layer = p_parent.data_layer
-        self.parent     = p_parent
-        self.marionette = p_parent.marionette
-        self.UTILS      = p_parent.UTILS
+    def __init__(self, parent):
+        self.apps       = parent.apps
+        self.data_layer = parent.data_layer
+        self.parent     = parent
+        self.marionette = parent.marionette
+        self.UTILS      = parent.UTILS
 
     def launch(self):
         #

@@ -1,15 +1,15 @@
 import GLOBAL
 frame_locator          = ("src","contacts")
 view_all_header        = ('xpath', GLOBAL.app_head_specific % 'Contacts')
-view_all_contact_xpath = '//*[@data-order="%s"]'
+view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
-view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-order,'%s')]"
-view_all_contact_JS    = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
-view_all_contact_JSname= ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li/p/strong")
+view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-search,'%s')]"
+view_all_contact_JS    = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li")
+view_all_contact_JSname= ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
 view_all_contact_HM    = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
-view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
-view_all_contact_import= ("xpath", "/html/body/section/article/div[2]/div/section/section[2]/ol/li")
-view_all_contact_import2= ("xpath", "/html/body/section/article/div[2]/div/section/section[2]/ol/li[2]")
+view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
+view_all_contact_import= ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li/p/strong")
+view_all_contact_import2= ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li[2]/p/strong")
 
 view_details_title     = ('id', 'contact-name-title')
 view_contact_image     = ("id", "cover-img")
@@ -26,7 +26,7 @@ search_results_list    = ("xpath",".//*[@id='search-list']/li")
 search_cancel_btn      = ('id', 'cancel-search')
 search_no_contacts_found = ("id", "no-result")
 favourites_section     = ("id", "contacts-list-favorites")
-favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//p[@data-order='%s']"
+favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//li[@data-order='%s']"
 favourite_JS           = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 
 social_network_contacts= ('class name', "icon-social icon-fb notorg")
@@ -57,7 +57,7 @@ done_button            = ('id', 'save-button')
 add_photo              = ("id", "thumbnail-photo")
 photo_from_gallery     = ("xpath", "/html/body/div/form[9]/menu/button")
 cancel_photo_source    = ("xpath", '//button[@data-action="cancel"]')
-picture_thumbnails     = ("xpath", "//*[@id='thumbnails']/li")
+picture_thumbnails     = ("xpath", "//*[@id='thumbnails']/li/ul/li")
 picture_crop_done_btn  = ("id", "crop-done-button")
 given_name_field       = ('id', 'givenName')
 given_name_reset_icon  = ("xpath", ".//*[@id='contact-form']//p[input[@id='givenName']]//button")
@@ -95,7 +95,7 @@ import_conts_list   = ("xpath", "//*[@id='groups-list']//li[@class='block-item']
 import_search_list  = ("xpath", "//*[@id='search-list']//li[@class='block-item']")
 import_conts_xp     = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
 
-import_contacts     = ("xpath", "/html/body/article/section/article/section/ul[2]/li/button")
+import_contacts      = ("id", "importContacts")
 
 gmail_button            = ("xpath", "//button[text()='Gmail']")
 gmail_frame             = ("data-url", "google")
@@ -116,6 +116,21 @@ hotmail_login_extra_msg   = ("id", "idDiv_FSI_HeaderInfo")
 hotmail_login_error_msg   = ("id", "idTd_PWD_Error")
 hotmail_import_frame      = ("src", "live")  # It's in the contacts iframe.
 
+memorycard_button = ("xpath", "/html/body/article/section[2]/article/section/ul/li[2]/button")
 
+sim_button =("xpath", "/html/body/article/section[2]/article/section/ul/li/button")
+
+#
+#Export
+#
+export_export_btn = ("id", "export-action")
+export_contacts =("id" , "exportContacts")
+export_sd_card = ("id" , "export-sd-option")
+export_select_all = ("id", "select-all")
+export = ("xpath" , "//*[@id='select-action']")
+export_import_banner = ("id" , "statusMsg")
+
+export_sim_card = ("id" , "export-sim-option-8934071100275319352")
+export_bluetooth = ("id" , "export-bluetooth-option")
 
 
