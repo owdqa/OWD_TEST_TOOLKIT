@@ -1,6 +1,7 @@
 from OWDTestToolkit.global_imports import *
 
 import  cellular_and_data                  ,\
+		callID_verify                      ,\
         configureMMSAutoRetrieve           ,\
         wifi_list_isConnected              ,\
         wifi_list_isNotConnected           ,\
@@ -21,6 +22,7 @@ import  cellular_and_data                  ,\
         wifi_forget
 
 class Settings (
+            callID_verify.main,
             cellular_and_data.main,
             configureMMSAutoRetrieve.main,
             wifi_list_isConnected.main,

@@ -1,6 +1,9 @@
 frame_locator          = ('src', 'dialer')
 frame_locator_calling  = ('name', 'call_screen')
 
+message_calleID    = ("xpath", "/html/body/article/section[2]/div")
+button_calleID = ('xpath',"/html/body/div/div[5]/form/menu/button")
+
 option_bar_call_log    = ("id", "option-recents")
 option_bar_contacts    = ("id", "option-contacts")
 option_bar_keypad      = ("id", "option-keypad")
