@@ -101,12 +101,12 @@ class Messages (
             waitForNewSMSPopup_by_number.main,
             waitForSMSNotifier.main):
     
-    def __init__(self, p_parent):
-        self.apps       = p_parent.apps
-        self.data_layer = p_parent.data_layer
-        self.parent     = p_parent
-        self.marionette = p_parent.marionette
-        self.UTILS      = p_parent.UTILS
+    def __init__(self, parent):
+        self.apps       = parent.apps
+        self.data_layer = parent.data_layer
+        self.parent     = parent
+        self.marionette = parent.marionette
+        self.UTILS      = parent.UTILS
 
     def launch(self):
         #
