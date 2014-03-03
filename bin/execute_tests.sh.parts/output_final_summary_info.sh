@@ -43,7 +43,7 @@ printf "\n$sep\n\n\n"
 
 TOTAL_CSV_FILE="/var/www/html/owd_tests/total_csv_file.csv"
 
-if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ]
+if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ] && [ "$JOB_NAME" != "testing_by_TEST_SUITE" ]
 then
     if [ ! -f "$TOTAL_CSV_FILE" ]
     then
@@ -93,7 +93,7 @@ fi
 
 PARTIAL_CSV_FILE="/var/www/html/owd_tests/$DEVICE/$BRANCH/partial_csv_file_NEW.csv"
 
-if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ]
+if [ "$ON_CI_SERVER" ] && [ ! "$FAKE_CI_SERVER" ] && [ "$JOB_NAME" != "testing_by_TEST_SUITE" ]
 then
     if [ ! -f "$PARTIAL_CSV_FILE" ]
     then
