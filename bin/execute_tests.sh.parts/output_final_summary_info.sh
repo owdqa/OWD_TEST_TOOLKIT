@@ -37,6 +37,7 @@ printf "Ignored test cases                 : %4s\n" $IGNORED
 printf "Unwritten test cases               : %4s\n" $UNWRITTEN
 printf "\n$sep\n\n\n"
 
+
 # WEEKLY CSV with all data
 # (weekly: there must be one jenkins job to delete this file and to be renewed per week)...
 
