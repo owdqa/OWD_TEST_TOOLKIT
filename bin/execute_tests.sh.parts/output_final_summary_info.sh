@@ -37,6 +37,7 @@ printf "Ignored test cases                 : %4s\n" $IGNORED
 printf "Unwritten test cases               : %4s\n" $UNWRITTEN
 printf "\n$sep\n\n\n"
 
+
 # WEEKLY CSV with all data
 # (weekly: there must be one jenkins job to delete this file and to be renewed per week)...
 
@@ -47,10 +48,10 @@ then
     if [ ! -f "$TOTAL_CSV_FILE" ]
     then
         # print the header
-        printf "WEEK NUMBER: %d\n" $(date '+%V') | sudo tee $TOTAL_CSV_FILE
+        printf "WEEK NUMBER: %s\n" $(date '+%V') | sudo tee $TOTAL_CSV_FILE
         #printf "TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,START_TIME,END_TIME,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $TOTAL_CSV_FILE
         #printf "START_TIME,END_TIME,TEST_SUITE,BUILD_NUMBER,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS\n" | sudo tee -a $TOTAL_CSV_FILE
-        printf "START_TIME,DATE,TEST_SUITE,BUILD_NUMBER,TEST_CASES_PASSED,FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,KNOWN_BUGS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED,DEVICE,VERSION,BUILD,TEST_DETAILS\n" | sudo tee -a $TOTAL_CSV_FILE
+        printf "START_TIME,DATE,TEST_SUITE,TEST_CASES_PASSED,FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,KNOWN_BUGS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED,DEVICE,VERSION,BUILD,TEST_DETAILS\n" | sudo tee -a $TOTAL_CSV_FILE
         sudo chmod 755 $TOTAL_CSV_FILE
     fi
 
@@ -58,8 +59,7 @@ then
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," "$RUN_TIME" | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," "$END_TIME" | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $JOB_NAME | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $BUILD_NUMBER | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s_%s," $JOB_NAME $BUILD_NUMBER | sudo tee -a $TOTAL_CSV_FILE
     printf "%4s / %-4s," $P $T | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $UNEX_FAILS | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $AUTOMATION_FAILS | sudo tee -a $TOTAL_CSV_FILE
@@ -98,12 +98,12 @@ then
     if [ ! -f "$PARTIAL_CSV_FILE" ]
     then
         # print the header
-        printf "Last test executions, DATE: %s %s\n" $(date '+%m-%d-%Y') $(date '+%T') | sudo tee $PARTIAL_CSV_FILE
+        printf "Last test executions, DATE: %s %s\n" $(date '+%d/%m/%Y %H:%M') | sudo tee $PARTIAL_CSV_FILE
         printf "Device: %s\n" $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
         printf "Version: %s\n" $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
 
         #printf "START_TIME,END_TIME,TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $PARTIAL_CSV_FILE
-        printf "START_TIME,DATE,TEST_SUITE,BUILD_NUMBER,TEST_CASES_PASSED,FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,KNOWN_BUGS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED,DEVICE,VERSION,BUILD,TEST_DETAILS\n" | sudo tee -a $PARTIAL_CSV_FILE
+        printf "START_TIME,DATE,TEST_SUITE,TEST_CASES_PASSED,FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,KNOWN_BUGS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED,DEVICE,VERSION,BUILD,TEST_DETAILS\n" | sudo tee -a $PARTIAL_CSV_FILE
         sudo chmod 755 $PARTIAL_CSV_FILE
     fi
 
@@ -111,8 +111,7 @@ then
     printf "\n" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," "$RUN_TIME" | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," "$END_TIME" | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s," $JOB_NAME | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s," $BUILD_NUMBER | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s_%s," $JOB_NAME $BUILD_NUMBER | sudo tee -a $PARTIAL_CSV_FILE
     printf "%4s / %-4s," $P $T | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $UNEX_FAILS | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $AUTOMATION_FAILS | sudo tee -a $PARTIAL_CSV_FILE
