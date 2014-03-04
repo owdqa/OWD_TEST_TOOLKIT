@@ -6,7 +6,8 @@ import  waitForNotElements,\
         getElement,\
         headerCheck,\
         moveScroller,\
-        setScrollerVal
+        setScrollerVal,\
+        simulateClick
         
 class main ( 
             waitForNotElements.main,
@@ -15,7 +16,8 @@ class main (
             getElement.main,
             headerCheck.main,
             moveScroller.main,
-            setScrollerVal.main):
+            setScrollerVal.main,
+            simulateClick.main):
 
     def __init__(self):
         return

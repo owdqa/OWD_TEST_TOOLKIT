@@ -7,9 +7,8 @@ class main(GaiaTestCase):
         # Opens the thread for this number (assumes we're looking at the
         # threads in the messaging screen).
         #
-        boolOK = True
         try:
-            thread_el = ("xpath", DOM.Messages.thread_selector_xpath % p_num)
+            thread_el = ("xpath", DOM.Messages.thread_selector_xpath.format(p_num))
             x = self.UTILS.getElement(thread_el,"Message thread for " + p_num)
             
             x.tap()
