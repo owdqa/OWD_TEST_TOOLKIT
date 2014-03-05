@@ -1,6 +1,6 @@
 import GLOBAL
 frame_locator          = ('src', "settings")
-settings_header        = ('xpath', GLOBAL.app_head_specific % 'Settings')
+settings_header        = ('xpath', GLOBAL.app_head_specific.format('Settings'))
 back_button            = ('class name', 'icon icon-back')
 
 call_settings = ('id', "menuItem-callSettings")
@@ -15,12 +15,12 @@ wifi_mode_switch       = ("id", "menuItem-wifi")
 wifi_mode_desc         = ("id", "wifi-desc")
 
 app_permissions        = ('id', "menuItem-appPermissions")
-app_permissions_header = ('xpath', GLOBAL.app_head_specific % 'App permissions')
+app_permissions_header = ('xpath', GLOBAL.app_head_specific.format('App permissions'))
 app_perm_camera        = ('xpath', './/*[@id="appPermissions"]//a[text()="Camera"]')
 app_perm_camera_geo    = ('xpath', './/*[@id="appPermissions-details"]//span[text()="Geolocation"]/select') 
 
 wifi                   = ('id', 'menuItem-wifi')
-wifi_header            = ('xpath', GLOBAL.app_head_specific % 'Wi-Fi')
+wifi_header            = ('xpath', GLOBAL.app_head_specific.format('Wi-Fi'))
 wifi_enabled           = ('xpath', ".//*[@id='wifi-enabled']/label")
 wifi_available_networks= ('xpath', ".//*[@id='wifi-availableNetworks']/li")
 wifi_available_status  = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
@@ -49,7 +49,7 @@ wifi_advanced_forgetBtn = ("xpath", "//*[@id='confirm-option']")
 wifi_advanced_cancelBtn = ("xpath", "//button[@data-l10n-id='cancel']")
 
 cellData               = ('id', 'menuItem-cellularAndData')
-celldata_header        = ('xpath', GLOBAL.app_head_specific % 'Cellular & Data')
+celldata_header        = ('xpath', GLOBAL.app_head_specific.format('Cellular & Data'))
 celldata_DataConn      = ('name', "ril.data.enabled")
 celldata_DataConn_ON   = ('xpath', "//button[@data-l10n-id='turnOn']")
 
@@ -60,7 +60,7 @@ sound                  = ('id', 'menuItem-sound')
 sound_alarm_vol        = ('name', 'audio.volume.alarm')
 
 hotspot                 = ("id", "menuItem-internetSharing")
-hotspot_header          = ('xpath', GLOBAL.app_head_specific % 'Internet sharing')
+hotspot_header          = ('xpath', GLOBAL.app_head_specific.format('Internet sharing'))
 hotspot_switch          = ("xpath", "/html/body/section[32]/div/ul/li/label")
 hotspot_settings        = ("xpath", "/html/body/section[32]/div/ul/li[6]/label/button")
 

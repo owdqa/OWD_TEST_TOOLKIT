@@ -1,6 +1,5 @@
 from OWDTestToolkit.global_imports import *
 from OWDTestToolkit.apps.Video import *
-from OWDTestToolkit.apps.Gallery import *
 from OWDTestToolkit.apps.Music import *
 
 
