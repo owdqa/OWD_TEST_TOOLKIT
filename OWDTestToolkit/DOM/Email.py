@@ -33,7 +33,7 @@ goto_accounts_btn       = ('class name', 'fld-accounts-btn')
 accounts_list_names     = ('class name', 'fld-account-name')
 
 folderList_header       = ('class name', 'fld-folders-header-account-label')
-folderList_name_xpath   = '//*[text()="%s"]'
+folderList_name_xpath   = '//*[text()="{}"]'
 
 folder_message_list     = ('class name', 'msg-header-item')
 folder_headers_list     = ('class name', 'msg-header-author-and-date')
