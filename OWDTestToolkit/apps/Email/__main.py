@@ -10,7 +10,8 @@ import  deleteEmail                        ,\
         sendTheMessage                     ,\
         setupAccount                       ,\
         switchAccount                      ,\
-        waitForDone                        
+        waitForDone                        ,\
+        setupAccountFirstStep
 
 class Email (
             deleteEmail.main,
@@ -23,7 +24,8 @@ class Email (
             sendTheMessage.main,
             setupAccount.main,
             switchAccount.main,
-            waitForDone.main):
+            waitForDone.main,
+            setupAccountFirstStep.main):
     
     def __init__(self, p_parent):
         self.apps       = p_parent.apps
