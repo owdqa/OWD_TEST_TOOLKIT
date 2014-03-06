@@ -1,33 +1,32 @@
 from OWDTestToolkit.global_imports import *
-    
+
+
 class main(GaiaTestCase):
 
     def uninstallApp(self, p_appName):
         #
         # Remove an app using the UI.
         #
-        self.logResult("info", "Making sure app <b>%s</b> is uninstalled." % p_appName)
-
+        self.logResult("info", "Making sure app <b>{}</b> is uninstalled.".format(p_appName))
 
         myApp = self.findAppIcon(p_appName)
-        if myApp:  
+        if myApp:
             self.actions.press(myApp).wait(2).release()
             self.actions.perform()
-    
-            delete_button = self.getElement( ("xpath", 
-                                              DOM.Home.app_delete_icon_xpath % p_appName), 
+
+            delete_button = self.getElement(("xpath", DOM.Home.app_delete_icon_xpath.format(p_appName)),
                                             "Delete button", False, 5, True)
             delete_button.tap()
-    
+
             delete = self.getElement(DOM.Home.app_confirm_delete, "Confirm app delete button")
             delete.tap()
-    
+
             time.sleep(2)
             self.touchHomeButton()
-    
+
             self.TEST(not self.isAppInstalled(p_appName), "App is uninstalled after deletion.")
         else:
-            self.logResult("info", "(No need to uninstall %s.)" % p_appName)
+            self.logResult("info", "(No need to uninstall {}.)".format(p_appName))
 
 
 # 

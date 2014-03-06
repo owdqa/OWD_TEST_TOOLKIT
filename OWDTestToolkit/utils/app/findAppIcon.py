@@ -19,7 +19,7 @@ class main(GaiaTestCase):
             #
             # If this works, then the icon is visible at the moment.
             #
-            x = self.marionette.find_element('css selector', DOM.Home.app_icon_css % p_appName)
+            x = self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(p_appName))
             self.logResult("debug", "icon displayed: %s" % str(x.is_displayed()))
             if x.is_displayed():
                 return x
@@ -35,7 +35,7 @@ class main(GaiaTestCase):
                 #
                 # If this works, then the icon is visible at the moment.
                 #
-                x = self.marionette.find_element('css selector', DOM.Home.app_icon_css % p_appName)
+                x = self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(p_appName))
                 self.logResult("debug", "icon displayed: %s" % str(x.is_displayed()))
                 if x.is_displayed():
                     return x
