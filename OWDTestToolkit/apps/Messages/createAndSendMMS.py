@@ -91,7 +91,7 @@ class main(GaiaTestCase):
             self.UTILS.addFileToDevice('./tests/_resources/AMR.amr', destination='/SD/mus')
 
             self.createMMSMusic()
-            self.music.clickOnSongMMS()
+            self.music.click_on_song_mms()
 
             #
             # Click send and wait for the message to be received

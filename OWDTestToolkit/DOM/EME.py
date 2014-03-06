@@ -15,7 +15,7 @@ start_eme_icon          = ("id", "evme-activation-icon")
 search_suggestions      = ("xpath", "//div[@id='helper-header']//*[@id='helper-rapper']//li")
 search_clear            = ("id", "button-clear")
 searching_spinner       = ("class name", "loading-apps")
-search_result_icon_xpath= "//li[@data-name='%s']"
+search_result_icon_xpath= "//li[@data-name='{}']"
 search_result_area      = ("id", "evmeApps")
 app_installed_banner    = ("id","evmeBanner")
 

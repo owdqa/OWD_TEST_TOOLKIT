@@ -1,5 +1,6 @@
 from OWDTestToolkit.global_imports import *
-    
+
+
 class main(GaiaTestCase):
 
     def isAppInstalled(self, p_appName):
@@ -8,12 +9,12 @@ class main(GaiaTestCase):
         #
         self.switchToFrame(*DOM.Home.frame_locator)
 
-        x = ('css selector', DOM.Home.app_icon_css % p_appName)
+        x = ('css selector', DOM.Home.app_icon_css.format(p_appName))
         try:
             self.marionette.find_element(*x)
-            self.logResult("info", "App <b>%s</b> is currently installed." % p_appName)
+            self.logResult("info", "App <b>{}</b> is currently installed.".format(p_appName))
             return True
         except:
-            self.logResult("info", "App <b>%s</b> is not currently installed." % p_appName)
+            self.logResult("info", "App <b>{}</b> is not currently installed.".format(p_appName))
             return False
 
