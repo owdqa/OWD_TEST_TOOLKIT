@@ -76,7 +76,7 @@ country_field          = ('id', 'countryName_0')
 comment_field          = ('id', 'note_0')
 sms_button             = ('id', 'send-sms-button-0')
 sms_button_specific_id = 'send-sms-button-%s'
-email_button_spec_id   = 'email-or-pick-%s'
+email_button_spec_id   = 'email-or-pick-{}'
 link_button            = ('id', "link_button") # WARNING: >1 element has this id!
 
 

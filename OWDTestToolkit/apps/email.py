@@ -296,6 +296,31 @@ class Email(object):
 
         return True
 
+    def sendTheMessageAndSwitchFrame(self, header, frame_locator):
+        #
+        # Hits the 'Send' button to send the message (handles
+        # waiting for the correct elements etc...) and switches to a specific frame
+        # 
+        # This method comes handy when the email app is called from another app
+        # (i.e Contacts, SMS...)
+        #
+        x = self.UTILS.getElement(DOM.Email.compose_send_btn, "Send button")
+        x.tap()
+        self.UTILS.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
+
+        #
+        # Wait for inbox to re-appear (give it a BIG wait time because sometimes
+        # it just needs it).
+        #
+        self.UTILS.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
+
+        x = ('xpath', DOM.GLOBAL.app_head_specific.format(header))
+
+        self.UTILS.switchToFrame(*frame_locator)
+        self.UTILS.waitForElements(x, header, True, 120)
+
+        return True
+
     def setupAccount(self, user, email, passwd):
         #
         # Set up a new email account in the email app and login.
