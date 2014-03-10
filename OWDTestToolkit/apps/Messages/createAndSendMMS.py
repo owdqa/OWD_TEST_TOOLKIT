@@ -1,7 +1,7 @@
 from OWDTestToolkit.global_imports import *
-from OWDTestToolkit.apps.Video import *
-from OWDTestToolkit.apps.Gallery import *
-from OWDTestToolkit.apps.Music import *
+from OWDTestToolkit.apps.video import Video
+from OWDTestToolkit.apps.gallery import Gallery
+from OWDTestToolkit.apps.music import Music
 
 
 class main(GaiaTestCase):
@@ -10,9 +10,9 @@ class main(GaiaTestCase):
     #
 
     def createAndSendMMS(self, attached_type, m_text):
-        self.gallery    = Gallery(self)
-        self.video    = Video(self)
-        self.music    = Music(self)
+        self.gallery = Gallery(self)
+        self.video = Video(self)
+        self.music = Music(self)
 
         #
         # Launch messages app.
@@ -34,7 +34,7 @@ class main(GaiaTestCase):
         #
         self.enterSMSMsg(m_text)
 
-        if attached_type=="image":
+        if attached_type == "image":
             #
             # Add an image file
             #
@@ -53,7 +53,7 @@ class main(GaiaTestCase):
             # Obtaining file attached type
             #
             x = self.UTILS.getElement(DOM.Messages.attach_preview_img_type, "preview type")
-            type=x.get_attribute("data-attachment-type")
+            type = x.get_attribute("data-attachment-type")
 
 
             if type != "img":
@@ -61,7 +61,7 @@ class main(GaiaTestCase):
 
 
 
-        elif attached_type=="video":
+        elif attached_type == "video":
             #
             # Load an video file into the device.
             #
@@ -76,7 +76,7 @@ class main(GaiaTestCase):
             # Obtaining file attached type
             #
             x = self.UTILS.getElement(DOM.Messages.attach_preview_video_audio_type, "preview type")
-            type=x.get_attribute("data-attachment-type")
+            type = x.get_attribute("data-attachment-type")
 
             if type != "video":
                 self.UTILS.quitTest("Incorrect file type. The file must be video")
@@ -84,14 +84,14 @@ class main(GaiaTestCase):
 
 
 
-        elif attached_type=="audio":
+        elif attached_type == "audio":
             #
             # Load an video file into the device.
             #
             self.UTILS.addFileToDevice('./tests/_resources/AMR.amr', destination='/SD/mus')
 
             self.createMMSMusic()
-            self.music.clickOnSongMMS()
+            self.music.click_on_song_mms()
 
             #
             # Click send and wait for the message to be received
@@ -104,13 +104,13 @@ class main(GaiaTestCase):
             # Obtaining file attached type
             #
             x = self.UTILS.getElement(DOM.Messages.attach_preview_video_audio_type, "preview type")
-            type=x.get_attribute("data-attachment-type")
+            type = x.get_attribute("data-attachment-type")
 
             if type != "audio":
                 self.UTILS.quitTest("Incorrect file type. The file must be audio ")
 
         else:
-            #self.UTILS.logResult("info", "incorrect value received")
+            # self.UTILS.logResult("info", "incorrect value received")
             self.UTILS.quitTest("FAILED: Incorrect parameter received in createAndSendMMS() . attached_type must being image, video or audio.")
 
 

@@ -1,6 +1,6 @@
 import GLOBAL
 frame_locator          = ("src","contacts")
-view_all_header        = ('xpath', GLOBAL.app_head_specific % 'Contacts')
+view_all_header        = ('xpath', GLOBAL.app_head_specific.format('Contacts'))
 view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-search,'%s')]"
@@ -31,21 +31,21 @@ favourite_JS           = ("xpath", "/html/body/section/article/div[2]/div/sectio
 
 social_network_contacts= ('class name', "icon-social icon-fb notorg")
 settings_button        = ('id', 'settings-button')
-settings_header        = ('xpath', GLOBAL.app_head_specific % 'Settings')
+settings_header        = ('xpath', GLOBAL.app_head_specific.format('Settings'))
 settings_done_button   = ('id', 'settings-close')
 settings_fb_enable     = ('xpath', '//li[@class="fb-item"]')
 settings_import_fb     = ('id', 'import-fb') 
 settings_fb_frame      = ("id", 'fb-extensions')
 settings_fb_logout_wait= ('id', 'progress-title')
 add_contact_button     = ('id', 'add-contact-button')
-add_contact_header     = ('xpath', GLOBAL.app_head_specific % 'Add contact')
+add_contact_header     = ('xpath', GLOBAL.app_head_specific.format('Add contact'))
 favourite_button       = ('id','toggle-favorite')
 favourite_marker       = ('id', 'favorite-star')
 details_back_button    = ('id', 'details-back')
 
 reset_field_xpath      = ".//*[@id='%s']//button[@id='img-delete-button']"
 edit_image             = ("id", "thumbnail-action")
-edit_contact_header    = ('xpath', GLOBAL.app_head_specific % 'Edit contact')
+edit_contact_header    = ('xpath', GLOBAL.app_head_specific.format('Edit contact'))
 edit_update_button     = ('id', 'save-button')
 edit_details_button    = ('id', 'edit-contact-button')
 edit_cancel_button     = ('id', 'cancel-edit')
@@ -76,7 +76,7 @@ country_field          = ('id', 'countryName_0')
 comment_field          = ('id', 'note_0')
 sms_button             = ('id', 'send-sms-button-0')
 sms_button_specific_id = 'send-sms-button-%s'
-email_button_spec_id   = 'email-or-pick-%s'
+email_button_spec_id   = 'email-or-pick-{}'
 link_button            = ('id', "link_button") # WARNING: >1 element has this id!
 
 
