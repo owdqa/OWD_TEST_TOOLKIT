@@ -1,5 +1,5 @@
 from OWDTestToolkit.global_imports import *
-from OWDTestToolkit.apps.Dialer import *
+
 
 class main(GaiaTestCase):
 

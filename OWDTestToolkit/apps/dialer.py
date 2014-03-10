@@ -111,7 +111,7 @@ class Dialer(object):
         # Calls a number from the call log.
         #
         try:
-            self.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
         except:
             self.openCallLog()
 
@@ -138,13 +138,13 @@ class Dialer(object):
     # Wipes all entries from the csll log.
     #
         try:
-            self.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
         except:
             self.openCallLog()
 
         boolLIST = True
         try:
-            self.wait_for_element_displayed(*DOM.Dialer.call_log_no_calls_msg, timeout=1)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_no_calls_msg, timeout=1)
             boolLIST = False
         except:
             pass
@@ -158,10 +158,10 @@ class Dialer(object):
             x = self.UTILS.getElement(DOM.Dialer.call_log_edit_btn, "Edit button")
             x.tap()
             time.sleep(2)
-            self.wait_for_element_present(*DOM.Dialer.call_log_edit_selAll, timeout=2)
+            self.parent.wait_for_element_present(*DOM.Dialer.call_log_edit_selAll, timeout=2)
             self.marionette.execute_script("document.getElementById('%s').click();" % DOM.Dialer.call_log_edit_selAll[1])
             time.sleep(1)
-            self.wait_for_element_present(*DOM.Dialer.call_log_edit_delete, timeout=2)
+            self.parent.wait_for_element_present(*DOM.Dialer.call_log_edit_delete, timeout=2)
             self.marionette.execute_script("document.getElementById('%s').click();" % DOM.Dialer.call_log_edit_delete[1])
 
             self.marionette.execute_script("""
@@ -181,13 +181,13 @@ class Dialer(object):
         # <br><b>NOTE:</b> the first item is 1, <i>not</i> 0.
         #
         try:
-            self.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
         except:
             self.openCallLog()
 
         boolLIST = True
         try:
-            self.wait_for_element_displayed(*DOM.Dialer.call_log_no_calls_msg, timeout=1)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_no_calls_msg, timeout=1)
             boolLIST = False
         except:
             pass
@@ -206,7 +206,7 @@ class Dialer(object):
             # that at the moment.
             #
             time.sleep(2)
-            self.wait_for_element_present(*DOM.Dialer.call_log_edit_header, timeout=2)
+            self.parent.wait_for_element_present(*DOM.Dialer.call_log_edit_header, timeout=2)
             _els = ("xpath", "//ol[@class='log-group']//li")
             x = self.UTILS.getElements(_els, "Call log items", False)
 
@@ -220,7 +220,7 @@ class Dialer(object):
 
             #prueba
             #time.sleep(0.5)
-            self.wait_for_element_present(*DOM.Dialer.call_log_edit_delete, timeout=2)
+            self.parent.wait_for_element_present(*DOM.Dialer.call_log_edit_delete, timeout=2)
             self.marionette.execute_script("document.getElementById('%s').click();" % DOM.Dialer.call_log_edit_delete[1])
             #time.sleep(0.5)
             self.marionette.execute_script("""
@@ -345,7 +345,7 @@ class Dialer(object):
         #
 
         try:
-            self.wait_for_element_displayed(*DOM.Dialer.phone_number, timeout=1)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.phone_number, timeout=1)
         except:
             x = self.UTILS.getElement(DOM.Dialer.option_bar_keypad, "Keypad option selector")
             x.tap()
@@ -388,11 +388,11 @@ class Dialer(object):
                                 DOM.Dialer.frame_locator_calling[0],
                                 DOM.Dialer.frame_locator_calling[1])
 
-            self.wait_for_element_present(*elDef, timeout=2)
+            self.parent.wait_for_element_present(*elDef, timeout=2)
             x = self.marionette.find_element(*elDef)
             if x:
                 self.marionette.switch_to_frame(x)
-                self.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=1)
+                self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=1)
                 x = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
                 if x: x.tap()
         except:
