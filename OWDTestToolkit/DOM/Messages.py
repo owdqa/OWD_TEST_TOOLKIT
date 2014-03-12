@@ -1,9 +1,9 @@
 frame_locator          = ('src', 'sms')
 
-statusbar_new_sms      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'%s')]")
-new_sms_popup_msg      = ("xpath", "//div[@id='toaster-detail' and contains(text(),'%s')]")
-new_sms_popup_num      = ("xpath", "//div[@id='toaster-title' and contains(text(),'%s')]")
-lockscreen_notif_xpath = "//*[@id='desktop-notifications-container']//div[contains(text(),'%s')]"
+statusbar_new_sms      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'{}')]")
+new_sms_popup_msg      = ("xpath", "//div[@id='toaster-detail' and contains(text(),'{}')]")
+new_sms_popup_num      = ("xpath", "//div[@id='toaster-title' and contains(text(),'{}')]")
+lockscreen_notif_xpath = "//*[@id='desktop-notifications-container']//div[contains(text(),'{}')]"
 create_new_message_btn = ('id', 'icon-add')
 
 edit_mode_wrapper      = ("xpath", "//article[@id='main-wrapper' and @class='wrapper edit']")
@@ -45,7 +45,7 @@ delete_threads_button  = ("id", "threads-delete-button")
 message_list           = ('xpath', '//article[@id="messages-container"]//li')
 message_timestamps     = ("xpath", "//article[@id='messages-container']/header")
 unread_message         = ('css selector', 'li > a.unread')
-messages_from_num      = "//*[contains(@id, '%s')]"
+messages_from_num      = "//*[contains(@id, '{}')]"
 message_timestamps     = ("xpath", ".//*[@id='messages-container']/header")
 message_header         = ("id", "messages-header-text")
 received_messages      = ('xpath', "//li[@class='bubble'][a[@class='received']]")
@@ -54,7 +54,7 @@ edit_messages_icon     = ('xpath', "//span[@class='icon icon-options']")
 delete_messages_btn    = ('xpath', "//button[@data-l10n-id='deleteMessages-label']")
 delete_messages_ok_btn    = ('xpath', "//form[@class='modal-dialog-confirm generic-dialog visible']/menu/button[@data-l10n-id='ok']")
 
-message_text    = ('xpath', "/html/body/article/section[2]/article/ul/li[%d]/section/div/p/span")
+message_text    = ('xpath', "/html/body/article/section[2]/article/ul/li[{}]/section/div/p/span")
 
 edit_msgs_delete_btn   = ("id","messages-delete-button")
 edit_msgs_header       = ("id","messages-edit-mode")
