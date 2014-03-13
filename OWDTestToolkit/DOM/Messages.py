@@ -93,4 +93,4 @@ mms_from_gallery                = ("xpath", "/html/body/div/form[9]/menu/button[
 mms_from_music                  = ("xpath", "/html/body/div/form[9]/menu/button[2]")
 mms_cancel_button               = ("xpath", "/html/body/div/form[9]/menu/button[5]")
 
-mms_icon                        = ("xpath", "/html/body/article/section/article/ul/li/a/p[2]/span")
+mms_icon                        = ("css selector", "span.mms-icon")
