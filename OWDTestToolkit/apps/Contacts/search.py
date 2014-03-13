@@ -12,7 +12,13 @@ class main(GaiaTestCase):
         # Tap the search area.
         #
         x = self.UTILS.getElement(DOM.Contacts.search_field, "Search field")
-        x.tap()
+        # x.tap()
+        #
+        # Tap method of marionette does not seem to work here. JS solution instead.
+        #
+        self.marionette.execute_script("""
+            arguments[0].click();
+        """, script_args=[x])
          
         # problems with this just now - seems to mess up marionette somehow ...
 #         self.parent.keyboard.send(p_val)

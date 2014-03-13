@@ -1,6 +1,6 @@
 from OWDTestToolkit.global_imports import *
 from OWDTestToolkit.apps.Settings import *
-from OWDTestToolkit.apps.Messages import *
+from OWDTestToolkit.apps.messages import Messages
 	
 class main(GaiaTestCase):
 
