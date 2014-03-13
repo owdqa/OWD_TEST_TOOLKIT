@@ -159,13 +159,28 @@ class Messages(object):
         self.UTILS.TEST(boolOK == targetIsPresent, testMsg)
         return boolOK
 
-    def checkMMSIcon(self):
+    def checkMMSIcon(self, thread_name):
+
+        #
+        # Get the thread for which we want to check the icon existence
+        #
+        selector = ("xpath", DOM.Messages.thread_selector_xpath.format(thread_name))
+        elem = self.UTILS.getElement(selector,"Message thread for " + thread_name)
+
+        #
+        # But, in order to make sure we're getting the specific frame, what we trully
+        # got above is an inner child of the thread element. So, we gotta get the father
+        #
+        thread = self.marionette.execute_script("""
+            return arguments[0].parentNode;
+        """, script_args=[elem])
+
         #
         # Checks for the presence of the MMS icon
         #
-        x = self.UTILS.getElement(DOM.Messages.mms_icon, "MMS Icon", True, 5, False)
-        if x:
-            self.UTILS.logResult("info", "MMS icon detected")
+        icon = thread.find_element(*DOM.Messages.mms_icon)
+        if icon:
+            self.UTILS.TEST(icon is not None, "MMS icon detected for thread [{}]".format(thread_name))
 
     def checkNumberIsInToField(self, target):
         #
