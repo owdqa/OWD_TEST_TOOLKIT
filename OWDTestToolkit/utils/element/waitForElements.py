@@ -12,15 +12,14 @@ class main(GaiaTestCase):
         boolOK = True
         try:
             if p_displayed:
-                p_msg = "<b>%s</b> displayed within %s seconds.|%s" % (p_msg, str(p_timeout), str(p_element))
+                p_msg = "<b>{}</b> displayed within {} seconds.|{}".format(p_msg, p_timeout, p_element)
                 self.wait_for_element_displayed(*p_element, timeout=p_timeout)
             else:
-                p_msg = "<b>%s</b> present within %s seconds.|%s" % (p_msg, str(p_timeout), str(p_element))
+                p_msg = "<b>{}</b> present within {} seconds.|{}".format(p_msg, p_timeout, p_element)
                 self.wait_for_element_present(*p_element, timeout=p_timeout)
         except:
             boolOK = False
-            
+
         self.TEST(boolOK, p_msg, p_stop)
-        
+
         return boolOK
-        

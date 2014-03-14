@@ -7,5 +7,6 @@ class main(GaiaTestCase):
     def insertContact(self, contact):
         self.marionette.switch_to_frame()
         mozcontact = contact.create_mozcontact()
-        result = self.marionette.execute_async_script('return GaiaDataLayer.insertContact(%s);' % json.dumps(mozcontact), special_powers=True)
-        assert result, 'Unable to insert contact %s' % contact
+        result = self.marionette.execute_async_script('return GaiaDataLayer.insertContact({});'.\
+                                                      format(json.dumps(mozcontact)), special_powers=True)
+        assert result, 'Unable to insert contact {}'.format(contact)
