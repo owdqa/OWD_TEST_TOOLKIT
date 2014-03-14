@@ -1,30 +1,21 @@
 from OWDTestToolkit import DOM
 import time
-import logging.config
-
 
 class Contacts(object):
 
     def __init__(self, parent):
-        logging.config.fileConfig("/home/fran/owd/OWD_TEST_TOOLKIT/OWDTestToolkit/utils/logging/logging.cfg")
-        self.logger = logging.getLogger('contacts')
         self.apps = parent.apps
         self.data_layer = parent.data_layer
         self.parent = parent
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
-        self.logger.debug("INIT CONTACTS %s", self.logger)
 
     def launch(self):
         #
         # Launch the app.
         #
-        self.logger.debug("Launching... %s", self.__class__.__name__)
-        logging.debug
         self.app = self.apps.launch(self.__class__.__name__)
-        self.logger.debug("APP: %s", self.app)
         self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
-        self.logger.debug("Ending launch!")
         return self.app
 
     def add_gallery_image_to_contact(self, num):
@@ -661,7 +652,7 @@ class Contacts(object):
         #
         self.marionette.switch_to_frame()
         try:
-            element = "//iframe[contains(@%s, '%s')]"\
+            element = "//iframe[contains(@{}, '{}')]"\
                       .format((DOM.Contacts.hotmail_frame[0], DOM.Contacts.hotmail_frame[1]))
 
             self.wait_for_element_present("xpath", element, timeout=5)
@@ -749,7 +740,7 @@ class Contacts(object):
                                  "<b>NOTE:</b> Apparently all your friends are already imported - " + \
                                  "see the following screenshots for details", x)
 
-            self.marionette.execute_script("document.getElementById('%s').click()" % DOM.Contacts.import_close_icon[1])
+            self.marionette.execute_script("document.getElementById('{}').click()".format(DOM.Contacts.import_close_icon[1]))
             time.sleep(1)
 
             #
@@ -1132,13 +1123,11 @@ class Contacts(object):
         self.find_frame()
 
         y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
-        self.logger.debug("getElements all contact list %s (%d)", (y, len(y)))
 
         self.UTILS.logResult("info", "{} contacts listed.".format(len(y)))
         ymax = len(y)
         found = False
         for i in range(ymax):
-            self.logger.debug("loop range(%d)", ymax)
             self.UTILS.logResult("info", "'{}'".format(y[i].text))
             if contact_name.lower() in y[i].text.lower():
                 found = True
@@ -1181,9 +1170,7 @@ class Contacts(object):
         # frame is different if coming from Dialer.
         #
         self.marionette.switch_to_frame()
-        self.logger.debug("1")
         x = self.try_frame(DOM.Dialer.frame_locator)
-        self.logger.debug("X: %s", x)
         if x:
             x = self.try_frame(DOM.Dialer.call_log_contact_name_iframe)
             if x:
@@ -1191,19 +1178,16 @@ class Contacts(object):
                 return "Dialer"
 
         self.marionette.switch_to_frame()
-        self.logger.debug("2")
         x = self.try_frame(DOM.Contacts.frame_locator)
         if x:
             return "Contacts"
 
         self.marionette.switch_to_frame()
-        self.logger.debug("3")
         x = self.try_frame(DOM.Messages.frame_locator)
         if x:
             return "Messages"
 
         self.marionette.switch_to_frame()
-        self.logger.debug("4")
         x = self.try_frame(["src", self._orig])
         return "Unknown"
 
@@ -1212,16 +1196,10 @@ class Contacts(object):
         # Private function to return an object for the many types of 'return iframes'.
         #
         try:
-            self.logger.debug("DOM[0] = %s   DOM[1] = %s", dom[0], dom[1])
             iframe = ("xpath", "//iframe[contains(@{},'{}')]".format(dom[0], dom[1]))
-            self.logger.debug("iframe: %s", iframe)
             self.wait_for_element_present(*iframe, timeout=2)
-            self.logger.debug("after wait")
             x = self.marionette.find_element(*iframe)
-            self.logger.debug("try_frame: X = %s", x)
             self.marionette.switch_to_frame(x)
-            self.logger.debug("5")
             return True
         except:
-            self.logger.debug("exception thrown")
             return False
