@@ -17,7 +17,7 @@ view_contact_tel_field = ("id", "call-or-pick-0")
 view_contact_email_field = ("id", "email-or-pick-0")
 view_contact_address    = ("xpath", "//li[@id='address-details-template-0']//a[@class='action action-block']/b")
 view_contact_comments  = ("id", "note-details-template-0")
-view_contact_tels_xpath= "//*[contains(@id, 'call-or-pick-') and contains(@data-tel, '%s')]"
+view_contact_tels_xpath= "//*[contains(@id, 'call-or-pick-') and contains(@data-tel, '{}')]"
 dialer_frame           = ("data-url", "oncall")
 
 search_field           = ("xpath", ".//*[@id='search-start']/input")
@@ -26,7 +26,7 @@ search_results_list    = ("xpath",".//*[@id='search-list']/li")
 search_cancel_btn      = ('id', 'cancel-search')
 search_no_contacts_found = ("id", "no-result")
 favourites_section     = ("id", "contacts-list-favorites")
-favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//li[@data-order='%s']"
+favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//li[@data-order='{}']"
 favourite_JS           = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 
 social_network_contacts= ('class name', "icon-social icon-fb notorg")
