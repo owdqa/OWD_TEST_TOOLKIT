@@ -3,7 +3,7 @@ frame_locator          = ("src","contacts")
 view_all_header        = ('xpath', GLOBAL.app_head_specific.format('Contacts'))
 view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list  = ("xpath", "//li[@class='contact-item']")
-view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-search,'%s')]"
+view_all_contact_name_xpath  = "//li[@class='contact-item']//p[contains(@data-search,'{}')]"
 view_all_contact_JS    = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li")
 view_all_contact_JSname= ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
 view_all_contact_HM    = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
@@ -43,7 +43,7 @@ favourite_button       = ('id','toggle-favorite')
 favourite_marker       = ('id', 'favorite-star')
 details_back_button    = ('id', 'details-back')
 
-reset_field_xpath      = ".//*[@id='%s']//button[@id='img-delete-button']"
+reset_field_xpath      = ".//*[@id='{}']//button[@id='img-delete-button']"
 edit_image             = ("id", "thumbnail-action")
 edit_contact_header    = ('xpath', GLOBAL.app_head_specific.format('Edit contact'))
 edit_update_button     = ('id', 'save-button')
@@ -68,7 +68,7 @@ email_field            = ('id', "email_0")
 add_email_button       = ("id","add-new-email")
 email_fields           = ("xpath", "//input[@type='email']")
 phone_field            = ('id', "number_0")
-phone_field_xpath      = "//*[contains(@id, 'number_') and contains(@value, '%s')]"
+phone_field_xpath      = "//*[contains(@id, 'number_') and contains(@value, '{}')]"
 street_field           = ('id', "streetAddress_0")
 zip_code_field         = ('id', "postalCode_0")
 city_field             = ('id', 'locality_0')
@@ -93,7 +93,7 @@ import_desel_all    = ("id", "deselect-all")
 import_import_btn   = ("id", "import-action")
 import_conts_list   = ("xpath", "//*[@id='groups-list']//li[@class='block-item']")
 import_search_list  = ("xpath", "//*[@id='search-list']//li[@class='block-item']")
-import_conts_xp     = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '%s')]"
+import_conts_xp     = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '{}')]"
 
 import_contacts      = ("id", "importContacts")
 
