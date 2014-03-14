@@ -5,7 +5,7 @@ digital_face            = ("xpath", "//*[@id='digital-clock-face']")
 new_alarm_btn           = ('id', 'alarm-new')
 
 time_button             = ('id', "time-menu")
-time_scroller           = ('css selector', '.value-picker-%s div')
+time_scroller           = ('css selector', '.value-picker-{} div')
 time_scroller_ampm      = ('css selector', '.value-picker-hour24-state div')
 time_picker_ok          = ("xpath", "//button[text()='OK']")
 alarm_label             = ("name", "alarm.label")
