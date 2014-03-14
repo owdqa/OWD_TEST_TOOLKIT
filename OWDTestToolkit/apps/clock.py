@@ -152,7 +152,7 @@ class Clock(object):
         scroller_minutes = self.UTILS.getElement(
             (DOM.Clock.time_scroller[0], DOM.Clock.time_scroller[1].format("minutes")), "Scroller for 'minutes'")
 
-        self.UTILS.logResult("info", "H: %s, M: %s" % (scroller_hours.text, scroller_minutes.text))
+        self.UTILS.logResult("info", "H: {}, M: {}".format(scroller_hours.text, scroller_minutes.text))
         return
 
         #
