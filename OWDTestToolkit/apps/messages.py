@@ -1146,7 +1146,7 @@ class Messages(object):
         myIframe = self.UTILS.currentIframe()
 
         self.marionette.switch_to_frame()
-        x = (DOM.Messages.new_sms_popumsg[0], DOM.Messages.new_sms_popumsg[1].format(msg))
+        x = (DOM.Messages.new_sms_popup_msg[0], DOM.Messages.new_sms_popup_msg[1].format(msg))
         self.UTILS.waitForElements(x,
                                     "Popup message saying we have a new sms containing '" + msg + "'",
                                     True,
