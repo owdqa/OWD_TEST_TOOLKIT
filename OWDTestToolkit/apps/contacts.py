@@ -352,20 +352,6 @@ class Contacts(object):
             self.marionette.switch_to_frame()
             self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
 
-            #
-            # Now relaunch and click the 'enable facebook' button again.
-            #
-            # For some reason I need to relaunch the Contacts app first.
-            # If I don't then after I log in again the 'Please hold on ...'
-            # message stays forever.
-            # (This is only a problem when automating - if you do this
-            # manually it works fine.)
-            #
-            self.launch()
-            self.tapSettingsButton()
-
-            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
-
             x = self.UTILS.getElement(DOM.Contacts.settings_fb_enable, "Enable facebook button")
             x.tap()
 

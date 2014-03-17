@@ -34,13 +34,15 @@ class Facebook(object):
         # Tap "Select all".
         #
         x = self.UTILS.getElement(DOM.Facebook.friends_select_all, "'Select all' button")
-        x.tap()
+        # x.tap()
+        self.UTILS.simulateClick(x)
 
         #
         # Tap "Import".
         #
         x = self.UTILS.getElement(DOM.Facebook.friends_import, "Import button")
-        x.tap()
+        # x.tap()
+        self.UTILS.simulateClick(x)
 
         #
         # Switch back to the contacts frame.
@@ -56,6 +58,7 @@ class Facebook(object):
         #
         # Return the number of friends we imported.
         #
+        self.UTILS.logComment("Friend count: {}".format(friend_count)
         return friend_count
 
     def LinkContact(self, contact_email):
