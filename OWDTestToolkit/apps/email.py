@@ -77,7 +77,7 @@ class Email(object):
                 #
                 # Look through any entries found in the folder ...
                 #
-                self.wait_for_element_displayed(*DOM.Email.folder_subject_list, timeout=2)
+                self.parent.wait_for_element_displayed(*DOM.Email.folder_subject_list, timeout=2)
                 z = self.marionette.find_elements(*DOM.Email.folder_subject_list)
                 pos = 0
                 for i in z:
@@ -176,7 +176,7 @@ class Email(object):
             #
             ok = True
             try:
-                self.wait_for_element_displayed(*DOM.Email.open_email_from)
+                self.parent.wait_for_element_displayed(*DOM.Email.open_email_from)
                 ok = True
             except:
                 ok = False
@@ -363,7 +363,7 @@ class Email(object):
         # (doesn't always appear when using hotmail)
         #
         try:
-            self.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
+            self.parent.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
             btn = self.marionette.find_element(*DOM.Email.login_next_btn)
             btn.tap()
         except:
@@ -431,7 +431,7 @@ class Email(object):
         # (doesn't always appear when using hotmail)
         #
         try:
-            self.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
+            self.parent.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
             btn = self.marionette.find_element(*DOM.Email.login_next_btn)
             btn.tap()
         except:
@@ -472,7 +472,7 @@ class Email(object):
         # Check if it's already set up (this may be empty, so don't test for this element).
         #
         try:
-            self.wait_for_element_present(*DOM.Email.accounts_list_names, timeout=2)
+            self.parent.wait_for_element_present(*DOM.Email.accounts_list_names, timeout=2)
             time.sleep(1)
             x = self.marionette.find_elements(*DOM.Email.accounts_list_names)
             for i in x:
