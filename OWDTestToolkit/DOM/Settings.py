@@ -25,9 +25,9 @@ wifi_enabled           = ('xpath', ".//*[@id='wifi-enabled']/label")
 wifi_available_networks= ('xpath', ".//*[@id='wifi-availableNetworks']/li")
 wifi_available_status  = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
 wifi_available_name    = ".//*[@id='wifi-availableNetworks']/li[%s]//a"
-wifi_name_xpath        = './/*[@id="wifi-availableNetworks"]//a[text()="%s"]'
+wifi_name_xpath        = './/*[@id="wifi-availableNetworks"]//a[text()="{}"]'
 wifi_connected         = ('xpath', '//small[text()="Connected"]')
-wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='%s']"
+wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='{}']"
 
 wifi_login_header      = ("xpath", "//section[@id='wifi-auth']//h1")
 wifi_login_user        = ('name', 'identity')
