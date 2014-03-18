@@ -77,7 +77,7 @@ class Email(object):
                 #
                 # Look through any entries found in the folder ...
                 #
-                self.wait_for_element_displayed(*DOM.Email.folder_subject_list, timeout=2)
+                self.parent.wait_for_element_displayed(*DOM.Email.folder_subject_list, timeout=2)
                 z = self.marionette.find_elements(*DOM.Email.folder_subject_list)
                 pos = 0
                 for i in z:
@@ -176,7 +176,7 @@ class Email(object):
             #
             ok = True
             try:
-                self.wait_for_element_displayed(*DOM.Email.open_email_from)
+                self.parent.wait_for_element_displayed(*DOM.Email.open_email_from)
                 ok = True
             except:
                 ok = False
@@ -363,7 +363,7 @@ class Email(object):
         # (doesn't always appear when using hotmail)
         #
         try:
-            self.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
+            self.parent.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
             btn = self.marionette.find_element(*DOM.Email.login_next_btn)
             btn.tap()
         except:
@@ -388,6 +388,54 @@ class Email(object):
 
         self.UTILS.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format('Inbox')), "Inbox")
         time.sleep(2)
+
+    def setupAccountFirstStep(self, p_user, p_email, p_pass):
+        #
+        # Set up a new email account in the email app and login.
+        #
+
+        #
+        # If we've just started out, email will open directly to "New Account").
+        #
+        x = self.UTILS.getElement(DOM.GLOBAL.app_head, "Application header")
+        if x.text.lower() != "new account":
+            #
+            # We have at least one emali account setup,
+            # check to see if we can just switch to ours.
+            #
+            if self.switchAccount(p_email):
+                return
+
+            #
+            # It's not setup already, so prepare to set it up!
+            #
+            x = self.UTILS.getElement(DOM.Email.settings_set_btn, "Settings set button")
+            x.tap()
+
+            x = self.UTILS.getElement(DOM.Email.settings_add_account_btn, "Add account button")
+            x.tap()
+
+        #
+        # (At this point we are now in the 'New account' screen by one path or
+        # another.)
+        #
+        self.UTILS.typeThis(DOM.Email.username  , "Username field", p_user , True, True)
+        self.UTILS.typeThis(DOM.Email.email_addr, "Address field" , p_email, True, True)
+        self.UTILS.typeThis(DOM.Email.password  , "Password field", p_pass , True, True)
+
+        self.parent.lockscreen.unlock()
+        self.marionette.switch_to_frame()
+        self.UTILS.switchToFrame(*DOM.Email.frame_locator)
+
+        #
+        # (doesn't always appear when using hotmail)
+        #
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
+            btn = self.marionette.find_element(*DOM.Email.login_next_btn)
+            btn.tap()
+        except:
+            pass
 
     def switchAccount(self, address):
         #
@@ -424,7 +472,7 @@ class Email(object):
         # Check if it's already set up (this may be empty, so don't test for this element).
         #
         try:
-            self.wait_for_element_present(*DOM.Email.accounts_list_names, timeout=2)
+            self.parent.wait_for_element_present(*DOM.Email.accounts_list_names, timeout=2)
             time.sleep(1)
             x = self.marionette.find_elements(*DOM.Email.accounts_list_names)
             for i in x:

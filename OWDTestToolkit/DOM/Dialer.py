@@ -36,7 +36,7 @@ hangup_bar_locator     = ('id', 'callbar-hang-up')
 call_log_btn           = ("id", "option-recents")
 call_log_filter        = ("id", "call-log-filter")
 call_log_numbers       = ("xpath", "//li[contains(@class,'log-item')]")
-call_log_number_xpath  = "//li[contains(@class,'log-item') and contains(@data-phone-number,'%s')]"
+call_log_number_xpath  = "//li[contains(@class,'log-item') and contains(@data-phone-number,'{}')]"
 call_log_name_xpath    = "//li[contains(@class,'log-item')]//span[@class='primary-info-main' and text()='%s']"
 call_log_edit_btn      = ("id", "call-log-icon-edit")
 call_log_edit_header   = ("id", "edit-mode-header")

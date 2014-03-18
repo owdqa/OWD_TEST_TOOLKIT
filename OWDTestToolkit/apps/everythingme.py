@@ -25,7 +25,7 @@ class EverythingMe(object):
         self.UTILS.logResult("info", "Launching Everything ME.")
         boolOK = False
         try:
-            self.wait_for_element_displayed(*DOM.EME.start_eme_icon, timeout=1)
+            self.parent.wait_for_element_displayed(*DOM.EME.start_eme_icon, timeout=1)
             x = self.marionette.find_element(*DOM.EME.start_eme_icon)
             x.tap()
             boolOK = True
@@ -33,7 +33,7 @@ class EverythingMe(object):
             self.UTILS.logResult("info", "Everything ME is already 'running', so just waking it up ...")
             self._relaunch()
             try:
-                self.wait_for_element_displayed(*DOM.EME.groups, timeout=3)
+                self.parent.wait_for_element_displayed(*DOM.EME.groups, timeout=3)
             except:
                 self._relaunch()
             boolOK = True
@@ -302,7 +302,7 @@ class EverythingMe(object):
         x.tap()
 
         try:
-            self.wait_for_element_displayed(*DOM.EME.apps_not_installed, timeout=20)
+            self.parent.wait_for_element_displayed(*DOM.EME.apps_not_installed, timeout=20)
             self.UTILS.logResult("info", "(Apps for group {} were displayed.)".format(name))
             ok = True
         except:
@@ -429,7 +429,7 @@ class EverythingMe(object):
         ok = True
         try:
             elem = ("xpath", DOM.EME.search_result_icon_xpath.format(name))
-            self.wait_for_element_displayed(*elem, timeout=60)
+            self.parent.wait_for_element_displayed(*elem, timeout=60)
             x = self.marionette.find_element(*elem)
             return x
         except:

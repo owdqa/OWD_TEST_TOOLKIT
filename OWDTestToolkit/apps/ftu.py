@@ -90,7 +90,7 @@ class Ftu(object):
         #
         time.sleep(2)
         try:
-            self.wait_for_element_displayed(*DOM.FTU.wifi_login_user, timeout=2)
+            self.parent.wait_for_element_displayed(*DOM.FTU.wifi_login_user, timeout=2)
             wifi_login_user = self.marionette.find_element(*DOM.FTU.wifi_login_user)
             wifi_login_pass = self.marionette.find_element(*DOM.FTU.wifi_login_pass)
             wifi_login_join = self.marionette.find_element(*DOM.FTU.wifi_login_join)
