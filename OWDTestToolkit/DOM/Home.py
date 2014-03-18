@@ -11,9 +11,9 @@ app_confirm_delete   = ('id', 'confirm-dialog-confirm-button')
 app_card             = ('xpath', '//div[@id="cards-view"]//li[@class="card" and @data-origin="app://{}.gaiamobile.org"]')
 app_close            = ('css selector', '#cards-view li.card[data-origin*="%s"] .close-card')
 
-datetime_time_xpath  = "//p[@id='landing-clock']//span[@class='numbers' and text()='%s']"
-datetime_ampm_xpath  = "//p[@id='landing-clock']//span[@class='meridiem' and text()='%s']"
-datetime_date_xpath  = "//div[@id='landing-time']//p[@id='landing-date' and text()='%s']"
+datetime_time_xpath  = "//p[@id='landing-clock']//span[@class='numbers' and text()='{}']"
+datetime_ampm_xpath  = "//p[@id='landing-clock']//span[@class='meridiem' and text()='{}']"
+datetime_date_xpath  = "//div[@id='landing-time']//p[@id='landing-date' and text()='{}']"
 
 dock                 = ("xpath", "//*[contains(@class,'dockWrapper')]")
 docked_apps          = ("xpath", "//div[contains(@class,'dockWrapper')]//li[@class='icon']")
