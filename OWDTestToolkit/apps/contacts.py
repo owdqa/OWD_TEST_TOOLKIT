@@ -190,7 +190,7 @@ class Contacts(object):
             #
             boolOK = False
             try:
-                self.wait_for_element_displayed(*DOM.Contacts.view_contact_image, timeout=1)
+                self.parent.wait_for_element_displayed(*DOM.Contacts.view_contact_image, timeout=1)
                 x = self.marionette.find_element(*DOM.Contacts.view_contact_image)
                 x_style = x.get_attribute("style")
                 if "blob" in x_style:
@@ -250,7 +250,7 @@ class Contacts(object):
         # Make sure we are in the contacts app.
         #
         try:
-            self.wait_for_element_displayed("xpath", "//h1[text() = 'Contacts']", timeout=1)
+            self.parent.wait_for_element_displayed("xpath", "//h1[text() = 'Contacts']", timeout=1)
         except:
             self.launch()
 
@@ -485,7 +485,7 @@ class Contacts(object):
         #
         self.marionette.switch_to_frame()
         try:
-            self.wait_for_element_present("xpath", "//iframe[contains(@{}, '{}')]".
+            self.parent.wait_for_element_present("xpath", "//iframe[contains(@{}, '{}')]".
                                           format(DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]),
                                           timeout=5)
 
@@ -504,7 +504,7 @@ class Contacts(object):
             boolOK = False
             while boolOK == False:
                 try:
-                    self.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
+                    self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
 
                     x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
                     x.tap()
@@ -519,9 +519,9 @@ class Contacts(object):
             #
             # Send the login information (the email field isn't always displayed).
             #
-            self.wait_for_element_displayed(*DOM.Contacts.gmail_password, timeout=30)
+            self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_password, timeout=30)
             try:
-                self.wait_for_element_displayed(*DOM.Contacts.gmail_username, timeout=5)
+                self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_username, timeout=5)
 
                 x = self.UTILS.getElement(DOM.Contacts.gmail_username, "Username field")
                 x.send_keys(name)
@@ -539,7 +539,7 @@ class Contacts(object):
                 # Check to see if sigin failed. If it did then stay here.
                 #
                 try:
-                    self.wait_for_element_displayed(*DOM.Contacts.gmail_login_error_msg, timeout=2)
+                    self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_login_error_msg, timeout=2)
 
                     x = self.UTILS.screenShotOnErr()
                     self.UTILS.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
@@ -641,7 +641,7 @@ class Contacts(object):
             element = "//iframe[contains(@{}, '{}')]"\
                       .format((DOM.Contacts.hotmail_frame[0], DOM.Contacts.hotmail_frame[1]))
 
-            self.wait_for_element_present("xpath", element, timeout=5)
+            self.parent.wait_for_element_present("xpath", element, timeout=5)
 
             #
             # Switch to the hotmail login frame.
@@ -655,9 +655,9 @@ class Contacts(object):
             # I 'know' that the password field will appear though, so use that element to get the
             # timing right.
             #
-            self.wait_for_element_displayed(*DOM.Contacts.hotmail_password, timeout=30)
+            self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_password, timeout=30)
             try:
-                self.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
+                self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
 
                 x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
                 x.send_keys(name)
@@ -675,7 +675,7 @@ class Contacts(object):
                 # Check to see if sigin failed. If it did then return False.
                 #
                 try:
-                    self.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
+                    self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
 
                     x = self.UTILS.screenShotOnErr()
                     self.UTILS.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
@@ -697,7 +697,7 @@ class Contacts(object):
         # Sometimes hotmail asks for permission - just accept it if it's there.
         #
         try:
-            self.wait_for_element_displayed(*DOM.Contacts.hotmail_permission_accept, timeout=2)
+            self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_permission_accept, timeout=2)
             x = self.marionette.find_element(*DOM.Contacts.hotmail_permission_accept)
             x.tap()
             x = self.UTILS.getElement(DOM.Contacts.hotmail_password, "Password field")
@@ -716,7 +716,7 @@ class Contacts(object):
         try:
             # For some reason this is needed before the message can be seen!
             x = self.UTILS.screenShotOnErr()
-            self.wait_for_element_displayed(*DOM.Contacts.import_all_imported_msg, timeout=2)
+            self.parent.wait_for_element_displayed(*DOM.Contacts.import_all_imported_msg, timeout=2)
             all_imported = True
         except:
             pass
@@ -1183,7 +1183,7 @@ class Contacts(object):
         #
         try:
             iframe = ("xpath", "//iframe[contains(@{},'{}')]".format(dom[0], dom[1]))
-            self.wait_for_element_present(*iframe, timeout=2)
+            self.parent.wait_for_element_present(*iframe, timeout=2)
             x = self.marionette.find_element(*iframe)
             self.marionette.switch_to_frame(x)
             return True

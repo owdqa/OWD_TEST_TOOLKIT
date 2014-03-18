@@ -47,7 +47,7 @@ class Browser(object):
         self.UTILS.logResult("info", "Screenshot of web page in browser:|" + fnam[1])
 
         try:
-            self.wait_for_element_present(*DOM.Browser.page_problem, timeout=1)
+            self.parent.wait_for_element_present(*DOM.Browser.page_problem, timeout=1)
             x = self.marionette.find_element(*DOM.Browser.page_problem)
             if x.is_displayed():
                 return False
@@ -79,7 +79,7 @@ class Browser(object):
         # Wait for this tab to go.
         time.sleep(1)
         try:
-            self.wait_for_element_displayed(*DOM.Browser.tab_tray_tab_list)
+            self.parent.wait_for_element_displayed(*DOM.Browser.tab_tray_tab_list)
             x = self.UTILS.getElements(DOM.Browser.tab_tray_tab_list, "Tab list after removal")
             _after_count = len(x)
             self.UTILS.TEST(_after_count < initial_count, "The tab has been removed.")
@@ -128,7 +128,7 @@ class Browser(object):
 
         x = ""
         try:
-            self.wait_for_element_displayed(*details[tab]["links"], timeout=2)
+            self.parent.wait_for_element_displayed(*details[tab]["links"], timeout=2)
             x = self.UTILS.getElements(details[tab]["links"], "{} links".format(tab_name))
         except Exception:
             self.UTILS.logResult("info", "<i>(No list items found for <b>{}</b> tab.)</i>".format(tab_name))
@@ -211,7 +211,7 @@ class Browser(object):
         self.UTILS.switchToFrame(*DOM.Browser.frame_locator)
         try:
             # We may already be in the 'tray' ...
-            self.wait_for_element_displayed(*DOM.Browser.tab_tray_screen, timeout=1)
+            self.parent.wait_for_element_displayed(*DOM.Browser.tab_tray_screen, timeout=1)
             return
         except Exception:
             try:
@@ -251,7 +251,7 @@ class Browser(object):
         """
         time.sleep(3)
         try:
-            self.wait_for_element_displayed(*DOM.Browser.throbber)
+            self.parent.wait_for_element_displayed(*DOM.Browser.throbber)
         except Exception:
             pass
         self.UTILS.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 120, False)
