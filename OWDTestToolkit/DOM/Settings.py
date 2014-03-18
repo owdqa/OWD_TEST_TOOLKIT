@@ -75,5 +75,3 @@ auto_retrieve_selected_item    = ("xpath", "//section[@id='value-selector-contai
 
 ok_btn             = ("xpath", "//menu[@id='select-options-buttons']/button")
 
-
-

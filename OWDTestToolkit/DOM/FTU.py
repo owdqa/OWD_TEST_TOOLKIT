@@ -1,3 +1,6 @@
+# TODO: Check this identifier
+frame_locator = ('src', 'ftu')
+
 language_list       = ('xpath', ".//*[@id='languages']/article/ul/li/label/p")
 language_Sel_xpath  = '//li[ starts-with( descendant-or-self::*/text(),"%s" ) ]'
 next_button         = ('id', 'forward')
