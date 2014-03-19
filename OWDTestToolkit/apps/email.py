@@ -16,7 +16,7 @@ class Email(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def deleteEmail(self, subject):
@@ -32,7 +32,7 @@ class Email(object):
         #
         # Press the delete button and confirm deletion.
         #
-        x = self.UTILS.getElement(DOM.Email.delete_this_email_btn, "Delete button")
+        x = self.UTILS.element.getElement(DOM.Email.delete_this_email_btn, "Delete button")
         x.tap()
 
         #
@@ -40,10 +40,10 @@ class Email(object):
         # For some reason, I can't wait_for_displayed() here either, so I have to wait for the buttons
         # to be 'present' (not 'displayed'), then look through them until I find the one I want.
         #
-        x = self.UTILS.getElements(DOM.Email.delete_confirm_buttons, "Confirmation buttons", False, 2, False)
+        x = self.UTILS.element.getElements(DOM.Email.delete_confirm_buttons, "Confirmation buttons", False, 2, False)
         for i in x:
             if i.is_displayed() and i.text == "Delete":
-                self.UTILS.logResult("info", "Clicking confirmation button.")
+                self.UTILS.reporting.logResult("info", "Clicking confirmation button.")
                 # (click, not tap!)
                 i.click()
                 break
@@ -51,7 +51,7 @@ class Email(object):
         #
         # "1 message deleted" displayed.
         #
-        x = self.UTILS.getElement(DOM.Email.deleted_email_notif, "Email deletion notifier")
+        x = self.UTILS.element.getElement(DOM.Email.deleted_email_notif, "Email deletion notifier")
 
         #
         # Refresh and check that the message is no longer in the inbox.
@@ -59,9 +59,9 @@ class Email(object):
         x = self.marionette.find_element(*DOM.Email.folder_refresh_button)
         x.tap()
         time.sleep(5)
-        x = self.UTILS.getElements(DOM.Email.folder_subject_list, "Email messages in this folder")
+        x = self.UTILS.element.getElements(DOM.Email.folder_subject_list, "Email messages in this folder")
 
-        self.UTILS.TEST(x[0].text != subject, "Email '" + subject + "' no longer found in this folder.", False)
+        self.UTILS.test.TEST(x[0].text != subject, "Email '" + subject + "' no longer found in this folder.", False)
 
     def emailIsInFolder(self, subject):
         #
@@ -110,7 +110,7 @@ class Email(object):
             # Wait a couple for seconds and try again.
             #
             # (don't validate because this could go on for a while...)
-            self.UTILS.logResult("info",
+            self.UTILS.reporting.logResult("info",
                                  "'" + subject + "' not found yet - refreshing the folder and looking again ...")
             x = self.marionette.find_element(*DOM.Email.folder_refresh_button)
             x.tap()
@@ -125,26 +125,26 @@ class Email(object):
         #
         # Goto a specific folder in the folder list screen.
         #
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Screen shot:", x)
-        x = self.UTILS.getElement(('xpath', DOM.Email.folderList_name_xpath.format(name)),
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screen shot:", x)
+        x = self.UTILS.element.getElement(('xpath', DOM.Email.folderList_name_xpath.format(name)),
                                   "Link to folder '" + name + "'")
         x.tap()
 
-        self.UTILS.waitForElements(("xpath", DOM.GLOBAL.app_head_specific.format(name)),
+        self.UTILS.element.waitForElements(("xpath", DOM.GLOBAL.app_head_specific.format(name)),
                                    "Header for '" + name + "' folder")
 
     def openMailFolder(self, folder_name):
         #
         # Open a specific mail folder (must be called from "Inbox").
         #
-        x = self.UTILS.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
+        x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
         x.tap()
 
         #
         # When we're looking at the folders screen ...
         #
-        self.UTILS.waitForElements(DOM.Email.folderList_header, "Folder list header", True, 20, False)
+        self.UTILS.element.waitForElements(DOM.Email.folderList_header, "Folder list header", True, 20, False)
 
         #
         # ... click on the folder were after.
@@ -154,7 +154,7 @@ class Email(object):
         #
         # Wait a while for everything to finish populating.
         #
-        self.UTILS.waitForNotElements(DOM.Email.folder_sync_spinner,
+        self.UTILS.element.waitForNotElements(DOM.Email.folder_sync_spinner,
                                       "Loading messages spinner", True, 60, False)
 
     def openMsg(self, subject):
@@ -164,7 +164,7 @@ class Email(object):
         #
 
         myEmail = self.emailIsInFolder(subject)
-        self.UTILS.TEST(myEmail != False, "Found email with subject '" + subject + "'.")
+        self.UTILS.test.TEST(myEmail != False, "Found email with subject '" + subject + "'.")
         if myEmail:
             #
             # We found it - open the email.
@@ -206,45 +206,45 @@ class Email(object):
         self.launch()
 
         try:
-            x = self.UTILS.waitForElements(("xpath", "//h1[text()='Inbox']"), "Inbox header", 10)
+            x = self.UTILS.element.waitForElements(("xpath", "//h1[text()='Inbox']"), "Inbox header", 10)
         except:
             #
             # We have no accounts set up (or the app would default to
             # the inbox of one of them).
             #
-            self.UTILS.logResult("info", "(No email accounts set up yet.)")
+            self.UTILS.reporting.logResult("info", "(No email accounts set up yet.)")
             return
 
-        x = self.UTILS.getElement(DOM.Email.settings_menu_btn, "Settings button")
+        x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings button")
         x.tap()
 
-        x = self.UTILS.getElement(DOM.Email.settings_set_btn, "Set settings button")
+        x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Set settings button")
         x.tap()
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format("Mail Settings"))
-        self.UTILS.waitForElements(x, "Mail settings", True, 20, False)
+        self.UTILS.element.waitForElements(x, "Mail settings", True, 20, False)
 
         #
         # Remove each email address listed ...
         #
-        x = self.UTILS.getElements(DOM.Email.email_accounts_list,
+        x = self.UTILS.element.getElements(DOM.Email.email_accounts_list,
                                    "Email accounts list", False, 20, False)
         for i in x:
             if i.text != "":
                 # This isn't a placeholder, so delete it.
-                self.UTILS.logComment("i: " + i.text)
+                self.UTILS.reporting.logComment("i: " + i.text)
                 i.tap()
 
                 x = ('xpath', DOM.GLOBAL.app_head_specific.format(i.text))
-                self.UTILS.waitForElements(x, i.text + " header", True, 20, False)
+                self.UTILS.element.waitForElements(x, i.text + " header", True, 20, False)
 
                 # Delete.
-                delacc = self.UTILS.getElement(DOM.Email.settings_del_acc_btn, "Delete account button")
+                delacc = self.UTILS.element.getElement(DOM.Email.settings_del_acc_btn, "Delete account button")
                 delacc.tap()
                 time.sleep(2)
 
                 # Confirm.  <<<< PROBLEM (on forums)!
-                delconf = self.UTILS.getElement(DOM.Email.settings_del_conf_btn, "Confirm delete button")
+                delconf = self.UTILS.element.getElement(DOM.Email.settings_del_conf_btn, "Confirm delete button")
                 delconf.tap()
 
                 # Wait for this dialog to go away, then sleep for 1s.
@@ -258,21 +258,21 @@ class Email(object):
         #
         # Compose and send a new email.
         #
-        x = self.UTILS.getElement(DOM.Email.compose_msg_btn, "Compose message button")
+        x = self.UTILS.element.getElement(DOM.Email.compose_msg_btn, "Compose message button")
         x.tap()
 
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
                                   "Compose message header")
 
         #
         # Put items in the corresponsing fields.
         #
-        self.UTILS.typeThis(DOM.Email.compose_to, "'To' field", p_target, True, False)
-        self.UTILS.typeThis(DOM.Email.compose_subject, "'Subject' field", p_subject, True, False)
-        self.UTILS.typeThis(DOM.Email.compose_msg, "Message field", p_message, True, False, False)
+        self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", p_target, True, False)
+        self.UTILS.general.typeThis(DOM.Email.compose_subject, "'Subject' field", p_subject, True, False)
+        self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", p_message, True, False, False)
 
         self.sendTheMessage()
 
@@ -281,18 +281,18 @@ class Email(object):
         # Hits the 'Send' button to send the message (handles
         # waiting for the correct elements etc...).
         #
-        x = self.UTILS.getElement(DOM.Email.compose_send_btn, "Send button")
+        x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
-        self.UTILS.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
+        self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
 
         #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
+        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format("Inbox"))
-        self.UTILS.waitForElements(x, "Inbox", True, 120)
+        self.UTILS.element.waitForElements(x, "Inbox", True, 120)
 
         return True
 
@@ -304,20 +304,20 @@ class Email(object):
         # This method comes handy when the email app is called from another app
         # (i.e Contacts, SMS...)
         #
-        x = self.UTILS.getElement(DOM.Email.compose_send_btn, "Send button")
+        x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
-        self.UTILS.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
+        self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
 
         #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
+        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(header))
 
-        self.UTILS.switchToFrame(*frame_locator)
-        self.UTILS.waitForElements(x, header, True, 120)
+        self.UTILS.iframe.switchToFrame(*frame_locator)
+        self.UTILS.element.waitForElements(x, header, True, 120)
 
         return True
 
@@ -329,7 +329,7 @@ class Email(object):
         #
         # If we've just started out, email will open directly to "New Account").
         #
-        x = self.UTILS.getElement(DOM.GLOBAL.app_head, "Application header")
+        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Application header")
         if x.text.lower() != "new account":
             #
             # We have at least one emali account setup,
@@ -341,23 +341,23 @@ class Email(object):
             #
             # It's not setup already, so prepare to set it up!
             #
-            x = self.UTILS.getElement(DOM.Email.settings_set_btn, "Settings set button")
+            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
             x.tap()
 
-            x = self.UTILS.getElement(DOM.Email.settings_add_account_btn, "Add account button")
+            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
             x.tap()
 
         #
         # (At this point we are now in the 'New account' screen by one path or
         # another.)
         #
-        self.UTILS.typeThis(DOM.Email.username, "Username field", user, True, True)
-        self.UTILS.typeThis(DOM.Email.email_addr, "Address field", email, True, True)
-        self.UTILS.typeThis(DOM.Email.password, "Password field", passwd, True, True)
+        self.UTILS.general.typeThis(DOM.Email.username, "Username field", user, True, True)
+        self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", email, True, True)
+        self.UTILS.general.typeThis(DOM.Email.password, "Password field", passwd, True, True)
 
         self.parent.lockscreen.unlock()
         self.marionette.switch_to_frame()
-        self.UTILS.switchToFrame(*DOM.Email.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
 
         #
         # (doesn't always appear when using hotmail)
@@ -370,23 +370,23 @@ class Email(object):
             pass
 
         time.sleep(2)
-        x = self.UTILS.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
+        x = self.UTILS.element.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
         x.tap()
 
         time.sleep(2)
-        x = self.UTILS.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
+        x = self.UTILS.element.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
         x.tap()
 
         #
         # Click the 'continue to mail' button.
         #
         time.sleep(1)
-        x = self.UTILS.getElement(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button", True, 60)
+        x = self.UTILS.element.getElement(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button", True, 60)
         x.tap()
 
-        self.UTILS.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
+        self.UTILS.element.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
 
-        self.UTILS.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format('Inbox')), "Inbox")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format('Inbox')), "Inbox")
         time.sleep(2)
 
     def setupAccountFirstStep(self, p_user, p_email, p_pass):
@@ -397,7 +397,7 @@ class Email(object):
         #
         # If we've just started out, email will open directly to "New Account").
         #
-        x = self.UTILS.getElement(DOM.GLOBAL.app_head, "Application header")
+        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Application header")
         if x.text.lower() != "new account":
             #
             # We have at least one emali account setup,
@@ -409,23 +409,23 @@ class Email(object):
             #
             # It's not setup already, so prepare to set it up!
             #
-            x = self.UTILS.getElement(DOM.Email.settings_set_btn, "Settings set button")
+            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
             x.tap()
 
-            x = self.UTILS.getElement(DOM.Email.settings_add_account_btn, "Add account button")
+            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
             x.tap()
 
         #
         # (At this point we are now in the 'New account' screen by one path or
         # another.)
         #
-        self.UTILS.typeThis(DOM.Email.username  , "Username field", p_user , True, True)
-        self.UTILS.typeThis(DOM.Email.email_addr, "Address field" , p_email, True, True)
-        self.UTILS.typeThis(DOM.Email.password  , "Password field", p_pass , True, True)
+        self.UTILS.general.typeThis(DOM.Email.username  , "Username field", p_user , True, True)
+        self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field" , p_email, True, True)
+        self.UTILS.general.typeThis(DOM.Email.password  , "Password field", p_pass , True, True)
 
         self.parent.lockscreen.unlock()
         self.marionette.switch_to_frame()
-        self.UTILS.switchToFrame(*DOM.Email.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
 
         #
         # (doesn't always appear when using hotmail)
@@ -441,32 +441,32 @@ class Email(object):
         #
         # Add a new account.
         #
-        x = self.UTILS.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
+        x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
         x.tap()
 
         #
         # Are we already in this account?
         #
-        x = self.UTILS.getElement(DOM.GLOBAL.app_head, "Header")
-        self.UTILS.logResult("info",
+        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Header")
+        self.UTILS.reporting.logResult("info",
                             "Currently using email account '{}' (looking to be in account '{}').".\
                             format(x.text, address))
         if x.text == address:
-            self.UTILS.logResult("info", "Already in the account we want - switch back to inbox.")
+            self.UTILS.reporting.logResult("info", "Already in the account we want - switch back to inbox.")
             self.goto_folder_from_list("Sent Mail")
             return True
 
-        self.UTILS.logResult("info", "Need to switch from account '{}' to account '{}' ...".\
+        self.UTILS.reporting.logResult("info", "Need to switch from account '{}' to account '{}' ...".\
                              format(x.text, address))
 
         #
         # We're not in this account already, so let's look for it.
         #
-        x = self.UTILS.getElement(DOM.Email.goto_accounts_btn, "Accounts button")
+        x = self.UTILS.element.getElement(DOM.Email.goto_accounts_btn, "Accounts button")
         x.tap()
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format("Accounts"))
-        self.UTILS.waitForElements(x, "Accounts header", True, 20, False)
+        self.UTILS.element.waitForElements(x, "Accounts header", True, 20, False)
 
         #
         # Check if it's already set up (this may be empty, so don't test for this element).
@@ -493,5 +493,5 @@ class Email(object):
         #
         # Wait until any progress icon goes away.
         #
-        self.UTILS.waitForNotElements(('tag name', 'progress'), "Progress icon", True, 60);
+        self.UTILS.element.waitForNotElements(('tag name', 'progress'), "Progress icon", True, 60);
         time.sleep(2) # (just to be sure!)

@@ -4,8 +4,13 @@ import os
 import base64
 
 
-
 class debug(object):
+
+    def __init__(self, parent):
+        self.parent = parent
+        self.errNum = parent.errNum
+        self.testNum = parent.testNum
+        self.marionette = parent.marionette
 
     def getStackTrace(self):
         #
@@ -25,7 +30,7 @@ class debug(object):
                               format(_counter, ("<b>" + os.path.basename(i[0]) + "</b>({})".format(i[1])).ljust(40),
                                      i[3])
 
-        self.logResult("debug", _logstr)
+        self.parent.reporting.logResult("debug", _logstr)
 
     def savePageHTML(self, p_outfile):
         #

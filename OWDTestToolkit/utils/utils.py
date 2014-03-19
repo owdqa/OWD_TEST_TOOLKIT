@@ -1,29 +1,21 @@
-from OWDTestToolkit.global_imports import *
+import time
+import datetime
+from marionette import Actions
+from app import app
+from date_and_time import date_and_time
+from debug import debug
+from element import element
+from general import general
+from home import home
+from iframe import iframe
+from network import network
+from reporting import reporting
+from statusbar import statusbar
+from test import test
 
-import  app         ,\
-        date_and_time,\
-        debug       ,\
-        element     ,\
-        general     ,\
-        home        ,\
-        iframe      ,\
-        network     ,\
-        reporting   ,\
-        statusbar   ,\
-        test
 
+class UTILS(object):
 
-class UTILS(app.main        ,
-            date_and_time.main,
-            debug.main      ,
-            element.main    ,
-            general.main    ,
-            home.main       ,
-            iframe.main     ,
-            network.main    ,
-            reporting.main  ,
-            statusbar.main  ,
-            test.main):
     #
     # When you create your instance of this class, include the
     # "self" object so we can access the calling class' objects.
@@ -48,16 +40,23 @@ class UTILS(app.main        ,
         self.last_timestamp = time.time()
 
         #
-        # Other globals ...
-        #
-        self._DEFAULT_ELEMENT_TIMEOUT = 5
-
-        #
         # Get run details from the OS.
         #
-        self.testNum = self.get_os_variable("TEST_NUM", True)
-        self.det_fnam = self.get_os_variable("DET_FILE", True)
-        self.sum_fnam = self.get_os_variable("SUM_FILE", True)
+        self.general = general(self)
+        self.testNum = self.general.get_os_variable("TEST_NUM", True)
+        self.det_fnam = self.general.get_os_variable("DET_FILE", True)
+        self.sum_fnam = self.general.get_os_variable("SUM_FILE", True)
+
+        self.app = app(self)
+        self.date_and_time = date_and_time(self)
+        self.debug = debug(self)
+        self.element = element(self, 5)
+        self.home = home(self)
+        self.iframe = iframe(self)
+        self.network = network(self)
+        self.reporting = reporting(self, self._resultArray, self._commentArray)
+        self.statusbar = statusbar(self)
+        self.test = test(self)
 
         self.marionette.set_search_timeout(10000)
         self.marionette.set_script_timeout(10000)
@@ -65,4 +64,4 @@ class UTILS(app.main        ,
         elapsed = time.time() - self.start_time
         elapsed = round(elapsed, 0)
         elapsed = str(datetime.timedelta(seconds=elapsed))
-        self.logResult("debug", "(Initializing 'UTILS' took {} seconds.)".format(elapsed))
+        self.reporting.logResult("debug", "(Initializing 'UTILS' took {} seconds.)".format(elapsed))

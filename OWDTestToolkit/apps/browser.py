@@ -19,18 +19,18 @@ class Browser(object):
         Launch the app.
         """
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def addNewTab(self):
         """
         Adds a new tab (assume we are in the main Browser iframe).
         """
-        x = self.UTILS.getElement(DOM.Browser.tab_tray_open, "Tab tray open button")
+        x = self.UTILS.element.getElement(DOM.Browser.tab_tray_open, "Tab tray open button")
         x.tap()
-        x = self.UTILS.getElement(DOM.Browser.tab_tray_new_tab_btn, "New tab button")
+        x = self.UTILS.element.getElement(DOM.Browser.tab_tray_new_tab_btn, "New tab button")
         x.tap()
-        self.UTILS.waitForElements(DOM.Browser.url_input, "New tab")
+        self.UTILS.element.waitForElements(DOM.Browser.url_input, "New tab")
 
     def check_page_loaded(self, url):
         """Check the page didn't have a problem.
@@ -38,13 +38,13 @@ class Browser(object):
         self.waitForPageToFinishLoading()
 
         url = self.loadedURL()
-        self.UTILS.logResult("info", "The loaded url is now <a href=\"{0}\">{0}</a>".format(url))
+        self.UTILS.reporting.logResult("info", "The loaded url is now <a href=\"{0}\">{0}</a>".format(url))
 
-        self.UTILS.switchToFrame(*DOM.Browser.website_frame, p_viaRootFrame=False)
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.website_frame, p_viaRootFrame=False)
 
         # Take a screenshot.
-        fnam = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Screenshot of web page in browser:|" + fnam[1])
+        fnam = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screenshot of web page in browser:|" + fnam[1])
 
         try:
             self.parent.wait_for_element_present(*DOM.Browser.page_problem, timeout=1)
@@ -59,20 +59,20 @@ class Browser(object):
         Closes the browser tab numbered num (starting at '1').
         Assumes we are in the main Browser iframe.
         """
-        self.UTILS.logResult("info", "Closing tab {} ...".format(num))
+        self.UTILS.reporting.logResult("info", "Closing tab {} ...".format(num))
         self.openTabTray()
 
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Screenshot before removing tab:", x)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screenshot before removing tab:", x)
 
         # You have to do this twice for some reason.
-        self.UTILS.logResult("info", "(FYI: I have to tap this icon twice, so there will be two checks below ...)")
-        x = self.UTILS.getElements(DOM.Browser.tab_tray_tab_list, "Tab list (for first tap)")
+        self.UTILS.reporting.logResult("info", "(FYI: I have to tap this icon twice, so there will be two checks below ...)")
+        x = self.UTILS.element.getElements(DOM.Browser.tab_tray_tab_list, "Tab list (for first tap)")
         initial_count = len(x)
         close = x[num - 1].find_element(*DOM.Browser.tab_tray_tab_item_close)
         close.tap()
 
-        x = self.UTILS.getElements(DOM.Browser.tab_tray_tab_list, "Tab list (for second tap)")
+        x = self.UTILS.element.getElements(DOM.Browser.tab_tray_tab_list, "Tab list (for second tap)")
         close = x[num - 1].find_element(*DOM.Browser.tab_tray_tab_item_close)
         close.tap()
 
@@ -80,15 +80,15 @@ class Browser(object):
         time.sleep(1)
         try:
             self.parent.wait_for_element_displayed(*DOM.Browser.tab_tray_tab_list)
-            x = self.UTILS.getElements(DOM.Browser.tab_tray_tab_list, "Tab list after removal")
+            x = self.UTILS.element.getElements(DOM.Browser.tab_tray_tab_list, "Tab list after removal")
             _after_count = len(x)
-            self.UTILS.TEST(_after_count < initial_count, "The tab has been removed.")
+            self.UTILS.test.TEST(_after_count < initial_count, "The tab has been removed.")
         except Exception:
             # If this was the only tab, then we'll be taken away from the tab tray automatically.
             pass
 
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Screenshot after removing tab:", x)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screenshot after removing tab:", x)
 
     def getAwesomeList(self, tab_name):
         """Returns a list of elements from the awesomescreen tabs.
@@ -112,26 +112,26 @@ class Browser(object):
         try:
             _blah = details[tab]
         except Exception:
-            self.UTILS.TEST(False, "(failing because an unknown tab name ('{}')\
+            self.UTILS.test.TEST(False, "(failing because an unknown tab name ('{}')\
              was passed to \"getAwesomeList()\".)".format(tab_name))
             return False
 
-        self.UTILS.logResult("info", "Examining the list of sites for the <b>{}</b> tab ...".format(tab_name))
+        self.UTILS.reporting.logResult("info", "Examining the list of sites for the <b>{}</b> tab ...".format(tab_name))
 
-        self.UTILS.switchToFrame(*DOM.Browser.frame_locator)
-        x = self.UTILS.getElement(DOM.Browser.url_input, "Search input field")
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
+        x = self.UTILS.element.getElement(DOM.Browser.url_input, "Search input field")
         x.tap()
 
-        x = self.UTILS.getElement(details[tab]["tab"], "<b>{}</b> tab".format(tab_name))
+        x = self.UTILS.element.getElement(details[tab]["tab"], "<b>{}</b> tab".format(tab_name))
         x.tap()
-        self.UTILS.TEST(x.get_attribute("class") == "selected", "<b>{}</b> tab is selected".format(tab_name))
+        self.UTILS.test.TEST(x.get_attribute("class") == "selected", "<b>{}</b> tab is selected".format(tab_name))
 
         x = ""
         try:
             self.parent.wait_for_element_displayed(*details[tab]["links"], timeout=2)
-            x = self.UTILS.getElements(details[tab]["links"], "{} links".format(tab_name))
+            x = self.UTILS.element.getElements(details[tab]["links"], "{} links".format(tab_name))
         except Exception:
-            self.UTILS.logResult("info", "<i>(No list items found for <b>{}</b> tab.)</i>".format(tab_name))
+            self.UTILS.reporting.logResult("info", "<i>(No list items found for <b>{}</b> tab.)</i>".format(tab_name))
 
         return x
 
@@ -142,9 +142,9 @@ class Browser(object):
         It assumes we are in the main browser frame.
         """
         self.openTabTray()
-        self.UTILS.waitForElements(DOM.Browser.tab_tray_screen, "Tab screen", True, 2, False)
+        self.UTILS.element.waitForElements(DOM.Browser.tab_tray_screen, "Tab screen", True, 2, False)
 
-        x = self.UTILS.getElements(DOM.Browser.tab_tray_tab_list, "Tab list")
+        x = self.UTILS.element.getElements(DOM.Browser.tab_tray_tab_list, "Tab list")
         found = False
         for i in range(len(x)):
             _title = x[i].find_element(*DOM.Browser.tab_tray_tab_item_title)
@@ -160,9 +160,9 @@ class Browser(object):
         """
         self.openTabTray()
 
-        self.UTILS.waitForElements(DOM.Browser.tab_tray_screen, "Tab screen", True, 2, False)
+        self.UTILS.element.waitForElements(DOM.Browser.tab_tray_screen, "Tab screen", True, 2, False)
 
-        x = self.UTILS.getElements(DOM.Browser.tab_tray_tab_list, "Tab list")
+        x = self.UTILS.element.getElements(DOM.Browser.tab_tray_tab_list, "Tab list")
         _title = x[num - 1].find_element(*DOM.Browser.tab_tray_tab_item_title)
 
         return _title.text.encode('ascii', 'ignore')
@@ -171,8 +171,8 @@ class Browser(object):
         """
         Returns the url of the currently loaded web page.
         """
-        self.UTILS.switchToFrame(*DOM.Browser.frame_locator)
-        x = self.UTILS.getElement(("xpath", "//iframe[contains(@%s,'%s')]" % \
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
+        x = self.UTILS.element.getElement(("xpath", "//iframe[contains(@%s,'%s')]" % \
                                 (DOM.Browser.browser_page_frame[0],
                                 DOM.Browser.browser_page_frame[1])), "Loaded page", False, 1, False)
         return x.get_attribute("src")
@@ -181,16 +181,16 @@ class Browser(object):
         """
         Open url.
         """
-        self.UTILS.switchToFrame(*DOM.Browser.frame_locator)
-        x = self.UTILS.getElement(DOM.Browser.url_input, "Url input field")
-        self.UTILS.logComment("Using URL " + p_url)
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
+        x = self.UTILS.element.getElement(DOM.Browser.url_input, "Url input field")
+        self.UTILS.reporting.logComment("Using URL " + p_url)
         x.clear()
         x.send_keys(p_url)
 
-        x = self.UTILS.getElement(DOM.Browser.url_go_button, "'Go to url' button")
+        x = self.UTILS.element.getElement(DOM.Browser.url_go_button, "'Go to url' button")
         x.tap()
 
-        self.UTILS.TEST(self.check_page_loaded(p_url), "Web page loaded correctly.")
+        self.UTILS.test.TEST(self.check_page_loaded(p_url), "Web page loaded correctly.")
 
     def openTab(self, num):
         """
@@ -198,7 +198,7 @@ class Browser(object):
         """
         self.openTabTray()
 
-        x = self.UTILS.getElements(DOM.Browser.tab_tray_tab_list, "Tabs list")[num - 1]
+        x = self.UTILS.element.getElements(DOM.Browser.tab_tray_tab_list, "Tabs list")[num - 1]
         y = x.find_element(*DOM.Browser.tab_tray_tab_item_image)
         y.tap()
         y.tap()
@@ -208,7 +208,7 @@ class Browser(object):
         """
         Opens the tab tray (can be one of several methods).
         """
-        self.UTILS.switchToFrame(*DOM.Browser.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
         try:
             # We may already be in the 'tray' ...
             self.parent.wait_for_element_displayed(*DOM.Browser.tab_tray_screen, timeout=1)
@@ -225,9 +225,9 @@ class Browser(object):
         """
         Searches for string using the URL field.
         """
-        x = self.UTILS.getElement(DOM.Browser.url_input, "Search input field")
+        x = self.UTILS.element.getElement(DOM.Browser.url_input, "Search input field")
         x.send_keys(string)
-        x = self.UTILS.getElement(DOM.Browser.url_go_button, "'Go' button")
+        x = self.UTILS.element.getElement(DOM.Browser.url_go_button, "'Go' button")
         x.tap()
         self.waitForPageToFinishLoading()
 
@@ -237,7 +237,7 @@ class Browser(object):
         Assumes we are in the main browser iframe.
         The value is returned as a string rather than an int.
         """
-        x = self.UTILS.getElement(DOM.Browser.tab_tray_counter, "Tab tray counter")
+        x = self.UTILS.element.getElement(DOM.Browser.tab_tray_counter, "Tab tray counter")
         y = x.text.encode('ascii', 'ignore').strip()
         z = ""
         for i in y:
@@ -254,6 +254,6 @@ class Browser(object):
             self.parent.wait_for_element_displayed(*DOM.Browser.throbber)
         except Exception:
             pass
-        self.UTILS.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 120, False)
+        self.UTILS.element.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 120, False)
 
         time.sleep(2)

@@ -4,6 +4,10 @@ import time
 
 class iframe(object):
 
+    def __init__(self, parent):
+        self.parent = parent
+        self.marionette = parent.marionette
+
     def currentIframe(self, attribute="src"):
         #
         # Returns the "src" attribute of the current iframe
@@ -41,7 +45,7 @@ class iframe(object):
         # Performs this 'silently' and just returns True or False.
         #
         if via_root_frame:
-            self.checkMarionetteOK()
+            self.parent.general.checkMarionetteOK()
             self.marionette.switch_to_frame()
 
         if value == "":
@@ -66,8 +70,8 @@ class iframe(object):
         # are contained in the root-level frame).
         #
         if via_root_frame:
-            self.logResult("debug", "(Switching to root-level iframe.)")
-            self.checkMarionetteOK()
+            self.parent.reporting.logResult("debug", "(Switching to root-level iframe.)")
+            self.parent.general.checkMarionetteOK()
             self.marionette.switch_to_frame()
 
         #
@@ -84,7 +88,7 @@ class iframe(object):
 
         x = ""
         try:
-            self.wait_for_element_displayed(*_frameDef, timeout=20)
+            self.parent.parent.wait_for_element_displayed(*_frameDef, timeout=20)
             x = self.marionette.find_elements(*_frameDef)
         except:
             pass
@@ -153,7 +157,8 @@ class iframe(object):
                         return
                     if new_src != "" and new_src == self._old_src:
                         # This is an endless loop (some iframes seem to do this) - ignore it and move on.
-                        self.logResult("info", "<i>(Avoiding 'endless loop' where src=\"{}\"...)</i>".format(new_src))
+                        self.parent.reporting.logResult("info", "<i>(Avoiding 'endless loop' where src=\"{}\"...)</i>"\
+                                                        .format(new_src))
                         return
 
                     self._old_src = new_src
@@ -162,13 +167,14 @@ class iframe(object):
 
                 self.marionette.switch_to_frame(int(i))
 
-        x = self.screenShotOnErr()
-        self.logResult("info",  "Iframe details for frame with path: {}|{}".format(self._framePathStr(), srcSTR), x)
+        x = self.parent.debug.screenShotOnErr()
+        self.parent.reporting.logResult("info",  "Iframe details for frame with path: {}|{}".\
+                                        format(self._framePathStr(), srcSTR), x)
 
         #
         # Do the same for all iframes in this iframe
         #
-        self.checkMarionetteOK()
+        self.parent.general.checkMarionetteOK()
         x = self.marionette.find_elements("tag name", "iframe")
         if len(x) > 0:
             for i2 in range(len(x)):

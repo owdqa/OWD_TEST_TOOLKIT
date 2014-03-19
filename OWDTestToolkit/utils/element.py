@@ -5,6 +5,11 @@ from OWDTestToolkit import DOM
 
 class element(object):
 
+    def __init__(self, parent, timeout=5):
+        self.parent = parent
+        self._DEFAULT_ELEMENT_TIMEOUT = timeout
+        self.marionette = parent.marionette
+
     def getElement(self, elem, msg, is_displayed=True, timeout=False, stop_on_error=True):
         #
         # Returns an element, or False it it's not found.<br>
@@ -12,7 +17,7 @@ class element(object):
         #
         timeout = self._DEFAULT_ELEMENT_TIMEOUT if not timeout else timeout
 
-        x = self.getElements(elem, msg, is_displayed, timeout, stop_on_error)
+        x = self.parent.element.getElements(elem, msg, is_displayed, timeout, stop_on_error)
 
         if x:
             # We're expecting ONE element back (it has different methods if it's one).
@@ -27,7 +32,7 @@ class element(object):
         #
         timeout = self._DEFAULT_ELEMENT_TIMEOUT if not timeout else timeout
 
-        boolEl = self.waitForElements(elem, msg, is_displayed, timeout, stop_on_error)
+        boolEl = self.parent.element.waitForElements(elem, msg, is_displayed, timeout, stop_on_error)
 
         if boolEl:
             el = self.marionette.find_elements(*elem)
@@ -52,7 +57,7 @@ class element(object):
         except:
             is_ok = False
 
-        self.TEST(is_ok, "Header is \"" + value + "\".")
+        self.parent.test.TEST(is_ok, "Header is \"" + value + "\".")
         return is_ok
 
     def moveScroller(self, scroller, forward=True):
@@ -118,7 +123,7 @@ class element(object):
     # From gaiatest Clock -> regions -> alarm.py
     #
     def _flick_menu_up(self, locator):
-        self.wait_for_element_displayed(*self._current_element(*locator), timeout=2)
+        self.parent.parent.wait_for_element_displayed(*self._current_element(*locator), timeout=2)
         current_element = self.marionette.find_element(*self._current_element(*locator))
         next_element = self.marionette.find_element(*self._next_element(*locator))
 
@@ -130,7 +135,7 @@ class element(object):
         action.perform()
 
     def _flick_menu_down(self, locator):
-        self.wait_for_element_displayed(*self._current_element(*locator), timeout=2)
+        self.parent.parent.wait_for_element_displayed(*self._current_element(*locator), timeout=2)
         current_element = self.marionette.find_element(*self._current_element(*locator))
         next_element = self.marionette.find_element(*self._next_element(*locator))
 
@@ -174,14 +179,14 @@ class element(object):
         try:
             if is_displayed:
                 msg = "<b>{}</b> displayed within {} seconds.|{}".format(msg, timeout, elem)
-                self.wait_for_element_displayed(*elem, timeout=timeout)
+                self.parent.parent.wait_for_element_displayed(*elem, timeout=timeout)
             else:
                 msg = "<b>{}</b> present within {} seconds.|{}".format(msg, timeout, elem)
                 self.wait_for_element_present(*elem, timeout=timeout)
         except:
             is_ok = False
 
-        self.TEST(is_ok, msg, stop_on_error)
+        self.parent.test.TEST(is_ok, msg, stop_on_error)
 
         return is_ok
 
@@ -203,5 +208,5 @@ class element(object):
         except:
             is_ok = False
 
-        self.TEST(is_ok, msg, stop_on_error)
+        self.parent.test.TEST(is_ok, msg, stop_on_error)
         return is_ok

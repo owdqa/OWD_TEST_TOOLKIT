@@ -4,6 +4,13 @@ import datetime
 
 class reporting(object):
 
+    def __init__(self, parent, result, comment):
+        self.parent = parent
+        self._resultArray = result
+        self._commentArray = comment
+        self.passed = parent.passed
+        self.failed = parent.failed
+
     def logComment(self, p_str):
         #
         # Add a comment to the comment array.
@@ -29,7 +36,7 @@ class reporting(object):
             #
             # Set up timestamp and mark this as pass or fail.
             #
-            time_now = time.time() - self.last_timestamp
+            time_now = time.time() - self.parent.last_timestamp
             time_now = round(time_now, 0)
             time_now = "[" + str(datetime.timedelta(seconds=time_now)) + "]"
 
@@ -92,9 +99,9 @@ class reporting(object):
         # Create the final result file from the result and comment arrays
         # (run only once, at the end of each test case).
         #
-        self.clearAllStatusBarNotifs(p_silent=True)
-        self.checkMarionetteOK()
-        self.data_layer.kill_active_call()
+        self.parent.statusbar.clearAllStatusBarNotifs(p_silent=True)
+        self.parent.general.checkMarionetteOK()
+        self.parent.data_layer.kill_active_call()
 
         #
         # Create output files (summary, which is displayed and

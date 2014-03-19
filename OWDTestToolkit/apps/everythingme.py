@@ -17,12 +17,12 @@ class EverythingMe(object):
         #
         # Launch the app.
         #
-        self.UTILS.goHome()
+        self.UTILS.home.goHome()
 
         #
         # If EME has already been launched, then the DOM has changed.
         #
-        self.UTILS.logResult("info", "Launching Everything ME.")
+        self.UTILS.reporting.logResult("info", "Launching Everything ME.")
         boolOK = False
         try:
             self.parent.wait_for_element_displayed(*DOM.EME.start_eme_icon, timeout=1)
@@ -30,7 +30,7 @@ class EverythingMe(object):
             x.tap()
             boolOK = True
         except:
-            self.UTILS.logResult("info", "Everything ME is already 'running', so just waking it up ...")
+            self.UTILS.reporting.logResult("info", "Everything ME is already 'running', so just waking it up ...")
             self._relaunch()
             try:
                 self.parent.wait_for_element_displayed(*DOM.EME.groups, timeout=3)
@@ -38,7 +38,7 @@ class EverythingMe(object):
                 self._relaunch()
             boolOK = True
 
-        self.UTILS.TEST(boolOK, "EME Starting up ...")
+        self.UTILS.test.TEST(boolOK, "EME Starting up ...")
 
     def _relaunch(self):
         #
@@ -57,11 +57,11 @@ class EverythingMe(object):
         #
         # Pick an app from the apps listed in this group.
         #
-        x = self.UTILS.getElements(DOM.EME.app_to_install, "The first game that is not installed already")[0]
+        x = self.UTILS.element.getElements(DOM.EME.app_to_install, "The first game that is not installed already")[0]
         APP_NAME = x.get_attribute("data-name")
-        self.UTILS.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
+        self.UTILS.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
 
-        self.UTILS.TEST(APP_NAME == name, "" + APP_NAME + "'is the correct app", True)
+        self.UTILS.test.TEST(APP_NAME == name, "" + APP_NAME + "'is the correct app", True)
 
         actions = Actions(self.marionette)
         actions.press(x).wait(2).release()
@@ -70,7 +70,7 @@ class EverythingMe(object):
         except:
             pass
 
-        x = self.UTILS.getElement(DOM.EME.add_app_to_homescreen, "Add app to homescreen button")
+        x = self.UTILS.element.getElement(DOM.EME.add_app_to_homescreen, "Add app to homescreen button")
         x.tap()
 
         return True
@@ -79,35 +79,35 @@ class EverythingMe(object):
         #
         # Adds a group to EME (assumes you're already in the EME group screen).
         #
-        self.UTILS.logResult("info", "(Adding group '" + group + "'.)")
+        self.UTILS.reporting.logResult("info", "(Adding group '" + group + "'.)")
 
         #
         # Click the 'More' icon.
         #
-        x = self.UTILS.getElement(DOM.EME.add_group_button, "'More' icon")
+        x = self.UTILS.element.getElement(DOM.EME.add_group_button, "'More' icon")
         x.tap()
 
         #
         # Wait for the 'loading' spinner to go away (can take a while!).
         #
-        self.UTILS.waitForNotElements(DOM.EME.loading_groups_message, "'Loading' message", True, 120)
+        self.UTILS.element.waitForNotElements(DOM.EME.loading_groups_message, "'Loading' message", True, 120)
 
         #
         # Chose an item from the groups list...
         #
-        self.UTILS.selectFromSystemDialog(group)
+        self.UTILS.general.selectFromSystemDialog(group)
 
         #
         # Verify the new group is in the groups list.
         #
-        x = self.UTILS.getElements(DOM.EME.groups, "Groups")
+        x = self.UTILS.element.getElements(DOM.EME.groups, "Groups")
         boolOK = False
         for i in x:
             if i.get_attribute("data-query") == group:
                 boolOK = True
                 break
 
-        self.UTILS.TEST(boolOK, "New group '" + group + "' is now present in the EME groups.")
+        self.UTILS.test.TEST(boolOK, "New group '" + group + "' is now present in the EME groups.")
         return boolOK
 
     def add_multiple_groups(self, group_array=False):
@@ -116,9 +116,9 @@ class EverythingMe(object):
         # <br><br>
         # For example: add_multiple_groups([0,1,2,3,8,11]) ... or just: add_multiple_groups()
         #
-        x = self.UTILS.getElement(DOM.EME.add_group_button, "'More' icon")
+        x = self.UTILS.element.getElement(DOM.EME.add_group_button, "'More' icon")
         x.tap()
-        self.UTILS.waitForNotElements(DOM.EME.loading_groups_message, "'Loading' message", True, 120)
+        self.UTILS.element.waitForNotElements(DOM.EME.loading_groups_message, "'Loading' message", True, 120)
 
         #
         # Switch to group selector (in top level iframe).
@@ -127,7 +127,7 @@ class EverythingMe(object):
 
         # for checking later
         list_names = []
-        elements = self.UTILS.getElements(DOM.GLOBAL.modal_valueSel_list, "Groups list", False)
+        elements = self.UTILS.element.getElements(DOM.GLOBAL.modal_valueSel_list, "Groups list", False)
 
         for i in range(len(elements)):
             if i > 0:
@@ -151,7 +151,7 @@ class EverythingMe(object):
 
             if select_elements:
                 tmp_name = elements[i].find_element("tag name", "span").text
-                self.UTILS.logResult("info", "Selecting '{}' ...".format(tmp_name))
+                self.UTILS.reporting.logResult("info", "Selecting '{}' ...".format(tmp_name))
                 list_names.append(tmp_name)
                 elements[i].tap()
 
@@ -164,7 +164,7 @@ class EverythingMe(object):
         #
         # Click the OK button.
         #
-        x = self.UTILS.getElement(DOM.GLOBAL.modal_valueSel_ok, "OK button")
+        x = self.UTILS.element.getElement(DOM.GLOBAL.modal_valueSel_ok, "OK button")
         try:
             # Sometimes it's one, sometimes the other ...
             x.tap()
@@ -177,7 +177,7 @@ class EverythingMe(object):
         #
         # Checkk all the items we expect are now loaded in evme.
         #
-        self.UTILS.switchToFrame(*DOM.Home.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Home.frame_locator)
         time.sleep(5)
         for name in list_names:
             ok = False
@@ -194,7 +194,7 @@ class EverythingMe(object):
                     ok = True
                     break
 
-            self.UTILS.TEST(ok, "'{}' is now among the groups.".format(name))
+            self.UTILS.test.TEST(ok, "'{}' is now among the groups.".format(name))
 
     def bookmark_app(self, app_name):
         #
@@ -210,7 +210,7 @@ class EverythingMe(object):
         x.tap()
 
         self.marionette.switch_to_frame()
-        self.UTILS.waitForElements(DOM.EME.launched_button_bar, "Button bar", False)
+        self.UTILS.element.waitForElements(DOM.EME.launched_button_bar, "Button bar", False)
 
         #
         # Wait for the bookmark option to be enabled (can take a few seconds).
@@ -224,53 +224,53 @@ class EverythingMe(object):
 
             time.sleep(6)
 
-        x = self.UTILS.getElement(DOM.EME.launched_display_button_bar, "Button bar 'displayer' element")
+        x = self.UTILS.element.getElement(DOM.EME.launched_display_button_bar, "Button bar 'displayer' element")
         x.tap()
 
-        self.UTILS.TEST(boolOK, "Bookmark button is enabled in the button bar.", True)
+        self.UTILS.test.TEST(boolOK, "Bookmark button is enabled in the button bar.", True)
 
         time.sleep(1)
 
-        x = self.UTILS.getElement(DOM.EME.launched_button_bookmark, "Button bar - bookmark button")
-        self.UTILS.TEST(not x.get_attribute("data-disabled"), "Bookmark button is enabled.", True)
+        x = self.UTILS.element.getElement(DOM.EME.launched_button_bookmark, "Button bar - bookmark button")
+        self.UTILS.test.TEST(not x.get_attribute("data-disabled"), "Bookmark button is enabled.", True)
         x.tap()
 
         self.marionette.switch_to_frame()
         _boolOK = False
-        x = self.UTILS.getElements(DOM.EME.launched_add_to_homescreen, "Apps to be added to homescreen")
+        x = self.UTILS.element.getElements(DOM.EME.launched_add_to_homescreen, "Apps to be added to homescreen")
         for i in x:
             if i.text == app_name:
                 i.tap()
                 _boolOK = True
                 break
 
-        self.UTILS.TEST(_boolOK, "Adding '{}' to homescreen (app selected).".format(app_name))
+        self.UTILS.test.TEST(_boolOK, "Adding '{}' to homescreen (app selected).".format(app_name))
 
-        self.UTILS.switchToFrame(*DOM.EME.add_to_home_screen_frame)
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Screenshot at this point:", x)
+        self.UTILS.iframe.switchToFrame(*DOM.EME.add_to_home_screen_frame)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screenshot at this point:", x)
 
-        x = self.UTILS.getElement(DOM.EME.add_to_home_screen_btn, "Add to homescreen (button)")
+        x = self.UTILS.element.getElement(DOM.EME.add_to_home_screen_btn, "Add to homescreen (button)")
         x.tap()
 
         self.marionette.switch_to_frame()
-        x = self.UTILS.getElement(DOM.EME.launched_display_button_bar, "Button bar 'displayer' element")
+        x = self.UTILS.element.getElement(DOM.EME.launched_display_button_bar, "Button bar 'displayer' element")
         x.tap()
 
-        x = self.UTILS.getElement(DOM.EME.launched_button_bookmark, "Button bar - bookmark button")
-        self.UTILS.TEST(x.get_attribute("data-disabled") == "true", "Bookmark button is now disabled.")
+        x = self.UTILS.element.getElement(DOM.EME.launched_button_bookmark, "Button bar - bookmark button")
+        self.UTILS.test.TEST(x.get_attribute("data-disabled") == "true", "Bookmark button is now disabled.")
 
-        self.UTILS.TEST(self.UTILS.findAppIcon(app_name), "'{}' is now installed.".format(app_name))
+        self.UTILS.test.TEST(self.UTILS.findAppIcon(app_name), "'{}' is now installed.".format(app_name))
 
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Screenshot of the button bar:", x)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screenshot of the button bar:", x)
         return True
 
     def launch_from_group(self, app_name):
         #
         # Function to launch an app directly from an EME group.
         #
-        x = self.UTILS.getElement(("xpath", "//li[@data-name='{}']".format(app_name)),
+        x = self.UTILS.element.getElement(("xpath", "//li[@data-name='{}']".format(app_name)),
                                   "Icon for app '{}'".format(app_name), False)
         try:
             x.tap()
@@ -283,31 +283,31 @@ class EverythingMe(object):
             x.tap()
 
         time.sleep(1)
-        self.UTILS.waitForNotElements(DOM.EME.launched_activity_bar, "Activity notifier", True, 30)
+        self.UTILS.element.waitForNotElements(DOM.EME.launched_activity_bar, "Activity notifier", True, 30)
 
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Screenshot of app running:", x)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screenshot of app running:", x)
 
     def pick_group(self, name):
         #
         # Pick a group from the main icons.
         #
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "<b>Choosing group '{}' from here ...</b>".format(name), x)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "<b>Choosing group '{}' from here ...</b>".format(name), x)
 
         ok = False
 
         x = self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(name))
-        self.UTILS.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
+        self.UTILS.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
         x.tap()
 
         try:
             self.parent.wait_for_element_displayed(*DOM.EME.apps_not_installed, timeout=20)
-            self.UTILS.logResult("info", "(Apps for group {} were displayed.)".format(name))
+            self.UTILS.reporting.logResult("info", "(Apps for group {} were displayed.)".format(name))
             ok = True
         except:
-            x = self.UTILS.screenShotOnErr()
-            self.UTILS.logResult("info", "(<b>NOTE:</b>Apps for group {} were not displayed.)|{}|{}".\
+            x = self.UTILS.debug.screenShotOnErr()
+            self.UTILS.reporting.logResult("info", "(<b>NOTE:</b>Apps for group {} were not displayed.)|{}|{}".\
                                  format(name, x[0], x[1]))
 
         return ok
@@ -335,7 +335,7 @@ class EverythingMe(object):
             pass
 
         try:
-            x = self.UTILS.getElement(("xpath", DOM.Home.app_delete_icon_xpath.format(group_array[0])),
+            x = self.UTILS.element.getElement(("xpath", DOM.Home.app_delete_icon_xpath.format(group_array[0])),
                                       "Delete button", False, 5, True)
             if x.is_displayed():
                 ok = True
@@ -344,9 +344,9 @@ class EverythingMe(object):
 
             time.sleep(2)
 
-        self.UTILS.TEST(ok, "Enabled EDIT mode.")
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Screenshot of app in EDIT mode:", x)
+        self.UTILS.test.TEST(ok, "Enabled EDIT mode.")
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screenshot of app in EDIT mode:", x)
 
         #
         # Remove all groups in the array.
@@ -354,31 +354,31 @@ class EverythingMe(object):
         removed = 0
         group_cnt = len(group_array)
 
-        self.UTILS.logResult("info", "Removing {} groups".format(group_cnt))
-        self.UTILS.logResult("info", "Removing groups: {}".format(group_array))
+        self.UTILS.reporting.logResult("info", "Removing {} groups".format(group_cnt))
+        self.UTILS.reporting.logResult("info", "Removing groups: {}".format(group_array))
 
         for group_specified in group_array:
             #
             # Remove it.
             #
             self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(group_specified))
-            y = self.UTILS.getElement(("xpath", DOM.Home.app_delete_icon_xpath % group_specified),
+            y = self.UTILS.element.getElement(("xpath", DOM.Home.app_delete_icon_xpath % group_specified),
                                       "Delete button", False, 5, True)
             y.tap()
 
-            delete = self.UTILS.getElement(DOM.Home.app_confirm_delete, "Confirm app delete button")
+            delete = self.UTILS.element.getElement(DOM.Home.app_confirm_delete, "Confirm app delete button")
             delete.tap()
             removed = removed + 1
-            self.UTILS.logResult("info", "Removed group '{}' ...".format(group_specified))
-            self.UTILS.logResult("info", "Removed {} groups".format(removed))
+            self.UTILS.reporting.logResult("info", "Removed group '{}' ...".format(group_specified))
+            self.UTILS.reporting.logResult("info", "Removed {} groups".format(removed))
             if removed == group_cnt:
                 break
 
         #
         # Turn off edit mode.
         #
-        self.UTILS.logResult("info", "Disabling edit mode ...")
-        self.UTILS.touchHomeButton()
+        self.UTILS.reporting.logResult("info", "Disabling edit mode ...")
+        self.UTILS.home.touchHomeButton()
 
     def search_for_app(self, name):
         #
@@ -386,7 +386,7 @@ class EverythingMe(object):
         # result to appear etc...).<br>
         # Returns the element for the icon (or False if it's not found).
         #
-        x = self.UTILS.getElement(DOM.EME.search_field, "Search field")
+        x = self.UTILS.element.getElement(DOM.EME.search_field, "Search field")
         x.clear()
         x.send_keys(name)
         x.click()
@@ -396,10 +396,10 @@ class EverythingMe(object):
         # Can take a few seconds to appear, so try a few times (about 1 min).
         #
         for retry in range(10):
-            x = self.UTILS.screenShotOnErr()
-            self.UTILS.logResult("debug", "Looking for '{}' - attempt {} ...".format(name, retry), x)
+            x = self.UTILS.debug.screenShotOnErr()
+            self.UTILS.reporting.logResult("debug", "Looking for '{}' - attempt {} ...".format(name, retry), x)
 
-            x = self.UTILS.getElements(DOM.EME.search_suggestions, "Search suggestions")
+            x = self.UTILS.element.getElements(DOM.EME.search_suggestions, "Search suggestions")
             ok = False
             for i in x:
                 i_name = i.get_attribute("data-suggestion")
@@ -409,7 +409,7 @@ class EverythingMe(object):
                     i_name = i_name.replace("]", "")
                     is_in = False
                     for i2 in name.lower().split():
-                        self.UTILS.logResult("debug", "Is '{}' in '{}'?".format(i2, i_name))
+                        self.UTILS.reporting.logResult("debug", "Is '{}' in '{}'?".format(i2, i_name))
                         if i2 not in i_name:
                             is_in = False
                             break
@@ -424,7 +424,7 @@ class EverythingMe(object):
 
             time.sleep(6)
 
-        self.UTILS.TEST(ok, "Found '%s' in suggestions." % name)
+        self.UTILS.test.TEST(ok, "Found '%s' in suggestions." % name)
 
         ok = True
         try:

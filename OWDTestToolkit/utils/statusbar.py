@@ -4,6 +4,10 @@ from OWDTestToolkit import DOM
 
 class statusbar(object):
 
+    def __init__(self, parent):
+        self.parent = parent
+        self.marionette = parent.marionette
+
     def clearAllStatusBarNotifs(self, p_silent=False):
         #
         # Opens the statusbar, presses "Clear all", then closes the status bar.<br>
@@ -13,7 +17,7 @@ class statusbar(object):
         if p_silent:
             try:
                 self.displayStatusBar()
-                self.wait_for_element_displayed(*DOM.Statusbar.clear_all_button, timeout=1)
+                self.parent.parent.wait_for_element_displayed(*DOM.Statusbar.clear_all_button, timeout=1)
                 x = self.marionette.find_element(*DOM.Statusbar.clear_all_button)
                 x.tap()
                 time.sleep(1)
@@ -53,13 +57,13 @@ class statusbar(object):
 
         found = False
         try:
-            self.wait_for_element_displayed(*p_dom, timeout=1)
+            self.parent.parent.wait_for_element_displayed(*p_dom, timeout=1)
             found = True
         except:
             pass
 
         if orig_iframe:
-            self.switchToFrame("src", orig_iframe)
+            self.parent.iframe.switchToFrame("src", orig_iframe)
 
         return found
 
@@ -69,13 +73,13 @@ class statusbar(object):
         # app via the statusbar.
         #
         self.displayStatusBar()
-        x = self.getElement(DOM.Statusbar.settings_button, "Settings button")
+        x = self.parent.element.getElement(DOM.Statusbar.settings_button, "Settings button")
         x.tap()
 
         time.sleep(2)
 
         self.marionette.switch_to_frame()
-        self.switchToFrame(*DOM.Settings.frame_locator)
+        self.parent.iframe.switchToFrame(*DOM.Settings.frame_locator)
 
     def toggleViaStatusBar(self, p_type):
         #
@@ -88,8 +92,8 @@ class statusbar(object):
         # <b>airplane</b><br>
         # <b>bluetooth</b>
         #
-        self.logResult("info", "Toggling " + p_type + " mode via statusbar ...")
-        orig_iframe = self.currentIframe()
+        self.parent.reporting.logResult("info", "Toggling " + p_type + " mode via statusbar ...")
+        orig_iframe = self.parent.iframe.currentIframe()
 
         #
         # Toggle (and wait).
@@ -115,7 +119,7 @@ class statusbar(object):
         #
         self.touchHomeButton()
         if orig_iframe:
-            self.switchToFrame("src", orig_iframe)
+            self.parent.iframe.switchToFrame("src", orig_iframe)
 
         return boolReturn
 
@@ -124,21 +128,21 @@ class statusbar(object):
         # (private) Toggle a button in the statusbar.
         # Don't call this directly, it's used by toggleViaStatusBar().
         #
-        boolWasEnabled = self.isNetworkTypeEnabled(p_type)
+        boolWasEnabled = self.parent.network.isNetworkTypeEnabled(p_type)
 
         #
         # Open the status bar.
         #
         self.displayStatusBar()
 
-        x = self.getElement(p_def["toggle"], "Toggle " + p_def["name"] + " icon")
+        x = self.parent.element.getElement(p_def["toggle"], "Toggle " + p_def["name"] + " icon")
         x.tap()
 
         boolReturn = True
         if boolWasEnabled:
-            boolReturn = self.waitForNetworkItemDisabled(p_type)
+            boolReturn = self.parent.network.waitForNetworkItemDisabled(p_type)
         else:
-            boolReturn = self.waitForNetworkItemEnabled(p_type)
+            boolReturn = self.parent.network.waitForNetworkItemEnabled(p_type)
 
         return boolReturn
 
@@ -146,13 +150,13 @@ class statusbar(object):
         #
         # Waits for a new notification in the status bar (20s timeout by default).
         #
-        orig_iframe = self.currentIframe()
+        orig_iframe = self.parent.iframe.currentIframe()
         self.marionette.switch_to_frame()
 
-        x = self.waitForElements(p_dom, "This statusbar icon", p_displayed, p_timeOut)
+        x = self.parent.element.waitForElements(p_dom, "This statusbar icon", p_displayed, p_timeOut)
 
         # Only switch if not called from the 'start' screen ...
         if orig_iframe != '':
-            self.switchToFrame("src", orig_iframe, False)
+            self.parent.iframe.switchToFrame("src", orig_iframe, False)
 
         return x

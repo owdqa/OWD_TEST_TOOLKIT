@@ -8,6 +8,10 @@ from OWDTestToolkit import DOM
 
 class general(object):
 
+    def __init__(self, parent):
+        self.parent = parent
+        self.marionette = parent.marionette
+
     def addFileToDevice(self, file_name, count=1, destination=''):
         #
         # Put a file onto the device (path is relative to the dir
@@ -23,7 +27,7 @@ class general(object):
         #
         try:
             self.marionette.start_session()
-            self.logResult("debug", "<i>(*** The Marionette session was restarted due to a possible crash. ***)</i>")
+            self.parent.reporting.logResult("debug", "<i>(*** The Marionette session was restarted due to a possible crash. ***)</i>")
         except:
             pass
 
@@ -34,20 +38,20 @@ class general(object):
         #
         permission_yes = ("id", "permission-yes")
         permission_no = ("id", "permission-no")
-        orig_frame = self.currentIframe()
+        orig_frame = self.parent.iframe.currentIframe()
         self.marionette.switch_to_frame()
         try:
             if allow_geoloc:
-                self.wait_for_element_displayed(*permission_yes, timeout=2)
+                self.parent.parent.wait_for_element_displayed(*permission_yes, timeout=2)
                 x = self.marionette.find_element(*permission_yes)
             else:
-                self.wait_for_element_displayed(*permission_no, timeout=2)
+                self.parent.parent.wait_for_element_displayed(*permission_no, timeout=2)
                 x = self.marionette.find_element(*permission_no)
             x.tap()
         except:
             pass
 
-        self.switchToFrame("src", orig_frame)
+        self.parent.iframe.switchToFrame("src", orig_frame)
 
     def createIncomingCall(self, num):
         """
@@ -71,9 +75,9 @@ class general(object):
             try:
                 x = os.environ[name]
             except:
-                self.logResult("info", "NOTE: OS variable '{}' was not set.".format(name))
+                self.parent.reporting.logResult("info", "NOTE: OS variable '{}' was not set.".format(name))
                 if validate:
-                    self.reportResults()
+                    self.parent.reporting.reportResults()
                     sys.exit(1)
                 return False
             return x
@@ -93,7 +97,7 @@ class general(object):
         #
         # Remember the current frame then switch to the system level one.
         #
-        orig_iframe = self.currentIframe()
+        orig_iframe = self.parent.iframe.currentIframe()
         self.marionette.switch_to_frame()
 
         #
@@ -102,7 +106,7 @@ class general(object):
         # would it real life).
         #
         xpath_val = "//section[@id='value-selector-container']//li[label[span[text()='{}']]]".format(p_str)
-        list_item = self.getElement(("xpath", xpath_val), "'{}' in the selector".format(p_str), False)
+        list_item = self.parent.element.getElement(("xpath", xpath_val), "'{}' in the selector".format(p_str), False)
         list_item.click()
 
         #
@@ -114,13 +118,13 @@ class general(object):
         #
         # Find and click OK.
         #
-        close_button = self.getElement(DOM.GLOBAL.modal_valueSel_ok, "OK button", True, 30)
+        close_button = self.parent.element.getElement(DOM.GLOBAL.modal_valueSel_ok, "OK button", True, 30)
         close_button.click()
 
         #
         # Return to the orginal frame.
         #
-        self.switchToFrame("src", orig_iframe)
+        self.parent.iframe.switchToFrame("src", orig_iframe)
 
     def setSetting(self, item, value, silent=False):
         #
@@ -128,13 +132,13 @@ class general(object):
         # 'set_setting()' function.
         #
         try:
-            self.data_layer.set_setting(item, value)
+            self.parent.data_layer.set_setting(item, value)
             if not silent:
-                self.logResult("info", "Setting '{}' to '{}' returned no issues.".format(item, value))
+                self.parent.reporting.logResult("info", "Setting '{}' to '{}' returned no issues.".format(item, value))
             return True
         except:
             if not silent:
-                self.logresult("info", "WARNING: Unable to set '{}' to '{}'!".format(item, value))
+                self.parent.reporting.logResult("info", "WARNING: Unable to set '{}' to '{}'!".format(item, value))
             return False
 
     def setupDataConn(self):
@@ -147,7 +151,7 @@ class general(object):
         host = "10.138.255.133"
         port = "8080"
 
-        self.logResult("info", "Ensuring dataconn settings (APN, etc...) are correct.")
+        self.parent.reporting.logResult("info", "Ensuring dataconn settings (APN, etc...) are correct.")
 
         self.set_item("ril.data.apn", apn)
         self.set_item("ril.data.user", conn_id)
@@ -155,16 +159,16 @@ class general(object):
         self.set_item("ril.data.httpProxyHost", host)
         self.set_item("ril.data.httpProxyPort", port)
 
-        self.logResult("info", "Done.")
+        self.parent.reporting.logResult("info", "Done.")
 
     def set_item(self, item, value):
         #
         # Just a quick function to report issues setting this.
         #
         try:
-            self.data_layer.set_setting(item, value)
+            self.parent.data_layer.set_setting(item, value)
         except:
-            self.logResult(False, "Unable to set '{}' to '{}'.".format(item, value))
+            self.parent.reporting.logResult(False, "Unable to set '{}' to '{}'.".format(item, value))
 
     def typeThis(self, p_element_array, p_desc, p_str, p_no_keyboard=False,
                  p_clear=True, p_enter=True, p_validate=True, p_remove_keyboard=True):
@@ -175,7 +179,7 @@ class general(object):
         # then regardless of what you send to this method, it will never
         # use the keyboard.
         #
-        no_keyboard = self.get_os_variable("NO_KEYBOARD", False)
+        no_keyboard = self.parent.general.get_os_variable("NO_KEYBOARD", False)
 
         #
         # Make sure the string is a string!
@@ -185,9 +189,9 @@ class general(object):
         #
         # Remember the current frame.
         #
-        orig_frame = self.currentIframe()
+        orig_frame = self.parent.iframe.currentIframe()
 
-        x = self.getElement(p_element_array, p_desc)
+        x = self.parent.element.getElement(p_element_array, p_desc)
 
         #
         # Need to click in a lot of these or the field isn't located correctly (esp. SMS).
@@ -201,7 +205,7 @@ class general(object):
             #
             # Don't use the keyboard.
             #
-            self.logResult("info", "(Sending '{}' to this field without using the keyboard.)".format(p_str))
+            self.parent.reporting.logResult("info", "(Sending '{}' to this field without using the keyboard.)".format(p_str))
             x.send_keys(p_str)
 
             #
@@ -214,13 +218,13 @@ class general(object):
             if "_" in p_str:
                 self.parent.lockscreen.unlock()
                 self.marionette.switch_to_frame()
-                self.switchToFrame("src", orig_frame)
+                self.parent.iframe.switchToFrame("src", orig_frame)
 
         else:
             #
             # Tap the element to get the keyboard to popup.
             #
-            self.logResult("info", "(Sending '{}' to this field using the keyboard.)".format(p_str))
+            self.parent.reporting.logResult("info", "(Sending '{}' to this field using the keyboard.)".format(p_str))
             x.tap()
 
             #
@@ -238,7 +242,7 @@ class general(object):
         #
         # Switch back to the frame we were in and get the element again.
         #
-        self.switchToFrame("src", orig_frame)
+        self.parent.iframe.switchToFrame("src", orig_frame)
 
         #
         # Validate that the field now has the value we sent it.
@@ -252,7 +256,7 @@ class general(object):
             else:
                 fieldText = y[-(len(p_str)):]
 
-            self.TEST(p_str == fieldText,
+            self.parent.test.TEST(p_str == fieldText,
                       "The field contains the correct string ...|{}|- vs. -|{}".format(fieldText, p_str))
 
         if p_remove_keyboard:
@@ -260,7 +264,7 @@ class general(object):
             # Try to tap the header to remove the keyboard now that we've finished.
             #
             try:
-                self.wait_for_element_displayed(*DOM.GLOBAL.app_head, timeout=1)
+                self.parent.parent.wait_for_element_displayed(*DOM.GLOBAL.app_head, timeout=1)
                 x = self.marionette.find_element(*DOM.GLOBAL.app_head)
                 x.tap()
                 time.sleep(0.5)
