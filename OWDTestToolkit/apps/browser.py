@@ -40,7 +40,7 @@ class Browser(object):
         url = self.loadedURL()
         self.UTILS.reporting.logResult("info", "The loaded url is now <a href=\"{0}\">{0}</a>".format(url))
 
-        self.UTILS.iframe.switchToFrame(*DOM.Browser.website_frame, p_viaRootFrame=False)
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.website_frame, via_root_frame=False)
 
         # Take a screenshot.
         fnam = self.UTILS.debug.screenShotOnErr()

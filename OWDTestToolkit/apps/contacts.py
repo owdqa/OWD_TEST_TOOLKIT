@@ -575,7 +575,7 @@ class Contacts(object):
               "then check at the 'root-level' iframe screenshot for an error message.)</b>"
         self.UTILS.reporting.logResult("info", txt)
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.gmail_import_frame, p_viaRootFrame=False)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.gmail_import_frame, via_root_frame=False)
 
         self.UTILS.element.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
         return True
@@ -626,7 +626,7 @@ class Contacts(object):
         time.sleep(2)
         self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_import_frame, p_viaRootFrame=False)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_import_frame, via_root_frame=False)
 
         #
         # Check to see if the 'all friends are imported' message is being
@@ -968,7 +968,7 @@ class Contacts(object):
         #
         time.sleep(2)
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame, p_viaRootFrame=False)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame, via_root_frame=False)
 
         #
         # Wait for the fb page to start.
