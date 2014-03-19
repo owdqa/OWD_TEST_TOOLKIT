@@ -6,6 +6,10 @@ from OWDTestToolkit import DOM
 
 class date_and_time(object):
 
+    def __init__(self, parent):
+        self.parent = parent
+        self.marionette = parent.marionette
+
     def getDateTimeFromEpochSecs(self, seconds_since_epoch):
         #
         # Returns struct containing date and time strings
@@ -30,8 +34,8 @@ class date_and_time(object):
         # <br>
         # Example:<br>
         # <pre>
-        # _today = self.UTILS.getDateTimeFromEpochSecs( int(time.time()) )<br>
-        # self.UTILS.logResults("info", "Day: %s" % _today.day_name)<br>
+        # _today = self.UTILS.date_and_time.getDateTimeFromEpochSecs( int(time.time()) )<br>
+        # self.UTILS.reporting.logResults("info", "Day: %s" % _today.day_name)<br>
         # <pre>
         #
         value = time.localtime(seconds_since_epoch)
@@ -68,10 +72,10 @@ class date_and_time(object):
         # Set the phone's time (using gaia data_layer instead of the UI).
         # <b>NOTE:</b> Also sets the timezone (continent and city).
         #
-        _continent = continent if continent else self.get_os_variable("GLOBAL_YOUR_CONTINENT")
-        _city = city if city else self.get_os_variable("GLOBAL_YOUR_CITY")
+        _continent = continent if continent else self.parent.general.get_os_variable("GLOBAL_YOUR_CONTINENT")
+        _city = city if city else self.parent.general.get_os_variable("GLOBAL_YOUR_CITY")
 
-        self.logResult("info", "(Setting timezone and time based on {} / {}.)".format(_continent, _city))
+        self.parent.reporting.logResult("info", "(Setting timezone and time based on {} / {}.)".format(_continent, _city))
 
         self.parent.data_layer.set_setting('time.timezone', _continent + "/" + _city)
         self.parent.data_layer.set_time(time.time() * 1000)
@@ -120,7 +124,7 @@ class date_and_time(object):
 
         _seconds_since_epoch = self.getEpochSecsFromDateTime(_dateTime)
 
-        self.data_layer.set_time(_seconds_since_epoch * 1000)
+        self.parent.data_layer.set_time(_seconds_since_epoch * 1000)
 
         self.waitForDeviceTimeToBe(p_year, p_month, p_day, p_hour, p_minute)
 
@@ -189,7 +193,7 @@ class date_and_time(object):
 
             time.sleep(2)
 
-        self.TEST(time_match, "Device time matched \"{}/{}/{} {:02d}:{:02d}\" within 60s (It was \"{}/{}/{} "\
+        self.parent.test.TEST(time_match, "Device time matched \"{}/{}/{} {:02d}:{:02d}\" within 60s (It was \"{}/{}/{} "\
                               "{:02d}:{:02d}\")".format(p_year, p_month, p_day, p_hour, p_minute,
                                _devtime[0], _devtime[1], _devtime[2], _devtime[3], _devtime[4]))
 
@@ -222,18 +226,18 @@ class date_and_time(object):
         # desired date and time.
         #
         myFrame = self.currentIframe()
-        self.switchToFrame(*DOM.Home.frame_locator)
+        self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
 
         # Time.
-        self.waitForElements(("xpath", DOM.Home.datetime_time_xpath.format(_time_str)),
+        self.parent.element.waitForElements(("xpath", DOM.Home.datetime_time_xpath.format(_time_str)),
                                     "Time matching '{}'".format(_time_str), True, 60, False)
-        self.waitForElements(("xpath", DOM.Home.datetime_ampm_xpath.format(_ampm_str)),
+        self.parent.element.waitForElements(("xpath", DOM.Home.datetime_ampm_xpath.format(_ampm_str)),
                                     "AM / PM matching '{}'".format(_ampm_str), True, 60, False)
-        self.waitForElements(("xpath", DOM.Home.datetime_date_xpath.format(_date_str)),
+        self.parent.element.waitForElements(("xpath", DOM.Home.datetime_date_xpath.format(_date_str)),
                                     "Day name is '{}'".format(_date_str), True, 60, False)
 
         if myFrame != '':
             #
             # Switch back to the frame we started in.
             #
-            self.UTILS.switchToFrame("src", myFrame)
+            self.parent.iframe.switchToFrame("src", myFrame)

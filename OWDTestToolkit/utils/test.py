@@ -3,6 +3,9 @@ import sys
 
 class test(object):
 
+    def __init__(self, parent):
+        self.parent = parent
+
     def quitTest(self, msg=False):
         #
         # Quit this test suite.
@@ -12,18 +15,18 @@ class test(object):
         else:
             msg = msg
 
-        self.logResult("info", " ")
-        self.logResult(False, msg)
+        self.parent.reporting.logResult("info", " ")
+        self.parent.reporting.logResult(False, msg)
 
         #
         # Collect info on every iframe for debugging ...
         #
-        self.viewAllIframes()
+        self.parent.iframe.viewAllIframes()
 
         #
         # Report the results.
         #
-        self.reportResults()
+        self.parent.reporting.reportResults()
 
         #
         # Exit immediately without throwing an exception
@@ -42,11 +45,11 @@ class test(object):
         #
         fnam = False
         if not result:
-            fnam = self.screenShotOnErr()
-            self.logResult(result, msg, fnam)
-            self.getStackTrace()
+            fnam = self.parent.debug.screenShotOnErr()
+            self.parent.reporting.logResult(result, msg, fnam)
+            self.parent.debug.getStackTrace()
 
             if stop_on_error:
                 self.quitTest()
         else:
-            self.logResult(result, msg)
+            self.parent.reporting.logResult(result, msg)

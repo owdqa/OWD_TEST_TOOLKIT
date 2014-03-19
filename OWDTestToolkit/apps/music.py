@@ -16,20 +16,20 @@ class Music(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def click_on_song_mms(self):
-        song = self.UTILS.getElement(DOM.Music.song1, "Song")
+        song = self.UTILS.element.getElement(DOM.Music.song1, "Song")
         song.tap()
 
         time.sleep(1)
 
-        doneButton = self.UTILS.getElement(DOM.Music.done_button, "Done Button")
+        doneButton = self.UTILS.element.getElement(DOM.Music.done_button, "Done Button")
         doneButton.tap()
 
-        self.UTILS.switchToFrame(*DOM.Messages.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
     def play_song(self):
-        song = self.UTILS.getElement(DOM.Music.song, "Song")
+        song = self.UTILS.element.getElement(DOM.Music.song, "Song")
         song.tap()
