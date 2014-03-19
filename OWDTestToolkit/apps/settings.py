@@ -263,7 +263,7 @@ class Settings(object):
         # First, make sure we're in "Settings".
         #
         try:
-            self.wait_for_element_present(*DOM.Settings.frame_locator, timeout=2)
+            self.parent.parent.wait_for_element_present(*DOM.Settings.frame_locator, timeout=2)
             x = self.marionette.find_element(*DOM.Settings.frame_locator)
         except:
             #
@@ -537,7 +537,7 @@ class Settings(object):
         # Verify the expected network is listed as connected in 'available networks'.
         #
         try:
-            self.wait_for_element_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
+            self.parent.parent.wait_for_element_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
                                           timeout=timeout)
             return True
         except:
@@ -548,7 +548,7 @@ class Settings(object):
         # Verify the expected network is listed as connected in 'available networks'.
         #
         try:
-            self.wait_for_element_not_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
+            self.parent.parent.wait_for_element_not_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
                                               timeout=timeout)
             return True
         except:

@@ -57,7 +57,7 @@ class iframe(object):
             _frameDef = ("xpath", "//iframe[contains(@{},'{}')]".format(attrib, value))
 
         try:
-            self.wait_for_element_present(*_frameDef, timeout=2)
+            self.parent.parent.wait_for_element_present(*_frameDef, timeout=2)
             return True
         except:
             return False
@@ -124,7 +124,7 @@ class iframe(object):
 
             x = self.marionette.find_elements(*_frameDef)
 
-        self.TEST(is_ok, "<i>(Sucessfully switched to iframe where '{}' contains '{}'.)</i>".format(attrib, value),
+        self.parent.test.TEST(is_ok, "<i>(Sucessfully switched to iframe where '{}' contains '{}'.)</i>".format(attrib, value),
                   quit_on_error)
 
     _framepath = []
@@ -207,7 +207,7 @@ class iframe(object):
                 framepath_str = framepath_str + "-"
             framepath_str = framepath_str + i
 
-        fnam = "{}/{}_frame_{}_details.txt".format(os.environ['RESULT_DIR'], self.testNum, framepath_str)
+        fnam = "{}/{}_frame_{}_details.txt".format(os.environ['RESULT_DIR'], self.parent.test.TESTNum, framepath_str)
 
         f = open(fnam, 'w')
         f.write("Attributes for this iframe ...\n")

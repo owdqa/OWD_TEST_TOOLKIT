@@ -79,7 +79,7 @@ class network(object):
             "bluetooth": self.parent.data_layer.bluetooth_is_enabled
             }.get(p_type)
 
-        self.TEST(False, "Incorrect parameter '" + str(p_type) + "' passed to UTILS.isNetworkTypeEnabled()!", True)
+        self.parent.test.TEST(False, "Incorrect parameter '" + str(p_type) + "' passed to UTILS.isNetworkTypeEnabled()!", True)
 
     def waitForNetworkItemDisabled(self, p_type, retries=30):
         #
@@ -132,7 +132,7 @@ class network(object):
         #
         for i in range(10):
             try:
-                self.wait_for_element_not_displayed(*DOM.Statusbar.network_activity, timeout=p_timeout)
+                self.parent.parent.wait_for_element_not_displayed(*DOM.Statusbar.network_activity, timeout=p_timeout)
                 try:
                     self.parent.parent.wait_for_element_displayed(*DOM.Statusbar.network_activity, timeout=5)
                     #

@@ -10,6 +10,9 @@ class reporting(object):
         self._commentArray = comment
         self.passed = parent.passed
         self.failed = parent.failed
+        self.det_fnam = parent.det_fnam
+        self.sum_fnam = parent.sum_fnam
+        self.testNum = parent.testNum
 
     def logComment(self, p_str):
         #
@@ -114,7 +117,7 @@ class reporting(object):
         fail_str = "FAILED"
         pass_span = "<span style='color:#00aa00'>"
         fail_span = "<span style='color:#ff0000'>"
-        test_time = time.time() - self.start_time
+        test_time = time.time() - self.parent.start_time
         test_time = round(test_time, 0)
         test_time = str(datetime.timedelta(seconds=test_time))
 

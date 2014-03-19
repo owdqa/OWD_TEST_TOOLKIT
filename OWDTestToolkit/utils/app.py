@@ -231,7 +231,7 @@ class app(object):
         self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
 
         try:
-            self.wait_for_element_present(*DOM.Home.docked_apps, timeout=1)
+            self.parent.parent.wait_for_element_present(*DOM.Home.docked_apps, timeout=1)
             x = self.parent.element.getElements(DOM.Home.docked_apps, "Dock apps")
             for i in x:
                 if i.get_attribute("aria-label") == app_name:
@@ -282,7 +282,7 @@ class app(object):
 
         self.marionette.switch_to_frame()
         try:
-            self.wait_for_element_present("xpath", "//iframe[contains(@{}, '{}')]".format(app_frame[0], app_frame[1]),
+            self.parent.parent.wait_for_element_present("xpath", "//iframe[contains(@{}, '{}')]".format(app_frame[0], app_frame[1]),
                                           timeout=1)
             self.parent.reporting.logResult("info", "(Looks like app '{}' is already running - just switching to it's iframe ...)".\
                            format(app_name))
@@ -322,6 +322,6 @@ class app(object):
             time.sleep(2)
             self.parent.home.touchHomeButton()
 
-            self.TEST(not self.isAppInstalled(app_name), "App is uninstalled after deletion.")
+            self.parent.test.TEST(not self.isAppInstalled(app_name), "App is uninstalled after deletion.")
         else:
             self.parent.reporting.logResult("info", "(No need to uninstall {}.)".format(app_name))
