@@ -58,7 +58,7 @@ class Facebook(object):
         #
         # Return the number of friends we imported.
         #
-        self.UTILS.logComment("Friend count: {}".format(friend_count)
+        self.UTILS.logComment("Friend count: {}".format(friend_count))
         return friend_count
 
     def LinkContact(self, contact_email):
@@ -80,7 +80,7 @@ class Facebook(object):
                 thisContact = i.find_elements("tag name", "p")[1]
                 if thisContact.text == contact_email:
                     email = contact_email
-                    thisContact.tap()
+                    self.UTILS.simulateClick(thisContact)
                     break
 
         self.UTILS.TEST(email, "Desired link contact's email address is displayed.")
