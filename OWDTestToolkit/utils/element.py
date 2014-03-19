@@ -205,3 +205,84 @@ class element(object):
 
         self.TEST(is_ok, msg, stop_on_error)
         return is_ok
+
+    def getElementByXpath(path):
+        #
+        # Use this function when normal getElement did not work
+        #
+        return self.marionette.execute_script("""
+            return document.evaluate(arguments[0], document, null, 9, null).singleNodeValue;
+        """, script_args=[path])
+
+    def getParent(element):
+        #
+        # Gets the element's parent. Can be called recursively
+        #
+        return self.marionette.execute_script("""
+            return arguments[0].parentNode;
+        """, script_args=[element])
+
+    def getChildren(element):
+        #
+        # Gets the element's children
+        #
+        return self.marionette.execute_script("""
+            return arguments[0].children;
+        """, script_args=[element])
+
+    def get_css_value(element, css_property):
+        #
+        # Gets the value of a certain css property.
+        #
+        return self.marionette.execute_script(""" 
+            function getStyle (el, styleProp) {
+                if (el.currentStyle)
+                    var y = x.currentStyle[styleProp];
+                else if (window.getComputedStyle)
+                    var y = document.defaultView.getComputedStyle(el,null)
+                                                .getPropertyValue(styleProp);
+                return y;
+            }
+            return getStyle(arguments[0], arguments[1])
+        """, script_args=[element, css_property])
+
+    def is_ellipsis_active(element):
+        #
+        # Checks whether a certain element is really ellipsed when its content
+        # overflows its width
+        #
+        return self.marionette.execute_script("""
+            function isEllipsisActive(element) {
+                return (element.offsetWidth < element.scrollWidth);
+            }
+            return isEllipsisActive(arguments[0])
+        """, script_args=[element])
+
+    def scroll_into_view(self, element):
+        self.marionette.execute_script("""
+            arguments[0].scrollIntoView();
+        """, script_args=[element])
+
+    def perform_action_over_element(locator, action):
+        self.marionette.execute_script("""
+            var _locatorMap = {
+                "id": getElementById,
+                "class name": document.getElementsByClassName,
+                "css selector": document.querySelector,
+                "xpath": function () { 
+                            return document.evaluate(arguments[0], document, null, 9, null).singleNodeValue 
+                        },
+                "tag name": document.getElementsByTagName
+            };
+
+            var _actionMap = {
+
+            }
+
+            var location_method = arguments[0][0];
+            var locator = arguments[0][1];
+
+            var element = _locatorMap(location_method)(locator);
+
+            return element;
+        """, script_args=[locator, action])    
