@@ -7,10 +7,10 @@ import base64, sys, os
 from marionette import Marionette
 
 class current_frame():
-    
+
     filename_screenshot = ""
     filename_htmldump   = ""
-    
+
     def main(self, LOGDIR):
         #
         # The first variable is the log directory.
@@ -19,7 +19,7 @@ class current_frame():
         self.marionette = Marionette(host='localhost', port=2828)  
         self.marionette.start_session()
         self.marionette.set_search_timeout(1000)
-        
+
         #
         # Now loop through all the iframes, gathering details about each one.
         #
@@ -32,12 +32,12 @@ class current_frame():
 
         frames = self.marionette.find_elements("tag name", "iframe")
         for fnum in range (0, len(frames)):
-          
+  
             #
             # App name is usually in the "src" attribute, so it's worth a shot..
             #
             frame_src = frames[fnum].get_attribute("src")
-              
+  
             if frame_src != "":
                 startpos = frame_src.index('/') + 2
                 stoppos  = frame_src.index('.')
@@ -47,27 +47,27 @@ class current_frame():
                 ucount = ucount + 1
                 appname  = "(unknown)"
                 filename = "unknown_" + str(ucount)
-            
+
             #
             # Because we call this script sometimes when we hit a Marionette issue,
             # these filenames may already exist (and we'd overwrite them!), so
             # add 'DEBUG_' to the start of the filename.
             #
             filename = "DEBUG_" + filename
-                 
+     
             filename_details         = LOGDIR + filename + "_iframe_details.txt"
             self.filename_screenshot = LOGDIR + filename + ".png"
             self.filename_htmldump   = LOGDIR + filename + ".html"
-            
+
             #
             # This iframe gives me problems sometimes, so I'm ignoring it for now.
             #
             if appname == "costcontrol":
                 continue
-            
+
             print ""
             print "Iframe for app \"" + appname + "\" ..."
-        
+
             #
             # Record the iframe details (pretty verbose, but 'execute_script' 
             # wasn't letting me use 'for' loops in js for some reason).
@@ -79,10 +79,10 @@ class current_frame():
             for i in range(0,num_attribs):
                 attrib_name  = self.marionette.execute_script("return document.getElementsByTagName('iframe')[" + str(fnum) + "].attributes[" + str(i) + "].nodeName;")
                 attrib_value = self.marionette.execute_script("return document.getElementsByTagName('iframe')[" + str(fnum) + "].attributes[" + str(i) + "].nodeValue;")
-        
+
                 f.write("    |_ " + attrib_name.ljust(20) + ": \"" + attrib_value + "\"\n")   
             f.close()
-            
+
             #
             # Switch to this frame.
             #
@@ -98,7 +98,7 @@ class current_frame():
                 f.close()
             else:
                 self.record_frame()
-         
+ 
             self.marionette.switch_to_frame()
 
 

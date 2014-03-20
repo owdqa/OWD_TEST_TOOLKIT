@@ -237,7 +237,7 @@ class general(object):
         # you didn't use it to type)?
         #
         if p_enter:
-            self.parent.keyboard.tap_enter()
+            self.parent.parent.keyboard.tap_enter()
 
         #
         # Switch back to the frame we were in and get the element again.
