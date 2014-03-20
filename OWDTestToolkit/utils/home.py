@@ -20,7 +20,7 @@ class home(object):
 
         self.parent.apps.kill_all()
 
-        self.parent.iframe.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
+        self.parent.iframe.switchToFrame(*DOM.Home.frame_locator, quit_on_error=False)
 
         time.sleep(1)
 
