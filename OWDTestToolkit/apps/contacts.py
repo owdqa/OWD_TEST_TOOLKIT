@@ -1,6 +1,7 @@
 from OWDTestToolkit import DOM
 import time
 
+
 class Contacts(object):
 
     def __init__(self, parent):
@@ -15,7 +16,7 @@ class Contacts(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def add_gallery_image_to_contact(self, num):
@@ -29,7 +30,7 @@ class Contacts(object):
         #
         # Click the 'add picture' link.
         #
-        x = self.UTILS.getElement(DOM.Contacts.add_photo, "'Add picture' link")
+        x = self.UTILS.element.getElement(DOM.Contacts.add_photo, "'Add picture' link")
         x.tap()
         time.sleep(2)
 
@@ -37,16 +38,16 @@ class Contacts(object):
         self.marionette.switch_to_frame()
 
         # Choose to get a picture from the Gallery.
-        x = self.UTILS.getElement(DOM.Contacts.photo_from_gallery, "Gallery link")
+        x = self.UTILS.element.getElement(DOM.Contacts.photo_from_gallery, "Gallery link")
         x.tap()
 
         # Switch to Gallery iframe.
         time.sleep(2)
-        self.UTILS.switchToFrame(*DOM.Gallery.frame_locator)
-        self.UTILS.waitForNotElements(DOM.Gallery.loading_bar, "Loading bar", True, 10)
+        self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
+        self.UTILS.element.waitForNotElements(DOM.Gallery.loading_bar, "Loading bar", True, 10)
 
         # Select the thumbnail (assume it's the only one).
-        x = self.UTILS.getElements(DOM.Contacts.picture_thumbnails, "Thumbnails for pictures")
+        x = self.UTILS.element.getElements(DOM.Contacts.picture_thumbnails, "Thumbnails for pictures")
         if x:
             x[num].tap()
 
@@ -55,23 +56,23 @@ class Contacts(object):
             # Tap 'crop done' button.
             boolOK = True
             try:
-                x = self.UTILS.getElement(DOM.Contacts.picture_crop_done_btn, "Crop 'done' button")
+                x = self.UTILS.element.getElement(DOM.Contacts.picture_crop_done_btn, "Crop 'done' button")
                 x.tap()
             except:
                 boolOK = False
 
-            self.UTILS.TEST(boolOK, "Can finish cropping the picture and return to Contacts app.")
+            self.UTILS.test.TEST(boolOK, "Can finish cropping the picture and return to Contacts app.")
 
             time.sleep(1)
 
         # Back to contacts app iframe.
-        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
     def add_another_email_address(self, email_address):
         #
         # Add a new email address to the contact currnetly being viewed in Edit mode.
         #
-        x = self.UTILS.getElement(DOM.Contacts.add_email_button, "Add email button")
+        x = self.UTILS.element.getElement(DOM.Contacts.add_email_button, "Add email button")
         x.tap()
 
         # (Marionette currently messes up the screen, so correct this.)
@@ -80,17 +81,17 @@ class Contacts(object):
         #
         # Add the email.
         #
-        x = self.UTILS.getElements(DOM.Contacts.email_fields, "Email fields", False, 2)
+        x = self.UTILS.element.getElements(DOM.Contacts.email_fields, "Email fields", False, 2)
         for i in x:
             if i.get_attribute("value") == "":
                 i.send_keys(email_address)
 
                 # (if there's a "_" in the email address, the screen will lock.)
                 if "_" in email_address:
-                    orig_frame = self.UTILS.currentIframe()
+                    orig_frame = self.UTILS.iframe.currentIframe()
                     self.lockscreen.unlock()
                     self.marionette.switch_to_frame()
-                    self.UTILS.switchToFrame("src", orig_frame)
+                    self.UTILS.iframe.switchToFrame("src", orig_frame)
                 break
 
     def change_contact(self, contact_name, field, value):
@@ -118,16 +119,16 @@ class Contacts(object):
         #
         # Save the changes
         #
-        updateBTN = self.UTILS.getElement(DOM.Contacts.edit_update_button, "Edit 'update' button")
+        updateBTN = self.UTILS.element.getElement(DOM.Contacts.edit_update_button, "Edit 'update' button")
         updateBTN.tap()
 
         #
         # Return to the contact list screen.
         #
-        backBTN = self.UTILS.getElement(DOM.Contacts.details_back_button, "Details 'back' button")
+        backBTN = self.UTILS.element.getElement(DOM.Contacts.details_back_button, "Details 'back' button")
         backBTN.tap()
 
-        self.UTILS.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
+        self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
 
     def check_edit_contact_details(self, contact):
         #
@@ -149,7 +150,7 @@ class Contacts(object):
         # (found I was doing this rather a lot so it's better in a function).
         #
         test_str = str(element.get_attribute("value"))
-        self.UTILS.TEST((test_str == value), name + " = \"" + value + "\" (it was \"" + test_str + "\").")
+        self.UTILS.test.TEST((test_str == value), name + " = \"" + value + "\" (it was \"" + test_str + "\").")
 
     def check_search_results(self, contact_name, present=True):
         #
@@ -169,7 +170,7 @@ class Contacts(object):
 
         comment2 = (" is " if present else " is not ") + "displayed in the result list."
 
-        self.UTILS.TEST(present == boolContact, "Contact '" + contact_name + "'" + comment2)
+        self.UTILS.test.TEST(present == boolContact, "Contact '" + contact_name + "'" + comment2)
 
     def check_view_contact_details(self, contact, check_image=False):
         #
@@ -198,7 +199,7 @@ class Contacts(object):
             except:
                 pass
 
-            self.UTILS.TEST(boolOK, "Contact's image contains 'something' in contact details screen.")
+            self.UTILS.test.TEST(boolOK, "Contact's image contains 'something' in contact details screen.")
 
         #
         # Correct details are in the contact fields.
@@ -215,13 +216,13 @@ class Contacts(object):
         # (for some reason these are flagged as not displayed, so
         # you have to get them as 'present').
         #
-        x = self.UTILS.getElements(DOM.Contacts.email_fields, "Email fields", False, 2)
-        self.UTILS.logResult("info", "NOTE: Contact's email addresses:")
+        x = self.UTILS.element.getElements(DOM.Contacts.email_fields, "Email fields", False, 2)
+        self.UTILS.reporting.logResult("info", "NOTE: Contact's email addresses:")
         counter = 0
         for i in x:
             if i.get_attribute("value") != "#value#":
                 counter = counter + 1
-                self.UTILS.logResult("info", "    - " + str(counter) + ": " + i.get_attribute("value"))
+                self.UTILS.reporting.logResult("info", "    - " + str(counter) + ": " + i.get_attribute("value"))
         return counter
 
     def create_contact(self, contact, img_src=False):
@@ -272,7 +273,7 @@ class Contacts(object):
         #
         # Confirm deletion.
         #
-        x = self.UTILS.getElement(DOM.Contacts.confirm_delete_btn, "Confirm deletion button")
+        x = self.UTILS.element.getElement(DOM.Contacts.confirm_delete_btn, "Confirm deletion button")
         x.tap()
 
         #
@@ -280,7 +281,7 @@ class Contacts(object):
         # this was the only contact).
         #
         contact_el = x = ("xpath", DOM.Contacts.view_all_contact_xpath % fullname.replace(" ", ""))
-        self.UTILS.waitForNotElements(contact_el, "Contact name in 'all contacts' screen")
+        self.UTILS.element.waitForNotElements(contact_el, "Contact name in 'all contacts' screen")
 
     def edit_contact(self, name, contact):
         #
@@ -300,9 +301,9 @@ class Contacts(object):
         #
         # Tap the Edit button to go to the edit details page.
         #
-        editBTN = self.UTILS.getElement(DOM.Contacts.edit_details_button, "Edit details button")
+        editBTN = self.UTILS.element.getElement(DOM.Contacts.edit_details_button, "Edit details button")
         editBTN.tap()
-        self.UTILS.waitForElements(DOM.Contacts.edit_contact_header, "'Edit contacts' screen header")
+        self.UTILS.element.waitForElements(DOM.Contacts.edit_contact_header, "'Edit contacts' screen header")
 
         #
         # Enter the new contact details.
@@ -312,22 +313,22 @@ class Contacts(object):
         #
         # Save the changes
         #
-        updateBTN = self.UTILS.getElement(DOM.Contacts.edit_update_button, "Edit 'update' button")
+        updateBTN = self.UTILS.element.getElement(DOM.Contacts.edit_update_button, "Edit 'update' button")
         updateBTN.tap()
 
         #
         # Return to the contact list screen.
         #
-        backBTN = self.UTILS.getElement(DOM.Contacts.details_back_button, "Details 'back' button")
+        backBTN = self.UTILS.element.getElement(DOM.Contacts.details_back_button, "Details 'back' button")
         backBTN.tap()
 
-        self.UTILS.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
+        self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
 
     def enable_FB_import(self):
         #
         # Enable fb import.
         #
-        x = self.UTILS.getElement(DOM.Contacts.settings_fb_enable, "Enable facebook button")
+        x = self.UTILS.element.getElement(DOM.Contacts.settings_fb_enable, "Enable facebook button")
         x.tap()
         time.sleep(1)
 
@@ -342,15 +343,15 @@ class Contacts(object):
             pass
 
         if boolFound:
-            self.UTILS.logResult("info", "Logging out of facebook so I can re-enable the FB import ...")
-            x = self.UTILS.getElement(('xpath', "//button[text()='Remove']"), "Remove button")
+            self.UTILS.reporting.logResult("info", "Logging out of facebook so I can re-enable the FB import ...")
+            x = self.UTILS.element.getElement(('xpath', "//button[text()='Remove']"), "Remove button")
             x.tap()
 
-            self.UTILS.waitForElements(DOM.Contacts.settings_fb_logout_wait, "FB logout message", True, 5)
-            self.UTILS.waitForNotElements(DOM.Contacts.settings_fb_logout_wait, "FB logout message", True, 60)
+            self.UTILS.element.waitForElements(DOM.Contacts.settings_fb_logout_wait, "FB logout message", True, 5)
+            self.UTILS.element.waitForNotElements(DOM.Contacts.settings_fb_logout_wait, "FB logout message", True, 60)
 
             self.marionette.switch_to_frame()
-            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
+            self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
             #
             # Now relaunch and click the 'enable facebook' button again.
@@ -364,12 +365,12 @@ class Contacts(object):
             self.launch()
             self.tapSettingsButton()
 
-            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
+            self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
-            x = self.UTILS.getElement(DOM.Contacts.settings_fb_enable, "Enable facebook button")
+            x = self.UTILS.element.getElement(DOM.Contacts.settings_fb_enable, "Enable facebook button")
             x.tap()
 
-        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
         time.sleep(2)
 
@@ -377,20 +378,20 @@ class Contacts(object):
         #
         # Press the Settings button, then Bluetooth
         #
-        x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
+        x = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
 
         time.sleep(1)
 
-        x = self.UTILS.getElement(DOM.Contacts.export_contacts, "Export button")
+        x = self.UTILS.element.getElement(DOM.Contacts.export_contacts, "Export button")
         x.tap()
         time.sleep(1)
 
         #
         # Press the Bluetooth.
         #
-        x = self.UTILS.getElement(DOM.Contacts.export_bluetooth, "Export Bluetooth")
-        self.UTILS.TEST(x.get_attribute("disabled") == "false", "Bluetooth button is enabled.")
+        x = self.UTILS.element.getElement(DOM.Contacts.export_bluetooth, "Export Bluetooth")
+        self.UTILS.test.TEST(x.get_attribute("disabled") == "false", "Bluetooth button is enabled.")
 
         x.tap()
         time.sleep(2)
@@ -399,20 +400,20 @@ class Contacts(object):
         #
         # Press the Settings button, then memory card
         #
-        x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
+        x = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
 
         time.sleep(1)
 
-        x = self.UTILS.getElement(DOM.Contacts.export_contacts, "Export button")
+        x = self.UTILS.element.getElement(DOM.Contacts.export_contacts, "Export button")
         x.tap()
         time.sleep(1)
 
         #
         # Press the SD Card.
         #
-        x = self.UTILS.getElement(DOM.Contacts.export_sd_card, "Export SD Card")
-        self.UTILS.TEST(x.get_attribute("disabled") == "false", "SD card button is enabled.")
+        x = self.UTILS.element.getElement(DOM.Contacts.export_sd_card, "Export SD Card")
+        self.UTILS.test.TEST(x.get_attribute("disabled") == "false", "SD card button is enabled.")
 
         x.tap()
         time.sleep(2)
@@ -422,20 +423,20 @@ class Contacts(object):
         # Presses the Settings button, then memory card
         #
 
-        x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
+        x = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
 
         time.sleep(1)
 
-        x = self.UTILS.getElement(DOM.Contacts.export_contacts, "Export button")
+        x = self.UTILS.element.getElement(DOM.Contacts.export_contacts, "Export button")
         x.tap()
         time.sleep(2)
 
         #
         # Press the SIM card.
         #
-        x = self.UTILS.getElement(DOM.Contacts.export_sim_card, "Export SIM Card")
-        self.UTILS.TEST(x.get_attribute("disabled") == "false", "SIM card button is enabled.")
+        x = self.UTILS.element.getElement(DOM.Contacts.export_sim_card, "Export SIM Card")
+        self.UTILS.test.TEST(x.get_attribute("disabled") == "false", "SIM card button is enabled.")
 
         x.tap()
         time.sleep(2)
@@ -448,21 +449,21 @@ class Contacts(object):
         #
         if view:
             return {
-            'name': self.UTILS.getElement(DOM.Contacts.view_details_title, "Name in title field", True, 5, False),
-            'tel': self.UTILS.getElement(DOM.Contacts.view_contact_tel_field, "Phone number field", True, 5, False),
-            'email': self.UTILS.getElement(DOM.Contacts.view_contact_email_field, "Email field", True, 5, False),
-            'address': self.UTILS.getElement(DOM.Contacts.view_contact_address, "Address field", True, 5, False),
+            'name': self.UTILS.element.getElement(DOM.Contacts.view_details_title, "Name in title field", True, 5, False),
+            'tel': self.UTILS.element.getElement(DOM.Contacts.view_contact_tel_field, "Phone number field", True, 5, False),
+            'email': self.UTILS.element.getElement(DOM.Contacts.view_contact_email_field, "Email field", True, 5, False),
+            'address': self.UTILS.element.getElement(DOM.Contacts.view_contact_address, "Address field", True, 5, False),
             }
         else:
             return {
-            'givenName': self.UTILS.getElement(DOM.Contacts.given_name_field, "Given name field", True, 5, False),
-            'familyName': self.UTILS.getElement(DOM.Contacts.family_name_field, "Family name field", True, 5, False),
-            'tel': self.UTILS.getElement(DOM.Contacts.phone_field, "Phone number field", True, 5, False),
-            'email': self.UTILS.getElement(DOM.Contacts.email_field, "Email field", True, 5, False),
-            'street': self.UTILS.getElement(DOM.Contacts.street_field, "Street field", True, 5, False),
-            'zip': self.UTILS.getElement(DOM.Contacts.zip_code_field, "Zip code field", True, 5, False),
-            'city': self.UTILS.getElement(DOM.Contacts.city_field, "City field", True, 5, False),
-            'country': self.UTILS.getElement(DOM.Contacts.country_field, "Country field", True, 5, False),
+            'givenName': self.UTILS.element.getElement(DOM.Contacts.given_name_field, "Given name field", True, 5, False),
+            'familyName': self.UTILS.element.getElement(DOM.Contacts.family_name_field, "Family name field", True, 5, False),
+            'tel': self.UTILS.element.getElement(DOM.Contacts.phone_field, "Phone number field", True, 5, False),
+            'email': self.UTILS.element.getElement(DOM.Contacts.email_field, "Email field", True, 5, False),
+            'street': self.UTILS.element.getElement(DOM.Contacts.street_field, "Street field", True, 5, False),
+            'zip': self.UTILS.element.getElement(DOM.Contacts.zip_code_field, "Zip code field", True, 5, False),
+            'city': self.UTILS.element.getElement(DOM.Contacts.city_field, "City field", True, 5, False),
+            'country': self.UTILS.element.getElement(DOM.Contacts.country_field, "Country field", True, 5, False),
             }
 
     def import_gmail_login(self, name, passwd, click_signin=True):
@@ -475,14 +476,14 @@ class Contacts(object):
         # <br>
         # Returns False if the login failed, else True.
         #
-        self.UTILS.logResult("info", "Logging in with '{}'/'{}'.".format(name, passwd))
+        self.UTILS.reporting.logResult("info", "Logging in with '{}'/'{}'.".format(name, passwd))
 
-        x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
+        x = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
 
         time.sleep(3)
 
-        x = self.UTILS.getElement(DOM.Contacts.import_contacts, "Import button")
+        x = self.UTILS.element.getElement(DOM.Contacts.import_contacts, "Import button")
         x.tap()
 
         time.sleep(3)
@@ -490,7 +491,7 @@ class Contacts(object):
         #
         # Press the Gmail button.
         #
-        x = self.UTILS.getElement(DOM.Contacts.gmail_button, "Gmail button")
+        x = self.UTILS.element.getElement(DOM.Contacts.gmail_button, "Gmail button")
         x.tap()
 
         #
@@ -506,10 +507,10 @@ class Contacts(object):
             #
             # Switch to the gmail login frame.
             #
-            self.UTILS.switchToFrame(*DOM.Contacts.gmail_frame)
+            self.UTILS.iframe.switchToFrame(*DOM.Contacts.gmail_frame)
 
             time.sleep(2)
-            self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
+            self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
 
             #
             # PERMISSIONS (sometimes appears).
@@ -524,7 +525,7 @@ class Contacts(object):
                     x.tap()
 
                     time.sleep(3)
-                    self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator",
+                    self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator",
                                                   True, False, False)
                     boolOK = True
                 except:
@@ -537,16 +538,16 @@ class Contacts(object):
             try:
                 self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_username, timeout=5)
 
-                x = self.UTILS.getElement(DOM.Contacts.gmail_username, "Username field")
+                x = self.UTILS.element.getElement(DOM.Contacts.gmail_username, "Username field")
                 x.send_keys(name)
             except:
                 pass
 
-            x = self.UTILS.getElement(DOM.Contacts.gmail_password, "Password field")
+            x = self.UTILS.element.getElement(DOM.Contacts.gmail_password, "Password field")
             x.send_keys(passwd)
 
             if click_signin:
-                x = self.UTILS.getElement(DOM.Contacts.gmail_signIn_button, "Sign In button")
+                x = self.UTILS.element.getElement(DOM.Contacts.gmail_signIn_button, "Sign In button")
                 x.tap()
 
                 #
@@ -555,8 +556,8 @@ class Contacts(object):
                 try:
                     self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_login_error_msg, timeout=2)
 
-                    x = self.UTILS.screenShotOnErr()
-                    self.UTILS.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
+                    x = self.UTILS.debug.screenShotOnErr()
+                    self.UTILS.reporting.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
                     return False
                 except:
                     pass
@@ -572,11 +573,11 @@ class Contacts(object):
         #
         txt = "<b>(NOTE: we've had some problems here - if this iframe switch fails " + \
               "then check at the 'root-level' iframe screenshot for an error message.)</b>"
-        self.UTILS.logResult("info", txt)
-        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.switchToFrame(*DOM.Contacts.gmail_import_frame, p_viaRootFrame=False)
+        self.UTILS.reporting.logResult("info", txt)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.gmail_import_frame, p_viaRootFrame=False)
 
-        self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
+        self.UTILS.element.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
         return True
 
     def import_hotmail_login(self, name, passwd, click_signin=True, just_signin=False):
@@ -589,12 +590,12 @@ class Contacts(object):
         # <br>
         # Returns False if the login failed, "ALLIMPORTED" if all your contacts are already imported else True.
         #
-        x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
+        x = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
 
         time.sleep(2)
 
-        x = self.UTILS.getElement(DOM.Contacts.import_contacts, "Import button")
+        x = self.UTILS.element.getElement(DOM.Contacts.import_contacts, "Import button")
         x.tap()
 
         time.sleep(2)
@@ -602,7 +603,7 @@ class Contacts(object):
         #
         # Press the Hotmail button.
         #
-        x = self.UTILS.getElement(DOM.Contacts.hotmail_button, "Hotmail button")
+        x = self.UTILS.element.getElement(DOM.Contacts.hotmail_button, "Hotmail button")
         x.tap()
 
         #
@@ -623,9 +624,9 @@ class Contacts(object):
         # Go to the hotmail import iframe.
         #
         time.sleep(2)
-        self.UTILS.checkMarionetteOK()
-        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.switchToFrame(*DOM.Contacts.hotmail_import_frame, p_viaRootFrame=False)
+        self.UTILS.general.checkMarionetteOK()
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_import_frame, p_viaRootFrame=False)
 
         #
         # Check to see if the 'all friends are imported' message is being
@@ -639,10 +640,10 @@ class Contacts(object):
         #
         # Wait for the hotmail contacts for this p_user to be displayed.
         #
-        self.UTILS.waitForElements(DOM.Contacts.import_conts_list, "Contacts list")
+        self.UTILS.element.waitForElements(DOM.Contacts.import_conts_list, "Contacts list")
 
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Contacts list in the Hotmail / Outlook app:", x)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Contacts list in the Hotmail / Outlook app:", x)
         return True
 
     def hotmail_login(self, name, passwd, click_signin):
@@ -660,9 +661,9 @@ class Contacts(object):
             #
             # Switch to the hotmail login frame.
             #
-            self.UTILS.switchToFrame(*DOM.Contacts.hotmail_frame)
+            self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_frame)
             time.sleep(2)
-            self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
+            self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
 
             #
             # Send the login information (sometimes the username isn't required, just the password).
@@ -678,11 +679,11 @@ class Contacts(object):
             except:
                 pass
 
-            x = self.UTILS.getElement(DOM.Contacts.hotmail_password, "Password field")
+            x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
             x.send_keys(passwd)
 
             if click_signin:
-                x = self.UTILS.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
+                x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
                 x.tap()
 
                 #
@@ -691,8 +692,8 @@ class Contacts(object):
                 try:
                     self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
 
-                    x = self.UTILS.screenShotOnErr()
-                    self.UTILS.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
+                    x = self.UTILS.debug.screenShotOnErr()
+                    self.UTILS.reporting.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
                     return False
                 except:
                     pass
@@ -714,11 +715,11 @@ class Contacts(object):
             self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_permission_accept, timeout=2)
             x = self.marionette.find_element(*DOM.Contacts.hotmail_permission_accept)
             x.tap()
-            x = self.UTILS.getElement(DOM.Contacts.hotmail_password, "Password field")
+            x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
             x.send_keys(passwd)
-            x = self.UTILS.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
+            x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
             x.tap()
-            self.UTILS.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
+            self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
         except:
             pass
 
@@ -729,14 +730,14 @@ class Contacts(object):
         all_imported = False
         try:
             # For some reason this is needed before the message can be seen!
-            x = self.UTILS.screenShotOnErr()
+            x = self.UTILS.debug.screenShotOnErr()
             self.parent.wait_for_element_displayed(*DOM.Contacts.import_all_imported_msg, timeout=2)
             all_imported = True
         except:
             pass
 
         if all_imported:
-            self.UTILS.logResult("info",
+            self.UTILS.reporting.logResult("info",
                                  "<b>NOTE:</b> Apparently all your friends are already imported - " + \
                                  "see the following screenshots for details", x)
 
@@ -746,22 +747,22 @@ class Contacts(object):
             #
             # Switch back to the contacts app frame and wait for the hotmail frame to go away.
             #
-            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
+            self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
             time.sleep(1)
 
             #
             # Close the settings screen.
             #
-            x = self.UTILS.getElement(DOM.Contacts.settings_done_button, "Contacts app settings 'done' button")
+            x = self.UTILS.element.getElement(DOM.Contacts.settings_done_button, "Contacts app settings 'done' button")
             x.tap()
 
             #
             # Record the contacts we currently have imported (in case this test fails and this is why).
             #
-            self.UTILS.waitForElements(DOM.Contacts.view_all_header, "All contacts main screen", True, 2)
+            self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "All contacts main screen", True, 2)
 
-            x = self.UTILS.screenShotOnErr()
-            self.UTILS.logResult("info",
+            x = self.UTILS.debug.screenShotOnErr()
+            self.UTILS.reporting.logResult("info",
                                  "<b>NOTE:</b> Apparently all your friends are imported from hotmail. " +\
                                  "These are the contacts you have in the Contacts app:", x)
             return True
@@ -772,7 +773,7 @@ class Contacts(object):
         #
         # Assumes you're already in the gmail import screen (after logging in etc...).
         #
-        self.UTILS.logResult("info", "Tapping the 'Select All' button ...")
+        self.UTILS.reporting.logResult("info", "Tapping the 'Select All' button ...")
         self.marionette.execute_script("document.getElementById('{}').click()".\
                                        format(DOM.Contacts.import_select_all[1]))
         time.sleep(1)
@@ -780,7 +781,7 @@ class Contacts(object):
         self.marionette.execute_script("document.getElementById('{}').click()".\
                                        format(DOM.Contacts.import_import_btn[1]))
         time.sleep(1)
-        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
     def import_toggle_select_contact(self, num):
         #
@@ -789,15 +790,15 @@ class Contacts(object):
         #
         el_num = num - 1
 
-        x = self.UTILS.getElements(DOM.Contacts.import_conts_list, "Contact list")
+        x = self.UTILS.element.getElements(DOM.Contacts.import_conts_list, "Contact list")
         cont_name = x[el_num].get_attribute("data-search")
 
-        self.UTILS.logResult("info", "Selecting contact {} ('{}') ...".format(num, cont_name))
+        self.UTILS.reporting.logResult("info", "Selecting contact {} ('{}') ...".format(num, cont_name))
 
         self.marionette.execute_script("document.getElementsByClassName('block-item')[{}].click()".format(el_num))
 
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Screenshot of current position", x)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screenshot of current position", x)
 
     def populate_contact_fields(self, contact):
         #
@@ -809,16 +810,16 @@ class Contacts(object):
         self.populate_fields(contact)
 
         # Press the 'done' button and wait for the 'all contacts' page to load.
-        done_button = self.UTILS.getElement(DOM.Contacts.done_button, "'Done' button")
+        done_button = self.UTILS.element.getElement(DOM.Contacts.done_button, "'Done' button")
         done_button.tap()
 
         # Wait for the 'view all contacts' header to be displayed.
-        self.UTILS.waitForElements(DOM.Contacts.view_all_header, "View all contacts header")
+        self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "View all contacts header")
 
         # Now check the contact's name is displayed here too.
         x = ("xpath", DOM.Contacts.view_all_contact_xpath.format(contact['name'].replace(" ", "")))
 
-        self.UTILS.waitForElements(x, "Contact '" + contact['name'] + "'")
+        self.UTILS.element.waitForElements(x, "Contact '" + contact['name'] + "'")
 
     def populate_fields(self, contact):
         #
@@ -847,9 +848,9 @@ class Contacts(object):
         #
         # Presses the Edit contact button when vieweing a contact.
         #
-        edit_cancel_button = self.UTILS.getElement(DOM.Contacts.edit_cancel_button, "Cancel edit button")
+        edit_cancel_button = self.UTILS.element.getElement(DOM.Contacts.edit_cancel_button, "Cancel edit button")
         edit_cancel_button.tap()
-        self.UTILS.waitForElements(DOM.Contacts.view_details_title, "'View contact details' title")
+        self.UTILS.element.waitForElements(DOM.Contacts.view_details_title, "'View contact details' title")
 
     def press_delete_contact_button(self):
         #
@@ -861,16 +862,16 @@ class Contacts(object):
                                        DOM.Contacts.delete_contact_btn[1] + \
                                        "').scrollIntoView();")
         self.marionette.execute_script("document.getElementById('settings-button').scrollIntoView();")
-        x = self.UTILS.getElement(DOM.Contacts.delete_contact_btn, "Delete contacts button", False)
+        x = self.UTILS.element.getElement(DOM.Contacts.delete_contact_btn, "Delete contacts button", False)
         x.tap()
 
     def press_edit_contact_button(self):
         #
         # Presses the Edit contact button when vieweing a contact.
         #
-        editBTN = self.UTILS.getElement(DOM.Contacts.edit_details_button, "Edit details button")
+        editBTN = self.UTILS.element.getElement(DOM.Contacts.edit_details_button, "Edit details button")
         editBTN.tap()
-        self.UTILS.waitForElements(DOM.Contacts.edit_contact_header, "'Edit contact' screen header")
+        self.UTILS.element.waitForElements(DOM.Contacts.edit_contact_header, "'Edit contact' screen header")
 
     def replace_str(self, field, value):
         #
@@ -893,17 +894,17 @@ class Contacts(object):
         #
         # Tap the search area.
         #
-        x = self.UTILS.getElement(DOM.Contacts.search_field, "Search field")
+        x = self.UTILS.element.getElement(DOM.Contacts.search_field, "Search field")
         x.tap()
 
-        self.UTILS.typeThis(DOM.Contacts.search_contact_input, "Search input", value,
+        self.UTILS.general.typeThis(DOM.Contacts.search_contact_input, "Search input", value,
                             p_no_keyboard=True, p_validate=False, p_clear=False, p_enter=False)
 
     def select_search_result(self, contact_name):
         #
         # Select the result of a search
         #
-        y = self.UTILS.getElements(DOM.Contacts.search_results_list, "Search results list")
+        y = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Search results list")
         for i in y:
             if contact_name in i.text:
                 i.tap()
@@ -913,7 +914,7 @@ class Contacts(object):
         #
         # Select the result of a search
         #
-        y = self.UTILS.getElements(DOM.Contacts.search_results_list, "Search results list", True, 10)
+        y = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Search results list", True, 10)
         for i in y:
             if contact_name in i.text:
                 i.tap()
@@ -923,13 +924,13 @@ class Contacts(object):
         # Then select the phone number, nothing if number is 0
         #
         self.marionette.switch_to_frame()
-        ok = self.UTILS.getElement(DOM.GLOBAL.conf_screen_ok_button, "OK button")
+        ok = self.UTILS.element.getElement(DOM.GLOBAL.conf_screen_ok_button, "OK button")
         if number == 0:
             ok.tap()
         else:
             xpath = ('xpath', '//span[contains(text(),"' + str(number) + '")]')
-            self.UTILS.logComment("Using xpath " + str(xpath))
-            num = self.UTILS.getElement(xpath, "Number to select")
+            self.UTILS.reporting.logComment("Using xpath " + str(xpath))
+            num = self.UTILS.element.getElement(xpath, "Number to select")
             num.tap()
 
     def start_create_new_contact(self):
@@ -940,7 +941,7 @@ class Contacts(object):
         #
         # First make sure we're in the right place.
         #
-        viewAllHeader = self.UTILS.getElement(DOM.Contacts.view_all_header, "'View all contacts' header", False)
+        viewAllHeader = self.UTILS.element.getElement(DOM.Contacts.view_all_header, "'View all contacts' header", False)
         if not viewAllHeader.is_displayed():
             #
             # Header isn't present, so we're not running yet.
@@ -950,15 +951,15 @@ class Contacts(object):
         #
         # Click Create new contact from the view all screen.
         #
-        self.UTILS.waitForElements(DOM.Contacts.view_all_header, "View all contacts header")
-        add_new_contact = self.UTILS.getElement(DOM.Contacts.add_contact_button, "'Add new contact' button")
+        self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "View all contacts header")
+        add_new_contact = self.UTILS.element.getElement(DOM.Contacts.add_contact_button, "'Add new contact' button")
 
         add_new_contact.tap()
 
         #
         # Enter details for new contact.
         #
-        self.UTILS.waitForElements(DOM.Contacts.add_contact_header, "Add contact header")
+        self.UTILS.element.waitForElements(DOM.Contacts.add_contact_header, "Add contact header")
 
     def switch_to_facebook(self):
         #
@@ -966,13 +967,13 @@ class Contacts(object):
         # finding the facebook app launched via contacts app.
         #
         time.sleep(2)
-        self.UTILS.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.switchToFrame(*DOM.Contacts.settings_fb_frame, p_viaRootFrame=False)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame, p_viaRootFrame=False)
 
         #
         # Wait for the fb page to start.
         #
-        self.UTILS.waitForElements(DOM.Facebook.friends_header, "Facebook friends header")
+        self.UTILS.element.waitForElements(DOM.Facebook.friends_header, "Facebook friends header")
         time.sleep(2)
 
     def tapLinkContact(self):
@@ -986,7 +987,7 @@ class Contacts(object):
         # 'invisible' one will cause 'getElements()' to fail the test).
         #
         time.sleep(2)
-        x = self.UTILS.getElements(DOM.Contacts.link_button, "Link contact button", False)
+        x = self.UTILS.element.getElements(DOM.Contacts.link_button, "Link contact button", False)
         for i in x:
             if i.is_displayed():
                 i.tap()
@@ -998,13 +999,13 @@ class Contacts(object):
         #
         # Tap the settings button.
         #
-        x = self.UTILS.getElement(DOM.Contacts.settings_button, "Settings button")
+        x = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
         x.tap()
 
-        self.UTILS.waitForElements(DOM.Contacts.settings_header, "Settings header")
+        self.UTILS.element.waitForElements(DOM.Contacts.settings_header, "Settings header")
 
     def view_test(self, desc, str1, str2):
-        self.UTILS.TEST(str1 in str2, "{} field contains '{}' (it was '{}').".format(desc, str1, str2))
+        self.UTILS.test.TEST(str1 in str2, "{} field contains '{}' (it was '{}').".format(desc, str1, str2))
 
     def verify_field_contents(self, contact, view=False):
         #
@@ -1040,7 +1041,7 @@ class Contacts(object):
         #
         # Verify that the contact's image is displayed.
         #
-        x = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "Contact list", False)
+        x = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "Contact list", False)
         for i in x:
             try:
                 i.find_element("xpath", "//p[@data-order='{}']".format(contact_name.replace(" ", "")))
@@ -1052,11 +1053,11 @@ class Contacts(object):
             boolOK = True
             try:
                 x = i.find_element("xpath", "//img")
-                self.UTILS.TEST("blob" in x.get_attribute("src"), "Contact image present in 'all contacts' screen.")
+                self.UTILS.test.TEST("blob" in x.get_attribute("src"), "Contact image present in 'all contacts' screen.")
             except:
                 boolOK = False
 
-            self.UTILS.TEST(boolOK, "An image is present for this contact in all contacts screen.")
+            self.UTILS.test.TEST(boolOK, "An image is present for this contact in all contacts screen.")
 
     def verify_linked(self, contact_name, fb_email):
         #
@@ -1068,8 +1069,8 @@ class Contacts(object):
         #
         # Check that our contact is now listed as a facebook contact (icon by the name in 'all contacts' screen).
         #
-        x = self.UTILS.getElements(DOM.Contacts.social_network_contacts, "Social network contacts")
-        self.UTILS.TEST(len(x) > 0, "Contact is listed as a facebook contact after linking.")
+        x = self.UTILS.element.getElements(DOM.Contacts.social_network_contacts, "Social network contacts")
+        self.UTILS.test.TEST(len(x) > 0, "Contact is listed as a facebook contact after linking.")
 
         #
         # View the details for this contact.
@@ -1085,7 +1086,7 @@ class Contacts(object):
         wall_post = False
         linked_email = False
         unlink = False
-        x = self.UTILS.getElements(("tag name", "button"), "All buttons on this page")
+        x = self.UTILS.element.getElements(("tag name", "button"), "All buttons on this page")
         for i in x:
             if i.text == "View Facebook profile":
                 view_fb_profile = True
@@ -1096,11 +1097,11 @@ class Contacts(object):
             if i.text == "Unlink contact":
                 unlink = True
 
-        self.UTILS.TEST(view_fb_profile, "'View Facebook profile' button is displayed after "\
+        self.UTILS.test.TEST(view_fb_profile, "'View Facebook profile' button is displayed after "\
                         "contact linked to fb contact.")
-        self.UTILS.TEST(wall_post, "'Wall post' button is displayed after contact linked to fb contact.")
-        self.UTILS.TEST(unlink, "'Unlink contact' button is displayed after contact linked to fb contact.")
-        self.UTILS.TEST(linked_email, "Linked facebook email address is displayed after contact linked to fb contact.")
+        self.UTILS.test.TEST(wall_post, "'Wall post' button is displayed after contact linked to fb contact.")
+        self.UTILS.test.TEST(unlink, "'Unlink contact' button is displayed after contact linked to fb contact.")
+        self.UTILS.test.TEST(linked_email, "Linked facebook email address is displayed after contact linked to fb contact.")
 
     def view_contact(self, contact_name, header_check=True):
         #
@@ -1115,23 +1116,23 @@ class Contacts(object):
         # Because this can be called from several applications (contacts, dialer, sms ...), finding
         # the right iframe can be tricky, which is why "self.find_frame()" is here.
         #
-        self._orig = self.UTILS.currentIframe()
+        self._orig = self.UTILS.iframe.currentIframe()
 
         time.sleep(1)
-        self.UTILS.checkMarionetteOK()
+        self.UTILS.general.checkMarionetteOK()
 
         self.find_frame()
 
-        y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
+        y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
 
-        self.UTILS.logResult("info", "{} contacts listed.".format(len(y)))
+        self.UTILS.reporting.logResult("info", "{} contacts listed.".format(len(y)))
         ymax = len(y)
         found = False
         for i in range(ymax):
-            self.UTILS.logResult("info", "'{}'".format(y[i].text))
+            self.UTILS.reporting.logResult("info", "'{}'".format(y[i].text))
             if contact_name.lower() in y[i].text.lower():
                 found = True
-                self.UTILS.logResult("info", "Contact '{}' found in all contacts - selecting this contact ...".\
+                self.UTILS.reporting.logResult("info", "Contact '{}' found in all contacts - selecting this contact ...".\
                                      format(contact_name))
                 self.marionette.execute_script("document.getElementsByClassName('contact-item')[{}].click()".format(i))
                 time.sleep(2)
@@ -1141,12 +1142,12 @@ class Contacts(object):
             # Marionette seems to crash here occasionally, so make sure we're okay before
             # the next loop!
             #
-            self.UTILS.checkMarionetteOK()
-            self.UTILS.switchToFrame(*DOM.Contacts.frame_locator, p_quitOnError=False)
-            y = self.UTILS.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False)
+            self.UTILS.general.checkMarionetteOK()
+            self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator, p_quitOnError=False)
+            y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False)
 
         if not found:
-            self.UTILS.logResult("info", "FYI: Contact '{}' was <b>not</b> found in the contacts list.".\
+            self.UTILS.reporting.logResult("info", "FYI: Contact '{}' was <b>not</b> found in the contacts list.".\
                                  format(contact_name))
             return
 
@@ -1154,13 +1155,13 @@ class Contacts(object):
         # TEST: Correct contact name is in the page header.
         #
         if header_check:
-            self.UTILS.headerCheck(contact_name)
+            self.UTILS.element.headerCheck(contact_name)
 
         x = self.find_frame()
 
         if x == "Dialer":
-            x = self.UTILS.getElement(DOM.Contacts.view_details_title, "View details title")
-            self.UTILS.TEST(contact_name in x.text, "Name is in the title")
+            x = self.UTILS.element.getElement(DOM.Contacts.view_details_title, "View details title")
+            self.UTILS.test.TEST(contact_name in x.text, "Name is in the title")
 
         time.sleep(2)
 
@@ -1174,7 +1175,7 @@ class Contacts(object):
         if x:
             x = self.try_frame(DOM.Dialer.call_log_contact_name_iframe)
             if x:
-                self.UTILS.logResult("info", "<i>Switched to dialer -> contacts iframe.)</i>")
+                self.UTILS.reporting.logResult("info", "<i>Switched to dialer -> contacts iframe.)</i>")
                 return "Dialer"
 
         self.marionette.switch_to_frame()

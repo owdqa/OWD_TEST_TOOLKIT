@@ -18,7 +18,7 @@ class Calendar(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def moveDayViewBy(self, num):
@@ -26,7 +26,7 @@ class Calendar(object):
         # Switches to week view, then moves 'p_num' weeks in the future or past (if the p_num is
         # positive or negative) relative to today.
         #
-        self.UTILS.logResult("info", "<b>Adjusting day view by {} screens ...</b>".format(num))
+        self.UTILS.reporting.logResult("info", "<b>Adjusting day view by {} screens ...</b>".format(num))
         self.setView("day")
         self.setView("today")
 
@@ -73,14 +73,14 @@ class Calendar(object):
         # Check this is the expected day.
         #
         _new_epoch = int(time.time()) + (num * 24 * 60 * 60)
-        _new_now = self.UTILS.getDateTimeFromEpochSecs(_new_epoch)
+        _new_now = self.UTILS.date_and_time.getDateTimeFromEpochSecs(_new_epoch)
         _expected_str = "{} {}, {}".format(_new_now.month_name[:3], _new_now.mday, _new_now.day_name)
 
-        x = self.UTILS.getElement(DOM.Calendar.current_view_header, "Current view header")
-        self.UTILS.TEST(x.text == _expected_str, "Header is '<b>%s</b>' (it was '%s')." % (_expected_str, x.text))
+        x = self.UTILS.element.getElement(DOM.Calendar.current_view_header, "Current view header")
+        self.UTILS.test.TEST(x.text == _expected_str, "Header is '<b>%s</b>' (it was '%s')." % (_expected_str, x.text))
 
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Day view screen after moving {} pages: ".format(num), x)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Day view screen after moving {} pages: ".format(num), x)
 
     def getEventPreview(self, p_view, p_hour24, p_title, p_location=False):
         #
@@ -112,7 +112,7 @@ class Calendar(object):
         #
         # Start by getting the parent element objects, which could contain event details.
         #
-        event_objects = self.UTILS.getElements(('xpath', viewStr[0]), "'" + p_view + "' event details list",
+        event_objects = self.UTILS.element.getElements(('xpath', viewStr[0]), "'" + p_view + "' event details list",
                                                False, 20, False)
         if not event_objects:
             return False
@@ -138,7 +138,7 @@ class Calendar(object):
         #   location,
         #   notes
         #
-        x = self.UTILS.getElement(DOM.Calendar.add_event_btn, "Add event button")
+        x = self.UTILS.element.getElement(DOM.Calendar.add_event_btn, "Add event button")
         x.tap()
 
         title = ("xpath", "//input[@name='title']")
@@ -146,13 +146,13 @@ class Calendar(object):
         # allday checkbox, True False (use tap())
         allday = ("xpath", "//li[@class='allday']")
 
-        x = self.UTILS.getElement(title, "Title", True, 10)
+        x = self.UTILS.element.getElement(title, "Title", True, 10)
         x.send_keys("hello title")
 
-        x = self.UTILS.getElement(where, "Where")
+        x = self.UTILS.element.getElement(where, "Where")
         x.send_keys("hello where")
 
-        x = self.UTILS.getElement(allday, "All day")
+        x = self.UTILS.element.getElement(allday, "All day")
         x.tap()
 
         self.marionette.execute_script("document.getElementById('start-date-locale').click()")
@@ -172,8 +172,8 @@ class Calendar(object):
         self.actions = Actions(self.marionette)
         now_secs = time.time()
         now_diff = int(now_secs) + (86400 * numDays)
-        now_today = self.UTILS.getDateTimeFromEpochSecs(now_secs)
-        new_today = self.UTILS.getDateTimeFromEpochSecs(now_diff)
+        now_today = self.UTILS.date_and_time.getDateTimeFromEpochSecs(now_secs)
+        new_today = self.UTILS.date_and_time.getDateTimeFromEpochSecs(now_diff)
 
         #
         # Switch to month view and tap this day, then switch back to our view.
@@ -183,7 +183,7 @@ class Calendar(object):
             self.moveMonthViewBy(x)
 
         el_id_str = "d-%s-%s-%s" % (new_today.year, new_today.mon - 1, new_today.mday)
-        x = self.UTILS.getElement(("xpath", "//li[@data-date='{}']".format(el_id_str)),
+        x = self.UTILS.element.getElement(("xpath", "//li[@data-date='{}']".format(el_id_str)),
                                   "Cell for day {}/{}/{}".format(new_today.mday, new_today.mon, new_today.year))
         x.tap()
         self.setView(viewType.lower())
@@ -194,7 +194,7 @@ class Calendar(object):
         # Switches to month view, then moves 'num' months in the future or past (if the num is
         # positive or negative) relative to today.
         #
-        self.UTILS.logResult("info", "<b>Adjusting month view by {} months ...</b>".format(num))
+        self.UTILS.reporting.logResult("info", "<b>Adjusting month view by {} months ...</b>".format(num))
         self.setView("month")
         self.setView("today")
 
@@ -250,9 +250,9 @@ class Calendar(object):
                         "July", "August", "September", "October", "November", "December"]
 
         expect = "{} {}".format(month_names[month - 1], year)
-        actual = self.UTILS.getElement(DOM.Calendar.current_view_header, "Header").text
+        actual = self.UTILS.element.getElement(DOM.Calendar.current_view_header, "Header").text
 
-        self.UTILS.TEST(expect.lower() in actual.lower(), "Expecting header to contain '{}' (received '{}')"
+        self.UTILS.test.TEST(expect.lower() in actual.lower(), "Expecting header to contain '{}' (received '{}')"
                         .format(expect, actual))
 
     def moveWeekViewBy(self, num):
@@ -260,7 +260,7 @@ class Calendar(object):
         # Switches to week view, then moves 'num' weeks in the future or past (if the num is
         # positive or negative) relative to today.
         #
-        self.UTILS.logResult("info", "<b>Adjusting week view by {} screens ...</b>".format(num))
+        self.UTILS.reporting.logResult("info", "<b>Adjusting week view by {} screens ...</b>".format(num))
         self.setView("week")
         self.setView("today")
 
@@ -287,10 +287,10 @@ class Calendar(object):
         #
         days_offset = 0
         now_epoch = int(time.time())
-        now = self.UTILS.getDateTimeFromEpochSecs(now_epoch)
+        now = self.UTILS.date_and_time.getDateTimeFromEpochSecs(now_epoch)
         now_str = "{} {}".format(now.day_name[:3].upper(), now.mday)
 
-        displayed_days = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+        displayed_days = self.UTILS.element.getElements(DOM.Calendar.wview_active_days, "Active days")
         startpos = 0
         for i in range(len(displayed_days)):
             x = displayed_days[i].text
@@ -316,7 +316,7 @@ class Calendar(object):
             #
             # Get the count of days we're adjusting (so we can check later).
             #
-            displayed_days = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+            displayed_days = self.UTILS.element.getElements(DOM.Calendar.wview_active_days, "Active days")
             days_offset = days_offset + len(displayed_days)
 
         time.sleep(0.3)
@@ -332,11 +332,11 @@ class Calendar(object):
         else:
             new_epoch = now_epoch + (days_offset * 24 * 60 * 60)
 
-        new_now = self.UTILS.getDateTimeFromEpochSecs(new_epoch)
+        new_now = self.UTILS.date_and_time.getDateTimeFromEpochSecs(new_epoch)
 
         new_now_str = "{} {}".format(new_now.day_name[:3].upper(), new_now.mday)
 
-        x = self.UTILS.getElements(DOM.Calendar.wview_active_days, "Active days")
+        x = self.UTILS.element.getElements(DOM.Calendar.wview_active_days, "Active days")
         boolOK = False
         for i in range(len(x)):
             x = displayed_days[i].text
@@ -345,21 +345,21 @@ class Calendar(object):
                     boolOK = True
                     break
 
-        self.UTILS.TEST(boolOK, "The column for date '<b>{}</b>' displayed.".format(new_now_str))
+        self.UTILS.test.TEST(boolOK, "The column for date '<b>{}</b>' displayed.".format(new_now_str))
 
-        x = self.UTILS.getElement(DOM.Calendar.current_view_header, "Current view header")
-        self.UTILS.TEST(new_now.month_name in x.text, "'<b>{}</b>' is in header ('{}')."
+        x = self.UTILS.element.getElement(DOM.Calendar.current_view_header, "Current view header")
+        self.UTILS.test.TEST(new_now.month_name in x.text, "'<b>{}</b>' is in header ('{}')."
                         .format(new_now.month_name, x.text))
-        self.UTILS.TEST(str(new_now.year) in x.text, "'<b>{}</b>' is in header ('{}').".format(new_now.year, x.text))
+        self.UTILS.test.TEST(str(new_now.year) in x.text, "'<b>{}</b>' is in header ('{}').".format(new_now.year, x.text))
 
-        x = self.UTILS.screenShotOnErr()
-        self.UTILS.logResult("info", "Week view screen after moving {} pages: ".format(num), x)
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Week view screen after moving {} pages: ".format(num), x)
 
     def setView(self, typ):
         #
         # Set to view typ (today / day / week / month).
         #
-        x = self.UTILS.getElement((DOM.Calendar.view_type[0], DOM.Calendar.view_type[1] % typ.lower()),
+        x = self.UTILS.element.getElement((DOM.Calendar.view_type[0], DOM.Calendar.view_type[1] % typ.lower()),
                                   "'" + typ + "' view type selector")
         x.tap()
 
@@ -368,6 +368,6 @@ class Calendar(object):
                          "week": DOM.Calendar.wview_container,
                          "day": DOM.Calendar.dview_container}
 
-            self.UTILS.waitForElements(viewTypes[typ], "Container for '{}' view".format(typ))
+            self.UTILS.element.waitForElements(viewTypes[typ], "Container for '{}' view".format(typ))
         else:
             time.sleep(0.5)

@@ -16,14 +16,14 @@ class Video(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def checkThumbDuration(self, thumb_num, length_str_mmss, error_margin_ss):
         #
         # Check the duration of a video thumbnail.
         #
-        durations = self.UTILS.getElements(DOM.Video.thumb_durations,
+        durations = self.UTILS.element.getElements(DOM.Video.thumb_durations,
                                            "Thumbnail durations", True, 20, False)
 
         if not durations:
@@ -48,12 +48,12 @@ class Video(object):
         if margin_time >= diff_time:
             in_errorMargin = True
 
-        self.UTILS.TEST(in_errorMargin,
+        self.UTILS.test.TEST(in_errorMargin,
                         "Expected video length on thumbnail to be {}, +- {} seconds (it was {} seconds).".\
                         format(length_str_mmss, error_margin_ss, myDur))
 
     def checkVideoLength(self, vid_num, from_ss, to_ss):
-        self.UTILS.logResult("info", "CANNOT USE checkVideoLength() AT THIS TIME!")
+        self.UTILS.reporting.logResult("info", "CANNOT USE checkVideoLength() AT THIS TIME!")
         return
 
         #
@@ -65,19 +65,19 @@ class Video(object):
         #
         self.startVideo(vid_num)
         time.sleep(1)
-        x = self.UTILS.getElement(DOM.Video.current_video_duration,
+        x = self.UTILS.element.getElement(DOM.Video.current_video_duration,
                                   "Duration of current video",
                                   False, 3, False)
-        self.UTILS.logResult("info", "Video duration during playback was " + x.text + ".")
+        self.UTILS.reporting.logResult("info", "Video duration during playback was " + x.text + ".")
 
         elapsed_time = float(x.text[-2:])
 
         #
         # Check the elapsed time.
         #
-        self.UTILS.TEST((elapsed_time >= from_ss), "Video is not shorter than expected (played for {:.2f} seconds).".\
+        self.UTILS.test.TEST((elapsed_time >= from_ss), "Video is not shorter than expected (played for {:.2f} seconds).".\
                         format(elapsed_time))
-        self.UTILS.TEST((elapsed_time <= to_ss), "Video is not longer than expected (played for {:.2f} seconds).".\
+        self.UTILS.test.TEST((elapsed_time <= to_ss), "Video is not longer than expected (played for {:.2f} seconds).".\
                         format(elapsed_time))
 
     def clickOnVideoMMS(self, num):
@@ -90,16 +90,16 @@ class Video(object):
         #
         time.sleep(2)
 
-        all_videos = self.UTILS.getElements(DOM.Video.thumbnails, "Videos")
+        all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails, "Videos")
         my_video = all_videos[num]
         my_video.tap()
 
         time.sleep(1)
 
-        doneButton = self.UTILS.getElement(DOM.Video.done_button, "Done Button")
+        doneButton = self.UTILS.element.getElement(DOM.Video.done_button, "Done Button")
         doneButton.tap()
 
-        self.UTILS.switchToFrame(*DOM.Messages.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
     def startVideo(self, num):
         #
@@ -109,11 +109,11 @@ class Video(object):
         #
         # Get the list of video items and click the 'num' one.
         #
-        all_videos = self.UTILS.getElements(DOM.Video.thumbnails, "Videos")
+        all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails, "Videos")
         my_video = all_videos[num]
         my_video.tap()
 
         #
         # Wait for the video to start playing before returning.
         #
-        self.UTILS.waitForElements(DOM.Video.video_loaded, "Loaded video", True, 20, False)
+        self.UTILS.element.waitForElements(DOM.Video.video_loaded, "Loaded video", True, 20, False)

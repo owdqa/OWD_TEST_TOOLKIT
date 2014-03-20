@@ -4,6 +4,10 @@ from OWDTestToolkit import DOM
 
 class home(object):
 
+    def __init__(self, parent):
+        self.parent = parent
+        self.marionette = parent.marionette
+
     def goHome(self):
         #
         # Return to the home screen.
@@ -14,9 +18,9 @@ class home(object):
         self.touchHomeButton()
         self.touchHomeButton()
 
-        self.apps.kill_all()
+        self.parent.apps.kill_all()
 
-        self.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
+        self.parent.iframe.switchToFrame(*DOM.Home.frame_locator, p_quitOnError=False)
 
         time.sleep(1)
 
@@ -35,7 +39,7 @@ class home(object):
         self.scrollHomescreenRight()
         time.sleep(0.5)
 
-        x = self.getElements(DOM.Home.app_icon_pages, "Icon pages on homescreen")
+        x = self.parent.element.getElements(DOM.Home.app_icon_pages, "Icon pages on homescreen")
         _first_icon = x[0].find_element("xpath", "./ol/li[@class='icon']")
         self.actions.press(_first_icon).wait(2).release().perform()
 

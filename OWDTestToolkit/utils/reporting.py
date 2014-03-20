@@ -4,6 +4,16 @@ import datetime
 
 class reporting(object):
 
+    def __init__(self, parent, result, comment):
+        self.parent = parent
+        self._resultArray = result
+        self._commentArray = comment
+        self.passed = parent.passed
+        self.failed = parent.failed
+        self.det_fnam = parent.det_fnam
+        self.sum_fnam = parent.sum_fnam
+        self.testNum = parent.testNum
+
     def logComment(self, p_str):
         #
         # Add a comment to the comment array.
@@ -29,7 +39,7 @@ class reporting(object):
             #
             # Set up timestamp and mark this as pass or fail.
             #
-            time_now = time.time() - self.last_timestamp
+            time_now = time.time() - self.parent.last_timestamp
             time_now = round(time_now, 0)
             time_now = "[" + str(datetime.timedelta(seconds=time_now)) + "]"
 
@@ -92,9 +102,9 @@ class reporting(object):
         # Create the final result file from the result and comment arrays
         # (run only once, at the end of each test case).
         #
-        self.clearAllStatusBarNotifs(p_silent=True)
-        self.checkMarionetteOK()
-        self.data_layer.kill_active_call()
+        self.parent.statusbar.clearAllStatusBarNotifs(p_silent=True)
+        self.parent.general.checkMarionetteOK()
+        self.parent.data_layer.kill_active_call()
 
         #
         # Create output files (summary, which is displayed and
@@ -107,7 +117,7 @@ class reporting(object):
         fail_str = "FAILED"
         pass_span = "<span style='color:#00aa00'>"
         fail_span = "<span style='color:#ff0000'>"
-        test_time = time.time() - self.start_time
+        test_time = time.time() - self.parent.start_time
         test_time = round(test_time, 0)
         test_time = str(datetime.timedelta(seconds=test_time))
 
