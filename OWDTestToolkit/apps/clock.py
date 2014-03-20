@@ -62,7 +62,7 @@ class Clock(object):
 
         retries = 40
         while retries >= 0:
-            if self.UTILS.iframe.switchToFrame(*DOM.Clock.alarm_alert_iframe, p_quitOnError=False):
+            if self.UTILS.iframe.switchToFrame(*DOM.Clock.alarm_alert_iframe, quit_on_error=False):
                 break
 
             time.sleep(2)

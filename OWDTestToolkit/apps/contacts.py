@@ -575,7 +575,7 @@ class Contacts(object):
               "then check at the 'root-level' iframe screenshot for an error message.)</b>"
         self.UTILS.reporting.logResult("info", txt)
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.gmail_import_frame, p_viaRootFrame=False)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.gmail_import_frame, via_root_frame=False)
 
         self.UTILS.element.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
         return True
@@ -626,7 +626,7 @@ class Contacts(object):
         time.sleep(2)
         self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_import_frame, p_viaRootFrame=False)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_import_frame, via_root_frame=False)
 
         #
         # Check to see if the 'all friends are imported' message is being
@@ -968,7 +968,7 @@ class Contacts(object):
         #
         time.sleep(2)
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame, p_viaRootFrame=False)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame, via_root_frame=False)
 
         #
         # Wait for the fb page to start.
@@ -1016,7 +1016,7 @@ class Contacts(object):
         # one in ./example/tests/mock_data/contacts.py.<br>
         # <b>view</b> selects whether this is the 'view contact' screen or not (defaults to False -> edit screen).
         #
-        contFields = self.getContactFields(view)
+        contFields = self.get_contact_fields(view)
 
         if view:
             self.view_test("Name", contact['name'], contFields['name'].text)
@@ -1028,14 +1028,14 @@ class Contacts(object):
             self.view_test("Country", contact['adr']['countryName'], contFields['address'].text)
 
         else:
-            self.checkMatch(contFields['givenName'], contact['givenName'], "Given name")
-            self.checkMatch(contFields['familyName'], contact['familyName'], "Family name")
-            self.checkMatch(contFields['tel'], contact['tel']['value'], "Telephone")
-            self.checkMatch(contFields['email'], contact['email']['value'], "Email")
-            self.checkMatch(contFields['street'], contact['adr']['streetAddress'], "Street")
-            self.checkMatch(contFields['zip'], contact['adr']['postalCode'], "Zip")
-            self.checkMatch(contFields['city'], contact['adr']['locality'], "City")
-            self.checkMatch(contFields['country'], contact['adr']['countryName'], "Country")
+            self.check_match(contFields['givenName'], contact['givenName'], "Given name")
+            self.check_match(contFields['familyName'], contact['familyName'], "Family name")
+            self.check_match(contFields['tel'], contact['tel']['value'], "Telephone")
+            self.check_match(contFields['email'], contact['email']['value'], "Email")
+            self.check_match(contFields['street'], contact['adr']['streetAddress'], "Street")
+            self.check_match(contFields['zip'], contact['adr']['postalCode'], "Zip")
+            self.check_match(contFields['city'], contact['adr']['locality'], "City")
+            self.check_match(contFields['country'], contact['adr']['countryName'], "Country")
 
     def verify_image_in_all_contacts(self, contact_name):
         #
@@ -1143,7 +1143,7 @@ class Contacts(object):
             # the next loop!
             #
             self.UTILS.general.checkMarionetteOK()
-            self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator, p_quitOnError=False)
+            self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator, quit_on_error=False)
             y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False)
 
         if not found:

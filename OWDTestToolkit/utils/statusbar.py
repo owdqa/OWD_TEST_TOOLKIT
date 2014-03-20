@@ -117,7 +117,7 @@ class statusbar(object):
         #
         # Close the statusbar and return to the original frame (if required).
         #
-        self.touchHomeButton()
+        self.parent.home.touchHomeButton()
         if orig_iframe:
             self.parent.iframe.switchToFrame("src", orig_iframe)
 

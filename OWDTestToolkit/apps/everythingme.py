@@ -362,7 +362,7 @@ class EverythingMe(object):
             # Remove it.
             #
             self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(group_specified))
-            y = self.UTILS.element.getElement(("xpath", DOM.Home.app_delete_icon_xpath % group_specified),
+            y = self.UTILS.element.getElement(("xpath", DOM.Home.app_delete_icon_xpath.format(group_specified)),
                                       "Delete button", False, 5, True)
             y.tap()
 

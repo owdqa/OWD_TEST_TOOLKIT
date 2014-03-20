@@ -20,7 +20,8 @@ class Messages(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
+                                              self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def addNumbersInToField(self, nums):
@@ -36,9 +37,9 @@ class Messages(object):
 
         for i in nums:
             x = self.UTILS.debug.screenShotOnErr()
-            
+
             #
-            # Even though we don't use the keyboard for putting the number in, 
+            # Even though we don't use the keyboard for putting the number in,
             # we need it for the ENTER button (which allows us to put more than
             # one number in).
             #
@@ -49,8 +50,8 @@ class Messages(object):
                 self.UTILS.reporting.logResult("info", "Checking the keyboard appears when I tap the 'To' field ...")
                 x = self.UTILS.element.getElement(DOM.Messages.target_numbers_empty, "Target number field")
                 x.tap()
-    
-                boolKBD=False
+
+                boolKBD = False
                 self.marionette.switch_to_frame()
 
                 if n < 1:
@@ -58,12 +59,12 @@ class Messages(object):
                     try:
                         #
                         # A 'silent' check to see if the keyboard iframe appears.
-                        elDef = ("xpath", 
-                                "//iframe[contains(@{}, '{}')]".format(DOM.Keyboard.frame_locator[0],DOM.Keyboard.frame_locator[1]))
+                        elDef = ("xpath",
+                                "//iframe[contains(@{}, '{}')]".format(DOM.Keyboard.frame_locator[0], DOM.Keyboard.frame_locator[1]))
                         self.parent.wait_for_element_displayed(*elDef, timeout=2)
                         boolKBD = True
                     except:
-                        boolKBD=False
+                        boolKBD = False
                     
                     self.UTILS.test.TEST(boolKBD, "Keyboard is displayed when 'To' field is clicked.")
     
@@ -101,7 +102,7 @@ class Messages(object):
         # Press options button
         #
         self.UTILS.reporting.logResult("info", "Cliking on messages options button")
-        x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn, 
+        x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
             "Messages option button is displayed")
         x.tap()
 
@@ -109,7 +110,7 @@ class Messages(object):
         # Press add subject button
         #
         self.UTILS.reporting.logResult("info", "Cliking on add subject button")
-        x = self.UTILS.element.getElement(DOM.Messages.addsubject_btn_msg_opt, 
+        x = self.UTILS.element.getElement(DOM.Messages.addsubject_btn_msg_opt,
             "add subject option button is displayed")
         x.tap()
 
@@ -130,11 +131,11 @@ class Messages(object):
         # while in 'airplane mode' (also removes
         # the message so you can continue).
         #
-        x = self.UTILS.element.getElement(DOM.Messages.airplane_warning_message, 
+        x = self.UTILS.element.getElement(DOM.Messages.airplane_warning_message,
                                     "Airplane mode warning message",
                                     True, 5, False)
         if x:
-            self.UTILS.reporting.logResult("info", 
+            self.UTILS.reporting.logResult("info",
                                  "Warning message title detected = '" + x.text + "'.")
             
             x = self.UTILS.element.getElement(DOM.Messages.airplane_warning_ok, "OK button")
@@ -166,7 +167,7 @@ class Messages(object):
         # Get the thread for which we want to check the icon existence
         #
         selector = ("xpath", DOM.Messages.thread_selector_xpath.format(thread_name))
-        elem = self.UTILS.element.getElement(selector,"Message thread for " + thread_name)
+        elem = self.UTILS.element.getElement(selector, "Message thread for " + thread_name)
 
         #
         # But, in order to make sure we're getting the specific frame, what we trully
@@ -199,7 +200,7 @@ class Messages(object):
                 boolOK = True
                 break
         
-        self.UTILS.test.TEST(boolOK, 
+        self.UTILS.test.TEST(boolOK,
             "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
         return boolOK
         
@@ -220,7 +221,7 @@ class Messages(object):
         #
         # Click new sms in the home page status bar notificaiton.
         #
-        self.UTILS.reporting.logResult("info", 
+        self.UTILS.reporting.logResult("info",
             "Clicking statusbar notification of new SMS from " + num + " ...")
 
         #
@@ -242,7 +243,7 @@ class Messages(object):
         #
         # Wait for the message thread to finish loading.
         #
-        self.UTILS.element.waitForElements(("xpath", "//h1[text()='" + num + "']"), 
+        self.UTILS.element.waitForElements(("xpath", "//h1[text()='" + num + "']"),
                                    "SMS thread header for " + str(num), True, 20)
         self.waitForReceivedMsgInThisThread()
 
@@ -387,7 +388,7 @@ class Messages(object):
         #
         # The header should now say how many receipients.
         #
-        time.sleep(2) # give the header time to change.
+        time.sleep(2)  # give the header time to change.
         
         num_recs = len(nums)
         search_str = " recipient" if num_recs == 1 else " recipients"
@@ -447,12 +448,12 @@ class Messages(object):
             self.UTILS.reporting.logResult("info", "Deleting message threads ...")
  
             x = self.threadEditModeON()
-            x = self.UTILS.element.getElement(DOM.Messages.check_all_threads_btn, 
+            x = self.UTILS.element.getElement(DOM.Messages.check_all_threads_btn,
                                         "Select all button")
             x.tap()
              
             self.deleteSelectedThreads()
-            self.UTILS.element.waitForElements(DOM.Messages.no_threads_message, 
+            self.UTILS.element.waitForElements(DOM.Messages.no_threads_message,
                                        "No message threads notification", True, 60)
 
     def deleteMessagesInThisThread(self, msg_array=False):
@@ -469,19 +470,19 @@ class Messages(object):
             #
             # Go into messages Settings..
             #
-            x= self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
+            x = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
             x.tap()
 
             #
             # Go into message edit mode..
             #
-            x= self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Edit button")
+            x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Edit button")
             x.tap()
 
             #
             # Press select all button.
             #
-            x = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn, 
+            x = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn,
                                         "'Select all' button")
             x.tap()
             
@@ -491,19 +492,19 @@ class Messages(object):
         #
         # Delete the currently selected messages in this thread.
         #
-        x= self.UTILS.element.getElement(DOM.Messages.edit_msgs_delete_btn, 
-                                    "Delete message" )
+        x = self.UTILS.element.getElement(DOM.Messages.edit_msgs_delete_btn,
+                                    "Delete message")
         x.tap()
 
         #
         # Press OK button to confirm. OK button is displayed on top_level frame.
         #
         self.marionette.switch_to_frame()
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, 
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn,
                                     "OK button in question dialog")
         x.tap()
 
-        #self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
+        # self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
         time.sleep(2)
 
     def deleteSelectedThreads(self):
@@ -511,13 +512,13 @@ class Messages(object):
         # Delete the currently selected message threads.
         #
         orig_iframe = self.UTILS.iframe.currentIframe()
-        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button, 
+        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button,
                                     "Delete threads button")
         x.tap()
         
         time.sleep(2)
         self.marionette.switch_to_frame()
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, 
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn,
                                     "OK button in question dialog")
         x.tap()
 
@@ -566,13 +567,13 @@ class Messages(object):
         #
         # Go into messages Settings..
         #
-        x= self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button" )
+        x = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
         x.tap()
 
         #
         # Go into message edit mode..
         #
-        x= self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Edit button")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Edit button")
         x.tap()
         
         #
@@ -598,14 +599,14 @@ class Messages(object):
         #
         # Go into edit mode..
         #
-        x= self.threadEditModeON()
+        x = self.threadEditModeON()
         
         #
         # Check the messages (for some reason, just doing x[i].click() doesn't
         # work for element zero, so I had to do this 'longhanded' version!).
         #
         for i in target_array:
-            x = self.UTILS.element.getElement(("xpath", 
+            x = self.UTILS.element.getElement(("xpath",
                                        DOM.Messages.thread_selector_xpath.format(i)),
                                       "Thread checkbox for '" + i + "'")
             x.click()
@@ -615,21 +616,21 @@ class Messages(object):
         # Create and send a message (assumes we are in a new 'create new message'
         # screen with the destination number filled in already).
         #
-        time.sleep(1) # Trying to remove an intermittent issue.
-        self.UTILS.general.typeThis(DOM.Messages.input_message_area, 
+        time.sleep(1)  # Trying to remove an intermittent issue.
+        self.UTILS.general.typeThis(DOM.Messages.input_message_area,
                             "Input message area",
                             msg,
                             p_no_keyboard=not_keyboard,
                             p_clear=False,
                             p_enter=False,
-                            p_validate=False) # it's the text() of this field, not the value.
+                            p_validate=False)  # it's the text() of this field, not the value.
         
         #
         # Validate the field.
         #
-        x = self.UTILS.element.getElement(DOM.Messages.input_message_area, 
+        x = self.UTILS.element.getElement(DOM.Messages.input_message_area,
                                     "Input message area (for validation)")
-        self.UTILS.test.TEST(x.text == msg, 
+        self.UTILS.test.TEST(x.text == msg,
                         "The text in the message area is as expected." + \
                         "|EXPECTED: '" + msg + "'" + \
                         "|ACTUAL  : '" + x.text + "'")
@@ -655,7 +656,7 @@ class Messages(object):
             # Press fordward button
             #
             self.UTILS.reporting.logResult("info", "Cliking on fordward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, 
+            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
                                           "Fordward button is displayed")
             x.tap()
 
@@ -668,7 +669,7 @@ class Messages(object):
             # Send the sms.
             #
             self.UTILS.reporting.logResult("info", "Cliking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, 
+            x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
                                           "Send button is displayed")
             x.tap()
 
@@ -676,7 +677,7 @@ class Messages(object):
             # Wait for the last message in this thread to be a 'recieved' one.
             #
             returnedSMS = self.waitForReceivedMsgInThisThread()
-            self.UTILS.test.TEST(returnedSMS, 
+            self.UTILS.test.TEST(returnedSMS,
                               "A receieved message appeared in the thread.", True)
 
 
@@ -694,7 +695,7 @@ class Messages(object):
             # Press fordward button
             #
             self.UTILS.reporting.logResult("info", "Cliking on fordward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, 
+            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
                                           "Fordward button is displayed")
             x.tap()
 
@@ -707,10 +708,9 @@ class Messages(object):
             # Send the mms.
             #
             self.UTILS.reporting.logResult("info", "Cliking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, 
+            x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
                                           "Send button is displayed")
             x.tap()
-
 
             #
             # Click send and wait for the message to be received
@@ -723,13 +723,13 @@ class Messages(object):
             x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
             x.tap()
 
-            self.openThread("+" + self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM"))
+            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
 
             #
             # Wait for the last message in this thread to be a 'recieved' one.
             #
             returnedSMS = self.waitForReceivedMsgInThisThread()
-            self.UTILS.test.TEST(returnedSMS, 
+            self.UTILS.test.TEST(returnedSMS,
                               "A receieved message appeared in the thread.", True)
 
         elif msg_type == "mmssub":
@@ -739,21 +739,19 @@ class Messages(object):
             #
             # Open mms option with longtap on it
             #
-            self.UTILS.reporting.logResult("info", 
+            self.UTILS.reporting.logResult("info",
                                     "Open mms with subject options with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject, 
+            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject,
                                     "Target MMS field")
             self.actions.long_press(x, 2).perform()
-
 
             #
             # Press fordward button
             #
             self.UTILS.reporting.logResult("info", "Cliking on fordaward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, 
+            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
                                           "Fordward button is displayed")
             x.tap()
-
 
             #
             # Add a phone number.
@@ -764,10 +762,9 @@ class Messages(object):
             # Send the mms.
             #
             self.UTILS.reporting.logResult("info", "Cliking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, 
+            x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
                                           "Send button is displayed")
             x.tap()
-
 
             #
             # Click send and wait for the message to be received
@@ -786,7 +783,7 @@ class Messages(object):
             # Wait for the last message in this thread to be a 'recieved' one.
             #
             returnedSMS = self.waitForReceivedMsgInThisThread()
-            self.UTILS.test.TEST(returnedSMS, 
+            self.UTILS.test.TEST(returnedSMS,
                               "A receieved message appeared in the thread.", True)
 
         else:
@@ -819,7 +816,7 @@ class Messages(object):
         x = self.UTILS.element.getElement(DOM.Messages.message_header, "Thread header")
         x.tap()
         
-        x = self.UTILS.element.getElement(DOM.Messages.header_add_to_contact_btn, 
+        x = self.UTILS.element.getElement(DOM.Messages.header_add_to_contact_btn,
                                     "'Add to an existing contact' button")
         x.tap()
         
@@ -862,7 +859,7 @@ class Messages(object):
         x = self.UTILS.element.getElement(DOM.Messages.message_header, "Thread header")
         x.tap()
         
-        x = self.UTILS.element.getElement(DOM.Messages.header_create_new_contact_btn, 
+        x = self.UTILS.element.getElement(DOM.Messages.header_create_new_contact_btn,
                                     "'Create new contact' button")
         x.tap()
         
@@ -906,7 +903,7 @@ class Messages(object):
         #
         try:
             thread_el = ("xpath", DOM.Messages.thread_selector_xpath.format(num))
-            x = self.UTILS.element.getElement(thread_el,"Message thread for " + num)
+            x = self.UTILS.element.getElement(thread_el, "Message thread for " + num)
             
             x.tap()
             
@@ -950,7 +947,7 @@ class Messages(object):
         
         x_pos = 0
         for i in range(0, len(x)):
-            self.UTILS.reporting.logResult("info", 
+            self.UTILS.reporting.logResult("info",
                                 "Checking target '{}' to '{}' ...".format(x[i].text, target))
 
             if x[i].text.lower() == target.lower():
@@ -971,7 +968,7 @@ class Messages(object):
                     #
                     # This contact was manually entered.
                     #
-                    z = self.UTILS.element.getElements(DOM.Messages.target_numbers, 
+                    z = self.UTILS.element.getElements(DOM.Messages.target_numbers,
                                                 "Target to be removed")[i]
                     z.clear()
                     return True
@@ -1001,12 +998,12 @@ class Messages(object):
         #
         # Just presses the 'send' button (assumes everything else is done).
         #
-        sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button, 
+        sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button,
                                         "Send sms button")
         sendBtn.tap()
 
-        time.sleep(2) # (Give the spinner time to appear.)
-        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, 
+        time.sleep(2)  # (Give the spinner time to appear.)
+        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner,
                                         "'Sending' icon", True, 120)
 
         #
@@ -1053,7 +1050,7 @@ class Messages(object):
         #
         # Turns on Edit mode while in the SMS threads screen.
         #
-        x= self.UTILS.element.getElement(DOM.Messages.edit_threads_button, "Edit button")
+        x = self.UTILS.element.getElement(DOM.Messages.edit_threads_button, "Edit button")
         x.tap()
         self.UTILS.element.waitForElements(DOM.Messages.cancel_edit_threads, "Cancel button")
 
@@ -1061,13 +1058,13 @@ class Messages(object):
         #
         # Verifies that a thread exists for this number (returns True or False).
         #
-        boolOK=False
+        boolOK = False
         try:
-            self.parent.wait_for_element_present("xpath", 
+            self.parent.wait_for_element_present("xpath",
                                     DOM.Messages.thread_selector_xpath.format(num), 1)
-            boolOK=True
+            boolOK = True
         except:
-            boolOK=False
+            boolOK = False
             
         return boolOK
 
@@ -1091,10 +1088,8 @@ class Messages(object):
         #
         # Returns the time of a thread.
         #
-        x = self.UTILS.element.getElement(("xpath", 
-                                    DOM.Messages.thread_timestamp_xpath.format(num)), 
-                                    "Thread timestamp",
-                                    True, 5, False)
+        x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_timestamp_xpath.format(num)),
+                                    "Thread timestamp", True, 5, False)
         return x.text
 
     def verifyMMSReceived(self, attached_type):
@@ -1109,9 +1104,9 @@ class Messages(object):
             self._verify(DOM.Messages.attach_preview_video_audio_type, attached_type)
 
         else:
-            #self.UTILS.reporting.logResult("info", "incorrect value received")
+            # self.UTILS.reporting.logResult("info", "incorrect value received")
             msg = "FAILED: Incorrect parameter received in verifyMMSReceived()"\
-                ". attached_type must being image, video or audio."
+                ". Attached_type must be image, video or audio."
             self.UTILS.test.quitTest(msg)
 
     def _verify(self, DOM_elem, attached_type):
@@ -1121,7 +1116,7 @@ class Messages(object):
         x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
         x.tap()
 
-        self.openThread("+" + self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM"))
+        self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
 
         #
         # Wait for the last message in this thread to be a 'recieved' one.
@@ -1150,8 +1145,7 @@ class Messages(object):
         x = (DOM.Messages.new_sms_popup_msg[0], DOM.Messages.new_sms_popup_msg[1].format(msg))
         self.UTILS.element.waitForElements(x,
                                     "Popup message saying we have a new sms containing '" + msg + "'",
-                                    True,
-                                    30)
+                                    True, 30)
 
         self.UTILS.iframe.switchToFrame("src", myIframe)
 
@@ -1161,13 +1155,12 @@ class Messages(object):
         # is from this 'num' number.
         #
         myIframe = self.UTILS.iframe.currentIframe()
-        
+
         self.marionette.switch_to_frame()
-        x = (DOM.Messages.new_sms_popunum[0], DOM.Messages.new_sms_popunum[1].format(str(num)))
+        x = (DOM.Messages.new_sms_popup_num[0], DOM.Messages.new_sms_popup_num[1].format(num))
         self.UTILS.element.waitForElements(x,
-                                    "Popup message saying we have a new sms from " + str(num),
-                                    True,
-                                    30)
+                                    "Popup message saying we have a new sms from {}".format(num),
+                                    True, 30)
 
         self.UTILS.iframe.switchToFrame("src", myIframe)
 
@@ -1210,7 +1203,7 @@ class Messages(object):
         #
         # Create the string to wait for.
         #
-        x=(DOM.Messages.statusbar_new_sms[0],
+        x = (DOM.Messages.statusbar_new_sms[0],
             DOM.Messages.statusbar_new_sms[1].format(num))
         
         #
