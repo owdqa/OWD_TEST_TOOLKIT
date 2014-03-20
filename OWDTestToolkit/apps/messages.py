@@ -1088,10 +1088,8 @@ class Messages(object):
         #
         # Returns the time of a thread.
         #
-        x = self.UTILS.element.getElement(("xpath",
-                                    DOM.Messages.thread_timestamp_xpath.format(num)),
-                                    "Thread timestamp",
-                                    True, 5, False)
+        x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_timestamp_xpath.format(num)),
+                                    "Thread timestamp", True, 5, False)
         return x.text
 
     def verifyMMSReceived(self, attached_type):
