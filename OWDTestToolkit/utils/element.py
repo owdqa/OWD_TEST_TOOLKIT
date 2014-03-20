@@ -268,10 +268,10 @@ class element(object):
             arguments[0].scrollIntoView();
         """, script_args=[element])
 
-    def perform_action_over_element(locator, action):
-        self.marionette.execute_script("""
+    def perform_action_over_element(self, locator, action, position=None):
+        script = """
             var _locatorMap = {
-                "id": getElementById,
+                "id": document.getElementById,
                 "class name": document.getElementsByClassName,
                 "css selector": document.querySelector,
                 "xpath": function () { 
@@ -280,14 +280,33 @@ class element(object):
                 "tag name": document.getElementsByTagName
             };
 
-            var _actionMap = {
+            var location_method = arguments[0][0];
+            var locator         = arguments[0][1];
+            var action          = arguments[1];
+            var position        = arguments[2];
 
+            if (position) {
+                var element = _locatorMap[location_method].call(document, locator)[position];
+            } else {
+                if ((locator === "class name") || (locator === "tag name")) {
+                    var e = 'JavaScriptException: InvalidParametersException: '
+                    var msg = 'If using "class name" or "tag name", it is mandatory to specify a position' 
+                    throw  e + msg
+                }
+                var element = _locatorMap[location_method].call(document, locator);
             }
 
-            var location_method = arguments[0][0];
-            var locator = arguments[0][1];
+            if (element) {
+                switch(action) {
+                    case "click":
+                        element.click();
+                        break;
+                    case "scrollIntoView":
+                        element.scrollIntoView();
+                        break;
+                }
+            }
+        """
+        self.marionette.execute_script(script, script_args=[list(locator), action, position])
 
-            var element = _locatorMap(location_method)(locator);
-
-            return element;
-        """, script_args=[locator, action])    
+  
