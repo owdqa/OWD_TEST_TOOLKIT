@@ -185,7 +185,8 @@ class date_and_time(object):
             _devtime = x.split(",")
 
             t_expected = "{}/{}/{} {}:{}".format(p_year, p_month, p_day, p_hour, p_minute)
-            t_actual = "{}/{}/{} {}:{}".format(_devtime[0], _devtime[1], _devtime[2], _devtime[3], _devtime[4])
+            t_actual = "{}/{}/{} {:02d}:{:02d}".format(_devtime[0], _devtime[1], _devtime[2],
+                                                       int(_devtime[3]), int(_devtime[4]))
 
             if t_expected == t_actual:
                 time_match = True
@@ -193,9 +194,9 @@ class date_and_time(object):
 
             time.sleep(2)
 
-        self.parent.test.TEST(time_match, "Device time matched \"{}/{}/{} {:02d}:{:02d}\" within 60s (It was \"{}/{}/{} "\
-                              "{:02d}:{:02d}\")".format(p_year, p_month, p_day, p_hour, p_minute,
-                               _devtime[0], _devtime[1], _devtime[2], _devtime[3], _devtime[4]))
+        self.parent.test.TEST(time_match, "Device time matched \"{}/{}/{} {:02d}:{:02d}\" within 60s "\
+                              "(It was \"{}/{}/{} {:02d}:{:02d}\")".format(p_year, p_month, p_day, p_hour, p_minute,
+                               _devtime[0], _devtime[1], _devtime[2], int(_devtime[3]), int(_devtime[4])))
 
     def waitForDisplayedTimeToBe(self, date_time):
         #

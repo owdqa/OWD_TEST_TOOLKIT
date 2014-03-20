@@ -8,18 +8,19 @@ class Dialer(object):
     """
 
     def __init__(self, p_parent):
-        self.apps       = p_parent.apps
+        self.apps = p_parent.apps
         self.data_layer = p_parent.data_layer
-        self.parent     = p_parent
+        self.parent = p_parent
         self.marionette = p_parent.marionette
-        self.UTILS      = p_parent.UTILS
+        self.UTILS = p_parent.UTILS
 
     def launch(self):
         #
         # Launch the app (it's called a different name to the everyone knows it as, so hardcode it!).
         #
         self.app = self.apps.launch("Phone")
-        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
+                                              self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def _complete_addNumberToContact(self, p_num, p_name):
@@ -29,13 +30,13 @@ class Dialer(object):
         # Handles switching frames etc... and finishes with you back in the dialer.
         #
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.element.waitForElements( ("xpath", "//h1[text()='Select contact']"), "'Select contact' header")
+        self.UTILS.element.waitForElements(("xpath", "//h1[text()='Select contact']"), "'Select contact' header")
 
         y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list")
         boolOK = False
         for i in y:
             if p_name in i.text:
-                self.UTILS.reporting.logResult("info", "Contact '%s' found in all contacts." % p_num)
+                self.UTILS.reporting.logResult("info", "Contact '{}' found in all contacts.".format(p_num))
                 i.tap()
                 boolOK = True
                 break
@@ -44,8 +45,8 @@ class Dialer(object):
         self.UTILS.element.waitForElements(DOM.Contacts.edit_contact_header, "'Edit contact' header")
 
         # Test for an input field for number_<x> contaiing our number.
-        self.UTILS.element.waitForElements( ("xpath", DOM.Contacts.phone_field_xpath % p_num),
-                                    "Phone field contaiing %s" % p_num)
+        self.UTILS.element.waitForElements(("xpath", DOM.Contacts.phone_field_xpath.format(p_num)),
+                                    "Phone field containing {}".format(p_num))
 
         #
         # Hit 'update' to save the changes to this contact.
@@ -57,11 +58,10 @@ class Dialer(object):
         # Verify that the contacts app is closed and we are returned to the call log.
         #
         self.marionette.switch_to_frame()
-        self.UTILS.element.waitForNotElements( ("xpath", "//iframe[contains(@%s, '%s')]" % \
-                                                (DOM.Contacts.frame_locator[0], DOM.Contacts.frame_locator[1])),
+        self.UTILS.element.waitForNotElements(("xpath", "//iframe[contains(@{}, '{}')]".\
+                                                format(DOM.Contacts.frame_locator[0], DOM.Contacts.frame_locator[1])),
                                         "COntacts frame")
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
-
 
     def addThisNumberToContact(self, p_name):
         #
@@ -78,8 +78,6 @@ class Dialer(object):
 
         self._complete_addNumberToContact(dialer_num, p_name)
 
-
-
     def callLog_addToContact(self, p_num, p_name, p_openCallLog=True):
     #
     # Adds this number in the call log to an existing contact
@@ -92,11 +90,11 @@ class Dialer(object):
 
         time.sleep(1)
 
-        x = self.UTILS.element.getElement( ("xpath", DOM.Dialer.call_log_number_xpath % p_num),
-                               "The call log for number %s" % p_num)
+        x = self.UTILS.element.getElement(("xpath", DOM.Dialer.call_log_number_xpath.format(p_num)),
+                               "The call log for number {}".format(p_num))
         x.tap()
 
-        x = self.UTILS.element.getElement( DOM.Dialer.call_log_numtap_add_to_existing, "Add to existing contact button")
+        x = self.UTILS.element.getElement(DOM.Dialer.call_log_numtap_add_to_existing, "Add to existing contact button")
         x.tap()
 
         self._complete_addNumberToContact(p_num, p_name)
@@ -115,23 +113,22 @@ class Dialer(object):
         except:
             self.openCallLog()
 
-        x = self.UTILS.element.getElement( ("xpath", DOM.Dialer.call_log_number_xpath % p_num),
-                                   "The call log for number %s" % p_num)
+        x = self.UTILS.element.getElement(("xpath", DOM.Dialer.call_log_number_xpath.format(p_num)),
+                                   "The call log for number {}".format(p_num))
         x.tap()
 
-        x = self.UTILS.element.getElement( DOM.Dialer.call_log_numtap_call, "Call button")
+        x = self.UTILS.element.getElement(DOM.Dialer.call_log_numtap_call, "Call button")
         x.tap()
         if own_num == p_num:
             time.sleep(2)
-            #self.marionette.switch_to_frame()
+            # self.marionette.switch_to_frame()
             x = self.UTILS.element.getElement(DOM.Dialer.call_busy_button_ok, "OK button (callLog_call)")
             x.tap()
         else:
             time.sleep(1)
             self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
-            self.UTILS.element.waitForElements( ("xpath", DOM.Dialer.outgoing_call_numberXP % p_num),
-                                    "Outgoing call found with number matching %s" % p_num)
-
+            self.UTILS.element.waitForElements(("xpath", DOM.Dialer.outgoing_call_numberXP.format(p_num)),
+                                    "Outgoing call found with number matching {}".format(p_num))
 
     def callLog_clearAll(self):
     #
@@ -159,10 +156,12 @@ class Dialer(object):
             x.tap()
             time.sleep(2)
             self.parent.wait_for_element_present(*DOM.Dialer.call_log_edit_selAll, timeout=2)
-            self.marionette.execute_script("document.getElementById('%s').click();" % DOM.Dialer.call_log_edit_selAll[1])
+            self.marionette.execute_script("document.getElementById('{}').click();".\
+                                           format(DOM.Dialer.call_log_edit_selAll[1]))
             time.sleep(1)
             self.parent.wait_for_element_present(*DOM.Dialer.call_log_edit_delete, timeout=2)
-            self.marionette.execute_script("document.getElementById('%s').click();" % DOM.Dialer.call_log_edit_delete[1])
+            self.marionette.execute_script("document.getElementById('{}').click();".\
+                                           format(DOM.Dialer.call_log_edit_delete[1]))
 
             self.marionette.execute_script("""
             var getElementByXpath = function (path) {
@@ -172,7 +171,6 @@ class Dialer(object):
             """)
 
         self.UTILS.element.waitForElements(DOM.Dialer.call_log_no_calls_msg, "'No calls ...' message")
-
 
     def callLog_clearSome(self, p_entryNumbers):
         #
@@ -210,19 +208,16 @@ class Dialer(object):
             _els = ("xpath", "//ol[@class='log-group']//li")
             x = self.UTILS.element.getElements(_els, "Call log items", False)
 
-
             _precount = len(x)
-            self.UTILS.reporting.logResult("info", "%s items found." % _precount)
+            self.UTILS.reporting.logResult("info", "{} items found.".format(_precount))
             for i in p_entryNumbers:
                 if i != 0:
                     _precount = _precount - 1
-                    x[i-1].tap()
+                    x[i - 1].tap()
 
-            #prueba
-            #time.sleep(0.5)
             self.parent.wait_for_element_present(*DOM.Dialer.call_log_edit_delete, timeout=2)
-            self.marionette.execute_script("document.getElementById('%s').click();" % DOM.Dialer.call_log_edit_delete[1])
-            #time.sleep(0.5)
+            self.marionette.execute_script("document.getElementById('{}').click();".\
+                                           format(DOM.Dialer.call_log_edit_delete[1]))
             self.marionette.execute_script("""
             var getElementByXpath = function (path) {
                 return document.evaluate(path, document, null, 9, null).singleNodeValue;
@@ -236,11 +231,8 @@ class Dialer(object):
             except:
                 _postcount = 0
 
-
             self.UTILS.test.TEST(_postcount == _precount,
-                        "%s numbers are left after deletion (there are %s)." % \
-                        (_precount,_postcount))
-
+                        "{} numbers are left after deletion (there are {}).".format(_precount, _postcount))
 
     def callLog_createContact(self, p_num, p_openCallLog=True):
     #
@@ -252,28 +244,27 @@ class Dialer(object):
         if p_openCallLog:
             self.openCallLog()
 
-        x = self.UTILS.element.getElement( ("xpath", DOM.Dialer.call_log_number_xpath % p_num),
-                                   "The call log for number %s" % p_num)
+        x = self.UTILS.element.getElement(("xpath", DOM.Dialer.call_log_number_xpath.format(p_num)),
+                                   "The call log for number {}".format(p_num))
         x.tap()
 
-        x = self.UTILS.element.getElement( DOM.Dialer.call_log_numtap_create_new, "Create new contact button", True, 20)
+        x = self.UTILS.element.getElement(DOM.Dialer.call_log_numtap_create_new, "Create new contact button", True, 20)
         x.tap()
 
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.element.waitForElements(DOM.Contacts.add_contact_header, "'Add contact' header")
-
 
     def callThisNumber(self):
         #
         # Get the current number.
         #
         x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
-        dialer_num = x.get_attribute("value")
+        x.get_attribute("value")
 
         #
         # Get own number.
         #
-        own_num = self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM")
+        self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM")
 
         #
         # Calls the current number.
@@ -284,7 +275,6 @@ class Dialer(object):
         self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
         self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call element", True, 5)
-
 
     def createContactFromThisNum(self):
         #
@@ -304,7 +294,6 @@ class Dialer(object):
         #
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
-
     def createMultipleCallLogEntries(self, p_num, p_amount):
         #
         # Put a number in the call log multiple times
@@ -314,15 +303,15 @@ class Dialer(object):
         x = self.UTILS.date_and_time.getDateTimeFromEpochSecs(time.time())
 
         for i in range(0, p_amount):
-            _day = x.mday-i
+            _day = x.mday - i
             _mon = x.mon
 
             if _day < 1:
                 #
                 # Jump back a month as well.
                 #
-                _day = 28 #(just to be sure!)
-                _mon = x.mon -1
+                _day = 28  # (just to be sure!)
+                _mon = x.mon - 1
 
             self.UTILS.date_and_time.setTimeToSpecific(p_day=_day, p_month=_mon)
 
@@ -338,7 +327,6 @@ class Dialer(object):
         self.launch()
         self.openCallLog()
 
-
     def enterNumber(self, p_num):
         #
         # Enters a number into the dialler using the keypad.
@@ -353,14 +341,14 @@ class Dialer(object):
 
         for i in str(p_num):
 
-            if i=="+":
-                x = self.UTILS.element.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % 0),
+            if i == "+":
+                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialler_button_xpath.format(0)),
                                            "keypad symbol '+'")
-                self.actions=Actions(self.marionette)
-                self.actions.long_press(x,2).perform()
+                self.actions = Actions(self.marionette)
+                self.actions.long_press(x, 2).perform()
             else:
-                x = self.UTILS.element.getElement( ("xpath", DOM.Dialer.dialler_button_xpath % i),
-                                           "keypad number %s" % i)
+                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialler_button_xpath.format(i)),
+                                           "keypad number {}".format(i))
                 x.tap()
 
         #
@@ -368,12 +356,11 @@ class Dialer(object):
         #
         x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
         dialer_num = x.get_attribute("value")
-        self.UTILS.test.TEST(str(p_num) in dialer_num, "After entering '%s', phone number field contains '%s'." % \
-                                                  (dialer_num, str(p_num)))
+        self.UTILS.test.TEST(str(p_num) in dialer_num, "After entering '{}', phone number field contains '{}'.".\
+                                                  format(dialer_num, str(p_num)))
 
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "Screenshot:", x)
-
 
     def hangUp(self):
         #
@@ -384,9 +371,9 @@ class Dialer(object):
         # the hangup bar isn't there.
         try:
             self.maroinette.switch_to_frame()
-            elDef = ("xpath", "//iframe[contains(@%s, '%s')]" % \
-                                DOM.Dialer.frame_locator_calling[0],
-                                DOM.Dialer.frame_locator_calling[1])
+            elDef = ("xpath", "//iframe[contains(@{}, '{}')]".\
+                                format(DOM.Dialer.frame_locator_calling[0],
+                                DOM.Dialer.frame_locator_calling[1]))
 
             self.parent.wait_for_element_present(*elDef, timeout=2)
             x = self.marionette.find_element(*elDef)
@@ -394,7 +381,8 @@ class Dialer(object):
                 self.marionette.switch_to_frame(x)
                 self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=1)
                 x = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
-                if x: x.tap()
+                if x:
+                    x.tap()
         except:
             pass
 
@@ -408,14 +396,11 @@ class Dialer(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
 
-
     def openCallLog(self):
         #
         # Opens the call log.
         #
         x = self.UTILS.element.getElement(DOM.Dialer.option_bar_call_log, "Call log button")
         x.tap()
-
-        #self.UTILS.element.waitForElements(DOM.Dialer.call_log_filter, "Call log filter")
 
         time.sleep(2)
