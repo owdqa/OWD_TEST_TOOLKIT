@@ -16,7 +16,8 @@ class Settings(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
+                                              self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def callID_verify(self):
@@ -263,7 +264,7 @@ class Settings(object):
         # First, make sure we're in "Settings".
         #
         try:
-            self.parent.parent.wait_for_element_present(*DOM.Settings.frame_locator, timeout=2)
+            self.parent.wait_for_element_present(*DOM.Settings.frame_locator, timeout=2)
             x = self.marionette.find_element(*DOM.Settings.frame_locator)
         except:
             #
@@ -312,7 +313,7 @@ class Settings(object):
         #
         time.sleep(2)
         try:
-            self.parent.parent.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON, timeout=2)
+            self.parent.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON, timeout=2)
             x = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
             if x.is_displayed():
                 x.tap()
@@ -416,7 +417,7 @@ class Settings(object):
         if self.UTILS.iframe.framePresent(*DOM.Settings.frame_locator):
             self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
             try:
-                self.parent.parent.wait_for_element_displayed(*DOM.Settings.wifi)
+                self.parent.wait_for_element_displayed(*DOM.Settings.wifi)
                 self.wifi()
             except:
                 pass
@@ -435,7 +436,7 @@ class Settings(object):
             #
             # Asked for username.
             #
-            self.parent.parent.wait_for_element_displayed(*DOM.Settings.wifi_login_user, timeout=3)
+            self.parent.wait_for_element_displayed(*DOM.Settings.wifi_login_user, timeout=3)
             wifi_login_user = self.marionette.find_element(*DOM.Settings.wifi_login_user)
             if wifi_login_user.is_displayed():
                 wifi_login_user.send_keys(username)
@@ -467,11 +468,12 @@ class Settings(object):
         # A couple of checks to wait for 'anything' to be Connected (only look for 'present' because it
         # might be off the bottom of the page).
         #
+        self.UTILS.test.TEST(True, "Connected: {}".format(self.wifi_list_isConnected(wlan_name, timeout=10)))
         self.UTILS.test.TEST(self.wifi_list_isConnected(wlan_name, timeout=60),
-                "WLAN '{}' is listed as 'connected' in wifi settings.".format(wlan_name), False)
+                "Wifi '{}' is listed as 'connected' in wifi settings.".format(wlan_name), False)
 
         self.UTILS.test.TEST(self.parent.data_layer.get_setting("wifi.enabled"),
-            "WLAN connection to '{}' established.".format(wlan_name), True)
+            "Wifi connection to '{}' established.".format(wlan_name), True)
 
     def wifi_forget(self, quiet=True):
         #
@@ -481,7 +483,7 @@ class Settings(object):
         # Either way, it will return True for forgotten, or False for 'not known'.
         #
         try:
-            self.parent.parent.wait_for_element_displayed(*DOM.Settings.wifi_details_header, timeout=2)
+            self.parent.wait_for_element_displayed(*DOM.Settings.wifi_details_header, timeout=2)
         except:
             return False
 
@@ -493,7 +495,7 @@ class Settings(object):
             # Already connected to this wifi (or connected automatically).
             # 'Forget' it (so we can reconnect as-per test) and tap the wifi name again.
             #
-            self.parent.parent.wait_for_element_displayed(*DOM.Settings.wifi_details_forget_btn, timeout=3)
+            self.parent.wait_for_element_displayed(*DOM.Settings.wifi_details_forget_btn, timeout=3)
             x = self.marionette.find_element(*DOM.Settings.wifi_details_forget_btn)
             x.tap()
             is_connected = True
@@ -537,7 +539,7 @@ class Settings(object):
         # Verify the expected network is listed as connected in 'available networks'.
         #
         try:
-            self.parent.parent.wait_for_element_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
+            self.parent.wait_for_element_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
                                           timeout=timeout)
             return True
         except:
@@ -548,7 +550,7 @@ class Settings(object):
         # Verify the expected network is listed as connected in 'available networks'.
         #
         try:
-            self.parent.parent.wait_for_element_not_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
+            self.parent.wait_for_element_not_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
                                               timeout=timeout)
             return True
         except:
