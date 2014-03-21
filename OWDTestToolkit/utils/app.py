@@ -63,7 +63,7 @@ class app(object):
         #
         # Put screen into edit mode.
         #
-        self.actions.press(_app_icon).wait(2).release().perform()
+        self.parent.actions.press(_app_icon).wait(2).release().perform()
 
         #
         # Move it to the dock.
@@ -71,7 +71,7 @@ class app(object):
         _docked_apps = self.parent.element.getElements(DOM.Home.docked_apps, "Docked apps (before adding app)")
         _count_before = len(_docked_apps)
 
-        self.actions.press(_app_icon).wait(2).move(_docked_apps[0]).release().perform()
+        self.parent.actions.press(_app_icon).wait(2).move(_docked_apps[0]).release().perform()
         time.sleep(1)
 
         self.parent.home.touchHomeButton()
@@ -216,7 +216,7 @@ class app(object):
         for i in x:
             if i.get_attribute("aria-label") == app_name:
                 self.parent.reporting.logResult("info", "Trying to move '{}' from the doc to the homescreen ...".format(app_name))
-                self.actions.press(i).wait(1).move_by_offset(0, -100).wait(1).release().perform()
+                self.parent.actions.press(i).wait(1).move_by_offset(0, -100).wait(1).release().perform()
                 self.parent.home.touchHomeButton()
                 is_moved = True
                 break
@@ -309,8 +309,8 @@ class app(object):
 
         myApp = self.findAppIcon(app_name)
         if myApp:
-            self.actions.press(myApp).wait(2).release()
-            self.actions.perform()
+            self.parent.actions.press(myApp).wait(2).release()
+            self.parent.actions.perform()
 
             delete_button = self.parent.element.getElement(("xpath", DOM.Home.app_delete_icon_xpath.format(app_name)),
                                             "Delete button", False, 5, True)

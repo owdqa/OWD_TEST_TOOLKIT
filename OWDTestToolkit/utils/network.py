@@ -15,7 +15,7 @@ class network(object):
         if self.parent.data_layer.get_setting('ril.radio.disabled'):
             self.parent.data_layer.set_setting('ril.radio.disabled', False)
 
-        if self.device.has_mobile_connection:
+        if self.parent.device.has_mobile_connection:
             self.parent.data_layer.disable_cell_data()
 
         self.parent.data_layer.disable_cell_roaming()

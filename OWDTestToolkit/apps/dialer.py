@@ -262,11 +262,6 @@ class Dialer(object):
         x.get_attribute("value")
 
         #
-        # Get own number.
-        #
-        self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM")
-
-        #
         # Calls the current number.
         #
         x = self.UTILS.element.getElement(DOM.Dialer.call_number_button, "Call number button")
@@ -329,9 +324,8 @@ class Dialer(object):
 
     def enterNumber(self, p_num):
         #
-        # Enters a number into the dialler using the keypad.
+        # Enters a number into the dialer using the keypad.
         #
-
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.phone_number, timeout=1)
         except:
@@ -357,7 +351,7 @@ class Dialer(object):
         x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
         dialer_num = x.get_attribute("value")
         self.UTILS.test.TEST(str(p_num) in dialer_num, "After entering '{}', phone number field contains '{}'.".\
-                                                  format(dialer_num, str(p_num)))
+                                                  format(dialer_num, p_num))
 
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "Screenshot:", x)
@@ -370,7 +364,7 @@ class Dialer(object):
         # The call may already be terminated, so don't throw an error if
         # the hangup bar isn't there.
         try:
-            self.maroinette.switch_to_frame()
+            self.marionette.switch_to_frame()
             elDef = ("xpath", "//iframe[contains(@{}, '{}')]".\
                                 format(DOM.Dialer.frame_locator_calling[0],
                                 DOM.Dialer.frame_locator_calling[1]))

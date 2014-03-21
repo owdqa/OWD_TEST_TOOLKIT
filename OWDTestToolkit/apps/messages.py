@@ -797,10 +797,10 @@ class Messages(object):
         #
         if self.threadExists(num):
             x = self.UTILS.element.getElements(DOM.Messages.threads_list, "Threads")
-            
+
             for thread in x:
                 try:
-                    y = thread.find_element("xpath", ".//p[text()='{}']".format(num))
+                    thread.find_element("xpath", ".//p[text()='{}']".format(num))
                     z = thread.find_element("xpath", ".//span[@class='body-text']")
                     return z.text
                 except:
