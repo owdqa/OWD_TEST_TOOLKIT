@@ -210,3 +210,111 @@ class element(object):
 
         self.parent.test.TEST(is_ok, msg, stop_on_error)
         return is_ok
+
+    def getElementByXpath(path):
+        #
+        # Use this function when normal getElement did not work
+        #
+        return self.marionette.execute_script("""
+            return document.evaluate(arguments[0], document, null, 9, null).singleNodeValue;
+        """, script_args=[path])
+
+    def getParent(element):
+        #
+        # Gets the element's parent. Can be called recursively
+        #
+        return self.marionette.execute_script("""
+            return arguments[0].parentNode;
+        """, script_args=[element])
+
+    def getChildren(element):
+        #
+        # Gets the element's children
+        #
+        return self.marionette.execute_script("""
+            return arguments[0].children;
+        """, script_args=[element])
+
+    def get_css_value(element, css_property):
+        #
+        # Gets the value of a certain css property.
+        #
+        return self.marionette.execute_script(""" 
+            function getStyle (el, styleProp) {
+                if (el.currentStyle)
+                    var y = x.currentStyle[styleProp];
+                else if (window.getComputedStyle)
+                    var y = document.defaultView.getComputedStyle(el,null)
+                                                .getPropertyValue(styleProp);
+                return y;
+            }
+            return getStyle(arguments[0], arguments[1])
+        """, script_args=[element, css_property])
+
+    def is_ellipsis_active(element):
+        #
+        # Checks whether a certain element is really ellipsed when its content
+        # overflows its width
+        #
+        return self.marionette.execute_script("""
+            function isEllipsisActive(element) {
+                return (element.offsetWidth < element.scrollWidth);
+            }
+            return isEllipsisActive(arguments[0])
+        """, script_args=[element])
+
+    def scroll_into_view(self, element):
+        self.marionette.execute_script("""
+            arguments[0].scrollIntoView();
+        """, script_args=[element])
+
+    def perform_action_over_element(self, locator, action, position=None):
+        script = """
+            var _locatorMap = {
+                "id": document.getElementById,
+                "class name": document.getElementsByClassName,
+                "css selector": document.querySelector,
+                "xpath": function () { 
+                            return document.evaluate(arguments[0], document, null, 9, null).singleNodeValue 
+                        },
+                "tag name": document.getElementsByTagName
+            };
+
+            // TODO - Add more events here
+            var _actionMap = {
+                "click":    new MouseEvent('click', {
+                                'view': window,
+                                'bubbles': true,
+                                'cancelable': true
+                            }), //HTMLElement.prototype.click
+            }
+
+            var location_method = arguments[0][0];
+            var locator         = arguments[0][1];
+            var action          = arguments[1];
+            var position        = arguments[2];
+
+            if (position) {
+                var element = _locatorMap[location_method].call(document, locator)[position];
+            } else {
+                if ((locator === "class name") || (locator === "tag name")) {
+                    var e = 'JavaScriptException: InvalidParametersException: '
+                    var msg = 'If using "class name" or "tag name", it is mandatory to specify a position' 
+                    throw  e + msg
+                }
+                var element = _locatorMap[location_method].call(document, locator);
+            }
+
+            if (element) {
+                if (_actionMap.hasOwnProperty(action)) {
+                    element.dispatchEvent(_actionMap[action])
+                } else {
+                    var e = 'JavaScriptException: InvalidParametersException: '
+                    var msg = 'Specified action <' + action + '> not supported'; 
+                    throw  e + msg
+                }
+            }
+        """
+        self.marionette.execute_script(script, script_args=[list(locator), action, position])
+
+  
