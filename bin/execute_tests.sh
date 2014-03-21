@@ -8,6 +8,8 @@ export RUN_INPUT_LIST="$@"
 
 . $0.parts/process_parameters_file.sh
 
+. $0.parts/change_results_location.sh
+
 . $0.parts/create_test_id_list.sh
 
 . $0.parts/ensure_device_connected.sh
