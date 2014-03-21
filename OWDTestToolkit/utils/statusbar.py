@@ -52,7 +52,7 @@ class statusbar(object):
         # Check an icon is in the statusbar, then return to the
         # given frame (doesn't wait, just expects it to be there).
         #
-        orig_iframe = self.currentIframe()
+        orig_iframe = self.parent.iframe.currentIframe()
         self.marionette.switch_to_frame()
 
         found = False

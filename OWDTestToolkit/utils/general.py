@@ -27,7 +27,8 @@ class general(object):
         #
         try:
             self.marionette.start_session()
-            self.parent.reporting.logResult("debug", "<i>(*** The Marionette session was restarted due to a possible crash. ***)</i>")
+            self.parent.reporting.logResult("debug", "<i>(*** The Marionette session was "\
+                                            "restarted due to a possible crash. ***)</i>")
         except:
             pass
 
@@ -205,7 +206,8 @@ class general(object):
             #
             # Don't use the keyboard.
             #
-            self.parent.reporting.logResult("info", "(Sending '{}' to this field without using the keyboard.)".format(p_str))
+            self.parent.reporting.logResult("info", "(Sending '{}' to this field without using the keyboard.)".\
+                                            format(p_str))
             x.send_keys(p_str)
 
             #
@@ -216,7 +218,7 @@ class general(object):
             # if necessary.
             #
             if "_" in p_str:
-                self.parent.lockscreen.unlock()
+                self.parent.parent.lockscreen.unlock()
                 self.marionette.switch_to_frame()
                 self.parent.iframe.switchToFrame("src", orig_frame)
 
@@ -230,7 +232,7 @@ class general(object):
             #
             # Type the string.
             #
-            self.parent.keyboard.send(p_str)
+            self.parent.parent.keyboard.send(p_str)
 
         #
         # Tap ENTER on the keyboard (helps to remove the keyboard even if
