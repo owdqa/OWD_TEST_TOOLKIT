@@ -280,6 +280,16 @@ class element(object):
                 "tag name": document.getElementsByTagName
             };
 
+            var _actionMap = {
+                "click":    new MouseEvent('click', {
+                                'view': window,
+                                'bubbles': true,
+                                'cancelable': true
+                            }), //HTMLElement.prototype.click
+                "scrollIntoView": Element.prototype.scrollIntoView,
+                "flick": ""        
+            }
+
             var location_method = arguments[0][0];
             var locator         = arguments[0][1];
             var action          = arguments[1];
@@ -297,13 +307,8 @@ class element(object):
             }
 
             if (element) {
-                switch(action) {
-                    case "click":
-                        element.click();
-                        break;
-                    case "scrollIntoView":
-                        element.scrollIntoView();
-                        break;
+                if (_actionMap.hasOwnProperty(action)) {
+                    element.dispatchEvent(_actionMap[action])
                 }
             }
         """
