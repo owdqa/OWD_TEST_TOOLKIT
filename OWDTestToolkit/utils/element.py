@@ -280,14 +280,13 @@ class element(object):
                 "tag name": document.getElementsByTagName
             };
 
+            // TODO - Add more events here
             var _actionMap = {
                 "click":    new MouseEvent('click', {
                                 'view': window,
                                 'bubbles': true,
                                 'cancelable': true
                             }), //HTMLElement.prototype.click
-                "scrollIntoView": Element.prototype.scrollIntoView,
-                "flick": ""        
             }
 
             var location_method = arguments[0][0];
@@ -309,6 +308,10 @@ class element(object):
             if (element) {
                 if (_actionMap.hasOwnProperty(action)) {
                     element.dispatchEvent(_actionMap[action])
+                } else {
+                    var e = 'JavaScriptException: InvalidParametersException: '
+                    var msg = 'Specified action <' + action + '> not supported'; 
+                    throw  e + msg
                 }
             }
         """
