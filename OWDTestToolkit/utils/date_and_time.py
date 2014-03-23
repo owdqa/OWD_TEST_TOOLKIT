@@ -185,7 +185,7 @@ class date_and_time(object):
             _devtime = x.split(",")
 
             t_expected = "{}/{}/{} {}:{}".format(p_year, p_month, p_day, p_hour, p_minute)
-            t_actual = "{}/{}/{} {:02d}:{:02d}".format(_devtime[0], _devtime[1], _devtime[2],
+            t_actual = "{}/{}/{} {}:{}".format(_devtime[0], _devtime[1], _devtime[2],
                                                        int(_devtime[3]), int(_devtime[4]))
 
             if t_expected == t_actual:

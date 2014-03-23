@@ -280,7 +280,7 @@ class Contacts(object):
         # Now verify that this contact is no longer present (or no search field if
         # this was the only contact).
         #
-        contact_el = x = ("xpath", DOM.Contacts.view_all_contact_xpath % fullname.replace(" ", ""))
+        contact_el = x = ("xpath", DOM.Contacts.view_all_contact_xpath.format(fullname.replace(" ", "")))
         self.UTILS.element.waitForNotElements(contact_el, "Contact name in 'all contacts' screen")
 
     def edit_contact(self, name, contact):
@@ -839,10 +839,10 @@ class Contacts(object):
         self.replace_str(contFields['familyName'], contact["familyName"])
         self.replace_str(contFields['tel'], contact["tel"]["value"])
         self.replace_str(contFields['email'], contact["email"]["value"])
-        self.replace_str(contFields['street'], contact["adr"]["streetAddress"])
-        self.replace_str(contFields['zip'], contact["adr"]["postalCode"])
-        self.replace_str(contFields['city'], contact["adr"]["locality"])
-        self.replace_str(contFields['country'], contact["adr"]["countryName"])
+        self.replace_str(contFields['street'], contact["addr"]["streetAddress"])
+        self.replace_str(contFields['zip'], contact["addr"]["postalCode"])
+        self.replace_str(contFields['city'], contact["addr"]["locality"])
+        self.replace_str(contFields['country'], contact["addr"]["countryName"])
 
     def press_cancel_edit_button(self):
         #
@@ -1022,20 +1022,20 @@ class Contacts(object):
             self.view_test("Name", contact['name'], contFields['name'].text)
             self.view_test("Telephone", contact['tel']['value'], contFields['tel'].text)
             self.view_test("Email", contact['email']['value'], contFields['email'].text)
-            self.view_test("Street", contact['adr']['streetAddress'], contFields['address'].text)
-            self.view_test("Post code", contact['adr']['postalCode'], contFields['address'].text)
-            self.view_test("Locality", contact['adr']['locality'], contFields['address'].text)
-            self.view_test("Country", contact['adr']['countryName'], contFields['address'].text)
+            self.view_test("Street", contact['addr']['streetAddress'], contFields['address'].text)
+            self.view_test("Post code", contact['addr']['postalCode'], contFields['address'].text)
+            self.view_test("Locality", contact['addr']['locality'], contFields['address'].text)
+            self.view_test("Country", contact['addr']['countryName'], contFields['address'].text)
 
         else:
             self.check_match(contFields['givenName'], contact['givenName'], "Given name")
             self.check_match(contFields['familyName'], contact['familyName'], "Family name")
             self.check_match(contFields['tel'], contact['tel']['value'], "Telephone")
             self.check_match(contFields['email'], contact['email']['value'], "Email")
-            self.check_match(contFields['street'], contact['adr']['streetAddress'], "Street")
-            self.check_match(contFields['zip'], contact['adr']['postalCode'], "Zip")
-            self.check_match(contFields['city'], contact['adr']['locality'], "City")
-            self.check_match(contFields['country'], contact['adr']['countryName'], "Country")
+            self.check_match(contFields['street'], contact['addr']['streetAddress'], "Street")
+            self.check_match(contFields['zip'], contact['addr']['postalCode'], "Zip")
+            self.check_match(contFields['city'], contact['addr']['locality'], "City")
+            self.check_match(contFields['country'], contact['addr']['countryName'], "Country")
 
     def verify_image_in_all_contacts(self, contact_name):
         #

@@ -653,11 +653,10 @@ class Messages(object):
             self.actions.long_press(x, 2).perform()
 
             #
-            # Press fordward button
+            # Press forward button
             #
-            self.UTILS.reporting.logResult("info", "Cliking on fordward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
-                                          "Fordward button is displayed")
+            self.UTILS.reporting.logResult("info", "Clicking on forward button")
+            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
             x.tap()
 
             #
@@ -668,18 +667,15 @@ class Messages(object):
             #
             # Send the sms.
             #
-            self.UTILS.reporting.logResult("info", "Cliking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
-                                          "Send button is displayed")
+            self.UTILS.reporting.logResult("info", "Clicking on Send button")
+            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
             x.tap()
 
             #
-            # Wait for the last message in this thread to be a 'recieved' one.
+            # Wait for the last message in this thread to be a 'received' one.
             #
             returnedSMS = self.waitForReceivedMsgInThisThread()
-            self.UTILS.test.TEST(returnedSMS,
-                              "A receieved message appeared in the thread.", True)
-
+            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         elif msg_type == "mms":
 
@@ -692,11 +688,10 @@ class Messages(object):
             self.actions.long_press(x, 2).perform()
 
             #
-            # Press fordward button
+            # Press forward button
             #
-            self.UTILS.reporting.logResult("info", "Cliking on fordward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
-                                          "Fordward button is displayed")
+            self.UTILS.reporting.logResult("info", "Clicking on forward button")
+            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
             x.tap()
 
             #
@@ -708,6 +703,58 @@ class Messages(object):
             # Send the mms.
             #
             self.UTILS.reporting.logResult("info", "Cliking on Send button")
+            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
+            x.tap()
+
+            #
+            # Click send and wait for the message to be received
+            #
+            self.sendSMS()
+
+            #
+            # This step is necessary because our sim cards receive mms with +XXX
+            #
+            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
+            x.tap()
+
+            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
+
+            #
+            # Wait for the last message in this thread to be a 'received' one.
+            #
+            returnedSMS = self.waitForReceivedMsgInThisThread()
+            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
+
+        elif msg_type == "mmssub":
+
+            self.UTILS.reporting.logResult("info", "is a mms with subject")
+
+            #
+            # Open mms option with longtap on it
+            #
+            self.UTILS.reporting.logResult("info",
+                                    "Open mms with subject options with longtap on it")
+            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject,
+                                    "Target MMS field")
+            self.actions.long_press(x, 2).perform()
+
+            #
+            # Press forward button
+            #
+            self.UTILS.reporting.logResult("info", "Clicking on fordward button")
+            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
+                                          "Forward button is displayed")
+            x.tap()
+
+            #
+            # Add a phone number.
+            #
+            self.addNumbersInToField([target_telNum])
+
+            #
+            # Send the mms.
+            #
+            self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
                                           "Send button is displayed")
             x.tap()
@@ -729,62 +776,7 @@ class Messages(object):
             # Wait for the last message in this thread to be a 'recieved' one.
             #
             returnedSMS = self.waitForReceivedMsgInThisThread()
-            self.UTILS.test.TEST(returnedSMS,
-                              "A receieved message appeared in the thread.", True)
-
-        elif msg_type == "mmssub":
-
-            self.UTILS.reporting.logResult("info", "is a mms with subject")
-
-            #
-            # Open mms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info",
-                                    "Open mms with subject options with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject,
-                                    "Target MMS field")
-            self.actions.long_press(x, 2).perform()
-
-            #
-            # Press fordward button
-            #
-            self.UTILS.reporting.logResult("info", "Cliking on fordaward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
-                                          "Fordward button is displayed")
-            x.tap()
-
-            #
-            # Add a phone number.
-            #
-            self.addNumbersInToField([target_telNum])
-
-            #
-            # Send the mms.
-            #
-            self.UTILS.reporting.logResult("info", "Cliking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
-                                          "Send button is displayed")
-            x.tap()
-
-            #
-            # Click send and wait for the message to be received
-            #
-            self.sendSMS()
-
-            #
-            # This step is necessary because our sim cards receive mms with +XXX
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
-            x.tap()
-
-            self.openThread("+" + self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM"))
-
-            #
-            # Wait for the last message in this thread to be a 'recieved' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
-            self.UTILS.test.TEST(returnedSMS,
-                              "A receieved message appeared in the thread.", True)
+            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")

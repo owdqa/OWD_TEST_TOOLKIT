@@ -1,4 +1,5 @@
 import time
+import datetime
 from OWDTestToolkit import DOM
 from marionette import Actions
 
@@ -295,20 +296,14 @@ class Dialer(object):
         # (done by manipulating the device time).
         # Leaves you in the call log.
         #
-        x = self.UTILS.date_and_time.getDateTimeFromEpochSecs(time.time())
+        #x = self.UTILS.date_and_time.getDateTimeFromEpochSecs(time.time())
 
-        for i in range(0, p_amount):
-            _day = x.mday - i
-            _mon = x.mon
+        today = datetime.datetime.today()
+        for i in range(p_amount):
+            delta = datetime.timedelta(days=i)
+            new_date = today - delta
 
-            if _day < 1:
-                #
-                # Jump back a month as well.
-                #
-                _day = 28  # (just to be sure!)
-                _mon = x.mon - 1
-
-            self.UTILS.date_and_time.setTimeToSpecific(p_day=_day, p_month=_mon)
+            self.UTILS.date_and_time.setTimeToSpecific(p_day=new_date.day, p_month=new_date.month)
 
             self.enterNumber(p_num)
             self.callThisNumber()
@@ -364,6 +359,17 @@ class Dialer(object):
         # The call may already be terminated, so don't throw an error if
         # the hangup bar isn't there.
         try:
+            self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
+            ok_btn = self.UTILS.element.getElement(DOM.Dialer.call_busy_button_ok, "Ok Button", timeout=3,
+                                                   stop_on_error=False)
+
+            # Since the call destination is the same as the origin, it's very likely to get an error
+            # message. If this is the case, tap the OK button. Otherwise (i.e. using twilio), hang up the call
+            if ok_btn:
+                self.UTILS.test.TEST(True, "Button text: {}".format(ok_btn.text))
+                ok_btn.tap()
+                return
+
             self.marionette.switch_to_frame()
             elDef = ("xpath", "//iframe[contains(@{}, '{}')]".\
                                 format(DOM.Dialer.frame_locator_calling[0],
