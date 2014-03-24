@@ -360,29 +360,31 @@ class Dialer(object):
         # the hangup bar isn't there.
         try:
             self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
-            ok_btn = self.UTILS.element.getElement(DOM.Dialer.call_busy_button_ok, "Ok Button", timeout=3,
-                                                   stop_on_error=False)
 
-            # Since the call destination is the same as the origin, it's very likely to get an error
-            # message. If this is the case, tap the OK button. Otherwise (i.e. using twilio), hang up the call
-            if ok_btn:
-                self.UTILS.test.TEST(True, "Button text: {}".format(ok_btn.text))
-                ok_btn.tap()
-                return
+            try:
+                self.parent.wait_for_element_displayed(*DOM.Dialer.call_busy_button_ok, timeout=10)
+                ok_btn = self.marionette.find_element(*DOM.Dialer.call_busy_button_ok)
+                # Since the call destination is the same as the origin, it's very likely to get an error
+                # message. If this is the case, tap the OK button. Otherwise (i.e. using twilio), hang up the call
+                if ok_btn:
+                    self.UTILS.test.TEST(True, "Button text: {}".format(ok_btn.text))
+                    ok_btn.tap()
+                    return
+            except: # non-busy call
 
-            self.marionette.switch_to_frame()
-            elDef = ("xpath", "//iframe[contains(@{}, '{}')]".\
-                                format(DOM.Dialer.frame_locator_calling[0],
-                                DOM.Dialer.frame_locator_calling[1]))
+                self.marionette.switch_to_frame()
+                elDef = ("xpath", "//iframe[contains(@{}, '{}')]".\
+                                    format(DOM.Dialer.frame_locator_calling[0],
+                                    DOM.Dialer.frame_locator_calling[1]))
 
-            self.parent.wait_for_element_present(*elDef, timeout=2)
-            x = self.marionette.find_element(*elDef)
-            if x:
-                self.marionette.switch_to_frame(x)
-                self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=1)
-                x = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
+                self.parent.wait_for_element_present(*elDef, timeout=2)
+                x = self.marionette.find_element(*elDef)
                 if x:
-                    x.tap()
+                    self.marionette.switch_to_frame(x)
+                    self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=1)
+                    x = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
+                    if x:
+                        x.tap()
         except:
             pass
 
