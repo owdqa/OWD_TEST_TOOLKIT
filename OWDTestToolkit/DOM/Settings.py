@@ -51,6 +51,7 @@ wifi_advanced_cancelBtn = ("xpath", "//button[@data-l10n-id='cancel']")
 cellData               = ('id', 'menuItem-cellularAndData')
 celldata_header        = ('xpath', GLOBAL.app_head_specific.format('Cellular & Data'))
 celldata_DataConn      = ('name', "ril.data.enabled")
+celldata_DataConn_switch = ('id', "menuItem-enableDataCall")
 celldata_DataConn_ON   = ('xpath', "//button[@data-l10n-id='turnOn']")
 
 bluetooth              = ("id", "menuItem-bluetooth")

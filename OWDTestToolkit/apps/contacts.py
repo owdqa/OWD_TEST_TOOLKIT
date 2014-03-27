@@ -513,25 +513,6 @@ class Contacts(object):
             self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
 
             #
-            # PERMISSIONS (sometimes appears).
-            # Seems to happen a few times, so loop through 5 just in case ...
-            #
-            boolOK = False
-            while boolOK == False:
-                try:
-                    self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
-
-                    x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
-                    x.tap()
-
-                    time.sleep(3)
-                    self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator",
-                                                  True, False, False)
-                    boolOK = True
-                except:
-                    pass
-
-            #
             # Send the login information (the email field isn't always displayed).
             #
             self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_password, timeout=30)
@@ -561,9 +542,37 @@ class Contacts(object):
                     return False
                 except:
                     pass
+
+                #
+                # If we arrive here, it means we've clicked the button to signin
+                #
+                #
+                
+                #
+                # PERMISSIONS (sometimes appears).
+                # Seems to happen a few times, so loop through 5 just in case ...
+                #
+                stop = False
+                count = 5
+                while not stop:
+                    try:
+                        self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
+
+                        x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
+                        x.tap()
+
+                        time.sleep(5)
+                        # self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator",
+                        #                               True, False, False)
+                        stop = True
+                    except:
+                        count -= 1
+                        if count == 0:
+                            stop = True
             else:
                 return True
         except:
+            self.UTILS.reporting.logResult("info", "<b>Already logged in</b>")
             pass
 
         time.sleep(5)
