@@ -54,3 +54,4 @@ call_log_contact_name_iframe    = ("id", "iframe-contacts")
 call_log_number_cont_highlight  = "//button[contains(@id, 'call-or-pick') and @class='activity icon icon-call remark' and contains(@data-tel, '{}')]"
 
 call_busy_button_ok = ("xpath", '//form[@id="confirmation-message"]/menu/button[@class="full"]')
+number_busy_windows_ok_button = ("xpath", "//form[@id='confirmation-message']/menu/button[@class='full']")

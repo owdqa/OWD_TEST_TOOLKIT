@@ -74,4 +74,5 @@ auto_retrieve_select_no_roaming    = ("xpath", "//section[@id='value-selector-co
 auto_retrieve_selected_item    = ("xpath", "//section[@id='value-selector-container']/ol/li[@aria-selected='true']")
 
 ok_btn             = ("xpath", "//menu[@id='select-options-buttons']/button")
+delivery_report = ("xpath", "//*[@data-l10n-id='message-delivery-reports']")
 
