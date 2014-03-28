@@ -164,7 +164,7 @@ class Email(object):
         #
 
         myEmail = self.emailIsInFolder(subject)
-        self.UTILS.TEST(myEmail, "Found email with subject '" + subject + "'.")
+        self.UTILS.test.TEST(myEmail != False, "Found email with subject '" + subject + "'.")
         if myEmail:
             #
             # We found it - open the email.
