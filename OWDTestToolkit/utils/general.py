@@ -17,7 +17,7 @@ class general(object):
         # Put a file onto the device (path is relative to the dir
         # you are physically in when running the tests).
         #
-        self.parent.device.push_file(file_name, count, '/'.join(['sdcard', destination]))
+        self.parent.device.push_file(file_name, count, '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination))
 
     def checkMarionetteOK(self):
         #
