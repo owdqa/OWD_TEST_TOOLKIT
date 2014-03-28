@@ -29,7 +29,7 @@ favourites_section     = ("id", "contacts-list-favorites")
 favourites_list_xpath  = "//ol[@id='contacts-list-favorites']//li[@data-order='{}']"
 favourite_JS           = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 
-social_network_contacts= ('class name', "icon-social icon-fb notorg")
+social_network_contacts= ('class name', "icon-social icon-fb")
 settings_button        = ('id', 'settings-button')
 settings_header        = ('xpath', GLOBAL.app_head_specific.format('Settings'))
 settings_done_button   = ('id', 'settings-close')

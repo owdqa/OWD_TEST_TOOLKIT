@@ -34,13 +34,13 @@ class Facebook(object):
         # Tap "Select all".
         #
         x = self.UTILS.element.getElement(DOM.Facebook.friends_select_all, "'Select all' button")
-        x.tap()
+        self.UTILS.element.simulateClick(x)
 
         #
         # Tap "Import".
         #
         x = self.UTILS.element.getElement(DOM.Facebook.friends_import, "Import button")
-        x.tap()
+        self.UTILS.element.simulateClick(x)
 
         #
         # Switch back to the contacts frame.
@@ -77,7 +77,7 @@ class Facebook(object):
                 thisContact = i.find_elements("tag name", "p")[1]
                 if thisContact.text == contact_email:
                     email = contact_email
-                    thisContact.tap()
+                    self.UTILS.element.simulateClick(thisContact)
                     break
 
         self.UTILS.test.TEST(email, "Desired link contact's email address is displayed.")
