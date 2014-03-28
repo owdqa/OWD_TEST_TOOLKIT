@@ -353,6 +353,9 @@ class Contacts(object):
             self.marionette.switch_to_frame()
             self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
+<<<<<<< HEAD
+            x = self.UTILS.getElement(DOM.Contacts.settings_fb_enable, "Enable facebook button")
+=======
             #
             # Now relaunch and click the 'enable facebook' button again.
             #
@@ -368,6 +371,7 @@ class Contacts(object):
             self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
             x = self.UTILS.element.getElement(DOM.Contacts.settings_fb_enable, "Enable facebook button")
+>>>>>>> integration-v1.3
             x.tap()
 
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)

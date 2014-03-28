@@ -1,3 +1,6 @@
+# TODO: Check this identifier
+frame_locator = ('src', 'calendar')
+
 add_event_btn           = ('xpath', ".//a[@href='/event/add/']")
 
 current_view_header     = ("id", "current-month-year")

@@ -37,7 +37,7 @@ import base64, sys, os
 from marionette import Marionette
 
 class current_frame():
-    
+
     def main(self, LOGDIR, p_el, p_frame_array=False):
         #
         # p_el is an array for the element.
@@ -46,31 +46,31 @@ class current_frame():
         self.marionette = Marionette(host='localhost', port=2828)  
         self.marionette.start_session()
         self.marionette.set_search_timeout(1000)
-        
+
         #
         # Switch to the correct iframe (unless it's "()").
         #
         self.marionette.switch_to_frame()
-        
+
         first_iframe = True
         for x in p_frame_array:
             # (just to make it look nice ;)
             typ_str = "'" + x[0] + "'"
-            
+
             if first_iframe:
                 first_iframe = False
                 print ""
                 print "Switching to iframe with " + typ_str.rjust(10) + " = '" + x[1] + "'"
             else:
                 print "... then to iframe with  " + typ_str.rjust(10) + " = '" + x[1] + "'"
-            
+
             my_iframe = self.marionette.find_element("xpath", "//iframe[@" + x[0] + "='" + x[1] + "']")
             self.marionette.switch_to_frame(my_iframe)
-            
+
         if first_iframe:
             print ""
             print "Using 'top level' iframe () ..."
-        
+
         #
         # Grab a screenshot and html dump of this frame.
         #
@@ -100,15 +100,15 @@ class current_frame():
             x = self.marionette.find_element(*p_el)
             if x:
                 b_present = True
-                
+    
                 if x.is_displayed():
                     b_displayed = True
-                    
+        
                 if x.is_enabled():
                     b_enabled = True
         except:
             pass
-        
+
         print ""
         print "Present  : " + str(b_present)
         print "Displayed: " + str(b_displayed)

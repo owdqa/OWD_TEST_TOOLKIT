@@ -1,3 +1,6 @@
+# TODO: Check this identifier
+frame_locator = ('src', 'facebook')
+
 import GLOBAL
 friends_header       = ('xpath', GLOBAL.app_head_specific.format('Facebook Friends'))
 friends_list         = ('xpath', "//li[@class='block-item']")

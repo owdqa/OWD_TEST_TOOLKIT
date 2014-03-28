@@ -16,7 +16,7 @@ class Camera(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def goToGallery(self):
@@ -24,20 +24,20 @@ class Camera(object):
         # Clicks the Gallery button to switch to the Gallery application
         # (warning: this will land you in the gallery iframe).
         #
-        galleryBTN = self.UTILS.getElement(DOM.Camera.gallery_button, "Gallery button")
+        galleryBTN = self.UTILS.element.getElement(DOM.Camera.gallery_button, "Gallery button")
         galleryBTN.tap()
-        self.UTILS.switchToFrame(*DOM.Gallery.frame_locator)
+        self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
 
     def clickThumbnail(self, num):
         #
         # Click thumbnail.
         #
-        thumbEls = self.UTILS.getElements(DOM.Camera.thumbnail, "Camera thumbnails")
+        thumbEls = self.UTILS.element.getElements(DOM.Camera.thumbnail, "Camera thumbnails")
         myThumb = thumbEls[num]
         myThumb.tap()
 
-        img_camera_view = self.UTILS.screenShot("_CAMERA_VIEW")
-        self.UTILS.logComment("    Clicking the thumbnail in the camera   : " + img_camera_view)
+        img_camera_view = self.UTILS.debug.screenShot("_CAMERA_VIEW")
+        self.UTILS.reporting.logComment("    Clicking the thumbnail in the camera   : " + img_camera_view)
 
     def checkVideoLength(self, vid_num, from_ss, to_ss):
         #
@@ -54,23 +54,23 @@ class Camera(object):
         # 5 and 9 seconds to complete (to allow time delay in element
         # loading).
         #
-        playBTN = self.UTILS.getElement(DOM.Camera.video_play_button, "Video play button")
+        playBTN = self.UTILS.element.getElement(DOM.Camera.video_play_button, "Video play button")
         playBTN.tap()
 
         # Start the timer when the pause button is visible.
-        self.UTILS.waitForElements(DOM.Camera.video_pause_button,
+        self.UTILS.element.waitForElements(DOM.Camera.video_pause_button,
                                    "Video pause button", True, 20, False)
         start_time = time.time()
 
         # Stop the timer when the pause button is no longer visible.
-        self.UTILS.waitForNotElements(DOM.Camera.video_pause_button,
+        self.UTILS.element.waitForNotElements(DOM.Camera.video_pause_button,
                                       "Video pause button", True, 20, False)
 
         elapsed_time = int(time.time() - start_time)
 
-        self.UTILS.TEST((elapsed_time >= from_ss), "Video is not shorter than expected (played for {:.2f} seconds)."
+        self.UTILS.test.TEST((elapsed_time >= from_ss), "Video is not shorter than expected (played for {:.2f} seconds)."
                         .format(elapsed_time))
-        self.UTILS.TEST((elapsed_time <= to_ss), "Video is not longer than expected (played for {:.2f} seconds)."
+        self.UTILS.test.TEST((elapsed_time <= to_ss), "Video is not longer than expected (played for {:.2f} seconds)."
                         .format(elapsed_time))
 
     def recordVideo(self, p_length):
@@ -87,7 +87,7 @@ class Camera(object):
         #
         # Record a video and click the thumbnail to play it.
         #
-        captureBTN = self.UTILS.getElement(DOM.Camera.capture_button, "Capture button")
+        captureBTN = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
         captureBTN.tap()
 
         # Record for 5 seconds
@@ -96,23 +96,23 @@ class Camera(object):
         # Stop recording
         captureBTN.tap()
 
-        self.UTILS.waitForNotElements(DOM.Camera.video_timer, "Video timer", True, 10, False)
+        self.UTILS.element.waitForNotElements(DOM.Camera.video_timer, "Video timer", True, 10, False)
 
-        self.UTILS.waitForElements(DOM.Camera.thumbnail,
+        self.UTILS.element.waitForElements(DOM.Camera.thumbnail,
                                    "Thumbnail appears after recording video", True, 10, False)
 
     def switchSource(self):
         #
         # Switch between still shot and video.
         #
-        switchBTN = self.UTILS.getElement(DOM.Camera.switch_source_btn, "Source switcher")
+        switchBTN = self.UTILS.element.getElement(DOM.Camera.switch_source_btn, "Source switcher")
         switchBTN.tap()
-        self.UTILS.waitForElements(DOM.Camera.capture_button_enabled, "Enabled capture button")
+        self.UTILS.element.waitForElements(DOM.Camera.capture_button_enabled, "Enabled capture button")
 
     def takePicture(self):
         #
         # Take a picture.
         #
-        x = self.UTILS.getElement(DOM.Camera.capture_button, "Capture button")
+        x = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
         x.tap()
-        self.UTILS.waitForElements(DOM.Camera.thumbnail, "Camera thumbnails")
+        self.UTILS.element.waitForElements(DOM.Camera.thumbnail, "Camera thumbnails")

@@ -7,17 +7,5 @@ setup(name='OWD_TEST_TOOLKIT',
       packages=['OWDTestToolkit',
                 'OWDTestToolkit/DOM',
                 'OWDTestToolkit/apps',
-                'OWDTestToolkit/apps/Settings',
-                'OWDTestToolkit/utils',
-                'OWDTestToolkit/utils/app',
-                'OWDTestToolkit/utils/debug',
-                'OWDTestToolkit/utils/date_and_time',
-                'OWDTestToolkit/utils/element',
-                'OWDTestToolkit/utils/general',
-                'OWDTestToolkit/utils/home',
-                'OWDTestToolkit/utils/iframe',
-                'OWDTestToolkit/utils/network',
-                'OWDTestToolkit/utils/reporting',
-                'OWDTestToolkit/utils/statusbar',
-                'OWDTestToolkit/utils/test']
+                'OWDTestToolkit/utils']
       )

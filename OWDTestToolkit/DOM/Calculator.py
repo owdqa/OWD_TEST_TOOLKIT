@@ -1,3 +1,6 @@
+# TODO: Check this identifier
+frame_locator = ('src', 'calculator')
+
 display         = ('id', 'display')
 button_mutiply  = ('id', 'multiply')
 button_divide   = ('id', 'divide')

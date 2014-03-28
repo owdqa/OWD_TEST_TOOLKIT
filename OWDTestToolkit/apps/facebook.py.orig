@@ -33,14 +33,26 @@ class Facebook(object):
         #
         # Tap "Select all".
         #
+<<<<<<< HEAD
+        x = self.UTILS.getElement(DOM.Facebook.friends_select_all, "'Select all' button")
+        # x.tap()
+        self.UTILS.simulateClick(x)
+=======
         x = self.UTILS.element.getElement(DOM.Facebook.friends_select_all, "'Select all' button")
-        self.UTILS.element.simulateClick(x)
+        x.tap()
+>>>>>>> integration-v1.3
 
         #
         # Tap "Import".
         #
+<<<<<<< HEAD
+        x = self.UTILS.getElement(DOM.Facebook.friends_import, "Import button")
+        # x.tap()
+        self.UTILS.simulateClick(x)
+=======
         x = self.UTILS.element.getElement(DOM.Facebook.friends_import, "Import button")
-        self.UTILS.element.simulateClick(x)
+        x.tap()
+>>>>>>> integration-v1.3
 
         #
         # Switch back to the contacts frame.
@@ -56,6 +68,7 @@ class Facebook(object):
         #
         # Return the number of friends we imported.
         #
+        self.UTILS.logComment("Friend count: {}".format(friend_count))
         return friend_count
 
     def LinkContact(self, contact_email):
@@ -77,7 +90,7 @@ class Facebook(object):
                 thisContact = i.find_elements("tag name", "p")[1]
                 if thisContact.text == contact_email:
                     email = contact_email
-                    self.UTILS.element.simulateClick(thisContact)
+                    self.UTILS.simulateClick(thisContact)
                     break
 
         self.UTILS.test.TEST(email, "Desired link contact's email address is displayed.")

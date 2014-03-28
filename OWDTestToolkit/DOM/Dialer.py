@@ -9,7 +9,7 @@ option_bar_contacts    = ("id", "option-contacts")
 option_bar_keypad      = ("id", "option-keypad")
 
 keypad                 = ("id", "keypad")
-dialler_button_xpath   = "//section[@id='keypad']//div[contains(@class,'keypad-key') and @data-value='%s']"
+dialler_button_xpath   = "//section[@id='keypad']//div[contains(@class,'keypad-key') and @data-value='{}']"
 dialer_button_1        = ("xpath", "/html/body/section/article[3]/div/article/section/div/div")
 phone_number_area      = ("id", "fake-phone-number-view")
 phone_number           = ('id', 'phone-number-view') # Beware: this number may have a country code prefix on it.
@@ -36,8 +36,8 @@ hangup_bar_locator     = ('id', 'callbar-hang-up')
 call_log_btn           = ("id", "option-recents")
 call_log_filter        = ("id", "call-log-filter")
 call_log_numbers       = ("xpath", "//li[contains(@class,'log-item')]")
-call_log_number_xpath  = "//li[contains(@class,'log-item') and contains(@data-phone-number,'%s')]"
-call_log_name_xpath    = "//li[contains(@class,'log-item')]//span[@class='primary-info-main' and text()='%s']"
+call_log_number_xpath  = "//li[contains(@class,'log-item') and contains(@data-phone-number,'{}')]"
+call_log_name_xpath    = "//li[contains(@class,'log-item')]//span[@class='primary-info-main' and text()='{}']"
 call_log_edit_btn      = ("id", "call-log-icon-edit")
 call_log_edit_header   = ("id", "edit-mode-header")
 call_log_edit_selAll   = ("id", "select-all-threads")
@@ -51,6 +51,6 @@ call_log_numtap_add_to_existing = ("id", "add-to-existing-contact-menuitem")
 call_log_numtap_cancel          = ("id", "cancel-action-menu")
 
 call_log_contact_name_iframe    = ("id", "iframe-contacts")
-call_log_number_cont_highlight  = "//button[contains(@id, 'call-or-pick') and @class='activity icon icon-call remark' and contains(@data-tel, '%s')]"
+call_log_number_cont_highlight  = "//button[contains(@id, 'call-or-pick') and @class='activity icon icon-call remark' and contains(@data-tel, '{}')]"
 
-call_busy_button_ok    = ("xpath", "/html/body/form[3]/menu/button")
+call_busy_button_ok = ("xpath", '//form[@id="confirmation-message"]/menu/button[@class="full"]')

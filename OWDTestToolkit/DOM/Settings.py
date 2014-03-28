@@ -25,9 +25,9 @@ wifi_enabled           = ('xpath', ".//*[@id='wifi-enabled']/label")
 wifi_available_networks= ('xpath', ".//*[@id='wifi-availableNetworks']/li")
 wifi_available_status  = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
 wifi_available_name    = ".//*[@id='wifi-availableNetworks']/li[%s]//a"
-wifi_name_xpath        = './/*[@id="wifi-availableNetworks"]//a[text()="%s"]'
+wifi_name_xpath        = './/*[@id="wifi-availableNetworks"]//a[text()="{}"]'
 wifi_connected         = ('xpath', '//small[text()="Connected"]')
-wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='%s']"
+wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='{}']"
 
 wifi_login_header      = ("xpath", "//section[@id='wifi-auth']//h1")
 wifi_login_user        = ('name', 'identity')
@@ -51,6 +51,7 @@ wifi_advanced_cancelBtn = ("xpath", "//button[@data-l10n-id='cancel']")
 cellData               = ('id', 'menuItem-cellularAndData')
 celldata_header        = ('xpath', GLOBAL.app_head_specific.format('Cellular & Data'))
 celldata_DataConn      = ('name', "ril.data.enabled")
+celldata_DataConn_switch = ('id', "menuItem-enableDataCall")
 celldata_DataConn_ON   = ('xpath', "//button[@data-l10n-id='turnOn']")
 
 bluetooth              = ("id", "menuItem-bluetooth")
@@ -74,6 +75,4 @@ auto_retrieve_select_no_roaming    = ("xpath", "//section[@id='value-selector-co
 auto_retrieve_selected_item    = ("xpath", "//section[@id='value-selector-container']/ol/li[@aria-selected='true']")
 
 ok_btn             = ("xpath", "//menu[@id='select-options-buttons']/button")
-
-
 
