@@ -96,6 +96,7 @@ import_search_list  = ("xpath", "//*[@id='search-list']//li[@class='block-item']
 import_conts_xp     = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '{}')]"
 
 import_contacts      = ("id", "importContacts")
+import_contacts_header = ("xpath", GLOBAL.app_head_specific.format('Import contacts'))
 
 gmail_button            = ("xpath", "//button[text()='Gmail']")
 gmail_frame             = ("data-url", "google")
@@ -107,7 +108,7 @@ gmail_login_error_msg   = ("id", "errormsg_0_Passwd")
 gmail_import_frame      = ("src", "gmail")  # It's in the contacts iframe.
 
 hotmail_button            = ("xpath", "//button[text()='Outlook']")
-hotmail_frame             = ("data-url", ".live.com")
+hotmail_frame             = ("data-url", "live")
 hotmail_username          = ("id", "i0116")
 hotmail_password          = ("id", "i0118")
 hotmail_signIn_button     = ("id", "idSIButton9")

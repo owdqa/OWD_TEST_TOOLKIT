@@ -633,8 +633,12 @@ class Contacts(object):
         # Go to the hotmail import iframe.
         #
         time.sleep(2)
-        self.UTILS.general.checkMarionetteOK()
+        # self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+        
+        #
+        # Change to import frame -> it is whithin Contacts frame
+        #
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_import_frame, via_root_frame=False)
 
         #
@@ -660,13 +664,15 @@ class Contacts(object):
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
         #
+        self.UTILS.reporting.logResult("info", "Entering hotmail_login ...")
         self.marionette.switch_to_frame()
         try:
-            element = "//iframe[contains(@{}, '{}')]"\
-                      .format((DOM.Contacts.hotmail_frame[0], DOM.Contacts.hotmail_frame[1]))
+            element = "//iframe[contains(@{}, '{}')]".\
+                            format(DOM.Contacts.hotmail_frame[0], DOM.Contacts.hotmail_frame[1])
 
             self.parent.wait_for_element_present("xpath", element, timeout=5)
 
+            self.UTILS.reporting.logResult("info", "Starting to switch frames in hotmail_login")
             #
             # Switch to the hotmail login frame.
             #
@@ -712,7 +718,7 @@ class Contacts(object):
                 #
                 self.permission_check(passwd)
         except:
-            pass
+             pass
 
         return True
 
@@ -1055,6 +1061,7 @@ class Contacts(object):
             try:
                 i.find_element("xpath", "//p[@data-order='{}']".format(contact_name.replace(" ", "")))
             except:
+                self.UTILS.reporting.logResult("info", "Crash when looking for contact")
                 pass
             #
             # This is our contact - try and get the image.
@@ -1128,7 +1135,7 @@ class Contacts(object):
         self._orig = self.UTILS.iframe.currentIframe()
 
         time.sleep(1)
-        self.UTILS.general.checkMarionetteOK()
+        # self.UTILS.general.checkMarionetteOK()
 
         self.find_frame()
 
@@ -1151,7 +1158,7 @@ class Contacts(object):
             # Marionette seems to crash here occasionally, so make sure we're okay before
             # the next loop!
             #
-            self.UTILS.general.checkMarionetteOK()
+            # self.UTILS.general.checkMarionetteOK()
             self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator, quit_on_error=False)
             y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False)
 
