@@ -96,7 +96,7 @@ getVariables(){
         sed -e "s/^.*get_os_variable//" | \
         grep "(\""                      | \
         awk '{FS=","}{print $1}'        | \
-        sed -e "s/[]()\"]//g")
+        sed -e "s/[](){}\"]//g")
 EOF
 }
 

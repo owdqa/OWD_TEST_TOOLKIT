@@ -33,7 +33,7 @@ goto_accounts_btn       = ('class name', 'fld-accounts-btn')
 accounts_list_names     = ('class name', 'fld-account-name')
 
 folderList_header       = ('class name', 'fld-folders-header-account-label')
-folderList_name_xpath   = '//*[text()="%s"]'
+folderList_name_xpath   = '//*[text()="{}"]'
 
 folder_message_list     = ('class name', 'msg-header-item')
 folder_headers_list     = ('class name', 'msg-header-author-and-date')
@@ -51,3 +51,7 @@ delete_this_email_btn   = ("xpath", "//div[@class='msg-reader-action-toolbar bot
 delete_confirm_buttons  = ("xpath", "//button[@id='msg-delete-ok']")
 deleted_email_notif     = ("xpath", ".//*[@id='cardContainer']//p[text()='1 message deleted']")
 
+confirm_ok = ("xpath", "//form[@class='modal-dialog-confirm generic-dialog visible']/menu/button[@data-l10n-id='ok']")
+confirm_msg = ("class name", "modal-dialog-confirm-message")
+
+new_account_error_msg = ('css selector', 'section.card-setup-account-info div.scrollregion-below-header div.sup-error-region div.sup-error-message')

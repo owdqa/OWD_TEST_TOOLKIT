@@ -49,7 +49,7 @@ from marionette import Marionette
 from marionette import Actions
 
 class current_frame():
-    
+
     def main(self, p_snippet, p_frame_array=False):
         #
         # p_el is an array for the element.
@@ -59,32 +59,32 @@ class current_frame():
         self.marionette.start_session()
         self.marionette.set_search_timeout(1000)
         self.actions    = Actions(self.marionette)
-        
+
         #
         # Switch to the correct iframe (unless it's "()").
         #
         self.marionette.switch_to_frame()
-        
+
         first_iframe = True
         for x in p_frame_array:
             # (just to make it look nice ;)
             typ_str = "'" + x[0] + "'"
-            
+
             if first_iframe:
                 first_iframe = False
                 print ""
                 print "Switching to iframe with " + typ_str.rjust(10) + " = '" + x[1] + "'"
             else:
                 print "... then to iframe with  " + typ_str.rjust(10) + " = '" + x[1] + "'"
-            
+
             my_iframe = self.marionette.find_element("xpath", "//iframe[@" + x[0] + "='" + x[1] + "']")
             self.marionette.switch_to_frame(my_iframe)
-            
+
         if first_iframe:
             print ""
             print "Using 'top level' iframe () ..."
-            
-        
+
+
         # Run the code snippet.
         print ""
         print "Running code snippet from this location ..."
