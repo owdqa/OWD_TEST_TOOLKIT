@@ -1056,24 +1056,18 @@ class Contacts(object):
         #
         # Verify that the contact's image is displayed.
         #
-        x = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "Contact list", False)
-        for i in x:
-            try:
-                i.find_element("xpath", "//p[@data-order='{}']".format(contact_name.replace(" ", "")))
-            except:
-                self.UTILS.reporting.logResult("info", "Crash when looking for contact")
-                pass
-            #
-            # This is our contact - try and get the image.
-            #
-            boolOK = True
-            try:
-                x = i.find_element("xpath", "//img")
-                self.UTILS.test.TEST("blob" in x.get_attribute("src"), "Contact image present in 'all contacts' screen.")
-            except:
-                boolOK = False
+        contact_list = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "Contact list", False)
+        for contact in contact_list:
+            if contact_name.replace(" ", "") == contact.get_attribute("data-order"):
+                isImage = True
+                try:
+                    img = contact.find_element("xpath", "//span[@data-type='img']")
+                    self.UTILS.test.TEST("blob" in img.get_attribute("data-src"), "Contact image present in 'all contacts' screen.")
+                except:
+                    self.UTILS.reporting.logResult("Cannot find img tag in contact. Contact data: {}".format(contact.text))
+                    isImage = False
 
-            self.UTILS.test.TEST(boolOK, "An image is present for this contact in all contacts screen.")
+                self.UTILS.test.TEST(isImage, "An image is present for this contact in all contacts screen.")
 
     def verify_linked(self, contact_name, fb_email):
         #
