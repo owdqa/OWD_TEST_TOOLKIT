@@ -59,7 +59,7 @@ SOURCE_DIR=http://ci-owd-misc-02/releases/DEVELOP/
 #
 # Get the latest date (if using the ci2-owd build).
 #
-x=$(echo $SOURCE_DIR | grep ci2-owd)
+x=$(echo $SOURCE_DIR | grep ci-owd-misc)
 if [ "$x" ]
 then
 	#
