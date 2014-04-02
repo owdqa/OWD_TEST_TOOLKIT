@@ -2,6 +2,7 @@ from OWDTestToolkit import DOM
 from OWDTestToolkit.apps.video import Video
 from OWDTestToolkit.apps.gallery import Gallery
 from OWDTestToolkit.apps.music import Music
+from OWDTestToolkit.apps.contacts import Contacts
 
 from marionette import Actions
 import time
@@ -750,6 +751,224 @@ class Messages(object):
             # Add a phone number.
             #
             self.addNumbersInToField([target_telNum])
+
+            #
+            # Send the mms.
+            #
+            self.UTILS.reporting.logResult("info", "Clicking on Send button")
+            x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
+                                          "Send button is displayed")
+            x.tap()
+
+            #
+            # Click send and wait for the message to be received
+            #
+            self.sendSMS()
+
+            #
+            # This step is necessary because our sim cards receive mms with +XXX
+            #
+            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
+            x.tap()
+
+            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
+
+            #
+            # Wait for the last message in this thread to be a 'recieved' one.
+            #
+            returnedSMS = self.waitForReceivedMsgInThisThread()
+            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
+
+        else:
+            self.UTILS.reporting.logResult("info", "incorrect value received")
+            self.UTILS.test.quitTest()
+
+
+    def forwardMessageToContact(self, msg_type, contact_name):
+        self.actions = Actions(self.marionette)
+        self.contacts = Contacts(self)
+
+        #
+        # Establish which phone number to use.
+        #
+
+        if msg_type == "sms":
+
+            self.UTILS.reporting.logResult("info", "is a sms")
+            #
+            # Open sms option with longtap on it
+            #
+            self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
+            x = self.UTILS.element.getElement(DOM.Messages.received_sms, "Target sms field")
+            self.actions.long_press(x, 2).perform()
+
+            #
+            # Press forward button
+            #
+            self.UTILS.reporting.logResult("info", "Clicking on forward button")
+            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
+            x.tap()
+
+            #
+            # Add a phone number.
+            #
+
+            #
+            # Search for our contact.
+            #
+            orig_iframe = self.selectAddContactButton()
+            self.contacts.search(contact_name)
+            self.contacts.check_search_results(contact_name)
+
+            x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
+            for i in x:
+                if i.text == contact_name:
+                    i.tap()
+                    break
+
+            #
+            # Switch back to the sms iframe.
+            #
+            self.marionette.switch_to_frame()
+            self.UTILS.iframe.switchToFrame("src",orig_iframe)
+
+            #
+            # Now check the correct name is in the 'To' list.
+            #
+            self.checkIsInToField(contact_name)
+
+            #
+            # Send the sms.
+            #
+            self.UTILS.reporting.logResult("info", "Clicking on Send button")
+            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
+            x.tap()
+
+            #
+            # Wait for the last message in this thread to be a 'received' one.
+            #
+            returnedSMS = self.waitForReceivedMsgInThisThread()
+            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
+
+        elif msg_type == "mms":
+
+            self.UTILS.reporting.logResult("info", "is a mms")
+            #
+            # Open mms option with longtap on it
+            #
+            self.UTILS.reporting.logResult("info", "Open mms option with longtap on it")
+            x = self.UTILS.element.getElement(DOM.Messages.received_mms, "Target mms field")
+            self.actions.long_press(x, 2).perform()
+
+            #
+            # Press forward button
+            #
+            self.UTILS.reporting.logResult("info", "Clicking on forward button")
+            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
+            x.tap()
+
+            #
+            # Add a phone number.
+            #
+
+            #
+            # Search for our contact.
+            #
+            orig_iframe = self.selectAddContactButton()
+            self.contacts.search(contact_name)
+            self.contacts.check_search_results(contact_name)
+
+            x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
+            for i in x:
+                if i.text == contact_name:
+                    i.tap()
+                    break
+
+            #
+            # Switch back to the sms iframe.
+            #
+            self.marionette.switch_to_frame()
+            self.UTILS.iframe.switchToFrame("src",orig_iframe)
+
+            #
+            # Now check the correct name is in the 'To' list.
+            #
+            self.checkIsInToField(contact_name)
+
+            #
+            # Send the mms.
+            #
+            self.UTILS.reporting.logResult("info", "Cliking on Send button")
+            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
+            x.tap()
+
+            #
+            # Click send and wait for the message to be received
+            #
+            self.sendSMS()
+
+            #
+            # This step is necessary because our sim cards receive mms with +XXX
+            #
+            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
+            x.tap()
+
+            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
+
+            #
+            # Wait for the last message in this thread to be a 'received' one.
+            #
+            returnedSMS = self.waitForReceivedMsgInThisThread()
+            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
+
+        elif msg_type == "mmssub":
+
+            self.UTILS.reporting.logResult("info", "is a mms with subject")
+
+            #
+            # Open mms option with longtap on it
+            #
+            self.UTILS.reporting.logResult("info",
+                                    "Open mms with subject options with longtap on it")
+            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject,
+                                    "Target MMS field")
+            self.actions.long_press(x, 2).perform()
+
+            #
+            # Press forward button
+            #
+            self.UTILS.reporting.logResult("info", "Clicking on fordward button")
+            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
+                                          "Forward button is displayed")
+            x.tap()
+
+            #
+            # Add a phone number.
+            #
+
+            #
+            # Search for our contact.
+            #
+            orig_iframe = self.selectAddContactButton()
+            self.contacts.search(contact_name)
+            self.contacts.check_search_results(contact_name)
+
+            x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
+            for i in x:
+                if i.text == contact_name:
+                    i.tap()
+                    break
+
+            #
+            # Switch back to the sms iframe.
+            #
+            self.marionette.switch_to_frame()
+            self.UTILS.iframe.switchToFrame("src",orig_iframe)
+
+            #
+            # Now check the correct name is in the 'To' list.
+            #
+            self.checkIsInToField(contact_name)
 
             #
             # Send the mms.
