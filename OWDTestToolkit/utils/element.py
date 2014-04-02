@@ -211,7 +211,7 @@ class element(object):
         self.parent.test.TEST(is_ok, msg, stop_on_error)
         return is_ok
 
-    def getElementByXpath(path):
+    def getElementByXpath(self, path):
         #
         # Use this function when normal getElement did not work
         #
@@ -219,7 +219,7 @@ class element(object):
             return document.evaluate(arguments[0], document, null, 9, null).singleNodeValue;
         """, script_args=[path])
 
-    def getParent(element):
+    def getParent(self, element):
         #
         # Gets the element's parent. Can be called recursively
         #
@@ -227,7 +227,7 @@ class element(object):
             return arguments[0].parentNode;
         """, script_args=[element])
 
-    def getChildren(element):
+    def getChildren(self, element):
         #
         # Gets the element's children
         #
@@ -235,7 +235,7 @@ class element(object):
             return arguments[0].children;
         """, script_args=[element])
 
-    def get_css_value(element, css_property):
+    def get_css_value(self, element, css_property):
         #
         # Gets the value of a certain css property.
         #
@@ -251,7 +251,7 @@ class element(object):
             return getStyle(arguments[0], arguments[1])
         """, script_args=[element, css_property])
 
-    def is_ellipsis_active(element):
+    def is_ellipsis_active(self, element):
         #
         # Checks whether a certain element is really ellipsed when its content
         # overflows its width
