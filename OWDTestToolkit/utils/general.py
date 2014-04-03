@@ -183,11 +183,6 @@ class general(object):
         no_keyboard = self.parent.general.get_os_variable("NO_KEYBOARD", False)
 
         #
-        # Make sure the string is a string!
-        #
-        p_str = str(str(p_str))
-
-        #
         # Remember the current frame.
         #
         orig_frame = self.parent.iframe.currentIframe()
@@ -206,8 +201,10 @@ class general(object):
             #
             # Don't use the keyboard.
             #
-            self.parent.reporting.logResult("info", "(Sending '{}' to this field without using the keyboard.)".\
-                                            format(p_str))
+            #self.parent.reporting.logResult("info", "(Sending'" + p_str + "'to this field without using the keyboard.)")
+            self.parent.reporting.logResult("info", u"(Sending '{}' to this field without using the keyboard.)".\
+                format(p_str))
+
             x.send_keys(p_str)
 
             #

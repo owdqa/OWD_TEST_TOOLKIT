@@ -1,5 +1,6 @@
 import time
 import datetime
+import codecs
 
 
 class reporting(object):
@@ -121,7 +122,8 @@ class reporting(object):
         test_time = round(test_time, 0)
         test_time = str(datetime.timedelta(seconds=test_time))
 
-        DET_FILE = open(self.det_fnam, "w")
+        #DET_FILE = open(self.det_fnam, "w")
+        DET_FILE = codecs.open(self.det_fnam, "w", encoding='utf-8')
         SUM_FILE = open(self.sum_fnam, "w")
 
         DET_FILE.write("<span style=\"font-size:14px\">")
@@ -178,7 +180,8 @@ class reporting(object):
                     DET_FILE.write(pass_str)
 
                 DET_FILE.write(i[0])  # (Timestamp)
-                DET_FILE.write(" " + i[2].encode('ascii', 'ignore') + "\n")
+                #DET_FILE.write(" " + i[2].encode('ascii', 'ignore') + "\n")
+                DET_FILE.write(" " + i[2] + "\n")
 
         DET_FILE.close()
         SUM_FILE.close()

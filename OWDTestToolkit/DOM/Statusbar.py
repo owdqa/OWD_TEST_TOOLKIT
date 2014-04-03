@@ -1,6 +1,6 @@
 status_bar_new  = ('xpath', "//*[@id='statusbar-notification'][@data-unread='true']")
 wifi            = ('id', 'statusbar-wifi')
-dataConn        = ('xpath', '/html/body/div/div/div[8]/div[2]')
+dataConn        = ('id', 'statusbar-data')
 bluetooth       = ('id', 'statusbar-bluetooth')
 airplane        = ('id', 'statusbar-flight-mode')
 signal          = ("xpath", "/html/body/div/div/div[8]/div")
@@ -14,3 +14,5 @@ toggle_bluetooth= ("id", "quick-settings-bluetooth")
 toggle_airplane = ("id", "quick-settings-airplane-mode")
 
 settings_button = ("id", "quick-settings-full-app")
+
+
