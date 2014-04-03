@@ -1001,6 +1001,51 @@ class Messages(object):
             self.UTILS.reporting.logResult("info", "incorrect value received")
             self.UTILS.test.quitTest()
 
+
+    def addContactToField(self, contact_name):
+        self.actions = Actions(self.marionette)
+        self.contacts = Contacts(self)
+
+
+        #
+        # Establish which phone number to use.
+        #
+
+        self.UTILS.reporting.logResult("info", "is a sms")
+        #
+        # Create and send a new SMS.<br>
+        # <b>Note:</b> The nums field must be an array of numbers
+        # or contact names.
+        #
+
+        self.startNewSMS()
+
+        #
+        # Search for our contact.
+        #
+        orig_iframe = self.selectAddContactButton()
+        self.contacts.search(contact_name)
+        self.contacts.check_search_results(contact_name)
+
+        x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
+        for i in x:
+               if i.text == contact_name:
+                   i.tap()
+                   break
+
+        #
+        # Switch back to the sms iframe.
+        #
+        self.marionette.switch_to_frame()
+        self.UTILS.iframe.switchToFrame("src",orig_iframe)
+
+        #
+        # Now check the correct name is in the 'To' list.
+        #
+        self.checkIsInToField(contact_name)
+
+
+
     def forwardMessageToMultipleRecipients(self, msg_type,target_telNum, contact_name):
         self.actions = Actions(self.marionette)
         self.contacts = Contacts(self)
