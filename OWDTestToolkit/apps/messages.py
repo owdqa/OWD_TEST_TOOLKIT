@@ -3,6 +3,7 @@ from OWDTestToolkit.apps.video import Video
 from OWDTestToolkit.apps.gallery import Gallery
 from OWDTestToolkit.apps.music import Music
 from OWDTestToolkit.apps.contacts import Contacts
+from OWDTestToolkit.apps.camera import Camera
 
 from marionette import Actions
 import time
@@ -316,6 +317,29 @@ class Messages(object):
             if type != "img":
                 self.UTILS.test.quitTest("Incorrect file type. The file must be img ")
 
+        elif attached_type == "cameraImage":
+            #
+            # Add an image file from camera
+            #
+            self.createMMSCameraImage()
+
+            #
+            # Click send and wait for the message to be received
+            #
+            self.sendSMS()
+            time.sleep(5)
+
+            #
+            # Obtaining file attached type
+            #
+            x = self.UTILS.element.getElement(DOM.Messages.attach_preview_img_type, "preview type")
+            type = x.get_attribute("data-attachment-type")
+
+
+            if type != "img":
+                self.UTILS.test.quitTest("Incorrect file type. The file must be img ")
+
+
         elif attached_type == "video":
             #
             # Load an video file into the device.
@@ -411,6 +435,26 @@ class Messages(object):
         gallery.tap()
 
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
+
+    def createMMSCameraImage(self):
+        self.camera = Camera(self)
+
+        attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
+        attach.tap()
+
+        self.marionette.switch_to_frame()
+
+        camera = self.UTILS.element.getElement(DOM.Messages.mms_from_camera, "From Camera")
+        camera.tap()
+
+        self.UTILS.iframe.switchToFrame(*DOM.Camera.frame_locator)
+
+        #
+        # Take a picture.
+        #
+        self.camera.takeAndSelectPicture()
+
+        self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
     def createMMSMusic(self):
 

@@ -116,3 +116,16 @@ class Camera(object):
         x = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
         x.tap()
         self.UTILS.element.waitForElements(DOM.Camera.thumbnail, "Camera thumbnails")
+
+    def takeAndSelectPicture(self):
+        #
+        # Take a picture.
+        #
+        x = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
+        x.tap()
+
+        #
+        # Confirm the picture.
+        #
+        y = self.UTILS.element.getElement(DOM.Camera.select_button, "Select Camera photo")
+        y.tap()
