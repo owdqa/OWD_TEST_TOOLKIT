@@ -192,7 +192,7 @@ class general(object):
         #
         # Need to click in a lot of these or the field isn't located correctly (esp. SMS).
         #
-        x.click()
+        x.tap(x=x.size["width"] - 1)
 
         if p_clear:
             x.clear()
@@ -224,7 +224,6 @@ class general(object):
             # Tap the element to get the keyboard to popup.
             #
             self.parent.reporting.logResult("info", "(Sending '{}' to this field using the keyboard.)".format(p_str))
-            x.tap()
 
             #
             # Type the string.
