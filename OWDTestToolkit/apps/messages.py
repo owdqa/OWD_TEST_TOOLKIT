@@ -61,17 +61,17 @@ class Messages(object):
                     try:
                         #
                         # A 'silent' check to see if the keyboard iframe appears.
-                        elDef = ("xpath",
-                                "//iframe[contains(@{}, '{}')]".format(DOM.Keyboard.frame_locator[0], DOM.Keyboard.frame_locator[1]))
+                        elDef = ("xpath", "//iframe[contains(@{}, '{}')]".\
+                                 format(DOM.Keyboard.frame_locator[0], DOM.Keyboard.frame_locator[1]))
                         self.parent.wait_for_element_displayed(*elDef, timeout=2)
                         boolKBD = True
                     except:
                         boolKBD = False
-                    
+
                     self.UTILS.test.TEST(boolKBD, "Keyboard is displayed when 'To' field is clicked.")
-    
+
                 self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
-            
+
             #
             # Seems okay, so proceed ...
             #
@@ -116,7 +116,6 @@ class Messages(object):
             "add subject option button is displayed")
         x.tap()
 
-
         self.UTILS.general.typeThis(DOM.Messages.target_subject,
                                     "Target Subject  field",
                                     subject,
@@ -124,7 +123,6 @@ class Messages(object):
                                     p_validate=False,
                                     p_clear=False,
                                     p_enter=False)
-
 
     def checkAirplaneModeWarning(self):
         #
@@ -139,7 +137,7 @@ class Messages(object):
         if x:
             self.UTILS.reporting.logResult("info",
                                  "Warning message title detected = '" + x.text + "'.")
-            
+
             x = self.UTILS.element.getElement(DOM.Messages.airplane_warning_ok, "OK button")
             x.tap()
 
@@ -151,13 +149,13 @@ class Messages(object):
         #
         time.sleep(1)
         x = self.UTILS.element.getElements(DOM.Messages.target_numbers, "'To:' field contents", False)
-        
+
         boolOK = False
         for i in x:
             if i.text.lower() == str(target).lower():
                 boolOK = True
                 break
-        
+
         testMsg = "is" if targetIsPresent else "is not"
         testMsg = "\"" + str(target) + "\" " + testMsg + " in the 'To:' field."
         self.UTILS.test.TEST(boolOK == targetIsPresent, testMsg)
@@ -195,27 +193,27 @@ class Messages(object):
         # contact).
         #
         x = self.UTILS.element.getElements(DOM.Messages.target_numbers, "'To:' field contents")
-        
+
         boolOK = False
         for i in x:
             if i.get_attribute("data-number") == target:
                 boolOK = True
                 break
-        
+
         self.UTILS.test.TEST(boolOK,
             "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
         return boolOK
-        
+
     def checkThreadHeader(self, header):
         #
         # Verifies if a string is contained in the header
         #
         x = self.UTILS.element.getElement(DOM.Messages.message_header, "Header")
-        
+
         boolOK = False
         if x.get_attribute("data-number") == header:
                 boolOK = True
-        
+
         self.UTILS.test.TEST(boolOK, "\"" + str(header) + "\" is the header in the SMS conversation.")
         return boolOK
 
@@ -241,7 +239,7 @@ class Messages(object):
         # Switch back to the messaging app.
         #
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
-        
+
         #
         # Wait for the message thread to finish loading.
         #
@@ -256,7 +254,7 @@ class Messages(object):
         #
         x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
         x.tap()
-        
+
         self.UTILS.element.waitForElements(("xpath", "//h1[text()='Messages']"), "Messages main header")
 
     def countMessagesInThisThread(self):
@@ -311,10 +309,9 @@ class Messages(object):
             # Obtaining file attached type
             #
             x = self.UTILS.element.getElement(DOM.Messages.attach_preview_img_type, "preview type")
-            type = x.get_attribute("data-attachment-type")
+            typ = x.get_attribute("data-attachment-type")
 
-
-            if type != "img":
+            if typ != "img":
                 self.UTILS.test.quitTest("Incorrect file type. The file must be img ")
 
         elif attached_type == "cameraImage":
@@ -350,14 +347,13 @@ class Messages(object):
             self.video.clickOnVideoMMS(0)
             self.sendSMS()
 
-
             #
             # Obtaining file attached type
             #
             x = self.UTILS.element.getElement(DOM.Messages.attach_preview_video_audio_type, "preview type")
-            type = x.get_attribute("data-attachment-type")
+            typ = x.get_attribute("data-attachment-type")
 
-            if type != "video":
+            if typ != "video":
                 self.UTILS.test.quitTest("Incorrect file type. The file must be video")
 
         elif attached_type == "audio":
@@ -375,14 +371,13 @@ class Messages(object):
             self.sendSMS()
             time.sleep(5)
 
-
             #
             # Obtaining file attached type
             #
             x = self.UTILS.element.getElement(DOM.Messages.attach_preview_video_audio_type, "preview type")
-            type = x.get_attribute("data-attachment-type")
+            typ = x.get_attribute("data-attachment-type")
 
-            if type != "audio":
+            if typ != "audio":
                 self.UTILS.test.quitTest("Incorrect file type. The file must be audio ")
 
         else:
@@ -414,7 +409,7 @@ class Messages(object):
         # The header should now say how many receipients.
         #
         time.sleep(2)  # give the header time to change.
-        
+
         num_recs = len(nums)
         search_str = " recipient" if num_recs == 1 else " recipients"
         self.UTILS.element.headerCheck(str(num_recs) + search_str)
@@ -491,12 +486,12 @@ class Messages(object):
                 self.UTILS.reporting.logResult("info", "(No message threads to delete.)")
         except:
             self.UTILS.reporting.logResult("info", "Deleting message threads ...")
- 
+
             x = self.threadEditModeON()
             x = self.UTILS.element.getElement(DOM.Messages.check_all_threads_btn,
                                         "Select all button")
             x.tap()
-             
+
             self.deleteSelectedThreads()
             self.UTILS.element.waitForElements(DOM.Messages.no_threads_message,
                                        "No message threads notification", True, 60)
@@ -505,8 +500,8 @@ class Messages(object):
         #
         # Enters edit mode, selects the required messages and
         # deletes them.<br>
-        # msg_array is an array of numbers. 
-        # If it's not specified then all messages in this 
+        # msg_array is an array of numbers.
+        # If it's not specified then all messages in this
         # thread will be deleted.
         #
         if msg_array:
@@ -530,7 +525,7 @@ class Messages(object):
             x = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn,
                                         "'Select all' button")
             x.tap()
-            
+
         self.deleteSelectedMessages()
 
     def deleteSelectedMessages(self):
@@ -545,8 +540,7 @@ class Messages(object):
         # Press OK button to confirm. OK button is displayed on top_level frame.
         #
         self.marionette.switch_to_frame()
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn,
-                                    "OK button in question dialog")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "OK button in question dialog")
         x.tap()
 
         # self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
@@ -557,14 +551,12 @@ class Messages(object):
         # Delete the currently selected message threads.
         #
         orig_iframe = self.UTILS.iframe.currentIframe()
-        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button,
-                                    "Delete threads button")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
         x.tap()
-        
+
         time.sleep(2)
         self.marionette.switch_to_frame()
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn,
-                                    "OK button in question dialog")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "OK button in question dialog")
         x.tap()
 
         #
@@ -578,9 +570,9 @@ class Messages(object):
         #
         # Enters edit mode, selects the required messages and
         # deletes them.<br>
-        # target_array is an array of target numbers 
+        # target_array is an array of target numbers
         # or contacts which identify the threads to be selected.
-        # If it's not specified then all messages in this 
+        # If it's not specified then all messages in this
         # thread will be deleted.
         #
         try:
@@ -588,12 +580,6 @@ class Messages(object):
             x = self.marionette.find_element(*DOM.Messages.no_threads_message)
             if x.is_displayed():
                 self.UTILS.reporting.logResult("info", "(No message threads to delete.)")
-                
-                #
-                # Without this 'return' the code actually tries to do the 'else:' part
-                # too!!
-                #
-                return
         except:
             self.UTILS.reporting.logResult("info", "Deleting message threads ...")
             if target_array:
@@ -608,7 +594,7 @@ class Messages(object):
         # the messages listed in msg_array.<br>
         # msg_array is an array of numbers.
         #
-        
+
         #
         # Go into messages Settings..
         #
@@ -620,7 +606,7 @@ class Messages(object):
         #
         x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Edit button")
         x.tap()
-        
+
         #
         # Check the messages (for some reason, just doing x[i].click() doesn't
         # work for element zero, so I had to do this 'longhanded' version!).
@@ -637,15 +623,15 @@ class Messages(object):
         #
         # Puts this thread into Edit mode and selects
         # the messages listed in p_msg_array.<br>
-        # target_array is an array of target numbers 
+        # target_array is an array of target numbers
         # or contacts which identify the threads to be selected.
         #
-        
+
         #
         # Go into edit mode..
         #
         x = self.threadEditModeON()
-        
+
         #
         # Check the messages (for some reason, just doing x[i].click() doesn't
         # work for element zero, so I had to do this 'longhanded' version!).
@@ -669,7 +655,7 @@ class Messages(object):
                             p_clear=False,
                             p_enter=False,
                             p_validate=False)  # it's the text() of this field, not the value.
-        
+
         #
         # Validate the field.
         #
@@ -1335,11 +1321,11 @@ class Messages(object):
         #
         x = self.UTILS.element.getElement(DOM.Messages.message_header, "Thread header")
         x.tap()
-        
+
         x = self.UTILS.element.getElement(DOM.Messages.header_add_to_contact_btn,
                                     "'Add to an existing contact' button")
         x.tap()
-        
+
         #
         # Switch to correct iframe.
         #
@@ -1378,11 +1364,11 @@ class Messages(object):
         #
         x = self.UTILS.element.getElement(DOM.Messages.message_header, "Thread header")
         x.tap()
-        
+
         x = self.UTILS.element.getElement(DOM.Messages.header_create_new_contact_btn,
                                     "'Create new contact' button")
         x.tap()
-        
+
         #
         # Switch to correct iframe.
         #
@@ -1396,7 +1382,7 @@ class Messages(object):
         #
         x = self.UTILS.element.getElement(DOM.Messages.message_header, "Thread header")
         x.tap()
-        
+
         x = self.UTILS.element.getElement(DOM.Messages.header_send_message_btn, "'Send message' button")
         x.tap()
 
@@ -1408,7 +1394,7 @@ class Messages(object):
         # try:
         self.parent.wait_for_element_present(*DOM.Messages.message_list, timeout=20)
         x = self.marionette.find_elements(*DOM.Messages.message_list)
-        
+
         if len(x) > 1:
             return x[-1]
         else:
@@ -1424,9 +1410,9 @@ class Messages(object):
         try:
             thread_el = ("xpath", DOM.Messages.thread_selector_xpath.format(num))
             x = self.UTILS.element.getElement(thread_el, "Message thread for " + num)
-            
+
             x.tap()
-            
+
             self.UTILS.element.waitForElements(DOM.Messages.send_message_button, "'Send' button")
         except:
             x = self.UTILS.debug.screenShotOnErr()
@@ -1448,11 +1434,11 @@ class Messages(object):
         x = self.UTILS.element.getElement(("xpath", DOM.Messages.messages_from_num.format(fromNum)),
                                      "Message from '" + fromNum + "'")
         x.tap()
-        
+
         # (From gaiatest: "TODO Due to displayed bugs I cannot find a good wait
         # for switch btw views")
         time.sleep(5)
-        
+
         #
         # Return the last comment in this thread.
         #
@@ -1464,16 +1450,15 @@ class Messages(object):
         # Returns True if it found the target, or False if not.
         #
         x = self.UTILS.element.getElements(DOM.Messages.target_numbers, "'To:' field contents")
-        
-        x_pos = 0
-        for i in range(0, len(x)):
+
+        for i in range(len(x)):
             self.UTILS.reporting.logResult("info",
                                 "Checking target '{}' to '{}' ...".format(x[i].text, target))
 
             if x[i].text.lower() == target.lower():
                 self.UTILS.reporting.logResult("info", "Tapping contact '" + target + "' ...")
                 x[i].tap()
-                
+
                 try:
                     #
                     # This contact was added via 'add contact' icon.
@@ -1502,15 +1487,15 @@ class Messages(object):
         #
         x = self.UTILS.element.getElement(DOM.Messages.add_contact_button, "Add contact button")
         x.tap()
-        
+
         time.sleep(2)
-        
+
         #
         # Switch to the contacts frame.
         #
         orig_iframe = self.UTILS.iframe.currentIframe()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        
+
         time.sleep(2)
         return orig_iframe
 
@@ -1518,20 +1503,18 @@ class Messages(object):
         #
         # Just presses the 'send' button (assumes everything else is done).
         #
-        sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button,
-                                        "Send sms button")
+        sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send sms button")
         sendBtn.tap()
 
-        time.sleep(2)  # (Give the spinner time to appear.)
-        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner,
-                                        "'Sending' icon", True, 120)
+        # (Give the spinner time to appear.)
+        time.sleep(2)
+        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 120)
 
         #
         # Check if we received the 'service unavailable' message.
         #
         try:
-            self.parent.wait_for_element_displayed(*DOM.Messages.service_unavailable_msg,
-                                            timeout=2)
+            self.parent.wait_for_element_displayed(*DOM.Messages.service_unavailable_msg, timeout=2)
             x = self.UTILS.debug.screenShotOnErr()
             msg = "'Service unavailable' message detected - unable to send sms!"
             self.UTILS.reporting.logResult("info", msg, x)
@@ -1546,16 +1529,14 @@ class Messages(object):
         # Starts a new sms (doesn't fill anything in).
         # Assumes the Messaging app is already launched.
         #
-        newMsgBtn = self.UTILS.element.getElement(DOM.Messages.create_new_message_btn,
-                                             "Create new message button")
+        newMsgBtn = self.UTILS.element.getElement(DOM.Messages.create_new_message_btn, "Create new message button")
         newMsgBtn.tap()
 
     def threadCarrier(self):
         #
         # Returns the 'carrier' being used by this thread.
         #
-        x = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field,
-                                     "Type and carrier information")
+        x = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field, "Type and carrier information")
         return x.text.split("|")[1].strip()
 
     def threadEditModeOFF(self):
@@ -1580,20 +1561,18 @@ class Messages(object):
         #
         boolOK = False
         try:
-            self.parent.wait_for_element_present("xpath",
-                                    DOM.Messages.thread_selector_xpath.format(num), 1)
+            self.parent.wait_for_element_present("xpath", DOM.Messages.thread_selector_xpath.format(num), 1)
             boolOK = True
         except:
             boolOK = False
-            
+
         return boolOK
 
     def threadType(self):
         #
         # Returns the 'type' being used by this thread.
         #
-        x = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field,
-                                    "Type and carrier information")
+        x = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field, "Type and carrier information")
         return x.text.split("|")[0].strip()
 
     def timeOfLastMessageInThread(self):
@@ -1648,9 +1627,9 @@ class Messages(object):
         # Obtaining file attached type
         #
         x = self.UTILS.element.getElement(DOM_elem, "preview type")
-        type = x.get_attribute("data-attachment-type")
+        typ = x.get_attribute("data-attachment-type")
 
-        if type != attached_type:
+        if typ != attached_type:
             msg = "Incorrect file type. The file must be {}".format(attached_type)
             self.UTILS.test.quitTest(msg)
 
@@ -1693,22 +1672,22 @@ class Messages(object):
         pollReps = (timeOut / pollTime)
         lastEl = False
 
-        for i in range(1, pollReps):
+        for i in range(pollReps):
             # Get last message in this thread.
             x = self.lastMessageInThisThread()
 
             if not x:
                 time.sleep(pollTime)
                 continue
-            
+
             # Is this a received message?
             if "incoming" in x.get_attribute("class"):
                 lastEl = x
                 break
-            
+
             # Nope - sleep then try again.
             time.sleep(pollTime)
-        
+
         self.UTILS.test.TEST(lastEl,
                         "Last message in thread is a 'received' message within " + str(timeOut) + " seconds.")
         return lastEl
@@ -1725,9 +1704,9 @@ class Messages(object):
         #
         x = (DOM.Messages.statusbar_new_sms[0],
             DOM.Messages.statusbar_new_sms[1].format(num))
-        
+
         #
-        # Wait for the notification to be present for this number 
+        # Wait for the notification to be present for this number
         # in the popup messages (this way we make sure it's coming from our number,
         # as opposed to just containing our number in the notification).
         #
