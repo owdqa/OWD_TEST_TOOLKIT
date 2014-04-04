@@ -21,6 +21,7 @@ compose_send_btn        = ('class name', 'icon icon-send')
 compose_send_failed_msg = ('xpath', './/*[text()="Sending email failed"]')
 compose_send_failed_ok  = ("id", "cmp-send-failed-ok")
 compose_sending_spinner = ('class name', 'cmp-messages-sending')
+compose_attach_btn = ('class name', 'icon icon-attachment')
 
 settings_menu_btn       = ('xpath', '//header//a[@class="msg-folder-list-btn"]')
 
