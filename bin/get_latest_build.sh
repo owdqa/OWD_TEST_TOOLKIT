@@ -51,15 +51,15 @@ TARGET_DIR=$HOME/Downloads/device_flash_files
 #
 # The latest version sould be in the tid.es option (comment out the ci2 one if you want that method).
 #
-SOURCE_DIR=https://owd.tid.es/releases/DEVELOP/latest-version
+#SOURCE_DIR=https://owd.tid.es/releases/DEVELOP/latest-version
 #SOURCE_DIR=http://ci2-owd/releases/DEVELOP/
-#SOURCE_DIR=http://ci-owd-misc-02/releases/DEVELOP/
+SOURCE_DIR=http://ci-owd-misc-02/releases/DEVELOP/
 
 
 #
-# Get the latest date (if using the ci2-owd build).
+# Get the latest date (if using the ci-owd-misc-02 build).
 #
-x=$(echo $SOURCE_DIR | grep ci2-owd)
+x=$(echo $SOURCE_DIR | grep ci-owd-misc)
 if [ "$x" ]
 then
 	#
