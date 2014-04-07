@@ -1048,7 +1048,7 @@ class Messages(object):
         # or contact names.
         #
 
-        self.startNewSMS()
+        #self.startNewSMS()
 
         #
         # Search for our contact.
