@@ -240,7 +240,7 @@ class Contacts(object):
 
         self.populate_contact_fields(contact)
 
-    def delete_contact(self, fullname):
+    def delete_contact(self, fullname, header_check=True):
         #
         # Deletes a contact.<br>
         # fullname must match the name displayed
@@ -258,7 +258,7 @@ class Contacts(object):
         #
         # View our contact.
         #
-        self.view_contact(fullname)
+        self.view_contact(fullname, header_check)
 
         #
         # Edit our contact.
@@ -1135,14 +1135,14 @@ class Contacts(object):
 
         y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
 
-        self.UTILS.reporting.logResult("info", "{} contacts listed.".format(len(y)))
+        self.UTILS.reporting.logResult("info", u"{} contacts listed.".format(len(y)))
         ymax = len(y)
         found = False
         for i in range(ymax):
-            self.UTILS.reporting.logResult("info", "'{}'".format(y[i].text))
+            self.UTILS.reporting.logResult("info", u"'{}'".format(y[i].text))
             if contact_name.lower() in y[i].text.lower():
                 found = True
-                self.UTILS.reporting.logResult("info", "Contact '{}' found in all contacts - selecting this contact ...".\
+                self.UTILS.reporting.logResult("info", u"Contact '{}' found in all contacts - selecting this contact ...".\
                                      format(contact_name))
                 self.marionette.execute_script("document.getElementsByClassName('contact-item')[{}].click()".format(i))
                 time.sleep(2)
@@ -1157,7 +1157,7 @@ class Contacts(object):
             y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False)
 
         if not found:
-            self.UTILS.reporting.logResult("info", "FYI: Contact '{}' was <b>not</b> found in the contacts list.".\
+            self.UTILS.reporting.logResult("info", u"FYI: Contact '{}' was <b>not</b> found in the contacts list.".\
                                  format(contact_name))
             return
 
