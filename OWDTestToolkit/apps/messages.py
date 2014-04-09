@@ -279,6 +279,12 @@ class Messages(object):
         #
         return len(self.UTILS.element.getElements(DOM.Messages.message_list, "Messages"))
 
+    def countNumberOfThreads(self):
+        #
+        # Count all threads (assumes the messagin app is already open).
+        #
+        return len(self.UTILS.element.getElements(DOM.Messages.threads_list, "Threads"))
+
     def createAndSendMMS(self, attached_type, m_text):
 
         self.gallery = Gallery(self)
