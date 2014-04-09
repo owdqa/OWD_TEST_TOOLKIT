@@ -257,3 +257,29 @@ class Browser(object):
         self.UTILS.element.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 120, False)
 
         time.sleep(2)
+
+    def addCurrentPageToBookmarks(self):
+        """
+        Adds the current page to bookmarks and checks that it was correctly added
+        """
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
+
+        #
+        # Add the page to the bookmark
+        #
+        x = self.UTILS.element.getElement(DOM.Browser.bookmarkmenu_button, "Bookmark button")
+        x.tap()
+
+        x = self.UTILS.element.getElement(DOM.Browser.bookmark_button, "Bookmark button")
+        x.tap()
+
+        x = self.UTILS.element.getElement(DOM.Browser.url_input, "Bookmark button")
+        x.tap()
+
+        x = self.UTILS.element.getElement(DOM.Browser.bookmarks_tab, "Bookmark tab")
+        x.tap()
+
+        #
+        # Very that the bookmark is correctly created
+        #
+        self.UTILS.element.waitForElements(DOM.Browser.bookmark_item1, "Bookmark")

@@ -42,3 +42,8 @@ settings_header         = ("xpath", "//header[@id='settings-header']")
 website_frame           = ("class", "browser-tab")
 page_title              = ('xpath', ".//*[@id='results']/ul//h5[text()='Problemloadingpage']")
 page_problem            = ("xpath", "//*[text()='Problem loading page']")
+
+bookmarkmenu_button = ("xpath", "//*[@id='bookmark-button']")
+bookmark_button = ("xpath", "//*[@id='bookmark-menu-add']")
+bookmarks_tab = ("xpath", "//*[@id='bookmarks-tab']")
+bookmark_item1 = ("xpath", "/html/body/div/div/div[2]/div/section[2]/ul/li/a/h5")
