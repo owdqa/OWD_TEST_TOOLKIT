@@ -339,6 +339,7 @@ class Settings(object):
         #
         if not self.parent.data_layer.get_setting("wifi.enabled"):
             x = self.UTILS.statusbar.isIconInStatusBar(DOM.Statusbar.dataConn)
+            time.sleep(5)
             self.UTILS.test.TEST(x, "Data connection icon is present in the status bar.", True)
 
         self.UTILS.home.goHome()
