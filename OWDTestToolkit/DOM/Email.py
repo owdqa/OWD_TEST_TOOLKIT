@@ -9,7 +9,8 @@ sup_next_btn            = ('class name', 'sup-info-next-btn')
 email_accounts_list     = ('class name', 'tng-account-item-label list-text')
 
 compose_msg_btn         = ('class name', 'msg-compose-btn')
-compose_to_from_contacts= ("xpath", "//div[@class='cmp-to-container cmp-addr-container']//span[@class='cmp-peep-name']")
+compose_to_from_contacts = ("xpath", "//div[@class='cmp-to-container cmp-addr-container']//span[@class='cmp-peep-name']")
+compose_to_from_contacts_address = ("xpath", "//div[@class='cmp-to-container cmp-addr-container']//span[@class='cmp-peep-address collapsed']") 
 compose_to              = ('class name', 'cmp-to-text cmp-addr-text')
 compose_cc              = ('class name', 'cmp-cc-text cmp-addr-text')
 compose_bcc             = ('class name', 'cmp-bcc-text cmp-addr-text')
@@ -17,11 +18,23 @@ compose_subject         = ('class name', 'cmp-subject-text')
 
 compose_msg             = ('class name', 'cmp-body-text') # Caution: there's >1 of these in the html!
 
+
+reply_btn = ('class name', "msg-reply-btn")
+reply_menu_reply = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-reply"]')
+reply_menu_reply_all = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-reply-all"]')
+reply_menu_forward = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-forward"]')
+reply_menu_cancel = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-cancel"]')
+
 compose_send_btn        = ('class name', 'icon icon-send')
 compose_send_failed_msg = ('xpath', './/*[text()="Sending email failed"]')
 compose_send_failed_ok  = ("id", "cmp-send-failed-ok")
 compose_sending_spinner = ('class name', 'cmp-messages-sending')
 compose_attach_btn = ('class name', 'icon icon-attachment')
+
+attach_video_btn = ("xpath", "//form//button[text()='Video']")
+attach_music_btn = ("xpath", "//form//button[text()='Music']")
+attach_gallery_btn = ("xpath", "//form//button[text()='Gallery']")
+attach_camera_btn = ("xpath", "//form//button[text()='Camera']")
 
 settings_menu_btn       = ('xpath', '//header//a[@class="msg-folder-list-btn"]')
 
@@ -36,6 +49,7 @@ accounts_list_names     = ('class name', 'fld-account-name')
 folderList_header       = ('class name', 'fld-folders-header-account-label')
 folderList_name_xpath   = '//*[text()="{}"]'
 
+folder_message_container = ('class name', 'msg-messages-container')
 folder_message_list     = ('class name', 'msg-header-item')
 folder_headers_list     = ('class name', 'msg-header-author-and-date')
 folder_subject_list     = ('class name', 'msg-header-subject')
@@ -43,8 +57,10 @@ folder_refresh_button   = ("class name", "msg-refresh-btn bottom-btn msg-nonsear
 folder_sync_spinner     = ("xpath", "//span[@data-l10n-id='messages-syncing']")
 
 open_email_from         = ('xpath', "//div[@class='msg-envelope-from-line']//span[@class='msg-peep-content msg-peep-address']")
-open_email_to           = ('xpath', "//div[@class='msg-envelope-to-line']//span[@class='msg-peep-content msg-peep-address']")
+#NOTE: incoherent use of classes here, that's why i'm using 'or' conditional
+open_email_to           = ('xpath', "//div[@class='msg-envelope-to-line']//span[@class='msg-peep-content' or @class='msg-peep-content msg-peep-address']")
 open_email_subject      = ('class name', 'msg-envelope-subject')
+open_email_attached_file = ("xpath", "//ul[@class='msg-attachments-container']/li[@class='msg-attachment-item']")
 
 # NOTE: complex, but there's > 1 of these so you have to be this specific!
 delete_this_email_btn   = ("xpath", "//div[@class='msg-reader-action-toolbar bottom-toolbar']//button[@class='msg-delete-btn bottom-btn']")
