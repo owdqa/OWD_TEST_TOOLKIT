@@ -30,6 +30,17 @@ class Music(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
+    def click_on_song_email(self):
+        song = self.UTILS.element.getElement(DOM.Music.song1, "Song")
+        song.tap()
+
+        time.sleep(1)
+
+        doneButton = self.UTILS.element.getElement(DOM.Music.done_button, "Done Button")
+        doneButton.tap()
+
+        self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
+
     def play_song(self):
         song = self.UTILS.element.getElement(DOM.Music.song, "Song")
         song.tap()
