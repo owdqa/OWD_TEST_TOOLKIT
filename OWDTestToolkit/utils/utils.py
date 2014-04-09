@@ -8,6 +8,7 @@ from element import element
 from general import general
 from home import home
 from iframe import iframe
+from messages import Messages
 from network import network
 from reporting import reporting
 from statusbar import statusbar
@@ -53,6 +54,7 @@ class UTILS(object):
         self.element = element(self, 5)
         self.home = home(self)
         self.iframe = iframe(self)
+        self.messages = Messages(self)
         self.network = network(self)
         self.reporting = reporting(self, self._resultArray, self._commentArray)
         self.statusbar = statusbar(self)
