@@ -606,6 +606,117 @@ class Email(object):
 
         return True
 
+    def setupAccountActiveSync(self, user, email, passwd, hostname):
+        #
+        # Set up a new ActiveSync account manually
+        #
+
+        #
+        # If we've just started out, email will open directly to "New Account").
+        #
+        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Application header")
+        if x.text.lower() != "new account":
+            #
+            # We have at least one emali account setup,
+            # check to see if we can just switch to ours.
+            #
+            if self.switchAccount(email):
+                return
+
+            #
+            # It's not setup already, so prepare to set it up!
+            #
+            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
+            x.tap()
+
+            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
+            x.tap()
+
+        #
+        # (At this point we are now in the 'New account' screen by one path or
+        # another.)
+        #
+        self.UTILS.general.typeThis(DOM.Email.username, "Username field", user, True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", email, True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.password, "Password field", passwd, True, True, False)
+
+        #
+        # Now tap on Manual setUp
+        #
+        manual_setup = self.UTILS.element.getElement(DOM.Email.manual_setup, "Manual setup button")
+        manual_setup.tap()
+
+        #
+        # Check that we are indeed setting up an account manually
+        #
+        self.UTILS.element.waitForElements(DOM.Email.manual_setup_sup_header, "Manual setup header", True, 5)
+
+        #
+        # Change the account type to ActiveSync
+        #
+        account_type = self.UTILS.element.getElement(DOM.Email.manual_setup_account_type, "Account type select")
+        account_type.tap()
+
+        #
+        # Change to top frame is needed in order to be able of choosing an option
+        #
+        self.marionette.switch_to_frame()
+        self.UTILS.element.waitForElements(DOM.Email.manual_setup_account_options, "Account type options", True, 5)
+
+        #
+        # Select active sync
+        #
+        elem = (DOM.Email.manual_setup_account_option[0], DOM.Email.manual_setup_account_option[1].format("ActiveSync"))
+        active_sync = self.UTILS.element.getElement(elem, "ActiveSync option")
+        active_sync.tap()
+
+        #
+        # Confirm
+        #
+        ok_btn = self.UTILS.element.getElement(DOM.Email.manual_setup_account_type_ok, "Ok button")
+        ok_btn.tap()
+
+        #
+        # Going back to Email frame
+        #
+        self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
+
+        #
+        #  Finish setting things up
+        #
+        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_host, "Active Sync Hostname field", hostname, True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_user, "Active Sync Username field", user, True, True, False)
+
+        #
+        # (doesn't always appear when using hotmail)
+        #
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
+            btn = self.marionette.find_element(*DOM.Email.login_next_btn)
+            btn.tap()
+        except:
+            pass
+
+        time.sleep(2)
+        x = self.UTILS.element.getElement(DOM.Email.manual_setup_next, "Manual Setup 'Next' button", True, 60)
+        x.tap()
+
+        time.sleep(2)
+        x = self.UTILS.element.getElement(DOM.Email.login_account_prefs_next_btn, "Next button")
+        x.tap()
+
+        #
+        # Click the 'continue to mail' button.
+        #
+        time.sleep(1)
+        x = self.UTILS.element.getElement(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button", True, 60)
+        x.tap()
+
+        self.UTILS.element.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
+
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format('Inbox')), "Inbox")
+        time.sleep(2)
+
     def setupAccount(self, user, email, passwd):
         #
         # Set up a new email account in the email app and login.
@@ -636,13 +747,9 @@ class Email(object):
         # (At this point we are now in the 'New account' screen by one path or
         # another.)
         #
-        self.UTILS.general.typeThis(DOM.Email.username, "Username field", user, True, True)
-        self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", email, True, True)
-        self.UTILS.general.typeThis(DOM.Email.password, "Password field", passwd, True, True)
-
-        self.parent.lockscreen.unlock()
-        self.marionette.switch_to_frame()
-        self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
+        self.UTILS.general.typeThis(DOM.Email.username, "Username field", user, True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", email, True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.password, "Password field", passwd, True, True, False)
 
         #
         # (doesn't always appear when using hotmail)
@@ -655,11 +762,11 @@ class Email(object):
             pass
 
         time.sleep(2)
-        x = self.UTILS.element.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
+        x = self.UTILS.element.getElement(DOM.Email.login_account_info_next_btn, "'Next' button", True, 60)
         x.tap()
 
         time.sleep(2)
-        x = self.UTILS.element.getElement(DOM.Email.login_next_btn, "'Next' button", True, 60)
+        x = self.UTILS.element.getElement(DOM.Email.login_account_prefs_next_btn, "Next button")
         x.tap()
 
         #
@@ -707,10 +814,6 @@ class Email(object):
         self.UTILS.general.typeThis(DOM.Email.username  , "Username field", p_user , True, True)
         self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field" , p_email, True, True)
         self.UTILS.general.typeThis(DOM.Email.password  , "Password field", p_pass , True, True)
-
-        self.parent.lockscreen.unlock()
-        self.marionette.switch_to_frame()
-        self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
 
         #
         # (doesn't always appear when using hotmail)
