@@ -71,7 +71,7 @@ class network(object):
         # <b>airplane</b><br>
         # <i>bluetooth (**NOT WORKING CURRENTLY!!**)</i>
         #
-        
+
         #
         # This call leaves you at the top-level frame. We have to make sure that
         # we are back in our frame
@@ -87,7 +87,19 @@ class network(object):
             "bluetooth": self.parent.data_layer.bluetooth_is_enabled
             }.get(p_type)
 
-        self.parent.test.TEST(False, "Incorrect parameter '" + str(p_type) + "' passed to UTILS.isNetworkTypeEnabled()!", True)
+        self.parent.test.TEST(False, "Incorrect parameter '" + str(p_type) +
+                              "' passed to UTILS.isNetworkTypeEnabled()!", True)
+
+    def turnOnDataConn(self):
+        """Turn the data connection on.
+        """
+        enabled = self.parent.data_layer.get_setting("ril.data.enabled")
+        if not enabled:
+            data_conn_switch = self.parent.element.getElement(DOM.Settings.enable_data_connection,
+                                                              "Enable data connection")
+            data_conn_switch.tap()
+            x = self.parent.element.getElement(DOM.Settings.celldata_DataConn_ON, "Confirm enabling data connection")
+            x.tap()
 
     def waitForNetworkItemDisabled(self, p_type, retries=30):
         #

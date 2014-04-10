@@ -77,7 +77,8 @@ class Settings(object):
         # Selecting the specific option using que received parameter
         #
         if value == "off":
-            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_off, "Off option in Auto Retrieve Select")
+            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_off,
+                                              "Off option in Auto Retrieve Select")
             x.tap()
         elif value == "on_with_r":
             x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_roaming,
@@ -100,6 +101,36 @@ class Settings(object):
         #Verifying if the option value has been selected
         #
         self.verify_autoRetrieve_SelectedItem(value)
+
+    def createCustomAPN(self, apn, identifier, pwd):
+        #
+        # Open Data Settings
+        #
+        self.open_data_settings()
+
+        #
+        # Select custom settings
+        #
+        x = self.UTILS.element.getElement(DOM.Settings.custom_settings_apn, "Custom settings button")
+        x.tap()
+
+        #
+        # Enter the data
+        #
+        self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
+                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=False)
+
+        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
+                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=False)
+
+        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
+                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=True)
+
+        #
+        # Tap the ok button to save the changes
+        #
+        x = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
+        x.tap()
 
     def disable_hotSpot(self):
         #
@@ -220,6 +251,55 @@ class Settings(object):
 
         self.UTILS.test.TEST(True, "Get element hotspot")
         self.UTILS.element.waitForElements(DOM.Settings.hotspot_header, "Hotspot header appears.", True, 20, False)
+
+    def open_data_settings(self):
+        #
+        # Open cellular and data settings.
+        #
+        self.cellular_and_data()
+        self.marionette.execute_script("""
+        var getElementByXpath = function (path) {
+            return document.evaluate(path, document, null, 9, null).singleNodeValue;
+        };
+        getElementByXpath('/html/body/section[29]/div/ul[3]/li[2]/label/button').scrollIntoView();
+        """)
+        x = self.UTILS.element.getElement(DOM.Settings.celldata_DataSettings, "Data settings link")
+        x.tap()
+
+    def open_msg_settings(self):
+        #
+        # Open cellular and data settings.
+        #
+        self.cellular_and_data()
+        self.marionette.execute_script("""
+        var getElementByXpath = function (path) {
+            return document.evaluate(path, document, null, 9, null).singleNodeValue;
+        };
+        getElementByXpath('/html/body/section[29]/div/ul[3]/li[3]/label/button').scrollIntoView();
+        """)
+        x = self.UTILS.element.getElement(DOM.Settings.celldata_MsgSettings, "Message settings link")
+        x.tap()
+
+    def selectDefaultAPN(self, apn):
+
+        #
+        # Open Data Settings
+        #
+        self.open_data_settings()
+
+        #
+        # Tap on the added APN
+        #
+        dom_elem = (DOM.Settings.default_apn[0], DOM.Settings.default_apn[1].format(apn))
+        x = self.UTILS.element.getElement(dom_elem, "Added APN")
+        self.UTILS.test.TEST(True, "APN {} element: {}".format(apn, x))
+        x.tap()
+
+        #
+        # Tap the ok button to save the changes
+        #
+        x = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
+        x.tap()
 
     def setAlarmVolume(self, volume):
         #
@@ -369,7 +449,8 @@ class Settings(object):
         # Selecting the specific option using que received parameter
         #
         if value == "off":
-            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_off, "Off option in Auto Retrieve Select")
+            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_off,
+                                              "Off option in Auto Retrieve Select")
         elif value == "on_with_r":
             x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_roaming,
                                       "On with roaming option in Auto Retrieve Select")

@@ -31,7 +31,9 @@ class iframe(object):
                 #
                 z = self.marionette.find_element("xpath", "//iframe[@" + attribute + "='" + y + "']")
                 self.marionette.switch_to_frame(z)
-                return y
+                # get the first part of the path, including the app:// part
+                orig_frame = y.split('.')[0]
+                return orig_frame
 
         # In case there's a problem.
         return ""
