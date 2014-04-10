@@ -18,7 +18,8 @@ cd $OWD_TEST_TOOLKIT_DIR/..
 rm -rf owd_test_cases 2>/dev/null
 
 git clone https://github.com/owdqa/owd_test_cases.git >> $LOGFILE 2>&1
-cd $owd_test_cases_DIR
+#cd $owd_test_cases_DIR
+cd owd_test_cases
 
 printf "\n<b>Switching to branch $INTEGRATION$BRANCH of owd_test_cases ...</b>\n\n" >> $LOGFILE
 git checkout $INTEGRATION$BRANCH  >> $LOGFILE 2>&1
