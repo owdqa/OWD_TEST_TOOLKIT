@@ -98,3 +98,5 @@ mms_icon = ("css selector", "span.mms-icon")
 attached_opt_view = ("xpath", "//*[@data-l10n-id='view-attachment-image']")
 attached_opt_remove = ("xpath", "//*[@data-l10n-id='remove-attachment-image']")
 attached_opt_replace = ("xpath", "//*[@data-l10n-id='replace-attachment-image']")
+
+message_expected_content = ('xpath', "//div[@class='message-content']/p/span[text()='{}']")
