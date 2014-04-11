@@ -20,7 +20,9 @@ export TEST_TYPE=${3:-"REGRESSION"}
 #
 # There are some 'special' tests we can run (like 'blocked').
 #
-cd $owd_test_cases_DIR
+#cd $owd_test_cases_DIR
+cd $OWD_TEST_TOOLKIT_DIR/../owd_test_cases
+
 if [ "$TEST_TYPE" = "BLOCKED" ]
 then
 	printf "\nRunning BLOCKED test cases only ...\n\n"
