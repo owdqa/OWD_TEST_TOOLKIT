@@ -687,15 +687,6 @@ class Email(object):
         self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_host, "Active Sync Hostname field", hostname, True, True, False)
         self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_user, "Active Sync Username field", user, True, True, False)
 
-        # #
-        # # (doesn't always appear when using hotmail)
-        # #
-        # try:
-        #     self.parent.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
-        #     btn = self.marionette.find_element(*DOM.Email.login_next_btn)
-        #     btn.tap()
-        # except:
-        #     pass
 
         time.sleep(2)
         x = self.UTILS.element.getElement(DOM.Email.manual_setup_next, "Manual Setup 'Next' button", True, 60)
@@ -751,16 +742,6 @@ class Email(object):
         self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", email, True, True, False)
         self.UTILS.general.typeThis(DOM.Email.password, "Password field", passwd, True, True, False)
 
-        # #
-        # # (doesn't always appear when using hotmail)
-        # #
-        # try:
-        #     self.parent.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
-        #     btn = self.marionette.find_element(*DOM.Email.login_next_btn)
-        #     btn.tap()
-        # except:
-        #     pass
-
         time.sleep(2)
         x = self.UTILS.element.getElement(DOM.Email.login_account_info_next_btn, "'Next' button", True, 60)
         x.tap()
@@ -815,15 +796,6 @@ class Email(object):
         self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field" , p_email, True, True)
         self.UTILS.general.typeThis(DOM.Email.password  , "Password field", p_pass , True, True)
 
-        #
-        # (doesn't always appear when using hotmail)
-        #
-        try:
-            self.parent.wait_for_element_displayed(*DOM.Email.login_next_btn, timeout=5)
-            btn = self.marionette.find_element(*DOM.Email.login_next_btn)
-            btn.tap()
-        except:
-            pass
 
     def switchAccount(self, address):
         #
