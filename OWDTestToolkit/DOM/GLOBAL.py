@@ -16,3 +16,5 @@ modal_valueSel_list  = ("xpath", "//section[@id='value-selector-container']//li"
 conf_screen_ok_button = ('xpath', '//button[@class="value-option-confirm affirmative full"]')
 
 scroller_curr_val    = ("class name", "picker-unit active")
+pin_input = ("css selector", "#dialog-overlay #simpin-dialog .container #pinArea .input-wrapper input")
+pin_ok_button = ("xpath", '//div[@id="dialog-overlay"]//button[@data-l10n-id="ok"]')

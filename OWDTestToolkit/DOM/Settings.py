@@ -91,3 +91,12 @@ auto_retrieve_selected_item = ("xpath", "//section[@id='value-selector-container
 
 ok_btn = ("xpath", "//menu[@id='select-options-buttons']/button")
 delivery_report = ("xpath", "//*[@data-l10n-id='message-delivery-reports']")
+
+sim_security =  ('id','menuItem-simSecurity')
+sim_security_tag = ('id', 'simCardLock-desc')
+sim_security_header = ('xpath', GLOBAL.app_head_specific.format('SIM security'))
+sim_security_pin = ('xpath', '//li[@class="simpin-enabled simpin-enabled-0 simpin-0"]')
+sim_security_change_pin = ('xpath', '//li[@class="simpin-change simpin-change-0 simpin-0"]//button[@data-l10n-id="changeSimPin"]')
+sim_security_enter_pin_header = ('xpath', GLOBAL.app_head_specific.format('Enter SIM PIN'))
+sim_security_enter_pin_input = ('xpath', '//div[@class="sim-code-area sim-pinArea"]/input')
+sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[text()="Done"]')
