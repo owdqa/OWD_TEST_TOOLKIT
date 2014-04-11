@@ -101,6 +101,27 @@ class Video(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
+    def clickOnVideoEmail(self, num):
+        #
+        # Clicks the thumbnail to start the video.
+        #
+
+        #
+        # Get the list of video items and click the 'num' one.
+        #
+        time.sleep(2)
+
+        all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails, "Videos")
+        my_video = all_videos[num]
+        my_video.tap()
+
+        time.sleep(1)
+
+        doneButton = self.UTILS.element.getElement(DOM.Video.done_button, "Done Button")
+        doneButton.tap()
+
+        self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
+
     def startVideo(self, num):
         #
         # Clicks the thumbnail to start the video.

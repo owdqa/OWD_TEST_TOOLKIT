@@ -104,6 +104,24 @@ class Gallery(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
+    def clickThumbEmail(self, num):
+        #
+        # Clicks a thumbnail from the gallery.
+        #
+        gallery_items = self.getGalleryItems()
+        for index, item in enumerate(gallery_items):
+            if index == num:
+                my_item = self.UTILS.element.getElements(DOM.Gallery.thumbnail_items,
+                                                 "Gallery item list", True, 20, False)[index]
+                my_item.tap()
+
+        time.sleep(2)
+
+        crop = self.UTILS.element.getElement(DOM.Gallery.crop_done, "Crop Done")
+        crop.tap()
+
+        self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
+
     def deleteThumbnails(self, num_array):
         #
         # Deletes the thumbnails listed in num_array
