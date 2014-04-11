@@ -27,7 +27,7 @@ class Messages(object):
                    "content-type": "application/x-www-form-urlencoded"}
 
         pigeon = pigeonpdu.PigeonPDU()
-        user_data = pigeon.getXMLPushUserdata(ota_filename, pintype, pin_number)
+        user_data = pigeon.getXMLPushUserdata(ota_filename, pin_number)
         pdu_data = binascii.hexlify(user_data)
         self.parent.test.TEST(True, "Sending CP message to {} from file {}".format(phone_number, ota_filename))
 
@@ -58,12 +58,17 @@ class Messages(object):
         wap_url: the URL we want to open
         message: alert text
         """
-        # if text == "":
-        #    url = 'http://10.95.193.226:8800/?PhoneNumber=' + phoneNumber + '&WAPURL=' + WAPURL
-        #    requests.get(url, auth=('owd', 'owdqa'))
-        # else:
-        #    url = 'http://10.95.193.226:8800/?PhoneNumber=' + phoneNumber + '&WAPURL=' + WAPURL + '&Text=' + text
-        #    requests.get(url, auth=('owd', 'owdqa'))
         headers = {"api_key": self.api_key, "api_secret": self.api_secret}
-        payload = {"to": [phone_number], "message": message}
-        requests.post(self.url, headers=headers, data=json.dumps(payload))
+        pigeon = pigeonpdu.PigeonPDU()
+        pdu_data = pigeon.generate_wap_push_pdu(wap_url, message)
+        self.parent.test.TEST(True, "PDU_DATA: {}".format(binascii.hexlify(pdu_data)))
+        data = {"dataCodingScheme": "F5", "protocolId": "00", "pduType": "41", "sourcePort": 9200,
+                "destinationPort": 2948, "pduData": "{}".format(binascii.hexlify(pdu_data))}
+        self.parent.test.TEST(True, "DATA: [{}]".format(data))
+        payload = {"to": [phone_number], "binaryMessage": data}
+        self.parent.test.TEST(True, "PAYLOAD: {}".format(payload))
+        response = requests.post(self.url, headers=headers, data=json.dumps(payload))
+        result = response.status_code == requests.codes.ok
+        self.parent.test.TEST(result, "The WAP PUSH message could {}be sent. Status code: {}. Body: {}".\
+                              format("not " if not result else "", response.status_code, response.text))
+        return result

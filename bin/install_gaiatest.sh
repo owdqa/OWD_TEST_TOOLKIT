@@ -24,7 +24,8 @@ if [ ! -d "$GAIATEST_PATH" ]
 then
     printf "(need to clone all of 'gaia' - this will take about 10-15 minutes ...)\n\n" | tee -a $LOGFILE
     cd $HOME
-    git clone https://github.com/mozilla-b2g/gaia.git --no-single-branch --depth 1 --progress >> $LOGFILE 2>&1
+    #git clone https://github.com/mozilla-b2g/gaia.git --no-single-branch --depth 1 --progress >> $LOGFILE 2>&1
+    git clone https://github.com/mozilla-b2g/gaia.git >> $LOGFILE 2>&1
 	
     printf "\n<b>Switching to branch \"$BRANCH\" of gaiatest ...</b>\n\n" | tee -a $LOGFILE
 	cd $HOME/gaia
@@ -36,9 +37,10 @@ else
     printf "(refreshing 'gaia' - this will take just a minute or so ...)\n\n" | tee -a $LOGFILE
     cd $HOME/gaia
     git stash
-    git fetch
-    sudo git checkout $BRANCH  2> >( tee -a $LOGFILE)
-    sudo git merge origin/$BRANCH
+    #git fetch
+    #sudo git checkout $BRANCH  2> >( tee -a $LOGFILE)
+    #sudo git merge origin/$BRANCH
+    git checkout $BRANCH  2> >( tee -a $LOGFILE)
 fi
 
 #
