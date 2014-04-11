@@ -441,6 +441,11 @@ class Email(object):
         x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
                                   "Compose message header")
         time.sleep(5)
+  
+        #
+        #  TODO - Finnish the following assertion
+        #
+              
         # #
         # # Get the guy we're replying to
         # #
