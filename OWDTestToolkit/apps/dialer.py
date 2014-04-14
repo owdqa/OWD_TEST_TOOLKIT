@@ -351,6 +351,21 @@ class Dialer(object):
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "Screenshot:", x)
 
+    def clear_dialer(self):
+        #
+        # Deletes a single number from the dialer
+        #
+        delete = self.UTILS.element.getElement(DOM.Dialer.keypad_delete, "Delete keypad")
+        delete.tap()
+
+    def clear_dialer_all(self):
+        #
+        # Clears all dialer input area
+        #
+        delete = self.UTILS.element.getElement(DOM.Dialer.keypad_delete, "Delete keypad")
+        self.actions = Actions(self.marionette)
+        self.actions.long_press(delete, 3).perform()
+
     def hangUp(self):
         #
         # Hangs up (assuming we're in the 'calling' frame).
