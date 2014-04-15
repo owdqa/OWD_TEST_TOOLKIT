@@ -160,3 +160,47 @@ class statusbar(object):
             self.parent.iframe.switchToFrame("src", orig_iframe, False)
 
         return x
+
+    def wait_for_notification_toaster_title(self, text, frame_to_change="", timeout=30):
+        #
+        # Waits for a new SMS popup notification which
+        # is from this 'num' number.
+        #
+
+        self.marionette.switch_to_frame()
+        
+        x = (DOM.GLOBAL.notification_toaster_title[0], DOM.GLOBAL.notification_toaster_title[1].format(text))
+        self.parent.test.TEST(True, "[Toaster] Waiting for toaster")
+        
+        # self.parent.element.waitForElements(x,
+        #                             "Popup message saying we have a new sms from {}".format(num),
+        #                             True, 30)
+        
+        self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
+        
+        toaster = self.marionette.find_element(*x)
+        # if toaster.is_displayed:
+        #     self.parent.test.TEST(True, "[Toaster] Done!")
+            
+        # self.parent.parent.wait_for_condition(lambda m: m.find_element(*x).is_displayed(), timeout=timeout, message="Waiting for notification")
+
+        if frame_to_change != "":
+            self.parent.iframe.switchToFrame(*frame_to_change)
+
+    def wait_for_notification_toaster_detail(self, text):
+        #
+        # Waits for a new SMS popup notification which
+        # is from this 'num' number.
+        #
+        myIframe = self.parent.iframe.currentIframe()
+
+        self.marionette.switch_to_frame()
+        
+        x = (DOM.GLOBAL.notification_toaster_detail[0], DOM.GLOBAL.notification_toaster_detail[1].format(text))
+        
+        # self.parent.element.waitForElements(x,
+        #                             "Popup message saying we have a new sms from {}".format(num),
+        #                             True, 30)
+        
+        self.parent.parent.wait_for_element_present(*x)
+        self.parent.iframe.switchToFrame("src", myIframe)
