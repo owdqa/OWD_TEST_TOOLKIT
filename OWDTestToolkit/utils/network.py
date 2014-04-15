@@ -48,7 +48,7 @@ class network(object):
         # The other methods seem to hit a marionette error just now,
         # but gaiatest has this method so I'll stick to that if it works.
         try:
-            self.parent.connect_to_network()
+            self.parent.parent.connect_to_network()
             return
         except:
             # make sure airplane mode is off.
