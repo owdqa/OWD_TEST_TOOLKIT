@@ -40,7 +40,7 @@ else
     #git fetch
     #sudo git checkout $BRANCH  2> >( tee -a $LOGFILE)
     #sudo git merge origin/$BRANCH
-    git checkout -f $BRANCH  2> >( tee -a $LOGFILE)
+    sudo git checkout -f $BRANCH  2> >( tee -a $LOGFILE)
 fi
 
 #
