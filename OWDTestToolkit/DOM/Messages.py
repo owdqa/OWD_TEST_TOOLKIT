@@ -27,6 +27,9 @@ message_sending_spinner = ("xpath", "//aside[@class='pack-end'][-1]/progress")
 
 header_back_button = ("id", "messages-back-button")
 
+# This field will allow to retrieve phone numbers and emails in the body of the last SM or MM
+contact_info_in_msg = ('xpath', "//ul[@id='last-messages']/li[last()]/section//span/a")
+
 threads = ("xpath", "//p[@class='name']")
 threads_list = ('xpath', '//article[@id="threads-container"]//li')
 
@@ -100,3 +103,5 @@ attached_opt_remove = ("xpath", "//*[@data-l10n-id='remove-attachment-image']")
 attached_opt_replace = ("xpath", "//*[@data-l10n-id='replace-attachment-image']")
 
 message_expected_content = ('xpath', "//div[@class='message-content']/p/span[text()='{}']")
+
+wap_push_message_link = ('xpath', "//*[@id='si-sl-screen']//a[@data-action='url-link']")

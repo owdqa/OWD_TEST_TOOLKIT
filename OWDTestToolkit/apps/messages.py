@@ -1,3 +1,4 @@
+import sys
 from OWDTestToolkit import DOM
 from OWDTestToolkit.apps.video import Video
 from OWDTestToolkit.apps.gallery import Gallery
@@ -231,7 +232,6 @@ class Messages(object):
         self.UTILS.test.TEST(boolOK, "\"" + header + "\" is the header in the SMS conversation.")
         return boolOK
 
-
     def clickSMSNotifier(self, num):
         #
         # Click new sms in the home page status bar notificaiton.
@@ -261,6 +261,27 @@ class Messages(object):
         self.UTILS.element.waitForElements(("xpath", "//h1[text()='" + num + "']"),
                                    "SMS thread header for " + str(num), True, 20)
         self.waitForReceivedMsgInThisThread()
+
+    def click_wap_push_notifier(self, num):
+        #
+        # Click new WAP push in the home page status bar notification.
+        #
+        self.UTILS.reporting.logResult("info", "Clicking status bar notification of new WAPPush from " + num + " ...")
+
+        #
+        # Switch to the 'home' frame to click the notifier.
+        #
+        self.marionette.switch_to_frame()
+        self.UTILS.statusbar.displayStatusBar()
+        notif = (DOM.Messages.statusbar_new_sms[0], DOM.Messages.statusbar_new_sms[1].format(num))
+        elem = self.UTILS.element.getElement(notif, "Status bar notification for " + num)
+        elem.tap()
+
+        #
+        # Switch back to the messaging app.
+        #
+        time.sleep(5)
+        self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
 
     def closeThread(self):
         #
@@ -1849,8 +1870,7 @@ class Messages(object):
         #
         # Create the string to wait for.
         #
-        x = (DOM.Messages.statusbar_new_sms[0],
-            DOM.Messages.statusbar_new_sms[1].format(num))
+        x = (DOM.Messages.statusbar_new_sms[0], DOM.Messages.statusbar_new_sms[1].format(num))
 
         #
         # Wait for the notification to be present for this number

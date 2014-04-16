@@ -1,5 +1,6 @@
 from OWDTestToolkit import DOM
 import time
+import sys
 
 
 class Contacts(object):
