@@ -579,7 +579,8 @@ class Email(object):
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
+        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
+                                              False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format("Inbox"))
         self.UTILS.element.waitForElements(x, "Inbox", True, 120)
@@ -590,7 +591,7 @@ class Email(object):
         #
         # Hits the 'Send' button to send the message (handles
         # waiting for the correct elements etc...) and switches to a specific frame
-        # 
+        #
         # This method comes handy when the email app is called from another app
         # (i.e Contacts, SMS...)
         #
@@ -602,7 +603,8 @@ class Email(object):
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
+        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
+                                              False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(header))
 
@@ -797,9 +799,9 @@ class Email(object):
         # (At this point we are now in the 'New account' screen by one path or
         # another.)
         #
-        self.UTILS.general.typeThis(DOM.Email.username  , "Username field", p_user , True, True)
-        self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field" , p_email, True, True)
-        self.UTILS.general.typeThis(DOM.Email.password  , "Password field", p_pass , True, True)
+        self.UTILS.general.typeThis(DOM.Email.username, "Username field", p_user, True, True)
+        self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", p_email, True, True)
+        self.UTILS.general.typeThis(DOM.Email.password, "Password field", p_pass, True, True)
 
 
     def switchAccount(self, address):
@@ -859,4 +861,4 @@ class Email(object):
         # Wait until any progress icon goes away.
         #
         self.UTILS.element.waitForNotElements(('tag name', 'progress'), "Progress icon", True, 60);
-        time.sleep(2) # (just to be sure!)
+        time.sleep(2)  # (just to be sure!)

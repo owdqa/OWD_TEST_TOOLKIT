@@ -1,4 +1,5 @@
 import time
+import sys
 from OWDTestToolkit import DOM
 
 
@@ -254,7 +255,7 @@ class Browser(object):
             self.parent.wait_for_element_displayed(*DOM.Browser.throbber)
         except Exception:
             pass
-        self.UTILS.element.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 120, False)
+        self.UTILS.element.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 60, False)
 
         time.sleep(2)
 

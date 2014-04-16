@@ -280,12 +280,13 @@ class Settings(object):
         x = self.UTILS.element.getElement(DOM.Settings.celldata_MsgSettings, "Message settings link")
         x.tap()
 
-    def selectDefaultAPN(self, apn):
+    def selectDefaultAPN(self, apn, open_settings=True):
 
         #
         # Open Data Settings
         #
-        self.open_data_settings()
+        if open_settings:
+            self.open_data_settings()
 
         #
         # Tap on the added APN
