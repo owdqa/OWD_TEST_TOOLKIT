@@ -257,12 +257,6 @@ class Dialer(object):
 
     def callThisNumber(self):
         #
-        # Get the current number.
-        #
-        x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
-        x.get_attribute("value")
-
-        #
         # Calls the current number.
         #
         x = self.UTILS.element.getElement(DOM.Dialer.call_number_button, "Call number button")
