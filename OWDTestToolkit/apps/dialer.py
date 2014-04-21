@@ -311,7 +311,7 @@ class Dialer(object):
         self.launch()
         self.openCallLog()
 
-    def enterNumber(self, p_num, validate=False):
+    def enterNumber(self, p_num, validate=True):
         #
         # Enters a number into the dialer using the keypad.
         #
