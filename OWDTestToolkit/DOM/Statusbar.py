@@ -1,6 +1,6 @@
 status_bar_new  = ('xpath', "//*[@id='statusbar-notification'][@data-unread='true']")
 wifi            = ('id', 'statusbar-wifi')
-dataConn        = ('id', 'statusbar-data')
+dataConn        = ('css selector', '#statusbar-connections .statusbar-data')
 bluetooth       = ('id', 'statusbar-bluetooth')
 airplane        = ('id', 'statusbar-flight-mode')
 signal          = ("xpath", "/html/body/div/div/div[8]/div")

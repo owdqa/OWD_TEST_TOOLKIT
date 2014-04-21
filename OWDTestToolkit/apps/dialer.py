@@ -257,12 +257,6 @@ class Dialer(object):
 
     def callThisNumber(self):
         #
-        # Get the current number.
-        #
-        x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
-        x.get_attribute("value")
-
-        #
         # Calls the current number.
         #
         x = self.UTILS.element.getElement(DOM.Dialer.call_number_button, "Call number button")
@@ -317,7 +311,7 @@ class Dialer(object):
         self.launch()
         self.openCallLog()
 
-    def enterNumber(self, p_num):
+    def enterNumber(self, p_num, validate=False):
         #
         # Enters a number into the dialer using the keypad.
         #
@@ -343,13 +337,14 @@ class Dialer(object):
         #
         # Verify that the number field contains the expected number.
         #
-        x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
-        dialer_num = x.get_attribute("value")
-        self.UTILS.test.TEST(str(p_num) in dialer_num, "After entering '{}', phone number field contains '{}'.".\
-                                                  format(dialer_num, p_num))
+        if validate:
+            x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
+            dialer_num = x.get_attribute("value")
+            self.UTILS.test.TEST(str(p_num) in dialer_num, "After entering '{}', phone number field contains '{}'.".\
+                                                      format(dialer_num, p_num))
 
-        x = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult("info", "Screenshot:", x)
+            x = self.UTILS.debug.screenShotOnErr()
+            self.UTILS.reporting.logResult("info", "Screenshot:", x)
 
     def clear_dialer(self):
         #
