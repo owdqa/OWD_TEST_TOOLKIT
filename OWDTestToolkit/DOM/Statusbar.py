@@ -19,6 +19,3 @@ notification_toaster_detail = ("xpath", "//div[@id='toaster-detail' and contains
 notification_toaster_title = ("xpath", "//div[@id='toaster-title' and contains(text(),'{}')]")
 notification_statusbar_title = ('xpath', '//div[@id="desktop-notifications-container"]/div[@class="notification"]/div[contains(text(),"{}")]')
 notification_statusbar_detail = ('xpath', '//div[@id="desktop-notifications-container"]/div[@class="notification"]/div[@class="detail" and contains(text(),"{}")]')
-
-
-
