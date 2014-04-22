@@ -44,7 +44,7 @@ class Music(object):
     def play_song(self, position):
         songs = self.UTILS.element.getElements(DOM.Music.music_songs, "Songs")
 
-        if (position <= len(songs)):
+        if (position < len(songs)):
             songs[position].tap()
         else:
             self.UTILS.test.TEST(False, "Position greater than the number of songs stored in the device")
