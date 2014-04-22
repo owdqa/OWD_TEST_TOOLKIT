@@ -41,6 +41,10 @@ class Music(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
 
-    def play_song(self):
-        song = self.UTILS.element.getElement(DOM.Music.song, "Song")
-        song.tap()
+    def play_song(self, position):
+        songs = self.UTILS.element.getElements(DOM.Music.music_songs, "Songs")
+
+        if (position <= len(songs)):
+            songs[position].tap()
+        else:
+            self.UTILS.test.TEST(False, "Position greater than the number of songs stored in the device")
