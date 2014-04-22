@@ -99,21 +99,13 @@ class reporting(object):
 
     def reportResults(self):
         #
-        # Clear out 'things' left by previous tests, then
-        # Create the final result file from the result and comment arrays
-        # (run only once, at the end of each test case).
-        #
-        self.parent.statusbar.clearAllStatusBarNotifs(p_silent=True)
-        self.parent.general.checkMarionetteOK()
-        self.parent.data_layer.kill_active_call()
-
-        #
         # Create output files (summary, which is displayed and
         # details, which is not displayed).
         #
         # NOTE: "XXDESCXX" is a marker that 'run_all_tests.sh' switches
         #       to the correct test description.
         #
+        
         pass_str = "passed"
         fail_str = "FAILED"
         pass_span = "<span style='color:#00aa00'>"
