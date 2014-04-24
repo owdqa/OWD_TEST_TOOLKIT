@@ -4,7 +4,7 @@ CP_Windows_Pin = ("xpath", '//input[@data-l10n-id="cp-pin"]')
 CP_Accept_Button = ("xpath", '//button[@id="accept"]')
 CP_Store_Button = ("xpath", '//form[@id="cp-store-confirm"]//button[@data-l10n-id="store"]')
 
-CP_OTA_Message = ("xpath", "/html/body/form[4]/section/p/strong")
+CP_OTA_Message = ("xpath", "//form[@id='cp-finish-confirm']//p/strong[@data-l10n-id='cp-finish-confirm-dialog-message']")
 CP_Finish_Button = ("xpath", '//form[@id="cp-finish-confirm"]//button[@data-l10n-id="finish"]')
 
 CP_Close_Button = ("xpath", "//button[@id='close']")
