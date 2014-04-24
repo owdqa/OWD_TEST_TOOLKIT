@@ -1,5 +1,13 @@
 #!/bin/sh
 #
+# (for CERT device)
+#
+export DEVICE="cert_device"
+export BRANCH="v1.3"
+export DEVICE_BUILDNAME="cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
+
+
+#
 # (For CI runs this is the only part we want emailed.)
 #
 export END_TIME="$(date '+%d/%m/%Y %H:%M')"
@@ -87,7 +95,7 @@ TOTAL_CSV_FILE="/var/www/html/owd_tests/total_csv_file_CERT.csv"
 # DAILY CSV partial (device & version) CSV with all data...
 # (DAILY: from Jenkins, "partial_csv_file.csv" is replaced for "partial_csv_file_NEW.csv" at the end of complete testing per version.)
 
-PARTIAL_CSV_FILE="/var/www/html/owd_tests/CERT/partial_csv_file_NEW_CERT.csv"
+PARTIAL_CSV_FILE="$RESULT_DIR/partial_csv_file_NEW_CERT.csv"
 
     if [ ! -f "$PARTIAL_CSV_FILE" ]
     then
