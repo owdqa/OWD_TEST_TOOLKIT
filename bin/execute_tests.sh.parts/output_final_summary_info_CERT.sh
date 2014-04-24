@@ -95,7 +95,7 @@ TOTAL_CSV_FILE="/var/www/html/owd_tests/total_csv_file_CERT.csv"
 # DAILY CSV partial (device & version) CSV with all data...
 # (DAILY: from Jenkins, "partial_csv_file.csv" is replaced for "partial_csv_file_NEW.csv" at the end of complete testing per version.)
 
-PARTIAL_CSV_FILE="$RESULT_DIR/partial_csv_file_NEW_CERT.csv"
+PARTIAL_CSV_FILE="$ALTERNATIVE_RESULTS_DIR/partial_csv_file_NEW_CERT.csv"
 
     if [ ! -f "$PARTIAL_CSV_FILE" ]
     then
