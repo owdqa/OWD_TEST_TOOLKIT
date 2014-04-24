@@ -2,9 +2,9 @@
 #
 # (for CERT device)
 #
-export DEVICE="cert_device"
-export BRANCH="v1.3"
-export DEVICE_BUILDNAME="cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
+export DEVICE_cert="cert_device"
+export BRANCH_cert="v1.3"
+export DEVICE_BUILDNAME_cert="cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
 
 
 #
@@ -14,7 +14,7 @@ export END_TIME="$(date '+%d/%m/%Y %H:%M')"
 export WEEK="$(date '+%V')"
 sep=$(printf "%0.1s" "#"{1..95})
 printf "\n\n\n$sep\n\n"
-printf "BUILD BEING TESTED                 : %s\n\n\n" $DEVICE_BUILDNAME
+printf "BUILD BEING TESTED                 : %s\n\n\n" $DEVICE_BUILDNAME_cert
 
 printf "Possible regression failures       : %s\n\n\n" $UNEX_FAILS
 
@@ -75,10 +75,10 @@ TOTAL_CSV_FILE="/var/www/html/owd_tests/total_csv_file_CERT.csv"
     printf "%s," $IGNORED | sudo tee -a $TOTAL_CSV_FILE
     printf "%s," $UNWRITTEN | sudo tee -a $TOTAL_CSV_FILE
     printf "%s%%," $ERROR_RATE | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $DEVICE | sudo tee -a $TOTAL_CSV_FILE
-    printf "%s," $BRANCH | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $DEVICE_cert | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $BRANCH_cert | sudo tee -a $TOTAL_CSV_FILE
     # Only first substring of $DEVICE_BUILDNAME
-    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*/,/g" | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s," $DEVICE_BUILDNAME_cert | sed -e "s/.Gecko.*/,/g" | sudo tee -a $TOTAL_CSV_FILE
     # URL without prefix (http://hostname/owd-qa)
     printf "%s/" "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $TOTAL_CSV_FILE
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
@@ -101,8 +101,8 @@ PARTIAL_CSV_FILE="$RESULT_DIR/partial_csv_file_NEW_CERT.csv"
     then
         # print the header
         printf "Last test executions, DATE: %s %s\n" $(date '+%d/%m/%Y %H:%M') | sudo tee $PARTIAL_CSV_FILE
-        printf "Device: %s\n" $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
-        printf "Version: %s\n" $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
+        printf "Device: %s\n" $DEVICE_cert | sudo tee -a $PARTIAL_CSV_FILE
+        printf "Version: %s\n" $BRANCH_cert | sudo tee -a $PARTIAL_CSV_FILE
 
         #printf "START_TIME,END_TIME,TEST_SUITE,BUILD_NUMBER,DEVICE,VERSION,BUILD_BEING_TESTED,URL_RUN_DETAILS,TEST_CASES_PASSED,UNEXPECTED_FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,EX_FAILS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED\n" | sudo tee -a $PARTIAL_CSV_FILE
         printf "START_TIME,DATE,TEST_SUITE,TEST_CASES_PASSED,FAILURES,AUTOMATION_FAILURES,UNEX_PASSES,KNOWN_BUGS,EX_PASSES,IGNORED,UNWRITTEN,PERCENT_FAILED,DEVICE,VERSION,BUILD,TEST_DETAILS\n" | sudo tee -a $PARTIAL_CSV_FILE
@@ -123,10 +123,10 @@ PARTIAL_CSV_FILE="$RESULT_DIR/partial_csv_file_NEW_CERT.csv"
     printf "%s," $IGNORED | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s," $UNWRITTEN | sudo tee -a $PARTIAL_CSV_FILE
     printf "%s%%," $ERROR_RATE | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s," $DEVICE | sudo tee -a $PARTIAL_CSV_FILE
-    printf "%s," $BRANCH | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $DEVICE_cert | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $BRANCH_cert | sudo tee -a $PARTIAL_CSV_FILE
     # Only first substring of $DEVICE_BUILDNAME
-    printf "%s," $DEVICE_BUILDNAME | sed -e "s/.Gecko.*/,/g" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s," $DEVICE_BUILDNAME_cert | sed -e "s/.Gecko.*/,/g" | sudo tee -a $PARTIAL_CSV_FILE
     # URL without prefix (http://hostname/owd-qa)
     printf "%s/" "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $PARTIAL_CSV_FILE
     printf "\n" | sudo tee -a $PARTIAL_CSV_FILE
