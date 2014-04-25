@@ -7,6 +7,7 @@ class iframe(object):
     def __init__(self, parent):
         self.parent = parent
         self.marionette = parent.marionette
+        self.frames_visited = []
 
     def currentIframe(self, attribute="src"):
         #
@@ -152,7 +153,9 @@ class iframe(object):
                 #
                 for f in frames:
                     src = f.get_attribute('src')
-                    src_list.append(src)
+                    if not src in self.frames_visited:
+                        self.frames_visited.append(src)
+                        src_list.append(src)
 
                 for src in src_list:
                     #
@@ -182,7 +185,7 @@ class iframe(object):
                 frame_elem = self.marionette.find_element(*_frameDef)
                 self.marionette.switch_to_frame(frame_elem)
             except:
-                self.parent.reporting.logResult('info', 'exception launched while doing the switch!!')
+                self.parent.reporting.logResult('info', '<i>exception launched while doing the switch!!. Frame_src: {}</i>'.format(frame_src))
                 return False
         else:
             self.marionette.switch_to_frame()
