@@ -99,6 +99,24 @@ class Messages(object):
 
             n += 1
 
+    def deleteSubject(self, subject):
+
+        #
+        # Press options button
+        #
+        self.UTILS.reporting.logResult("info", "Cliking on messages options button")
+        x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
+            "Messages option button is displayed")
+        x.tap()
+
+        #
+        # Press add subject button
+        #
+        self.UTILS.reporting.logResult("info", "Cliking on delete subject button")
+        x = self.UTILS.element.getElement(DOM.Messages.deletesubject_btn_msg_opt,
+            "delete subject option button is displayed")
+        x.tap()
+
     def addSubject(self, subject):
 
         #

@@ -75,6 +75,8 @@ cancel_btn_msg_opt = ('xpath', "/html/body/form/menu/button[3]")
 
 messages_options_btn = ("id", "messages-options-icon")
 addsubject_btn_msg_opt = ('xpath', "/html/body/form/menu/button[1]")
+deletesubject_btn_msg_opt = ('xpath', "/html/body/form/menu/button[1]")
+messages_converting = ('xpath', "/html/body/article/section[2]/div/div[2]/section[2]/p")
 target_subject = ("id", "messages-subject-input")
 
 attach_preview_img_type = ("xpath", "//*[@class='attachment-container preview']")
