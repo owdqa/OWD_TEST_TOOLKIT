@@ -1,12 +1,13 @@
 import os
 import time
-
+import sys
 
 class iframe(object):
 
     def __init__(self, parent):
         self.parent = parent
         self.marionette = parent.marionette
+        self.frames_visited = []
 
     def currentIframe(self, attribute="src"):
         #
@@ -129,96 +130,64 @@ class iframe(object):
         self.parent.test.TEST(is_ok, "<i>(Sucessfully switched to iframe where '{}' contains '{}'.)</i>".format(attrib, value),
                   quit_on_error)
 
-    _framepath = []
-    _MAXLOOPS = 20
-    _old_src = ""
-
-    def viewAllIframes(self):
+    def view_all_iframes(self, frame_src=None):
         #
-        # Dumps details of all iframes (recursively) into the run log.
+        # Base case
         #
+        has_switched = self._do_the_switch(frame_src)
 
-        # Just in case we end up in an endless loop ...
-        self._MAXLOOPS = self._MAXLOOPS - 1
-        if self._MAXLOOPS < 0:
+        if has_switched == "skip":
             return
 
+        if has_switched:
+            dump = self.parent.debug.screenShotOnErr()
+            self.parent.reporting.logResult("info",  "Iframe details for frame with path: {}".format(frame_src if frame_src else "root"), dump)
+
+            frames = self.marionette.find_elements('tag name', 'iframe')
+
+            if len(frames) > 0:
+                src_list = []
+                #
+                # This needs to be done because references to HTML elements change between recursive calls to
+                # view_all_iframes
+                #
+                for f in frames:
+                    src = f.get_attribute('src')
+                    if not src in self.frames_visited:
+                        self.frames_visited.append(src)
+                        src_list.append(src)
+
+                for src in src_list:
+                    #
+                    # Before recursive call, restore the frame to the parent one
+                    #
+                    if src_list.index(src) > 0:
+                        self._do_the_switch(frame_src)
+                    self.view_all_iframes(src)
+
+    def _do_the_switch(self, frame_src):
         #
-        # Climb up from 'root level' iframe to the starting position ...
+        # ignore_list: costcontrol -> unnecessary, keyboard -> breaks marioette
         #
-        srcSTR = ""
-        self.marionette.switch_to_frame()
-        time.sleep(0.5)
-        if len(self._framepath) > 0:
-            for i in self._framepath:
-                if i == self._framepath[-1]:
-                    # We're at the target iframe - record its "src" value.
-                    try:
-                        new_src = self.marionette.find_elements("tag name", "iframe")[int(i)].get_attribute("src")
-                    except:
-                        return
-                    if new_src != "" and new_src == self._old_src:
-                        # This is an endless loop (some iframes seem to do this) - ignore it and move on.
-                        self.parent.reporting.logResult("info", "<i>(Avoiding 'endless loop' where src=\"{}\"...)</i>"\
-                                                        .format(new_src))
-                        return
+        ignore_list = ("costcontrol", "keyboard")
+        if frame_src:
 
-                    self._old_src = new_src
-                    new_src = new_src if len(new_src) > 0 else "<i>(nothing)</i>"
-                    srcSTR = "value of 'src'      = \"{}\"".format(new_src)
+            startpos = frame_src.index('/') + 2
+            stoppos = frame_src.index('.')
+            appname = frame_src[startpos:stoppos]
 
-                self.marionette.switch_to_frame(int(i))
+            if appname in ignore_list:
+                return "skip"
+            
+            _frameDef = ("xpath", "//iframe[contains(@{},'{}')]".format('src', appname))
+            try:
 
-        x = self.parent.debug.screenShotOnErr()
-        self.parent.reporting.logResult("info",  "Iframe details for frame with path: {}|{}".\
-                                        format(self._framePathStr(), srcSTR), x)
+                frame_elem = self.marionette.find_element(*_frameDef)
+                self.marionette.switch_to_frame(frame_elem)
+            except:
+                self.parent.reporting.logResult('info', '<i>exception launched while doing the switch!!. Frame_src: {}</i>'.format(frame_src))
+                return False
+        else:
+            self.marionette.switch_to_frame()
 
-        #
-        # Do the same for all iframes in this iframe
-        #
-        self.parent.general.checkMarionetteOK()
-        x = self.marionette.find_elements("tag name", "iframe")
-        if len(x) > 0:
-            for i2 in range(len(x)):
-                # Add this iframe number to the array.
-                self._framepath.extend(str(i2))
-
-                # Process this iframe.
-                self.viewAllIframes()
-
-                # Remove this iframe number from the array.
-                del self._framepath[-1]
-
-    def _framePathStr(self):
-        #
-        # Private method to return the iframe path in a 'nice' format.
-        #
-        pathStr = "<i>(root level)</i><b>"
-        for i in self._framepath:
-            pathStr = "{} -> {}".format(pathStr, i)
-
-        return pathStr + "</b>"
-
-    def _getFrameDetails(self):
-        #
-        # Private method to record the iframe details (LOCKS UP FOR SOME REASON, SO DON'T USE IT YET!!).
-        #
-        framepath_str = ""
-        for i in self._framepath:
-            if len(framepath_str) > 0:
-                framepath_str = framepath_str + "-"
-            framepath_str = framepath_str + i
-
-        fnam = "{}/{}_frame_{}_details.txt".format(os.environ['RESULT_DIR'], self.parent.test.TESTNum, framepath_str)
-
-        f = open(fnam, 'w')
-        f.write("Attributes for this iframe ...\n")
-
-        js_str = "return document.getElementsByTagName('iframe')[{}]".format(self._framepath[-1])
-        num_attribs = self.marionette.execute_script(js_str + ".attributes.length;")
-        for i in range(num_attribs):
-            attrib_name = self.marionette.execute_script(js_str + ".attributes[{}].nodeName;".format(i))
-            attrib_value = self.marionette.execute_script(js_str + ".attributes[{}].nodeValue;".format(i))
-            f.write("    |_ " + attrib_name.ljust(20) + ": \"" + attrib_value + "\"\n")
-        f.close()
-        return fnam
+        return True

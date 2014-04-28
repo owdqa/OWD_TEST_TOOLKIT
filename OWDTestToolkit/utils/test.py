@@ -1,4 +1,5 @@
 import sys
+import os
 
 
 class test(object):
@@ -21,7 +22,9 @@ class test(object):
         #
         # Collect info on every iframe for debugging ...
         #
-        self.parent.iframe.viewAllIframes()
+        
+        self.parent.reporting.logResult("info", "<b style='color: #62E3C5'>Starting frame dump...</b>")
+        self.parent.iframe.view_all_iframes()
 
         #
         # Report the results.
@@ -32,7 +35,18 @@ class test(object):
         # Exit immediately without throwing an exception
         # (otherwise it looks like Marionette hit a problem).
         #
-        sys.exit(1)
+        # sys.exit(1)
+        # 
+        
+        #
+        # By definition, sys.exit() raises a ExitValue exception.
+        # If we don't want an exception to be raised at this point,
+        # then we should use os._exit().
+        # 
+        # **** NOTE **** : The call to os._exit() is dangerous, so
+        # if thing go odd, please go back to sys.exit()
+        #
+        os._exit(1)
 
     def TEST(self, result, msg, stop_on_error=False):
         #
