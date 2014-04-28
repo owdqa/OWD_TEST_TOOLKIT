@@ -308,6 +308,15 @@ class Settings(object):
         #
         self.parent.data_layer.set_setting('audio.volume.alarm', volume)
 
+    def setNetworkOperator(self):
+        #
+        # Open cellular and data settings.
+        #
+        x = self.UTILS.element.getElement(DOM.Settings.cellData, "Cellular and Data settings link")
+        x.tap()
+
+        self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
+
     def setRingerAndNotifsVolume(self, volume):
         #
         # Set the volume for ringer and notifications.

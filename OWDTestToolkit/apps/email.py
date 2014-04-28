@@ -4,6 +4,7 @@ from OWDTestToolkit.apps.gallery import Gallery
 from OWDTestToolkit.apps.music import Music
 from OWDTestToolkit.apps.camera import Camera
 import time
+import sys
 
 
 class Email(object):
@@ -522,13 +523,13 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
                                   "Compose message header")
         time.sleep(5)
 
         #
-        # Put items in the corresponsing fields.
-        # 
+        # Put items in the corresponding fields.
+        #
         if type(p_target) is list:
             for addr in p_target:
                 self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", addr, True, False, True, False)
@@ -546,13 +547,12 @@ class Email(object):
 
         self.replyTheMessage(from_field.split("@")[0])
 
-
     def replyTheMessage(self, sender_name):
         #
         # Hits the 'Send' button to reply to the message (handles
         # waiting for the correct elements etc...).
         #
-        
+
         x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
         self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
@@ -561,11 +561,12 @@ class Email(object):
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
+        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
+                                               False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(sender_name))
         self.UTILS.element.waitForElements(x, "Previous received message", True, 120)
-        
+
     def sendTheMessage(self):
         #
         # Hits the 'Send' button to send the message (handles
@@ -581,7 +582,6 @@ class Email(object):
         #
         self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
-
         x = ('xpath', DOM.GLOBAL.app_head_specific.format("Inbox"))
         self.UTILS.element.waitForElements(x, "Inbox", True, 120)
 
