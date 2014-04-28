@@ -749,20 +749,29 @@ class Email(object):
         self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", email, True, True, False)
         self.UTILS.general.typeThis(DOM.Email.password, "Password field", passwd, True, True, False)
 
-        time.sleep(2)
-        x = self.UTILS.element.getElement(DOM.Email.login_account_info_next_btn, "'Next' button", True, 60)
-        x.tap()
+        #
+        # TODO : surround this by a try-except block, calling to quitTest. This has to be done
+        # once we fix the great delay caused by viewAllIframes()
+        #
+        self.parent.wait_for_element_displayed(*DOM.Email.login_account_info_next_btn, timeout=60)
+        next = self.marionette.find_element(*DOM.Email.login_account_info_next_btn)
+        self.UTILS.element.simulateClick(next)
+        self.UTILS.reporting.logResult("info", "'Next button'")
 
-        time.sleep(2)
-        x = self.UTILS.element.getElement(DOM.Email.login_account_prefs_next_btn, "Next button", True, 60)
-        x.tap()
+        self.parent.wait_for_element_displayed(*DOM.Email.login_account_prefs_next_btn, timeout=120)
+        next2 = self.marionette.find_element(*DOM.Email.login_account_prefs_next_btn)
+        self.UTILS.element.simulateClick(next2)
+        self.UTILS.reporting.logResult("info", "'Next button'")
+
 
         #
         # Click the 'continue to mail' button.
         #
         time.sleep(1)
-        x = self.UTILS.element.getElement(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button", True, 60)
-        x.tap()
+        self.parent.wait_for_element_present(*DOM.Email.login_cont_to_email_btn, timeout=120)
+        continue_btn = self.marionette.find_element(*DOM.Email.login_cont_to_email_btn)
+        continue_btn.tap()
+        self.UTILS.reporting.logResult("info", "'Continue to email' button")
 
         self.UTILS.element.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
 
