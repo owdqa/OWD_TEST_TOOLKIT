@@ -74,3 +74,25 @@ class Messages(object):
         self.parent.test.TEST(result, "The WAP PUSH message could {}be sent. Status code: {}. Body: {}".\
                               format("not " if not result else "", response.status_code, response.text))
         return result
+
+    def create_incoming_cp_nowsms(self, phoneNumber, pinType, otaFilename, pinNumber=None):
+        """Send an incoming OTA CP notification.
+
+        phoneNumber: phone number used to receive the notification
+        pinType: Specifies the type of PIN specified in the OTAPIN variable. Can either be a value of USERPIN,
+        NETWPIN, or USERNETWPIN.
+        The value must be uppercase, if not will be converted.
+        pinNumber: short pin code (often 4 digits)
+        otaFilename: The file name contained the OTA XML configuration. This file must be saved in OTA folder
+        of nowSMS.
+        """
+
+        if (pinNumber != None):
+            url = 'http://10.95.193.226:8800/?PhoneNumber=' + phoneNumber + '&OTAPINTYPE=' + pinType.upper() + \
+                    '&OTAPIN=' + pinNumber + '&OTA=' + otaFilename
+        else:
+            url = 'http://10.95.193.226:8800/?PhoneNumber=' + phoneNumber + '&OTA=' + otaFilename
+
+        self.logResult("URL", "Current url is: " + url)
+
+        requests.get(url, auth=('owd', 'owdqa'))

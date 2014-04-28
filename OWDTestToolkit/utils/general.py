@@ -270,3 +270,12 @@ class general(object):
                 time.sleep(0.5)
             except:
                 pass
+
+    def remove_file(self, file_name, destination_prefix):
+        #
+        # remove file from sdcard
+        #
+        destination_prefix_file = destination_prefix
+        destination = destination_prefix_file + file_name
+        file_to_remove = '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination)
+        self.parent.device.manager.removeFile(file_to_remove)

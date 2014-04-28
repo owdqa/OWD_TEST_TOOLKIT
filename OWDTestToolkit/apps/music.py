@@ -41,10 +41,25 @@ class Music(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
 
-    def play_song(self, position):
+    def play_from_tiles_by_position(self, position):
         songs = self.UTILS.element.getElements(DOM.Music.music_songs, "Songs")
 
         if (position < len(songs)):
             songs[position].tap()
         else:
             self.UTILS.test.TEST(False, "Position greater than the number of songs stored in the device")
+
+    def play_from_tiles_by_artist(self, artist):
+        songs = self.UTILS.element.getElements(DOM.Music.music_songs, "Songs")
+
+        for song in songs:
+            try:
+                title = song.find_element('css selector', '.tile-title-artist')
+                if title.text.lower() == artist.lower():
+                    song.tap()
+                    break
+            except:
+                #
+                # Song not found, so keep looping
+                #
+                pass

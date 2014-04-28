@@ -98,7 +98,7 @@ class OMACP(object):
         x.tap()
 
         x = self.UTILS.element.getElement(DOM.OMACP.CP_OTA_Message, "Message")
-        self.UTILS.test.TEST(x.text == "We are done, the APN(s) are now stored.", "Stored OTA message")
+        self.UTILS.test.TEST(x, "Stored OTA message")
 
         x = self.UTILS.element.getElement(DOM.OMACP.CP_Finish_Button, "Finish button")
         x.tap()
