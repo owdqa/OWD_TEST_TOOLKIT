@@ -465,7 +465,7 @@ class Email(object):
 
         self.replyTheMessage(from_field.split("@")[0])
 
-    def reply_all(self, reply_message):
+    def reply_all(self, sender, reply_message):
         #
         # This method replies to all recipients of a previously received message
         # It assumes we already are viewing that message
@@ -488,10 +488,20 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
                                   "Compose message header")
         time.sleep(5)
 
+        #
+        # Check the sender is not included in the 'To' field
+        #
+        bubbles = self.UTILS.element.getElements(('css selector', '.cmp-to-container.cmp-addr-container .cmp-bubble-container .cmp-peep-name'), 
+                                            '"To" field bubbles')
+
+        bubbles_text = [bubble.text for bubble in bubbles]
+
+        if sender['username'] in bubbles_text:
+            self.UTILS.test.TEST(False, "Sender ({}) must not appear in the 'To field' when replying".format(sender['username']), True)
         #
         # Write some reply content
         #
