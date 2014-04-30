@@ -34,6 +34,7 @@ outgoing_call_locator = ("xpath", "/html/body/article/article/section[3]/div[7]/
 outgoing_call_number = ("xpath", "//*[contains(@class,'number font-light')]") #Note: maybe + prefix.
 outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '{}')]" #Note: maybe + prefix.
 hangup_bar_locator = ('id', 'callbar-hang-up')
+answer_callButton = ("xpath", "//*[@id='callbar-answer']")
 
 call_log_btn = ("id", "option-recents")
 call_log_filter = ("id", "call-log-filter")
