@@ -98,6 +98,25 @@ class Messages(object):
 
             n += 1
 
+    def cancelSettings(self):
+
+        #
+        # Press options button
+        #
+        self.UTILS.reporting.logResult("info", "Cliking on messages options button")
+        x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
+            "Messages option button is displayed")
+        x.tap()
+
+        #
+        # Press cancel button
+        #
+        cancelBtn = self.UTILS.element.getElement(DOM.Messages.cancel_btn_msg,
+            "Press Cancel button")
+        cancelBtn.tap()
+
+
+
     def deleteSubject(self, subject):
 
         #
