@@ -41,6 +41,7 @@ else
     #sudo git checkout $BRANCH  2> >( tee -a $LOGFILE)
     #sudo git merge origin/$BRANCH
     sudo git checkout -f $BRANCH  2> >( tee -a $LOGFILE)
+    sudo git pull 2> >( tee -a $LOGFILE)
 fi
 
 #
