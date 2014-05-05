@@ -6,6 +6,7 @@ airplane        = ('id', 'statusbar-flight-mode')
 signal          = ("xpath", "/html/body/div/div/div[8]/div")
 hotspot         = ("id", "statusbar-tethering")
 network_activity= ("id", "statusbar-network-activity")
+downloads       = ("id", "statusbar-system-downloads")
 
 clear_all_button= ('id', 'notification-clear')
 toggle_wifi     = ("id", "quick-settings-wifi")

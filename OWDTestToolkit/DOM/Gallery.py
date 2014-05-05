@@ -17,3 +17,5 @@ no_thumbnails_message       = ("xpath", "//h1[@id='overlay-title' and text()='No
 
 camera_button               = ("id", "thumbnails-camera-button")
 crop_done                   = ("xpath", "//*[@id='crop-done-button']")
+
+current_image_pic2           = ('css selector', '#frame > img')

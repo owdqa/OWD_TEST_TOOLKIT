@@ -103,3 +103,8 @@ sim_security_change_pin = ('xpath', '//li[@class="simpin-change simpin-change-0 
 sim_security_enter_pin_header = ('xpath', GLOBAL.app_head_specific.format('Enter SIM PIN'))
 sim_security_enter_pin_input = ('xpath', '//div[@class="sim-code-area sim-pinArea"]/input')
 sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[text()="Done"]')
+
+downloads                   = ("id", "menuItem-downloads")
+downloads_header            = ("id", "downloads")
+downloads_edit_button       = ("id", "downloads-edit-button")
+downloads_edit_mode_header  = ("id", "downloads-title-edit")

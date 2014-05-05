@@ -5,6 +5,7 @@ import Camera
 import Clock
 import Contacts
 import Email
+import DownloadManager
 import EME
 import Facebook
 import FTU
