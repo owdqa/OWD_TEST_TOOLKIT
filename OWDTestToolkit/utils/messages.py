@@ -36,10 +36,10 @@ class Messages(object):
 
         data = {"dataCodingScheme": "F5", "protocolId": "00", "pduType": "41", "sourcePort": 9200,
                 "destinationPort": 2948, "pduData": "{}".format(pdu_data)}
-        payload = {"to": [phone_number], "binaryMessage": data}
+        payload = {"to": ["tel:{}".format(phone_number)], "binaryMessage": data}
 
         response = requests.post(self.url, headers=headers, data=json.dumps(payload))
-        result = response.status_code == requests.codes.ok
+        result = response.status_code == requests.codes.created
         self.parent.test.TEST(result, "The provisioning message could {}be sent. Status code: {}. Body: {}".\
                               format("not " if not result else "", response.status_code, response.text))
         return result
@@ -50,8 +50,30 @@ class Messages(object):
         Use Pigeon API to send a SMS to the given number and with the specified text.
         """
         headers = {"api_key": self.api_key, "api_secret": self.api_secret}
-        payload = {"to": [phone_number], "message": message}
+        payload = {"to": ["tel:{}".format(phone_number)], "message": message}
         requests.post(self.url, headers=headers, data=json.dumps(payload))
+
+    def create_incoming_binary_sms(self, phone_number, message, clazz):
+        """Create Incoming binary SMS with the given class
+
+        Use Pigeon API to send a SMS to the given number and with the specified text.
+        clazz - The SMS class. Can be any value in [0, 1, 2, 3].
+        """
+        if clazz not in (0, 1, 2, 3):
+            raise ValueError("clazz parameter must be one of [0, 1, 2, 3]")
+        headers = {"api_key": self.api_key, "api_secret": self.api_secret}
+        pigeon = pigeonpdu.PigeonPDU()
+        pdu_data = pigeon.gsm_encode(message)
+        self.parent.test.TEST(True, "PDU_DATA: {}".format(pdu_data))
+        data = {"dataCodingScheme": "F{}".format(clazz), "protocolId": "00", "pduType": "01", "sourcePort": 9200,
+                "destinationPort": 2948, "pduData": "{}".format(pdu_data)}
+        payload = {"to": ["tel:{}".format(phone_number)], "binaryMessage": data}
+        self.parent.test.TEST(True, "Binary message data: {}".format(data))
+        response = requests.post(self.url, headers=headers, data=json.dumps(payload))
+        result = response.status_code == requests.codes.created
+        self.parent.test.TEST(result, "The binary SMS Class {} could {}be sent. Status code: {}. Body: {}".\
+                              format(clazz, "not " if not result else "", response.status_code, response.text))
+        return True
 
     def create_incoming_wap_push(self, phone_number, typ, wap_url, message="", action='signal-medium'):
         """Create an incoming WAP Push message
@@ -68,9 +90,9 @@ class Messages(object):
         self.parent.test.TEST(True, "PDU_DATA: {}".format(binascii.hexlify(pdu_data)))
         data = {"dataCodingScheme": "F5", "protocolId": "00", "pduType": "41", "sourcePort": 9200,
                 "destinationPort": 2948, "pduData": "{}".format(binascii.hexlify(pdu_data))}
-        payload = {"to": [phone_number], "binaryMessage": data}
+        payload = {"to": ["tel:{}".format(phone_number)], "binaryMessage": data}
         response = requests.post(self.url, headers=headers, data=json.dumps(payload))
-        result = response.status_code == requests.codes.ok
+        result = response.status_code == requests.codes.created
         self.parent.test.TEST(result, "The WAP PUSH message could {}be sent. Status code: {}. Body: {}".\
                               format("not " if not result else "", response.status_code, response.text))
         return result
