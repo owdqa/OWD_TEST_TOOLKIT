@@ -117,7 +117,7 @@ class DownloadManager(object):
 
         time.sleep(2)
 
-        ########################################################################
+
 
 
         #
@@ -147,13 +147,8 @@ class DownloadManager(object):
                         "Getting Delete button")
         x.tap()
 
-        #x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
-        #               "Getting Delete button")
-        #time.sleep(2)
-        #x.tap()
         self.UTILS.element.waitForElements(DOM.DownloadManager.download_confirm_yes,
                         "Getting Delete button")
-
         x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
                         "Getting Delete button")
         x.tap()
