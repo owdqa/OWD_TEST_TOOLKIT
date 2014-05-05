@@ -5,6 +5,7 @@ import Camera
 import Clock
 import Contacts
 import Email
+import DownloadManager
 import EME
 import Facebook
 import FTU
@@ -12,6 +13,7 @@ import Gallery
 import GLOBAL
 import Home
 import Market
+import Music
 import Messages
 import OMACP
 import Dialer
@@ -19,4 +21,4 @@ import Settings
 import Statusbar
 import Video
 import Keyboard
-import Music
+

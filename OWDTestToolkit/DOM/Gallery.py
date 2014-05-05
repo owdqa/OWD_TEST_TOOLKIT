@@ -8,6 +8,7 @@ thumbnail_trash_confirm_btn     = ("id", "modal-dialog-confirm-ok")
 thumbnail_cancel_sel_mode_btn   = ("id", "thumbnails-cancel-button")
 
 current_image_pic           = ('css selector', '#frame2 > img')
+current_image_pic2           = ('css selector', '#frame > img')
 current_image_vid           = ('xpath', "//*[@id='frame2']/div")
 video_play_button           = ('xpath', "//*[@id='frame2']/div/button")
 video_pause_button          = ('xpath', "//*[@id='frame2']/div/div/button")
@@ -17,3 +18,4 @@ no_thumbnails_message       = ("xpath", "//h1[@id='overlay-title' and text()='No
 
 camera_button               = ("id", "thumbnails-camera-button")
 crop_done                   = ("xpath", "//*[@id='crop-done-button']")
+
