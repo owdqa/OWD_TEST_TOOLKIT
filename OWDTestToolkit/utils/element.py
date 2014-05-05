@@ -183,7 +183,7 @@ class element(object):
             else:
                 msg = "<b>{}</b> present within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_present(*elem, timeout=timeout)
-        except:
+        except Exception:
             is_ok = False
 
         self.parent.test.TEST(is_ok, msg, stop_on_error)

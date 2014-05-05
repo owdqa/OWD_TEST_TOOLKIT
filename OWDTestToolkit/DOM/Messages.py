@@ -83,7 +83,6 @@ target_subject = ("id", "messages-subject-input")
 attach_preview_img_type = ("xpath", "//*[@class='attachment-container preview']")
 attach_preview_video_audio_type = ("xpath", "//*[@class='attachment-container nopreview']")
 
-
 header_call_btn = ("xpath", "//button[text()='Call']")
 header_send_message_btn = ("xpath", "//button[text()='Send message']")
 header_create_new_contact_btn = ("xpath", "//button[text()='Create new contact']")
@@ -108,3 +107,5 @@ attached_opt_replace = ("xpath", "//*[@data-l10n-id='replace-attachment-image']"
 message_expected_content = ('xpath', "//div[@class='message-content']/p/span[text()='{}']")
 
 wap_push_message_link = ('xpath', "//*[@id='si-sl-screen']//a[@data-action='url-link']")
+
+sms_class_0_ok_btn = ('xpath', '//form[@class="modal-dialog-alert generic-dialog visible"]/menu/button')
