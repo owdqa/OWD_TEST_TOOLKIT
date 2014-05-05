@@ -114,17 +114,21 @@ class Settings(object):
         x = self.UTILS.element.getElement(DOM.Settings.custom_settings_apn, "Custom settings button")
         x.tap()
 
+        # We do not want suggestions or auto-correction for the APN values, so, just disable them
+        self.data_layer.set_setting('keyboard.wordsuggestion', False)
+        self.data_layer.set_setting('keyboard.autocorrect', False)
+
         #
         # Enter the data
         #
         self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
-                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=False)
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
         self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
-                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=False)
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
         self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
-                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=True)
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
         #
         # Tap the ok button to save the changes
