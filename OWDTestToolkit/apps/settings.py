@@ -1,7 +1,6 @@
 from OWDTestToolkit import DOM
 import time
 
-
 class Settings(object):
 
     def __init__(self, parent):

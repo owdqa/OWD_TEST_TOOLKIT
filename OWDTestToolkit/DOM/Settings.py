@@ -106,5 +106,6 @@ sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[
 
 downloads                   = ("id", "menuItem-downloads")
 downloads_header            = ("id", "downloads")
-downloads_edit_button       = ("id", "downloads-edit-button")
 downloads_edit_mode_header  = ("id", "downloads-title-edit")
+downloads_edit_button       = ("id", "downloads-edit-button")
+

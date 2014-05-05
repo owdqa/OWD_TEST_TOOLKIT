@@ -67,7 +67,6 @@ class DownloadManager(object):
 
     def deleteAllDownloads(self):
 
-
         #
         # Enter into Edit Mode
         #
