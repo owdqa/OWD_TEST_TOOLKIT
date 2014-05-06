@@ -345,6 +345,33 @@ class Settings(object):
         time.sleep(2)
         self.marionette.switch_to_frame()
 
+    def toggle_SIM_security(self, pin):
+        #
+        # This method toggles the SIM security configuration. It does not care whether it
+        # was previously activated or not
+        #
+        
+        sim_security_menu = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
+        sim_security_menu.tap()
+
+        self.UTILS.element.waitForElements(DOM.Settings.sim_security_header, "SIM Security header")
+
+        enable_pin = self.UTILS.element.getElement(DOM.Settings.sim_security_pin, "SIM PIN switch")
+        enable_pin.tap()
+
+        self.UTILS.element.waitForElements(DOM.Settings.sim_security_enter_pin_header, "Enter PIN header")
+
+        #
+        # Type the PIN in
+        #
+        pin_input = self.UTILS.element.getElement(DOM.Settings.sim_security_enter_pin_input, "Enter PIN input")
+        pin_input.send_keys(pin)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_enter_pin_done, "Done button")
+        done_btn.tap()
+
+        self.UTILS.element.waitForElements(DOM.Settings.sim_security_header, "SIM Security header")
+
     def turn_dataConn_on(self, wireless_off=False):
         #
         # Click slider to turn data connection on.
