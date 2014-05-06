@@ -116,3 +116,9 @@ networkOperator_PrefWCDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li/
 networkOperator_PrefGSM = ("xpath", "/html/body/div/div[5]/form/section/ol/li[4]/label/span")
 networkOperator_PrefEVDO = ("xpath", "/html/body/div/div[5]/form/section/ol/li[5]/label/span")
 networkOperator_OK_btn = ("xpath", "/html/body/div/div[5]/form/menu/button")
+
+change_pin_done_btn = ('xpath', '//section[@id="simpin-dialog"]//button[@data-l10n-id="done"]')
+change_pin_old_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-pinArea"]/input')
+change_pin_new_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-newPinArea"]/input')
+change_pin_confirm_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-confirmPinArea"]/input')
+change_pin_error = ('xpath', '//section[@id="simpin-dialog"]//div[@class="sim-errorMsg error"]//div[@class="sim-messageHeader"]')
