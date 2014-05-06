@@ -114,17 +114,21 @@ class Settings(object):
         x = self.UTILS.element.getElement(DOM.Settings.custom_settings_apn, "Custom settings button")
         x.tap()
 
+        # We do not want suggestions or auto-correction for the APN values, so, just disable them
+        self.data_layer.set_setting('keyboard.wordsuggestion', False)
+        self.data_layer.set_setting('keyboard.autocorrect', False)
+
         #
         # Enter the data
         #
         self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
-                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=False)
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
         self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
-                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=False)
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
         self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
-                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=True)
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
         #
         # Tap the ok button to save the changes
@@ -345,19 +349,20 @@ class Settings(object):
         time.sleep(2)
         self.marionette.switch_to_frame()
 
-    def toggle_SIM_security(self, pin):
+    def enable_sim_security(self, enable, pin):
         #
-        # This method toggles the SIM security configuration. It does not care whether it
-        # was previously activated or not
+        # This method sets the SIM security configuration.
         #
-        
-        sim_security_menu = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
-        sim_security_menu.tap()
-
-        self.UTILS.element.waitForElements(DOM.Settings.sim_security_header, "SIM Security header")
-
-        enable_pin = self.UTILS.element.getElement(DOM.Settings.sim_security_pin, "SIM PIN switch")
-        enable_pin.tap()
+        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
+        self.UTILS.element.scroll_into_view(sim_security)
+        sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
+        # If the attribute is already in the desired state, return
+        current = sim_security_tag.text == "Enabled"
+        if enable == current:
+            return
+        sim_security.tap()
+        sim_security_pin = self.UTILS.element.getElement(DOM.Settings.sim_security_pin, "SIM security switch")
+        sim_security_pin.tap()
 
         self.UTILS.element.waitForElements(DOM.Settings.sim_security_enter_pin_header, "Enter PIN header")
 
