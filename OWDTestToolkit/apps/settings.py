@@ -349,6 +349,35 @@ class Settings(object):
         time.sleep(2)
         self.marionette.switch_to_frame()
 
+    def change_sim_pin(self, old_pin, new_pin, confirm_pin):
+        #
+        # This method changes the current PIN code to a new one
+        #
+        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
+        self.UTILS.element.scroll_into_view(sim_security)
+        sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
+
+        # If no SIM security enabled, enable it
+        if sim_security_tag.text == "Disabled":
+            self.enable_sim_security(True, old_pin)
+            self.goBack()
+
+        sim_security.tap()
+        change_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin, "Change PIN button")
+        change_btn.tap()
+
+        old = self.UTILS.element.getElement(DOM.Settings.change_pin_old_input, "getting OLD PIN input")
+        old.send_keys(old_pin)
+
+        new = self.UTILS.element.getElement(DOM.Settings.change_pin_new_input, "getting new PIN input")
+        new.send_keys(new_pin)
+
+        confirm = self.UTILS.element.getElement(DOM.Settings.change_pin_confirm_input, "getting CONFIRM PIN input")
+        confirm.send_keys(confirm_pin)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.change_pin_done_btn, "Change PIN Done button")
+        done_btn.tap()
+        
     def enable_sim_security(self, enable, pin):
         #
         # This method sets the SIM security configuration.
@@ -356,10 +385,14 @@ class Settings(object):
         sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
         self.UTILS.element.scroll_into_view(sim_security)
         sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
+       
         # If the attribute is already in the desired state, return
         current = sim_security_tag.text == "Enabled"
         if enable == current:
+            #click anyway so that we can later check whether the button to change the PIN
+            sim_security.tap()
             return
+
         sim_security.tap()
         sim_security_pin = self.UTILS.element.getElement(DOM.Settings.sim_security_pin, "SIM security switch")
         sim_security_pin.tap()
