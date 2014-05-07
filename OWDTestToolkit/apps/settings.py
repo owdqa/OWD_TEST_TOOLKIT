@@ -175,12 +175,22 @@ class Settings(object):
 
         do_return = (enable and status == "Enabled") or (not enable and status == "Disabled")
 
+        #
+        # If it is already enabled/disabled, then return False, so that we can
+        # know outside this method that there is no need in typing the PIN2
+        #
         if do_return:
-            return
+            return False
 
         switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "Enable fdn")
         switch.tap()
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format("Enable FDN")), "Enable FDN header")
+        if enable:
+            self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format("Enable FDN")), "Enable FDN header")
+        else:
+            self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format("Disable FDN")), "Disable FDN header")
+
+
+        return True
 
     def fdn_type_pin2(self, pin2):
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
@@ -194,7 +204,7 @@ class Settings(object):
         self.open_fdn()
         self.go_enable_fdn(True)
         self.change_pin2(wrong_pin2, good_pin2, puk2)
-        
+
     def fdn_open_auth_numbers(self):
         auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
         auth_list.tap()
@@ -299,7 +309,7 @@ class Settings(object):
         #
         for i in range(len(contacts)):
             elem = (DOM.Settings.fdn_auth_numbers_list_item[0], 
-                DOM.Settings.fdn_auth_numbers_list_item[1].format(i + 1))
+                DOM.Settings.fdn_auth_numbers_list_item[1].format(0))
 
             contact = self.UTILS.element.getElement(elem, "contact")
             number = contact.find_element('css selector', 'small').text
