@@ -24,4 +24,4 @@ lockscreen_network_locator = ('xpath', '//div[@id="lockscreen-header"]//span[@cl
 puk_puk_input = ('xpath', '//div[@id="pukArea"]//input')
 puk_new_pin_input = ('xpath', '//div[@id="newPinArea"]//input')
 puk_confirm_pin_input = ('xpath', '//div[@id="confirmPinArea"]//input')
-puk_ok_btn = ('xpaht', '//div[@id="simpin-dialog"]//button[@data-l10n-id="ok"]')
+puk_ok_btn = ('xpath', '//div[@id="simpin-dialog"]//button[@data-l10n-id="ok"]')
