@@ -7,10 +7,10 @@ download_list = ("id", "downloadList")
 download_element = ("xpath", ".//li[@data-url='%s']")
 download_element_progress = ("xpath", ".//li[@data-url='%s']/progress")
 download_element_button = ("xpath", "//*[@id='%s']/aside[2]")
-download_element_button_position = ("xpath", "//section[@id='downloadList']/ul/li[{}]/aside[2]")
+download_element_button_position = ("xpath", "//section[@id='downloadList']/ul/li[{}]/aside[@class='pack-end']")
 download_element_checkbox = ("xpath",".//li[@data-url='%s']/label/input")
 download_status_text = ("xpath", "//*[@id='%s']/p[2]")
-download_status_text_position= ("xpath", "//section[@id='downloadList']/ul/li[{}]/p[2]")
+download_status_text_position= ("xpath", "//section[@id='downloadList']/ul/li[{}]/p[@class='info']")
 download_status = ("xpath", "//*[@id='%s']")
 download_status_position = ("xpath", "//section[@id='downloadList']/ul/li[{}]")
 
@@ -35,3 +35,5 @@ download_file_option_share = ("id", "SHARE")
 download_file_option_ringtone = ("id", "RINGTONE")
 ownload_file_option_wallpaper = ("id", "WALLPAPER")
 download_file_option_cancel = ("id", "CANCEL")
+
+
