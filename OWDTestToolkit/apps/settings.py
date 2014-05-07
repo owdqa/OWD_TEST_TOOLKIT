@@ -194,8 +194,8 @@ class Settings(object):
         self.open_fdn()
         self.go_enable_fdn(True)
         self.change_pin2(wrong_pin2, good_pin2, puk2)
-	
-	def fdn_open_auth_numbers(self):
+        
+    def fdn_open_auth_numbers(self):
         auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
         auth_list.tap()
 
