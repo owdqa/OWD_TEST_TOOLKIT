@@ -274,6 +274,78 @@ class DownloadManager(object):
         x = self.UTILS.element.getElement(elem, "Getting desired download")
         x.tap()
 
+    def restartDownloadByPosition(self, position, confirm):
+
+        #
+        # Restarts a download that was previously stopped, if <confirm> = True
+        #
+
+
+        #
+        # Tap on a stopped Download by download_id
+        #
+        elem = (DOM.DownloadManager.download_element_button_position[0],
+                DOM.DownloadManager.download_element_button_position[1].format(position) )
+        x = self.UTILS.element.getElement(elem, "Getting download item refresh button")
+        x.tap()
+
+        #
+        # Verify if we must press yes or no button
+        #
+        if confirm:
+            #
+            # Press Try again button to restart the download
+            #
+            x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
+                            "Restart the download tapping on Try again button")
+            x.tap()
+
+            #
+            # Verify text during the download process (graphically)
+            #
+            elem = (DOM.DownloadManager.download_status_text_position[0],
+                    DOM.DownloadManager.download_status_text_position[1].format(position))
+            x = self.UTILS.element.getElement(elem,
+                        "Obtain the text displayed to verify the text 'X' MB of 'Y' MB")
+
+            match = re.search(r"(\d)+(.(\d)+)*\s(GB|MB|KB)\sof\s(\d)+(.(\d)+)*\s(GB|MB|KB)",
+                             x.text)
+            self.UTILS.test.TEST(match is not None, "Verify the the text is: 'X' MB of 'Y' MB")
+
+            #
+            # Verify status downloading using data-state="downloading".
+            #
+            elem = (DOM.DownloadManager.download_status_text_position[0],
+                    DOM.DownloadManager.download_status_position[1].format(position))
+            x =self.UTILS.element.getElement(elem, "Obtain the download state")
+            self.UTILS.test.TEST("downloading" == x.get_attribute("data-state"),
+                             "Verify that the status is downloading")
+
+        else:
+            #
+            # Press cancel button and the download still stopped
+            #
+            x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_no,
+                             "Press cancel button and the download still stopped")
+            x.tap()
+
+            #
+            # Verify text Stopped.
+            #
+            elem = (DOM.DownloadManager.download_status_text_position[0],
+                     DOM.DownloadManager.download_status_text_position[1].format(position))
+            x = self.UTILS.element.getElement(elem,
+                         "Obtain the text displayed to verify the text stopped")
+            self.UTILS.test.TEST("Stopped" in x.text,"Verify the text Stopped")
+
+            #
+            # Verify status Stopped using data-state="stopped".
+            #
+            elem = (DOM.DownloadManager.download_status_text_position[0], DOM.DownloadManager.download_status_position[1].format(position))
+            x = self.UTILS.element.getElement(elem, "Obtain the download state")
+            self.UTILS.test.TEST("stopped" == x.get_attribute("data-state"),
+                            "Verify that the status is stopped")
+
     def restartDownload(self, download_id, confirm):
 
         #
@@ -345,6 +417,77 @@ class DownloadManager(object):
             x = self.UTILS.element.getElement(elem, "Obtain the download state")
             self.UTILS.test.TEST("stopped" == x.get_attribute("data-state"),
                             "Verify that the status is stopped")
+
+    def stopDownloadByPosition(self, position, confirm):
+        # Stops a download in progress if <confirm> = True
+        #
+
+
+        #
+        # Tap in Stopping Download by download_id
+        #
+        elem = (DOM.DownloadManager.download_element_button_position[0],
+                DOM.DownloadManager.download_element_button_position[1].format(position))
+        x= self.UTILS.element.getElement(elem, "Get element by position")
+        x.tap()
+
+        #
+        # Verify if we must press yes or no button
+        #
+        if confirm:
+            #
+            # Press Yes button and Confirm Stop Download.
+            #
+            x= self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
+                "Confirm Stop Download, Yes button")
+            x.tap()
+
+            #
+            # Verify text Stopped.
+            #
+            elem = (DOM.DownloadManager.download_status_text_position[0],
+                    DOM.DownloadManager.download_status_text_position[1].format(position))
+            x = self.UTILS.element.getElement(elem,
+                            "Obtain the text displayed to verify the text stopped")
+            self.UTILS.test.TEST("Stopped" in x.text, "Verify the text Stopped")
+
+            #
+            # Verify status Stopped using data-state="stopped".
+            #
+            elem = (DOM.DownloadManager.download_status_position[0], DOM.DownloadManager.download_status_position[1].format(position))
+            x = self.UTILS.element.getElement(elem, "Obtain the download state")
+            self.UTILS.test.TEST("stopped" == x.get_attribute("data-state"),
+                             "Verify the status stopped")
+
+        else:
+            #
+            # Press No button and Cancel Stop Download
+            #
+            x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_no,
+                                "Confirm Stop Download, Yes button")
+            x.tap()
+
+            #
+            # Verify text during the download process.
+            #
+
+            elem = (DOM.DownloadManager.download_status_text_position[0],
+                     DOM.DownloadManager.download_status_text_position[1].format(position) )
+            x = self.UTILS.element.getElement(elem,
+                    "Obtain the text displayed to verify the text 'X' MB of 'Y' MB")
+
+            pattern = r"^(\d)+(.(\d)+)*\s(GB|MB|KB)\sof\s(\d)+(.(\d)+)*\s(GB|MB|KB)$"
+            match = re.search(pattern, x.text)
+            self.UTILS.test.TEST(match is not None, "Verify the text is : 'X' MB of 'Y' MB")
+
+            #
+            # Verify status downloading using data-state="downloading".
+            #
+            elem = (DOM.DownloadManager.download_status_position[0], DOM.DownloadManager.download_status_position[1].format(position))
+            x = self.UTILS.element.getElement(elem, "Obtain the download state")
+            self.UTILS.test.TEST("downloading" == x.get_attribute("data-state"),
+                        "Verify that the status is downloading")
+
 
     def stopDownload(self, download_id, confirm):
 
