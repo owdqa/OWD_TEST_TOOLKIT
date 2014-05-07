@@ -154,12 +154,18 @@ class Settings(object):
 
         do_return = (enable and status == "Enabled") or (not enable and status == "Disabled")
 
+        #
+        # If fdn is already enabled/disabled, return False so that we know that outside
+        # this method
+        #
         if do_return:
-            return
+            return False
 
         switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "Enable fdn")
         switch.tap()
         self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format("Enable FDN")), "Enable FDN header")
+
+        return True
 
     def fdn_type_pin2(self, pin2):
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
@@ -167,6 +173,124 @@ class Settings(object):
 
         done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
         done_btn.tap()
+
+    def fdn_open_auth_numbers(self):
+        auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
+        auth_list.tap()
+
+        self.UTILS.element.waitForElements(('xpath',
+            DOM.GLOBAL.app_head_specific.format("Authorized numbers")), "Authorised number sheader")
+
+    def fdn_add_auth_number(self, name, number, pin2):
+        #
+        # Add the contact
+        #
+        
+        add_btn = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number, "Add button")
+        add_btn.tap()
+        self.UTILS.element.waitForElements(('xpath',
+            DOM.GLOBAL.app_head_specific.format("Add contact")), "Add contact header")
+
+        #
+        # Fill contact data
+        #
+        name_input = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number_name, "Auth contact name")
+        name_input.send_keys(name)
+
+        number_input = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number_number, "Auth contact number")
+        number_input.send_keys(number)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number_done, "Auth contact Done button")
+        done_btn.tap()
+
+        #
+        # PIN2 Confirmation
+        #
+        self.UTILS.element.waitForElements(('xpath',
+            DOM.GLOBAL.app_head_specific.format("Enter SIM PIN2")), "Confirm SIM PIN2 header")
+
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
+        pin2_input.send_keys(pin2)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
+        done_btn.tap()
+
+        #
+        # Check the number has been added to the list
+        #
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0], 
+            DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
+        self.UTILS.element.waitForElements(elem, "Waiting for contact to be in the list", True, 30)
+
+        # back_btn = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers_back, "Back button")
+        # back_btn.tap()
+
+    def fdn_delete_auth_number(self, name, number, pin2):
+        #
+        # This method deletes a contact from the authorized numbers list
+        # It must be called once the list has been displayed
+        #
+        
+        
+        # Tap over the contact
+        #
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0], 
+            DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
+
+        contact = self.UTILS.element.getElement(elem, "Contact to be deleted")
+        contact.tap()
+        time.sleep(1)
+
+        #
+        # Wait for options to be displayed
+        #
+        header = (DOM.Settings.fdn_auth_number_action_header[0],
+            DOM.Settings.fdn_auth_number_action_header[1].format(name))
+        self.UTILS.element.waitForElements(header, 
+            "Waiting for actions over contact: {}, {}".format(name, number))
+
+        #
+        # Choose delete option
+        #
+        delete_option = self.UTILS.element.getElement(DOM.Settings.fdn_auth_number_action_delete, "Delete option")
+        delete_option.tap()
+
+        #
+        # PIN2 Confirmation
+        #
+        self.UTILS.element.waitForElements(('xpath',
+            DOM.GLOBAL.app_head_specific.format("Enter SIM PIN2")), "Confirm SIM PIN2 header")
+
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
+        pin2_input.send_keys(pin2)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
+        done_btn.tap()
+
+        #
+        # Check the number is no longer present in the list
+        #
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0], 
+            DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
+        self.UTILS.element.waitForNotElements(elem, "Waiting for contact NOT to be in the list", True, 30)
+
+        # back_btn = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers_back, "Back button")
+        # back_btn.tap()
+
+    def fdn_delete_all_auth_numbers(self, pin2):
+        contacts = self.UTILS.element.getElements(DOM.Settings.fdn_auth_numbers_list, "Contact list")
+
+        #
+        # We have to do it this way to avoid StaleElementException to be raised
+        #
+        for i in range(len(contacts)):
+            elem = (DOM.Settings.fdn_auth_numbers_list_item[0], 
+                DOM.Settings.fdn_auth_numbers_list_item[1].format(i + 1))
+
+            contact = self.UTILS.element.getElement(elem, "contact")
+            number = contact.find_element('css selector', 'small').text
+            name = contact.find_element('css selector', 'span').text
+            self.fdn_delete_auth_number(name, number, pin2)
 
     def disable_hotSpot(self):
         #
