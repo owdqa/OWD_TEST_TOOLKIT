@@ -20,11 +20,17 @@ class Settings(object):
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def callID_verify(self):
+    def call_settings(self):
         x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call number button")
         x.tap()
+        self.UTILS.element.waitForElements(('xpath', 
+            DOM.GLOBAL.app_head_specific.format("Call Settings")), "Call settings header")
+
+    def callID_verify(self):
+        self.call_settings()
+
         self.UTILS.reporting.logResult("info", "Call number presses")
-        time.sleep(20)
+        # time.sleep(20)
 
         x = self.UTILS.element.getElement(DOM.Settings.call_button, "Call ID button")
         x.tap()
@@ -165,6 +171,32 @@ class Settings(object):
         #
         x = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
         x.tap()
+
+    def open_fdn(self):
+        fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
+        fdn.tap()
+        self.UTILS.element.waitForElements(('xpath', 
+            DOM.GLOBAL.app_head_specific.format("Fixed dialing numbers")), "FDN header")
+
+    def go_enable_fdn(self, enable):
+        
+        status = self.UTILS.element.getElement(DOM.Settings.fdn_status, "FDN status").text
+
+        do_return = (enable and status == "Enabled") or (not enable and status == "Disabled")
+
+        if do_return:
+            return
+
+        switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "Enable fdn")
+        switch.tap()
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format("Enable FDN")), "Enable FDN header")
+
+    def fdn_type_pin2(self, pin2):
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
+        pin2_input.send_keys(pin2)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
+        done_btn.tap()
 
     def disable_hotSpot(self):
         #

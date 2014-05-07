@@ -8,6 +8,13 @@ call_callerID = ('id', "menuItem-callerId")
 call_log_number_xpath = ("xpath", "/html/body/div/div[5]/form/section/ol/li[2]")
 call_show_number = ("xpath", "/html/body/div/div[5]/form/section/ol/li[3]")
 call_button = ('xpath', "/html/body/section[20]/div/ul/li[4]/span")
+call_fdn = ('xpath', '//a[@data-href="#call-fdnSettings"]')
+
+fdn_enable = ('xpath', '//li[@id="fdn-enabled"]')
+fdn_status = ('xpath', '//li[@id="fdn-enabled"]//small')
+fdn_auth_numbers = ('xpath', '//a[@href="#call-fdnList"]')
+fdn_pin2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-pinArea"]/input')
+fdn_pin2_done = ('xpath', '//section[@id="call-pin2-dialog"]//button[@data-l10n-id="done"]')
 
 airplane_mode_switch = ("id", "menuItem-airplaneMode")
 wifi_mode_switch = ("id", "menuItem-wifi")
