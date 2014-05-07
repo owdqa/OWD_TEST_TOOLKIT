@@ -165,6 +165,9 @@ class Settings(object):
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
         pin2_input.send_keys(pin2)
 
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
+        done_btn.tap()
+
     def disable_hotSpot(self):
         #
         # Disable hotspot (internet sharing) - assumes Settings app is already open.
