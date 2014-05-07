@@ -21,9 +21,9 @@ class Settings(object):
         return self.app
 
     def call_settings(self):
-        x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call number button")
+        x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
         x.tap()
-        self.UTILS.element.waitForElements(('xpath', 
+        self.UTILS.element.waitForElements(('xpath',
             DOM.GLOBAL.app_head_specific.format("Call Settings")), "Call settings header")
 
     def callID_verify(self):
@@ -53,27 +53,19 @@ class Settings(object):
         and also a new PIN2 value is entered twice.
         """
         for i in range(3):
-            pin2 = self.UTILS.element.getElement(DOM.Settings.sim_security_enter_pin_input,
-                                                 "Getting PIN2 input. Retry {}".format(i))
-            pin2.send_keys(self.wrong_pin2)
-
-            #
-            # Confirm
-            #
-            x = self.UTILS.element.getElement(DOM.Settings.fdn_enter_pin2_done, "Getting PIN2 Done button")
-            x.tap()
+            self.fdn_type_pin2(wrong_pin2)
 
         # SIM locked, enter PUK2 and new PIN2 twice
         puk2_input = self.UTILS.element.getElement(DOM.Settings.fdn_enter_puk2_input, "PUK2 input")
         puk2_input.send_keys(puk2)
 
-        new_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_new_pin2_input, "New PIN2 input")
+        new_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_puk2_pin2_input, "New PIN2 input")
         new_pin2_input.send_keys(good_pin2)
 
         confirm_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_confirm_pin2_input, "Confirm PIN2 input")
         confirm_pin2_input.send_keys(good_pin2)
 
-        ok_btn = self.UTILS.element.getElement(DOM.GLOBAL.puk_ok_btn, "OK button")
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "OK button")
         ok_btn.tap()
 
     def cellular_and_data(self):
@@ -175,11 +167,10 @@ class Settings(object):
     def open_fdn(self):
         fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
         fdn.tap()
-        self.UTILS.element.waitForElements(('xpath', 
+        self.UTILS.element.waitForElements(('xpath',
             DOM.GLOBAL.app_head_specific.format("Fixed dialing numbers")), "FDN header")
 
     def go_enable_fdn(self, enable):
-        
         status = self.UTILS.element.getElement(DOM.Settings.fdn_status, "FDN status").text
 
         do_return = (enable and status == "Enabled") or (not enable and status == "Disabled")
@@ -189,7 +180,8 @@ class Settings(object):
 
         switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "Enable fdn")
         switch.tap()
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format("Enable FDN")), "Enable FDN header")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format("Enable FDN")),
+                                           "Enable FDN header")
 
     def fdn_type_pin2(self, pin2):
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
@@ -197,6 +189,12 @@ class Settings(object):
 
         done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
         done_btn.tap()
+
+    def reset_pin2(self, wrong_pin2, good_pin2, puk2):
+        self.call_settings()
+        self.open_fdn()
+        self.go_enable_fdn(True)
+        self.change_pin2(wrong_pin2, good_pin2, puk2)
 
     def disable_hotSpot(self):
         #
