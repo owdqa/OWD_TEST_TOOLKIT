@@ -104,6 +104,10 @@ sim_security_change_pin = ('xpath', '//li[@class="simpin-change simpin-change-0 
 sim_security_enter_pin_header = ('xpath', GLOBAL.app_head_specific.format('Enter SIM PIN'))
 sim_security_enter_pin_input = ('xpath', '//div[@class="sim-code-area sim-pinArea"]/input')
 sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[text()="Done"]')
+fdn_enter_pin2_done = ('xpath', '//section[@id="call-pin2-dialog"]//button[@data-l10n-id="done"]')
+fdn_enter_puk2_input = ('xpath', '//section[@id="call-pin2-dialog//div[@class="sim-code-area sim-pukArea"/input')
+fdn_new_pin2_input = ('xpath', '//section[@id="call-pin2-dialog//div[@class="sim-code-area sim-newPinArea"/input')
+fdn_confirm_pin2_input = ('xpath', '//section[@id="call-pin2-dialog//div[@class="sim-code-area sim-confirmPinArea"/input')
 
 networkOperator_button = ("xpath", "/html/body/section[29]/div/ul[3]/li/label/button")
 networkOperator_types = ("id", "preferredNetworkType")

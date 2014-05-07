@@ -40,6 +40,36 @@ class Settings(object):
         self.UTILS.reporting.logResult("info", "Screen shot of the result of tapping call button", y)
         self.UTILS.test.TEST(y == "true", "Checking Call ID value")
 
+    def change_pin2(self, wrong_pin2, good_pin2, puk2):
+        """Change the PIN2.
+
+        Enter a wrong PIN2 three consecutive times. After that, the PUK2 is requested,
+        and also a new PIN2 value is entered twice.
+        """
+        for i in range(3):
+            pin2 = self.UTILS.element.getElement(DOM.Settings.sim_security_enter_pin_input,
+                                                 "Getting PIN2 input. Retry {}".format(i))
+            pin2.send_keys(self.wrong_pin2)
+
+            #
+            # Confirm
+            #
+            x = self.UTILS.element.getElement(DOM.Settings.fdn_enter_pin2_done, "Getting PIN2 Done button")
+            x.tap()
+
+        # SIM locked, enter PUK2 and new PIN2 twice
+        puk2_input = self.UTILS.element.getElement(DOM.Settings.fdn_enter_puk2_input, "PUK2 input")
+        puk2_input.send_keys(puk2)
+
+        new_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_new_pin2_input, "New PIN2 input")
+        new_pin2_input.send_keys(good_pin2)
+
+        confirm_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_confirm_pin2_input, "Confirm PIN2 input")
+        confirm_pin2_input.send_keys(good_pin2)
+
+        ok_btn = self.UTILS.element.getElement(DOM.GLOBAL.puk_ok_btn, "OK button")
+        ok_btn.tap()
+
     def cellular_and_data(self):
         #
         # Open cellular and data settings.
