@@ -14,6 +14,7 @@ fdn_enable = ('xpath', '//li[@id="fdn-enabled"]')
 fdn_status = ('xpath', '//li[@id="fdn-enabled"]//small')
 fdn_auth_numbers = ('xpath', '//a[@href="#call-fdnList"]')
 fdn_pin2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-pinArea"]/input')
+fdn_pin2_done = ('xpath', '//section[@id="call-pin2-dialog"]//button[@data-l10n-id="done"]')
 
 airplane_mode_switch = ("id", "menuItem-airplaneMode")
 wifi_mode_switch = ("id", "menuItem-wifi")
