@@ -1,6 +1,7 @@
 import time
 import datetime
 import codecs
+import logging.config
 
 
 class reporting(object):
@@ -14,15 +15,26 @@ class reporting(object):
         self.det_fnam = parent.det_fnam
         self.sum_fnam = parent.sum_fnam
         self.testNum = parent.testNum
+        self.config_file = self.parent.general.get_os_variable("OWD_LOG_CFG")
+        logging.config.fileConfig(self.config_file)
+        self.logger = logging.getLogger('OWDTestToolkit')
 
     def logComment(self, p_str):
         #
         # Add a comment to the comment array.
         #
         self._commentArray.append(p_str)
+        self.logger.info("Adding comment: {}".format(p_str))
 
     _subnote = "|__ "
     _no_time = "         "
+
+    def log_to_file(self, message, level='info'):
+        if level in ('critical', 'error', 'warn', 'info', 'debug'):
+            f = self.logger.__getattribute__(level)
+            f(message)
+        else:
+            self.logger.info(message)
 
     def logResult(self, p_result, p_msg, p_fnam=False):
         #
@@ -30,7 +42,7 @@ class reporting(object):
         # Everything after the first "|" is a 'note' line for this message
         # (will be put on a separate line with _subnote prefixed).
         #
-
+        self.logger.info("Logging result: [{}] with message [{}]. p_fnam: {}".format(p_result, p_msg, p_fnam))
         if str(p_result).lower() == "info":
             timestamp = self._no_time
         elif str(p_result).lower() == "debug":
@@ -105,7 +117,6 @@ class reporting(object):
         # NOTE: "XXDESCXX" is a marker that 'run_all_tests.sh' switches
         #       to the correct test description.
         #
-        
         pass_str = "passed"
         fail_str = "FAILED"
         pass_span = "<span style='color:#00aa00'>"
