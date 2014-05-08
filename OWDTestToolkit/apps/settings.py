@@ -309,7 +309,7 @@ class Settings(object):
         #
         for i in range(len(contacts)):
             elem = (DOM.Settings.fdn_auth_numbers_list_item[0], 
-                DOM.Settings.fdn_auth_numbers_list_item[1].format(0))
+                DOM.Settings.fdn_auth_numbers_list_item[1].format(1))
 
             contact = self.UTILS.element.getElement(elem, "contact")
             number = contact.find_element('css selector', 'small').text
