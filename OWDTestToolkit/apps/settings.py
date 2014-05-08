@@ -22,7 +22,7 @@ class Settings(object):
 
     def call_settings(self):
         x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
-        x.tap()
+        self.UTILS.element.simulateClick(x)
         self.UTILS.element.waitForElements(('xpath',
             DOM.GLOBAL.app_head_specific.format("Call Settings")), "Call settings header")
 
@@ -46,7 +46,7 @@ class Settings(object):
         self.UTILS.reporting.logResult("info", "Screen shot of the result of tapping call button", y)
         self.UTILS.test.TEST(y == "true", "Checking Call ID value")
 
-    def change_pin2(self, wrong_pin2, good_pin2, puk2):
+    def three_times_bad_pin2(self, wrong_pin2):
         """Change the PIN2.
 
         Enter a wrong PIN2 three consecutive times. After that, the PUK2 is requested,
@@ -55,6 +55,11 @@ class Settings(object):
         for i in range(3):
             self.fdn_type_pin2(wrong_pin2)
 
+    def restore_pin2(self, good_pin2, puk2):
+        """Restore PIN2 using PUK2.
+
+        After PIN2 has been entered wrongly three times, the PUK2 is required to unlock the SIM.
+        """
         # SIM locked, enter PUK2 and new PIN2 twice
         puk2_input = self.UTILS.element.getElement(DOM.Settings.fdn_enter_puk2_input, "PUK2 input")
         puk2_input.send_keys(puk2)
@@ -167,7 +172,7 @@ class Settings(object):
     def open_fdn(self):
         fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
         fdn.tap()
-        self.UTILS.element.waitForElements(('xpath', 
+        self.UTILS.element.waitForElements(('xpath',
             DOM.GLOBAL.app_head_specific.format("Fixed dialing numbers")), "FDN header")
 
     def go_enable_fdn(self, enable):
@@ -182,41 +187,60 @@ class Settings(object):
         if do_return:
             return False
 
-        switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "Enable fdn")
+        switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "{} FDN".\
+                                               format("Enable" if enable else "Disable"))
         switch.tap()
-        if enable:
-            self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format("Enable FDN")), "Enable FDN header")
-        else:
-            self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format("Disable FDN")), "Disable FDN header")
-
-
+        header = ('xpath', DOM.GLOBAL.app_head_specific.format("Enable FDN" if enable else "Disable FDN"))
+        self.UTILS.element.waitForElements(header, "{} FDN header".format("Enable" if enable else "Disable"))
         return True
 
     def fdn_type_pin2(self, pin2):
-        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input", timeout=20)
         pin2_input.send_keys(pin2)
 
         done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
         done_btn.tap()
 
-    def reset_pin2(self, wrong_pin2, good_pin2, puk2):
+    def change_pin2_full_process(self, wrong_pin2, good_pin2, puk2):
         self.call_settings()
         self.open_fdn()
         self.go_enable_fdn(True)
-        self.change_pin2(wrong_pin2, good_pin2, puk2)
+        self.three_times_bad_pin2(wrong_pin2)
+        self.restore_pin2(good_pin2, puk2)
+
+    def reset_pin2(self, old_pin2, new_pin2):
+        self.call_settings()
+        self.open_fdn()
+        changed = self.go_enable_fdn(True)
+        if changed:
+            self.fdn_type_pin2(old_pin2)
+
+        reset_btn = self.UTILS.element.getElement(DOM.Settings.fdn_reset_pin2_btn, "Reset PIN2 button")
+        reset_btn.tap()
+
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "Old PIN2 input")
+        pin2_input.send_keys(old_pin2)
+
+        pin2_new_input = self.UTILS.element.getElement(DOM.Settings.fdn_puk2_pin2_input, "New PIN2 input")
+        pin2_new_input.send_keys(new_pin2)
+
+        pin2_confirm_input = self.UTILS.element.getElement(DOM.Settings.fdn_confirm_pin2_input, "Confirm new PIN2")
+        pin2_confirm_input.send_keys(new_pin2)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done Reset PIN2 button")
+        done_btn.tap()
 
     def fdn_open_auth_numbers(self):
         auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
         auth_list.tap()
 
-        self.UTILS.element.waitForElements(('xpath',
-            DOM.GLOBAL.app_head_specific.format("Authorized numbers")), "Authorised number sheader")
+        header = ('xpath', DOM.GLOBAL.app_head_specific.format("Authorized numbers"))
+        self.UTILS.element.waitForElements(header, "Authorized numbers header")
 
     def fdn_add_auth_number(self, name, number, pin2):
         #
         # Add the contact
         #
-        
         add_btn = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number, "Add button")
         add_btn.tap()
         self.UTILS.element.waitForElements(('xpath',
@@ -258,10 +282,10 @@ class Settings(object):
         # This method deletes a contact from the authorized numbers list
         # It must be called once the list has been displayed
         #
-        
+
         # Tap over the contact
         #
-        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0], 
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
             DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
 
         contact = self.UTILS.element.getElement(elem, "Contact to be deleted")
@@ -273,7 +297,7 @@ class Settings(object):
         #
         header = (DOM.Settings.fdn_auth_number_action_header[0],
             DOM.Settings.fdn_auth_number_action_header[1].format(name))
-        self.UTILS.element.waitForElements(header, 
+        self.UTILS.element.waitForElements(header,
             "Waiting for actions over contact: {}, {}".format(name, number))
 
         #
@@ -297,7 +321,7 @@ class Settings(object):
         #
         # Check the number is no longer present in the list
         #
-        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0], 
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
             DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
         self.UTILS.element.waitForNotElements(elem, "Waiting for contact NOT to be in the list", True, 30)
 
@@ -308,15 +332,14 @@ class Settings(object):
         # We have to do it this way to avoid StaleElementException to be raised
         #
         for i in range(len(contacts)):
-            elem = (DOM.Settings.fdn_auth_numbers_list_item[0], 
-                DOM.Settings.fdn_auth_numbers_list_item[1].format(0))
+            elem = (DOM.Settings.fdn_auth_numbers_list_item[0],
+                DOM.Settings.fdn_auth_numbers_list_item[1].format(1))
 
             contact = self.UTILS.element.getElement(elem, "contact")
             number = contact.find_element('css selector', 'small').text
             name = contact.find_element('css selector', 'span').text
             self.fdn_delete_auth_number(name, number, pin2)
-	
-	
+
     def disable_hotSpot(self):
         #
         # Disable hotspot (internet sharing) - assumes Settings app is already open.
