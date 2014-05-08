@@ -18,6 +18,10 @@ fdn_pin2_done = ('xpath', '//section[@id="call-pin2-dialog"]//button[@data-l10n-
 fdn_puk2_pin2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-newPinArea"]/input')
 fdn_enter_puk2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-pukArea"]/input')
 fdn_confirm_pin2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-confirmPinArea"]/input')
+fdn_input_error_msg = ('xpath', '//section[@id="call-pin2-dialog"]//div[@data-l10n-id="fdnErrorMsg"]')
+fdn_pin2_tries_left = ('xpath', '//section[@id="call-pin2-dialog"]//div[@data-l10n-id="inputCodeRetriesLeft"]')
+fdn_pin2_back_btn = ('xpath', '//section[@id="call-pin2-dialog"]//button/span[@data-l10n-id="back"]')
+fdn_pin2_sim_locked = ('xpath', '//section[@id="call-pin2-dialog"]//div[@data-l10n-id="simCardLockedMsg"]')
 
 fdn_auth_numbers_back = ('xpath', '//section[@id="call-fdnList"]//span[@data-l10n-id="back"]')
 fdn_add_auth_number = ('xpath', '//section[@id="call-fdnList"]//button[@id="fdnContact"]')
@@ -36,6 +40,8 @@ fdn_auth_number_action_cancel = ('xpath', '//form[@id="call-fdnList-action"]//bu
 fdn_warning_header = ('xpath', '//form[@id="confirmation-message"]//h1[contains(text(), "{}")]')
 fdn_warning_body = ('xpath', '//form[@id="confirmation-message"]//p[contains(text(), "{}")]')
 fdn_warning_ok = ('xpath', '//form[@id="confirmation-message"]//button[contains(text(), "OK")]')
+
+fdn_reset_pin2_btn = ('xpath', '//section[@id="call-fdnSettings"]//button[@data-l10n-id="fdnReset"]')
 
 airplane_mode_switch = ("id", "menuItem-airplaneMode")
 wifi_mode_switch = ("id", "menuItem-wifi")
