@@ -195,6 +195,48 @@ class DownloadManager(object):
         #     # Verify text Stopped.
         #     #
 
+    def deleteDownloadByPosition(self, position):
+        #
+        # Deletes a single download from the downloads list by position
+        #
+
+
+        #
+        # Enter into Edit Mode
+        #
+        x = self.UTILS.element.getElement(DOM.DownloadManager.download_edit_button,
+                                     "Getting download edit button")
+        x.tap()
+        time.sleep(2)
+
+        self.UTILS.element.waitForElements(DOM.DownloadManager.downloads_edit_header_title,
+                                    "Getting edit downloads header")
+        #
+        # Getting the element's checkbox
+        #
+
+        elem = (DOM.DownloadManager.download_element_checkbox_position[0],
+                 DOM.DownloadManager.download_element_checkbox_position[1].format(position))
+
+        self.UTILS.element.waitForElements(elem, "Getting the checkbox of the file to delete")
+
+        x = self.UTILS.element.getElement(elem, "Getting the checkbox of the file to delete")
+        x.tap()
+
+        #
+        # Get Delete button
+        #
+        x = self.UTILS.element.getElement(DOM.DownloadManager.download_delete_button, "Getting Delete button")
+        x.tap()
+
+        #
+        # Confirmation
+        #
+        self.UTILS.element.waitForElements(DOM.DownloadManager.download_confirm_yes,
+                        "Getting Delete button")
+        x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
+                        "Getting Delete button")
+        x.tap()
 
     def deleteDownload(self, file):
 
