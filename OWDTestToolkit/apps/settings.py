@@ -20,11 +20,17 @@ class Settings(object):
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
+    def call_settings(self):
+        x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
+        self.UTILS.element.simulateClick(x)
+        self.UTILS.element.waitForElements(('xpath',
+            DOM.GLOBAL.app_head_specific.format("Call Settings")), "Call settings header")
+
     def callID_verify(self):
-        x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call number button")
-        x.tap()
+        self.call_settings()
+
         self.UTILS.reporting.logResult("info", "Call number presses")
-        time.sleep(20)
+        # time.sleep(20)
 
         x = self.UTILS.element.getElement(DOM.Settings.call_button, "Call ID button")
         x.tap()
@@ -39,6 +45,33 @@ class Settings(object):
 
         self.UTILS.reporting.logResult("info", "Screen shot of the result of tapping call button", y)
         self.UTILS.test.TEST(y == "true", "Checking Call ID value")
+
+    def three_times_bad_pin2(self, wrong_pin2):
+        """Change the PIN2.
+
+        Enter a wrong PIN2 three consecutive times. After that, the PUK2 is requested,
+        and also a new PIN2 value is entered twice.
+        """
+        for i in range(3):
+            self.fdn_type_pin2(wrong_pin2)
+
+    def restore_pin2(self, good_pin2, puk2):
+        """Restore PIN2 using PUK2.
+
+        After PIN2 has been entered wrongly three times, the PUK2 is required to unlock the SIM.
+        """
+        # SIM locked, enter PUK2 and new PIN2 twice
+        puk2_input = self.UTILS.element.getElement(DOM.Settings.fdn_enter_puk2_input, "PUK2 input")
+        puk2_input.send_keys(puk2)
+
+        new_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_puk2_pin2_input, "New PIN2 input")
+        new_pin2_input.send_keys(good_pin2)
+
+        confirm_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_confirm_pin2_input, "Confirm PIN2 input")
+        confirm_pin2_input.send_keys(good_pin2)
+
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "OK button")
+        ok_btn.tap()
 
     def cellular_and_data(self):
         #
@@ -135,6 +168,178 @@ class Settings(object):
         #
         x = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
         x.tap()
+
+    def open_fdn(self):
+        fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
+        fdn.tap()
+        self.UTILS.element.waitForElements(('xpath',
+            DOM.GLOBAL.app_head_specific.format("Fixed dialing numbers")), "FDN header")
+
+    def go_enable_fdn(self, enable):
+        status = self.UTILS.element.getElement(DOM.Settings.fdn_status, "FDN status").text
+
+        do_return = (enable and status == "Enabled") or (not enable and status == "Disabled")
+
+        #
+        # If it is already enabled/disabled, then return False, so that we can
+        # know outside this method that there is no need in typing the PIN2
+        #
+        if do_return:
+            return False
+
+        switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "{} FDN".\
+                                               format("Enable" if enable else "Disable"))
+        switch.tap()
+        header = ('xpath', DOM.GLOBAL.app_head_specific.format("Enable FDN" if enable else "Disable FDN"))
+        self.UTILS.element.waitForElements(header, "{} FDN header".format("Enable" if enable else "Disable"))
+        return True
+
+    def fdn_type_pin2(self, pin2):
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input", timeout=20)
+        pin2_input.send_keys(pin2)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
+        done_btn.tap()
+
+    def change_pin2_full_process(self, wrong_pin2, good_pin2, puk2):
+        self.call_settings()
+        self.open_fdn()
+        self.go_enable_fdn(True)
+        self.three_times_bad_pin2(wrong_pin2)
+        self.restore_pin2(good_pin2, puk2)
+
+    def reset_pin2(self, old_pin2, new_pin2):
+        self.call_settings()
+        self.open_fdn()
+        changed = self.go_enable_fdn(True)
+        if changed:
+            self.fdn_type_pin2(old_pin2)
+
+        reset_btn = self.UTILS.element.getElement(DOM.Settings.fdn_reset_pin2_btn, "Reset PIN2 button")
+        reset_btn.tap()
+
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "Old PIN2 input")
+        pin2_input.send_keys(old_pin2)
+
+        pin2_new_input = self.UTILS.element.getElement(DOM.Settings.fdn_puk2_pin2_input, "New PIN2 input")
+        pin2_new_input.send_keys(new_pin2)
+
+        pin2_confirm_input = self.UTILS.element.getElement(DOM.Settings.fdn_confirm_pin2_input, "Confirm new PIN2")
+        pin2_confirm_input.send_keys(new_pin2)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done Reset PIN2 button")
+        done_btn.tap()
+
+    def fdn_open_auth_numbers(self):
+        auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
+        auth_list.tap()
+
+        header = ('xpath', DOM.GLOBAL.app_head_specific.format("Authorized numbers"))
+        self.UTILS.element.waitForElements(header, "Authorized numbers header")
+
+    def fdn_add_auth_number(self, name, number, pin2):
+        #
+        # Add the contact
+        #
+        
+        add_btn = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number, "Add button")
+        add_btn.tap()
+        self.UTILS.element.waitForElements(('xpath',
+            DOM.GLOBAL.app_head_specific.format("Add contact")), "Add contact header")
+
+        #
+        # Fill contact data
+        #
+        name_input = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number_name, "Auth contact name")
+        name_input.send_keys(name)
+
+        number_input = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number_number, "Auth contact number")
+        number_input.send_keys(number)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number_done, "Auth contact Done button")
+        done_btn.tap()
+
+        #
+        # PIN2 Confirmation
+        #
+        self.UTILS.element.waitForElements(('xpath',
+            DOM.GLOBAL.app_head_specific.format("Enter SIM PIN2")), "Confirm SIM PIN2 header")
+
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
+        pin2_input.send_keys(pin2)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
+        done_btn.tap()
+
+        #
+        # Check the number has been added to the list
+        #
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0], 
+            DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
+        self.UTILS.element.waitForElements(elem, "Waiting for contact to be in the list", True, 30)
+
+    def fdn_delete_auth_number(self, name, number, pin2):
+        #
+        # This method deletes a contact from the authorized numbers list
+        # It must be called once the list has been displayed
+        #
+        
+        # Tap over the contact
+        #
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
+            DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
+
+        contact = self.UTILS.element.getElement(elem, "Contact to be deleted")
+        contact.tap()
+        time.sleep(1)
+
+        #
+        # Wait for options to be displayed
+        #
+        header = (DOM.Settings.fdn_auth_number_action_header[0],
+            DOM.Settings.fdn_auth_number_action_header[1].format(name))
+        self.UTILS.element.waitForElements(header,
+            "Waiting for actions over contact: {}, {}".format(name, number))
+
+        #
+        # Choose delete option
+        #
+        delete_option = self.UTILS.element.getElement(DOM.Settings.fdn_auth_number_action_delete, "Delete option")
+        delete_option.tap()
+
+        #
+        # PIN2 Confirmation
+        #
+        self.UTILS.element.waitForElements(('xpath',
+            DOM.GLOBAL.app_head_specific.format("Enter SIM PIN2")), "Confirm SIM PIN2 header")
+
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "SIM2 input")
+        pin2_input.send_keys(pin2)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
+        done_btn.tap()
+
+        #
+        # Check the number is no longer present in the list
+        #
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
+            DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
+        self.UTILS.element.waitForNotElements(elem, "Waiting for contact NOT to be in the list", True, 30)
+
+    def fdn_delete_all_auth_numbers(self, pin2):
+        contacts = self.UTILS.element.getElements(DOM.Settings.fdn_auth_numbers_list, "Contact list")
+
+        #
+        # We have to do it this way to avoid StaleElementException to be raised
+        #
+        for i in range(len(contacts)):
+            elem = (DOM.Settings.fdn_auth_numbers_list_item[0],
+                DOM.Settings.fdn_auth_numbers_list_item[1].format(1))
+
+            contact = self.UTILS.element.getElement(elem, "contact")
+            number = contact.find_element('css selector', 'small').text
+            name = contact.find_element('css selector', 'span').text
+            self.fdn_delete_auth_number(name, number, pin2)
 
     def disable_hotSpot(self):
         #
@@ -349,6 +554,35 @@ class Settings(object):
         time.sleep(2)
         self.marionette.switch_to_frame()
 
+    def change_sim_pin(self, old_pin, new_pin, confirm_pin):
+        #
+        # This method changes the current PIN code to a new one
+        #
+        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
+        self.UTILS.element.scroll_into_view(sim_security)
+        sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
+
+        # If no SIM security enabled, enable it
+        if sim_security_tag.text == "Disabled":
+            self.enable_sim_security(True, old_pin)
+            self.goBack()
+
+        sim_security.tap()
+        change_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin, "Change PIN button")
+        change_btn.tap()
+
+        old = self.UTILS.element.getElement(DOM.Settings.change_pin_old_input, "getting OLD PIN input")
+        old.send_keys(old_pin)
+
+        new = self.UTILS.element.getElement(DOM.Settings.change_pin_new_input, "getting new PIN input")
+        new.send_keys(new_pin)
+
+        confirm = self.UTILS.element.getElement(DOM.Settings.change_pin_confirm_input, "getting CONFIRM PIN input")
+        confirm.send_keys(confirm_pin)
+
+        done_btn = self.UTILS.element.getElement(DOM.Settings.change_pin_done_btn, "Change PIN Done button")
+        done_btn.tap()
+        
     def enable_sim_security(self, enable, pin):
         #
         # This method sets the SIM security configuration.
@@ -356,10 +590,14 @@ class Settings(object):
         sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
         self.UTILS.element.scroll_into_view(sim_security)
         sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
+       
         # If the attribute is already in the desired state, return
         current = sim_security_tag.text == "Enabled"
         if enable == current:
+            #click anyway so that we can later check whether the button to change the PIN
+            sim_security.tap()
             return
+
         sim_security.tap()
         sim_security_pin = self.UTILS.element.getElement(DOM.Settings.sim_security_pin, "SIM security switch")
         sim_security_pin.tap()
