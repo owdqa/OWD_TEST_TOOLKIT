@@ -36,7 +36,7 @@ then
 else
     printf "(refreshing 'gaia' - this will take just a minute or so ...)\n\n" | tee -a $LOGFILE
     cd $HOME/gaia
-    git stash
+    #git stash
     #git fetch
     #sudo git checkout $BRANCH  2> >( tee -a $LOGFILE)
     #sudo git merge origin/$BRANCH

@@ -10,7 +10,7 @@ class test(object):
         #
         # Quit this test suite.
         #
-        self.parent.reporting.log_to_file("Quit test due to fatal error", level='error')
+        self.parent.reporting.log_to_file(u"Quit test due to fatal error", level='error')
         if not msg:
             msg = "CANNOT CONTINUE PAST THIS ERROR - ABORTING THIS TEST CASE!"
         else:
@@ -46,7 +46,7 @@ class test(object):
         # However, it also takes a screenshot and dumps the html source
         # if result is False.
         #
-        self.parent.reporting.log_to_file("Testing with {} and message: {}. stop_on_error: {}".\
+        self.parent.reporting.log_to_file(u"Testing with {} and message: {}. stop_on_error: {}".\
                                           format(result, msg, stop_on_error))
         fnam = False
         if not result:

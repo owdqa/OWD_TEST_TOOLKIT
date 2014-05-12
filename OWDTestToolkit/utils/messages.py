@@ -51,7 +51,8 @@ class Messages(object):
         """
         headers = {"api_key": self.api_key, "api_secret": self.api_secret}
         payload = {"to": ["tel:{}".format(phone_number)], "message": message}
-        requests.post(self.url, headers=headers, data=json.dumps(payload))
+        result = requests.post(self.url, headers=headers, data=json.dumps(payload))
+        self.parent.reporting.log_to_file(u"Message sent: {}. Result: {}".format(message, result.status_code))
 
     def create_incoming_binary_sms(self, phone_number, message, clazz):
         """Create Incoming binary SMS with the given class
