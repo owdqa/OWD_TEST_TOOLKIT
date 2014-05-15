@@ -47,9 +47,9 @@ delete_threads_button = ("id", "threads-delete-button")
 
 message_list = ('xpath', '//article[@id="messages-container"]//li')
 message_timestamps = ("xpath", "//article[@id='messages-container']/header")
+message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')
 messages_from_num = "//*[contains(@id, '{}')]"
-message_timestamps = ("xpath", ".//*[@id='messages-container']/header")
 message_header = ("id", "messages-header-text")
 received_messages = ('xpath', "//li[@class='bubble'][a[@class='received']]")
 
@@ -82,6 +82,8 @@ target_subject = ("id", "messages-subject-input")
 
 attach_preview_img_type = ("xpath", "//*[@class='attachment-container preview']")
 attach_preview_video_audio_type = ("xpath", "//*[@class='attachment-container nopreview']")
+last_message_attachment_img = ('xpath', '//*[@id="last-messages"]/li[last()]//div[@class="attachment-container preview"]')
+last_message_attachment_av = ('xpath', '//*[@id="last-messages"]/li[last()]//div[@class="attachment-container nopreview"]')
 
 header_call_btn = ("xpath", "//button[text()='Call']")
 header_send_message_btn = ("xpath", "//button[text()='Send message']")

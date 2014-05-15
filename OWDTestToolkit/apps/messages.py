@@ -115,10 +115,7 @@ class Messages(object):
             "Press Cancel button")
         cancelBtn.tap()
 
-
-
     def deleteSubject(self, subject):
-
         #
         # Press options button
         #
@@ -361,7 +358,7 @@ class Messages(object):
         #
         # Insert the phone number in the To field
         #
-        #self.addNumbersInToField([self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM")])
+        # self.addNumbersInToField([self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM")])
         self.addNumbersInToField(nums)
 
         #
@@ -409,12 +406,10 @@ class Messages(object):
             # Obtaining file attached type
             #
             x = self.UTILS.element.getElement(DOM.Messages.attach_preview_img_type, "preview type")
-            type = x.get_attribute("data-attachment-type")
+            typ = x.get_attribute("data-attachment-type")
 
-
-            if type != "img":
+            if typ != "img":
                 self.UTILS.test.quitTest("Incorrect file type. The file must be img ")
-
 
         elif attached_type == "video":
             #
@@ -464,8 +459,6 @@ class Messages(object):
             msg = "FAILED: Incorrect parameter received in createAndSendMMS()"\
                 ". attached_type must being image, video or audio."
             self.UTILS.test.quitTest(msg)
-
-
 
     def createAndSendSMS(self, nums, msg):
         #
@@ -577,8 +570,6 @@ class Messages(object):
             self.UTILS.element.waitForElements(DOM.Messages.no_threads_message,
                                        "No message threads notification", True, 60)
 
-
-
     def deleteMessagesInThisThread(self, msg_array=False):
         #
         # Enters edit mode, selects the required messages and
@@ -633,7 +624,6 @@ class Messages(object):
         #
         # Delete the currently selected message threads.
         #
-        orig_iframe = self.UTILS.iframe.currentIframe()
         x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
         x.tap()
 
@@ -783,12 +773,13 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
+            send_time = time.time()
             x.tap()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
             #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
+            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
             self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         elif msg_type == "mms":
@@ -823,6 +814,7 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
+            send_time = time.time()
             self.sendSMS()
 
             #
@@ -836,7 +828,7 @@ class Messages(object):
             #
             # Wait for the last message in this thread to be a 'received' one.
             #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
+            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
             self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         elif msg_type == "mmssub":
@@ -876,6 +868,7 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
+            send_time = time.time()
             self.sendSMS()
 
             #
@@ -889,13 +882,12 @@ class Messages(object):
             #
             # Wait for the last message in this thread to be a 'recieved' one.
             #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
+            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
             self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
             self.UTILS.test.quitTest()
-
 
     def forwardMessageToContact(self, msg_type, contact_name):
         self.actions = Actions(self.marionette)
@@ -943,7 +935,7 @@ class Messages(object):
             # Switch back to the sms iframe.
             #
             self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src",orig_iframe)
+            self.UTILS.iframe.switchToFrame("src", orig_iframe)
 
             #
             # Now check the correct name is in the 'To' list.
@@ -955,12 +947,13 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
+            send_time = time.time()
             x.tap()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
             #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
+            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
             self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         elif msg_type == "mms":
@@ -1001,7 +994,7 @@ class Messages(object):
             # Switch back to the sms iframe.
             #
             self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src",orig_iframe)
+            self.UTILS.iframe.switchToFrame("src", orig_iframe)
 
             #
             # Now check the correct name is in the 'To' list.
@@ -1018,6 +1011,7 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
+            send_time = time.time()
             self.sendSMS()
 
             #
@@ -1031,7 +1025,7 @@ class Messages(object):
             #
             # Wait for the last message in this thread to be a 'received' one.
             #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
+            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
             self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         elif msg_type == "mmssub":
@@ -1076,7 +1070,7 @@ class Messages(object):
             # Switch back to the sms iframe.
             #
             self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src",orig_iframe)
+            self.UTILS.iframe.switchToFrame("src", orig_iframe)
 
             #
             # Now check the correct name is in the 'To' list.
@@ -1094,6 +1088,7 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
+            send_time = time.time()
             self.sendSMS()
 
             #
@@ -1107,22 +1102,16 @@ class Messages(object):
             #
             # Wait for the last message in this thread to be a 'recieved' one.
             #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
+            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
             self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
             self.UTILS.test.quitTest()
 
-
     def addContactToField(self, contact_name):
         self.actions = Actions(self.marionette)
         self.contacts = Contacts(self)
-
-
-        #
-        # Establish which phone number to use.
-        #
 
         self.UTILS.reporting.logResult("info", "is a sms")
         #
@@ -1131,7 +1120,7 @@ class Messages(object):
         # or contact names.
         #
 
-        #self.startNewSMS()
+        # self.startNewSMS()
 
         #
         # Search for our contact.
@@ -1142,24 +1131,22 @@ class Messages(object):
 
         x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
         for i in x:
-               if i.text == contact_name:
-                   i.tap()
-                   break
+            if i.text == contact_name:
+                i.tap()
+                break
 
         #
         # Switch back to the sms iframe.
         #
         self.marionette.switch_to_frame()
-        self.UTILS.iframe.switchToFrame("src",orig_iframe)
+        self.UTILS.iframe.switchToFrame("src", orig_iframe)
 
         #
         # Now check the correct name is in the 'To' list.
         #
         self.checkIsInToField(contact_name)
 
-
-
-    def forwardMessageToMultipleRecipients(self, msg_type,target_telNum, contact_name):
+    def forwardMessageToMultipleRecipients(self, msg_type, target_telNum, contact_name):
         self.actions = Actions(self.marionette)
         self.contacts = Contacts(self)
 
@@ -1206,7 +1193,7 @@ class Messages(object):
             # Switch back to the sms iframe.
             #
             self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src",orig_iframe)
+            self.UTILS.iframe.switchToFrame("src", orig_iframe)
 
             #
             # Now check the correct name is in the 'To' list.
@@ -1218,12 +1205,13 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
+            send_time = time.time()
             x.tap()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
             #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
+            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
             self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         elif msg_type == "mms":
@@ -1265,7 +1253,7 @@ class Messages(object):
             # Switch back to the sms iframe.
             #
             self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src",orig_iframe)
+            self.UTILS.iframe.switchToFrame("src", orig_iframe)
 
             #
             # Now check the correct name is in the 'To' list.
@@ -1282,6 +1270,7 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
+            send_time = time.time()
             self.sendSMS()
 
             #
@@ -1295,7 +1284,7 @@ class Messages(object):
             #
             # Wait for the last message in this thread to be a 'received' one.
             #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
+            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
             self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         elif msg_type == "mmssub":
@@ -1341,7 +1330,7 @@ class Messages(object):
             # Switch back to the sms iframe.
             #
             self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src",orig_iframe)
+            self.UTILS.iframe.switchToFrame("src", orig_iframe)
 
             #
             # Now check the correct name is in the 'To' list.
@@ -1359,6 +1348,7 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
+            send_time = time.time()
             self.sendSMS()
 
             #
@@ -1372,7 +1362,7 @@ class Messages(object):
             #
             # Wait for the last message in this thread to be a 'recieved' one.
             #
-            returnedSMS = self.waitForReceivedMsgInThisThread()
+            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
             self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
 
         else:
@@ -1478,12 +1468,10 @@ class Messages(object):
         self.parent.wait_for_element_present(*DOM.Messages.message_list, timeout=20)
         x = self.marionette.find_elements(*DOM.Messages.message_list)
 
-        if len(x) > 1:
+        try:
             return x[-1]
-        else:
-            return x[0]
-        # except:
-            # return False
+        except:
+            return False
 
     def openThread(self, num):
         #
@@ -1674,21 +1662,31 @@ class Messages(object):
                                     "Thread timestamp", True, 5, False)
         return x.text
 
-    def verifyMMSReceived(self, attached_type):
+    def verifyMMSReceived(self, attached_type, send_time=None):
 
-        if attached_type == "image":
-            self._verify(DOM.Messages.attach_preview_img_type, "img")
+        message = self.waitForReceivedMsgInThisThread(send_time=send_time)
+        self.UTILS.test.TEST(message, "A received message appeared in the thread.", True)
 
+        self.UTILS.reporting.log_to_file("*** attached type: {}".format(attached_type))
+        if attached_type == "img":
+            elem = DOM.Messages.last_message_attachment_img
         elif attached_type == "video":
-            self._verify(DOM.Messages.attach_preview_video_audio_type, attached_type)
-
+            elem = DOM.Messages.last_message_attachment_av
         elif attached_type == "audio":
-            self._verify(DOM.Messages.attach_preview_video_audio_type, attached_type)
-
+            elem = DOM.Messages.last_message_attachment_av
         else:
             # self.UTILS.reporting.logResult("info", "incorrect value received")
             msg = "FAILED: Incorrect parameter received in verifyMMSReceived()"\
                 ". Attached_type must be image, video or audio."
+            self.UTILS.test.quitTest(msg)
+
+        self.UTILS.reporting.log_to_file("*** searching for attachment type")
+        last = self.UTILS.element.getElement(elem, "Last message")
+        self.UTILS.element.scroll_into_view(last)
+        typ = last.get_attribute("data-attachment-type")
+        self.UTILS.reporting.log_to_file("*** searching for attachment type Result: {}".format(typ))
+        if typ != attached_type:
+            msg = "Incorrect file type. The file must be {}, but is {} instead".format(attached_type, typ)
             self.UTILS.test.quitTest(msg)
 
     def _verify(self, DOM_elem, attached_type):
@@ -1713,7 +1711,7 @@ class Messages(object):
         typ = x.get_attribute("data-attachment-type")
 
         if typ != attached_type:
-            msg = "Incorrect file type. The file must be {}".format(attached_type)
+            msg = "Incorrect file type. The file must be {}, but is {} instead".format(attached_type, typ)
             self.UTILS.test.quitTest(msg)
 
     def waitForNewSMSPopup_by_msg(self, msg):
@@ -1746,7 +1744,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame("src", myIframe)
 
-    def waitForReceivedMsgInThisThread(self, timeOut=30):
+    def waitForReceivedMsgInThisThread(self, send_time=None, timeOut=30):
         #
         # Waits for the last message in this thread to be a 'received' message
         # and returns the element for this message.
@@ -1762,6 +1760,15 @@ class Messages(object):
             if not x:
                 time.sleep(pollTime)
                 continue
+
+            # If the send_time timestamp is greater than this message's timestamp,it means the message
+            # we expect has not arrived yet, so we have to wait a bit more.
+            if send_time:
+                message_data_time = float(x.get_attribute("data-timestamp")) / 1000
+                fmt = "data-timestamp of last message in thread: {:.3f} send_time: {:.3f}"
+                self.UTILS.reporting.log_to_file(fmt.format(message_data_time, send_time))
+                if send_time > message_data_time:
+                    continue
 
             # Is this a received message?
             if "incoming" in x.get_attribute("class"):

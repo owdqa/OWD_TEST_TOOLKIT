@@ -16,7 +16,7 @@ class statusbar(object):
         #
         try:
             self.displayStatusBar()
-            
+
             self.parent.parent.wait_for_element_displayed(*DOM.Statusbar.clear_all_button, timeout=1)
             x = self.marionette.find_element(*DOM.Statusbar.clear_all_button)
             self.parent.element.simulateClick(x)
