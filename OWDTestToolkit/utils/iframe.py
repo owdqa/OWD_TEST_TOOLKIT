@@ -65,7 +65,7 @@ class iframe(object):
         except:
             return False
 
-    def switchToFrame(self, attrib, value, quit_on_error=True, via_root_frame=True):
+    def switchToFrame(self, attrib, value, quit_on_error=True, via_root_frame=True, test=True):
         #
         # Switch to the iframe containing the attribute value <b>value</b>.<br>
         # For example: ("src", "contacts") or ("src", "sms") etc...<br><br>
@@ -127,8 +127,9 @@ class iframe(object):
 
             x = self.marionette.find_elements(*_frameDef)
 
-        self.parent.test.TEST(is_ok, "<i>(Sucessfully switched to iframe where '{}' contains '{}'.)</i>".format(attrib, value),
-                  quit_on_error)
+        if test:
+            self.parent.test.TEST(is_ok, "<i>(Sucessfully switched to iframe where '{}' contains '{}'.)</i>".format(attrib, value),
+                    quit_on_error)
 
     def view_all_iframes(self, frame_src=None):
         #

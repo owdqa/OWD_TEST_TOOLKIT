@@ -139,6 +139,25 @@ class statusbar(object):
         x = self.parent.element.getElement(p_def["toggle"], "Toggle " + p_def["name"] + " icon")
         x.tap()
 
+        #
+        # Sometimes, when we activate data connection, the devices goes till settings and
+        # show a confirmation screen. We have to accept it.
+        #
+        # try:
+        success = self.parent.iframe.switchToFrame(DOM.Settings.frame_locator[0], DOM.Settings.frame_locator[1],
+                                         quit_on_error=True, via_root_frame=True, test=False)
+        if success:
+            self.parent.element.waitForElements(('xpath', 
+                '//section[@id="carrier-dc-warning"]//span[@data-l10n-id="dataConnection-warning-head"]'),
+                "Confirmation header", True, 40)
+
+            ok_btn = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
+            ok_btn.tap()
+        else:
+            # No confirmation required
+            self.parent.reporting.logResult("debug", "No 3G confirmation asked")
+
+
         boolReturn = True
         if boolWasEnabled:
             boolReturn = self.parent.network.waitForNetworkItemDisabled(p_type)
