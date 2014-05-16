@@ -501,6 +501,11 @@ class Email(object):
 
         bubbles_text = [bubble.text for bubble in bubbles]
 
+        self.UTILS.reporting.logResult("info", "Content of To field (bubbles): {}".format(bubbles_text))
+        self.UTILS.reporting.logResult("info", "Username: {}".format(sender['username']))
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screen shot of REPLY ALL:", x)
+
         if sender['username'] in bubbles_text:
             self.UTILS.test.TEST(False, "Sender ({}) must not appear in the 'To field' when replying".format(sender['username']), True)
         #
