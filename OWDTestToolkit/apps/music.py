@@ -19,8 +19,10 @@ class Music(object):
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def click_on_song_mms(self):
-        song = self.UTILS.element.getElement(DOM.Music.song1, "Song")
+    def click_on_song_mms(self, title=None):
+        dom_elem = DOM.Music.song1  if not title\
+                                    else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
+        song = self.UTILS.element.getElement(dom_elem, "Song")
         song.tap()
 
         time.sleep(1)

@@ -42,7 +42,7 @@ class reporting(object):
         # Everything after the first "|" is a 'note' line for this message
         # (will be put on a separate line with _subnote prefixed).
         #
-        self.logger.info("Logging result: [{}] with message [{}]. p_fnam: {}".format(p_result, p_msg, p_fnam))
+        self.logger.info(u"Logging result: [{}] with message [{}]. p_fnam: {}".format(p_result, p_msg, p_fnam))
         if str(p_result).lower() == "info":
             timestamp = self._no_time
         elif str(p_result).lower() == "debug":
