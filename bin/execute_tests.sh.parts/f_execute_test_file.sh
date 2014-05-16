@@ -30,6 +30,11 @@ _f_run_test(){
     # Run the test and update the variables with the results.
     #
     #RESTART="--restart" #(just until this problem with gaiatest goes away)
+    echo "Launching test...."
+    echo "......"
+    echo "......"
+    echo "gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE"
+    
 	gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE >$ERR_FILE 2>&1
     line="$(tail -1 $SUM_FILE)"
     test_passes=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $1}')
