@@ -147,8 +147,7 @@ class statusbar(object):
         success = self.parent.iframe.switchToFrame(DOM.Settings.frame_locator[0], DOM.Settings.frame_locator[1],
                                          quit_on_error=True, via_root_frame=True, test=False)
         if success:
-            self.parent.element.waitForElements(('xpath', 
-                '//section[@id="carrier-dc-warning"]//span[@data-l10n-id="dataConnection-warning-head"]'),
+            self.parent.element.waitForElements(DOM.Settings.celldata_DataConn_confirm_header,
                 "Confirmation header", True, 40)
 
             ok_btn = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
