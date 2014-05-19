@@ -18,6 +18,7 @@ manual_setup_account_option = ('xpath', '//form[@id="select-option-popup"]//li[@
 manual_setup_account_type_ok = ('xpath', '//form[@id="select-option-popup"]//menu[@id="select-options-buttons"]/button[@data-type="ok"]')
 manual_setup_activesync_host = ('class name', 'sup-manual-activesync-hostname')
 manual_setup_activesync_user = ('class name', 'sup-manual-activesync-username')
+setup_account_header = ('xpath', '//h1[@data-l10n-id="setup-account-header3"]')
 
 compose_msg_btn         = ('class name', 'msg-compose-btn')
 compose_to_from_contacts = ("xpath", "//div[@class='cmp-to-container cmp-addr-container']//span[@class='cmp-peep-name']")
@@ -81,6 +82,7 @@ delete_confirm_buttons = ("xpath", "//button[@id='msg-delete-ok']")
 deleted_email_notif = ("xpath", ".//*[@id='cardContainer']//p[text()='1 message deleted']")
 
 confirm_ok = ("xpath", "//form[@class='modal-dialog-confirm generic-dialog visible']/menu/button[@data-l10n-id='ok']")
+email_not_setup_ok = ('xpath', '//button[@class="confirm-dialog-ok recommend"]')
 confirm_msg = ("class name", "modal-dialog-confirm-message")
 
 new_account_error_msg = ('css selector', 'section.card-setup-account-info div.scrollregion-below-header div.sup-error-region div.sup-error-message')

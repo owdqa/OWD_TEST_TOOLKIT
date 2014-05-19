@@ -94,7 +94,7 @@ class statusbar(object):
         # <b>bluetooth</b>
         #
         self.parent.reporting.logResult("info", "Toggling " + p_type + " mode via statusbar ...")
-        orig_iframe = self.parent.iframe.currentIframe()
+        orig_iframe = self.marionette.get_active_frame()
 
         #
         # Toggle (and wait).
@@ -103,6 +103,7 @@ class statusbar(object):
         _data = {"name": "data", "notif": DOM.Statusbar.dataConn, "toggle": DOM.Statusbar.toggle_dataconn}
         _bluetooth = {"name": "bluetooth", "notif": DOM.Statusbar.bluetooth, "toggle": DOM.Statusbar.toggle_bluetooth}
         _airplane = {"name": "airplane", "notif": DOM.Statusbar.airplane, "toggle": DOM.Statusbar.toggle_airplane}
+        self.parent.reporting.log_to_file("*** toggle: p_type = {}".format(p_type))
 
         if p_type == "data":
             typedef = _data
@@ -120,7 +121,7 @@ class statusbar(object):
         #
         self.parent.home.touchHomeButton()
         if orig_iframe:
-            self.parent.iframe.switchToFrame("src", orig_iframe)
+            self.marionette.switch_to_frame(orig_iframe)
 
         return boolReturn
 
@@ -171,7 +172,6 @@ class statusbar(object):
         time.sleep(1)
 
         x = (DOM.Statusbar.notification_statusbar_title[0], DOM.Statusbar.notification_statusbar_title[1].format(text))
-        self.parent.test.TEST(True, "[Notification] Waiting for notif")
 
         self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
         notif = self.marionette.find_element(x[0], x[1])
