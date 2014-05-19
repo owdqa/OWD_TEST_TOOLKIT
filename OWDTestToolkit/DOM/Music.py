@@ -7,6 +7,8 @@ song = ("xpath", "/html/body/div/div/div/div/div/div/div")
 song_title_amr = ("xpath", "//*[@data-l10n-id='unknownTitle']")
 song_title = ("xpath", "//*[@data-l10n-id='music']")
 
+title_song = ('id', 'title-text')
+
 music_songs = ('css selector', '#views-tiles-anchor .tile')
 progress_bar = ('xpath', '//progress[@id="player-seek-bar-progress"]')
 seek_elapsed = ('id', 'player-seek-elapsed')
