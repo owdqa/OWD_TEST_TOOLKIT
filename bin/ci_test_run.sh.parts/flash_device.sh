@@ -7,7 +7,7 @@
 if [ "$DEVICE" = "certification" ]
 then
     printf "\n\n CERTIFICATION BUILD PREINSTALLED. NOT FLASHING DEVICE!)\n"
-    export DEVICE_BUILDNAME="Certification preinstalled build"
+    export DEVICE_BUILDNAME="Cert_preinstalled"
 else
     printf "\n\nFLASHING DEVICE - DO NOT DISTURB! :)\n"
     flash_device.sh $DEVICE eng $BRANCH >$RESULT_DIR/flash_device 2>&1
