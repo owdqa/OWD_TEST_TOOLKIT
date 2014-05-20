@@ -71,24 +71,19 @@ class network(object):
         # <b>airplane</b><br>
         # <i>bluetooth (**NOT WORKING CURRENTLY!!**)</i>
         #
-
-        #
-        # This call leaves you at the top-level frame. We have to make sure that
-        # we are back in our frame
-        #
-        current_frame = self.marionette.get_active_frame()
-        self.parent.general.checkMarionetteOK()
-        self.marionette.switch_to_frame(current_frame)
-
-        return {
-            "data": self.parent.data_layer.is_cell_data_enabled,
-            "wifi": self.parent.data_layer.is_wifi_enabled,
-            "airplane": self.parent.data_layer.get_setting('ril.radio.disabled'),
-            "bluetooth": self.parent.data_layer.bluetooth_is_enabled
-            }.get(p_type)
-
-        self.parent.test.TEST(False, "Incorrect parameter '" + str(p_type) +
+        enabled = False
+        if p_type == "data":
+            enabled = self.parent.data_layer.is_cell_data_enabled
+        elif p_type == "wifi":
+            enabled = self.parent.data_layer.is_wifi_enabled
+        elif p_type == "airplane":
+            enabled = self.parent.data_layer.get_setting('ril.radio.disabled')
+        elif p_type == "bluetooth":
+            enabled = self.parent.data_layer.bluetooth_is_enabled
+        else:
+            self.parent.test.TEST(False, "Incorrect parameter '" + str(p_type) +
                               "' passed to UTILS.isNetworkTypeEnabled()!", True)
+        return enabled
 
     def turnOnDataConn(self):
         """Turn the data connection on.

@@ -38,7 +38,7 @@ class Email(object):
 
     def createEmailCameraImage(self):
         self.camera = Camera(self)
-        
+
         attach = self.UTILS.element.getElement(DOM.Email.compose_attach_btn, "Attach button")
         attach.tap()
 
@@ -113,7 +113,6 @@ class Email(object):
 
             self.createEmailVideo()
             self.video.clickOnVideoEmail(0)
-        
 
         elif attached_type == "audio":
             #
@@ -123,7 +122,6 @@ class Email(object):
 
             self.createEmailMusic()
             self.music.click_on_song_email()
-
 
         else:
             # self.UTILS.reporting.logResult("info", "incorrect value received")
@@ -197,7 +195,7 @@ class Email(object):
                 z = self.marionette.find_elements(*DOM.Email.folder_subject_list)
 
                 #
-                # If we've tried several times and found nothing, it is likely that 
+                # If we've tried several times and found nothing, it is likely that
                 # we are stuck at some point down the mails list, so let's try
                 # to go to the top
                 #
@@ -706,9 +704,10 @@ class Email(object):
         #
         #  Finish setting things up
         #
-        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_host, "Active Sync Hostname field", hostname, True, True, False)
-        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_user, "Active Sync Username field", user, True, True, False)
-
+        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_host, "Active Sync Hostname field", hostname,
+                                    True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_user, "Active Sync Username field", user, True,
+                                    True, False)
 
         time.sleep(2)
         x = self.UTILS.element.getElement(DOM.Email.manual_setup_next, "Manual Setup 'Next' button", True, 60)
@@ -734,27 +733,7 @@ class Email(object):
         #
         # Set up a new email account in the email app and login.
         #
-
-        #
-        # If we've just started out, email will open directly to "New Account").
-        #
-        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Application header")
-        if x.text.lower() != "new account":
-            #
-            # We have at least one emali account setup,
-            # check to see if we can just switch to ours.
-            #
-            if self.switchAccount(email):
-                return
-
-            #
-            # It's not setup already, so prepare to set it up!
-            #
-            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
-            x.tap()
-
-            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
-            x.tap()
+        self.check_no_existing_account(email, False)
 
         #
         # (At this point we are now in the 'New account' screen by one path or
@@ -769,15 +748,14 @@ class Email(object):
         # once we fix the great delay caused by viewAllIframes()
         #
         self.parent.wait_for_element_displayed(*DOM.Email.login_account_info_next_btn, timeout=60)
-        next = self.marionette.find_element(*DOM.Email.login_account_info_next_btn)
-        self.UTILS.element.simulateClick(next)
+        nxt = self.marionette.find_element(*DOM.Email.login_account_info_next_btn)
+        self.UTILS.element.simulateClick(nxt)
         self.UTILS.reporting.logResult("info", "'Next button'")
 
         self.parent.wait_for_element_displayed(*DOM.Email.login_account_prefs_next_btn, timeout=120)
         next2 = self.marionette.find_element(*DOM.Email.login_account_prefs_next_btn)
         self.UTILS.element.simulateClick(next2)
         self.UTILS.reporting.logResult("info", "'Next button'")
-
 
         #
         # Click the 'continue to mail' button.
@@ -796,18 +774,29 @@ class Email(object):
     def setupAccountFirstStep(self, p_user, p_email, p_pass):
         #
         # Set up a new email account in the email app and login.
-        #
-
-        #
         # If we've just started out, email will open directly to "New Account").
         #
-        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Application header")
-        if x.text.lower() != "new account":
+        self.check_no_existing_account(p_email)
+
+        #
+        # (At this point we are now in the 'New account' screen by one path or
+        # another.)
+        #
+        self.UTILS.general.typeThis(DOM.Email.username, "Username field", p_user, True, True)
+        self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", p_email, True, True)
+        self.UTILS.general.typeThis(DOM.Email.password, "Password field", p_pass, True, True)
+
+    def check_no_existing_account(self, email, first=True):
+        """Check if the new account header is present
+        """
+        x = self.UTILS.element.getElement(DOM.Email.setup_account_header, "Application header",
+                                               stop_on_error=first)
+        if x and x.text != "New Account":
             #
-            # We have at least one emali account setup,
+            # We have at least one email account setup,
             # check to see if we can just switch to ours.
             #
-            if self.switchAccount(p_email):
+            if self.switchAccount(email):
                 return
 
             #
@@ -818,15 +807,6 @@ class Email(object):
 
             x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
             x.tap()
-
-        #
-        # (At this point we are now in the 'New account' screen by one path or
-        # another.)
-        #
-        self.UTILS.general.typeThis(DOM.Email.username, "Username field", p_user, True, True)
-        self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", p_email, True, True)
-        self.UTILS.general.typeThis(DOM.Email.password, "Password field", p_pass, True, True)
-
 
     def switchAccount(self, address):
         #
