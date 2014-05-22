@@ -65,3 +65,16 @@ class Music(object):
                 # Song not found, so keep looping
                 #
                 pass
+
+    def get_total_songs(self):
+        #
+        # Make sure we're in the mix tab (the left)
+        #
+        mix_tab = self.UTILS.element.getElement(DOM.Music.mix_tab, "Mix tab")
+        mix_tab.tap()
+
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Music.music_songs)
+            return len(self.marionette.find_elements(*DOM.Music.music_songs))
+        except:
+            return 0
