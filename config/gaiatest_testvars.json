@@ -1,9 +1,5 @@
 {
-	"acknowledged_risks":true,
-	"skip_warning":true,
-	"wifi": {
-	    "ssid": "OWDBOE",
-	    "keyManagement": "WPA-PSK",
-	    "psk": "owdtest2"
-	}
+"acknowledged_risks":true,
+"skip_warning":true,
+"wifi": { "ssid": "OWDTEST", "keyManagement": "WPA-PSK", "psk": "tidowd66" }
 }

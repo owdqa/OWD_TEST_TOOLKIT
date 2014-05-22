@@ -37,9 +37,9 @@ fdn_auth_number_action_call = ('xpath', '//form[@id="call-fdnList-action"]//butt
 fdn_auth_number_action_edit = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-edit"]')
 fdn_auth_number_action_delete = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-delete"]')
 fdn_auth_number_action_cancel = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-cancel"]')
-fdn_warning_header = ('xpath', '//form[@id="confirmation-message"]//h1[contains(text(), "{}")]')
-fdn_warning_body = ('xpath', '//form[@id="confirmation-message"]//p[contains(text(), "{}")]')
-fdn_warning_ok = ('xpath', '//form[@id="confirmation-message"]//button[contains(text(), "OK")]')
+fdn_warning_header = ('xpath', '//form[@id="confirmation-message"]//h1')
+fdn_warning_body = ('xpath', '//form[@id="confirmation-message"]//p')
+fdn_warning_ok = ('xpath', '//form[@id="confirmation-message"]//button[@class="full"]')
 
 fdn_reset_pin2_btn = ('xpath', '//section[@id="call-fdnSettings"]//button[@data-l10n-id="fdnReset"]')
 
