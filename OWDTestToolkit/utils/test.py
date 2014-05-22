@@ -10,7 +10,7 @@ class test(object):
         #
         # Quit this test suite.
         #
-        self.parent.reporting.log_to_file(u"Quit test due to fatal error", level='error')
+        self.parent.reporting.log_to_file("Quit test due to fatal error", level='error')
         if not msg:
             msg = "CANNOT CONTINUE PAST THIS ERROR - ABORTING THIS TEST CASE!"
         else:
