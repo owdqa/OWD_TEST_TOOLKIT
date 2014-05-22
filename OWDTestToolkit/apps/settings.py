@@ -1,5 +1,6 @@
-from OWDTestToolkit import DOM
 import time
+from OWDTestToolkit import DOM
+from OWDTestToolkit.utils.utils import _
 
 
 class Settings(object):
@@ -15,6 +16,7 @@ class Settings(object):
         #
         # Launch the app.
         #
+        self.UTILS.reporting.log_to_file(u"**** Launching {}".format(_(u"Settings")))
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
@@ -30,7 +32,6 @@ class Settings(object):
         self.call_settings()
 
         self.UTILS.reporting.logResult("info", "Call number presses")
-        # time.sleep(20)
 
         x = self.UTILS.element.getElement(DOM.Settings.call_button, "Call ID button")
         x.tap()
@@ -647,7 +648,7 @@ class Settings(object):
             self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
 
             x = self.UTILS.element.getElement(DOM.Settings.celldata_DataConn, "Connect to cellular and data switch",
-                                      False, 5, False)
+                                      False, 15, False)
             try:
                 x.tap()
             except:
@@ -702,7 +703,7 @@ class Settings(object):
             time.sleep(5)
             self.UTILS.test.TEST(x, "Data connection icon is present in the status bar.", True)
 
-        self.UTILS.home.goHome()
+        self.apps.kill_all()
 
     def verify_autoRetrieve_SelectedItem(self, value):
         #

@@ -14,6 +14,15 @@ from reporting import reporting
 from statusbar import statusbar
 from test import test
 
+import gettext
+import os
+import site
+
+
+locale_path = os.path.join(site.getsitepackages()[0], 'OWDTestToolkit/locale')
+translation = gettext.translation('default', locale_path, languages=['en'], fallback=True)
+_ = translation.ugettext
+
 
 class UTILS(object):
 
@@ -66,4 +75,5 @@ class UTILS(object):
         elapsed = time.time() - self.start_time
         elapsed = round(elapsed, 0)
         elapsed = str(datetime.timedelta(seconds=elapsed))
-        self.reporting.logResult("debug", "(Initializing 'UTILS' took {} seconds.)".format(elapsed))
+
+        self.reporting.logResult("debug", _(u"(Initializing 'UTILS' took {} seconds.)").format(elapsed))

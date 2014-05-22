@@ -17,7 +17,7 @@ class EverythingMe(object):
         #
         # Launch the app.
         #
-        self.UTILS.home.goHome()
+        self.apps.kill_all()
 
         #
         # If EME has already been launched, then the DOM has changed.
