@@ -1,4 +1,5 @@
 {
 "acknowledged_risks":true,
-"skip_warning":true
+"skip_warning":true,
+"wifi": { "ssid": "OWDTEST", "keyManagement": "WPA-PSK", "psk": "tidowd66" }
 }
