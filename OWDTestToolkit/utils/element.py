@@ -176,12 +176,13 @@ class element(object):
         timeout = self._DEFAULT_ELEMENT_TIMEOUT if not timeout else timeout
 
         is_ok = True
+        msg = u"" + msg
         try:
             if is_displayed:
-                msg = "<b>{}</b> displayed within {} seconds.|{}".format(msg, timeout, elem)
+                msg = u"<b>{}</b> displayed within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_displayed(*elem, timeout=timeout)
             else:
-                msg = "<b>{}</b> present within {} seconds.|{}".format(msg, timeout, elem)
+                msg = u"<b>{}</b> present within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_present(*elem, timeout=timeout)
         except Exception:
             is_ok = False
@@ -239,7 +240,7 @@ class element(object):
         #
         # Gets the value of a certain css property.
         #
-        return self.marionette.execute_script(""" 
+        return self.marionette.execute_script("""
             function getStyle (el, styleProp) {
                 if (el.currentStyle)
                     var y = x.currentStyle[styleProp];
@@ -274,8 +275,8 @@ class element(object):
                 "id": document.getElementById,
                 "class name": document.getElementsByClassName,
                 "css selector": document.querySelector,
-                "xpath": function () { 
-                            return document.evaluate(arguments[0], document, null, 9, null).singleNodeValue 
+                "xpath": function () {
+                            return document.evaluate(arguments[0], document, null, 9, null).singleNodeValue
                         },
                 "tag name": document.getElementsByTagName
             };
@@ -299,7 +300,7 @@ class element(object):
             } else {
                 if ((locator === "class name") || (locator === "tag name")) {
                     var e = 'JavaScriptException: InvalidParametersException: '
-                    var msg = 'If using "class name" or "tag name", it is mandatory to specify a position' 
+                    var msg = 'If using "class name" or "tag name", it is mandatory to specify a position'
                     throw  e + msg
                 }
                 var element = _locatorMap[location_method].call(document, locator);
@@ -310,11 +311,9 @@ class element(object):
                     element.dispatchEvent(_actionMap[action])
                 } else {
                     var e = 'JavaScriptException: InvalidParametersException: '
-                    var msg = 'Specified action <' + action + '> not supported'; 
+                    var msg = 'Specified action <' + action + '> not supported';
                     throw  e + msg
                 }
             }
         """
         self.marionette.execute_script(script, script_args=[list(locator), action, position])
-
-  
