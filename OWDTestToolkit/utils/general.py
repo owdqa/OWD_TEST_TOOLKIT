@@ -275,7 +275,6 @@ class general(object):
         #
         # remove file from sdcard
         #
-        destination_prefix_file = destination_prefix
-        destination = destination_prefix_file + file_name
+        destination = destination_prefix + file_name
         file_to_remove = '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination)
         self.parent.device.manager.removeFile(file_to_remove)
