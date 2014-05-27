@@ -723,6 +723,20 @@ class Contacts(object):
 
         return True
 
+    def is_contact_a_favorite(self, element=None):
+        """
+            Checks is a certain contact has been added as favorite
+            It assumes it is already the contact_view
+        """
+        fav_button = element or self.UTILS.element.getElement(DOM.Contacts.favourite_button, "Favourite toggle button")
+        
+        classes = fav_button.get_attribute("class").split()
+        try:
+            classes.index("on")
+            return True
+        except ValueError:
+            return False
+
     def permission_check(self, passwd):
         #
         # Sometimes hotmail asks for permission - just accept it if it's there.
