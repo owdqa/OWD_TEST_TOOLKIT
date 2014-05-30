@@ -1481,7 +1481,6 @@ class Messages(object):
         try:
             thread_el = ("xpath", DOM.Messages.thread_selector_xpath.format(num))
             x = self.UTILS.element.getElement(thread_el, "Message thread for " + num)
-
             x.tap()
 
             self.UTILS.element.waitForElements(DOM.Messages.send_message_button, "'Send' button")
@@ -1579,7 +1578,7 @@ class Messages(object):
 
         # (Give the spinner time to appear.)
         time.sleep(2)
-        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 120)
+        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 240)
 
         #
         # Check if we received the 'service unavailable' message.
