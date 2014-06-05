@@ -30,6 +30,8 @@ _f_run_test(){
     # Run the test and update the variables with the results.
     #
     #RESTART="--restart" #(just until this problem with gaiatest goes away)
+    # Temporary solution for TCV v1.4
+    sudo cp /home/develenv/gaia/tests/python/gaia-ui-tests/gaiatest/gaia_test_v14.py /home/develenv/gaia/tests/python/gaia-ui-tests/gaiatest/gaia_test.py
 	gaiatest $RESTART $TESTVARS $ADDRESS $TEST_FILE >$ERR_FILE 2>&1
     line="$(tail -1 $SUM_FILE)"
     test_passes=$(  echo "$line" | awk 'BEGIN{FS="\t"}{print $1}')
