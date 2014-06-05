@@ -36,10 +36,10 @@ then
 else
     printf "(refreshing 'gaia' - this will take just a minute or so ...)\n\n" | tee -a $LOGFILE
     cd $HOME/gaia
+    # temporary comments to test v1.4 without removing /data/local/webapps in cleanup_data in gaia_tests.py)
     #sudo git stash
-    sudo git checkout $BRANCH  2> >( tee -a $LOGFILE)
     #sudo git checkout -f $BRANCH  2> >( tee -a $LOGFILE)
-    sudo git pull 2> >( tee -a $LOGFILE)
+    #sudo git pull 2> >( tee -a $LOGFILE)
 fi
 
 #
