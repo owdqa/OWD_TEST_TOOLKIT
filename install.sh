@@ -87,3 +87,6 @@ sudo python setup.py clean --all >> $LOGFILE 2>&1
 sudo python setup.py install >> $LOGFILE 2>&1
 
 [ ! -d "/tmp/tests" ] && mkdir /tmp/tests >/dev/null 2>&1
+
+# Temporaty solucion for v1.4 where cleanup_data method is ivoked removing /local/data/webapps in the device
+sudo cp $GAIATEST_PATH/gaia_test_v14.py $GAIATEST_PATH/gaia_test.py
