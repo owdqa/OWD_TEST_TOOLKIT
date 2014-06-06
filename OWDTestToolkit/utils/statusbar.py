@@ -19,7 +19,8 @@ class statusbar(object):
 
             self.parent.parent.wait_for_element_displayed(*DOM.Statusbar.clear_all_button, timeout=1)
             x = self.marionette.find_element(*DOM.Statusbar.clear_all_button)
-            self.parent.element.simulateClick(x)
+            #self.parent.element.simulateClick(x)
+            x.tap()
 
             time.sleep(1)
             self.hideStatusBar()
@@ -157,8 +158,6 @@ class statusbar(object):
             # No confirmation required
             self.parent.reporting.logResult("debug", "No 3G confirmation asked")
 
-
-        boolReturn = True
         if boolWasEnabled:
             boolReturn = self.parent.network.waitForNetworkItemDisabled(p_type)
         else:
@@ -206,7 +205,8 @@ class statusbar(object):
         self.displayStatusBar()
         time.sleep(1)
 
-        x = (DOM.Statusbar.notification_statusbar_detail[0], DOM.Statusbar.notification_statusbar_detail[1].format(text))
+        x = (DOM.Statusbar.notification_statusbar_detail[0],
+             DOM.Statusbar.notification_statusbar_detail[1].format(text))
         self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
 
         notif = self.marionette.find_element(x[0], x[1])
@@ -238,3 +238,34 @@ class statusbar(object):
 
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
+
+    def wait_for_notification_toaster_with_titles(self, titles, frame_to_change=None, timeout=30):
+        #
+        # Waits for a new pop up notification whose title is one of the texts in the titles list.
+        #
+        self.marionette.switch_to_frame()
+
+        exception = None
+        title = None
+        for t in titles:
+            self.parent.reporting.log_to_file("Waiting for notification with title {}".format(t))
+            toaster = (DOM.Statusbar.notification_toaster_title[0],
+                 DOM.Statusbar.notification_toaster_title[1].format(t))
+            try:
+                self.parent.parent.wait_for_element_displayed(toaster[0], toaster[1], timeout)
+                if frame_to_change:
+                    self.parent.iframe.switchToFrame(*frame_to_change)
+                # Success. Clear the exception, if any
+                exception = None
+                title = t
+                break
+            except Exception as e:
+                # If the element is not displayed before timeout, store exception, just in case another
+                # title appears
+                exception = e
+
+        # Oops! Error, raise the exception
+        if exception is not None:
+            raise exception
+        # Return the title found, so it can be used later, to click on or whatever
+        return title

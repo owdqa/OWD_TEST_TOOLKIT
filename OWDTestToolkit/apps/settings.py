@@ -1,6 +1,5 @@
 import time
 from OWDTestToolkit import DOM
-from OWDTestToolkit.utils.utils import _
 
 
 class Settings(object):
@@ -16,7 +15,6 @@ class Settings(object):
         #
         # Launch the app.
         #
-        self.UTILS.reporting.log_to_file(u"**** Launching {}".format(_(u"Settings")))
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
