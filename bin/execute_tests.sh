@@ -54,7 +54,7 @@ do
             _scheduled_restart_counter=$(($_scheduled_restart_counter+1))
 			unset SCHEDULED_RESTART
 			
-		    if [ $_scheduled_restart_counter -ge 20 ]
+		    if [ $_scheduled_restart_counter -ge 10 ]
 		    then
 		        export SCHEDULED_RESTART="Y"
 		        _scheduled_restart_counter=0
