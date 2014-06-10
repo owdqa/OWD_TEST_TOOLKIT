@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OWD Test Toolkit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-20 12:01+0200\n"
-"PO-Revision-Date: 2014-05-20 12:07+0100\n"
+"POT-Creation-Date: 2014-06-09 17:56+0200\n"
+"PO-Revision-Date: 2014-06-09 17:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: TID\n"
 "MIME-Version: 1.0\n"
@@ -17,11 +17,40 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/utils/utils.py:78
-#: OWDTestToolkit/utils/utils.py:78
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:91
+#: OWDTestToolkit/DOM/Settings.py:91
+msgid "Cellular & Data"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:123
+#: OWDTestToolkit/DOM/Settings.py:123
+msgid "Internet sharing"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:141
+#: OWDTestToolkit/DOM/Settings.py:141
+msgid "SIM security"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:144
+#: OWDTestToolkit/DOM/Settings.py:144
+msgid "Enter SIM PIN"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:146
+#: OWDTestToolkit/DOM/Settings.py:146
+msgid "Done"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/utils/utils.py:73
+#: OWDTestToolkit/utils/utils.py:73
 msgid "(Initializing 'UTILS' took {} seconds.)"
 msgstr ""
 
-#: OWDTestToolkit/apps/settings.py:18
-msgid "Settings"
+#: OWDTestToolkit/apps/settings.py:565
+msgid "Disabled"
+msgstr ""
+
+#: OWDTestToolkit/apps/settings.py:596
+msgid "Enabled"
 msgstr ""

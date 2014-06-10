@@ -48,18 +48,16 @@ class build(_build):
         _build.run(self)
 
 
-#===============================================================================
-# class install_data(_install_data):
-# 
-#    def run(self):
-#        print "**** locale listing: {}".format(os.listdir('OWDTestToolkit/locale'))
-#        for lang in os.listdir('OWDTestToolkit/locale'):
-#            print "**** install_data run LANG {}".format(lang)
-#            lang_dir = os.path.join('', 'locale', lang, 'LC_MESSAGES')
-#            lang_file = os.path.join('', 'locale', lang, 'LC_MESSAGES', 'default.mo')
-#            self.data_files.append((lang_dir, [lang_file]))
-#        _install_data.run(self)
-#===============================================================================
+class install_data(_install_data):
+
+    def run(self):
+        print "**** locale listing: {}".format(os.listdir('OWDTestToolkit/locale'))
+        for lang in os.listdir('OWDTestToolkit/locale'):
+            print "**** install_data run LANG {}".format(lang)
+            lang_dir = os.path.join('', 'locale', lang, 'LC_MESSAGES')
+            lang_file = os.path.join('', 'locale', lang, 'LC_MESSAGES', 'default.mo')
+            self.data_files.append((lang_dir, [lang_file]))
+        _install_data.run(self)
 
 cmdclass = {
     'build': build,

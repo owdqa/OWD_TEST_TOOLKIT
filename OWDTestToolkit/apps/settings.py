@@ -1,6 +1,8 @@
 import time
 from OWDTestToolkit import DOM
-#from OWDTestToolkit.utils.utils import _
+
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
 
 
 class Settings(object):
@@ -241,7 +243,7 @@ class Settings(object):
         #
         # Add the contact
         #
-        
+
         add_btn = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number, "Add button")
         add_btn.tap()
         self.UTILS.element.waitForElements(('xpath',
@@ -274,7 +276,7 @@ class Settings(object):
         #
         # Check the number has been added to the list
         #
-        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0], 
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
             DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
         self.UTILS.element.waitForElements(elem, "Waiting for contact to be in the list", True, 30)
 
@@ -283,7 +285,7 @@ class Settings(object):
         # This method deletes a contact from the authorized numbers list
         # It must be called once the list has been displayed
         #
-        
+
         # Tap over the contact
         #
         elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
@@ -563,7 +565,7 @@ class Settings(object):
         sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
 
         # If no SIM security enabled, enable it
-        if sim_security_tag.text == "Disabled":
+        if sim_security_tag.text == _("Disabled"):
             self.enable_sim_security(True, old_pin)
             self.goBack()
 
@@ -582,17 +584,19 @@ class Settings(object):
 
         done_btn = self.UTILS.element.getElement(DOM.Settings.change_pin_done_btn, "Change PIN Done button")
         done_btn.tap()
-        
+
     def enable_sim_security(self, enable, pin):
         #
-        # This method sets the SIM security configuration.
+        # Set the SIM security configuration.
+        # Check SIM security - if activated, do the thing. Otherwise, activate it by
+        # inserting the PIN code
         #
         sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
         self.UTILS.element.scroll_into_view(sim_security)
         sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
-       
+
         # If the attribute is already in the desired state, return
-        current = sim_security_tag.text == "Enabled"
+        current = sim_security_tag.text == _("Enabled")
         if enable == current:
             #click anyway so that we can later check whether the button to change the PIN
             sim_security.tap()

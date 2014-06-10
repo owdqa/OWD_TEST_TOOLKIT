@@ -1,4 +1,9 @@
 import GLOBAL
+
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
+
 frame_locator = ('src', "settings")
 settings_header = ('xpath', GLOBAL.app_head_specific.format('Settings'))
 back_button = ('class name', 'icon icon-back')
@@ -83,7 +88,7 @@ wifi_advanced_forgetBtn = ("xpath", "//*[@id='confirm-option']")
 wifi_advanced_cancelBtn = ("xpath", "//button[@data-l10n-id='cancel']")
 
 cellData = ('id', 'menuItem-cellularAndData')
-celldata_header = ('xpath', GLOBAL.app_head_specific.format('Cellular & Data'))
+celldata_header = ('xpath', GLOBAL.app_head_specific.format(_('Cellular & Data').encode("utf8")))
 celldata_DataConn = ('name', "ril.data.enabled")
 celldata_DataConn_switch = ('id', "menuItem-enableDataCall")
 celldata_DataConn_confirm_header = ('xpath', '//section[@id="carrier-dc-warning"]//span[@data-l10n-id="dataConnection-warning-head"]')
@@ -115,7 +120,7 @@ sound = ('id', 'menuItem-sound')
 sound_alarm_vol = ('name', 'audio.volume.alarm')
 
 hotspot = ("id", "menuItem-internetSharing")
-hotspot_header = ('xpath', GLOBAL.app_head_specific.format('Internet sharing'))
+hotspot_header = ('xpath', GLOBAL.app_head_specific.format(_('Internet sharing')))
 hotspot_switch = ("xpath", "/html/body/section[32]/div/ul/li/label")
 hotspot_settings = ("xpath", "/html/body/section[32]/div/ul/li[6]/label/button")
 
@@ -133,12 +138,12 @@ delivery_report = ("xpath", "//*[@data-l10n-id='message-delivery-reports']")
 
 sim_security = ('id', 'menuItem-simSecurity')
 sim_security_tag = ('id', 'simCardLock-desc')
-sim_security_header = ('xpath', GLOBAL.app_head_specific.format('SIM security'))
+sim_security_header = ('xpath', GLOBAL.app_head_specific.format(_('SIM security').encode("utf8")))
 sim_security_pin = ('xpath', '//li[@class="simpin-enabled simpin-enabled-0 simpin-0"]')
 sim_security_change_pin = ('xpath', '//li[@class="simpin-change simpin-change-0 simpin-0"]//button[@data-l10n-id="changeSimPin"]')
-sim_security_enter_pin_header = ('xpath', GLOBAL.app_head_specific.format('Enter SIM PIN'))
+sim_security_enter_pin_header = ('xpath', GLOBAL.app_head_specific.format(_('Enter SIM PIN')))
 sim_security_enter_pin_input = ('xpath', '//div[@class="sim-code-area sim-pinArea"]/input')
-sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[text()="Done"]')
+sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[text()="{}"]'.format(_("Done")))
 
 networkOperator_button = ("xpath", "/html/body/section[29]/div/ul[3]/li/label/button")
 networkOperator_types = ("id", "preferredNetworkType")

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OWD Test Toolkit v1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-20 12:01+0200\n"
-"PO-Revision-Date: 2014-05-20 12:06+0100\n"
+"POT-Creation-Date: 2014-06-09 17:56+0200\n"
+"PO-Revision-Date: 2014-06-09 17:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: TID\n"
 "MIME-Version: 1.0\n"
@@ -17,11 +17,43 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/utils/utils.py:78
-#: OWDTestToolkit/utils/utils.py:78
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:91
+#: OWDTestToolkit/DOM/Settings.py:91
+msgid "Cellular & Data"
+msgstr "Téléphonie et données"
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:123
+#: OWDTestToolkit/DOM/Settings.py:123
+msgid "Internet sharing"
+msgstr "Partage de connexion"
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:141
+#: OWDTestToolkit/DOM/Settings.py:141
+msgid "SIM security"
+msgstr "Sécurité carte SIM"
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:144
+#: OWDTestToolkit/DOM/Settings.py:144
+msgid "Enter SIM PIN"
+msgstr "Saisir le code PIN"
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:146
+#: OWDTestToolkit/DOM/Settings.py:146
+msgid "Done"
+msgstr "Fini"
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/utils/utils.py:73
+#: OWDTestToolkit/utils/utils.py:73
 msgid "(Initializing 'UTILS' took {} seconds.)"
 msgstr "Initialisation des 'UTILS' a 3 secondes"
 
-#: OWDTestToolkit/apps/settings.py:18
-msgid "Settings"
-msgstr "Paramètres"
+#: OWDTestToolkit/apps/settings.py:565
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: OWDTestToolkit/apps/settings.py:596
+msgid "Enabled"
+msgstr "Activé"
+
+#~ msgid "Settings"
+#~ msgstr "Paramètres"
