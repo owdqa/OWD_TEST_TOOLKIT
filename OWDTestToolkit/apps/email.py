@@ -631,26 +631,8 @@ class Email(object):
         # Set up a new ActiveSync account manually
         #
 
-        #
-        # If we've just started out, email will open directly to "New Account").
-        #
-        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Application header")
-        if x.text.lower() != "new account":
-            #
-            # We have at least one emali account setup,
-            # check to see if we can just switch to ours.
-            #
-            if self.switchAccount(email):
-                return
-
-            #
-            # It's not setup already, so prepare to set it up!
-            #
-            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
-            x.tap()
-
-            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
-            x.tap()
+        if not self.no_existing_account(email):
+            return
 
         #
         # (At this point we are now in the 'New account' screen by one path or
@@ -733,7 +715,8 @@ class Email(object):
         #
         # Set up a new email account in the email app and login.
         #
-        self.check_no_existing_account(email, False)
+        if not self.no_existing_account(email):
+            return
 
         #
         # (At this point we are now in the 'New account' screen by one path or
@@ -776,7 +759,8 @@ class Email(object):
         # Set up a new email account in the email app and login.
         # If we've just started out, email will open directly to "New Account").
         #
-        self.check_no_existing_account(p_email)
+        if not self.no_existing_account(email):
+            return
 
         #
         # (At this point we are now in the 'New account' screen by one path or
@@ -786,18 +770,25 @@ class Email(object):
         self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", p_email, True, True)
         self.UTILS.general.typeThis(DOM.Email.password, "Password field", p_pass, True, True)
 
-    def check_no_existing_account(self, email, first=True):
+    def no_existing_account(self, email):
         """Check if the new account header is present
         """
-        x = self.UTILS.element.getElement(DOM.Email.setup_account_header, "Application header",
-                                               stop_on_error=first)
-        if x and x.text != "New Account":
+
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Email.setup_account_header)
+            x = self.marionette.find_element(*DOM.Email.setup_account_header)
+            return True
+        except:
             #
-            # We have at least one email account setup,
+            #  If exception raised --> other account has been alread set up
+            #
+            
+            #
+            # We have at least one email account setup, so
             # check to see if we can just switch to ours.
             #
             if self.switchAccount(email):
-                return
+                return False
 
             #
             # It's not setup already, so prepare to set it up!
@@ -807,6 +798,7 @@ class Email(object):
 
             x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
             x.tap()
+            return True
 
     def switchAccount(self, address):
         #
