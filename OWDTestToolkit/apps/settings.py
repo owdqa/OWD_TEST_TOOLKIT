@@ -1,6 +1,9 @@
 import time
 from OWDTestToolkit import DOM
 
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
 
 class Settings(object):
 
