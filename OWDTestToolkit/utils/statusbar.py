@@ -19,8 +19,7 @@ class statusbar(object):
 
             self.parent.parent.wait_for_element_displayed(*DOM.Statusbar.clear_all_button, timeout=1)
             x = self.marionette.find_element(*DOM.Statusbar.clear_all_button)
-            #self.parent.element.simulateClick(x)
-            x.tap()
+            self.parent.element.simulateClick(x)
 
             time.sleep(1)
             self.hideStatusBar()
@@ -239,9 +238,10 @@ class statusbar(object):
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
 
-    def wait_for_notification_toaster_with_titles(self, titles, frame_to_change=None, timeout=30):
+    def wait_for_notification_toaster_with_titles(self, titles, dom=DOM.Statusbar.notification_toaster_title,
+                                                  displayed=True, frame_to_change=None, timeout=30):
         #
-        # Waits for a new pop up notification whose title is one of the texts in the titles list.
+        # Waits for a new toaster notification whose title is one of the texts in the titles list.
         #
         self.marionette.switch_to_frame()
 
@@ -249,14 +249,17 @@ class statusbar(object):
         title = None
         for t in titles:
             self.parent.reporting.log_to_file("Waiting for notification with title {}".format(t))
-            toaster = (DOM.Statusbar.notification_toaster_title[0],
-                 DOM.Statusbar.notification_toaster_title[1].format(t))
+            toaster = (dom[0], dom[1].format(t))
             try:
-                self.parent.parent.wait_for_element_displayed(toaster[0], toaster[1], timeout)
+                if displayed:
+                    self.parent.parent.wait_for_element_displayed(toaster[0], toaster[1], timeout)
+                else:
+                    self.parent.parent.wait_for_element_present(toaster[0], toaster[1], timeout)
                 if frame_to_change:
                     self.parent.iframe.switchToFrame(*frame_to_change)
                 # Success. Clear the exception, if any
                 exception = None
+                self.parent.reporting.log_to_file("Title found: {}".format(t))
                 title = t
                 break
             except Exception as e:
