@@ -70,11 +70,22 @@ class Music(object):
         #
         # Make sure we're in the mix tab (the left)
         #
-        mix_tab = self.UTILS.element.getElement(DOM.Music.mix_tab, "Mix tab")
-        mix_tab.tap()
-
         try:
-            self.parent.wait_for_element_displayed(*DOM.Music.music_songs)
-            return len(self.marionette.find_elements(*DOM.Music.music_songs))
-        except:
-            return 0
+            self.UTILS.reporting.logResult("info", "Try to get the Mix Tab")
+            self.parent.wait_for_element_displayed(*DOM.Music.mix_tab)
+
+            mix_tab = self.marionette.find_element(*DOM.Music.mix_tab)
+            mix_tab.tap()
+
+            try:
+                self.parent.wait_for_element_displayed(*DOM.Music.music_songs)
+                return len(self.marionette.find_elements(*DOM.Music.music_songs))
+            except:
+                return 0
+        except: # This could be the music frame comes from the SMS app or Email (attach)
+            self.parent.wait_for_element_displayed(*('id', 'views-list-anchor'))
+            try:
+                self.parent.wait_for_element_displayed(*('css selector', '#views-list-anchor .list-item'))
+                return len(self.marionette.find_elements(*('css selector', '#views-list-anchor .list-item')))
+            except:
+                return 0
