@@ -816,7 +816,8 @@ class Email(object):
                             format(x.text, address))
         if x.text == address:
             self.UTILS.reporting.logResult("info", "Already in the account we want - switch back to inbox.")
-            self.goto_folder_from_list("Sent Mail")
+            #self.goto_folder_from_list("Sent Mail")
+            self.goto_folder_from_list("Inbox")
             return True
 
         self.UTILS.reporting.logResult("info", "Need to switch from account '{}' to account '{}' ...".\
@@ -842,7 +843,8 @@ class Email(object):
                 if i.text != "":
                     if i.text == address:
                         i.tap()
-                        self.goto_folder_from_list("Sent Mail")
+                        #self.goto_folder_from_list("Sent Mail")
+                        self.goto_folder_from_list("Inbox")
                         return True
         except:
             pass

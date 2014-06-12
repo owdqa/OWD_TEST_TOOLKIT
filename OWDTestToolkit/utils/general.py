@@ -2,7 +2,6 @@ import sys
 import os
 import json
 import time
-from twilio.rest import TwilioRestClient
 from OWDTestToolkit import DOM
 
 
@@ -61,9 +60,10 @@ class general(object):
 
         account_sid = "ACd3d2699e42974fd163129ff8a7530e56"
         auth_token = "0ac68cfbf12aa7e0725da1750da609b7"
-        client = TwilioRestClient(account_sid, auth_token)
+        #Change with sendSMS with pigeon to start a call
+        #client = TwilioRestClient(account_sid, auth_token)
 
-        client.calls.create(url="http://demo.twilio.com/docs/voice.xml", to=num, from_="+34518880854")
+        #client.calls.create(url="http://demo.twilio.com/docs/voice.xml", to=num, from_="+34518880854")
 
     def get_os_variable(self, name, validate=True):
         #
