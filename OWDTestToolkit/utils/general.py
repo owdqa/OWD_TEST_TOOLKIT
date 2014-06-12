@@ -53,18 +53,6 @@ class general(object):
 
         self.parent.iframe.switchToFrame("src", orig_frame)
 
-    def createIncomingCall(self, num):
-        """
-        Create an incoming call using Twilio API
-        """
-
-        account_sid = "ACd3d2699e42974fd163129ff8a7530e56"
-        auth_token = "0ac68cfbf12aa7e0725da1750da609b7"
-        #Change with sendSMS with pigeon to start a call
-        #client = TwilioRestClient(account_sid, auth_token)
-
-        #client.calls.create(url="http://demo.twilio.com/docs/voice.xml", to=num, from_="+34518880854")
-
     def get_os_variable(self, name, validate=True):
         #
         # Get a variable from the OS.
