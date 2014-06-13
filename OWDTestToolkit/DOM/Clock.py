@@ -1,3 +1,7 @@
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
+
 frame_locator           = ('src', 'clock')
 
 analog_face             = ("xpath", "//*[@id='analog-clock-face']")
@@ -7,7 +11,7 @@ new_alarm_btn           = ('id', 'alarm-new')
 time_button             = ('id', "time-menu")
 time_scroller           = ('css selector', '.value-picker-{} div')
 time_scroller_ampm      = ('css selector', '.value-picker-hour24-state div')
-time_picker_ok          = ("xpath", "//button[text()='OK']")
+time_picker_ok          = ("xpath", "//button[text()='{}']".format(_("OK")))
 alarm_label             = ("name", "alarm.label")
 alarm_done              = ('id', 'alarm-done')
 alarm_delete_button     = ("id", "alarm-delete")

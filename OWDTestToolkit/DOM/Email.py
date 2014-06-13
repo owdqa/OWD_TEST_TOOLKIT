@@ -1,17 +1,21 @@
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
+
 frame_locator = ("src", "email")
 username = ('class name', 'sup-info-name')
 email_addr = ('class name', 'sup-info-email')
 password = ('class name', 'sup-info-password')
 login_account_info_next_btn  = ('xpath', '//section[@data-type="setup_account_info"]//button[@class="sup-info-next-btn"]')
 login_account_prefs_next_btn  = ('css selector', '.card-setup-account-prefs button.sup-info-next-btn')
-login_cont_to_email_btn = ("xpath", "//button[text()='Continue to Mail']")
-sup_header = ('xpath', '//h1[text()="New Account"]')
+login_cont_to_email_btn = ("xpath", "//button[text()='{}']".format(_("Continue to Mail")))
+sup_header = ('xpath', '//h1[text()="{}"]'.format(_("New Account")))
 sup_next_btn = ('class name', 'sup-info-next-btn')
 email_accounts_list = ('class name', 'tng-account-item-label list-text')
 
 manual_setup = ('class name', 'sup-manual-config-btn')
 manual_setup_next = ('class name', 'sup-manual-next-btn')
-manual_setup_sup_header = ('xpath', '//h1[text()="Manual Setup"]')
+manual_setup_sup_header = ('xpath', '//h1[text()="{}"]'.format(_("Manual Setup")))
 manual_setup_account_type = ('xpath', '//select[@class="mail-select sup-manual-account-type"]')
 manual_setup_account_options = ('xpath', '//form[@id="select-option-popup"]')
 manual_setup_account_option = ('xpath', '//form[@id="select-option-popup"]//li[@role="option"]//span[text()="{}"]')
@@ -37,15 +41,15 @@ reply_menu_forward = ('xpath', './/form[@class="msg-reply-menu"]//button[@class=
 reply_menu_cancel = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-cancel"]')
 
 compose_send_btn = ('class name', 'icon icon-send')
-compose_send_failed_msg = ('xpath', './/*[text()="Sending email failed"]')
+compose_send_failed_msg = ('xpath', './/*[text()="{}"]'.format(_("Sending email failed")))
 compose_send_failed_ok = ("id", "cmp-send-failed-ok")
 compose_sending_spinner = ('class name', 'cmp-messages-sending')
 compose_attach_btn = ('class name', 'icon icon-attachment')
 
-attach_video_btn = ("xpath", "//form//button[text()='Video']")
-attach_music_btn = ("xpath", "//form//button[text()='Music']")
-attach_gallery_btn = ("xpath", "//form//button[text()='Gallery']")
-attach_camera_btn = ("xpath", "//form//button[text()='Camera']")
+attach_video_btn = ("xpath", "//form//button[text()='{}']".format(_("Video")))
+attach_music_btn = ("xpath", "//form//button[text()='{}']".format(_("Music")))
+attach_gallery_btn = ("xpath", "//form//button[text()='{}']".format(_("Gallery")))
+attach_camera_btn = ("xpath", "//form//button[text()='{}']".format(_("Camera")))
 
 settings_menu_btn = ('xpath', '//header//a[@class="msg-folder-list-btn"]')
 
@@ -79,7 +83,7 @@ open_email_attached_file = ("xpath", "//ul[@class='msg-attachments-container']/l
 delete_this_email_btn = ("xpath", "//div[@class='msg-reader-action-toolbar bottom-toolbar']//button[@class='msg-delete-btn bottom-btn']")
 # NOTE: Nightmare - you need to getElements(this, desc, False) and loop through the list, there's > 1 of everything here!!
 delete_confirm_buttons = ("xpath", "//button[@id='msg-delete-ok']")
-deleted_email_notif = ("xpath", ".//*[@id='cardContainer']//p[text()='1 message deleted']")
+deleted_email_notif = ("xpath", ".//*[@id='cardContainer']//p[text()='{}']".format(_("1 message deleted")))
 
 confirm_ok = ("xpath", "//form[@class='modal-dialog-confirm generic-dialog visible']/menu/button[@data-l10n-id='ok']")
 email_not_setup_ok = ('xpath', '//button[@class="confirm-dialog-ok recommend"]')

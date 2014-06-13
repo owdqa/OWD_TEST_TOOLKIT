@@ -2,6 +2,9 @@ from OWDTestToolkit import DOM
 import time
 import sys
 
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
 
 class Contacts(object):
 
@@ -338,14 +341,14 @@ class Contacts(object):
         #
         boolFound = False
         try:
-            self.parent.wait_for_element_displayed('xpath', "//button[text()='Remove']", timeout=5)
+            self.parent.wait_for_element_displayed('xpath', "//button[text()='{}']".format(_("Remove")), timeout=5)
             boolFound = True
         except:
             pass
 
         if boolFound:
             self.UTILS.reporting.logResult("info", "Logging out of facebook so I can re-enable the FB import ...")
-            x = self.UTILS.element.getElement(('xpath', "//button[text()='Remove']"), "Remove button")
+            x = self.UTILS.element.getElement(('xpath', "//button[text()='{}']".format(_("Remove"))), "Remove button")
             x.tap()
 
             self.UTILS.element.waitForElements(DOM.Contacts.settings_fb_logout_wait, "FB logout message", True, 5)

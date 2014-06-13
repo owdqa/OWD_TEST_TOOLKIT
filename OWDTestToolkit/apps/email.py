@@ -4,7 +4,9 @@ from OWDTestToolkit.apps.gallery import Gallery
 from OWDTestToolkit.apps.music import Music
 from OWDTestToolkit.apps.camera import Camera
 import time
-import sys
+
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
 
 
 class Email(object):
@@ -338,7 +340,7 @@ class Email(object):
         self.launch()
 
         try:
-            x = self.UTILS.element.waitForElements(("xpath", "//h1[text()='Inbox']"), "Inbox header", 10)
+            x = self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Inbox"))), "Inbox header", 10)
         except:
             #
             # We have no accounts set up (or the app would default to
@@ -353,7 +355,7 @@ class Email(object):
         x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Set settings button")
         x.tap()
 
-        x = ('xpath', DOM.GLOBAL.app_head_specific.format("Mail Settings"))
+        x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Mail Settings")))
         self.UTILS.element.waitForElements(x, "Mail settings", True, 20, False)
 
         #
@@ -396,7 +398,7 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
 
         #
@@ -437,7 +439,7 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
         time.sleep(5)
   
@@ -487,7 +489,7 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
         time.sleep(5)
 
@@ -536,7 +538,7 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
         time.sleep(5)
 
@@ -595,7 +597,7 @@ class Email(object):
         #
         self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
-        x = ('xpath', DOM.GLOBAL.app_head_specific.format("Inbox"))
+        x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox")))
         self.UTILS.element.waitForElements(x, "Inbox", True, 120)
 
         return True
@@ -708,7 +710,7 @@ class Email(object):
 
         self.UTILS.element.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
 
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format('Inbox')), "Inbox")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox"))), "Inbox")
         time.sleep(2)
 
     def setupAccount(self, user, email, passwd):
@@ -751,7 +753,7 @@ class Email(object):
 
         self.UTILS.element.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
 
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format('Inbox')), "Inbox")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox"))), "Inbox")
         time.sleep(2)
 
     def setupAccountFirstStep(self, p_user, p_email, p_pass):
@@ -759,7 +761,7 @@ class Email(object):
         # Set up a new email account in the email app and login.
         # If we've just started out, email will open directly to "New Account").
         #
-        if not self.no_existing_account(email):
+        if not self.no_existing_account(p_email):
             return
 
         #
@@ -829,7 +831,7 @@ class Email(object):
         x = self.UTILS.element.getElement(DOM.Email.goto_accounts_btn, "Accounts button")
         x.tap()
 
-        x = ('xpath', DOM.GLOBAL.app_head_specific.format("Accounts"))
+        x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Accounts")))
         self.UTILS.element.waitForElements(x, "Accounts header", True, 20, False)
 
         #

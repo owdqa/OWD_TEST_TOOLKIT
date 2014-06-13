@@ -3,6 +3,9 @@ import datetime
 from OWDTestToolkit import DOM
 from marionette import Actions
 
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
 
 class Dialer(object):
     """Object representing the Dialer application.
@@ -31,7 +34,7 @@ class Dialer(object):
         # Handles switching frames etc... and finishes with you back in the dialer.
         #
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.element.waitForElements(("xpath", "//h1[text()='Select contact']"), "'Select contact' header")
+        self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Select contact"))), "'Select contact' header")
 
         y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list")
         boolOK = False

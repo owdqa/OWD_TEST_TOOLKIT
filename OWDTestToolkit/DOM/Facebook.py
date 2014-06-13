@@ -1,8 +1,12 @@
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
+
 # TODO: Check this identifier
 frame_locator = ('src', 'facebook')
 
 import GLOBAL
-friends_header       = ('xpath', GLOBAL.app_head_specific.format('Facebook Friends'))
+friends_header       = ('xpath', GLOBAL.app_head_specific.format(_('Facebook Friends')))
 friends_list         = ('xpath', "//li[@class='block-item']")
 link_friends_list    = ('xpath', "//ol[@id='friends-list']//li[@data-visited='true']/a")
 # link_friends_list    = ('xpath', "//ol[@id='contacts-list-R']//li")

@@ -1,6 +1,9 @@
 from OWDTestToolkit import DOM
 from marionette.keys import Keys
 
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
 
 class Marketplace(object):
 
@@ -63,7 +66,7 @@ class Marketplace(object):
         # Wait for the download statusbar to finish.
         #
         self.UTILS.statusbar.displayStatusBar()
-        x = ("xpath", "//div[text()='Downloading {}']".format(app))
+        x = ("xpath", "//div[text()='{} {}']".format(_("Downloading"), app))
         self.UTILS.element.waitForElements(x, "Download status bar")
         self.UTILS.element.waitForNotElements(x, "Download status bar", True, 180, False)
         self.UTILS.statusbar.hideStatusBar()

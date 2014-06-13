@@ -13,9 +13,15 @@ from network import network
 from reporting import reporting
 from statusbar import statusbar
 from test import test
+import gettext
+import os
+import site
 
-from OWDTestToolkit.utils.i18nsetup import I18nSetup
-_ = I18nSetup(I18nSetup).setup()
+
+#===============================================================================
+# from OWDTestToolkit.utils.i18nsetup import I18nSetup
+# _ = I18nSetup(I18nSetup).setup()
+#===============================================================================
 
 
 class UTILS(object):
@@ -69,5 +75,15 @@ class UTILS(object):
         elapsed = time.time() - self.start_time
         elapsed = round(elapsed, 0)
         elapsed = str(datetime.timedelta(seconds=elapsed))
+        self.reporting.logResult("debug", "Initializing 'UTILS' took {} seconds.".format(elapsed))
+        current_lang = parent.data_layer.get_setting("language.current").split('-')[0]
+        self.reporting.log_to_file("Current language: [{}]".format(current_lang))
 
-        self.reporting.logResult("debug", _("(Initializing 'UTILS' took {} seconds.)").format(elapsed))
+    #===========================================================================
+    # def setup_translations(self, testcase):
+    #    current_lang = testcase.data_layer.get_setting("language.current").split('-')[0]
+    #    self.reporting.log_to_file("Current language: [{}]".format(current_lang))
+    #    locale_path = os.path.join(site.getsitepackages()[0], 'OWDTestToolkit/locale')
+    #    translation = gettext.translation('default', locale_path, languages=[current_lang])
+    #    return translation.ugettext
+    #===========================================================================

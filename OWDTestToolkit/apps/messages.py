@@ -8,6 +8,9 @@ from OWDTestToolkit.apps.camera import Camera
 from marionette import Actions
 import time
 
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
 
 class Messages(object):
     def __init__(self, parent):
@@ -324,7 +327,8 @@ class Messages(object):
         x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
         x.tap()
 
-        self.UTILS.element.waitForElements(("xpath", "//h1[text()='Messages']"), "Messages main header")
+        self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Messages"))),
+                                           "Messages main header")
 
     def countMessagesInThisThread(self):
         #
@@ -1534,9 +1538,9 @@ class Messages(object):
                     #
                     # This contact was added via 'add contact' icon.
                     #
-                    self.parent.wait_for_element_displayed("xpath", "//button[text()='Remove']",
+                    self.parent.wait_for_element_displayed("xpath", "//button[text()='{}']".format(_("Remove")),
                                                     timeout=2)
-                    y = self.marionette.find_element("xpath", "//button[text()='Remove']")
+                    y = self.marionette.find_element("xpath", "//button[text()='{}']".format(_("Remove")))
                     self.UTILS.reporting.logResult("info", "Tapping 'Remove' button.")
                     y.tap()
                     return True

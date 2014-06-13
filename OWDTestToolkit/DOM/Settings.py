@@ -5,7 +5,7 @@ _ = I18nSetup(I18nSetup).setup()
 
 
 frame_locator = ('src', "settings")
-settings_header = ('xpath', GLOBAL.app_head_specific.format('Settings'))
+settings_header = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode("utf8")))
 back_button = ('class name', 'icon icon-back')
 
 call_settings = ('id', "menuItem-callSettings")
@@ -53,19 +53,19 @@ wifi_mode_switch = ("id", "menuItem-wifi")
 wifi_mode_desc = ("id", "wifi-desc")
 
 app_permissions = ('id', "menuItem-appPermissions")
-app_permissions_header = ('xpath', GLOBAL.app_head_specific.format('App permissions'))
-app_perm_camera = ('xpath', './/*[@id="appPermissions"]//a[text()="Camera"]')
-app_perm_camera_geo = ('xpath', './/*[@id="appPermissions-details"]//span[text()="Geolocation"]/select')
+app_permissions_header = ('xpath', GLOBAL.app_head_specific.format(_('App permissions')))
+#app_perm_camera = ('xpath', './/*[@id="appPermissions"]//a[text()="Camera"]')
+#app_perm_camera_geo = ('xpath', './/*[@id="appPermissions-details"]//span[text()="Geolocation"]/select')
 
 wifi = ('id', 'menuItem-wifi')
-wifi_header = ('xpath', GLOBAL.app_head_specific.format('Wi-Fi'))
+wifi_header = ('xpath', GLOBAL.app_head_specific.format(_('Wi-Fi')))
 wifi_enabled = ('xpath', ".//*[@id='wifi-enabled']/label")
 wifi_available_networks = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside[contains(@class, 'pack-end wifi-icon level-')]")
 wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
-wifi_available_status = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
-wifi_available_name = ".//*[@id='wifi-availableNetworks']/li[%s]//a"
+#wifi_available_status = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
+#wifi_available_name = ".//*[@id='wifi-availableNetworks']/li[%s]//a"
 wifi_name_xpath = '//*[@id="wifi-availableNetworks"]//a[text()="{}"]'
-wifi_connected = ('xpath', '//small[text()="Connected"]')
+#wifi_connected = ('xpath', '//small[text()="Connected"]')
 wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='{}']"
 
 wifi_login_header = ("xpath", "//section[@id='wifi-auth']//h1")
@@ -74,7 +74,7 @@ wifi_login_pass = ('xpath', '//section[@id="wifi-auth"]//input[@name="password"]
 wifi_login_ok_btn = ('xpath', "//section[@id='wifi-auth']//button[@type='submit']/span[@data-l10n-id='ok']")
 
 wifi_details_header = ("xpath", "//section[@id='wifi-status']//h1")
-wifi_details_forget_btn = ("xpath", ".//button//span[text()='Forget']")
+wifi_details_forget_btn = ("xpath", ".//button//span[text()='{}']".format(_('Forget')))
 wifi_details_security = ("xpath", "//a[@data-l10n-id='security']/span")
 wifi_details_signal = ("xpath", "//a[@data-l10n-id='signalStrength']/span")
 wifi_details_ipaddress = ("xpath", "//a[@data-l10n-id='ipAddress']/span")
