@@ -210,6 +210,16 @@ class Settings(object):
         self.three_times_bad_pin2(wrong_pin2)
         self.restore_pin2(good_pin2, puk2)
 
+    def confirm_data_conn(self):
+        try:
+            self.UTILS.reporting.logResult("info", "Waiting for data switch-on confirmation")
+            self.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON)
+            x = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
+            x.tap()
+            self.UTILS.reporting.logResult("info", "Data connection: confirmed")
+        except:
+            self.UTILS.reporting.logResult("info", "No data connection confirmation")
+
     def reset_pin2(self, old_pin2, new_pin2):
         self.call_settings()
         self.open_fdn()
