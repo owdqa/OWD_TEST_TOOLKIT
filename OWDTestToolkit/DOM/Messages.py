@@ -1,3 +1,7 @@
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
+
 frame_locator = ('src', 'sms')
 
 statusbar_new_sms = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'{}')]")
@@ -16,8 +20,8 @@ target_numbers_empty = ("xpath", "//*[@id='to-label']")
 target_numbers = ("xpath", "//*[@id='messages-recipients-list']/span")
 add_contact_button = ("id", "messages-contact-pick-button")
 cancel_add_contact = ("id", "cancel_activity")
-contact_no_phones_msg = ("xpath", "//form[@id='confirmation-message']//p[text()='No phones']")
-contact_no_phones_ok = ("xpath", "//form[@id='confirmation-message']//button[text()='OK']")
+contact_no_phones_msg = ("xpath", "//form[@id='confirmation-message']//p[text()='{}']".format(_("No phones")))
+contact_no_phones_ok = ("xpath", "//form[@id='confirmation-message']//button[text()='{}']".format(_("OK")))
 
 input_message_area = ('id', 'messages-input')
 
@@ -64,7 +68,7 @@ edit_msgs_header = ("id", "messages-edit-mode")
 edit_msgs_sel_all_btn = ("id", "messages-check-all-button")
 
 airplane_warning_message = ("xpath", "//p/*[contains(text(),'Airplane')]")
-airplane_warning_ok = ("xpath", "//button[text()='OK']")
+airplane_warning_ok = ("xpath", "//button[text()='{}']".format(_("OK")))
 
 received_sms = ('xpath', "//li[@class='message sms received incoming']/section/div/p")
 received_mms = ('xpath', "//li[@class='message mms received incoming']/section/div/p")
@@ -85,12 +89,12 @@ attach_preview_video_audio_type = ("xpath", "//*[@class='attachment-container no
 last_message_attachment_img = ('xpath', '//*[@id="last-messages"]/li[last()]//div[@class="attachment-container preview"]')
 last_message_attachment_av = ('xpath', '//*[@id="last-messages"]/li[last()]//div[@class="attachment-container nopreview"]')
 
-header_call_btn = ("xpath", "//button[text()='Call']")
-header_send_message_btn = ("xpath", "//button[text()='Send message']")
-header_create_new_contact_btn = ("xpath", "//button[text()='Create new contact']")
-header_add_to_contact_btn = ("xpath", "//button[text()='Add to an existing contact']")
-header_send_email_btn = ("xpath", "//button[text()='Send email']")
-header_cancel_btn = ("xpath", "//button[text()='Cancel']")
+header_call_btn = ("xpath", "//button[text()='{}']".format(_("Call")))
+header_send_message_btn = ("xpath", "//button[text()='{}']".format(_("Send message")))
+header_create_new_contact_btn = ("xpath", "//button[text()='{}']".format(_("Create new contact")))
+header_add_to_contact_btn = ("xpath", "//button[text()='{}']".format(_("Add to an existing contact")))
+header_send_email_btn = ("xpath", "//button[text()='{}']".format(_("Send email")))
+header_cancel_btn = ("xpath", "//button[text()='{}']".format(_("Cancel")))
 header_cancel_btn_no_send = ("xpath", "/html/body/form/menu/button[4]")
 header_cancel_btn_absolute = ("xpath", "/html/body/form/menu/button[5]")
 

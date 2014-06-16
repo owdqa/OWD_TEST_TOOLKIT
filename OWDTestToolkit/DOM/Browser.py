@@ -1,3 +1,7 @@
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
+
 frame_locator           = ('src', 'browser')
 browser_page_frame      = ('mozbrowser', "")
 url_input               = ('id', 'url-input')
@@ -40,8 +44,8 @@ settings_button         = ("id", "settings-button")
 settings_header         = ("xpath", "//header[@id='settings-header']")
 
 website_frame           = ("class", "browser-tab")
-page_title              = ('xpath', ".//*[@id='results']/ul//h5[text()='Problemloadingpage']")
-page_problem            = ("xpath", "//*[text()='Problem loading page']")
+page_title              = ('xpath', ".//*[@id='results']/ul//h5[text()='{}']".format(_("Problemloadingpage")))
+page_problem            = ("xpath", "//*[text()='{}']".format(_("Problemloadingpage")))
 
 bookmarkmenu_button = ("xpath", "//*[@id='bookmark-button']")
 bookmark_button = ("xpath", "//*[@id='bookmark-menu-add']")

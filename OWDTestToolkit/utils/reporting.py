@@ -127,7 +127,7 @@ class reporting(object):
 
         #DET_FILE = open(self.det_fnam, "w")
         DET_FILE = codecs.open(self.det_fnam, "w", encoding='utf-8')
-        SUM_FILE = open(self.sum_fnam, "w")
+        SUM_FILE = codecs.open(self.sum_fnam, "w", encoding='utf-8')
 
         DET_FILE.write("<span style=\"font-size:14px\">")
         DET_FILE.write("<b>Test case</b>      : <b>{}</b>\n".format(self.testNum))
