@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-13 10:40+0200\n"
+"POT-Creation-Date: 2014-06-16 08:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,8 +52,8 @@ msgid "Settings"
 msgstr ""
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:46
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:248
-#: OWDTestToolkit/DOM/Contacts.py:46 OWDTestToolkit/apps/settings.py:248
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:258
+#: OWDTestToolkit/DOM/Contacts.py:46 OWDTestToolkit/apps/settings.py:258
 msgid "Add contact"
 msgstr ""
 
@@ -92,6 +92,11 @@ msgstr ""
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:61
 #: OWDTestToolkit/DOM/Settings.py:61
 msgid "Wi-Fi"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:68
+#: OWDTestToolkit/DOM/Settings.py:68
+msgid "Connected"
 msgstr ""
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:77
@@ -254,14 +259,14 @@ msgid "Fixed dialing numbers"
 msgstr ""
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:183
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:595
-#: OWDTestToolkit/apps/settings.py:183 OWDTestToolkit/apps/settings.py:595
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:605
+#: OWDTestToolkit/apps/settings.py:183 OWDTestToolkit/apps/settings.py:605
 msgid "Enabled"
 msgstr ""
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:183
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:566
-#: OWDTestToolkit/apps/settings.py:183 OWDTestToolkit/apps/settings.py:566
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:576
+#: OWDTestToolkit/apps/settings.py:183 OWDTestToolkit/apps/settings.py:576
 msgid "Disabled"
 msgstr ""
 
@@ -275,18 +280,26 @@ msgstr ""
 msgid "Disable FDN"
 msgstr ""
 
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:238
-#: OWDTestToolkit/apps/settings.py:238
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:248
+#: OWDTestToolkit/apps/settings.py:248
 msgid "Authorized numbers"
 msgstr ""
 
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:266
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:314
-#: OWDTestToolkit/apps/settings.py:266 OWDTestToolkit/apps/settings.py:314
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:276
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:324
+#: OWDTestToolkit/apps/settings.py:276 OWDTestToolkit/apps/settings.py:324
 msgid "Enter SIM PIN2"
 msgstr ""
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/marketplace.py:69
 #: OWDTestToolkit/apps/marketplace.py:69
 msgid "Downloading"
+msgstr ""
+
+#: OWDTestToolkit/apps/messages.py:492
+msgid " recipient"
+msgstr ""
+
+#: OWDTestToolkit/apps/messages.py:492
+msgid " recipients"
 msgstr ""

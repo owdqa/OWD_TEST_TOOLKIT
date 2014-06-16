@@ -489,7 +489,7 @@ class Messages(object):
         time.sleep(2)  # give the header time to change.
 
         num_recs = len(nums)
-        search_str = " recipient" if num_recs == 1 else " recipients"
+        search_str = _(" recipient") if num_recs == 1 else _(" recipients")
         self.UTILS.element.headerCheck(str(num_recs) + search_str)
 
         #
