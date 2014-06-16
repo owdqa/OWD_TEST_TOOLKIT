@@ -375,7 +375,7 @@ class Dialer(object):
             self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
 
             try:
-                self.parent.wait_for_element_displayed(*DOM.Dialer.call_busy_button_ok, timeout=10)
+                self.parent.wait_for_element_displayed(*DOM.Dialer.call_busy_button_ok, timeout=60)
                 ok_btn = self.marionette.find_element(*DOM.Dialer.call_busy_button_ok)
                 # If the call destination is the same as the origin, it's very likely to get an error
                 # message. If this is the case, tap the OK button. Otherwise (i.e. using twilio), hang up the call
