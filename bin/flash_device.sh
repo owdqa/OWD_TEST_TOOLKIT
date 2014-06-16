@@ -130,4 +130,8 @@ cd $TARGET_DIR
 rm -rf $REL_DIR
 
 printf "\n\nDONE!\n"
+
+printf "\n\nKilling FTU app\n"
+sudo gcli killapps
+
 exit 0
