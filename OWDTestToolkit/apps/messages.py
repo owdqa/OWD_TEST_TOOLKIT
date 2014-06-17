@@ -326,7 +326,6 @@ class Messages(object):
         #
         x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
         x.tap()
-
         self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Messages"))),
                                            "Messages main header")
 
@@ -489,7 +488,7 @@ class Messages(object):
         time.sleep(2)  # give the header time to change.
 
         num_recs = len(nums)
-        search_str = " recipient" if num_recs == 1 else " recipients"
+        search_str = _(" recipient") if num_recs == 1 else _(" recipients")
         self.UTILS.element.headerCheck(str(num_recs) + search_str)
 
         #
@@ -1663,8 +1662,16 @@ class Messages(object):
         # Returns the time of a thread.
         #
         x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_timestamp_xpath.format(num)),
-                                    "Thread timestamp", True, 5, False)
+                                    "Thread time", True, 5, False)
         return x.text
+
+    def thread_timestamp(self, num):
+        #
+        # Returns the timestamp of a thread
+        #
+        x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_timestamp_xpath.format(num)),
+                                    "Thread timestamp", True, 5, False)
+        return float(x.get_attribute("data-time"))
 
     def verifyMMSReceived(self, attached_type, send_time=None):
 
