@@ -213,11 +213,12 @@ class Settings(object):
     def confirm_data_conn(self):
         try:
             self.UTILS.reporting.logResult("info", "Waiting for data switch-on confirmation")
-            self.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON)
+            self.parent.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON)
             x = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
             x.tap()
             self.UTILS.reporting.logResult("info", "Data connection: confirmed")
-        except:
+        except Exception as e:
+            self.UTILS.reporting.log_to_file("*** Exception: {}".format(e))
             self.UTILS.reporting.logResult("info", "No data connection confirmation")
 
     def reset_pin2(self, old_pin2, new_pin2):
