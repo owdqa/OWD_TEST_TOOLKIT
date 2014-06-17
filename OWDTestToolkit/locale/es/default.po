@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OWD Test Toolkit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-16 08:44+0200\n"
-"PO-Revision-Date: 2014-06-16 08:44+0100\n"
+"POT-Creation-Date: 2014-06-17 09:16+0200\n"
+"PO-Revision-Date: 2014-06-17 09:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: TID\n"
 "MIME-Version: 1.0\n"
@@ -69,12 +69,12 @@ msgid "Cancel"
 msgstr ""
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:59
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:1541
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:1543
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:1540
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:1542
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/contacts.py:344
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/contacts.py:351
-#: OWDTestToolkit/DOM/Contacts.py:59 OWDTestToolkit/apps/messages.py:1541
-#: OWDTestToolkit/apps/messages.py:1543 OWDTestToolkit/apps/contacts.py:344
+#: OWDTestToolkit/DOM/Contacts.py:59 OWDTestToolkit/apps/messages.py:1540
+#: OWDTestToolkit/apps/messages.py:1542 OWDTestToolkit/apps/contacts.py:344
 #: OWDTestToolkit/apps/contacts.py:351
 msgid "Remove"
 msgstr "Eliminar"
@@ -93,11 +93,6 @@ msgstr ""
 #: OWDTestToolkit/DOM/Settings.py:61
 msgid "Wi-Fi"
 msgstr "Wifi"
-
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:68
-#: OWDTestToolkit/DOM/Settings.py:68
-msgid "Connected"
-msgstr "Conectado"
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:77
 #: OWDTestToolkit/DOM/Settings.py:77
@@ -138,7 +133,7 @@ msgstr ""
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:11
 #: OWDTestToolkit/DOM/Email.py:11
 msgid "Continue to Mail"
-msgstr ""
+msgstr "Continuar con el correo"
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:12
 #: OWDTestToolkit/DOM/Email.py:12
@@ -215,8 +210,8 @@ msgstr ""
 msgid "Select contact"
 msgstr ""
 
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:330
-#: OWDTestToolkit/apps/messages.py:330
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:329
+#: OWDTestToolkit/apps/messages.py:329
 msgid "Messages"
 msgstr "Mensajes"
 
@@ -227,7 +222,7 @@ msgstr "Mensajes"
 #: OWDTestToolkit/apps/email.py:343 OWDTestToolkit/apps/email.py:600
 #: OWDTestToolkit/apps/email.py:713 OWDTestToolkit/apps/email.py:756
 msgid "Inbox"
-msgstr ""
+msgstr "Bandeja de entrada"
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:358
 #: OWDTestToolkit/apps/email.py:358
@@ -296,11 +291,15 @@ msgstr "Escribir el PIN2 de la SIM"
 msgid "Downloading"
 msgstr ""
 
-#: OWDTestToolkit/apps/messages.py:492
+#: OWDTestToolkit/DOM/Settings.py:68
+msgid "Connected"
+msgstr "Conectado"
+
+#: OWDTestToolkit/apps/messages.py:491
 msgid " recipient"
 msgstr " destinatario"
 
-#: OWDTestToolkit/apps/messages.py:492
+#: OWDTestToolkit/apps/messages.py:491
 msgid " recipients"
 msgstr " destinatarios"
 

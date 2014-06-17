@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-16 08:51+0200\n"
+"POT-Creation-Date: 2014-06-17 09:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,12 +69,12 @@ msgid "Cancel"
 msgstr ""
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:59
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:1541
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:1543
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:1540
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:1542
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/contacts.py:344
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/contacts.py:351
-#: OWDTestToolkit/DOM/Contacts.py:59 OWDTestToolkit/apps/messages.py:1541
-#: OWDTestToolkit/apps/messages.py:1543 OWDTestToolkit/apps/contacts.py:344
+#: OWDTestToolkit/DOM/Contacts.py:59 OWDTestToolkit/apps/messages.py:1540
+#: OWDTestToolkit/apps/messages.py:1542 OWDTestToolkit/apps/contacts.py:344
 #: OWDTestToolkit/apps/contacts.py:351
 msgid "Remove"
 msgstr ""
@@ -92,11 +92,6 @@ msgstr ""
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:61
 #: OWDTestToolkit/DOM/Settings.py:61
 msgid "Wi-Fi"
-msgstr ""
-
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:68
-#: OWDTestToolkit/DOM/Settings.py:68
-msgid "Connected"
 msgstr ""
 
 #: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:77
@@ -215,8 +210,8 @@ msgstr ""
 msgid "Select contact"
 msgstr ""
 
-#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:330
-#: OWDTestToolkit/apps/messages.py:330
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:329
+#: OWDTestToolkit/apps/messages.py:329
 msgid "Messages"
 msgstr ""
 
@@ -296,10 +291,14 @@ msgstr ""
 msgid "Downloading"
 msgstr ""
 
-#: OWDTestToolkit/apps/messages.py:492
+#: OWDTestToolkit/DOM/Settings.py:68
+msgid "Connected"
+msgstr ""
+
+#: OWDTestToolkit/apps/messages.py:491
 msgid " recipient"
 msgstr ""
 
-#: OWDTestToolkit/apps/messages.py:492
+#: OWDTestToolkit/apps/messages.py:491
 msgid " recipients"
 msgstr ""
