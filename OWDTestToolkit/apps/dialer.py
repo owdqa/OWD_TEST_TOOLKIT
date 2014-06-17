@@ -364,6 +364,22 @@ class Dialer(object):
         self.actions = Actions(self.marionette)
         self.actions.long_press(delete, 3).perform()
 
+    def answer(self):
+        self.marionette.switch_to_frame()
+        elDef = ("xpath", "//iframe[contains(@{}, '{}')]".\
+                            format(DOM.Dialer.frame_locator_calling[0],
+                            DOM.Dialer.frame_locator_calling[1]))
+
+        self.parent.wait_for_element_present(*elDef, timeout=60)
+        frame_calling = self.marionette.find_element(*elDef)
+
+        if frame_calling:
+            self.marionette.switch_to_frame(frame_calling)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.answer_callButton, timeout=1)
+            answer = self.marionette.find_element(*DOM.Dialer.answer_callButton)
+            if answer:
+                answer.tap()
+
     def hangUp(self):
         #
         # Hangs up (assuming we're in the 'calling' frame).
@@ -390,14 +406,14 @@ class Dialer(object):
                                     format(DOM.Dialer.frame_locator_calling[0],
                                     DOM.Dialer.frame_locator_calling[1]))
 
-                self.parent.wait_for_element_present(*elDef, timeout=2)
-                x = self.marionette.find_element(*elDef)
-                if x:
-                    self.marionette.switch_to_frame(x)
+                self.parent.wait_for_element_present(*elDef, timeout=60)
+                frame_calling = self.marionette.find_element(*elDef)
+                if frame_calling:
+                    self.marionette.switch_to_frame(frame_calling)
                     self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=1)
-                    x = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
-                    if x:
-                        x.tap()
+                    hangup = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
+                    if hangup:
+                        hangup.tap()
         except:
             pass
 
