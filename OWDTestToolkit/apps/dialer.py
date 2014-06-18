@@ -269,6 +269,21 @@ class Dialer(object):
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
         self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call element", True, 5)
 
+    def call_this_number_and_hangup(self, delay):
+        self.callThisNumber()
+        time.sleep(delay)
+
+        self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=1)
+        hangup = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
+        if hangup:
+            hangup.tap()
+        else:
+            try:
+                self.parent.data_layer.kill_active_call()
+            except:
+                self.UTILS.reporting.logResult("info", "Exception when killing active call via data_layer")
+                pass
+
     def createContactFromThisNum(self):
         #
         # Creates a new contact from the number currently in the dialler
