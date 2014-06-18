@@ -8,7 +8,7 @@
 export MYPATH=$(dirname $0)
 export CURRPATH=$(pwd)
 
-export BRANCH=${1:-"v1.3"}
+export BRANCH=${1:-"v2.0"}
 LOGFILE=${LOGFILE:-/tmp/gaiatest_setup.log}
 
 
