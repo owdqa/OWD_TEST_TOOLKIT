@@ -134,9 +134,25 @@ printf "\n\nDONE!\n"
 printf "\n\nKilling FTU app\n"
 #sudo $cmd_adb kill-server > /dev/null
 #sudo $cmd_adb start-server > /dev/null
+
+#
+# Install gaiatest.
+#
+cd $GAIATEST_PATH/..
+
+#
+# Install gaiatest and dependencies.
+#
+printf "\n<b>Installing gaiatest for branch \"$(git branch | grep '*')\" ... </b>\n\n" | tee -a $LOGFILE
+sudo python setup.py develop
+
+printf "\n\nDevices\n"
 sudo $cmd_adb devices
+printf "\n\nDevice forward 2828\n"
 $cmd_adb forward tcp:2828 tcp:2828
+printf "\n\nRunning apps\n"
 gcli listrunningapps
+printf "\n\nKilling apps\n"
 gcli killapps
 
 printf "\n\nDONE!\n"
