@@ -132,9 +132,12 @@ rm -rf $REL_DIR
 printf "\n\nDONE!\n"
 
 printf "\n\nKilling FTU app\n"
-sudo $cmd_adb kill-server > /dev/null
-sudo $cmd_adb start-server > /dev/null
-sudo $cmd_adb forward tcp:2828 tcp:2828 > /dev/null
+#sudo $cmd_adb kill-server > /dev/null
+#sudo $cmd_adb start-server > /dev/null
+sudo $cmd_adb devices
+sudo $cmd_adb forward tcp:2828 tcp:2828
+sudo gcli listrunningapps
 sudo gcli killapps
 
+printf "\n\nDONE!\n"
 exit 0
