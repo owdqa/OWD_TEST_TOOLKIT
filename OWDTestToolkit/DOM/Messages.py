@@ -90,9 +90,9 @@ last_message_attachment_img = ('xpath', '//*[@id="last-messages"]/li[last()]//di
 last_message_attachment_av = ('xpath', '//*[@id="last-messages"]/li[last()]//div[@class="attachment-container nopreview"]')
 
 header_call_btn = ("xpath", "//button[text()='{}']".format(_("Call")))
-header_send_message_btn = ("xpath", "//button[text()='{}']".format(_("Send message")))
-header_create_new_contact_btn = ("xpath", "//button[text()='{}']".format(_("Create new contact")))
-header_add_to_contact_btn = ("xpath", "//button[text()='{}']".format(_("Add to an existing contact")))
+header_send_message_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='sendEmail']")
+header_create_new_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='createNewContact']")
+header_add_to_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='addToExistingContact']")
 header_send_email_btn = ("xpath", "//button[text()='{}']".format(_("Send email")))
 header_cancel_btn = ("xpath", "//button[text()='{}']".format(_("Cancel")))
 header_cancel_btn_no_send = ("xpath", "/html/body/form/menu/button[4]")
