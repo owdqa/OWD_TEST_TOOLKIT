@@ -181,7 +181,7 @@ class general(object):
         #
         # Need to click in a lot of these or the field isn't located correctly (esp. SMS).
         #
-        x.tap(x=x.size["width"] - 1)
+        x.tap(x=x.size["width"] - 1, y=x.size["height"] - 1)
 
         if p_clear:
             x.clear()
