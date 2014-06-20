@@ -1673,9 +1673,9 @@ class Messages(object):
                                     "Thread timestamp", True, 5, False)
         return float(x.get_attribute("data-time"))
 
-    def verifyMMSReceived(self, attached_type, send_time=None):
+    def verifyMMSReceived(self, attached_type, send_time=None, timeout=30):
 
-        message = self.waitForReceivedMsgInThisThread(send_time=send_time)
+        message = self.waitForReceivedMsgInThisThread(send_time=send_time, timeOut=timeout)
         self.UTILS.test.TEST(message, "A received message appeared in the thread.", True)
 
         self.UTILS.reporting.log_to_file("*** attached type: {}".format(attached_type))
