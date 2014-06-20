@@ -32,7 +32,7 @@ then
 	git checkout $BRANCH  2> >( tee -a $LOGFILE)
 
 	# Temporary hack...
-	$OWD_TEST_TOOLKIT_BIN/tmp_hack.sh
+	#$OWD_TEST_TOOLKIT_BIN/tmp_hack.sh
 else
     printf "(refreshing 'gaia' - this will take just a minute or so ...)\n\n" | tee -a $LOGFILE
     cd $HOME/gaia
