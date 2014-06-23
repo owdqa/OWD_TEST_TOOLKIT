@@ -15,7 +15,6 @@ git checkout $INTEGRATION$BRANCH 2> >( tee -a $LOGFILE)
 printf "\n<b>Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".</b>\n\n" | tee -a $LOGFILE
 
 
-
 . $0.parts/set_up_parameters.sh
 
 . $0.parts/install_toolkit_and_test_cases.sh
