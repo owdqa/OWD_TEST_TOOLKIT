@@ -30,6 +30,8 @@ _f_run_test(){
     # Run the test and update the variables with the results.
     #
     #RESTART="--restart" #(just until this problem with gaiatest goes away)
+    # Temporary solution for TCL v1.4
+    sudo cp /home/develenv/gaia/tests/python/gaia-ui-tests/gaiatest/gaia_test_v14.py /home/develenv/gaia/tests/python/gaia-ui-tests/gaiatest/gaia_test.py
     echo "Launching test...."
     echo "......"
     echo "......"

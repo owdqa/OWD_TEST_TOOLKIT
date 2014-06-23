@@ -1484,7 +1484,6 @@ class Messages(object):
         try:
             thread_el = ("xpath", DOM.Messages.thread_selector_xpath.format(num))
             x = self.UTILS.element.getElement(thread_el, "Message thread for " + num)
-
             x.tap()
 
             self.UTILS.element.waitForElements(DOM.Messages.send_message_button, "'Send' button")
@@ -1582,7 +1581,7 @@ class Messages(object):
 
         # (Give the spinner time to appear.)
         time.sleep(2)
-        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 120)
+        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 240)
 
         #
         # Check if we received the 'service unavailable' message.
@@ -1673,9 +1672,9 @@ class Messages(object):
                                     "Thread timestamp", True, 5, False)
         return float(x.get_attribute("data-time"))
 
-    def verifyMMSReceived(self, attached_type, send_time=None):
+    def verifyMMSReceived(self, attached_type, send_time=None, timeout=30):
 
-        message = self.waitForReceivedMsgInThisThread(send_time=send_time)
+        message = self.waitForReceivedMsgInThisThread(send_time=send_time, timeOut=timeout)
         self.UTILS.test.TEST(message, "A received message appeared in the thread.", True)
 
         self.UTILS.reporting.log_to_file("*** attached type: {}".format(attached_type))

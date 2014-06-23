@@ -255,7 +255,7 @@ class Contacts(object):
         # Make sure we are in the contacts app.
         #
         try:
-            self.parent.wait_for_element_displayed("xpath", "//h1[text() = 'Contacts']", timeout=1)
+            self.parent.wait_for_element_displayed("xpath", "//h1[text() = '{}']".format(_("Contacts")), timeout=1)
         except:
             self.launch()
 
@@ -548,11 +548,6 @@ class Contacts(object):
                     pass
 
                 #
-                # If we arrive here, it means we've clicked the button to signin
-                #
-                #
-                
-                #
                 # PERMISSIONS (sometimes appears).
                 # Seems to happen a few times, so loop through 5 just in case ...
                 #
@@ -566,8 +561,6 @@ class Contacts(object):
                         x.tap()
 
                         time.sleep(5)
-                        # self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator",
-                        #                               True, False, False)
                         stop = True
                     except:
                         count -= 1
@@ -639,7 +632,7 @@ class Contacts(object):
         time.sleep(2)
         # self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        
+
         #
         # Change to import frame -> it is whithin Contacts frame
         #
@@ -722,9 +715,23 @@ class Contacts(object):
                 #
                 self.permission_check(passwd)
         except:
-             pass
+            pass
 
         return True
+
+    def is_contact_a_favorite(self, element=None):
+        """
+            Checks is a certain contact has been added as favorite
+            It assumes it is already the contact_view
+        """
+        fav_button = element or self.UTILS.element.getElement(DOM.Contacts.favourite_button, "Favourite toggle button")
+        
+        classes = fav_button.get_attribute("class").split()
+        try:
+            classes.index("on")
+            return True
+        except ValueError:
+            return False
 
     def permission_check(self, passwd):
         #
@@ -760,7 +767,8 @@ class Contacts(object):
                                  "<b>NOTE:</b> Apparently all your friends are already imported - " + \
                                  "see the following screenshots for details", x)
 
-            self.marionette.execute_script("document.getElementById('{}').click()".format(DOM.Contacts.import_close_icon[1]))
+            self.marionette.execute_script("document.getElementById('{}').click()".\
+                                           format(DOM.Contacts.import_close_icon[1]))
             time.sleep(1)
 
             #
@@ -1132,9 +1140,6 @@ class Contacts(object):
         #
         self._orig = self.UTILS.iframe.currentIframe()
 
-        time.sleep(1)
-        # self.UTILS.general.checkMarionetteOK()
-
         self.find_frame()
 
         y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
@@ -1149,14 +1154,8 @@ class Contacts(object):
                 self.UTILS.reporting.logResult("info", u"Contact '{}' found in all contacts - selecting this contact ...".\
                                      format(contact_name))
                 self.marionette.execute_script("document.getElementsByClassName('contact-item')[{}].click()".format(i))
-                time.sleep(2)
                 break
 
-            #
-            # Marionette seems to crash here occasionally, so make sure we're okay before
-            # the next loop!
-            #
-            # self.UTILS.general.checkMarionetteOK()
             self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator, quit_on_error=False)
             y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list", False)
 
@@ -1176,8 +1175,6 @@ class Contacts(object):
         if x == "Dialer":
             x = self.UTILS.element.getElement(DOM.Contacts.view_details_title, "View details title")
             self.UTILS.test.TEST(contact_name in x.text, "Name is in the title")
-
-        time.sleep(2)
 
     def find_frame(self):
         #

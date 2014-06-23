@@ -11,7 +11,6 @@ export CURRPATH=$(pwd)
 export BRANCH=${1:-"v2.0"}
 LOGFILE=${LOGFILE:-/tmp/gaiatest_setup.log}
 
-
 printf "\n\n<b>Installing gaiatest (for $BRANCH) and Marionette ...</b>" | tee -a $LOGFILE
 printf "\n<b>====================================================</b>\n" | tee -a $LOGFILE
 
