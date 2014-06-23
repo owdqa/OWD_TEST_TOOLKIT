@@ -13,6 +13,15 @@ from network import network
 from reporting import reporting
 from statusbar import statusbar
 from test import test
+import gettext
+import os
+import site
+
+
+#===============================================================================
+# from OWDTestToolkit.utils.i18nsetup import I18nSetup
+# _ = I18nSetup(I18nSetup).setup()
+#===============================================================================
 
 
 class UTILS(object):
@@ -66,4 +75,6 @@ class UTILS(object):
         elapsed = time.time() - self.start_time
         elapsed = round(elapsed, 0)
         elapsed = str(datetime.timedelta(seconds=elapsed))
-        self.reporting.logResult("debug", "(Initializing 'UTILS' took {} seconds.)".format(elapsed))
+        self.reporting.logResult("debug", "Initializing 'UTILS' took {} seconds.".format(elapsed))
+        current_lang = parent.data_layer.get_setting("language.current").split('-')[0]
+        self.reporting.log_to_file("Current Toolkit language: [{}]".format(current_lang))

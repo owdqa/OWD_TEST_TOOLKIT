@@ -5,6 +5,9 @@ from OWDTestToolkit.apps.music import Music
 from OWDTestToolkit.apps.camera import Camera
 import time
 
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
 
 class Email(object):
 
@@ -37,7 +40,7 @@ class Email(object):
 
     def createEmailCameraImage(self):
         self.camera = Camera(self)
-        
+
         attach = self.UTILS.element.getElement(DOM.Email.compose_attach_btn, "Attach button")
         attach.tap()
 
@@ -112,7 +115,6 @@ class Email(object):
 
             self.createEmailVideo()
             self.video.clickOnVideoEmail(0)
-        
 
         elif attached_type == "audio":
             #
@@ -122,7 +124,6 @@ class Email(object):
 
             self.createEmailMusic()
             self.music.click_on_song_email()
-
 
         else:
             # self.UTILS.reporting.logResult("info", "incorrect value received")
@@ -196,7 +197,7 @@ class Email(object):
                 z = self.marionette.find_elements(*DOM.Email.folder_subject_list)
 
                 #
-                # If we've tried several times and found nothing, it is likely that 
+                # If we've tried several times and found nothing, it is likely that
                 # we are stuck at some point down the mails list, so let's try
                 # to go to the top
                 #
@@ -339,7 +340,7 @@ class Email(object):
         self.launch()
 
         try:
-            x = self.UTILS.element.waitForElements(("xpath", "//h1[text()='Inbox']"), "Inbox header", 10)
+            x = self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Inbox"))), "Inbox header", 10)
         except:
             #
             # We have no accounts set up (or the app would default to
@@ -354,7 +355,7 @@ class Email(object):
         x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Set settings button")
         x.tap()
 
-        x = ('xpath', DOM.GLOBAL.app_head_specific.format("Mail Settings"))
+        x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Mail Settings")))
         self.UTILS.element.waitForElements(x, "Mail settings", True, 20, False)
 
         #
@@ -397,7 +398,7 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
 
         #
@@ -438,7 +439,7 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
         time.sleep(5)
   
@@ -465,7 +466,7 @@ class Email(object):
 
         self.replyTheMessage(from_field.split("@")[0])
 
-    def reply_all(self, reply_message):
+    def reply_all(self, sender, reply_message):
         #
         # This method replies to all recipients of a previously received message
         # It assumes we already are viewing that message
@@ -488,10 +489,25 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
         time.sleep(5)
 
+        #
+        # Check the sender is not included in the 'To' field
+        #
+        bubbles = self.UTILS.element.getElements(('css selector', '.cmp-to-container.cmp-addr-container .cmp-bubble-container .cmp-peep-name'), 
+                                            '"To" field bubbles')
+
+        bubbles_text = [bubble.text for bubble in bubbles]
+
+        self.UTILS.reporting.logResult("info", "Content of To field (bubbles): {}".format(bubbles_text))
+        self.UTILS.reporting.logResult("info", "Username: {}".format(sender['username']))
+        x = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "Screen shot of REPLY ALL:", x)
+
+        if sender['username'] in bubbles_text:
+            self.UTILS.test.TEST(False, "Sender ({}) must not appear in the 'To field' when replying".format(sender['username']), True)
         #
         # Write some reply content
         #
@@ -522,13 +538,13 @@ class Email(object):
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format("Compose")),
+        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
         time.sleep(5)
 
         #
-        # Put items in the corresponsing fields.
-        # 
+        # Put items in the corresponding fields.
+        #
         if type(p_target) is list:
             for addr in p_target:
                 self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", addr, True, False, True, False)
@@ -546,13 +562,12 @@ class Email(object):
 
         self.replyTheMessage(from_field.split("@")[0])
 
-
     def replyTheMessage(self, sender_name):
         #
         # Hits the 'Send' button to reply to the message (handles
         # waiting for the correct elements etc...).
         #
-        
+
         x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
         self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
@@ -561,11 +576,12 @@ class Email(object):
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60, False)
+        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
+                                               False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(sender_name))
         self.UTILS.element.waitForElements(x, "Previous received message", True, 120)
-        
+
     def sendTheMessage(self):
         #
         # Hits the 'Send' button to send the message (handles
@@ -581,8 +597,7 @@ class Email(object):
         #
         self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
-
-        x = ('xpath', DOM.GLOBAL.app_head_specific.format("Inbox"))
+        x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox")))
         self.UTILS.element.waitForElements(x, "Inbox", True, 120)
 
         return True
@@ -618,26 +633,8 @@ class Email(object):
         # Set up a new ActiveSync account manually
         #
 
-        #
-        # If we've just started out, email will open directly to "New Account").
-        #
-        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Application header")
-        if x.text.lower() != "new account":
-            #
-            # We have at least one emali account setup,
-            # check to see if we can just switch to ours.
-            #
-            if self.switchAccount(email):
-                return
-
-            #
-            # It's not setup already, so prepare to set it up!
-            #
-            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
-            x.tap()
-
-            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
-            x.tap()
+        if not self.no_existing_account(email):
+            return
 
         #
         # (At this point we are now in the 'New account' screen by one path or
@@ -691,9 +688,10 @@ class Email(object):
         #
         #  Finish setting things up
         #
-        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_host, "Active Sync Hostname field", hostname, True, True, False)
-        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_user, "Active Sync Username field", user, True, True, False)
-
+        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_host, "Active Sync Hostname field", hostname,
+                                    True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_user, "Active Sync Username field", user, True,
+                                    True, False)
 
         time.sleep(2)
         x = self.UTILS.element.getElement(DOM.Email.manual_setup_next, "Manual Setup 'Next' button", True, 60)
@@ -712,34 +710,15 @@ class Email(object):
 
         self.UTILS.element.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
 
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format('Inbox')), "Inbox")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox"))), "Inbox")
         time.sleep(2)
 
     def setupAccount(self, user, email, passwd):
         #
         # Set up a new email account in the email app and login.
         #
-
-        #
-        # If we've just started out, email will open directly to "New Account").
-        #
-        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Application header")
-        if x.text.lower() != "new account":
-            #
-            # We have at least one emali account setup,
-            # check to see if we can just switch to ours.
-            #
-            if self.switchAccount(email):
-                return
-
-            #
-            # It's not setup already, so prepare to set it up!
-            #
-            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
-            x.tap()
-
-            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
-            x.tap()
+        if not self.no_existing_account(email):
+            return
 
         #
         # (At this point we are now in the 'New account' screen by one path or
@@ -749,51 +728,41 @@ class Email(object):
         self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", email, True, True, False)
         self.UTILS.general.typeThis(DOM.Email.password, "Password field", passwd, True, True, False)
 
-        time.sleep(2)
-        x = self.UTILS.element.getElement(DOM.Email.login_account_info_next_btn, "'Next' button", True, 60)
-        x.tap()
+        #
+        # TODO : surround this by a try-except block, calling to quitTest. This has to be done
+        # once we fix the great delay caused by viewAllIframes()
+        #
+        self.parent.wait_for_element_displayed(*DOM.Email.login_account_info_next_btn, timeout=60)
+        nxt = self.marionette.find_element(*DOM.Email.login_account_info_next_btn)
+        self.UTILS.element.simulateClick(nxt)
+        self.UTILS.reporting.logResult("info", "'Next button'")
 
-        time.sleep(2)
-        x = self.UTILS.element.getElement(DOM.Email.login_account_prefs_next_btn, "Next button", True, 60)
-        x.tap()
+        self.parent.wait_for_element_displayed(*DOM.Email.login_account_prefs_next_btn, timeout=120)
+        next2 = self.marionette.find_element(*DOM.Email.login_account_prefs_next_btn)
+        self.UTILS.element.simulateClick(next2)
+        self.UTILS.reporting.logResult("info", "'Next button'")
 
         #
         # Click the 'continue to mail' button.
         #
         time.sleep(1)
-        x = self.UTILS.element.getElement(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button", True, 60)
-        x.tap()
+        self.parent.wait_for_element_present(*DOM.Email.login_cont_to_email_btn, timeout=120)
+        continue_btn = self.marionette.find_element(*DOM.Email.login_cont_to_email_btn)
+        continue_btn.tap()
+        self.UTILS.reporting.logResult("info", "'Continue to email' button")
 
         self.UTILS.element.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
 
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format('Inbox')), "Inbox")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox"))), "Inbox")
         time.sleep(2)
 
     def setupAccountFirstStep(self, p_user, p_email, p_pass):
         #
         # Set up a new email account in the email app and login.
-        #
-
-        #
         # If we've just started out, email will open directly to "New Account").
         #
-        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Application header")
-        if x.text.lower() != "new account":
-            #
-            # We have at least one emali account setup,
-            # check to see if we can just switch to ours.
-            #
-            if self.switchAccount(p_email):
-                return
-
-            #
-            # It's not setup already, so prepare to set it up!
-            #
-            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
-            x.tap()
-
-            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
-            x.tap()
+        if not self.no_existing_account(p_email):
+            return
 
         #
         # (At this point we are now in the 'New account' screen by one path or
@@ -803,6 +772,35 @@ class Email(object):
         self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", p_email, True, True)
         self.UTILS.general.typeThis(DOM.Email.password, "Password field", p_pass, True, True)
 
+    def no_existing_account(self, email):
+        """Check if the new account header is present
+        """
+
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Email.setup_account_header)
+            x = self.marionette.find_element(*DOM.Email.setup_account_header)
+            return True
+        except:
+            #
+            #  If exception raised --> other account has been alread set up
+            #
+            
+            #
+            # We have at least one email account setup, so
+            # check to see if we can just switch to ours.
+            #
+            if self.switchAccount(email):
+                return False
+
+            #
+            # It's not setup already, so prepare to set it up!
+            #
+            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
+            x.tap()
+
+            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
+            x.tap()
+            return True
 
     def switchAccount(self, address):
         #
@@ -820,7 +818,8 @@ class Email(object):
                             format(x.text, address))
         if x.text == address:
             self.UTILS.reporting.logResult("info", "Already in the account we want - switch back to inbox.")
-            self.goto_folder_from_list("Sent Mail")
+            #self.goto_folder_from_list("Sent Mail")
+            self.goto_folder_from_list(_("Inbox"))
             return True
 
         self.UTILS.reporting.logResult("info", "Need to switch from account '{}' to account '{}' ...".\
@@ -832,7 +831,7 @@ class Email(object):
         x = self.UTILS.element.getElement(DOM.Email.goto_accounts_btn, "Accounts button")
         x.tap()
 
-        x = ('xpath', DOM.GLOBAL.app_head_specific.format("Accounts"))
+        x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Accounts")))
         self.UTILS.element.waitForElements(x, "Accounts header", True, 20, False)
 
         #
@@ -846,7 +845,8 @@ class Email(object):
                 if i.text != "":
                     if i.text == address:
                         i.tap()
-                        self.goto_folder_from_list("Sent Mail")
+                        #self.goto_folder_from_list("Sent Mail")
+                        self.goto_folder_from_list(_("Inbox"))
                         return True
         except:
             pass

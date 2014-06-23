@@ -16,7 +16,7 @@ class statusbar(object):
         #
         try:
             self.displayStatusBar()
-            
+
             self.parent.parent.wait_for_element_displayed(*DOM.Statusbar.clear_all_button, timeout=1)
             x = self.marionette.find_element(*DOM.Statusbar.clear_all_button)
             self.parent.element.simulateClick(x)
@@ -94,7 +94,7 @@ class statusbar(object):
         # <b>bluetooth</b>
         #
         self.parent.reporting.logResult("info", "Toggling " + p_type + " mode via statusbar ...")
-        orig_iframe = self.parent.iframe.currentIframe()
+        orig_iframe = self.marionette.get_active_frame()
 
         #
         # Toggle (and wait).
@@ -103,6 +103,7 @@ class statusbar(object):
         _data = {"name": "data", "notif": DOM.Statusbar.dataConn, "toggle": DOM.Statusbar.toggle_dataconn}
         _bluetooth = {"name": "bluetooth", "notif": DOM.Statusbar.bluetooth, "toggle": DOM.Statusbar.toggle_bluetooth}
         _airplane = {"name": "airplane", "notif": DOM.Statusbar.airplane, "toggle": DOM.Statusbar.toggle_airplane}
+        self.parent.reporting.log_to_file("*** toggle: p_type = {}".format(p_type))
 
         if p_type == "data":
             typedef = _data
@@ -120,7 +121,7 @@ class statusbar(object):
         #
         self.parent.home.touchHomeButton()
         if orig_iframe:
-            self.parent.iframe.switchToFrame("src", orig_iframe)
+            self.marionette.switch_to_frame(orig_iframe)
 
         return boolReturn
 
@@ -139,7 +140,23 @@ class statusbar(object):
         x = self.parent.element.getElement(p_def["toggle"], "Toggle " + p_def["name"] + " icon")
         x.tap()
 
-        boolReturn = True
+        #
+        # Sometimes, when we activate data connection, the devices goes till settings and
+        # show a confirmation screen. We have to accept it.
+        #
+        # try:
+        success = self.parent.iframe.switchToFrame(DOM.Settings.frame_locator[0], DOM.Settings.frame_locator[1],
+                                         quit_on_error=True, via_root_frame=True, test=False)
+        if success:
+            self.parent.element.waitForElements(DOM.Settings.celldata_DataConn_confirm_header,
+                "Confirmation header", True, 40)
+
+            ok_btn = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
+            ok_btn.tap()
+        else:
+            # No confirmation required
+            self.parent.reporting.logResult("debug", "No 3G confirmation asked")
+
         if boolWasEnabled:
             boolReturn = self.parent.network.waitForNetworkItemDisabled(p_type)
         else:
@@ -162,61 +179,96 @@ class statusbar(object):
 
         return x
 
-    def click_on_notification_title(self, text, frame_to_change, timeout=30):
+    def click_on_notification_title(self, text, frame_to_change=None, timeout=30):
         #
         # Clicks on a certain notification (given by its title)
         # If @frame_to_change provided, it will switch to that frame
         #
         self.displayStatusBar()
         time.sleep(1)
-        
+
         x = (DOM.Statusbar.notification_statusbar_title[0], DOM.Statusbar.notification_statusbar_title[1].format(text))
-        self.parent.test.TEST(True, "[Notification] Waiting for notif")
-        
+
         self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
         notif = self.marionette.find_element(x[0], x[1])
         notif.tap()
-        
-        if frame_to_change != "":
+
+        if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
 
-    def click_on_notification_detail(self, text, frame_to_change, timeout=30):
+    def click_on_notification_detail(self, text, frame_to_change=None, timeout=30):
         #
         # Clicks on a certain notification (given by its detail)
         # If @frame_to_change provided, it will switch to that frame
         #
         self.displayStatusBar()
         time.sleep(1)
-        
-        x = (DOM.Statusbar.notification_statusbar_detail[0], DOM.Statusbar.notification_statusbar_detail[1].format(text))
+
+        x = (DOM.Statusbar.notification_statusbar_detail[0],
+             DOM.Statusbar.notification_statusbar_detail[1].format(text))
         self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
 
         notif = self.marionette.find_element(x[0], x[1])
         notif.tap()
-        
-        if frame_to_change != "":
+
+        if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
 
-    def wait_for_notification_toaster_title(self, text, frame_to_change="", timeout=30):
+    def wait_for_notification_toaster_title(self, text, frame_to_change=None, timeout=30):
         #
         # Waits for a new popup notification which contains a certain title
         #
         self.marionette.switch_to_frame()
-        
+
         x = (DOM.Statusbar.notification_toaster_title[0], DOM.Statusbar.notification_toaster_title[1].format(text))
         self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
-        
-        if frame_to_change != "":
+
+        if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
 
-    def wait_for_notification_toaster_detail(self, text, frame_to_change="", timeout=30):
+    def wait_for_notification_toaster_detail(self, text, frame_to_change=None, timeout=30):
         #
         # Waits for a new popup notification which contains a certain body
         #
         self.marionette.switch_to_frame()
-        
+
         x = (DOM.Statusbar.notification_toaster_detail[0], DOM.Statusbar.notification_toaster_detail[1].format(text))
         self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
-        
-        if frame_to_change != "":
+
+        if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
+
+    def wait_for_notification_toaster_with_titles(self, titles, dom=DOM.Statusbar.notification_toaster_title,
+                                                  displayed=True, frame_to_change=None, timeout=30):
+        #
+        # Waits for a new toaster notification whose title is one of the texts in the titles list.
+        #
+        self.marionette.switch_to_frame()
+
+        exception = None
+        title = None
+        for t in titles:
+            self.parent.reporting.log_to_file("Waiting for notification with title {}".format(t))
+            toaster = (dom[0], dom[1].format(t))
+            try:
+                if displayed:
+                    self.parent.parent.wait_for_element_displayed(toaster[0], toaster[1], timeout)
+                else:
+                    self.parent.parent.wait_for_element_present(toaster[0], toaster[1], timeout)
+                if frame_to_change:
+                    self.parent.iframe.switchToFrame(*frame_to_change)
+                # Success. Clear the exception, if any
+                exception = None
+                self.parent.reporting.log_to_file("Title found: {}".format(t))
+                title = t
+                break
+            except Exception as e:
+                # If the element is not displayed before timeout, store exception, just in case another
+                # title appears
+                exception = e
+
+        # Oops! Error, raise the exception
+        if exception is not None:
+            raise exception
+        # Return the title found, so it can be used later, to click on or whatever
+        return title

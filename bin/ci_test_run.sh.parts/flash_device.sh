@@ -21,4 +21,3 @@ else
         mv $RESULT_DIR/flash_device ${RESULT_DIR}/@Flash_device@${DEVICE_BUILDNAME}
     fi
 fi
-

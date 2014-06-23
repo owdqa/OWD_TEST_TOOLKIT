@@ -1,6 +1,11 @@
 import GLOBAL
+
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
+
 frame_locator = ('src', "settings")
-settings_header = ('xpath', GLOBAL.app_head_specific.format('Settings'))
+settings_header = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode("utf8")))
 back_button = ('class name', 'icon icon-back')
 
 call_settings = ('id', "menuItem-callSettings")
@@ -8,33 +13,69 @@ call_callerID = ('id', "menuItem-callerId")
 call_log_number_xpath = ("xpath", "/html/body/div/div[5]/form/section/ol/li[2]")
 call_show_number = ("xpath", "/html/body/div/div[5]/form/section/ol/li[3]")
 call_button = ('xpath', "/html/body/section[20]/div/ul/li[4]/span")
+call_fdn = ('xpath', '//a[@data-href="#call-fdnSettings"]')
+
+fdn_enable = ('xpath', '//li[@id="fdn-enabled"]')
+fdn_status = ('xpath', '//li[@id="fdn-enabled"]//small')
+fdn_settings_header = ('xpath', '//h1[@data-l10n-id="fdnSettings-header"]')
+fdn_auth_numbers = ('xpath', '//a[@data-l10n-id="fdn-authorizedNumbers"]')
+fdn_pin2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-pinArea"]/input')
+fdn_pin2_done = ('xpath', '//section[@id="call-pin2-dialog"]//button[@data-l10n-id="done"]')
+fdn_puk2_pin2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-newPinArea"]/input')
+fdn_enter_puk2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-pukArea"]/input')
+fdn_confirm_pin2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-confirmPinArea"]/input')
+fdn_input_error_msg = ('xpath', '//section[@id="call-pin2-dialog"]//div[@data-l10n-id="fdnErrorMsg"]')
+fdn_pin2_tries_left = ('xpath', '//section[@id="call-pin2-dialog"]//div[@data-l10n-id="inputCodeRetriesLeft"]')
+fdn_pin2_back_btn = ('xpath', '//section[@id="call-pin2-dialog"]//button/span[@data-l10n-id="back"]')
+fdn_pin2_sim_locked = ('xpath', '//section[@id="call-pin2-dialog"]//div[@data-l10n-id="simCardLockedMsg"]')
+
+fdn_auth_numbers_back = ('xpath', '//section[@id="call-fdnList"]//span[@data-l10n-id="back"]')
+fdn_add_auth_number = ('xpath', '//section[@id="call-fdnList"]//button[@id="fdnContact"]')
+fdn_add_auth_number_name = ('xpath', '//section[@id="call-fdnList-add"]//input[@id="fdnContact-name"]')
+fdn_add_auth_number_number = ('xpath', '//section[@id="call-fdnList-add"]//input[@id="fdnContact-number"]')
+fdn_add_auth_number_done = ('xpath', '//section[@id="call-fdnList-add"]//button[@id="fdnContact-submit"]')
+
+fdn_auth_numbers_list = ('xpath', '//section[@id="call-fdnList"]//ul[@id="fdn-contactsContainer"]/li')
+fdn_auth_numbers_list_elem = ('xpath', '//ul[@id="fdn-contactsContainer"]//small[contains(text(), "{}")]')
+fdn_auth_numbers_list_item = ('xpath', '//section[@id="call-fdnList"]//ul[@id="fdn-contactsContainer"]/li[{}]')
+fdn_auth_number_action_header = ('xpath', '//form[@id="call-fdnList-action"]//span[@id="fdnAction-name" and contains(text(), "{}")]')
+fdn_auth_number_action_call = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-call"]')
+fdn_auth_number_action_edit = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-edit"]')
+fdn_auth_number_action_delete = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-delete"]')
+fdn_auth_number_action_cancel = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-cancel"]')
+fdn_warning_header = ('xpath', '//form[@id="confirmation-message"]//h1')
+fdn_warning_body = ('xpath', '//form[@id="confirmation-message"]//p')
+fdn_warning_ok = ('xpath', '//form[@id="confirmation-message"]//button[@class="full"]')
+
+fdn_reset_pin2_btn = ('xpath', '//section[@id="call-fdnSettings"]//button[@data-l10n-id="fdnReset"]')
 
 airplane_mode_switch = ("id", "menuItem-airplaneMode")
 wifi_mode_switch = ("id", "menuItem-wifi")
 wifi_mode_desc = ("id", "wifi-desc")
 
 app_permissions = ('id', "menuItem-appPermissions")
-app_permissions_header = ('xpath', GLOBAL.app_head_specific.format('App permissions'))
-app_perm_camera = ('xpath', './/*[@id="appPermissions"]//a[text()="Camera"]')
-app_perm_camera_geo = ('xpath', './/*[@id="appPermissions-details"]//span[text()="Geolocation"]/select') 
+app_permissions_header = ('xpath', GLOBAL.app_head_specific.format(_('App permissions')))
+#app_perm_camera = ('xpath', './/*[@id="appPermissions"]//a[text()="Camera"]')
+#app_perm_camera_geo = ('xpath', './/*[@id="appPermissions-details"]//span[text()="Geolocation"]/select')
 
 wifi = ('id', 'menuItem-wifi')
 wifi_header = ('xpath', GLOBAL.app_head_specific.format('Wi-Fi'))
 wifi_enabled = ('xpath', ".//*[@id='wifi-enabled']/label")
-wifi_available_networks = ('xpath', ".//*[@id='wifi-availableNetworks']/li")
-wifi_available_status = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
-wifi_available_name = ".//*[@id='wifi-availableNetworks']/li[%s]//a"
-wifi_name_xpath = './/*[@id="wifi-availableNetworks"]//a[text()="{}"]'
-wifi_connected = ('xpath', '//small[text()="Connected"]')
+wifi_available_networks = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside[contains(@class, 'pack-end wifi-icon level-')]")
+wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
+#wifi_available_status = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
+#wifi_available_name = ".//*[@id='wifi-availableNetworks']/li[%s]//a"
+wifi_name_xpath = '//*[@id="wifi-availableNetworks"]//a[text()="{}"]'
+wifi_connected = ('xpath', '//small[text()="{}"]'.format(_("Connected")))
 wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='{}']"
 
 wifi_login_header = ("xpath", "//section[@id='wifi-auth']//h1")
 wifi_login_user = ('name', 'identity')
-wifi_login_pass = ('name', 'password')
-wifi_login_ok_btn = ('xpath', ".//button//span[text()='OK']")
+wifi_login_pass = ('xpath', '//section[@id="wifi-auth"]//input[@name="password"]')
+wifi_login_ok_btn = ('xpath', "//section[@id='wifi-auth']//button[@type='submit']/span[@data-l10n-id='ok']")
 
 wifi_details_header = ("xpath", "//section[@id='wifi-status']//h1")
-wifi_details_forget_btn = ("xpath", ".//button//span[text()='Forget']")
+wifi_details_forget_btn = ("xpath", ".//button//span[text()='{}']".format(_('Forget')))
 wifi_details_security = ("xpath", "//a[@data-l10n-id='security']/span")
 wifi_details_signal = ("xpath", "//a[@data-l10n-id='signalStrength']/span")
 wifi_details_ipaddress = ("xpath", "//a[@data-l10n-id='ipAddress']/span")
@@ -48,10 +89,11 @@ wifi_advanced_forgetBtn = ("xpath", "//*[@id='confirm-option']")
 wifi_advanced_cancelBtn = ("xpath", "//button[@data-l10n-id='cancel']")
 
 cellData = ('id', 'menuItem-cellularAndData')
-celldata_header = ('xpath', GLOBAL.app_head_specific.format('Cellular & Data'))
+celldata_header = ('xpath', GLOBAL.app_head_specific.format(_('Cellular & Data').encode("utf8")))
 celldata_DataConn = ('name', "ril.data.enabled")
 celldata_DataConn_switch = ('id', "menuItem-enableDataCall")
-celldata_DataConn_ON = ('xpath', "//button[@data-l10n-id='turnOn']")
+celldata_DataConn_confirm_header = ('xpath', '//section[@id="carrier-dc-warning"]//span[@data-l10n-id="dataConnection-warning-head"]')
+celldata_DataConn_ON = ('xpath', "//section[@id='carrier-dc-warning']//button[@data-l10n-id='turnOn']")
 enable_data_connection = ('xpath', "//section[@id='carrier']//span[@data-l10n-id='dataConnection']/..")
 enable_data_roaming = ('xpath', "//section[@id='carrier']//span[@data-l10n-id='dataRoaming']/..")
 celldata_DataSettings = ('xpath', "//section[@id='carrier']//button[@data-l10n-id='dataSettings']")
@@ -64,8 +106,8 @@ celldata_ok_button = ('xpath', "//*[@id='carrier-dataSettings']/header/menu/butt
 celldata_mms_ok_button = ('xpath', "//*[@id='carrier-mmsSettings']/header/menu/button/span[@data-l10n-id='ok']")
 apn_settings_list = ('xpath', "//li//input[@name='defaultApn']")
 selected_apn = ('css selector', 'label > input[name=defaultApn]:checked + span')
-default_apn = ('xpath', "//*[@id='carrier-dataSettings']//input[@value='{}']/..")
-default_apn_mms = ('xpath', "//*[@id='carrier-mmsSettings']//input[@value='{}']/..")
+default_apn = ('xpath', "//*[@id='carrier-dataSettings']//span[text()='{}']/..")
+default_apn_mms = ('xpath', "//*[@id='carrier-mmsSettings']//span[text()='{}']/..")
 selected_apn_mms = ('css selector', 'label > input[name=mmsApn]:checked + span')
 mms_second = ('xpath', "/html/body/section[24]/div/ul/li[2]/label")
 apn_sixth = ('xpath', "/html/body/section[23]/div/ul/li[6]/label")
@@ -79,7 +121,7 @@ sound = ('id', 'menuItem-sound')
 sound_alarm_vol = ('name', 'audio.volume.alarm')
 
 hotspot = ("id", "menuItem-internetSharing")
-hotspot_header = ('xpath', GLOBAL.app_head_specific.format('Internet sharing'))
+hotspot_header = ('xpath', GLOBAL.app_head_specific.format(_('Internet sharing')))
 hotspot_switch = ("xpath", "/html/body/section[32]/div/ul/li/label")
 hotspot_settings = ("xpath", "/html/body/section[32]/div/ul/li[6]/label/button")
 
@@ -95,17 +137,34 @@ auto_retrieve_selected_item = ("xpath", "//section[@id='value-selector-container
 ok_btn = ("xpath", "//menu[@id='select-options-buttons']/button")
 delivery_report = ("xpath", "//*[@data-l10n-id='message-delivery-reports']")
 
-sim_security =  ('id','menuItem-simSecurity')
+sim_security = ('id', 'menuItem-simSecurity')
 sim_security_tag = ('id', 'simCardLock-desc')
-sim_security_header = ('xpath', GLOBAL.app_head_specific.format('SIM security'))
+sim_security_header = ('xpath', GLOBAL.app_head_specific.format(_('SIM security').encode("utf8")))
 sim_security_pin = ('xpath', '//li[@class="simpin-enabled simpin-enabled-0 simpin-0"]')
 sim_security_change_pin = ('xpath', '//li[@class="simpin-change simpin-change-0 simpin-0"]//button[@data-l10n-id="changeSimPin"]')
-sim_security_enter_pin_header = ('xpath', GLOBAL.app_head_specific.format('Enter SIM PIN'))
+sim_security_enter_pin_header = ('xpath', GLOBAL.app_head_specific.format(_('Enter SIM PIN')))
 sim_security_enter_pin_input = ('xpath', '//div[@class="sim-code-area sim-pinArea"]/input')
-sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[text()="Done"]')
+sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[text()="{}"]'.format(_("Done")))
+
+networkOperator_button = ("xpath", "/html/body/section[29]/div/ul[3]/li/label/button")
+networkOperator_types = ("id", "preferredNetworkType")
+networkOperator_GSM = ("xpath", "/html/body/div/div[5]/form/section/ol/li[2]/label/span")
+networkOperator_CDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li[6]/label/span")
+networkOperator_EVDO = ("xpath", "/html/body/div/div[5]/form/section/ol/li[7]/label/span")
+networkOperator_Auto = ("xpath", "/html/body/div/div[5]/form/section/ol/li[8]/label/span")
+networkOperator_WCDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li[3]/label/span")
+networkOperator_PrefWCDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li/label/span")
+networkOperator_PrefGSM = ("xpath", "/html/body/div/div[5]/form/section/ol/li[4]/label/span")
+networkOperator_PrefEVDO = ("xpath", "/html/body/div/div[5]/form/section/ol/li[5]/label/span")
+networkOperator_OK_btn = ("xpath", "/html/body/div/div[5]/form/menu/button")
+
+change_pin_done_btn = ('xpath', '//section[@id="simpin-dialog"]//button[@data-l10n-id="done"]')
+change_pin_old_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-pinArea"]/input')
+change_pin_new_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-newPinArea"]/input')
+change_pin_confirm_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-confirmPinArea"]/input')
+change_pin_error = ('xpath', '//section[@id="simpin-dialog"]//div[@class="sim-errorMsg error"]//div[@class="sim-messageHeader"]')
 
 downloads                   = ("id", "menuItem-downloads")
 downloads_header            = ("id", "downloads")
 downloads_edit_mode_header  = ("id", "downloads-title-edit")
 downloads_edit_button       = ("id", "downloads-edit-button")
-

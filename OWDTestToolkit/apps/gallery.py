@@ -211,10 +211,10 @@ class Gallery(object):
         #
         # Returns the number of thumbnails.
         #
-        x = self.UTILS.element.getElements(DOM.Gallery.thumbnail_items, "Gallery thumbnails", False)
-        if x:
-            return len(x)
-        else:
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Gallery.thumbnail_items)
+            return len(self.marionette.find_elements(*DOM.Gallery.thumbnail_items))
+        except:
             return 0
 
     def waitForThumbnails(self, cnt, fail_on_err=False):

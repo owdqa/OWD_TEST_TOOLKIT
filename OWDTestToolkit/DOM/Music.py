@@ -1,7 +1,7 @@
 frame_locator = ('src', 'music')
 
-
 done_button = ("xpath", "//*[@id='title-done']")
+song_by_title = ("xpath", "//span[@class='list-main-title'][text()='{}']")
 song1 = ("xpath", "/html/body/div/div[2]/div/li[2]/span")
 song = ("xpath", "/html/body/div/div/div/div/div/div/div")
 song_title_amr = ("xpath", "//*[@data-l10n-id='unknownTitle']")
@@ -12,3 +12,5 @@ title_song = ('id', 'title-text')
 music_songs = ('css selector', '#views-tiles-anchor .tile')
 progress_bar = ('xpath', '//progress[@id="player-seek-bar-progress"]')
 seek_elapsed = ('id', 'player-seek-elapsed')
+
+mix_tab = ('id', 'tabs-mix')

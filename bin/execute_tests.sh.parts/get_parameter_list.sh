@@ -95,7 +95,7 @@ getVariables(){
     $(  f_findme get_os_variable        | \
         sed -e "s/^.*get_os_variable//" | \
         grep "(\""                      | \
-        awk '{FS=","}{print $1}'        | \
+        awk '{FS="\""}{print $1}'        | \
         sed -e "s/[](){}\"]//g")
 EOF
 }

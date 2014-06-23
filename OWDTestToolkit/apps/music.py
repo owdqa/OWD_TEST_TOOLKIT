@@ -19,8 +19,10 @@ class Music(object):
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def click_on_song_mms(self):
-        song = self.UTILS.element.getElement(DOM.Music.song1, "Song")
+    def click_on_song_mms(self, title=None):
+        dom_elem = DOM.Music.song1  if not title\
+                                    else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
+        song = self.UTILS.element.getElement(dom_elem, "Song")
         song.tap()
 
         time.sleep(1)
@@ -63,3 +65,27 @@ class Music(object):
                 # Song not found, so keep looping
                 #
                 pass
+
+    def get_total_songs(self):
+        #
+        # Make sure we're in the mix tab (the left)
+        #
+        try:
+            self.UTILS.reporting.logResult("info", "Try to get the Mix Tab")
+            self.parent.wait_for_element_displayed(*DOM.Music.mix_tab)
+
+            mix_tab = self.marionette.find_element(*DOM.Music.mix_tab)
+            mix_tab.tap()
+
+            try:
+                self.parent.wait_for_element_displayed(*DOM.Music.music_songs)
+                return len(self.marionette.find_elements(*DOM.Music.music_songs))
+            except:
+                return 0
+        except: # This could be the music frame comes from the SMS app or Email (attach)
+            self.parent.wait_for_element_displayed(*('id', 'views-list-anchor'))
+            try:
+                self.parent.wait_for_element_displayed(*('css selector', '#views-list-anchor .list-item'))
+                return len(self.marionette.find_elements(*('css selector', '#views-list-anchor .list-item')))
+            except:
+                return 0

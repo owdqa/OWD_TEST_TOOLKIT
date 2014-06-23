@@ -2,7 +2,6 @@ import sys
 import os
 import json
 import time
-from twilio.rest import TwilioRestClient
 from OWDTestToolkit import DOM
 
 
@@ -53,17 +52,6 @@ class general(object):
             pass
 
         self.parent.iframe.switchToFrame("src", orig_frame)
-
-    def createIncomingCall(self, num):
-        """
-        Create an incoming call using Twilio API
-        """
-
-        account_sid = "ACd3d2699e42974fd163129ff8a7530e56"
-        auth_token = "0ac68cfbf12aa7e0725da1750da609b7"
-        client = TwilioRestClient(account_sid, auth_token)
-
-        client.calls.create(url="http://demo.twilio.com/docs/voice.xml", to=num, from_="+34518880854")
 
     def get_os_variable(self, name, validate=True):
         #
@@ -193,7 +181,7 @@ class general(object):
         #
         # Need to click in a lot of these or the field isn't located correctly (esp. SMS).
         #
-        x.tap(x=x.size["width"] - 1)
+        x.tap(x=x.size["width"] - 1, y=x.size["height"] - 1)
 
         if p_clear:
             x.clear()
@@ -275,7 +263,6 @@ class general(object):
         #
         # remove file from sdcard
         #
-        destination_prefix_file = destination_prefix
-        destination = destination_prefix_file + file_name
+        destination = destination_prefix + file_name
         file_to_remove = '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination)
         self.parent.device.manager.removeFile(file_to_remove)

@@ -87,3 +87,17 @@ sudo python setup.py clean --all >> $LOGFILE 2>&1
 sudo python setup.py install >> $LOGFILE 2>&1
 
 [ ! -d "/tmp/tests" ] && mkdir /tmp/tests >/dev/null 2>&1
+
+# HOTFIX - Avoid gaia_apps.js file to replace with the one from gaia.
+export GAIA_APPS_FILE_PATH=$OWD_TEST_TOOLKIT_CONFIG/gaia_apps.js
+if [ -f $GAIA_APPS_FILE_PATH ]
+then
+    sudo cp $GAIA_APPS_FILE_PATH $GAIATEST_PATH/atoms/
+fi
+
+export GAIA_TEST_FILE_PATH=$OWD_TEST_TOOLKIT_CONFIG/gaia_test.py
+if [ -f $GAIA_TEST_FILE_PATH ]
+then
+    sudo cp $GAIA_TEST_FILE_PATH $GAIATEST_PATH
+fi
+
