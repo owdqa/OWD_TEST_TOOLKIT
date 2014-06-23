@@ -19,6 +19,9 @@ export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%H%M%Y%m%d).log"}
 export BRANCH=${1:"sms-blocked-tests"}
 [ "$BRANCH" = "1.0.1" ] && export BRANCH="v1.0.1"
 
+printf "\n<b>Switching to branch $INTEGRATION$BRANCH of OWD_TEST_TOOLKIT ...</b>\n\n" | tee -a $LOGFILE
+git checkout $INTEGRATION$BRANCH 2> >( tee -a $LOGFILE)
+printf "\n<b>Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".</b>\n\n" | tee -a $LOGFILE
 
 #
 # CHECK DEPENDENCIES ...
