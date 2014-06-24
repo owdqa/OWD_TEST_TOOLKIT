@@ -899,7 +899,10 @@ class Contacts(object):
         field.clear()
         field.send_keys(value)
 
-        x = self.marionette.find_element("tag name", "h1")
+        #
+        # Tap outside the field, so that we exit its edition
+        #
+        x = self.marionette.find_element("xpath", '//h1[@id="contact-form-title"]')
         x.tap()
 
         self.check_match(field, value, "After replacing the string, this field now")
