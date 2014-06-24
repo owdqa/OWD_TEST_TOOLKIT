@@ -56,7 +56,7 @@ edit_details_button    = ('id', 'edit-contact-button')
 edit_cancel_button     = ('id', 'cancel-edit')
 delete_contact_btn     = ('id', 'delete-contact')
 cancel_delete_btn      = ('xpath', '//*[@id="confirmation-message"]//button[text()="{}"]'.format(_("Cancel")))
-confirm_delete_btn     = ('xpath', '//*[@id="confirmation-message"]//button[text()="{}"]'.format(_("Remove")))
+confirm_delete_btn     = ('xpath', '//*[@id="confirmation-message"]//button[text()="{}"]'.format(_("Delete")))
 done_button            = ('id', 'save-button')
 
 add_photo              = ("id", "thumbnail-photo")
