@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OWD Test Toolkit\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-24 13:00+0200\n"
-"PO-Revision-Date: 2014-06-24 13:01+0100\n"
+"POT-Creation-Date: 2014-06-24 13:38+0200\n"
+"PO-Revision-Date: 2014-06-24 13:39+0100\n"
 "Last-Translator: Alberto Villena <b.avg@tid.es>\n"
 "Language-Team: TID\n"
 "Language: \n"
@@ -180,8 +180,8 @@ msgid "Delete"
 msgstr "Delete"
 
 #: DOM/Contacts.py:104
-msgid "Import contacts"
-msgstr "Import contacts"
+msgid "Import Contacts"
+msgstr "Import Contacts"
 
 #: DOM/Facebook.py:9
 msgid "Facebook Friends"

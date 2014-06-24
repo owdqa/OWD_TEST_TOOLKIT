@@ -89,7 +89,7 @@ link_button            = ('id', "link_button") # WARNING: >1 element has this id
 # Importing from gmail / hotmail etc...
 #
 import_all_imported_msg = ("xpath", "//*[@id='friends-msg' and contains(text(), 'your friends are imported')]")
-import_cancel_login = ("id", "popup-close")
+import_cancel_login = ("xpath", '//button[@class="kill popup-close"]')
 import_close_icon   = ("id", "import-close")
 import_throbber     = ("id", "popup-throbber")
 import_num_of_conts = ("id", "friends-msg")
@@ -101,7 +101,7 @@ import_search_list  = ("xpath", "//*[@id='search-list']//li[@class='block-item']
 import_conts_xp     = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '{}')]"
 
 import_contacts      = ("id", "importContacts")
-import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import contacts')))
+import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import Contacts')))
 
 gmail_button            = ("xpath", "//button[text()='Gmail']")
 gmail_frame             = ("data-url", "google")

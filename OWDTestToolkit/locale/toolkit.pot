@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-24 13:00+0200\n"
+"POT-Creation-Date: 2014-06-24 13:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,7 +163,7 @@ msgid "Delete"
 msgstr ""
 
 #: DOM/Contacts.py:104
-msgid "Import contacts"
+msgid "Import Contacts"
 msgstr ""
 
 #: DOM/Facebook.py:9
