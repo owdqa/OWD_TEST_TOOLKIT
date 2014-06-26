@@ -17,6 +17,7 @@ call_fdn = ('xpath', '//a[@data-href="#call-fdnSettings"]')
 
 fdn_enable = ('xpath', '//li[@id="fdn-enabled"]')
 fdn_status = ('xpath', '//li[@id="fdn-enabled"]//small')
+fdn_settings_header = ('xpath', '//h1[@data-l10n-id="fdnSettings-header"]')
 fdn_auth_numbers = ('xpath', '//a[@data-l10n-id="fdn-authorizedNumbers"]')
 fdn_pin2_input = ('xpath', '//section[@id="call-pin2-dialog"]//div[@class="sim-code-area sim-pinArea"]/input')
 fdn_pin2_done = ('xpath', '//section[@id="call-pin2-dialog"]//button[@data-l10n-id="done"]')
@@ -58,7 +59,7 @@ app_permissions_header = ('xpath', GLOBAL.app_head_specific.format(_('App permis
 #app_perm_camera_geo = ('xpath', './/*[@id="appPermissions-details"]//span[text()="Geolocation"]/select')
 
 wifi = ('id', 'menuItem-wifi')
-wifi_header = ('xpath', GLOBAL.app_head_specific.format(_('Wi-Fi')))
+wifi_header = ('xpath', GLOBAL.app_head_specific.format('Wi-Fi'))
 wifi_enabled = ('xpath', ".//*[@id='wifi-enabled']/label")
 wifi_available_networks = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside[contains(@class, 'pack-end wifi-icon level-')]")
 wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
@@ -162,3 +163,8 @@ change_pin_old_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pi
 change_pin_new_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-newPinArea"]/input')
 change_pin_confirm_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-confirmPinArea"]/input')
 change_pin_error = ('xpath', '//section[@id="simpin-dialog"]//div[@class="sim-errorMsg error"]//div[@class="sim-messageHeader"]')
+
+downloads                   = ("id", "menuItem-downloads")
+downloads_header            = ("id", "downloads")
+downloads_edit_mode_header  = ("id", "downloads-title-edit")
+downloads_edit_button       = ("id", "downloads-edit-button")

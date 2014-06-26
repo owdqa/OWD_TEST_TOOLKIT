@@ -181,7 +181,7 @@ class general(object):
         #
         # Need to click in a lot of these or the field isn't located correctly (esp. SMS).
         #
-        x.tap(x=x.size["width"] - 1)
+        x.tap(x=x.size["width"] - 1, y=x.size["height"] - 1)
 
         if p_clear:
             x.clear()
@@ -263,7 +263,6 @@ class general(object):
         #
         # remove file from sdcard
         #
-        destination_prefix_file = destination_prefix
-        destination = destination_prefix_file + file_name
+        destination = destination_prefix + file_name
         file_to_remove = '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination)
         self.parent.device.manager.removeFile(file_to_remove)

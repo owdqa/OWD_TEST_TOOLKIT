@@ -1,6 +1,6 @@
 frame_locator = ("src", "camera")
 
-capture_button = ('xpath', '//*[@id="capture-button"]')
+capture_button = ('css selector', '#capture-button:not([disabled])')
 thumbnail = ('class name', 'thumbnail')
 thumbnail_preview_marker = ('id', 'preview')
 switch_source_btn = ('id', 'switch-button')

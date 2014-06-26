@@ -77,13 +77,4 @@ class UTILS(object):
         elapsed = str(datetime.timedelta(seconds=elapsed))
         self.reporting.logResult("debug", "Initializing 'UTILS' took {} seconds.".format(elapsed))
         current_lang = parent.data_layer.get_setting("language.current").split('-')[0]
-        self.reporting.log_to_file("Current language: [{}]".format(current_lang))
-
-    #===========================================================================
-    # def setup_translations(self, testcase):
-    #    current_lang = testcase.data_layer.get_setting("language.current").split('-')[0]
-    #    self.reporting.log_to_file("Current language: [{}]".format(current_lang))
-    #    locale_path = os.path.join(site.getsitepackages()[0], 'OWDTestToolkit/locale')
-    #    translation = gettext.translation('default', locale_path, languages=[current_lang])
-    #    return translation.ugettext
-    #===========================================================================
+        self.reporting.log_to_file("Current Toolkit language: [{}]".format(current_lang))

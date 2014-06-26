@@ -7,3 +7,5 @@ video_loaded            = ('css selector', 'video[style]')
 current_video_duration  = ("xpath", "//*[@id='duration-text']")
 
 done_button             = ("xpath", "//*[@id='picker-done']")
+
+video_header             = ("xpath", "//*[@id='video-title']")

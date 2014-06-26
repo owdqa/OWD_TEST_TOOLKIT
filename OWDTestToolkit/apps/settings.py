@@ -4,7 +4,6 @@ from OWDTestToolkit import DOM
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
-
 class Settings(object):
 
     def __init__(self, parent):
@@ -388,6 +387,16 @@ class Settings(object):
 
         self.UTILS.test.TEST(is_disabled, "Hotspot settings are disabled (because 'hotspot' is not running).")
         self.UTILS.test.TEST(not is_status_icon, "Hotspot icon is not present in the status bar.")
+
+    def downloads(self):
+        #
+        # Open wifi settings.
+        #
+        x = self.UTILS.element.getElement(DOM.Settings.downloads, "Downloads settings link")
+        x.tap()
+
+        self.UTILS.element.waitForElements(DOM.Settings.downloads_header,
+                                    "Downloads header appears.", True, 20, False)
 
     def enable_hotSpot(self):
         #
