@@ -2,7 +2,7 @@
 # Install the toolkit and dependencies (assume we've just cloned it and 
 # are still in the parent directory).
 #
-cd OWD_TEST_TOOLKIT_DIR
+cd OWD_TEST_TOOLKIT
 
 ./install.sh $BRANCH >/dev/null 2>&1
 
