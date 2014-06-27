@@ -239,7 +239,7 @@ class statusbar(object):
             self.parent.iframe.switchToFrame(*frame_to_change)
 
     def wait_for_notification_toaster_with_titles(self, titles, dom=DOM.Statusbar.notification_toaster_title,
-                                                  displayed=True, frame_to_change=None, timeout=30):
+                                                  frame_to_change=None, timeout=30):
         #
         # Waits for a new toaster notification whose title is one of the texts in the titles list.
         #
@@ -251,10 +251,7 @@ class statusbar(object):
             self.parent.reporting.log_to_file("Waiting for notification with title {}".format(t))
             toaster = (dom[0], dom[1].format(t))
             try:
-                if displayed:
-                    self.parent.parent.wait_for_element_displayed(toaster[0], toaster[1], timeout)
-                else:
-                    self.parent.parent.wait_for_element_present(toaster[0], toaster[1], timeout)
+                self.parent.parent.wait_for_element_present(toaster[0], toaster[1], timeout)
                 if frame_to_change:
                     self.parent.iframe.switchToFrame(*frame_to_change)
                 # Success. Clear the exception, if any

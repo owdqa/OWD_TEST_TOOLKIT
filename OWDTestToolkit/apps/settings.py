@@ -79,7 +79,7 @@ class Settings(object):
         # Open cellular and data settings.
         #
         x = self.UTILS.element.getElement(DOM.Settings.cellData, "Cellular and Data settings link")
-        x.tap()
+        self.UTILS.element.simulateClick(x)
 
         self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
 
@@ -216,6 +216,7 @@ class Settings(object):
             x = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
             x.tap()
             self.UTILS.reporting.logResult("info", "Data connection: confirmed")
+            self.UTILS.reporting.log_to_file("**************** Data connection confirmed")
         except Exception as e:
             self.UTILS.reporting.log_to_file("*** Exception: {}".format(e))
             self.UTILS.reporting.logResult("info", "No data connection confirmation")
@@ -486,13 +487,8 @@ class Settings(object):
         # Open cellular and data settings.
         #
         self.cellular_and_data()
-        self.marionette.execute_script("""
-        var getElementByXpath = function (path) {
-            return document.evaluate(path, document, null, 9, null).singleNodeValue;
-        };
-        getElementByXpath('/html/body/section[29]/div/ul[3]/li[2]/label/button').scrollIntoView();
-        """)
         x = self.UTILS.element.getElement(DOM.Settings.celldata_DataSettings, "Data settings link")
+        self.UTILS.element.scroll_into_view(x)
         x.tap()
 
     def open_msg_settings(self):
@@ -500,13 +496,8 @@ class Settings(object):
         # Open cellular and data settings.
         #
         self.cellular_and_data()
-        self.marionette.execute_script("""
-        var getElementByXpath = function (path) {
-            return document.evaluate(path, document, null, 9, null).singleNodeValue;
-        };
-        getElementByXpath('/html/body/section[29]/div/ul[3]/li[3]/label/button').scrollIntoView();
-        """)
         x = self.UTILS.element.getElement(DOM.Settings.celldata_MsgSettings, "Message settings link")
+        self.UTILS.element.scroll_into_view(x)
         x.tap()
 
     def selectDefaultAPN(self, apn, open_settings=True):
@@ -530,6 +521,7 @@ class Settings(object):
         #
         x = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
         x.tap()
+        self.goBack()
 
     def setAlarmVolume(self, volume):
         #

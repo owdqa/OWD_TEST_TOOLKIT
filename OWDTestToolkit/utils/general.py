@@ -3,6 +3,7 @@ import os
 import json
 import time
 from OWDTestToolkit import DOM
+from gaiatest.apps.keyboard.app import Keyboard
 
 
 class general(object):
@@ -10,6 +11,7 @@ class general(object):
     def __init__(self, parent):
         self.parent = parent
         self.marionette = parent.marionette
+        self.keyboard = Keyboard(self.marionette)
 
     def addFileToDevice(self, file_name, count=1, destination=''):
         #
@@ -217,14 +219,14 @@ class general(object):
             #
             # Type the string.
             #
-            self.parent.parent.keyboard.send(p_str)
+            self.keyboard.send(p_str)
 
         #
         # Tap ENTER on the keyboard (helps to remove the keyboard even if
         # you didn't use it to type)?
         #
         if p_enter:
-            self.parent.parent.keyboard.tap_enter()
+            self.keyboard.tap_enter()
 
         #
         # Switch back to the frame we were in and get the element again.

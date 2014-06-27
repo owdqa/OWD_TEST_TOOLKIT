@@ -609,8 +609,7 @@ class Messages(object):
         #
         # Delete the currently selected messages in this thread.
         #
-        x = self.UTILS.element.getElement(DOM.Messages.edit_msgs_delete_btn,
-                                    "Delete message")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "Delete messages button")
         x.tap()
 
         #
@@ -716,7 +715,8 @@ class Messages(object):
             x = self.UTILS.element.getElement(("xpath",
                                        DOM.Messages.thread_selector_xpath.format(i)),
                                       "Thread checkbox for '" + i + "'")
-            x.click()
+            self.UTILS.reporting.debug("Trying to tap in element {}".format(x))
+            x.tap()
 
     def enterSMSMsg(self, msg, not_keyboard=True):
         #
