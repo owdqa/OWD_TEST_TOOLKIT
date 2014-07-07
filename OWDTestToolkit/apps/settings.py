@@ -156,13 +156,13 @@ class Settings(object):
         # Enter the data
         #
         self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=True)
 
         self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=True)
 
         self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=True)
 
         #
         # Tap the ok button to save the changes
@@ -210,6 +210,7 @@ class Settings(object):
         self.restore_pin2(good_pin2, puk2)
 
     def confirm_data_conn(self):
+        self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
         try:
             self.UTILS.reporting.logResult("info", "Waiting for data switch-on confirmation")
             self.parent.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON)
@@ -339,17 +340,15 @@ class Settings(object):
 
     def fdn_delete_all_auth_numbers(self, pin2):
         contacts = self.UTILS.element.getElements(DOM.Settings.fdn_auth_numbers_list, "Contact list")
-
+        self.UTILS.reporting.debug("*** DELETING FDN CONTACTS: [{}]".format(contacts))
         #
         # We have to do it this way to avoid StaleElementException to be raised
         #
         for i in range(len(contacts)):
-            elem = (DOM.Settings.fdn_auth_numbers_list_item[0],
-                DOM.Settings.fdn_auth_numbers_list_item[1].format(1))
-
-            contact = self.UTILS.element.getElement(elem, "contact")
-            number = contact.find_element('css selector', 'small').text
-            name = contact.find_element('css selector', 'span').text
+            contact = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers_list, "contact")
+            self.UTILS.reporting.debug("*** Contact found: [{}]".format(contact))
+            number = self.marionette.find_element('css selector', 'small', contact.id).text
+            name = self.marionette.find_element('css selector', 'span', contact.id).text
             self.fdn_delete_auth_number(name, number, pin2)
 
     def disable_hotSpot(self):
@@ -602,6 +601,7 @@ class Settings(object):
         sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
         self.UTILS.element.scroll_into_view(sim_security)
         sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
+        time.sleep(4)
 
         # If the attribute is already in the desired state, return
         current = sim_security_tag.text == _("Enabled")

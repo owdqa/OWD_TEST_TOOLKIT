@@ -51,7 +51,8 @@ delete_threads_button = ("css selector", "button[data-l10n-id='deleteMessages-la
 
 message_list = ('xpath', '//div[@id="messages-container"]//li')
 message_timestamps = ("xpath", "//article[@id='messages-container']/header")
-last_message_text = ('xpath', '//div[@id="messages-container"]//li[last()]//div[@class="message-content"]//p')
+last_message = ('xpath', '//div[@id="messages-container"]//li[last()]')
+last_message_text = ('xpath', '//div[@id="messages-container"]//li[last()]//div[@class="message-content"]//p/span')
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')
 messages_from_num = "//*[contains(@id, '{}')]"
@@ -110,7 +111,7 @@ attached_opt_view = ("xpath", "//*[@data-l10n-id='view-attachment-image']")
 attached_opt_remove = ("xpath", "//*[@data-l10n-id='remove-attachment-image']")
 attached_opt_replace = ("xpath", "//*[@data-l10n-id='replace-attachment-image']")
 
-message_expected_content = ('xpath', "//div[@class='message-content']/p/span[text()='{}']")
+message_expected_content = ('xpath', "//div[@class='message-content']//p/span[text()='{}']")
 
 wap_push_message_link = ('xpath', "//*[@id='si-sl-screen']//a[@data-action='url-link']")
 

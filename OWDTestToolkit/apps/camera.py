@@ -115,6 +115,7 @@ class Camera(object):
         # Take a picture.
         #
         x = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
+        time.sleep(4)
         x.tap()
         self.UTILS.element.waitForElements(DOM.Camera.thumbnail, "Camera thumbnails")
 
