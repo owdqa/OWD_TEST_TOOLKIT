@@ -38,7 +38,7 @@ fdn_add_auth_number_done = ('xpath', '//section[@id="call-fdnList-add"]//button[
 fdn_auth_numbers_list = ('xpath', '//section[@id="call-fdnList"]//ul[@id="fdn-contactsContainer"]/li')
 fdn_auth_numbers_list_elem = ('xpath', '//ul[@id="fdn-contactsContainer"]//small[contains(text(), "{}")]')
 fdn_auth_numbers_list_item = ('xpath', '//section[@id="call-fdnList"]//ul[@id="fdn-contactsContainer"]/li[{}]')
-fdn_auth_number_action_header = ('xpath', '//form[@id="call-fdnList-action"]//span[@id="fdnAction-name" and contains(text(), "{}")]')
+fdn_auth_number_action_header = ('xpath', '//form[@id="call-fdnList-action"]//span[@id="fdnAction-name"]')
 fdn_auth_number_action_call = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-call"]')
 fdn_auth_number_action_edit = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-edit"]')
 fdn_auth_number_action_delete = ('xpath', '//form[@id="call-fdnList-action"]//button[@id="fdnAction-delete"]')

@@ -238,7 +238,7 @@ class element(object):
 
     def find_nested(self, context, css_selector):
         return self.marionette.execute_script("""
-            arguments[0].querySelector(arguments[1])
+            return arguments[0].querySelector(arguments[1])
         """, script_args=[context, css_selector])
 
     def get_css_value(self, element, css_property):

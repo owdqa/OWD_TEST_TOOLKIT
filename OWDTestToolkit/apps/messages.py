@@ -37,7 +37,6 @@ class Messages(object):
         # <br>
         # <b>nums</b> must be an array.
         #
-
         n = 0
 
         for i in nums:
@@ -609,8 +608,7 @@ class Messages(object):
         #
         # Delete the currently selected messages in this thread.
         #
-        x = self.UTILS.element.getElement(DOM.Messages.edit_msgs_delete_btn,
-                                    "Delete message")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "Delete messages button")
         x.tap()
 
         #
@@ -659,7 +657,9 @@ class Messages(object):
         except:
             self.UTILS.reporting.logResult("info", "Deleting message threads ...")
             if target_array:
+                self.UTILS.reporting.debug("*** Selecting threads for deletion [{}]".format(target_array))
                 self.editAndSelectThreads(target_array)
+                self.UTILS.reporting.debug("*** Threads selected")
                 self.deleteSelectedThreads()
             else:
                 self.deleteAllThreads()
@@ -708,15 +708,14 @@ class Messages(object):
         #
         x = self.threadEditModeON()
 
-        #
-        # Check the messages (for some reason, just doing x[i].click() doesn't
-        # work for element zero, so I had to do this 'longhanded' version!).
-        #
         for i in target_array:
+            self.UTILS.reporting.debug("selecting thread for [{}]".format(i))
             x = self.UTILS.element.getElement(("xpath",
-                                       DOM.Messages.thread_selector_xpath.format(i)),
+                                    "//*[@id='threads-container']//li//a/p[contains(text(),'{}')]/../../label/input".format(x)),
+                                       #DOM.Messages.thread_selector_xpath.format(i)),
                                       "Thread checkbox for '" + i + "'")
-            x.click()
+            self.UTILS.reporting.debug("Trying to tap in element {}".format(x))
+            self.UTILS.element.simulateClick(x)
 
     def enterSMSMsg(self, msg, not_keyboard=True):
         #
@@ -1468,13 +1467,8 @@ class Messages(object):
         #
         time.sleep(5)
         # try:
-        self.parent.wait_for_element_present(*DOM.Messages.message_list, timeout=20)
-        x = self.marionette.find_elements(*DOM.Messages.message_list)
-
-        try:
-            return x[-1]
-        except:
-            return False
+        self.parent.wait_for_element_present(*DOM.Messages.last_message, timeout=20)
+        return self.marionette.find_element(*DOM.Messages.last_message)
 
     def openThread(self, num):
         #
@@ -1775,8 +1769,8 @@ class Messages(object):
             # we expect has not arrived yet, so we have to wait a bit more.
             if send_time:
                 message_data_time = float(x.get_attribute("data-timestamp")) / 1000
-                fmt = "data-timestamp of last message in thread: {:.3f} send_time: {:.3f}"
-                self.UTILS.reporting.log_to_file(fmt.format(message_data_time, send_time))
+                fmt = "data-timestamp of last message in thread: {:.3f} send_time: {:.3f} --> {}"
+                self.UTILS.reporting.log_to_file(fmt.format(message_data_time, send_time, send_time > message_data_time))
                 if send_time > message_data_time:
                     continue
 

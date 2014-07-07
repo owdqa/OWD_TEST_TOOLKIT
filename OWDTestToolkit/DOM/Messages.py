@@ -43,14 +43,16 @@ thread_target_names = ('xpath', '//article[@id="threads-container"]//li//p[@clas
 thread_selector_xpath = "//*[@id='threads-container']//li//a/p[contains(text(),'{}')]"
 thread_timestamp_xpath = thread_selector_xpath + "/..//time"
 no_threads_message = ("id", "no-result-message")
-edit_threads_button = ("id", "threads-edit-icon")
-cancel_edit_threads = ("id", "threads-cancel-button")
+edit_threads_button = ("id", "threads-options-icon")
+cancel_edit_threads = ("css selector", "button[data-l10n-id='settings'] + button[data-l10n-id='cancel']")
 check_all_threads_btn = ("id", "threads-check-all-button")
 check_all_messages_btn = ("id", "messages-check-all-button")
-delete_threads_button = ("id", "threads-delete-button")
+delete_threads_button = ("css selector", "button[data-l10n-id='deleteMessages-label']")
 
-message_list = ('xpath', '//article[@id="messages-container"]//li')
+message_list = ('xpath', '//div[@id="messages-container"]//li')
 message_timestamps = ("xpath", "//article[@id='messages-container']/header")
+last_message = ('xpath', '//div[@id="messages-container"]//li[last()]')
+last_message_text = ('xpath', '//div[@id="messages-container"]//li[last()]//div[@class="message-content"]//p/span')
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')
 messages_from_num = "//*[contains(@id, '{}')]"
@@ -59,11 +61,10 @@ received_messages = ('xpath', "//li[@class='bubble'][a[@class='received']]")
 
 edit_messages_icon = ('xpath', "//span[@class='icon icon-options']")
 delete_messages_btn = ('xpath', "//button[@data-l10n-id='deleteMessages-label']")
-delete_messages_ok_btn = ('xpath', "//form[@class='modal-dialog-confirm generic-dialog visible']/menu/button[@data-l10n-id='ok']")
+delete_messages_ok_btn = ('id', "messages-delete-button")
 
 message_text = ('xpath', "/html/body/article/section[2]/article/ul/li[{}]/section/div/p/span")
 
-edit_msgs_delete_btn = ("id", "messages-delete-button")
 edit_msgs_header = ("id", "messages-edit-mode")
 edit_msgs_sel_all_btn = ("id", "messages-check-all-button")
 
@@ -110,7 +111,7 @@ attached_opt_view = ("xpath", "//*[@data-l10n-id='view-attachment-image']")
 attached_opt_remove = ("xpath", "//*[@data-l10n-id='remove-attachment-image']")
 attached_opt_replace = ("xpath", "//*[@data-l10n-id='replace-attachment-image']")
 
-message_expected_content = ('xpath', "//div[@class='message-content']/p/span[text()='{}']")
+message_expected_content = ('xpath', "//div[@class='message-content']//p/span[text()='{}']")
 
 wap_push_message_link = ('xpath', "//*[@id='si-sl-screen']//a[@data-action='url-link']")
 

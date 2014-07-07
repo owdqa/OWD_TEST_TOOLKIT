@@ -3,7 +3,7 @@ _ = I18nSetup(I18nSetup).setup()
 
 frame_locator = ("src", "gallery")
 loading_bar = ("id", 'progress')
-thumbnail_items = ('css selector', 'li.thumbnail')
+thumbnail_items = ('css selector', 'div.thumbnail')
 thumbnail_list_section = ('id', 'thumbnail-list-view')
 thumbnail_select_mode_btn = ("id", "thumbnails-select-button")
 thumbnail_trash_icon = ("id", "thumbnails-delete-button")

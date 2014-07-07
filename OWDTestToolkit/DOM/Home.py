@@ -1,4 +1,4 @@
-frame_locator = ("src", "homescreen")
+frame_locator = ("src", "verticalhome")
 cards_view = ('id', 'cards-view')
 lockscreen_frame = ('id', 'lockscreen')
 

@@ -242,7 +242,7 @@ class Dialer(object):
 
         self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
-        self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call element", True, 5)
+        self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call locator", True, 5)
 
     def call_this_number_and_hangup(self, delay):
         self.callThisNumber()
@@ -333,7 +333,7 @@ class Dialer(object):
         if validate:
             x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
             dialer_num = x.get_attribute("value")
-            self.UTILS.test.TEST(str(p_num) in dialer_num, "After entering '{}', phone number field contains '{}'.".\
+            self.UTILS.test.TEST(str(p_num) in dialer_num, u"After entering '{}', phone number field contains '{}'.".\
                                                       format(dialer_num, p_num))
 
             x = self.UTILS.debug.screenShotOnErr()
@@ -369,7 +369,7 @@ class Dialer(object):
             answer = self.marionette.find_element(*DOM.Dialer.answer_callButton)
             if answer:
                 answer.tap()
-                
+
     def answer_and_hangup(self, delay=5):
         self.answer()
         time.sleep(delay)
@@ -421,16 +421,6 @@ class Dialer(object):
                         hangup.tap()
         except:
             pass
-
-        #
-        # Just to be sure!
-        #
-        try:
-            self.parent.data_layer.kill_active_call()
-        except:
-            pass
-
-        self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
 
     def openCallLog(self):
         #
