@@ -170,14 +170,12 @@ class GaiaData(object):
     def _get_pref(self, datatype, name):
         self.marionette.switch_to_frame()
         pref = self.marionette.execute_script("return SpecialPowers.get%sPref('%s');" % (datatype, name), special_powers=True)
-        self.apps.switch_to_displayed_app()
         return pref
 
     def _set_pref(self, datatype, name, value):
         value = json.dumps(value)
         self.marionette.switch_to_frame()
         self.marionette.execute_script("SpecialPowers.set%sPref('%s', %s);" % (datatype, name, value), special_powers=True)
-        self.apps.switch_to_displayed_app()
 
     def get_bool_pref(self, name):
         """Returns the value of a Gecko boolean pref, which is different from a Gaia setting."""
@@ -510,7 +508,6 @@ class GaiaDevice(object):
             raise Exception('Unable to start B2G')
         self.marionette.wait_for_port()
         self.marionette.start_session()
-
         # Wait for the AppWindowManager to have registered the frame as active (loaded)
         locator = (By.CSS_SELECTOR, 'div.appWindow.active.render')
         Wait(marionette=self.marionette, timeout=timeout, ignored_exceptions=NoSuchElementException)\
@@ -568,11 +565,11 @@ class GaiaDevice(object):
 
     def touch_home_button(self):
         apps = GaiaApps(self.marionette)
-        if apps.displayed_app.name.lower() != 'vertical':
+        if apps.displayed_app.name.lower() != 'homescreen':
             # touching home button will return to homescreen
             self._dispatch_home_button_event()
             Wait(self.marionette).until(
-                lambda m: apps.displayed_app.name.lower() == 'vertical')
+                lambda m: apps.displayed_app.name.lower() == 'homescreen')
             apps.switch_to_displayed_app()
         else:
             apps.switch_to_displayed_app()
@@ -723,11 +720,11 @@ class GaiaTestCase(MarionetteTestCase, B2GTestCaseMixin):
                 self.data_layer.set_char_pref(name, value)
 
         # unlock
-        self.device.unlock()
+        if self.data_layer.get_setting('lockscreen.enabled'):
+            self.device.unlock()
 
         # kill any open apps
         self.apps.kill_all()
-
         if full_reset:
             # disable passcode
             self.data_layer.set_setting('lockscreen.passcode-lock.code', '1111')
@@ -739,7 +736,6 @@ class GaiaTestCase(MarionetteTestCase, B2GTestCaseMixin):
             # reset keyboard to default values
             self.data_layer.set_setting("keyboard.enabled-layouts",
                                         "{'app://keyboard.gaiamobile.org/manifest.webapp': {'en': True, 'number': True}}")
-
             # reset do not track
             self.data_layer.set_setting('privacy.donottrackheader.value', '-1')
 
@@ -917,4 +913,3 @@ class GaiaEnduranceTestCase(GaiaTestCase, EnduranceTestCaseMixin, MemoryEnduranc
         _close_button_locator = ('css selector', locator_part_two)
         close_card_app_button = self.marionette.find_element(*_close_button_locator)
         close_card_app_button.tap()
-

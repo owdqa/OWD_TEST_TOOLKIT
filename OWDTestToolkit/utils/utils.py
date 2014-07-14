@@ -13,15 +13,6 @@ from network import network
 from reporting import reporting
 from statusbar import statusbar
 from test import test
-import gettext
-import os
-import site
-
-
-#===============================================================================
-# from OWDTestToolkit.utils.i18nsetup import I18nSetup
-# _ = I18nSetup(I18nSetup).setup()
-#===============================================================================
 
 
 class UTILS(object):

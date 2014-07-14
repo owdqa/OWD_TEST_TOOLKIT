@@ -30,8 +30,9 @@ class Messages(object):
         user_data = pigeon.getXMLPushUserdata(ota_filename, pin_number)
         pdu_data = binascii.hexlify(user_data)
         # If no security is used, we must extract that part from the PDU.
+        self.parent.reporting.debug("PDU_DATA: [{}]".format(pdu_data))
         if pin_type is "NONE":
-            pdu_data = pdu_data[0:4] + "01b6" + pdu_data[pdu_data.index("030b6a2f"):]
+            pdu_data = pdu_data[0:4] + "01b6" + pdu_data[pdu_data.index("030b6a"):]
         self.parent.test.TEST(True, "Sending CP message to {} from file {}".format(phone_number, ota_filename))
 
         data = {"dataCodingScheme": "F5", "protocolId": "00", "pduType": "41", "sourcePort": 9200,
