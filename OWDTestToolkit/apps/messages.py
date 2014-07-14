@@ -622,9 +622,11 @@ class Messages(object):
         #time.sleep(2)
 
     def deleteSelectedThreads(self):
+        delete_btn = self.UTILS.element.getElement(DOM.Messages.threads_delete_button, "Delete threads button")
+        delete_btn.tap()
+
         time.sleep(2)
-        self.marionette.switch_to_frame()
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "OK button in question dialog")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "OK button in question dialog")
         x.tap()
 
         #
@@ -710,7 +712,14 @@ class Messages(object):
             x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_selector_xpath.format(i)),
                                       "Thread checkbox for '{}'".format(i))
             self.UTILS.reporting.debug("Trying to tap in element {}".format(x))
-            self.UTILS.element.simulateClick(x)
+            #self.UTILS.element.simulateClick(x)
+            x.tap()
+
+        #
+        # Finally check that all desired threads have been selected
+        #
+        header = self.UTILS.element.getElement(DOM.Messages.edit_threads_header, "Edit threads header")
+        self.UTILS.test.TEST(str(len(target_array)) in header.text, "Check that all desired threads have been selected")
 
     def enterSMSMsg(self, msg, not_keyboard=True):
         #

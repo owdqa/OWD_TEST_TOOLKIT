@@ -63,6 +63,9 @@ message_header = ("id", "messages-header-text")
 received_messages = ('xpath', "//li[@class='bubble'][a[@class='received']]")
 
 edit_messages_icon = ('xpath', "//span[@class='icon icon-options']")
+edit_threads_header = ('id', 'threads-edit-mode')
+threads_delete_button = ('id', 'threads-delete-button')
+delete_threads_ok_btn = ('xpath', '//button[@class="danger" and @data-l10n-id="delete"]')
 delete_messages_btn = ('xpath', "//button[@data-l10n-id='deleteMessages-label']")
 delete_messages_ok_btn = ('id', "messages-delete-button")
 
