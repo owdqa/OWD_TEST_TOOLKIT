@@ -238,9 +238,9 @@ class Dialer(object):
         # Calls the current number.
         #
         x = self.UTILS.element.getElement(DOM.Dialer.call_number_button, "Call number button")
-        x.tap()
+        self.UTILS.reporting.debug("*** Call this number button: [{}]   Text: [{}]".format(x, x.text))
+        self.UTILS.element.simulateClick(x)
 
-        self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
         self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call locator", True, 5)
 
@@ -261,7 +261,7 @@ class Dialer(object):
 
     def createContactFromThisNum(self):
         #
-        # Creates a new contact from the number currently in the dialler
+        # Creates a new contact from the number currently in the dialer
         # (doesn't fill in the contact details).
         #
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
@@ -318,12 +318,12 @@ class Dialer(object):
         for i in str(p_num):
 
             if i == "+":
-                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialler_button_xpath.format(0)),
+                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialer_button_xpath.format(0)),
                                            "keypad symbol '+'")
                 self.actions = Actions(self.marionette)
                 self.actions.long_press(x, 2).perform()
             else:
-                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialler_button_xpath.format(i)),
+                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialer_button_xpath.format(i)),
                                            "keypad number {}".format(i))
                 x.tap()
 
@@ -332,9 +332,10 @@ class Dialer(object):
         #
         if validate:
             x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
-            dialer_num = x.get_attribute("value")
+            dialer_num = self.marionette.execute_script("return arguments[0].value", script_args=[x])
+            self.UTILS.reporting.debug(u"** Dialer_num entered: [{}]".format(dialer_num))
             self.UTILS.test.TEST(str(p_num) in dialer_num, u"After entering '{}', phone number field contains '{}'.".\
-                                                      format(dialer_num, p_num))
+                                                      format(p_num, dialer_num))
 
             x = self.UTILS.debug.screenShotOnErr()
             self.UTILS.reporting.logResult("info", "Screenshot:", x)

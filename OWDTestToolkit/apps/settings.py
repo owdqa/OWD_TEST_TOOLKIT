@@ -156,13 +156,13 @@ class Settings(object):
         # Enter the data
         #
         self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
-                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=True)
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
         self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
-                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=True)
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
         self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
-                                    p_no_keyboard=True, p_validate=False, p_clear=True, p_enter=True)
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
         #
         # Tap the ok button to save the changes
@@ -217,7 +217,7 @@ class Settings(object):
             x = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
             x.tap()
             self.UTILS.reporting.logResult("info", "Data connection: confirmed")
-            self.UTILS.reporting.log_to_file("**************** Data connection confirmed")
+            self.UTILS.reporting.log_to_file("*** Data connection confirmed")
         except Exception as e:
             self.UTILS.reporting.log_to_file("*** Exception: {}".format(e))
             self.UTILS.reporting.logResult("info", "No data connection confirmation")

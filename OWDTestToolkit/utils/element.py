@@ -18,7 +18,6 @@ class element(object):
         timeout = self._DEFAULT_ELEMENT_TIMEOUT if not timeout else timeout
 
         x = self.getElements(elem, msg, is_displayed, timeout, stop_on_error)
-
         if x:
             # We're expecting ONE element back (it has different methods if it's one).
             return x[0]

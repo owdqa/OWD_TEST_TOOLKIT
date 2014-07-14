@@ -4,6 +4,8 @@ import json
 import time
 from OWDTestToolkit import DOM
 from gaiatest.apps.keyboard.app import Keyboard
+from gaiatest import GaiaData
+from gaiatest import GaiaApps
 
 
 class general(object):
@@ -181,7 +183,7 @@ class general(object):
         x = self.parent.element.getElement(p_element_array, p_desc)
 
         #
-        # Need to click in a lot of these or the field isn't located correctly (esp. SMS).
+        # Need to click in the bottom right corner, or the cursor may not be properly located to append.
         #
         x.tap(x=x.size["width"] - 1, y=x.size["height"] - 1)
 
@@ -192,7 +194,6 @@ class general(object):
             #
             # Don't use the keyboard.
             #
-            #self.parent.reporting.logResult("info", "(Sending'" + p_str + "'to this field without using the keyboard.)")
             self.parent.reporting.logResult("info", u"(Sending '{}' to this field without using the keyboard.)".\
                 format(p_str))
 
@@ -240,6 +241,10 @@ class general(object):
         if p_validate:
             x = self.marionette.find_element(*p_element_array)
             y = x.get_attribute("value")
+            self.parent.reporting.debug("*** VALUE of cmp-body-text: [{}]".format(y))
+            if y is None:
+                y = x.text
+                self.parent.reporting.debug("*** No value found. Using TEXT of cmp-body-text: [{}]".format(y))
 
             if p_clear:
                 fieldText = y
@@ -268,3 +273,16 @@ class general(object):
         destination = destination_prefix + file_name
         file_to_remove = '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination)
         self.parent.device.manager.removeFile(file_to_remove)
+
+    def restart(self):
+        # Lockscreen does not get on very well with restarts
+        lock_enabled = self.parent.data_layer.get_setting("lockscreen.enabled")
+        if lock_enabled:
+            self.parent.data_layer.set_setting("lockscreen.enabled", False)
+
+        # After restarting we need to re-instantiate javascript objects
+        self.parent.device.restart_b2g()
+        self.apps = GaiaApps(self.marionette)
+        self.parent.data_layer = GaiaData(self.marionette, self.parent.parent.testvars)
+        # Restore lockscreen status
+        self.parent.data_layer.set_setting("lockscreen.enabled", lock_enabled)
