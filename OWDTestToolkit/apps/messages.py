@@ -1485,9 +1485,9 @@ class Messages(object):
             x.tap()
 
             self.UTILS.element.waitForElements(DOM.Messages.send_message_button, "'Send' button")
-        except:
+        except Exception as e:
             x = self.UTILS.debug.screenShotOnErr()
-            msg = "<b>NOTE:</b> The thread <i>may</i> have failed to open."
+            msg = "<b>NOTE:</b> The thread <i>may</i> have failed to open due to [{}].".format(e)
             self.UTILS.reporting.logResult("info", msg, x)
 
     def readLastSMSInThread(self):
