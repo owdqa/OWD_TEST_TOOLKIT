@@ -306,17 +306,9 @@ class Settings(object):
         time.sleep(1)
 
         #
-        # Wait for options to be displayed
-        #
-        header = (DOM.Settings.fdn_auth_number_action_header[0],
-            DOM.Settings.fdn_auth_number_action_header[1].format(name))
-        self.UTILS.element.waitForElements(header,
-            "Waiting for actions over contact: {}, {}".format(name, number))
-
-        #
         # Choose delete option
         #
-        delete_option = self.UTILS.element.getElement(DOM.Settings.fdn_auth_number_action_delete, "Delete option")
+        delete_option = self.UTILS.element.getElement(DOM.Settings.fdn_auth_number_action_delete, "Delete option", is_displayed=True, timeout=20)
         delete_option.tap()
 
         #
