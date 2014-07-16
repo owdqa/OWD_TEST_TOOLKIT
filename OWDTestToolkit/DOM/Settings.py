@@ -88,6 +88,7 @@ wifi_advanced_joinHidden = ("id", "joinHidden")
 wifi_advanced_forgetBtn = ("xpath", "//*[@id='confirm-option']")
 wifi_advanced_cancelBtn = ("xpath", "//button[@data-l10n-id='cancel']")
 
+data_connectivity = ('id', 'data-connectivity')
 cellData = ('id', 'menuItem-cellularAndData')
 celldata_header = ('xpath', GLOBAL.app_head_specific.format(_('Cellular & Data').encode("utf8")))
 celldata_DataConn = ('name', "ril.data.enabled")
