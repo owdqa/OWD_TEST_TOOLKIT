@@ -348,8 +348,10 @@ class Settings(object):
             contact = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers_list, "contact")
             self.UTILS.reporting.debug("*** Contact found: [{}]".format(contact))
             number = self.marionette.find_element('css selector', 'small', contact.id).text
+            contact = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers_list, "contact")
             name = self.marionette.find_element('css selector', 'span', contact.id).text
             self.fdn_delete_auth_number(name, number, pin2)
+            time.sleep(2)
 
     def disable_hotSpot(self):
         #
