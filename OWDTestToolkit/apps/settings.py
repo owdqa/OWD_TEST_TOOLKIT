@@ -533,7 +533,7 @@ class Settings(object):
         # Open cellular and data settings.
         #
         x = self.UTILS.element.getElement(DOM.Settings.cellData, "Cellular and Data settings link")
-        x.tap()
+        self.UTILS.element.simulateClick(x)
 
         self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
 
@@ -788,16 +788,7 @@ class Settings(object):
         #
         # Are we in the settings app?
         #
-        if self.UTILS.iframe.framePresent(*DOM.Settings.frame_locator):
-            self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
-            try:
-                self.parent.wait_for_element_displayed(*DOM.Settings.wifi)
-                self.wifi()
-            except:
-                pass
-        else:
-            self.launch()
-            self.wifi()
+        self.wifi()
 
         self.wifi_switchOn()
 
