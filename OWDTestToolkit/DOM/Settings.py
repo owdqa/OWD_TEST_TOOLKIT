@@ -55,16 +55,16 @@ wifi_mode_desc = ("id", "wifi-desc")
 
 app_permissions = ('id', "menuItem-appPermissions")
 app_permissions_header = ('xpath', GLOBAL.app_head_specific.format(_('App permissions')))
-#app_perm_camera = ('xpath', './/*[@id="appPermissions"]//a[text()="Camera"]')
-#app_perm_camera_geo = ('xpath', './/*[@id="appPermissions-details"]//span[text()="Geolocation"]/select')
+# app_perm_camera = ('xpath', './/*[@id="appPermissions"]//a[text()="Camera"]')
+# app_perm_camera_geo = ('xpath', './/*[@id="appPermissions-details"]//span[text()="Geolocation"]/select')
 
 wifi = ('id', 'menuItem-wifi')
 wifi_header = ('xpath', GLOBAL.app_head_specific.format('Wi-Fi'))
 wifi_enabled = ('xpath', ".//*[@id='wifi-enabled']/label")
 wifi_available_networks = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside[contains(@class, 'pack-end wifi-icon level-')]")
 wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
-#wifi_available_status = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
-#wifi_available_name = ".//*[@id='wifi-availableNetworks']/li[%s]//a"
+# wifi_available_status = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
+# wifi_available_name = ".//*[@id='wifi-availableNetworks']/li[%s]//a"
 wifi_name_xpath = '//*[@id="wifi-availableNetworks"]//a[text()="{}"]'
 wifi_connected = ('xpath', '//small[text()="{}"]'.format(_("Connected")))
 wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='{}']"
@@ -146,9 +146,9 @@ sim_security_enter_pin_header = ('xpath', GLOBAL.app_head_specific.format(_('Ent
 sim_security_enter_pin_input = ('xpath', '//div[@class="sim-code-area sim-pinArea"]/input')
 sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[text()="{}"]'.format(_("Done")))
 
-networkOperator_button = ("xpath", "/html/body/section[29]/div/ul[3]/li/label/button")
+networkOperator_button = ('css selector', '#carrier button[data-l10n-id="networkOperator"]')
 networkOperator_types = ("id", "preferredNetworkType")
-networkOperator_GSM = ("xpath", "/html/body/div/div[5]/form/section/ol/li[2]/label/span")
+networkOperator_GSM = ("xpath", "//*[@id='value-selector-container']//span[text()='2G only']")
 networkOperator_CDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li[6]/label/span")
 networkOperator_EVDO = ("xpath", "/html/body/div/div[5]/form/section/ol/li[7]/label/span")
 networkOperator_Auto = ("xpath", "/html/body/div/div[5]/form/section/ol/li[8]/label/span")
@@ -156,7 +156,7 @@ networkOperator_WCDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li[3]/l
 networkOperator_PrefWCDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li/label/span")
 networkOperator_PrefGSM = ("xpath", "/html/body/div/div[5]/form/section/ol/li[4]/label/span")
 networkOperator_PrefEVDO = ("xpath", "/html/body/div/div[5]/form/section/ol/li[5]/label/span")
-networkOperator_OK_btn = ("xpath", "/html/body/div/div[5]/form/menu/button")
+networkOperator_OK_btn = ("css selector", "#select-option-popup #select-options-buttons button[data-l10n-id='ok']")
 
 change_pin_done_btn = ('xpath', '//section[@id="simpin-dialog"]//button[@data-l10n-id="done"]')
 change_pin_old_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-pinArea"]/input')
@@ -164,7 +164,7 @@ change_pin_new_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pi
 change_pin_confirm_input = ('xpath', '//section[@id="simpin-dialog"]//div[@class="pin-dialog"]//div[@class="sim-code-area sim-confirmPinArea"]/input')
 change_pin_error = ('xpath', '//section[@id="simpin-dialog"]//div[@class="sim-errorMsg error"]//div[@class="sim-messageHeader"]')
 
-downloads                   = ("id", "menuItem-downloads")
-downloads_header            = ("id", "downloads")
-downloads_edit_mode_header  = ("id", "downloads-title-edit")
-downloads_edit_button       = ("id", "downloads-edit-button")
+downloads = ("id", "menuItem-downloads")
+downloads_header = ("id", "downloads")
+downloads_edit_mode_header = ("id", "downloads-title-edit")
+downloads_edit_button = ("id", "downloads-edit-button")

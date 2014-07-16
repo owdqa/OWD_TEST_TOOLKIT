@@ -1,10 +1,7 @@
-import sys
 import re
 import time
 from OWDTestToolkit import DOM
 from OWDTestToolkit.apps.settings import Settings
-
-from marionette import Actions
 
 
 class DownloadManager(object):
@@ -20,7 +17,8 @@ class DownloadManager(object):
         #
         # Click new sms in the home page status bar notificaiton.
         #
-        self.UTILS.reporting.logResult("info", "Clicking statusbar notification of new Download from " + title + " ...")
+        self.UTILS.reporting.logResult("info", "Clicking statusbar notification of new Download from {}...".\
+                                       format(title))
 
         #
         # Switch to the 'home' frame to click the notifier.
@@ -28,12 +26,10 @@ class DownloadManager(object):
         self.marionette.switch_to_frame()
         self.UTILS.statusbar.displayStatusBar()
 
-
         #
         # Create the strings to wait for.
         #
-        x = (DOM.DownloadManager.statusbar_new_notif[0],
-            DOM.DownloadManager.statusbar_new_notif[1] % title)
+        x = (DOM.DownloadManager.statusbar_new_notif[0], DOM.DownloadManager.statusbar_new_notif[1].format(title))
 
         x = self.UTILS.element.getElement(x, "Statusbar notification for " + title, True, 20, True)
         x.tap()
@@ -51,19 +47,15 @@ class DownloadManager(object):
         #
         self.settings.downloads()
 
+        time.sleep(3)
+        x = self.marionette.find_elements(*DOM.DownloadManager.download_list_elems)
+        self.UTILS.reporting.debug("*** Download list: {}   Length: {}".format(x, len(x)))
 
-        #
-        # Check "No downloads" label is there
-        #
-        time.sleep(5)
-        x = self.marionette.find_element(*DOM.DownloadManager.download_empty_list_content)
-
-        if x.text == "No downloads":
-          self.UTILS.reporting.logResult("info", "Downloads list is empty, it's not necessary delete any file")
+        if not x or len(x) == 0:
+            self.UTILS.reporting.logResult("info", "Downloads list is empty, it's not necessary delete any file")
         else:
             self.UTILS.reporting.logResult("info", "Downloads list is  not empty, it's necessary delete some files")
             self.deleteAllDownloads()
-
 
     def deleteAllDownloads(self):
 
@@ -117,9 +109,6 @@ class DownloadManager(object):
 
         time.sleep(2)
 
-
-
-
         #
         # Verify that now "Deselect All" button is enabled and "Select All"
         # button is disabled
@@ -130,15 +119,11 @@ class DownloadManager(object):
         deselect = self.UTILS.element.getElement(DOM.DownloadManager.download_deselect_all,
                                 "Getting 'Deselect All' button")
 
-
         result = deselect.get_attribute("disabled")
         self.UTILS.test.TEST(result == "false", 'Checking "Deselect All" button is enabled')
 
-
-
         result = select.get_attribute("disabled")
         self.UTILS.test.TEST(result == "true", 'Checking "Select All" button is disabled')
-
 
         #
         # Delete all the downloads
@@ -153,7 +138,7 @@ class DownloadManager(object):
                         "Getting Delete button")
         x.tap()
 
-        #self.UTILS.element.simulateClick(x)
+        # self.UTILS.element.simulateClick(x)
 
         #
         # Verify no downloads are present
@@ -164,42 +149,10 @@ class DownloadManager(object):
         self.UTILS.test.TEST(x.text == "No downloads",
             "Verifying 'No downloads' message is displayed")
 
-        #
-        # Confirmation (<confirm>)
-        #
-
-        #
-        # Verify if we must press yes or no button
-        #
-        # if confirm:
-        #     #
-        #     # Press Try again button to restart the download
-        #     #
-        #     x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
-        #                     "Delete all downloads by tapping yes button")
-        #     x.tap()
-
-        #     #
-        #     # Verify no downloads are present in the list
-        #     #
-
-        # else:
-        #     #
-        #     # Press cancel button and the download still stopped
-        #     #
-        #     x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_no,
-        #                      "Press cancel button. All downloads are in the list")
-        #     x.tap()
-
-        #     #
-        #     # Verify text Stopped.
-        #     #
-
     def deleteDownloadByPosition(self, position):
         #
         # Deletes a single download from the downloads list by position
         #
-
 
         #
         # Enter into Edit Mode
@@ -214,7 +167,6 @@ class DownloadManager(object):
         #
         # Getting the element's checkbox
         #
-
         elem = (DOM.DownloadManager.download_element_checkbox_position[0],
                  DOM.DownloadManager.download_element_checkbox_position[1].format(position))
 
@@ -238,17 +190,14 @@ class DownloadManager(object):
                         "Getting Delete button")
         x.tap()
 
-    def deleteDownload(self, file):
-
+    def deleteDownload(self, filename):
         #
         # Deletes a single download from the downloads list
         #
 
-
         #
         # Enter into Edit Mode
         #
-
         x = self.UTILS.element.getElement(DOM.DownloadManager.download_edit_button,
                                      "Getting download edit button")
         x.tap()
@@ -266,41 +215,31 @@ class DownloadManager(object):
         # Getting the element's checkbox
         #
         elem = (DOM.DownloadManager.download_element_checkbox[0],
-                 DOM.DownloadManager.download_element_checkbox[1] % file)
+                 DOM.DownloadManager.download_element_checkbox[1] % filename)
 
         x = self.UTILS.element.getElement(elem, "Getting the checkbox of the file to delete")
         x.tap()
 
-
-
-        # #
-        # # Making sure it is selected
-        # #
-        # ### ??????
-
-        # #
-        # # Get Delete button
-        # #
+        #
+        # Get Delete button
+        #
         x = self.UTILS.element.getElement(DOM.DownloadManager.download_delete_button, "Getting Delete button")
         x.tap()
 
-        # #
-        # # TODO - CONFIRMATION!!!! - We will add a new parameter, called 'confirm'
-        # # and wait for a confirmation popup.... like in stopDownload and restartDownload
-        # #
+        #
+        # TODO - CONFIRMATION!!!! - We will add a new parameter, called 'confirm'
+        # and wait for a confirmation popup.... like in stopDownload and restartDownload
 
-        # #
-        # # Wait for download to be deleted
-        # #
+        #
+        # Wait for download to be deleted
+        #
         self.UTILS.element.waitForNotElements(elem, "Download item from downloads list")
 
-
     def downloadFile(self, filename):
-
         #
         # Start the file download
         #
-        self.UTILS.element.waitForElements(('css selector', 'a[href="%s"] ' % filename), "The file " + filename + " is present" )
+        self.UTILS.element.waitForElements(('css selector', 'a[href="%s"] ' % filename), "The file " + filename + " is present")
 
         x = self.UTILS.element.getElement(('css selector', 'a[href="%s"] ' % filename),
                                  "getting the file [%s] to download" % filename,
@@ -327,7 +266,7 @@ class DownloadManager(object):
         # Tap on a stopped Download by download_id
         #
         elem = (DOM.DownloadManager.download_element_button_position[0],
-                DOM.DownloadManager.download_element_button_position[1].format(position) )
+                DOM.DownloadManager.download_element_button_position[1].format(position))
         x = self.UTILS.element.getElement(elem, "Getting download item refresh button")
         x.tap()
 
@@ -359,7 +298,7 @@ class DownloadManager(object):
             #
             elem = (DOM.DownloadManager.download_status_text_position[0],
                     DOM.DownloadManager.download_status_position[1].format(position))
-            x =self.UTILS.element.getElement(elem, "Obtain the download state")
+            x = self.UTILS.element.getElement(elem, "Obtain the download state")
             self.UTILS.test.TEST("downloading" == x.get_attribute("data-state"),
                              "Verify that the status is downloading")
 
@@ -378,7 +317,7 @@ class DownloadManager(object):
                      DOM.DownloadManager.download_status_text_position[1].format(position))
             x = self.UTILS.element.getElement(elem,
                          "Obtain the text displayed to verify the text stopped")
-            self.UTILS.test.TEST("Stopped" in x.text,"Verify the text Stopped")
+            self.UTILS.test.TEST("Stopped" in x.text, "Verify the text Stopped")
 
             #
             # Verify status Stopped using data-state="stopped".
@@ -399,7 +338,7 @@ class DownloadManager(object):
         # Tap on a stopped Download by download_id
         #
         elem = (DOM.DownloadManager.download_element_button[0],
-                DOM.DownloadManager.download_element_button[1] % download_id )
+                DOM.DownloadManager.download_element_button[1] % download_id)
         x = self.UTILS.element.getElement(elem, "Getting download item refresh button")
         x.tap()
 
@@ -418,7 +357,7 @@ class DownloadManager(object):
             # Verify text during the download process (graphically)
             #
             elem = (DOM.DownloadManager.download_status_text[0],
-                    DOM.DownloadManager.download_status_text[1] % download_id )
+                    DOM.DownloadManager.download_status_text[1] % download_id)
             x = self.UTILS.element.getElement(elem,
                         "Obtain the text displayed to verify the text 'X' MB of 'Y' MB")
 
@@ -431,7 +370,7 @@ class DownloadManager(object):
             #
             elem = (DOM.DownloadManager.download_status_text[0],
                     DOM.DownloadManager.download_status[1] % download_id)
-            x =self.UTILS.element.getElement(elem, "Obtain the download state")
+            x = self.UTILS.element.getElement(elem, "Obtain the download state")
             self.UTILS.test.TEST("downloading" == x.get_attribute("data-state"),
                              "Verify that the status is downloading")
 
@@ -447,10 +386,10 @@ class DownloadManager(object):
             # Verify text Stopped.
             #
             elem = (DOM.DownloadManager.download_status_text[0],
-                     DOM.DownloadManager.download_status_text[1] % download_id )
+                     DOM.DownloadManager.download_status_text[1] % download_id)
             x = self.UTILS.element.getElement(elem,
                          "Obtain the text displayed to verify the text stopped")
-            self.UTILS.test.TEST("Stopped" in x.text,"Verify the text Stopped")
+            self.UTILS.test.TEST("Stopped" in x.text, "Verify the text Stopped")
 
             #
             # Verify status Stopped using data-state="stopped".
@@ -470,7 +409,7 @@ class DownloadManager(object):
         #
         elem = (DOM.DownloadManager.download_element_button_position[0],
                 DOM.DownloadManager.download_element_button_position[1].format(position))
-        x= self.UTILS.element.getElement(elem, "Get element by position")
+        x = self.UTILS.element.getElement(elem, "Get element by position")
         x.tap()
 
         #
@@ -480,7 +419,7 @@ class DownloadManager(object):
             #
             # Press Yes button and Confirm Stop Download.
             #
-            x= self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
+            x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
                 "Confirm Stop Download, Yes button")
             x.tap()
 
@@ -514,7 +453,7 @@ class DownloadManager(object):
             #
 
             elem = (DOM.DownloadManager.download_status_text_position[0],
-                     DOM.DownloadManager.download_status_text_position[1].format(position) )
+                     DOM.DownloadManager.download_status_text_position[1].format(position))
             x = self.UTILS.element.getElement(elem,
                     "Obtain the text displayed to verify the text 'X' MB of 'Y' MB")
 
@@ -542,8 +481,8 @@ class DownloadManager(object):
         # Tap in Stopping Download by download_id
         #
         elem = (DOM.DownloadManager.download_element_button[0],
-                DOM.DownloadManager.download_element_button[1] % download_id )
-        x= self.UTILS.element.getElement(elem, "Get element by id")
+                DOM.DownloadManager.download_element_button[1] % download_id)
+        x = self.UTILS.element.getElement(elem, "Get element by id")
         x.tap()
 
         #
@@ -553,7 +492,7 @@ class DownloadManager(object):
             #
             # Press Yes button and Confirm Stop Download.
             #
-            x= self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
+            x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
                 "Confirm Stop Download, Yes button")
             x.tap()
 
@@ -561,7 +500,7 @@ class DownloadManager(object):
             # Verify text Stopped.
             #
             elem = (DOM.DownloadManager.download_status_text[0],
-                    DOM.DownloadManager.download_status_text[1] % download_id )
+                    DOM.DownloadManager.download_status_text[1] % download_id)
             x = self.UTILS.element.getElement(elem,
                             "Obtain the text displayed to verify the text stopped")
             self.UTILS.test.TEST("Stopped" in x.text, "Verify the text Stopped")
@@ -588,7 +527,7 @@ class DownloadManager(object):
             # Verify text during the download process.
             #
             elem = (DOM.DownloadManager.download_status_text[0],
-                     DOM.DownloadManager.download_status_text[1] % download_id )
+                     DOM.DownloadManager.download_status_text[1] % download_id)
             x = self.UTILS.element.getElement(elem,
                     "Obtain the text displayed to verify the text 'X' MB of 'Y' MB")
 
@@ -612,7 +551,7 @@ class DownloadManager(object):
         #
         self.UTILS.reporting.logResult("info",
             "Waiting for statusbar notification of download of title [" + title
-            +  "] and detail [" + detail + "]")
+            + "] and detail [" + detail + "]")
 
         #
         # Create the strings to wait for.
@@ -644,7 +583,7 @@ class DownloadManager(object):
 
         self.marionette.switch_to_frame()
         x = (DOM.DownloadManager.new_download_popup_detail[0], DOM.DownloadManager.new_download_popup_detail[1] % file)
-        self.UTILS.element.waitForElements( x,
+        self.UTILS.element.waitForElements(x,
 									"Popup message saying we have a new download of " + file,
 									True,
 									30)
