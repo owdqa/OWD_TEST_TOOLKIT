@@ -22,7 +22,12 @@ class Settings(object):
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
+    def wait_for_option_to_be_enabled(locator):
+        
     def call_settings(self):
+
+        self.wait_for_option_to_be_enabled(DOM.Settings.call_settings_option)
+
         x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
         self.UTILS.element.simulateClick(x)
         self.UTILS.element.waitForElements(('xpath',

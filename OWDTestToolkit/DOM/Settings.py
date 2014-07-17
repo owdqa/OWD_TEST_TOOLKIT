@@ -8,6 +8,7 @@ frame_locator = ('src', "settings")
 settings_header = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode("utf8")))
 back_button = ('class name', 'icon icon-back')
 
+call_settings_option = ('id', 'call-settings')
 call_settings = ('id', "menuItem-callSettings")
 call_callerID = ('id', "menuItem-callerId")
 call_log_number_xpath = ("xpath", "/html/body/div/div[5]/form/section/ol/li[2]")
