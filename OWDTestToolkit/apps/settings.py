@@ -22,7 +22,17 @@ class Settings(object):
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def wait_for_option_to_be_enabled(locator):
+    def wait_for_option_to_be_enabled(self, locator):
+         #
+        # Wait for option to be enabled
+        #
+        self.parent.wait_for_element_displayed(*locator)
+        option = self.marionette.find_element(*locator)
+
+        while option.get_attribute("aria-disabled"):
+            option = self.marionette.find_element(*locator)
+            continue
+
         
     def call_settings(self):
 
@@ -84,15 +94,7 @@ class Settings(object):
         # Open cellular and data settings.
         #
         
-        #
-        # Wait for option to be enabled
-        #
-        self.parent.wait_for_element_displayed(*DOM.Settings.data_connectivity)
-        option = self.marionette.find_element(*DOM.Settings.data_connectivity)
-
-        while option.get_attribute("aria-disabled"):
-            option = self.marionette.find_element(*DOM.Settings.data_connectivity)
-            continue
+        self.wait_for_option_to_be_enabled(DOM.Settings.data_connectivity)
 
         #
         # Once it is enabled, click on it
@@ -225,9 +227,12 @@ class Settings(object):
         if do_return:
             return False
 
+        time.sleep(3)
         switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "{} FDN".\
                                                format("Enable" if enable else "Disable"))
         switch.tap()
+        # self.UTILS.element.simulateClick(switch)
+
         header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Enable FDN") if enable else _("Disable FDN")))
         self.UTILS.element.waitForElements(header, "{} FDN header".format("Enable" if enable else "Disable"))
         return True
@@ -242,9 +247,11 @@ class Settings(object):
     def change_pin2_full_process(self, wrong_pin2, good_pin2, puk2):
         self.call_settings()
         self.open_fdn()
-        self.go_enable_fdn(True)
-        self.three_times_bad_pin2(wrong_pin2)
-        self.restore_pin2(good_pin2, puk2)
+        result = self.go_enable_fdn(True)
+
+        if result:
+            self.three_times_bad_pin2(wrong_pin2)
+            self.restore_pin2(good_pin2, puk2)
 
     def confirm_data_conn(self):
         self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
