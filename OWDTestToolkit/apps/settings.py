@@ -83,9 +83,23 @@ class Settings(object):
         #
         # Open cellular and data settings.
         #
-        x = self.UTILS.element.getElement(DOM.Settings.cellData, "Cellular and Data settings link")
-        self.UTILS.element.simulateClick(x)
+        
+        #
+        # Wait for option to be enabled
+        #
+        self.parent.wait_for_element_displayed(*DOM.Settings.data_connectivity)
+        option = self.marionette.find_element(*DOM.Settings.data_connectivity)
 
+        while option.get_attribute("aria-disabled"):
+            option = self.marionette.find_element(*DOM.Settings.data_connectivity)
+            continue
+
+        #
+        # Once it is enabled, click on it
+        #
+
+        link = self.marionette.find_element(*DOM.Settings.cellData)
+        link.tap()
         self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
 
     def configureMMSAutoRetrieve(self, value):
@@ -160,14 +174,32 @@ class Settings(object):
         #
         # Enter the data
         #
-        self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        
+        #
+        # This has to commented since there's a bug in Keyboard application from gaitestcase
+        # Instead, we have to use the primitive methods from marionette.
+        #
 
-        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        # self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
+        #                             p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
-        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        # self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
+        #                             p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+
+        # self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
+        #                             p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+
+        apn_field = self.UTILS.element.getElement(DOM.Settings.celldata_data_apn, "APN name")
+        apn_field.clear()
+        apn_field.send_keys(apn)
+
+        identifier_field = self.UTILS.element.getElement(DOM.Settings.celldata_apn_user, "APN identifier")
+        identifier_field.clear()
+        identifier_field.send_keys(identifier)
+
+        pwd_field = self.UTILS.element.getElement(DOM.Settings.celldata_apn_passwd, "APN pass")
+        pwd_field.clear()
+        pwd_field.send_keys(pwd)
 
         #
         # Tap the ok button to save the changes
