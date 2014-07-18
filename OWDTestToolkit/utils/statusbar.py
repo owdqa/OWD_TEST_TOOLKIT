@@ -221,6 +221,7 @@ class statusbar(object):
         self.marionette.switch_to_frame()
 
         x = (DOM.Statusbar.notification_toaster_title[0], DOM.Statusbar.notification_toaster_title[1].format(text))
+        self.parent.reporting.debug("** Waiting for notification toaster title: [{}]".format(x))
         self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
 
         if frame_to_change:

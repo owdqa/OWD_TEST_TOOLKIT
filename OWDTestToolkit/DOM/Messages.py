@@ -55,6 +55,7 @@ delete_threads_button = ("css selector", "button[data-l10n-id='deleteMessages-la
 message_list = ('xpath', '//div[@id="messages-container"]//li')
 message_timestamps = ("xpath", "//article[@id='messages-container']/header")
 last_message = ('xpath', '//div[@id="messages-container"]//li[last()]')
+last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
 last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span[text()]')
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')

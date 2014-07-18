@@ -779,8 +779,8 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            send_time = time.time()
             x.tap()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
@@ -820,8 +820,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -874,8 +874,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -953,8 +953,8 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            send_time = time.time()
             x.tap()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
@@ -1017,8 +1017,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1094,8 +1094,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1211,8 +1211,8 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            send_time = time.time()
             x.tap()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
@@ -1276,8 +1276,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1354,8 +1354,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1473,6 +1473,12 @@ class Messages(object):
         # try:
         self.parent.wait_for_element_present(*DOM.Messages.last_message, timeout=20)
         return self.marionette.find_element(*DOM.Messages.last_message)
+
+    def last_sent_message_timestamp(self):
+        """Returns the timestamp of the last sent message
+        """
+        send_time = self.marionette.find_element(*DOM.Messages.last_sent_message).get_attribute("data-timestamp")
+        return float(send_time) / 1000
 
     def openThread(self, num):
         #
@@ -1672,6 +1678,7 @@ class Messages(object):
 
     def verifyMMSReceived(self, attached_type, sender_number):
 
+        self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
         self.openThread(sender_number)
         message = self.lastMessageInThisThread()
         self.UTILS.test.TEST(message, "A received message appeared in the thread.", True)
