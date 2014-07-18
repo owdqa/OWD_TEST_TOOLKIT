@@ -139,6 +139,7 @@ auto_retrieve_selected_item = ("xpath", "//section[@id='value-selector-container
 ok_btn = ("xpath", "//menu[@id='select-options-buttons']/button")
 delivery_report = ("xpath", "//*[@data-l10n-id='message-delivery-reports']")
 
+sim_security_option = ('id', 'simSecurity-settings')
 sim_security = ('id', 'menuItem-simSecurity')
 sim_security_tag = ('id', 'simCardLock-desc')
 sim_security_header = ('xpath', GLOBAL.app_head_specific.format(_('SIM security').encode("utf8")))
