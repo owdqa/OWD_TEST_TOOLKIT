@@ -636,13 +636,20 @@ class Settings(object):
         #
         # This method sets the SIM security configuration.
         #
+        
+        self.wait_for_option_to_be_enabled(DOM.Settings.sim_security_option)
+        
         sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
         self.UTILS.element.scroll_into_view(sim_security)
         sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
         time.sleep(4)
 
         # If the attribute is already in the desired state, return
+        # 
+        self.UTILS.reporting.logResult("info", "Value of enable: {}".format(enable))
+        self.UTILS.reporting.logResult("info", "Value of sim security tag: {}".format(sim_security_tag.text))
         current = sim_security_tag.text == _("Enabled")
+        self.UTILS.reporting.logResult("info", "Value of current: {}".format(current))
         if enable == current:
             #click anyway so that we can later check whether the button to change the PIN
             sim_security.tap()
