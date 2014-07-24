@@ -9,6 +9,7 @@ settings_header = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode
 back_button = ('class name', 'icon icon-back')
 
 call_settings_option = ('id', 'call-settings')
+sim_card_number = ('id', 'menuItem-call-sim{}')
 call_settings = ('id', "menuItem-callSettings")
 call_callerID = ('id', "menuItem-callerId")
 call_log_number_xpath = ("xpath", "/html/body/div/div[5]/form/section/ol/li[2]")
@@ -148,6 +149,13 @@ sim_security_change_pin = ('xpath', '//li[@class="simpin-change simpin-change-0 
 sim_security_enter_pin_header = ('xpath', GLOBAL.app_head_specific.format(_('Enter SIM PIN')))
 sim_security_enter_pin_input = ('xpath', '//div[@class="sim-code-area sim-pinArea"]/input')
 sim_security_enter_pin_done = ('xpath', '//section[@id="simpin-dialog"]//button[text()="{}"]'.format(_("Done")))
+
+sim_manager_option = ('id', 'simCardManager-settings')
+sim_manager_sim_security = ('id', 'sim-manager-security-entry')
+sim_manager_header = ('xpath', GLOBAL.app_head_specific.format(_('SIM manager').encode("utf8")))
+dual_sim_switch_pin_sim1 = ('xpath', '//ul[@id="simpin-container"]//li[@class="simpin-enabled simpin-enabled-0 simpin-0"]')
+dual_sim_change_pin_sim1 = ('xpath', '//ul[@id="simpin-container"]//li[@class="simpin-change simpin-change-0 simpin-0"]')
+
 
 networkOperator_button = ('css selector', '#carrier button[data-l10n-id="networkOperator"]')
 networkOperator_types = ("id", "preferredNetworkType")
