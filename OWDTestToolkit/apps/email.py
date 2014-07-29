@@ -270,7 +270,7 @@ class Email(object):
         #
         # When we're looking at the folders screen ...
         #
-        self.UTILS.element.waitForElements(DOM.Email.folderList_header, "Folder list header", True, 20, False)
+        self.UTILS.element.waitForElements(DOM.Email.folder_list_container, "Folder list container", True, 20, False)
 
         #
         # ... click on the folder were after.
@@ -570,13 +570,13 @@ class Email(object):
 
         x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
-        self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
+        self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
 
         #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
+        self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
                                                False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(sender_name))
@@ -589,14 +589,15 @@ class Email(object):
         #
         x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
-        self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
+        self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
 
         #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
+        self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
                                               False)
+
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox")))
         self.UTILS.element.waitForElements(x, "Inbox", True, 120)
 
@@ -612,13 +613,13 @@ class Email(object):
         #
         x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
-        self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
+        self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
 
         #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
+        self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
                                               False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(header))
@@ -778,13 +779,13 @@ class Email(object):
 
         try:
             self.parent.wait_for_element_displayed(*DOM.Email.setup_account_header)
-            x = self.marionette.find_element(*DOM.Email.setup_account_header)
+            self.marionette.find_element(*DOM.Email.setup_account_header)
             return True
         except:
             #
             #  If exception raised --> other account has been alread set up
             #
-            
+            self.UTILS.reporting.logResult("info", "It is necessary to switch to another email account.")
             #
             # We have at least one email account setup, so
             # check to see if we can just switch to ours.
@@ -809,52 +810,111 @@ class Email(object):
         x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
         x.tap()
 
-        #
-        # Are we already in this account?
-        #
-        x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Header")
-        self.UTILS.reporting.logResult("info",
-                            "Currently using email account '{}' (looking to be in account '{}').".\
-                            format(x.text, address))
-        if x.text == address:
-            self.UTILS.reporting.logResult("info", "Already in the account we want - switch back to inbox.")
-            #self.goto_folder_from_list("Sent Mail")
-            self.goto_folder_from_list(_("Inbox"))
-            return True
-
-        self.UTILS.reporting.logResult("info", "Need to switch from account '{}' to account '{}' ...".\
-                             format(x.text, address))
-
-        #
-        # We're not in this account already, so let's look for it.
-        #
-        x = self.UTILS.element.getElement(DOM.Email.goto_accounts_btn, "Accounts button")
-        x.tap()
-
-        x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Accounts")))
-        self.UTILS.element.waitForElements(x, "Accounts header", True, 20, False)
-
-        #
-        # Check if it's already set up (this may be empty, so don't test for this element).
-        #
         try:
-            self.parent.wait_for_element_present(*DOM.Email.accounts_list_names, timeout=2)
-            time.sleep(1)
-            x = self.marionette.find_elements(*DOM.Email.accounts_list_names)
-            for i in x:
-                if i.text != "":
-                    if i.text == address:
-                        i.tap()
-                        #self.goto_folder_from_list("Sent Mail")
-                        self.goto_folder_from_list(_("Inbox"))
-                        return True
-        except:
-            pass
+            self.UTILS.reporting.logResult("info", "First, check whether we have one account configured or MORE")
+            self.parent.wait_for_element_displayed(*DOM.Email.switch_account_panel_one_account)
+            self.UTILS.reporting.logResult("info", "There's only a single account configured. Time to check if\
+                                                        it's necessary to do the change")
+            try:
+                self.parent.wait_for_element_present(*DOM.Email.switch_account_current_account)
+                current_account = self.marionette.find_element(*DOM.Email.switch_account_current_account)
 
-        #
-        # It's not setup yet, so we couldn't switch.
-        #
-        return False
+                if current_account.text == address:
+                    self.UTILS.reporting.logResult("info", "Already in the account we want - switch back to inbox.")
+                    self.goto_folder_from_list(_("Inbox"))
+                    return True
+                else:
+                    self.UTILS.reporting.logResult("info", "It looks like the account we want to switch is not set up yet, so we cannot switch to it")
+                    return False
+            except:
+                self.UTILS.reporting.logResult("info", "ONE ACCOUNT - something went wrong")
+
+        except:
+            self.UTILS.reporting.logResult("info", "Well, we have at least 2 accounts configured")
+            
+            self.UTILS.reporting.logResult("info", "Checking whether exists a scroll containing different accounts")
+            self.parent.wait_for_element_displayed(*DOM.Email.switch_account_scroll_outer)
+
+            self.UTILS.reporting.logResult("info", "Check if the current account is the one we we want to change")
+            self.parent.wait_for_element_displayed(*DOM.Email.switch_account_current_account)
+            current_account = self.marionette.find_element(*DOM.Email.switch_account_current_account)
+
+            if current_account.text == address:
+                self.UTILS.reporting.logResult("info", "Already in the account we want - switch back to inbox.")
+                self.goto_folder_from_list(_("Inbox"))
+                return True
+
+            self.UTILS.reporting.logResult("info", "We're not in the account we want to be, so open the scroll to see what's there")
+
+            scroll = self.marionette.find_element(*DOM.Email.switch_account_scroll_outer)
+            scroll.tap()
+            time.sleep(1)
+
+            self.UTILS.reporting.logResult("info", "Now we have to iterate over all accounts displayed (but not already selected)")
+            accounts = self.marionette.find_elements(*DOM.Email.switch_account_accounts_to_change)
+
+            for account in accounts:
+                if account.text == address:
+                    self.UTILS.reporting.logResult("info", "We got a winner. Switching to already configured account...")
+                    account.tap()
+                    self.UTILS.element.waitForElements(("xpath", DOM.GLOBAL.app_head_specific.format(_("Inbox"))),
+                                   "Header for 'Inbox' folder")
+                    return True
+
+            self.UTILS.reporting.logResult("info", "It looks like the account we want to switch is not set up yet, so we cannot switch to it")
+            return False
+
+
+
+
+
+
+        # #
+        # # Are we already in this account?
+        # #
+        # x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Header")
+        # self.UTILS.reporting.logResult("info",
+        #                     "Currently using email account '{}' (looking to be in account '{}').".\
+        #                     format(x.text, address))
+        # if x.text == address:
+        #     self.UTILS.reporting.logResult("info", "Already in the account we want - switch back to inbox.")
+        #     #self.goto_folder_from_list("Sent Mail")
+        #     self.goto_folder_from_list(_("Inbox"))
+        #     return True
+
+        # self.UTILS.reporting.logResult("info", "Need to switch from account '{}' to account '{}' ...".\
+        #                      format(x.text, address))
+
+        # #
+        # # We're not in this account already, so let's look for it.
+        # #
+        # x = self.UTILS.element.getElement(DOM.Email.goto_accounts_btn, "Accounts button")
+        # x.tap()
+
+        # x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Accounts")))
+        # self.UTILS.element.waitForElements(x, "Accounts header", True, 20, False)
+
+        # #
+        # # Check if it's already set up (this may be empty, so don't test for this element).
+        # #
+        # try:
+        #     self.parent.wait_for_element_present(*DOM.Email.accounts_list_names, timeout=2)
+        #     time.sleep(1)
+        #     x = self.marionette.find_elements(*DOM.Email.accounts_list_names)
+        #     for i in x:
+        #         if i.text != "":
+        #             if i.text == address:
+        #                 i.tap()
+        #                 #self.goto_folder_from_list("Sent Mail")
+        #                 self.goto_folder_from_list(_("Inbox"))
+        #                 return True
+        # except:
+        #     pass
+
+        # #
+        # # It's not setup yet, so we couldn't switch.
+        # #
+        # return False
 
     def waitForDone(self):
         #
