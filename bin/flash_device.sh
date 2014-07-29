@@ -161,5 +161,25 @@ then
     sudo $OWD_TEST_TOOLKIT_BIN/adjustRAM.sh 273
 fi
 
+#
+# Wait until the device is ready.
+#
+timeoutLoops=10
+while true
+do
+	sudo $cmd_adb start-server >/dev/null 2>&1
+	[ $? -eq 0 ] && break
+
+	$timeoutLoops=$(($timeoutLoops-1))
+	[ $timeoutLoops -le 0 ] && break
+
+	sleep 5
+done
+
+sleep 15
+sudo $cmd_adb start-server
+sudo $cmd_adb forward tcp:2828 tcp:2828
+
+
 printf "\n\nDONE!\n"
 exit 0
