@@ -53,7 +53,7 @@ attach_camera_btn = ("xpath", "//form//button[text()='{}']".format(_("Camera")))
 
 settings_menu_btn = ('xpath', '//header//a[@class="msg-folder-list-btn"]')
 
-settings_set_btn = ('class name', 'fld-nav-settings-btn bottom-btn')
+settings_set_btn = ('xpath', '//a[@class="fld-nav-toolbar bottom-toolbar"]//span[@data-l10n-id="drawer-settings-link"]')
 settings_del_acc_btn = ('class name', 'tng-account-delete')
 settings_del_conf_btn = ('xpath', '//button[@id="account-delete-ok"]')
 settings_add_account_btn = ('class name', 'tng-account-add')
@@ -61,8 +61,9 @@ settings_add_account_btn = ('class name', 'tng-account-add')
 goto_accounts_btn = ('class name', 'fld-accounts-btn')    
 accounts_list_names = ('class name', 'fld-account-name')
 
+folder_list_container = ('xpath', '//div[@class="fld-folders-container"]')
 folderList_header = ('class name', 'fld-folders-header-account-label')
-folderList_name_xpath = '//*[text()="{}"]'
+folderList_name_xpath = '//span[@class="fld-folder-name" and text()="{}"]'
 
 folder_message_container = ('class name', 'msg-messages-container')
 folder_message_list = ('class name', 'msg-header-item')
@@ -90,3 +91,12 @@ email_not_setup_ok = ('xpath', '//button[@class="confirm-dialog-ok recommend"]')
 confirm_msg = ("class name", "modal-dialog-confirm-message")
 
 new_account_error_msg = ('css selector', 'section.card-setup-account-info div.scrollregion-below-header div.sup-error-region div.sup-error-message')
+
+toaster_sending_mail = ('xpath', '//section[contains(@class, "toaster actionable")]//p[@class="toaster-text" and contains(text(), "Sending mail")]')
+toaster_sent_mail = ('xpath', '//section[contains(@class, "toaster actionable")]//p[@class="toaster-text" and text()="Email sent."]')
+
+switch_account_panel_one_account = ('class name', 'card-folder-picker card anim-vertical anim-overlay one-account center opened')
+
+switch_account_scroll_outer = ('xpath', '//div[@class="fld-acct-scrollouter"]')
+switch_account_current_account = ('xpath', '//div[@class="fld-acct-scrollouter"]//a[@class="fld-acct-header closed"]//span[@class="fld-acct-header-account-label"]')
+switch_account_accounts_to_change = ('xpath', '//div[@class="fld-accountlist-container"]//a[@class="fld-account-item"]//span[@class="fld-account-name"]') # This selector does not return the current account
