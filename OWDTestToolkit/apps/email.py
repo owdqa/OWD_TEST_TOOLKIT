@@ -253,35 +253,49 @@ class Email(object):
         #
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "Screen shot:", x)
-        x = self.UTILS.element.getElement(('xpath', DOM.Email.folderList_name_xpath.format(name)),
-                                  "Link to folder '" + name + "'")
-        x.tap()
+
+        elem = ('xpath', DOM.Email.folderList_name_xpath.format(name))
+
+
+        folder_link = self.UTILS.element.getElement(elem, "Link to folder '" + name + "'")
+        self.UTILS.element.scroll_into_view(folder_link)
+        folder_link.tap()
 
         self.UTILS.element.waitForElements(("xpath", DOM.GLOBAL.app_head_specific.format(name)),
                                    "Header for '" + name + "' folder")
 
     def openMailFolder(self, folder_name):
-        #
-        # Open a specific mail folder (must be called from "Inbox").
-        #
-        x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
-        x.tap()
 
         #
-        # When we're looking at the folders screen ...
+        # Check whether we're already there
         #
-        self.UTILS.element.waitForElements(DOM.Email.folder_list_container, "Folder list container", True, 20, False)
+        
+        try:
+            self.UTILS.reporting.logResult("info", "Checking if it's necessary to open it")
+            self.parent.wait_for_element_displayed(*("xpath", DOM.GLOBAL.app_head_specific.format(folder_name)))
+        except:
+            self.UTILS.reporting.logResult("info", "Yes, we have to open the folder: {}".format(folder_name))
+            #
+            # Open a specific mail folder (must be called from "Inbox").
+            #
+            x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
+            x.tap()
 
-        #
-        # ... click on the folder were after.
-        #
-        self.goto_folder_from_list(folder_name)
+            #
+            # When we're looking at the folders screen ...
+            #
+            self.UTILS.element.waitForElements(DOM.Email.folder_list_container, "Folder list container", True, 20, False)
 
-        #
-        # Wait a while for everything to finish populating.
-        #
-        self.UTILS.element.waitForNotElements(DOM.Email.folder_sync_spinner,
-                                      "Loading messages spinner", True, 60, False)
+            #
+            # ... click on the folder were after.
+            #
+            self.goto_folder_from_list(folder_name)
+
+            #
+            # Wait a while for everything to finish populating.
+            #
+            self.UTILS.element.waitForNotElements(DOM.Email.folder_sync_spinner,
+                                          "Loading messages spinner", True, 60, False)
 
     def openMsg(self, subject):
         #
@@ -392,14 +406,31 @@ class Email(object):
         #
         # Compose and send a new email.
         #
-        x = self.UTILS.element.getElement(DOM.Email.compose_msg_btn, "Compose message button")
-        x.tap()
+        self.UTILS.reporting.logResult("info", "Getting 'compose message button'")
+
+        self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
+        compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
+        compose_new_msg_btn.tap()
 
         #
         # Wait for 'compose message' header.
         #
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
-                                  "Compose message header")
+        
+        #
+        # Sometimes, the tap on the "Compose message button" does not work, resulting in a failed test
+        # Let's try to do something about it
+        #
+        keep_trying = True
+
+        while keep_trying:
+            self.UTILS.reporting.logResult("info", "Trying to tap on 'Compose new message' button")
+            try:
+                self.parent.wait_for_element_displayed(*('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))))
+                keep_trying = False
+            except:
+                self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
+                compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
+                self.UTILS.element.simulateClick(compose_new_msg_btn)
 
         #
         # Put items in the corresponsing fields.
@@ -462,7 +493,7 @@ class Email(object):
         #
         # Write some reply content
         #
-        self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False, False)
 
         self.replyTheMessage(from_field.split("@")[0])
 
@@ -511,7 +542,7 @@ class Email(object):
         #
         # Write some reply content
         #
-        self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False, False)
 
         self.replyTheMessage(from_field.split("@")[0])
 
@@ -555,7 +586,7 @@ class Email(object):
         #
         # Write some reply content
         #
-        self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", fwd_message, True, True, False)
+        self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", fwd_message, True, True, False, False)
 
         if attach:
             self.attach_file(attached_type)
@@ -578,6 +609,8 @@ class Email(object):
         #
         self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
                                                False)
+        self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
+                                              False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(sender_name))
         self.UTILS.element.waitForElements(x, "Previous received message", True, 120)
@@ -596,6 +629,8 @@ class Email(object):
         # it just needs it).
         #
         self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
+                                              False)
+        self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
                                               False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox")))
@@ -620,6 +655,8 @@ class Email(object):
         # it just needs it).
         #
         self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
+                                              False)
+        self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Sending email toaster", True, 120,
                                               False)
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(header))
@@ -846,11 +883,12 @@ class Email(object):
 
             self.UTILS.reporting.logResult("info", "We're not in the account we want to be, so open the scroll to see what's there")
 
-            scroll = self.marionette.find_element(*DOM.Email.switch_account_scroll_outer)
+            self.parent.wait_for_element_displayed(*DOM.Email.switch_account_scroll)
+            scroll = self.marionette.find_element(*DOM.Email.switch_account_scroll)
             scroll.tap()
-            time.sleep(1)
 
             self.UTILS.reporting.logResult("info", "Now we have to iterate over all accounts displayed (but not already selected)")
+            self.parent.wait_for_element_displayed(*DOM.Email.switch_account_accounts_to_change)
             accounts = self.marionette.find_elements(*DOM.Email.switch_account_accounts_to_change)
 
             for account in accounts:
@@ -863,58 +901,6 @@ class Email(object):
 
             self.UTILS.reporting.logResult("info", "It looks like the account we want to switch is not set up yet, so we cannot switch to it")
             return False
-
-
-
-
-
-
-        # #
-        # # Are we already in this account?
-        # #
-        # x = self.UTILS.element.getElement(DOM.GLOBAL.app_head, "Header")
-        # self.UTILS.reporting.logResult("info",
-        #                     "Currently using email account '{}' (looking to be in account '{}').".\
-        #                     format(x.text, address))
-        # if x.text == address:
-        #     self.UTILS.reporting.logResult("info", "Already in the account we want - switch back to inbox.")
-        #     #self.goto_folder_from_list("Sent Mail")
-        #     self.goto_folder_from_list(_("Inbox"))
-        #     return True
-
-        # self.UTILS.reporting.logResult("info", "Need to switch from account '{}' to account '{}' ...".\
-        #                      format(x.text, address))
-
-        # #
-        # # We're not in this account already, so let's look for it.
-        # #
-        # x = self.UTILS.element.getElement(DOM.Email.goto_accounts_btn, "Accounts button")
-        # x.tap()
-
-        # x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Accounts")))
-        # self.UTILS.element.waitForElements(x, "Accounts header", True, 20, False)
-
-        # #
-        # # Check if it's already set up (this may be empty, so don't test for this element).
-        # #
-        # try:
-        #     self.parent.wait_for_element_present(*DOM.Email.accounts_list_names, timeout=2)
-        #     time.sleep(1)
-        #     x = self.marionette.find_elements(*DOM.Email.accounts_list_names)
-        #     for i in x:
-        #         if i.text != "":
-        #             if i.text == address:
-        #                 i.tap()
-        #                 #self.goto_folder_from_list("Sent Mail")
-        #                 self.goto_folder_from_list(_("Inbox"))
-        #                 return True
-        # except:
-        #     pass
-
-        # #
-        # # It's not setup yet, so we couldn't switch.
-        # #
-        # return False
 
     def waitForDone(self):
         #
