@@ -11,7 +11,7 @@ if [[ ${ADB_FOUND} == "List of devices attached" ]]; then
 fi
 
 if [ $# -eq 0 ]; then
-  printf "\nNo arguments provided. RAM: [0|256-1024] (273 is the value we should use right now.\n"
+  printf "\nNo arguments provided. RAM: [0|256-1024] (273 or 319 are the values we should use right now.\n"
   exit
 else
   $cmd_adb reboot bootloader

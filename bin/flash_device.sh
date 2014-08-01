@@ -157,8 +157,8 @@ gcli killapps
 
 if [ "$DEVICE" = "flame-JB" ]
 then
-    printf "\nFLAME device: adjusting RAM to 273Mb\n"
-    sudo $OWD_TEST_TOOLKIT_BIN/adjustRAM.sh 273
+    printf "\nFLAME device: adjusting RAM to 319Mb\n"
+    sudo $OWD_TEST_TOOLKIT_BIN/adjustRAM.sh 319 
 fi
 
 #
