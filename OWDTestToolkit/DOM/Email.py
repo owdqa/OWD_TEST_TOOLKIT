@@ -17,9 +17,9 @@ manual_setup = ('class name', 'sup-manual-config-btn')
 manual_setup_next = ('class name', 'sup-manual-next-btn')
 manual_setup_sup_header = ('xpath', '//h1[@data-l10n-id="setup-manual-config-header"]')
 manual_setup_account_type = ('xpath', '//select[@class="mail-select sup-manual-account-type"]')
-manual_setup_account_options = ('xpath', '//form[@id="select-option-popup"]')
-manual_setup_account_option = ('xpath', '//form[@id="select-option-popup"]//li[@role="option"]//span[text()="{}"]')
-manual_setup_account_type_ok = ('xpath', '//form[@id="select-option-popup"]//menu[@id="select-options-buttons"]/button[@data-type="ok"]')
+manual_setup_account_options = ('xpath', '//form[@class="value-selector-select-option-popup"]')
+manual_setup_account_option = ('xpath', '//form[@class="value-selector-select-option-popup"]//li[@role="option"]//span[text()="{}"]')
+manual_setup_account_type_ok = ('xpath', '//form[@class="value-selector-select-option-popup"]//menu[@class="value-selector-select-options-buttons"]/button[@data-type="ok"]')
 manual_setup_activesync_host = ('class name', 'sup-manual-activesync-hostname')
 manual_setup_activesync_user = ('class name', 'sup-manual-activesync-username')
 setup_account_header = ('xpath', '//h1[@data-l10n-id="setup-account-header3"]')
@@ -69,16 +69,16 @@ folder_message_container = ('class name', 'msg-messages-container')
 folder_message_list = ('class name', 'msg-header-item')
 folder_headers_list = ('class name', 'msg-header-author-and-date')
 folder_subject_list = ('class name', 'msg-header-subject')
-folder_refresh_button = ("class name", "msg-refresh-btn bottom-btn msg-nonsearch-only")
+folder_refresh_button = ("class name", "icon msg-refresh-btn")
 folder_sync_spinner = ("xpath", "//span[@data-l10n-id='messages-syncing']")
 
 msg_list_new_mail_notification = ("class name", "msg-list-topbar")
 
-open_email_from = ('xpath', "//div[@class='msg-envelope-from-line']//span[@class='msg-peep-content msg-peep-address']")
+open_email_from = ('xpath', "//div[@class='msg-envelope-line msg-envelope-from-line']//span[@class='msg-peep-content msg-peep-address']")
 # NOTE: incoherent use of classes here, that's why i'm using 'or' conditional
-open_email_to = ('xpath', "//div[@class='msg-envelope-to-line']//span[@class='msg-peep-content' or @class='msg-peep-content msg-peep-address']")
+open_email_to = ('xpath', "//div[@class='msg-envelope-line msg-envelope-to-line']//span[@class='msg-peep-content' or @class='msg-peep-content msg-peep-address']")
 open_email_subject = ('class name', 'msg-envelope-subject')
-open_email_attached_file = ("xpath", "//ul[@class='msg-attachments-container']/li[@class='msg-attachment-item']")
+open_email_attached_file = ("xpath", "//ul[@class='msg-attachments-container']/li[contains(@class, 'msg-attachment-item')]")
 
 # NOTE: complex, but there's > 1 of these so you have to be this specific!
 delete_this_email_btn = ("xpath", "//div[@class='msg-reader-action-toolbar bottom-toolbar']//button[@class='msg-delete-btn bottom-btn']")
@@ -98,5 +98,6 @@ toaster_sent_mail = ('xpath', '//section[contains(@class, "toaster actionable")]
 switch_account_panel_one_account = ('class name', 'card-folder-picker card anim-vertical anim-overlay one-account center opened')
 
 switch_account_scroll_outer = ('xpath', '//div[@class="fld-acct-scrollouter"]')
+switch_account_scroll = ('class name', 'fld-acct-header closed')
 switch_account_current_account = ('xpath', '//div[@class="fld-acct-scrollouter"]//a[@class="fld-acct-header closed"]//span[@class="fld-acct-header-account-label"]')
 switch_account_accounts_to_change = ('xpath', '//div[@class="fld-accountlist-container"]//a[@class="fld-account-item"]//span[@class="fld-account-name"]') # This selector does not return the current account
