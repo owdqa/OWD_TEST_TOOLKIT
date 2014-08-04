@@ -306,7 +306,17 @@ class Settings(object):
         auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
         auth_list.tap()
         header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Authorized numbers").encode("utf8")))
-        self.UTILS.element.waitForElements(header, "Authorized numbers header")
+
+        tapped = False
+
+        while not tapped:
+            try:
+                self.parent.wait_for_element_displayed(*header)
+                tapped = True
+            except:
+                self.UTILS.reporting.logResult("info", "Looks like 'Authorized numbers' has not been tapped")
+                auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
+                auth_list.tap()
 
     def fdn_add_auth_number(self, name, number, pin2):
         #
@@ -348,7 +358,7 @@ class Settings(object):
             DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
         self.UTILS.element.waitForElements(elem, "Waiting for contact to be in the list", True, 30)
 
-    def fdn_delete_auth_number(self, name, number, pin2):
+    def fdn_delete_auth_number(self, number, pin2):
         #
         # This method deletes a contact from the authorized numbers list
         # It must be called once the list has been displayed
@@ -359,10 +369,15 @@ class Settings(object):
         elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
             DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
 
-        contact = self.UTILS.element.getElement(elem, "Contact to be deleted", True, 10)
-        contact.tap()
-        time.sleep(1)
-
+        try:
+            self.parent.wait_for_element_displayed(*elem)
+            contact = self.marionette.find_element(*elem)
+            contact.tap()
+            time.sleep(1)
+        except:
+            self.UTILS.reporting.logResult("info", "Something went wrong deleting the contact from FDN list")
+            return
+            
         #
         # Choose delete option
         #
@@ -381,6 +396,7 @@ class Settings(object):
         done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button", True, 10)
         done_btn.tap()
 
+        time.sleep(2)
         #
         # Check the number is no longer present in the list
         #
@@ -398,9 +414,8 @@ class Settings(object):
             contact = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers_list, "contact")
             self.UTILS.reporting.debug("*** Contact found: [{}]".format(contact))
             number = self.marionette.find_element('css selector', 'small', contact.id).text
-            contact = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers_list, "contact")
-            name = self.marionette.find_element('css selector', 'span', contact.id).text
-            self.fdn_delete_auth_number(name, number, pin2)
+            self.UTILS.reporting.logResult("info", "Number of contact to be deleted: {}".format(number))
+            self.fdn_delete_auth_number(number, pin2)
             time.sleep(2)
 
     def disable_hotSpot(self):
@@ -675,7 +690,6 @@ class Settings(object):
             try:
                 self.UTILS.reporting.logResult("info", "First we have to check if there's a button to change the PIN")
                 self.parent.wait_for_element_displayed(*DOM.Settings.dual_sim_change_pin_sim1)
-                # self.UTILS.element.getElement(DOM.Settings.dual_sim_change_pin_sim1, "Change PIN BUTTON!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 if enable:
                     self.UTILS.reporting.logResult("info", "Trying to enable... but IT WAS AlREADY DONE!! Exiting...")
                     return
@@ -727,7 +741,20 @@ class Settings(object):
         done_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_enter_pin_done, "Done button")
         done_btn.tap()
 
-        self.UTILS.element.waitForElements(DOM.Settings.sim_security_header, "SIM Security header")
+        #
+        # Check that we're in SIM security menu.
+        # NOTE: There's a glitch (automation presumed) in which after hitting the "Done button" (see above)
+        # we come back to the SIM manager menu instead of the SIM security.
+        # 
+        # I haven't been able to reproduce it manually, so the following patch had to be applied.
+        #
+        #
+        try:
+            self.UTILS.reporting.logResult("info", "SIM Security header")
+            self.parent.wait_for_element_displayed(*DOM.Settings.sim_security_header)
+        except:
+            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
+            sim_security.tap()
 
         #
         # Check that SIM security was actually enabled/disabled
