@@ -254,6 +254,7 @@ class Email(object):
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "Screen shot:", x)
 
+        name = _(name)
         elem = ('xpath', DOM.Email.folderList_name_xpath.format(name))
 
 
@@ -413,25 +414,11 @@ class Email(object):
         compose_new_msg_btn.tap()
 
         #
-        # Wait for 'compose message' header.
-        #
-        
-        #
         # Sometimes, the tap on the "Compose message button" does not work, resulting in a failed test
         # Let's try to do something about it
         #
-        keep_trying = True
-
-        while keep_trying:
-            self.UTILS.reporting.logResult("info", "Trying to tap on 'Compose new message' button")
-            try:
-                self.parent.wait_for_element_displayed(*('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))))
-                keep_trying = False
-            except:
-                self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
-                compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
-                self.UTILS.element.simulateClick(compose_new_msg_btn)
-
+        self.parent.wait_for_condition(lambda m: self._is_composed_btn_tapped(),
+                                        timeout=30, message="'Compose message' button tapped")
         #
         # Put items in the corresponsing fields.
         # 
@@ -446,6 +433,18 @@ class Email(object):
 
         self.sendTheMessage()
 
+
+    def _is_composed_btn_tapped(self):
+
+        try:
+            self.parent.wait_for_element_displayed(*('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))))
+            return True
+        except:
+            self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
+            compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
+            compose_new_msg_btn.tap()
+            return False
+    
     def reply_msg(self, reply_message):
         #
         # This method replies to a previously received message
