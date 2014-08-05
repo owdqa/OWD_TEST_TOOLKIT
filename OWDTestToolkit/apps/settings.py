@@ -26,12 +26,14 @@ class Settings(object):
          #
         # Wait for option to be enabled
         #
-        self.parent.wait_for_element_displayed(*locator)
-        option = self.marionette.find_element(*locator)
+        # self.parent.wait_for_element_displayed(*locator)
+        # option = self.marionette.find_element(*locator)
 
-        while option.get_attribute("aria-disabled"):
-            option = self.marionette.find_element(*locator)
-            continue
+        # while option.get_attribute("aria-disabled"):
+        #     option = self.marionette.find_element(*locator)
+        #     continue
+        self.parent.wait_for_condition(lambda m: m.find_element(*locator).get_attribute("aria-disabled") is None,
+                                         timeout=30, message="Option to be enabled")
 
         
     def call_settings(self, sim_card_number=1):
@@ -46,8 +48,9 @@ class Settings(object):
         # entering the call_settings menu. 
         #
         try:
-            elem = (DOM.Settings.sim_card_number[0],
-                DOM.Settings.sim_card_number[1].format(sim_card_number))
+            elem = (DOM.Settings.call_settings_sim_card_number[0],
+                DOM.Settings.call_settings_sim_card_number[1].format(sim_card_number))
+
             self.parent.wait_for_element_displayed(elem[0], elem[1], 20)
             sim_card_option = self.marionette.find_element(*elem)
             sim_card_option.tap()
@@ -103,19 +106,33 @@ class Settings(object):
         ok_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "OK button")
         ok_btn.tap()
 
-    def cellular_and_data(self):
+    def cellular_and_data(self, sim_card_number=1):
         #
         # Open cellular and data settings.
         #
         
         self.wait_for_option_to_be_enabled(DOM.Settings.data_connectivity)
-
         #
         # Once it is enabled, click on it
         #
 
         link = self.marionette.find_element(*DOM.Settings.cellData)
         link.tap()
+
+        #
+        # In case the device supports dual sim, we have to select one before
+        # entering the call_settings menu. 
+        #
+        try:
+            elem = (DOM.Settings.cellData_sim_card_number[0],
+                DOM.Settings.cellData_sim_card_number[1].format(sim_card_number))
+
+            self.parent.wait_for_element_displayed(elem[0], elem[1], 20)
+            sim_card_option = self.marionette.find_element(*elem)
+            sim_card_option.tap()
+        except:
+            self.UTILS.reporting.logResult("info", "No double SIM detected. Keep working...")
+
         self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
 
     def configureMMSAutoRetrieve(self, value):
@@ -305,18 +322,20 @@ class Settings(object):
     def fdn_open_auth_numbers(self):
         auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
         auth_list.tap()
+
+        self.parent.wait_for_condition(lambda m: self._is_auth_numbers_menu_tapped(), timeout=30, message="'Authorized numbers' menu tapped")
+
+    def _is_auth_numbers_menu_tapped(self):
+
         header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Authorized numbers").encode("utf8")))
-
-        tapped = False
-
-        while not tapped:
-            try:
-                self.parent.wait_for_element_displayed(*header)
-                tapped = True
-            except:
-                self.UTILS.reporting.logResult("info", "Looks like 'Authorized numbers' has not been tapped")
-                auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
-                auth_list.tap()
+        try:
+            self.parent.wait_for_element_displayed(*header)
+            return True
+        except:
+            self.UTILS.reporting.logResult("info", "Looks like 'Authorized numbers' has not been tapped")
+            auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
+            auth_list.tap()
+            return False
 
     def fdn_add_auth_number(self, name, number, pin2):
         #
