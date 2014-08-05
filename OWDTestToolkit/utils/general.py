@@ -82,6 +82,16 @@ class general(object):
                                                       format(json.dumps(mozcontact)), special_powers=True)
         assert result, 'Unable to insert contact {}'.format(contact)
 
+    def is_device_dual_sim(self):
+        import os
+        try:
+            prop = os.popen('adb shell cat /system/build.prop | grep multisim').read().strip().split("=")[-1]
+            self.parent.reporting.logResult("info", "Value of property: {}".format(prop))
+            return  prop == "dsds"
+        except:
+            self.parent.reporting.logResult("info", "That property was not found")
+            return False
+
     def selectFromSystemDialog(self, p_str):
         #
         # Selects an item from a system select box (such as country / timezone etc...).
