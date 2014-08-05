@@ -9,7 +9,7 @@ settings_header = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode
 back_button = ('class name', 'icon icon-back')
 
 call_settings_option = ('id', 'call-settings')
-sim_card_number = ('id', 'menuItem-call-sim{}')
+call_settings_sim_card_number = ('id', 'menuItem-call-sim{}')
 call_settings = ('id', "menuItem-callSettings")
 call_callerID = ('id', "menuItem-callerId")
 call_log_number_xpath = ("xpath", "/html/body/div/div[5]/form/section/ol/li[2]")
@@ -92,6 +92,7 @@ wifi_advanced_cancelBtn = ("xpath", "//button[@data-l10n-id='cancel']")
 
 data_connectivity = ('id', 'data-connectivity')
 cellData = ('id', 'menuItem-cellularAndData')
+cellData_sim_card_number = ('id', 'menuItem-carrier-sim{}')
 celldata_header = ('xpath', GLOBAL.app_head_specific.format(_('Cellular & Data').encode("utf8")))
 celldata_DataConn = ('name', "ril.data.enabled")
 celldata_DataConn_switch = ('id', "menuItem-enableDataCall")
