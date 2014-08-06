@@ -22,9 +22,41 @@ class Settings(object):
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def call_settings(self):
+    def wait_for_option_to_be_enabled(self, locator):
+         #
+        # Wait for option to be enabled
+        #
+        # self.parent.wait_for_element_displayed(*locator)
+        # option = self.marionette.find_element(*locator)
+
+        # while option.get_attribute("aria-disabled"):
+        #     option = self.marionette.find_element(*locator)
+        #     continue
+        self.parent.wait_for_condition(lambda m: m.find_element(*locator).get_attribute("aria-disabled") is None,
+                                         timeout=30, message="Option to be enabled")
+
+        
+    def call_settings(self, sim_card_number=1):
+
+        self.wait_for_option_to_be_enabled(DOM.Settings.call_settings_option)
+
         x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
         self.UTILS.element.simulateClick(x)
+        
+        #
+        # In case the device supports dual sim, we have to select one before
+        # entering the call_settings menu. 
+        #
+        try:
+            elem = (DOM.Settings.call_settings_sim_card_number[0],
+                DOM.Settings.call_settings_sim_card_number[1].format(sim_card_number))
+
+            self.parent.wait_for_element_displayed(elem[0], elem[1], 20)
+            sim_card_option = self.marionette.find_element(*elem)
+            sim_card_option.tap()
+        except:
+            self.UTILS.reporting.logResult("info", "No double SIM detected. Keep working...")
+        
         self.UTILS.element.waitForElements(('xpath',
             DOM.GLOBAL.app_head_specific.format(_("Call Settings").encode("utf8"))), "Call settings header")
 
@@ -74,27 +106,33 @@ class Settings(object):
         ok_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "OK button")
         ok_btn.tap()
 
-    def cellular_and_data(self):
+    def cellular_and_data(self, sim_card_number=1):
         #
         # Open cellular and data settings.
         #
         
-        #
-        # Wait for option to be enabled
-        #
-        self.parent.wait_for_element_displayed(*DOM.Settings.data_connectivity)
-        option = self.marionette.find_element(*DOM.Settings.data_connectivity)
-
-        while option.get_attribute("aria-disabled"):
-            option = self.marionette.find_element(*DOM.Settings.data_connectivity)
-            continue
-
+        self.wait_for_option_to_be_enabled(DOM.Settings.data_connectivity)
         #
         # Once it is enabled, click on it
         #
 
         link = self.marionette.find_element(*DOM.Settings.cellData)
         link.tap()
+
+        #
+        # In case the device supports dual sim, we have to select one before
+        # entering the call_settings menu. 
+        #
+        try:
+            elem = (DOM.Settings.cellData_sim_card_number[0],
+                DOM.Settings.cellData_sim_card_number[1].format(sim_card_number))
+
+            self.parent.wait_for_element_displayed(elem[0], elem[1], 20)
+            sim_card_option = self.marionette.find_element(*elem)
+            sim_card_option.tap()
+        except:
+            self.UTILS.reporting.logResult("info", "No double SIM detected. Keep working...")
+
         self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
 
     def configureMMSAutoRetrieve(self, value):
@@ -220,9 +258,12 @@ class Settings(object):
         if do_return:
             return False
 
+        time.sleep(3)
         switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "{} FDN".\
                                                format("Enable" if enable else "Disable"))
         switch.tap()
+        # self.UTILS.element.simulateClick(switch)
+
         header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Enable FDN") if enable else _("Disable FDN")))
         self.UTILS.element.waitForElements(header, "{} FDN header".format("Enable" if enable else "Disable"))
         return True
@@ -237,9 +278,11 @@ class Settings(object):
     def change_pin2_full_process(self, wrong_pin2, good_pin2, puk2):
         self.call_settings()
         self.open_fdn()
-        self.go_enable_fdn(True)
-        self.three_times_bad_pin2(wrong_pin2)
-        self.restore_pin2(good_pin2, puk2)
+        result = self.go_enable_fdn(True)
+
+        if result:
+            self.three_times_bad_pin2(wrong_pin2)
+            self.restore_pin2(good_pin2, puk2)
 
     def confirm_data_conn(self):
         self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
@@ -279,8 +322,20 @@ class Settings(object):
     def fdn_open_auth_numbers(self):
         auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
         auth_list.tap()
+
+        self.parent.wait_for_condition(lambda m: self._is_auth_numbers_menu_tapped(), timeout=30, message="'Authorized numbers' menu tapped")
+
+    def _is_auth_numbers_menu_tapped(self):
+
         header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Authorized numbers").encode("utf8")))
-        self.UTILS.element.waitForElements(header, "Authorized numbers header")
+        try:
+            self.parent.wait_for_element_displayed(*header)
+            return True
+        except:
+            self.UTILS.reporting.logResult("info", "Looks like 'Authorized numbers' has not been tapped")
+            auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
+            auth_list.tap()
+            return False
 
     def fdn_add_auth_number(self, name, number, pin2):
         #
@@ -322,7 +377,7 @@ class Settings(object):
             DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
         self.UTILS.element.waitForElements(elem, "Waiting for contact to be in the list", True, 30)
 
-    def fdn_delete_auth_number(self, name, number, pin2):
+    def fdn_delete_auth_number(self, number, pin2):
         #
         # This method deletes a contact from the authorized numbers list
         # It must be called once the list has been displayed
@@ -333,36 +388,34 @@ class Settings(object):
         elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
             DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
 
-        contact = self.UTILS.element.getElement(elem, "Contact to be deleted")
-        contact.tap()
-        time.sleep(1)
-
-        #
-        # Wait for options to be displayed
-        #
-        header = (DOM.Settings.fdn_auth_number_action_header[0],
-            DOM.Settings.fdn_auth_number_action_header[1].format(name))
-        self.UTILS.element.waitForElements(header,
-            "Waiting for actions over contact: {}, {}".format(name, number))
-
+        try:
+            self.parent.wait_for_element_displayed(*elem)
+            contact = self.marionette.find_element(*elem)
+            contact.tap()
+            time.sleep(1)
+        except:
+            self.UTILS.reporting.logResult("info", "Something went wrong deleting the contact from FDN list")
+            return
+            
         #
         # Choose delete option
         #
-        delete_option = self.UTILS.element.getElement(DOM.Settings.fdn_auth_number_action_delete, "Delete option")
+        delete_option = self.UTILS.element.getElement(DOM.Settings.fdn_auth_number_action_delete, "Delete option", is_displayed=True, timeout=20)
         delete_option.tap()
 
         #
         # PIN2 Confirmation
         #
         self.UTILS.element.waitForElements(('xpath',
-            DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))), "Confirm SIM PIN2 header")
+            DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))), "Confirm SIM PIN2 header", True, 10)
 
-        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "PIN2 input")
+        pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "PIN2 input", True, 10)
         pin2_input.send_keys(pin2)
 
-        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button")
+        done_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "Done button", True, 10)
         done_btn.tap()
 
+        time.sleep(2)
         #
         # Check the number is no longer present in the list
         #
@@ -380,8 +433,9 @@ class Settings(object):
             contact = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers_list, "contact")
             self.UTILS.reporting.debug("*** Contact found: [{}]".format(contact))
             number = self.marionette.find_element('css selector', 'small', contact.id).text
-            name = self.marionette.find_element('css selector', 'span', contact.id).text
-            self.fdn_delete_auth_number(name, number, pin2)
+            self.UTILS.reporting.logResult("info", "Number of contact to be deleted: {}".format(number))
+            self.fdn_delete_auth_number(number, pin2)
+            time.sleep(2)
 
     def disable_hotSpot(self):
         #
@@ -607,15 +661,18 @@ class Settings(object):
         #
         # This method changes the current PIN code to a new one
         #
-        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
-        self.UTILS.element.scroll_into_view(sim_security)
-        sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
+        #
+        
+        is_dual_sim = self.UTILS.general.is_device_dual_sim()
 
-        # If no SIM security enabled, enable it
-        if sim_security_tag.text == _("Disabled"):
-            self.enable_sim_security(True, old_pin)
-            self.goBack()
+        self.enable_sim_security(True, old_pin)
+        self.goBack()
 
+        if is_dual_sim:
+            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
+        else:
+            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
+        
         sim_security.tap()
         change_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin, "Change PIN button")
         change_btn.tap()
@@ -632,26 +689,72 @@ class Settings(object):
         done_btn = self.UTILS.element.getElement(DOM.Settings.change_pin_done_btn, "Change PIN Done button")
         done_btn.tap()
 
-    def enable_sim_security(self, enable, pin):
+    def enable_sim_security(self, enable, pin, is_dual_sim=None):
         #
         # This method sets the SIM security configuration.
         #
-        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
-        self.UTILS.element.scroll_into_view(sim_security)
-        sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
-        time.sleep(4)
+        
+        self.UTILS.reporting.logResult("info", "Enabling SIM security" if enable else "Disabling SIM Security")
+        
+        if is_dual_sim is None:
+            is_dual_sim = self.UTILS.general.is_device_dual_sim()
+        
+        if is_dual_sim:
+            self.UTILS.reporting.logResult("info", "Is dual SIM")
+            
+            self.wait_for_option_to_be_enabled(DOM.Settings.sim_manager_option)
+            sim_manager = self.UTILS.element.getElement(DOM.Settings.sim_manager_option, "SIM manager")
+            sim_manager.tap()
 
-        # If the attribute is already in the desired state, return
-        current = sim_security_tag.text == _("Enabled")
-        if enable == current:
-            #click anyway so that we can later check whether the button to change the PIN
+            self.UTILS.reporting.logResult("info", "Time to select SIM security option")
+
+            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
             sim_security.tap()
-            return
 
-        sim_security.tap()
-        sim_security_pin = self.UTILS.element.getElement(DOM.Settings.sim_security_pin, "SIM security switch")
-        sim_security_pin.tap()
+            self.UTILS.reporting.logResult("info", "Try to switch ON the SIM 1 PIN switch")
+            try:
+                self.UTILS.reporting.logResult("info", "First we have to check if there's a button to change the PIN")
+                self.parent.wait_for_element_displayed(*DOM.Settings.dual_sim_change_pin_sim1)
+                if enable:
+                    self.UTILS.reporting.logResult("info", "Trying to enable... but IT WAS AlREADY DONE!! Exiting...")
+                    return
+                else:
+                    sim_security_pin = self.UTILS.element.getElement(DOM.Settings.dual_sim_switch_pin_sim1, "Enable PIN 1 switch")
+                    sim_security_pin.tap()
+            except:
+                if not enable:
+                    self.UTILS.reporting.logResult("info", "Trying to disable... but IT WAS AlREADY DONE!! Exiting...")
+                    return
 
+                self.UTILS.reporting.logResult("info", "The button was not there, so let's enable security")
+                sim_security_pin = self.UTILS.element.getElement(DOM.Settings.dual_sim_switch_pin_sim1, "Enable PIN 1 switch")
+                sim_security_pin.tap()
+
+        else:
+            self.UTILS.reporting.logResult("info", "Is single SIM")
+            self.wait_for_option_to_be_enabled(DOM.Settings.sim_security_option)
+            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
+            self.UTILS.element.scroll_into_view(sim_security)
+            sim_security_tag = self.UTILS.element.getElement(DOM.Settings.sim_security_tag, "SIM security status")
+            time.sleep(4)
+
+            #
+            # If the attribute is already in the desired state, return
+            # 
+            self.UTILS.reporting.logResult("info", "Value of enable: {}".format(enable))
+            self.UTILS.reporting.logResult("info", "Value of sim security tag: {}".format(sim_security_tag.text))
+            current = sim_security_tag.text == _("Enabled")
+            self.UTILS.reporting.logResult("info", "Value of current: {}".format(current))
+            if enable == current:
+                #click anyway so that we can later check whether the button to change the PIN
+                sim_security.tap()
+                return
+
+            sim_security.tap()
+            sim_security_pin = self.UTILS.element.getElement(DOM.Settings.sim_security_pin, "SIM security switch")
+            sim_security_pin.tap()
+
+        self.UTILS.reporting.logResult("info", "Now it should appear a 'Enter PIN' header")
         self.UTILS.element.waitForElements(DOM.Settings.sim_security_enter_pin_header, "Enter PIN header")
 
         #
@@ -663,7 +766,51 @@ class Settings(object):
         done_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_enter_pin_done, "Done button")
         done_btn.tap()
 
-        self.UTILS.element.waitForElements(DOM.Settings.sim_security_header, "SIM Security header")
+        #
+        # Check that we're in SIM security menu.
+        # NOTE: There's a glitch (automation presumed) in which after hitting the "Done button" (see above)
+        # we come back to the SIM manager menu instead of the SIM security.
+        # 
+        # I haven't been able to reproduce it manually, so the following patch had to be applied.
+        #
+        #
+        try:
+            self.UTILS.reporting.logResult("info", "SIM Security header")
+            self.parent.wait_for_element_displayed(*DOM.Settings.sim_security_header)
+        except:
+            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
+            sim_security.tap()
+
+        #
+        # Check that SIM security was actually enabled/disabled
+        #
+        if is_dual_sim:
+            if enable:
+                #
+                # Now the PIN has been set up, we should be able to see the "Change PIN" button
+                # If not, something went wrong
+                #
+                try:
+                    self.UTILS.element.getElement(DOM.Settings.dual_sim_change_pin_sim1, "Change PIN button <b> is there </b>")
+                except:
+                    self.UTILS.test.TEST(False, "Something went wrong while activating the PIN", True)
+            else:
+                self.UTILS.element.waitForNotElements(DOM.Settings.dual_sim_change_pin_sim1,
+                                              "Change PIN button <b> is not there </b>")
+        else:
+            if enable:
+                #
+                # Now the PIN has been set up, we should be able to see the "Change PIN" button
+                # If not, something went wrong
+                #
+                try:
+                    self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin, "Change PIN button <b> is there </b>")
+                except:
+                    self.UTILS.test.TEST(False, "Something went wrong while activating the PIN", True)
+            else:
+                self.UTILS.element.waitForNotElements(DOM.Settings.sim_security_change_pin,
+                                              "Change PIN button <b> is not there </b>")
+
 
     def turn_dataConn_on(self, wireless_off=False):
         #
