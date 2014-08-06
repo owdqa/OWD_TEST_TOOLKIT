@@ -1,8 +1,7 @@
 import re
 import time
 from OWDTestToolkit import DOM
-from OWDTestToolkit.apps.settings import Settings
-
+from marionette import Actions
 
 class DownloadManager(object):
 
@@ -35,17 +34,6 @@ class DownloadManager(object):
         x.tap()
 
     def restartDownloadsList(self):
-        self.settings = Settings(self)
-
-        #
-        # Open the Settings application.
-        #
-        self.settings.launch()
-
-        #
-        # Tap Downloads List.
-        #
-        self.settings.downloads()
 
         time.sleep(3)
         x = self.marionette.find_elements(*DOM.DownloadManager.download_list_elems)
@@ -54,7 +42,7 @@ class DownloadManager(object):
         if not x or len(x) == 0:
             self.UTILS.reporting.logResult("info", "Downloads list is empty, it's not necessary delete any file")
         else:
-            self.UTILS.reporting.logResult("info", "Downloads list is  not empty, it's necessary delete some files")
+            self.UTILS.reporting.logResult("info", "Downloads list is not empty, it's necessary delete some files")
             self.deleteAllDownloads()
 
     def deleteAllDownloads(self):
@@ -241,11 +229,25 @@ class DownloadManager(object):
         #
         self.UTILS.element.waitForElements(('css selector', 'a[href="%s"] ' % filename), "The file " + filename + " is present")
 
-        x = self.UTILS.element.getElement(('css selector', 'a[href="%s"] ' % filename),
+        link = self.UTILS.element.getElement(('css selector', 'a[href="%s"] ' % filename),
                                  "getting the file [%s] to download" % filename,
                                  True, 120)
-        x.tap()
-        time.sleep(3)
+        
+        self.actions = Actions(self.marionette)
+        self.actions.long_press(link, 2).perform()
+        time.sleep(1)
+
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
+
+        confirm_save = ('xpath', '//section[@data-type="action"]//button[@id="undefined"]')
+        confirm_button = self.UTILS.element.getElement(confirm_save, "Confirmation message")
+        confirm_button.tap()
+    #     try:
+    #         self.parent.wait_for_element_displayed(*confirm_save)
+    #         confirm_button = self.marionette.find_element(*confirm_save)
+    #         confirm_button.tap()
+    #     except:
+    #         self.UTILS.test.TEST(False, "Something went wrong getting the confirmation button", True)
 
     def openDownload(self, file):
 

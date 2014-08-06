@@ -424,11 +424,17 @@ class Settings(object):
         #
         # Open wifi settings.
         #
-        x = self.UTILS.element.getElement(DOM.Settings.downloads, "Downloads settings link")
-        x.tap()
+        self.parent.wait_for_element_displayed(*DOM.Settings.downloads)
+        downloads_link = self.marionette.find_element(*DOM.Settings.downloads)
+        
+        self.UTILS.element.scroll_into_view(downloads_link)
+        time.sleep(0.5)
+
+        downloads_link.tap()
+        # self.UTILS.element.simulateClick(downloads_link)
 
         self.UTILS.element.waitForElements(DOM.Settings.downloads_header,
-                                    "Downloads header appears.", True, 20, False)
+                                    "Downloads header appears.", True, 20, True)
 
     def enable_hotSpot(self):
         #
