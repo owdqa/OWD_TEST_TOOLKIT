@@ -482,7 +482,7 @@ class Settings(object):
         downloads_link = self.marionette.find_element(*DOM.Settings.downloads)
         
         self.UTILS.element.scroll_into_view(downloads_link)
-        time.sleep(0.5)
+        time.sleep(2)
 
         downloads_link.tap()
         # self.UTILS.element.simulateClick(downloads_link)

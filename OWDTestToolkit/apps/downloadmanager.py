@@ -242,13 +242,29 @@ class DownloadManager(object):
         confirm_save = ('xpath', '//section[@data-type="action"]//button[@id="undefined"]')
         confirm_button = self.UTILS.element.getElement(confirm_save, "Confirmation message")
         confirm_button.tap()
-    #     try:
-    #         self.parent.wait_for_element_displayed(*confirm_save)
-    #         confirm_button = self.marionette.find_element(*confirm_save)
-    #         confirm_button.tap()
-    #     except:
-    #         self.UTILS.test.TEST(False, "Something went wrong getting the confirmation button", True)
+    
+    def is_file_downloading(self, file_name):
+        #
+        # Checks whether the file is downloading in the downloads list
+        #
+        
+        #
+        # Sometimes it takes too long to load the list
+        #
+        self.parent.wait_for_element_displayed(DOM.DownloadManager.download_list[0],
+            DOM.DownloadManager.download_list[1], 60)
 
+        #
+        # Gets the desired file in the list
+        #
+        elem = (DOM.DownloadManager.download_element[0],
+                DOM.DownloadManager.download_element[1].format(file_name))
+        # self.parent.wait_for_element_displayed(*elem)
+        # file = self.marionette.find_element(*elem)
+
+        file = self.UTILS.element.getElement(elem, "A file")
+        return file.get_attribute("data-state") == "downloading"
+        
     def openDownload(self, file):
 
         elem = (DOM.DownloadManager.download_element[0],
