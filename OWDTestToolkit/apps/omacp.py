@@ -80,12 +80,12 @@ class OMACP(object):
 
         self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
 
-    def storeOMACPSettings(self, CP_PinNumber):
+    def storeOMACPSettings(self, pin):
         #
         # Introduce the PIN number, then click on the Accept button
         #
         self.UTILS.iframe.switchToFrame(*DOM.OMACP.frame_locator)
-        self.UTILS.general.typeThis(DOM.OMACP.CP_Windows_Pin, "PIN field", CP_PinNumber, p_no_keyboard=False,
+        self.UTILS.general.typeThis(DOM.OMACP.CP_Windows_Pin, "PIN field", pin, p_no_keyboard=True,
                             p_validate=False, p_clear=False, p_enter=True)
 
         x = self.UTILS.element.getElement(DOM.OMACP.CP_Accept_Button, "Accept button")
@@ -102,3 +102,4 @@ class OMACP(object):
 
         x = self.UTILS.element.getElement(DOM.OMACP.CP_Finish_Button, "Finish button")
         x.tap()
+        time.sleep(3)

@@ -36,6 +36,21 @@ class reporting(object):
         else:
             self.logger.info(message)
 
+    def critical(self, message):
+        self.logger.critical(message)
+
+    def error(self, message):
+        self.logger.error(message)
+
+    def warn(self, message):
+        self.logger.warn(message)
+
+    def info(self, message):
+        self.logger.info(message)
+
+    def debug(self, message):
+        self.logger.debug(message)
+
     def logResult(self, p_result, p_msg, p_fnam=False):
         #
         # Add a test result to the result array.

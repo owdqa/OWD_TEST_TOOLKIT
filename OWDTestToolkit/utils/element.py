@@ -18,7 +18,6 @@ class element(object):
         timeout = self._DEFAULT_ELEMENT_TIMEOUT if not timeout else timeout
 
         x = self.getElements(elem, msg, is_displayed, timeout, stop_on_error)
-
         if x:
             # We're expecting ONE element back (it has different methods if it's one).
             return x[0]
@@ -235,6 +234,11 @@ class element(object):
         return self.marionette.execute_script("""
             return arguments[0].children;
         """, script_args=[element])
+
+    def find_nested(self, context, css_selector):
+        return self.marionette.execute_script("""
+            return arguments[0].querySelector(arguments[1])
+        """, script_args=[context, css_selector])
 
     def get_css_value(self, element, css_property):
         #

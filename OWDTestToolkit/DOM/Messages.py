@@ -26,13 +26,15 @@ contact_no_phones_ok = ("xpath", "//form[@id='confirmation-message']//button[tex
 input_message_area = ('id', 'messages-input')
 
 send_message_button = ('id', 'messages-send-button')
+messages_counter = ('id', 'messages-counter-label')
 attach_button = ('id', 'messages-attach-button')
 message_sending_spinner = ("xpath", "//aside[@class='pack-end'][-1]/progress")
 
 header_back_button = ("id", "messages-back-button")
 
 # This field will allow to retrieve phone numbers and emails in the body of the last SM or MM
-contact_info_in_msg = ('xpath', "//ul[@id='last-messages']/li[last()]/section//span/a")
+phone_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//span/a[@data-action="dial-link"]')
+email_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//span/a[@data-action="email-link"]')
 
 threads = ("xpath", "//p[@class='name']")
 threads_list = ('xpath', '//article[@id="threads-container"]//li')
@@ -40,17 +42,20 @@ threads_list = ('xpath', '//article[@id="threads-container"]//li')
 threads_list_element = ('xpath', '//article[@id="threads-container"]/div/ul/li/a/p')
 
 thread_target_names = ('xpath', '//article[@id="threads-container"]//li//p[@class="name"]')
-thread_selector_xpath = "//*[@id='threads-container']//li//a/p[contains(text(),'{}')]"
+thread_selector_xpath = "//*[@id='threads-container']//li//a/p[contains(text(),'{}')]/../.."
+thread_selector_checked = ('xpath', "//*[@id='threads-container']//li//a/p[contains(text(),'{}')]/../../label/input")
 thread_timestamp_xpath = thread_selector_xpath + "/..//time"
 no_threads_message = ("id", "no-result-message")
-edit_threads_button = ("id", "threads-edit-icon")
-cancel_edit_threads = ("id", "threads-cancel-button")
+edit_threads_button = ("id", "threads-options-icon")
+cancel_edit_threads = ("css selector", "button[data-l10n-id='settings'] + button[data-l10n-id='cancel']")
 check_all_threads_btn = ("id", "threads-check-all-button")
 check_all_messages_btn = ("id", "messages-check-all-button")
-delete_threads_button = ("id", "threads-delete-button")
+delete_threads_button = ("css selector", "button[data-l10n-id='deleteMessages-label']")
 
-message_list = ('xpath', '//article[@id="messages-container"]//li')
+message_list = ('xpath', '//div[@id="messages-container"]//li')
 message_timestamps = ("xpath", "//article[@id='messages-container']/header")
+last_message = ('xpath', '//div[@id="messages-container"]//li[last()]')
+last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span[text()]')
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')
 messages_from_num = "//*[contains(@id, '{}')]"
@@ -58,12 +63,14 @@ message_header = ("id", "messages-header-text")
 received_messages = ('xpath', "//li[@class='bubble'][a[@class='received']]")
 
 edit_messages_icon = ('xpath', "//span[@class='icon icon-options']")
+edit_threads_header = ('id', 'threads-edit-mode')
+threads_delete_button = ('id', 'threads-delete-button')
+delete_threads_ok_btn = ('xpath', '//button[@class="danger" and @data-l10n-id="delete"]')
 delete_messages_btn = ('xpath', "//button[@data-l10n-id='deleteMessages-label']")
-delete_messages_ok_btn = ('xpath', "//form[@class='modal-dialog-confirm generic-dialog visible']/menu/button[@data-l10n-id='ok']")
+delete_messages_ok_btn = ('id', "messages-delete-button")
 
 message_text = ('xpath', "/html/body/article/section[2]/article/ul/li[{}]/section/div/p/span")
 
-edit_msgs_delete_btn = ("id", "messages-delete-button")
 edit_msgs_header = ("id", "messages-edit-mode")
 edit_msgs_sel_all_btn = ("id", "messages-check-all-button")
 
@@ -86,8 +93,8 @@ target_subject = ("id", "messages-subject-input")
 
 attach_preview_img_type = ("xpath", "//*[@class='attachment-container preview']")
 attach_preview_video_audio_type = ("xpath", "//*[@class='attachment-container nopreview']")
-last_message_attachment_img = ('xpath', '//*[@id="last-messages"]/li[last()]//div[@class="attachment-container preview"]')
-last_message_attachment_av = ('xpath', '//*[@id="last-messages"]/li[last()]//div[@class="attachment-container nopreview"]')
+last_message_attachment_img = ('xpath', '//*[@id="messages-container"]//li[last()]//div[@class="attachment-container preview"]')
+last_message_attachment_av = ('xpath', '//*[@id="messages-container"]//li[last()]//div[@class="attachment-container nopreview"]')
 
 header_call_btn = ("xpath", "//button[text()='{}']".format(_("Call")))
 header_send_message_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='sendEmail']")
@@ -110,7 +117,7 @@ attached_opt_view = ("xpath", "//*[@data-l10n-id='view-attachment-image']")
 attached_opt_remove = ("xpath", "//*[@data-l10n-id='remove-attachment-image']")
 attached_opt_replace = ("xpath", "//*[@data-l10n-id='replace-attachment-image']")
 
-message_expected_content = ('xpath', "//div[@class='message-content']/p/span[text()='{}']")
+message_expected_content = ('xpath', "//div[@class='message-content']//p/span[text()='{}']")
 
 wap_push_message_link = ('xpath', "//*[@id='si-sl-screen']//a[@data-action='url-link']")
 

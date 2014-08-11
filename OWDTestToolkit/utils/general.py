@@ -3,6 +3,9 @@ import os
 import json
 import time
 from OWDTestToolkit import DOM
+from gaiatest.apps.keyboard.app import Keyboard
+from gaiatest import GaiaData
+from gaiatest import GaiaApps
 
 
 class general(object):
@@ -10,6 +13,7 @@ class general(object):
     def __init__(self, parent):
         self.parent = parent
         self.marionette = parent.marionette
+        self.keyboard = Keyboard(self.marionette)
 
     def addFileToDevice(self, file_name, count=1, destination=''):
         #
@@ -77,6 +81,16 @@ class general(object):
         result = self.marionette.execute_async_script('return GaiaDataLayer.insertContact({});'.\
                                                       format(json.dumps(mozcontact)), special_powers=True)
         assert result, 'Unable to insert contact {}'.format(contact)
+
+    def is_device_dual_sim(self):
+        import os
+        try:
+            prop = os.popen('adb shell cat /system/build.prop | grep multisim').read().strip().split("=")[-1]
+            self.parent.reporting.logResult("info", "Value of property: {}".format(prop))
+            return  prop == "dsds"
+        except:
+            self.parent.reporting.logResult("info", "That property was not found")
+            return False
 
     def selectFromSystemDialog(self, p_str):
         #
@@ -179,7 +193,7 @@ class general(object):
         x = self.parent.element.getElement(p_element_array, p_desc)
 
         #
-        # Need to click in a lot of these or the field isn't located correctly (esp. SMS).
+        # Need to click in the bottom right corner, or the cursor may not be properly located to append.
         #
         x.tap(x=x.size["width"] - 1, y=x.size["height"] - 1)
 
@@ -190,7 +204,6 @@ class general(object):
             #
             # Don't use the keyboard.
             #
-            #self.parent.reporting.logResult("info", "(Sending'" + p_str + "'to this field without using the keyboard.)")
             self.parent.reporting.logResult("info", u"(Sending '{}' to this field without using the keyboard.)".\
                 format(p_str))
 
@@ -217,14 +230,14 @@ class general(object):
             #
             # Type the string.
             #
-            self.parent.parent.keyboard.send(p_str)
+            self.keyboard.send(p_str)
 
         #
         # Tap ENTER on the keyboard (helps to remove the keyboard even if
         # you didn't use it to type)?
         #
         if p_enter:
-            self.parent.parent.keyboard.tap_enter()
+            self.keyboard.tap_enter()
 
         #
         # Switch back to the frame we were in and get the element again.
@@ -238,6 +251,10 @@ class general(object):
         if p_validate:
             x = self.marionette.find_element(*p_element_array)
             y = x.get_attribute("value")
+            self.parent.reporting.debug("*** VALUE of cmp-body-text: [{}]".format(y))
+            if y is None:
+                y = x.text
+                self.parent.reporting.debug("*** No value found. Using TEXT of cmp-body-text: [{}]".format(y))
 
             if p_clear:
                 fieldText = y
@@ -266,3 +283,16 @@ class general(object):
         destination = destination_prefix + file_name
         file_to_remove = '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination)
         self.parent.device.manager.removeFile(file_to_remove)
+
+    def restart(self):
+        # Lockscreen does not get on very well with restarts
+        lock_enabled = self.parent.data_layer.get_setting("lockscreen.enabled")
+        if lock_enabled:
+            self.parent.data_layer.set_setting("lockscreen.enabled", False)
+
+        # After restarting we need to re-instantiate javascript objects
+        self.parent.device.restart_b2g()
+        self.apps = GaiaApps(self.marionette)
+        self.parent.data_layer = GaiaData(self.marionette, self.parent.parent.testvars)
+        # Restore lockscreen status
+        self.parent.data_layer.set_setting("lockscreen.enabled", lock_enabled)

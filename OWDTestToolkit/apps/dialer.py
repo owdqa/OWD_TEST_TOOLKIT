@@ -238,11 +238,11 @@ class Dialer(object):
         # Calls the current number.
         #
         x = self.UTILS.element.getElement(DOM.Dialer.call_number_button, "Call number button")
-        x.tap()
+        self.UTILS.reporting.debug("*** Call this number button: [{}]   Text: [{}]".format(x, x.text))
+        self.UTILS.element.simulateClick(x)
 
-        self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
-        self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call element", True, 5)
+        self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call locator", True, 5)
 
     def call_this_number_and_hangup(self, delay):
         self.callThisNumber()
@@ -261,7 +261,7 @@ class Dialer(object):
 
     def createContactFromThisNum(self):
         #
-        # Creates a new contact from the number currently in the dialler
+        # Creates a new contact from the number currently in the dialer
         # (doesn't fill in the contact details).
         #
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
@@ -318,12 +318,12 @@ class Dialer(object):
         for i in str(p_num):
 
             if i == "+":
-                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialler_button_xpath.format(0)),
+                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialer_button_xpath.format(0)),
                                            "keypad symbol '+'")
                 self.actions = Actions(self.marionette)
                 self.actions.long_press(x, 2).perform()
             else:
-                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialler_button_xpath.format(i)),
+                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialer_button_xpath.format(i)),
                                            "keypad number {}".format(i))
                 x.tap()
 
@@ -332,9 +332,10 @@ class Dialer(object):
         #
         if validate:
             x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
-            dialer_num = x.get_attribute("value")
-            self.UTILS.test.TEST(str(p_num) in dialer_num, "After entering '{}', phone number field contains '{}'.".\
-                                                      format(dialer_num, p_num))
+            dialer_num = self.marionette.execute_script("return arguments[0].value", script_args=[x])
+            self.UTILS.reporting.debug(u"** Dialer_num entered: [{}]".format(dialer_num))
+            self.UTILS.test.TEST(str(p_num) in dialer_num, u"After entering '{}', phone number field contains '{}'.".\
+                                                      format(p_num, dialer_num))
 
             x = self.UTILS.debug.screenShotOnErr()
             self.UTILS.reporting.logResult("info", "Screenshot:", x)
@@ -369,7 +370,7 @@ class Dialer(object):
             answer = self.marionette.find_element(*DOM.Dialer.answer_callButton)
             if answer:
                 answer.tap()
-                
+
     def answer_and_hangup(self, delay=5):
         self.answer()
         time.sleep(delay)
@@ -421,16 +422,6 @@ class Dialer(object):
                         hangup.tap()
         except:
             pass
-
-        #
-        # Just to be sure!
-        #
-        try:
-            self.parent.data_layer.kill_active_call()
-        except:
-            pass
-
-        self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
 
     def openCallLog(self):
         #

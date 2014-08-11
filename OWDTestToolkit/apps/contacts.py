@@ -705,6 +705,7 @@ class Contacts(object):
                     self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
 
                     x = self.UTILS.debug.screenShotOnErr()
+                    self.UTILS.reporting.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
                     return False
                 except:
                     pass

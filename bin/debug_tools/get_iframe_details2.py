@@ -100,7 +100,7 @@ class current_frame():
                 #
                 print "    |_ html dump saved to      : " + self.filename_htmldump
                 f = open(self.filename_htmldump, 'w')
-                f.write(self.marionette.page_source.encode('ascii', 'ignore'))
+                f.write(self.marionette.page_source.encode('utf8', 'ignore'))
                 f.close()
             else:
                 self.record_frame()
@@ -122,7 +122,7 @@ class current_frame():
         #
         print "    |_ html dump saved to      : " + self.filename_htmldump
         f = open(self.filename_htmldump, 'w')
-        f.write(self.marionette.page_source.encode('ascii', 'ignore'))
+        f.write(self.marionette.page_source.encode('utf8', 'ignore'))
         f.close()
 
 

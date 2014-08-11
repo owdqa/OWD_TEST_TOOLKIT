@@ -1,17 +1,18 @@
-statusbar_new_notif      = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'%s')]")
-new_download_popup_detail     = ("xpath", "//div[@id='toaster-detail' and contains(text(),'%s')]")
-new_download_popup_title      = ("xpath", "//div[@id='toaster-title' and contains(text(),'%s')]")
+statusbar_new_notif = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'{}')]")
+new_download_popup_detail = ("xpath", "//div[@id='toaster-detail' and contains(text(),'%s')]")
+new_download_popup_title = ("xpath", "//div[@id='toaster-title' and contains(text(),'%s')]")
 
 download_list = ("id", "downloadList")
+download_list_elems = ('xpath', "//section[@id='downloadList']/ul/li")
 
 download_element = ("xpath", ".//li[@data-url='%s']")
 download_element_progress = ("xpath", ".//li[@data-url='%s']/progress")
 download_element_button = ("xpath", "//*[@id='%s']/aside[2]")
 download_element_button_position = ("xpath", "//section[@id='downloadList']/ul/li[{}]/aside[@class='pack-end']")
-download_element_checkbox = ("xpath",".//li[@data-url='%s']/label/input")
+download_element_checkbox = ("xpath", ".//li[@data-url='%s']/label/input")
 download_element_checkbox_position = ("xpath", "//section[@id='downloadList']/ul/li[{}]")
 download_status_text = ("xpath", "//*[@id='%s']/p[2]")
-download_status_text_position= ("xpath", "//section[@id='downloadList']/ul/li[{}]/p[@class='info']")
+download_status_text_position = ("xpath", "//section[@id='downloadList']/ul/li[{}]/p[@class='info']")
 download_status = ("xpath", "//*[@id='%s']")
 download_status_position = ("xpath", "//section[@id='downloadList']/ul/li[{}]")
 
@@ -36,5 +37,3 @@ download_file_option_share = ("id", "SHARE")
 download_file_option_ringtone = ("id", "RINGTONE")
 ownload_file_option_wallpaper = ("id", "WALLPAPER")
 download_file_option_cancel = ("id", "CANCEL")
-
-

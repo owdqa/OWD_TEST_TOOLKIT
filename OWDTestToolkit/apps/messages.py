@@ -37,7 +37,6 @@ class Messages(object):
         # <br>
         # <b>nums</b> must be an array.
         #
-
         n = 0
 
         for i in nums:
@@ -609,8 +608,7 @@ class Messages(object):
         #
         # Delete the currently selected messages in this thread.
         #
-        x = self.UTILS.element.getElement(DOM.Messages.edit_msgs_delete_btn,
-                                    "Delete message")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "Delete messages button")
         x.tap()
 
         #
@@ -621,26 +619,22 @@ class Messages(object):
         x.tap()
 
         # self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
-        time.sleep(2)
+        #time.sleep(2)
 
     def deleteSelectedThreads(self):
-        #
-        # Delete the currently selected message threads.
-        #
-        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
-        x.tap()
+        delete_btn = self.UTILS.element.getElement(DOM.Messages.threads_delete_button, "Delete threads button")
+        delete_btn.tap()
 
         time.sleep(2)
-        self.marionette.switch_to_frame()
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "OK button in question dialog")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "OK button in question dialog")
         x.tap()
 
         #
         # For some reason after you do this, you can't enter a 'to' number anymore.
         # After a lot of headscratching, it was just easier to re-launch the app.
         #
-        time.sleep(5)
-        self.launch()
+        #time.sleep(5)
+        #self.launch()
 
     def deleteThreads(self, target_array=False):
         #
@@ -659,7 +653,9 @@ class Messages(object):
         except:
             self.UTILS.reporting.logResult("info", "Deleting message threads ...")
             if target_array:
+                self.UTILS.reporting.debug("*** Selecting threads for deletion [{}]".format(target_array))
                 self.editAndSelectThreads(target_array)
+                self.UTILS.reporting.debug("*** Threads selected")
                 self.deleteSelectedThreads()
             else:
                 self.deleteAllThreads()
@@ -706,17 +702,24 @@ class Messages(object):
         #
         # Go into edit mode..
         #
-        x = self.threadEditModeON()
+        self.threadEditModeON()
+
+        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
+        x.tap()
+
+        for i in target_array:
+            self.UTILS.reporting.debug("selecting thread for [{}]".format(i))
+            x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_selector_xpath.format(i)),
+                                      "Thread checkbox for '{}'".format(i))
+            self.UTILS.reporting.debug("Trying to tap in element {}".format(x))
+            #self.UTILS.element.simulateClick(x)
+            x.tap()
 
         #
-        # Check the messages (for some reason, just doing x[i].click() doesn't
-        # work for element zero, so I had to do this 'longhanded' version!).
+        # Finally check that all desired threads have been selected
         #
-        for i in target_array:
-            x = self.UTILS.element.getElement(("xpath",
-                                       DOM.Messages.thread_selector_xpath.format(i)),
-                                      "Thread checkbox for '" + i + "'")
-            x.click()
+        header = self.UTILS.element.getElement(DOM.Messages.edit_threads_header, "Edit threads header")
+        self.UTILS.test.TEST(str(len(target_array)) in header.text, "Check that all desired threads have been selected")
 
     def enterSMSMsg(self, msg, not_keyboard=True):
         #
@@ -1468,13 +1471,8 @@ class Messages(object):
         #
         time.sleep(5)
         # try:
-        self.parent.wait_for_element_present(*DOM.Messages.message_list, timeout=20)
-        x = self.marionette.find_elements(*DOM.Messages.message_list)
-
-        try:
-            return x[-1]
-        except:
-            return False
+        self.parent.wait_for_element_present(*DOM.Messages.last_message, timeout=20)
+        return self.marionette.find_element(*DOM.Messages.last_message)
 
     def openThread(self, num):
         #
@@ -1487,9 +1485,9 @@ class Messages(object):
             x.tap()
 
             self.UTILS.element.waitForElements(DOM.Messages.send_message_button, "'Send' button")
-        except:
+        except Exception as e:
             x = self.UTILS.debug.screenShotOnErr()
-            msg = "<b>NOTE:</b> The thread <i>may</i> have failed to open."
+            msg = "<b>NOTE:</b> The thread <i>may</i> have failed to open due to [{}].".format(e)
             self.UTILS.reporting.logResult("info", msg, x)
 
     def readLastSMSInThread(self):
@@ -1672,12 +1670,13 @@ class Messages(object):
                                     "Thread timestamp", True, 5, False)
         return float(x.get_attribute("data-time"))
 
-    def verifyMMSReceived(self, attached_type, send_time=None, timeout=30):
+    def verifyMMSReceived(self, attached_type, sender_number):
 
-        message = self.waitForReceivedMsgInThisThread(send_time=send_time, timeOut=timeout)
+        self.openThread(sender_number)
+        message = self.lastMessageInThisThread()
         self.UTILS.test.TEST(message, "A received message appeared in the thread.", True)
 
-        self.UTILS.reporting.log_to_file("*** attached type: {}".format(attached_type))
+        self.UTILS.reporting.debug("*** attached type: {}".format(attached_type))
         if attached_type == "img":
             elem = DOM.Messages.last_message_attachment_img
         elif attached_type == "video":
@@ -1690,11 +1689,11 @@ class Messages(object):
                 ". Attached_type must be image, video or audio."
             self.UTILS.test.quitTest(msg)
 
-        self.UTILS.reporting.log_to_file("*** searching for attachment type")
+        self.UTILS.reporting.debug("*** searching for attachment type")
         last = self.UTILS.element.getElement(elem, "Last message")
         self.UTILS.element.scroll_into_view(last)
         typ = last.get_attribute("data-attachment-type")
-        self.UTILS.reporting.log_to_file("*** searching for attachment type Result: {}".format(typ))
+        self.UTILS.reporting.debug("*** searching for attachment type Result: {}".format(typ))
         if typ != attached_type:
             msg = "Incorrect file type. The file must be {}, but is {} instead".format(attached_type, typ)
             self.UTILS.test.quitTest(msg)
@@ -1775,8 +1774,8 @@ class Messages(object):
             # we expect has not arrived yet, so we have to wait a bit more.
             if send_time:
                 message_data_time = float(x.get_attribute("data-timestamp")) / 1000
-                fmt = "data-timestamp of last message in thread: {:.3f} send_time: {:.3f}"
-                self.UTILS.reporting.log_to_file(fmt.format(message_data_time, send_time))
+                fmt = "data-timestamp of last message in thread: {:.3f} send_time: {:.3f} --> {}"
+                self.UTILS.reporting.log_to_file(fmt.format(message_data_time, send_time, send_time > message_data_time))
                 if send_time > message_data_time:
                     continue
 
