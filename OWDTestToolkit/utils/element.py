@@ -5,18 +5,13 @@ from OWDTestToolkit import DOM
 
 class element(object):
 
-    def __init__(self, parent, timeout=5):
+    def __init__(self, parent):
         self.parent = parent
-        self._DEFAULT_ELEMENT_TIMEOUT = timeout
         self.marionette = parent.marionette
 
-    def getElement(self, elem, msg, is_displayed=True, timeout=False, stop_on_error=True):
+    def getElement(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
         #
         # Returns an element, or False it it's not found.<br>
-        # timeout defaults to _DEFAULT_ELEMENT_TIMEOUT (set in the utils.py file).
-        #
-        timeout = self._DEFAULT_ELEMENT_TIMEOUT if not timeout else timeout
-
         x = self.getElements(elem, msg, is_displayed, timeout, stop_on_error)
         if x:
             # We're expecting ONE element back (it has different methods if it's one).
@@ -24,13 +19,9 @@ class element(object):
         else:
             return False
 
-    def getElements(self, elem, msg, is_displayed=True, timeout=False, stop_on_error=True):
+    def getElements(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
         #
         # Returns a list of matching elements, or False if none are found.<br>
-        # timeout defaults to _DEFAULT_ELEMENT_TIMEOUT (set in the utils.py file).
-        #
-        timeout = self._DEFAULT_ELEMENT_TIMEOUT if not timeout else timeout
-
         boolEl = self.waitForElements(elem, msg, is_displayed, timeout, stop_on_error)
 
         if boolEl:
@@ -167,13 +158,9 @@ class element(object):
             arguments[0].dispatchEvent(event);
         """, script_args=[element])
 
-    def waitForElements(self, elem, msg, is_displayed=True, timeout=False, stop_on_error=True):
+    def waitForElements(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
         #
         # Waits for an element to be displayed and captures the error if not.<br>
-        # timeout defaults to _DEFAULT_ELEMENT_TIMEOUT (set in the utils.py file).
-        #
-        timeout = self._DEFAULT_ELEMENT_TIMEOUT if not timeout else timeout
-
         is_ok = True
         msg = u"" + msg
         try:
@@ -190,13 +177,9 @@ class element(object):
 
         return is_ok
 
-    def waitForNotElements(self, elem, msg, is_displayed=True, timeout=False, stop_on_error=True):
+    def waitForNotElements(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
         #
         # Waits for an element to be displayed and captures the error if not.<br>
-        # timeout defaults to _DEFAULT_ELEMENT_TIMEOUT (set in the utils.py file).
-        #
-        timeout = self._DEFAULT_ELEMENT_TIMEOUT if not timeout else timeout
-
         is_ok = True
         try:
             if is_displayed:

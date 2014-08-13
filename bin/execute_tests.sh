@@ -19,6 +19,8 @@ export RUN_INPUT_LIST="$@"
 #
 cp /dev/null $REALTIME_SUMMARY
 _scheduled_restart_counter=0
+
+FAILED_TESTS=
 for TEST_NUM in $(echo $TESTS)
 do
     #
@@ -65,7 +67,6 @@ do
 
     . $0.parts/execute_test.sh
     
-    
     . $0.parts/record_test_run_details.sh
     
     . $0.parts/update_run_summary_totals.sh
@@ -89,7 +90,7 @@ if [ $UNEX_FAILS -gt 0 ]
 then
     # Calculating error rate
     P=$(($EX_PASSES + $UNEX_PASSES))
-    F=$(($EX_FAILS + $UNEX_FAILS))
+    F=$(($EX_FAILS + $UNEX_FAILS + $AUTOMATION_FAILS))
     T=$(($P + $F))
     ERROR_RATE=$((($F*100)/$T))
     printf "\n\nERROR RATE = %s %%\n\n" $ERROR_RATE

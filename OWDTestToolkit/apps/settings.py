@@ -4,6 +4,7 @@ from OWDTestToolkit import DOM
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
+
 class Settings(object):
 
     def __init__(self, parent):
@@ -23,7 +24,7 @@ class Settings(object):
         return self.app
 
     def wait_for_option_to_be_enabled(self, locator):
-         #
+        #
         # Wait for option to be enabled
         #
         # self.parent.wait_for_element_displayed(*locator)
@@ -35,14 +36,13 @@ class Settings(object):
         self.parent.wait_for_condition(lambda m: m.find_element(*locator).get_attribute("aria-disabled") is None,
                                          timeout=30, message="Option to be enabled")
 
-        
     def call_settings(self, sim_card_number=1):
 
         self.wait_for_option_to_be_enabled(DOM.Settings.call_settings_option)
 
         x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
         self.UTILS.element.simulateClick(x)
-        
+
         #
         # In case the device supports dual sim, we have to select one before
         # entering the call_settings menu. 
@@ -56,7 +56,7 @@ class Settings(object):
             sim_card_option.tap()
         except:
             self.UTILS.reporting.logResult("info", "No double SIM detected. Keep working...")
-        
+
         self.UTILS.element.waitForElements(('xpath',
             DOM.GLOBAL.app_head_specific.format(_("Call Settings").encode("utf8"))), "Call settings header")
 
@@ -110,30 +110,46 @@ class Settings(object):
         #
         # Open cellular and data settings.
         #
-        
+
         self.wait_for_option_to_be_enabled(DOM.Settings.data_connectivity)
         #
         # Once it is enabled, click on it
         #
-
+        self.parent.wait_for_element_displayed(*DOM.Settings.cellData)
         link = self.marionette.find_element(*DOM.Settings.cellData)
         link.tap()
 
         #
         # In case the device supports dual sim, we have to select one before
-        # entering the call_settings menu. 
+        # entering the call_settings menu.
         #
+        sim_card_option = self.get_multi_sim(sim_card_number)
+        sim_card_option.tap()
+
+        self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
+
+    def get_multi_sim(self, sim_card_number=1):
+        """Try to find the element for selecting between multiple SIMs.
+
+        Return the element for the selected SIM number, if found. None otherwise.
+        """
         try:
             elem = (DOM.Settings.cellData_sim_card_number[0],
                 DOM.Settings.cellData_sim_card_number[1].format(sim_card_number))
 
             self.parent.wait_for_element_displayed(elem[0], elem[1], 20)
-            sim_card_option = self.marionette.find_element(*elem)
-            sim_card_option.tap()
+            return self.marionette.find_element(*elem)
         except:
             self.UTILS.reporting.logResult("info", "No double SIM detected. Keep working...")
+        return None
 
-        self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
+    def skip_multisim(self):
+        """Detect if we are in a multisim selection menu and skip it using the Back button.
+        """
+        time.sleep(2)
+        sim_card_option = self.get_multi_sim()
+        if sim_card_option:
+            self.goBack()
 
     def configureMMSAutoRetrieve(self, value):
         #
@@ -207,32 +223,37 @@ class Settings(object):
         #
         # Enter the data
         #
-        
+
         #
         # This has to commented since there's a bug in Keyboard application from gaitestcase
         # Instead, we have to use the primitive methods from marionette.
         #
 
-        # self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
-        #                             p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
-        # self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
-        #                             p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
-        # self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
-        #                             p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
+                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
-        apn_field = self.UTILS.element.getElement(DOM.Settings.celldata_data_apn, "APN name")
-        apn_field.clear()
-        apn_field.send_keys(apn)
-
-        identifier_field = self.UTILS.element.getElement(DOM.Settings.celldata_apn_user, "APN identifier")
-        identifier_field.clear()
-        identifier_field.send_keys(identifier)
-
-        pwd_field = self.UTILS.element.getElement(DOM.Settings.celldata_apn_passwd, "APN pass")
-        pwd_field.clear()
-        pwd_field.send_keys(pwd)
+#===============================================================================
+#        apn_field = self.UTILS.element.getElement(DOM.Settings.celldata_data_apn, "APN name")
+#        apn_field.clear()
+#        apn_field.send_keys(apn)
+#        time.sleep(2)
+#
+#        identifier_field = self.UTILS.element.getElement(DOM.Settings.celldata_apn_user, "APN identifier")
+#        identifier_field.clear()
+#        identifier_field.send_keys(identifier)
+#        time.sleep(2)
+#
+#        pwd_field = self.UTILS.element.getElement(DOM.Settings.celldata_apn_passwd, "APN pass")
+#        pwd_field.clear()
+#        pwd_field.send_keys(pwd)
+#        time.sleep(2)
+#===============================================================================
 
         #
         # Tap the ok button to save the changes
@@ -396,7 +417,7 @@ class Settings(object):
         except:
             self.UTILS.reporting.logResult("info", "Something went wrong deleting the contact from FDN list")
             return
-            
+    
         #
         # Choose delete option
         #
@@ -607,6 +628,9 @@ class Settings(object):
         x = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
         x.tap()
         self.goBack()
+        sim_card_option = self.get_multi_sim()
+        if sim_card_option:
+            self.goBack()
 
     def setAlarmVolume(self, volume):
         #
@@ -656,7 +680,7 @@ class Settings(object):
         # This method changes the current PIN code to a new one
         #
         #
-        
+
         is_dual_sim = self.UTILS.general.is_device_dual_sim()
 
         self.enable_sim_security(True, old_pin)
@@ -666,7 +690,7 @@ class Settings(object):
             sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
         else:
             sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
-        
+
         sim_security.tap()
         change_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin, "Change PIN button")
         change_btn.tap()
@@ -687,15 +711,15 @@ class Settings(object):
         #
         # This method sets the SIM security configuration.
         #
-        
+
         self.UTILS.reporting.logResult("info", "Enabling SIM security" if enable else "Disabling SIM Security")
-        
+
         if is_dual_sim is None:
             is_dual_sim = self.UTILS.general.is_device_dual_sim()
-        
+
         if is_dual_sim:
             self.UTILS.reporting.logResult("info", "Is dual SIM")
-            
+
             self.wait_for_option_to_be_enabled(DOM.Settings.sim_manager_option)
             sim_manager = self.UTILS.element.getElement(DOM.Settings.sim_manager_option, "SIM manager")
             sim_manager.tap()
@@ -764,7 +788,7 @@ class Settings(object):
         # Check that we're in SIM security menu.
         # NOTE: There's a glitch (automation presumed) in which after hitting the "Done button" (see above)
         # we come back to the SIM manager menu instead of the SIM security.
-        # 
+        #
         # I haven't been able to reproduce it manually, so the following patch had to be applied.
         #
         #
@@ -804,7 +828,6 @@ class Settings(object):
             else:
                 self.UTILS.element.waitForNotElements(DOM.Settings.sim_security_change_pin,
                                               "Change PIN button <b> is not there </b>")
-
 
     def turn_dataConn_on(self, wireless_off=False):
         #
