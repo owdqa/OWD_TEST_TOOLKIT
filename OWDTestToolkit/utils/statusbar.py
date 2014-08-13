@@ -222,7 +222,8 @@ class statusbar(object):
 
         x = (DOM.Statusbar.notification_toaster_title[0], DOM.Statusbar.notification_toaster_title[1].format(text))
         self.parent.reporting.debug("** Waiting for notification toaster title: [{}]".format(x))
-        self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
+        #self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
+        self.parent.element.getElement((x[0], x[1]), "**** Notification toaster", timeout=timeout)
 
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
