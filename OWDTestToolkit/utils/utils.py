@@ -51,7 +51,7 @@ class UTILS(object):
         self.app = app(self)
         self.date_and_time = date_and_time(self)
         self.debug = debug(self)
-        self.element = element(self, 5)
+        self.element = element(self)
         self.home = home(self)
         self.iframe = iframe(self)
         self.messages = Messages(self)

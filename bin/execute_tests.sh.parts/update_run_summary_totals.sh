@@ -46,7 +46,9 @@ else
     else
         #
         # Failed.
+        # Add the test identifier to the list of failed tests
         #
+        FAILED_TESTS="$FAILED_TESTS $TEST_NUM"
         if [ "$test_blocked" ]
         then
         	#
@@ -93,4 +95,6 @@ export UNEX_PASSES=${UNEX_PASSES:-"0"}
 export EX_FAILS=${EX_FAILS:-"0"}
 export IGNORED=${IGNORED:-"0"}
 export UNWRITTEN=${UNWRITTEN:-"0"}
+#echo "Failed tests update_run: $FAILED_TESTS"
+export FAILED_TESTS
 

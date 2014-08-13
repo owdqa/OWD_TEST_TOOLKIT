@@ -18,7 +18,7 @@ printf "Start time                         : %s\n" "$RUN_TIME"
 printf "End time                           : %s\n\n" "$END_TIME"
 
 P=$(($EX_PASSES + $UNEX_PASSES))
-F=$(($EX_FAILS + $UNEX_FAILS))
+F=$(($EX_FAILS + $UNEX_FAILS + $AUTOMATION_FAILS))
 T=$(($P + $F))
 
 # Calculating error rate
@@ -35,6 +35,7 @@ printf "Assertions passed                  : %4s / %-4s\n" $ASSERTS_PASSED $ASSE
 printf "Expected failures                  : %4s\n" $EX_FAILS
 printf "Ignored test cases                 : %4s\n" $IGNORED
 printf "Unwritten test cases               : %4s\n" $UNWRITTEN
+#printf "Failed tests                       : %s\n" $FAILED_TESTS
 printf "\n$sep\n\n\n"
 
 

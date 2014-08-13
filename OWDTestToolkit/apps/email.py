@@ -266,6 +266,11 @@ class Email(object):
                                    "Header for '" + name + "' folder")
 
     def openMailFolder(self, folder_name):
+        #
+        # Open a specific mail folder (must be called from "Inbox").
+        #
+        x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
+        x.tap()
 
         #
         # Check whether we're already there

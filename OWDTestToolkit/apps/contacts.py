@@ -671,6 +671,7 @@ class Contacts(object):
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
         #
+        self.UTILS.reporting.logResult("info", "Entering hotmail_login ...")
         self.marionette.switch_to_frame()
         try:
             element = "//iframe[contains(@{}, '{}')]".\
@@ -758,7 +759,6 @@ class Contacts(object):
             self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
         except:
             pass
-
 
     def check_all_friends_imported(self):
         #

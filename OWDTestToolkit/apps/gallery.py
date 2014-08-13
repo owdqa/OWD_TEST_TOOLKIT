@@ -92,10 +92,15 @@ class Gallery(object):
         #
         gallery_items = self.getGalleryItems()
         for index, item in enumerate(gallery_items):
+            self.UTILS.reporting.debug("** Searching for gallery item {} with index {} and item {}".\
+                                       format(num, index, item))
             if index == num:
-                my_item = self.UTILS.element.getElements(DOM.Gallery.thumbnail_items,
+                img = self.UTILS.element.getElements(DOM.Gallery.thumbnail_items,
                                                  "Gallery item list", True, 20, False)[index]
-                my_item.tap()
+                self.UTILS.reporting.debug("---> Image found! [{}]".format(img))
+                time.sleep(1)
+                img.tap()
+                break
 
         time.sleep(2)
 

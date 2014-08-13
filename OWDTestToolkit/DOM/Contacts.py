@@ -34,19 +34,19 @@ favourites_section = ("id", "contacts-list-favorites")
 favourites_list_xpath = "//ol[@id='contacts-list-favorites']//li[@data-order='{}']"
 favourite_JS = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 
-social_network_contacts= ('class name', "icon-social icon-fb")
-settings_button        = ('id', 'settings-button')
-settings_header        = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode("utf8")))
-settings_done_button   = ('id', 'settings-close')
-settings_fb_enable     = ('xpath', '//li[@class="fb-item"]')
-settings_import_fb     = ('id', 'import-fb') 
-settings_fb_frame      = ("id", 'fb-extensions')
-settings_fb_logout_wait= ('id', 'progress-title')
-add_contact_button     = ('id', 'add-contact-button')
-add_contact_header     = ('xpath', GLOBAL.app_head_specific.format(_('Add contact')))
-favourite_button       = ('id','toggle-favorite')
-favourite_marker       = ('id', 'favorite-star')
-details_back_button    = ('id', 'details-back')
+social_network_contacts = ('class name', "icon-social icon-fb")
+settings_button = ('id', 'settings-button')
+settings_header = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode("utf8")))
+settings_done_button = ('id', 'settings-close')
+settings_fb_enable = ('xpath', '//li[@class="fb-item"]')
+settings_import_fb = ('id', 'import-fb') 
+settings_fb_frame = ("id", 'fb-extensions')
+settings_fb_logout_wait = ('id', 'progress-title')
+add_contact_button = ('id', 'add-contact-button')
+add_contact_header = ('xpath', GLOBAL.app_head_specific.format(_('Add contact')))
+favourite_button = ('id', 'toggle-favorite')
+favourite_marker = ('id', 'favorite-star')
+details_back_button = ('id', 'details-back')
 
 reset_field_xpath = ".//*[@id='{}']//button[@id='img-delete-button']"
 edit_image = ("id", "thumbnail-action")
@@ -100,9 +100,8 @@ import_conts_list = ("xpath", "//*[@id='groups-list']//li[@class='block-item']")
 import_search_list = ("xpath", "//*[@id='search-list']//li[@class='block-item']")
 import_conts_xp = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '{}')]"
 
-import_contacts      = ("id", "importContacts")
-import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import Contacts')))
-import_contacts_back = ("id", "import-settings-back")
+import_contacts = ("id", "importContacts")
+import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import contacts')))
 
 gmail_button = ("xpath", "//button[text()='Gmail']")
 gmail_frame = ("data-url", "google")
@@ -126,7 +125,7 @@ hotmail_import_frame2 = ("data-url", "live")  # It's in the contacts iframe.
 
 memorycard_button = ("xpath", "/html/body/article/section[2]/article/section/ul/li[2]/button")
 
-sim_button =("xpath", "/html/body/article/section[2]/article/section/ul/li/button")
+sim_button = ("xpath", "/html/body/article/section[2]/article/section/ul/li/button")
 
 #
 # Export

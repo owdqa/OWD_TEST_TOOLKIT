@@ -177,6 +177,15 @@ class Messages(object):
             x = self.UTILS.element.getElement(DOM.Messages.airplane_warning_ok, "OK button")
             x.tap()
 
+    def check_last_message_contents(self, expected):
+        """Get the last message text and check it against the expected value.
+        """
+        returnedSMS = self.lastMessageInThisThread()
+        returnedSMS_text = self.marionette.find_element(*DOM.Messages.last_message_text,
+                                                                      id=returnedSMS.id)
+        self.UTILS.test.TEST((returnedSMS_text and returnedSMS_text.text == expected),
+                             "Expected SMS text = '{}' (got '{}').".format(expected, returnedSMS_text.text))
+
     def checkIsInToField(self, target, targetIsPresent=True):
         #
         # Verifies if a number (or contact name) is
@@ -564,6 +573,8 @@ class Messages(object):
             self.UTILS.reporting.logResult("info", "Deleting message threads ...")
 
             x = self.threadEditModeON()
+            x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
+            x.tap()
             x = self.UTILS.element.getElement(DOM.Messages.check_all_threads_btn,
                                         "Select all button")
             x.tap()
@@ -598,43 +609,36 @@ class Messages(object):
             #
             # Press select all button.
             #
-            x = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn,
-                                        "'Select all' button")
+            x = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn, "'Select all' button")
             x.tap()
 
         self.deleteSelectedMessages()
 
     def deleteSelectedMessages(self):
-        #
-        # Delete the currently selected messages in this thread.
-        #
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "Delete messages button")
+        self.UTILS.reporting.debug("*** Tapping top Delete button")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "Delete button")
         x.tap()
+        time.sleep(2)
 
-        #
-        # Press OK button to confirm. OK button is displayed on top_level frame.
-        #
-        self.marionette.switch_to_frame()
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "OK button in question dialog")
+        self.UTILS.reporting.debug("*** Tap Delete messages confirmation button")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete messages confirmation button")
         x.tap()
-
-        # self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
-        #time.sleep(2)
+        time.sleep(2)
 
     def deleteSelectedThreads(self):
         delete_btn = self.UTILS.element.getElement(DOM.Messages.threads_delete_button, "Delete threads button")
         delete_btn.tap()
 
         time.sleep(2)
-        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "OK button in question dialog")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete threads confirmation button")
         x.tap()
 
         #
         # For some reason after you do this, you can't enter a 'to' number anymore.
         # After a lot of headscratching, it was just easier to re-launch the app.
         #
-        #time.sleep(5)
-        #self.launch()
+        time.sleep(5)
+        self.launch()
 
     def deleteThreads(self, target_array=False):
         #
@@ -670,26 +674,31 @@ class Messages(object):
         #
         # Go into messages Settings..
         #
+        self.UTILS.reporting.debug("*** Tap Edit button")
         x = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
         x.tap()
+        time.sleep(2)
 
         #
         # Go into message edit mode..
         #
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Edit button")
+        self.UTILS.reporting.debug("*** Tap Delete messages button")
+        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Delete messages button")
         x.tap()
+        time.sleep(2)
 
         #
         # Check the messages (for some reason, just doing x[i].click() doesn't
         # work for element zero, so I had to do this 'longhanded' version!).
         #
-        x = self.UTILS.element.getElements(DOM.Messages.message_list, "Messages")
-        y = 0
-        for i in x:
-            if y in msg_array:
-                self.UTILS.reporting.logResult("info", "Selecting message " + str(y) + " ...")
-                i.click()
-            y += 1
+        messages = self.UTILS.element.getElements(DOM.Messages.message_list, "Messages")
+        selected = 0
+        for msg in messages:
+            if selected in msg_array:
+                self.UTILS.reporting.debug("Selecting message {} ...".format(selected))
+                msg.tap()
+                time.sleep(2)
+            selected += 1
 
     def editAndSelectThreads(self, target_array):
         #
@@ -779,8 +788,8 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            send_time = time.time()
             x.tap()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
@@ -820,8 +829,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -874,8 +883,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -953,8 +962,8 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            send_time = time.time()
             x.tap()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
@@ -1017,8 +1026,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1094,8 +1103,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1211,8 +1220,8 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            send_time = time.time()
             x.tap()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
@@ -1276,8 +1285,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1354,8 +1363,8 @@ class Messages(object):
             #
             # Click send and wait for the message to be received
             #
-            send_time = time.time()
             self.sendSMS()
+            send_time = self.messages.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1473,6 +1482,12 @@ class Messages(object):
         # try:
         self.parent.wait_for_element_present(*DOM.Messages.last_message, timeout=20)
         return self.marionette.find_element(*DOM.Messages.last_message)
+
+    def last_sent_message_timestamp(self):
+        """Returns the timestamp of the last sent message
+        """
+        send_time = self.marionette.find_element(*DOM.Messages.last_sent_message).get_attribute("data-timestamp")
+        return float(send_time) / 1000
 
     def openThread(self, num):
         #
@@ -1672,6 +1687,7 @@ class Messages(object):
 
     def verifyMMSReceived(self, attached_type, sender_number):
 
+        self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
         self.openThread(sender_number)
         message = self.lastMessageInThisThread()
         self.UTILS.test.TEST(message, "A received message appeared in the thread.", True)
