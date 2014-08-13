@@ -621,7 +621,6 @@ class Messages(object):
         time.sleep(2)
 
         self.UTILS.reporting.debug("*** Tap Delete messages confirmation button")
-        self.parent.wait_for_element_displayed(*DOM.Messages.delete_threads_ok_btn, timeout=10)
         x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete messages confirmation button")
         x.tap()
         time.sleep(2)
