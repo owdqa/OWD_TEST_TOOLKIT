@@ -547,29 +547,12 @@ class Contacts(object):
                 except:
                     pass
 
-                #
-                # PERMISSIONS (sometimes appears).
-                # Seems to happen a few times, so loop through 5 just in case ...
-                #
-                stop = False
-                count = 5
-                while not stop:
-                    try:
-                        self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
-
-                        x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
-                        x.tap()
-
-                        time.sleep(5)
-                        stop = True
-                    except:
-                        count -= 1
-                        if count == 0:
-                            stop = True
+                self.check_gmail_permissions()
             else:
                 return True
         except:
             self.UTILS.reporting.logResult("info", "<b>Already logged in</b>")
+            self.check_gmail_permissions()
             pass
 
         time.sleep(5)
@@ -585,6 +568,29 @@ class Contacts(object):
 
         self.UTILS.element.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
         return True
+
+    def check_gmail_permissions(self):
+        #
+        # PERMISSIONS (sometimes appears).
+        # Seems to happen a few times, so loop through 5 just in case ...
+        #
+        stop = False
+        count = 5
+        while not stop:
+            self.UTILS.reporting.logResult('info', "Loop")
+            try:
+                self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
+
+                x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
+                x.tap()
+
+                self.UTILS.reporting.logResult('info', "Gmail permissions accepted")
+                time.sleep(5)
+                stop = True
+            except:
+                count -= 1
+                if count == 0:
+                    stop = True
 
     def import_hotmail_login(self, name, passwd, click_signin=True, just_signin=False):
         #
@@ -629,10 +635,14 @@ class Contacts(object):
         #
         # Go to the hotmail import iframe.
         #
+        self.UTILS.reporting.logResult('info', "Doing the switch to contacts......")
         time.sleep(2)
         # self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-
+        
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot before swithing", screenshot)
+        
         #
         # Change to import frame -> it is whithin Contacts frame
         #
@@ -661,7 +671,6 @@ class Contacts(object):
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
         #
-        self.UTILS.reporting.logResult("info", "Entering hotmail_login ...")
         self.marionette.switch_to_frame()
         try:
             element = "//iframe[contains(@{}, '{}')]".\
@@ -698,6 +707,7 @@ class Contacts(object):
                 x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
                 x.tap()
 
+                self.UTILS.general.checkMarionetteOK()
                 #
                 # Check to see if sigin failed. If it did then return False.
                 #
@@ -713,7 +723,7 @@ class Contacts(object):
                 #
                 # Sometimes a message about permissions appears.
                 #
-                self.permission_check(passwd)
+                self.hotmail_check_permissions(passwd)
         except:
             pass
 
@@ -733,7 +743,7 @@ class Contacts(object):
         except ValueError:
             return False
 
-    def permission_check(self, passwd):
+    def hotmail_check_permissions(self, passwd):
         #
         # Sometimes hotmail asks for permission - just accept it if it's there.
         #
@@ -748,6 +758,7 @@ class Contacts(object):
             self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
         except:
             pass
+
 
     def check_all_friends_imported(self):
         #

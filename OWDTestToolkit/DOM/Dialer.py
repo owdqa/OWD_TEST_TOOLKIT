@@ -30,9 +30,9 @@ suggestion_item_name = ('xpath', '//section[@id="suggestion-bar"]//div[@class="s
 suggestion_list = ("xpath", "//ul[@id='suggestion-list']/li")
 suggestion_list_cancel = ("id", "suggestion-overlay-cancel")
 
-outgoing_call_locator = ("xpath", "//section[contains(@class, 'handled-call outgoing')]/div[@class='duration']")
-outgoing_call_number = ("xpath", "//*[contains(@class,'number font-light')]")
-outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '{}')]"
+outgoing_call_locator = ("xpath", '//*[@id="calls"]//section[contains(@class, "outgoing")]')
+outgoing_call_number = ("xpath", '//*[@id="calls"]//section[contains(@class, "outgoing")]//div[contains(@class, "numberWrapper")]/div[contains(@class, "number font-light")]') #Note: maybe + prefix.
+outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '{}')]" #Note: maybe + prefix.
 hangup_bar_locator = ('id', 'callbar-hang-up')
 answer_callButton = ("xpath", "//*[@id='callbar-answer']")
 
