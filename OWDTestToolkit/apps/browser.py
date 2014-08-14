@@ -37,28 +37,6 @@ class Browser(object):
         x.tap()
         self.UTILS.element.waitForElements(DOM.Browser.url_input, "New tab")
 
-    # def check_page_loaded(self, url):
-    #     """Check the page didn't have a problem.
-    #     """
-    #     self.waitForPageToFinishLoading()
-
-    #     url = self.loadedURL()
-    #     self.UTILS.reporting.logResult("info", "The loaded url is now <a href=\"{0}\">{0}</a>".format(url))
-
-    #     self.UTILS.iframe.switchToFrame(*DOM.Browser.website_frame, via_root_frame=False)
-
-    #     # Take a screenshot.
-    #     fnam = self.UTILS.debug.screenShotOnErr()
-    #     self.UTILS.reporting.logResult("info", "Screenshot of web page in browser:|" + fnam[1])
-
-    #     try:
-    #         self.parent.wait_for_element_present(*DOM.Browser.page_problem, timeout=1)
-    #         x = self.marionette.find_element(*DOM.Browser.page_problem)
-    #         if x.is_displayed():
-    #             return False
-    #     except Exception:
-    #         return True
-
     def closeTab(self, num):
         """
         Closes the browser tab numbered num (starting at '1').
@@ -197,16 +175,6 @@ class Browser(object):
         self.UTILS.reporting.logResult('info', "Url parameter: {}".format(url))
         self.UTILS.reporting.logResult('info', "Current url: {}".format(self.loadedURL()))
         self.UTILS.test.TEST(url in self.loadedURL(), "Loaded URL matches the desired URL")
-        # self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
-        # x = self.UTILS.element.getElement(DOM.Browser.url_input, "Url input field")
-        # self.UTILS.reporting.logComment("Using URL " + p_url)
-        # x.clear()
-        # x.send_keys(p_url)
-
-        # x = self.UTILS.element.getElement(DOM.Browser.url_go_button, "'Go to url' button")
-        # x.tap()
-
-        # self.UTILS.test.TEST(self.check_page_loaded(p_url), "Web page loaded correctly.")
 
     def tap_go_button(self, timeout=30):
         self.marionette.find_element(*DOM.Browser.url_go_button).tap()
@@ -286,19 +254,6 @@ class Browser(object):
             if i in "0123456789":
                 z = z + i
         return z
-
-    # def waitForPageToFinishLoading(self):
-    #     """
-    #     Waits for the current url to finish loading.
-    #     """
-    #     time.sleep(3)
-    #     try:
-    #         self.parent.wait_for_element_displayed(*DOM.Browser.throbber)
-    #     except Exception:
-    #         pass
-    #     self.UTILS.element.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 60, False)
-
-    #     time.sleep(2)
 
     def addCurrentPageToBookmarks(self):
         """
