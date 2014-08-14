@@ -101,7 +101,7 @@ import_search_list = ("xpath", "//*[@id='search-list']//li[@class='block-item']"
 import_conts_xp = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '{}')]"
 
 import_contacts = ("id", "importContacts")
-import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import contacts')))
+import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import Contacts')))
 
 gmail_button = ("xpath", "//button[text()='Gmail']")
 gmail_frame = ("data-url", "google")
