@@ -721,14 +721,14 @@ class Messages(object):
             x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_selector_xpath.format(i)),
                                       "Thread checkbox for '{}'".format(i))
             self.UTILS.reporting.debug("Trying to tap in element {}".format(x))
-            #self.UTILS.element.simulateClick(x)
             x.tap()
 
         #
         # Finally check that all desired threads have been selected
         #
-        header = self.UTILS.element.getElement(DOM.Messages.edit_threads_header, "Edit threads header")
-        self.UTILS.test.TEST(str(len(target_array)) in header.text, "Check that all desired threads have been selected")
+        header = self.UTILS.element.getElement(DOM.Messages.edit_threads_header, "Edit threads header").text
+        expected_title = str(len(target_array)) if len(target_array) else _("Delete messages")
+        self.UTILS.test.TEST(expected_title in header, "Check that all desired threads have been selected")
 
     def enterSMSMsg(self, msg, not_keyboard=True):
         #
@@ -754,7 +754,7 @@ class Messages(object):
                         "|EXPECTED: '" + msg + "'" + \
                         "|ACTUAL  : '" + x.text + "'")
 
-    def fordwardMessage(self, msg_type, target_telNum):
+    def forwardMessage(self, msg_type, target_telNum):
         self.actions = Actions(self.marionette)
 
         #
@@ -775,7 +775,7 @@ class Messages(object):
             # Press forward button
             #
             self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
             x.tap()
 
             #
@@ -811,7 +811,7 @@ class Messages(object):
             # Press forward button
             #
             self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
             x.tap()
 
             #
@@ -862,8 +862,8 @@ class Messages(object):
             #
             # Press forward button
             #
-            self.UTILS.reporting.logResult("info", "Clicking on fordward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
+            self.UTILS.reporting.logResult("info", "Clicking on forward button")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt,
                                           "Forward button is displayed")
             x.tap()
 
@@ -926,7 +926,7 @@ class Messages(object):
             # Press forward button
             #
             self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
             x.tap()
 
             #
@@ -985,7 +985,7 @@ class Messages(object):
             # Press forward button
             #
             self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
             x.tap()
 
             #
@@ -1059,8 +1059,8 @@ class Messages(object):
             #
             # Press forward button
             #
-            self.UTILS.reporting.logResult("info", "Clicking on fordward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
+            self.UTILS.reporting.logResult("info", "Clicking on forward button")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt,
                                           "Forward button is displayed")
             x.tap()
 
@@ -1165,10 +1165,7 @@ class Messages(object):
         self.actions = Actions(self.marionette)
         self.contacts = Contacts(self)
 
-        #
-        # Establish which phone number to use.
-        #
-
+        self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
         if msg_type == "sms":
 
             self.UTILS.reporting.logResult("info", "is a sms")
@@ -1176,14 +1173,15 @@ class Messages(object):
             # Open sms option with longtap on it
             #
             self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_sms, "Target sms field")
-            self.actions.long_press(x, 2).perform()
+            sms = self.lastMessageInThisThread()
+            self.UTILS.reporting.debug("*** LAST MESSAGE TEXT: {}".format(self.UTILS.element.getElement(DOM.Messages.last_message_text, "Text")))
+            self.actions.long_press(sms, 2).perform()
 
             #
             # Press forward button
             #
             self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
             x.tap()
 
             #
@@ -1236,14 +1234,14 @@ class Messages(object):
             # Open mms option with longtap on it
             #
             self.UTILS.reporting.logResult("info", "Open mms option with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_mms, "Target mms field")
-            self.actions.long_press(x, 2).perform()
+            sms = self.lastMessageInThisThread()
+            self.actions.long_press(sms, 2).perform()
 
             #
             # Press forward button
             #
             self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt, "Forward button is displayed")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
             x.tap()
 
             #
@@ -1318,8 +1316,8 @@ class Messages(object):
             #
             # Press forward button
             #
-            self.UTILS.reporting.logResult("info", "Clicking on fordward button")
-            x = self.UTILS.element.getElement(DOM.Messages.fordward_btn_msg_opt,
+            self.UTILS.reporting.logResult("info", "Clicking on forward button")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt,
                                           "Forward button is displayed")
             x.tap()
 
@@ -1479,7 +1477,6 @@ class Messages(object):
         # Returns an object of the last message in the current thread.
         #
         time.sleep(5)
-        # try:
         self.parent.wait_for_element_present(*DOM.Messages.last_message, timeout=20)
         return self.marionette.find_element(*DOM.Messages.last_message)
 
@@ -1638,7 +1635,7 @@ class Messages(object):
         # Turns on Edit mode while in the SMS threads screen.
         #
         x = self.UTILS.element.getElement(DOM.Messages.edit_threads_button, "Edit button")
-        x.tap()
+        self.UTILS.element.simulateClick(x)
         self.UTILS.element.waitForElements(DOM.Messages.cancel_edit_threads, "Cancel button")
 
     def threadExists(self, num):
