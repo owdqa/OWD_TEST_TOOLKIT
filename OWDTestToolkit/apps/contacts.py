@@ -666,67 +666,74 @@ class Contacts(object):
         self.UTILS.reporting.logResult("info", "Contacts list in the Hotmail / Outlook app:", x)
         return True
 
+    def switch_to_hotmail_login_frame(self):
+        self.marionette.switch_to_frame()
+        hotmail_sign_in = self.marionette.find_element(*DOM.Contacts.hotmail_signin_frame)
+        self.marionette.switch_to_frame(hotmail_sign_in)
+
     def hotmail_login(self, name, passwd, click_signin):
         #
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
         #
         self.UTILS.reporting.logResult("info", "Entering hotmail_login ...")
-        self.marionette.switch_to_frame()
+
         try:
-            element = "//iframe[contains(@{}, '{}')]".\
-                            format(DOM.Contacts.hotmail_frame[0], DOM.Contacts.hotmail_frame[1])
-
-            self.parent.wait_for_element_present("xpath", element, timeout=5)
-
-            self.UTILS.reporting.logResult("info", "Starting to switch frames in hotmail_login")
-            #
-            # Switch to the hotmail login frame.
-            #
-            self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_frame)
-            time.sleep(2)
-            self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
-
-            #
-            # Send the login information (sometimes the username isn't required, just the password).
-            # I 'know' that the password field will appear though, so use that element to get the
-            # timing right.
-            #
-            self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_password, timeout=30)
+            self.switch_to_hotmail_login_frame()
             try:
-                self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
+                self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
 
-                x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
-                x.send_keys(name)
-            except:
-                pass
-
-            x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
-            x.send_keys(passwd)
-
-            if click_signin:
-                x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
-                x.tap()
-
-                self.UTILS.general.checkMarionetteOK()
                 #
-                # Check to see if sigin failed. If it did then return False.
+                # Send the login information (sometimes the username isn't required, just the password).
+                # I 'know' that the password field will appear though, so use that element to get the
+                # timing right.
                 #
+                self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_password, timeout=30)
                 try:
-                    self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
+                    self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
 
-                    x = self.UTILS.debug.screenShotOnErr()
-                    self.UTILS.reporting.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
-                    return False
+                    x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
+                    x.send_keys(name)
                 except:
                     pass
 
-                #
-                # Sometimes a message about permissions appears.
-                #
-                self.hotmail_check_permissions(passwd)
+                x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
+                x.send_keys(passwd)
+
+                if click_signin:
+                    x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
+                    x.tap()
+
+                    self.UTILS.reporting.logResult('info', "before checking marionette")
+                    self.UTILS.general.checkMarionetteOK()
+                    self.UTILS.reporting.logResult('info', "After checking marionette")
+                    #
+                    # Check to see if sigin failed. If it did then return False.
+                    #
+                    try:
+                        self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
+
+                        x = self.UTILS.debug.screenShotOnErr()
+                        self.UTILS.reporting.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
+                        return False
+                    except:
+                        self.UTILS.reporting.logResult('info', ">>>>>>>>> LOGIN HAS NOT FAILED <<<<<<<<<<<<<")
+                        x = self.UTILS.debug.screenShotOnErr()
+                        self.UTILS.reporting.logResult("info", "<b>Login NOT failed!</b> Screenshot and details:", x)
+                        l = self.marionette.find_elements(*DOM.Contacts.hotmail_login_error_msg)
+
+                        for e in l:
+                            self.UTILS.reporting.logResult('info', "id: {}".format(e.get_attribute("id")))
+                        pass
+
+                    #
+                    # Sometimes a message about permissions appears.
+                    #
+                    self.hotmail_check_permissions(passwd)
+            except:
+                pass
         except:
-            pass
+            self.UTILS.reporting.logResult('info', 'Log in was previously done. Keep walking...')
 
         return True
 
