@@ -180,13 +180,36 @@ class Browser(object):
         self.marionette.find_element(*DOM.Browser.url_go_button).tap()
         # TODO wait_for_throbber can resolve before the page has started loading
         time.sleep(2)
-        self.wait_for_throbber_not_visible(timeout=timeout)
+        try:
+            self.wait_for_throbber_not_visible(timeout=timeout)
+        except:
+            # maybe something went wrong, so try to find the reload button
+            self.switch_to_content()
+            screenshot = self.UTILS.debug.screenShotOnErr()
+            self.UTILS.reporting.logResult('info', "Screenshot when failing open_url", screenshot)
+            if self.is_page_not_loaded():
+                self.retry_load_page()
+
         self.parent.wait_for_element_displayed(*DOM.Browser.bookmarkmenu_button)
         self.switch_to_content()
 
     def wait_for_throbber_not_visible(self, timeout=30):
         # TODO see if we can reduce this timeout in the future. >10 seconds is poor UX
         self.parent.wait_for_condition(lambda m: not self.is_throbber_visible(), timeout=timeout)
+        
+
+    def is_page_not_loaded(self):
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Browser.embarrasing_tag)
+            return True
+        except:
+            return False
+
+    def retry_load_page(self):
+        self.parent.wait_for_element_displayed(*DOM.Browser.embarrasing_reload)
+        reload_btn = self.marionette.find_element(*DOM.Browser.embarrasing_reload)
+        reload_btn.tap()
+
 
     def is_throbber_visible(self):
         return self.marionette.find_element(*DOM.Browser.throbber).get_attribute('class') == 'loading'

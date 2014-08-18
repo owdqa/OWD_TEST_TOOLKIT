@@ -1124,8 +1124,10 @@ class Settings(object):
         # Tap the network name in the list.
         #
         _wifi_name_element = ("xpath", DOM.Settings.wifi_name_xpath.format(wlan_name))
-        x = self.UTILS.element.getElement(_wifi_name_element, "Wifi '{}'".format(wlan_name), True, 30, True)
-        x.tap()
+        self.parent.wait_for_element_displayed(_wifi_name_element[0], _wifi_name_element[1], timeout=10)
+        wifi = self.marionette.find_element(*_wifi_name_element)
+        
+        wifi.tap()
         time.sleep(2)
 
     def wifi_switchOn(self):
@@ -1141,3 +1143,18 @@ class Settings(object):
         # so just wait a little while before proceeding ...
         #
         time.sleep(3)
+
+    def wifi_switchOff(self):
+        #
+        # Click slider to turn wifi on.
+        #
+        if self.parent.data_layer.get_setting("wifi.enabled"):
+            x = self.UTILS.element.getElement(DOM.Settings.wifi_enabled, "Disable wifi switch")
+            x.tap()
+
+        #
+        # Nothing to check for yet, because the network may require login etc...,
+        # so just wait a little while before proceeding ...
+        #
+        time.sleep(3)
+
