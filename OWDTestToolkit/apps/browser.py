@@ -1,6 +1,9 @@
 import time
 import sys
 from OWDTestToolkit import DOM
+from gaiatest.apps.keyboard.app import Keyboard
+
+
 
 
 class Browser(object):
@@ -14,6 +17,7 @@ class Browser(object):
         self.parent = parent
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
+        self.keyboard = Keyboard(self.marionette)
 
     def launch(self):
         """
@@ -32,28 +36,6 @@ class Browser(object):
         x = self.UTILS.element.getElement(DOM.Browser.tab_tray_new_tab_btn, "New tab button")
         x.tap()
         self.UTILS.element.waitForElements(DOM.Browser.url_input, "New tab")
-
-    def check_page_loaded(self, url):
-        """Check the page didn't have a problem.
-        """
-        self.waitForPageToFinishLoading()
-
-        url = self.loadedURL()
-        self.UTILS.reporting.logResult("info", "The loaded url is now <a href=\"{0}\">{0}</a>".format(url))
-
-        self.UTILS.iframe.switchToFrame(*DOM.Browser.website_frame, via_root_frame=False)
-
-        # Take a screenshot.
-        fnam = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult("info", "Screenshot of web page in browser:|" + fnam[1])
-
-        try:
-            self.parent.wait_for_element_present(*DOM.Browser.page_problem, timeout=1)
-            x = self.marionette.find_element(*DOM.Browser.page_problem)
-            if x.is_displayed():
-                return False
-        except Exception:
-            return True
 
     def closeTab(self, num):
         """
@@ -178,20 +160,47 @@ class Browser(object):
                                 DOM.Browser.browser_page_frame[1])), "Loaded page", False, 1, False)
         return x.get_attribute("src")
 
-    def open_url(self, p_url):
-        """
-        Open url.
-        """
-        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
-        x = self.UTILS.element.getElement(DOM.Browser.url_input, "Url input field")
-        self.UTILS.reporting.logComment("Using URL " + p_url)
-        x.clear()
-        x.send_keys(p_url)
+    def current_url(self):
+        return self.marionette.execute_script("return window.wrappedJSObject.Browser.currentTab.url;")
 
-        x = self.UTILS.element.getElement(DOM.Browser.url_go_button, "'Go to url' button")
-        x.tap()
+    def open_url(self, url, timeout=30):
+        # """
+        # Open url.
+        # """
+        self.parent.wait_for_element_displayed(*DOM.Browser.url_input)
+        self.marionette.find_element(*DOM.Browser.url_input).tap()
+        self.keyboard.send(url)
+        self.tap_go_button(timeout=timeout)
 
-        self.UTILS.test.TEST(self.check_page_loaded(p_url), "Web page loaded correctly.")
+        self.UTILS.reporting.logResult('info', "Url parameter: {}".format(url))
+        self.UTILS.reporting.logResult('info', "Current url: {}".format(self.loadedURL()))
+        self.UTILS.test.TEST(url in self.loadedURL(), "Loaded URL matches the desired URL")
+
+    def tap_go_button(self, timeout=30):
+        self.marionette.find_element(*DOM.Browser.url_go_button).tap()
+        # TODO wait_for_throbber can resolve before the page has started loading
+        time.sleep(2)
+        self.wait_for_throbber_not_visible(timeout=timeout)
+        self.parent.wait_for_element_displayed(*DOM.Browser.bookmarkmenu_button)
+        self.switch_to_content()
+
+    def wait_for_throbber_not_visible(self, timeout=30):
+        # TODO see if we can reduce this timeout in the future. >10 seconds is poor UX
+        self.parent.wait_for_condition(lambda m: not self.is_throbber_visible(), timeout=timeout)
+
+    def is_throbber_visible(self):
+        return self.marionette.find_element(*DOM.Browser.throbber).get_attribute('class') == 'loading'
+
+    def switch_to_content(self):
+        web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
+        for web_frame in web_frames:
+            if web_frame.is_displayed():
+                self.marionette.switch_to_frame(web_frame)
+                break
+
+    def switch_to_chrome(self):
+        self.marionette.switch_to_frame()
+        self.marionette.switch_to_frame(self.app.frame)
 
     def openTab(self, num):
         """
@@ -230,7 +239,7 @@ class Browser(object):
         x.send_keys(string)
         x = self.UTILS.element.getElement(DOM.Browser.url_go_button, "'Go' button")
         x.tap()
-        self.waitForPageToFinishLoading()
+        self.wait_for_throbber_not_visible()
 
     def trayCounterValue(self):
         """
@@ -245,19 +254,6 @@ class Browser(object):
             if i in "0123456789":
                 z = z + i
         return z
-
-    def waitForPageToFinishLoading(self):
-        """
-        Waits for the current url to finish loading.
-        """
-        time.sleep(3)
-        try:
-            self.parent.wait_for_element_displayed(*DOM.Browser.throbber)
-        except Exception:
-            pass
-        self.UTILS.element.waitForNotElements(DOM.Browser.throbber, "Animated 'wait' icon", True, 60, False)
-
-        time.sleep(2)
 
     def addCurrentPageToBookmarks(self):
         """

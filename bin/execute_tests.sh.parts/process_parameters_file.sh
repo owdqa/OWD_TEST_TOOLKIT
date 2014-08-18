@@ -4,7 +4,7 @@
 # If the file already exists, this will keep the current values.
 # Any values that aren't present will be added (and set to nothing).
 #
-params_file=$HOME/.OWD_TEST_PARAMETERS
+params_file=$PWD/.OWD_TEST_PARAMETERS
 array_count=0
 declare -a NEW_PARAMETERS
 [ -f "$params_file" ] && file_exists="y" || file_exists=""
@@ -98,7 +98,7 @@ fi
 #
 # If we get to here then it's okay - load variables from this file.
 #
-export PARAM_FILE="$HOME/.OWD_TEST_PARAMETERS"
+export PARAM_FILE="$PWD/.OWD_TEST_PARAMETERS"
 if [ -f "$PARAM_FILE" ]
 then
     while read line

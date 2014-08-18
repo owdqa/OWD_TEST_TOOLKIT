@@ -2,6 +2,7 @@ import sys
 import os
 import json
 import time
+import datetime
 from OWDTestToolkit import DOM
 from gaiatest.apps.keyboard.app import Keyboard
 from gaiatest import GaiaData
@@ -33,6 +34,7 @@ class general(object):
             self.parent.reporting.logResult("debug", "<i>(*** The Marionette session was "\
                                             "restarted due to a possible crash. ***)</i>")
         except:
+            self.parent.reporting.logResult('debug',  "Marionette session still running")
             pass
 
     def clearGeolocPermission(self, allow_geoloc=False):
@@ -56,6 +58,12 @@ class general(object):
             pass
 
         self.parent.iframe.switchToFrame("src", orig_frame)
+
+    def get_current_date_string(self):
+        """Return the current date as a formatted string, to include it in logs, SMS bodies, etc.
+        """
+        now = datetime.datetime.now()
+        return now.strftime("%Y/%m/%d %H:%M:%S.%f")
 
     def get_os_variable(self, name, validate=True):
         #
@@ -217,7 +225,7 @@ class general(object):
             # if necessary.
             #
             if "_" in p_str:
-                self.parent.parent.lockscreen.unlock()
+                self.parent.parent.device.unlock()
                 self.marionette.switch_to_frame()
                 self.parent.iframe.switchToFrame("src", orig_frame)
 

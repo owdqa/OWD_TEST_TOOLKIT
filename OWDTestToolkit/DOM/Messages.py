@@ -53,16 +53,19 @@ check_all_messages_btn = ("id", "messages-check-all-button")
 delete_threads_button = ("css selector", "button[data-l10n-id='deleteMessages-label']")
 
 message_list = ('xpath', '//div[@id="messages-container"]//li')
-message_timestamps = ("xpath", "//article[@id='messages-container']/header")
+message_timestamps = ("xpath", "//div[@id='messages-container']/div[@class='messages-date-group'][last()]/header")
 last_message = ('xpath', '//div[@id="messages-container"]//li[last()]')
-last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span[text()]')
+last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
+last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p')
+last_message_text_nested = ('xpath', '//div[@class="message-content"]//p') # Use this with a find_element over the result of getting last_message
+
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')
 messages_from_num = "//*[contains(@id, '{}')]"
 message_header = ("id", "messages-header-text")
 received_messages = ('xpath', "//li[@class='bubble'][a[@class='received']]")
 
-edit_messages_icon = ('xpath', "//span[@class='icon icon-options']")
+edit_messages_icon = ('xpath', "//section[@id='thread-messages']//span[@class='icon icon-options']")
 edit_threads_header = ('id', 'threads-edit-mode')
 threads_delete_button = ('id', 'threads-delete-button')
 delete_threads_ok_btn = ('xpath', '//button[@class="danger" and @data-l10n-id="delete"]')
@@ -71,6 +74,7 @@ delete_messages_ok_btn = ('id', "messages-delete-button")
 
 message_text = ('xpath', "/html/body/article/section[2]/article/ul/li[{}]/section/div/p/span")
 
+edit_msgs_delete_btn = ("id", "messages-delete-button")
 edit_msgs_header = ("id", "messages-edit-mode")
 edit_msgs_sel_all_btn = ("id", "messages-check-all-button")
 
@@ -81,8 +85,8 @@ received_sms = ('xpath', "//li[@class='message sms received incoming']/section/d
 received_mms = ('xpath', "//li[@class='message mms received incoming']/section/div/p")
 received_mms_subject = ('xpath', "//li[@class='message mms received incoming has-subject']/section/div/p")
 
-fordward_btn_msg_opt = ('xpath', "/html/body/form/menu/button[1]")
-cancel_btn_msg_opt = ('xpath', "/html/body/form/menu/button[3]")
+forward_btn_msg_opt = ('xpath', "//button[@data-l10n-id='forward']")
+cancel_btn_msg_opt = ('xpath', "//button[@data-l10n-id='cancel']")
 
 messages_options_btn = ("id", "messages-options-icon")
 addsubject_btn_msg_opt = ('xpath', "/html/body/form/menu/button[1]")
@@ -100,6 +104,8 @@ header_call_btn = ("xpath", "//button[text()='{}']".format(_("Call")))
 header_send_message_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='sendEmail']")
 header_create_new_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='createNewContact']")
 header_add_to_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='addToExistingContact']")
+contact_cancel_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='cancel']")
+
 header_send_email_btn = ("xpath", "//button[text()='{}']".format(_("Send email")))
 header_cancel_btn = ("xpath", "//button[text()='{}']".format(_("Cancel")))
 header_cancel_btn_no_send = ("xpath", "/html/body/form/menu/button[4]")
@@ -122,3 +128,4 @@ message_expected_content = ('xpath', "//div[@class='message-content']//p/span[te
 wap_push_message_link = ('xpath', "//*[@id='si-sl-screen']//a[@data-action='url-link']")
 
 sms_class_0_ok_btn = ('xpath', '//form[@class="modal-dialog-alert generic-dialog visible"]/menu/button')
+send_email_failed = ('xpath', '//span[@class="modal-dialog-alert-message"]')

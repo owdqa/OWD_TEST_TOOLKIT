@@ -547,29 +547,12 @@ class Contacts(object):
                 except:
                     pass
 
-                #
-                # PERMISSIONS (sometimes appears).
-                # Seems to happen a few times, so loop through 5 just in case ...
-                #
-                stop = False
-                count = 5
-                while not stop:
-                    try:
-                        self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
-
-                        x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
-                        x.tap()
-
-                        time.sleep(5)
-                        stop = True
-                    except:
-                        count -= 1
-                        if count == 0:
-                            stop = True
+                self.check_gmail_permissions()
             else:
                 return True
         except:
             self.UTILS.reporting.logResult("info", "<b>Already logged in</b>")
+            self.check_gmail_permissions()
             pass
 
         time.sleep(5)
@@ -585,6 +568,25 @@ class Contacts(object):
 
         self.UTILS.element.waitForElements(DOM.Contacts.import_conts_list, "Contacts list", False, 2)
         return True
+
+    def check_gmail_permissions(self):
+        #
+        # PERMISSIONS (sometimes appears).
+        # Seems to happen a few times, so loop through 5 just in case ...
+        #
+        #
+        for i in range(5, 0, -1):
+            try:
+                self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
+
+                x = self.marionette.find_element(*DOM.Contacts.gmail_permission_accept)
+                x.tap()
+
+                self.UTILS.reporting.logResult('info', "Gmail permissions accepted")
+                time.sleep(5)
+                break
+            except:
+                self.UTILS.reporting.logResult('info', "Checking permissions once again")
 
     def import_hotmail_login(self, name, passwd, click_signin=True, just_signin=False):
         #
@@ -629,10 +631,14 @@ class Contacts(object):
         #
         # Go to the hotmail import iframe.
         #
+        self.UTILS.reporting.logResult('info', "Doing the switch to contacts......")
         time.sleep(2)
         # self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-
+        
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot before swithing", screenshot)
+        
         #
         # Change to import frame -> it is whithin Contacts frame
         #
@@ -656,66 +662,70 @@ class Contacts(object):
         self.UTILS.reporting.logResult("info", "Contacts list in the Hotmail / Outlook app:", x)
         return True
 
+    def switch_to_hotmail_login_frame(self):
+        self.marionette.switch_to_frame()
+        hotmail_sign_in = self.marionette.find_element(*DOM.Contacts.hotmail_signin_frame)
+        self.marionette.switch_to_frame(hotmail_sign_in)
+
     def hotmail_login(self, name, passwd, click_signin):
         #
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
         #
         self.UTILS.reporting.logResult("info", "Entering hotmail_login ...")
-        self.marionette.switch_to_frame()
+
         try:
-            element = "//iframe[contains(@{}, '{}')]".\
-                            format(DOM.Contacts.hotmail_frame[0], DOM.Contacts.hotmail_frame[1])
-
-            self.parent.wait_for_element_present("xpath", element, timeout=5)
-
-            self.UTILS.reporting.logResult("info", "Starting to switch frames in hotmail_login")
-            #
-            # Switch to the hotmail login frame.
-            #
-            self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_frame)
-            time.sleep(2)
-            self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
-
-            #
-            # Send the login information (sometimes the username isn't required, just the password).
-            # I 'know' that the password field will appear though, so use that element to get the
-            # timing right.
-            #
-            self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_password, timeout=30)
+            self.switch_to_hotmail_login_frame()
             try:
-                self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
-
-                x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
-                x.send_keys(name)
-            except:
-                pass
-
-            x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
-            x.send_keys(passwd)
-
-            if click_signin:
-                x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
-                x.tap()
+                self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
 
                 #
-                # Check to see if sigin failed. If it did then return False.
+                # Send the login information (sometimes the username isn't required, just the password).
+                # I 'know' that the password field will appear though, so use that element to get the
+                # timing right.
                 #
+                self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_password, timeout=30)
                 try:
-                    self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
+                    self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
 
-                    x = self.UTILS.debug.screenShotOnErr()
-                    self.UTILS.reporting.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
-                    return False
+                    x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
+                    x.send_keys(name)
                 except:
                     pass
 
-                #
-                # Sometimes a message about permissions appears.
-                #
-                self.permission_check(passwd)
+                x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
+                x.send_keys(passwd)
+
+                if click_signin:
+                    x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
+                    x.tap()
+
+                    self.UTILS.general.checkMarionetteOK()
+                    #
+                    # Check to see if sigin failed. If it did then return False.
+                    #
+                    try:
+                        #
+                        # TODO - Get the error message. The following locator does not seem to be working (See test 27048)
+                        #
+                        self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
+
+                        x = self.UTILS.debug.screenShotOnErr()
+                        self.UTILS.reporting.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
+                        return False
+                    except:
+                        x = self.UTILS.debug.screenShotOnErr()
+                        self.UTILS.reporting.logResult("info", "<b>Login NOT failed!</b> Screenshot and details:", x)
+
+
+                    #
+                    # Sometimes a message about permissions appears.
+                    #
+                    self.hotmail_check_permissions(passwd)
+            except:
+                pass
         except:
-            pass
+            self.UTILS.reporting.logResult('info', 'Log in was previously done. Keep walking...')
 
         return True
 
@@ -733,7 +743,7 @@ class Contacts(object):
         except ValueError:
             return False
 
-    def permission_check(self, passwd):
+    def hotmail_check_permissions(self, passwd):
         #
         # Sometimes hotmail asks for permission - just accept it if it's there.
         #
@@ -907,9 +917,11 @@ class Contacts(object):
         field.clear()
         field.send_keys(value)
 
-        # What is this code?
-        #x = self.marionette.find_element("tag name", "h1")
-        #x.tap()
+        #
+        # Tap outside the field, so that we exit its edition
+        #
+        x = self.marionette.find_element("xpath", '//h1[@id="contact-form-title"]')
+        x.tap()
 
         self.check_match(field, value, "After replacing the string, this field now")
 
