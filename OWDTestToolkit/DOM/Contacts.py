@@ -9,12 +9,17 @@ view_all_header = ('xpath', GLOBAL.app_head_specific.format(_('Contacts')))
 view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath = "//li[@class='contact-item']//p[contains(@data-search,'{}')]"
-view_all_contact_JS = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li")
-view_all_contact_JSname = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
 view_all_contact_HM = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
 view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
-view_all_contact_import = ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li/p/strong")
-view_all_contact_import2 = ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li[2]/p/strong")
+
+# To be erased when we know they don't break anything
+# view_all_contact_JS = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li")
+# view_all_contact_JSname = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
+# view_all_contact_import = ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li/p/strong")
+# view_all_contact_import2 = ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li[2]/p/strong")
+
+view_all_contact_specific_contact = ('xpath', '//section[@class="group-section"]//li/p[@class="contact-text"]/strong[contains(text(), "{}")]')
+
 
 view_details_title = ('id', 'contact-name-title')
 view_contact_image = ("id", "cover-img")
@@ -89,9 +94,9 @@ link_button = ('id', "link_button")  # WARNING: >1 element has this id!
 # Importing from gmail / hotmail etc...
 #
 import_all_imported_msg = ("xpath", "//*[@id='friends-msg' and contains(text(), 'your friends are imported')]")
-import_cancel_login = ("id", "popup-close")
-import_close_icon = ("id", "import-close")
-import_throbber = ("id", "popup-throbber")
+import_cancel_login = ("xpath", '//button[@class="kill popup-close"]')
+import_close_icon   = ("id", "import-close")
+import_throbber     = ("id", "popup-throbber")
 import_num_of_conts = ("id", "friends-msg")
 import_select_all = ("id", "select-all")
 import_desel_all = ("id", "deselect-all")
@@ -101,7 +106,8 @@ import_search_list = ("xpath", "//*[@id='search-list']//li[@class='block-item']"
 import_conts_xp = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '{}')]"
 
 import_contacts = ("id", "importContacts")
-import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import contacts')))
+import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import Contacts')))
+import_contacts_back = ("id", "import-settings-back")
 
 gmail_button = ("xpath", "//button[text()='Gmail']")
 gmail_frame = ("data-url", "google")
@@ -113,14 +119,15 @@ gmail_login_error_msg = ("id", "errormsg_0_Passwd")
 gmail_import_frame = ("src", "gmail")  # It's in the contacts iframe.
 
 hotmail_button = ("xpath", "//button[text()='Outlook']")
-hotmail_frame = ("data-url", "live")
+hotmail_signin_frame = ('css selector', '.popupWindow.active iframe[data-url*="live"]')
 hotmail_username = ("id", "i0116")
 hotmail_password = ("id", "i0118")
 hotmail_signIn_button = ("id", "idSIButton9")
 hotmail_permission_accept = ("id", "idBtn_Accept")
 hotmail_login_extra_msg = ("id", "idDiv_FSI_HeaderInfo")
-hotmail_login_error_msg = ("id", "idTd_PWD_Error")
+hotmail_login_error_msg = ("xpath", "//*[contains(@id, 'error')")
 hotmail_import_frame = ("src", "live")  # It's in the contacts iframe.
+hotmail_import_frame2 = ("data-url", "live")  # It's in the contacts iframe.
 
 memorycard_button = ("xpath", "/html/body/article/section[2]/article/section/ul/li[2]/button")
 

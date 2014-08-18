@@ -266,6 +266,11 @@ class Email(object):
                                    "Header for '" + name + "' folder")
 
     def openMailFolder(self, folder_name):
+        #
+        # Open a specific mail folder (must be called from "Inbox").
+        #
+        x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
+        x.tap()
 
         #
         # Check whether we're already there
@@ -600,16 +605,25 @@ class Email(object):
 
         x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
-        self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
+
+        self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
 
         #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
-                                               False)
-        self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
+        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
+        
+        # Version 2.1
+        #
+        # self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
+        # self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
+        #                                        False)
+        # self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
+        #                                       False)
+        #                                       
+
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(sender_name))
         self.UTILS.element.waitForElements(x, "Previous received message", True, 120)
@@ -621,16 +635,24 @@ class Email(object):
         #
         x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
-        self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
+        self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
 
         #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
+        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
-        self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
-                                              False)
+        
+        # Version 2.1
+        #
+        # self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
+        # self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
+        #                                        False)
+        # self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
+        #                                       False)
+        #   
+        #   
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox")))
         self.UTILS.element.waitForElements(x, "Inbox", True, 120)
@@ -647,16 +669,23 @@ class Email(object):
         #
         x = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         x.tap()
-        self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
+        self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
 
         #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
         #
-        self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
+        self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
-        self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Sending email toaster", True, 120,
-                                              False)
+        
+        # Version 2.1
+        #
+        # self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
+        # self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
+        #                                        False)
+        # self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
+        #                                       False)
+        #   
 
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(header))
 
@@ -855,7 +884,19 @@ class Email(object):
                 self.parent.wait_for_element_present(*DOM.Email.switch_account_current_account)
                 current_account = self.marionette.find_element(*DOM.Email.switch_account_current_account)
 
-                if current_account.text == address:
+                #
+                # Since the element is not displayed, sometimes we cannot access to the text using .text
+                # This way is more secure
+                #
+                current_account_text = self.marionette.execute_script("return arguments[0].innerHTML", script_args=[current_account])
+                
+                self.UTILS.reporting.logResult('info', "Current account: {}".format(current_account_text))
+                self.UTILS.reporting.logResult('info', "Account to switch: {}".format(address))
+
+                screenshot = self.UTILS.debug.screenShotOnErr()
+                self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
+
+                if current_account_text == address:
                     self.UTILS.reporting.logResult("info", "Already in the account we want - switch back to inbox.")
                     self.goto_folder_from_list(_("Inbox"))
                     return True

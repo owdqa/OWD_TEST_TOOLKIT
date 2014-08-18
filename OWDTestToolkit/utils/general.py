@@ -34,6 +34,7 @@ class general(object):
             self.parent.reporting.logResult("debug", "<i>(*** The Marionette session was "\
                                             "restarted due to a possible crash. ***)</i>")
         except:
+            self.parent.reporting.logResult('debug',  "Marionette session still running")
             pass
 
     def clearGeolocPermission(self, allow_geoloc=False):

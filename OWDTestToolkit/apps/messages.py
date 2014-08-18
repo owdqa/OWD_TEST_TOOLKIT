@@ -633,6 +633,13 @@ class Messages(object):
         x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete threads confirmation button")
         x.tap()
 
+        #
+        # For some reason after you do this, you can't enter a 'to' number anymore.
+        # After a lot of headscratching, it was just easier to re-launch the app.
+        #
+        time.sleep(5)
+        self.launch()
+
     def deleteThreads(self, target_array=False):
         #
         # Enters edit mode, selects the required messages and

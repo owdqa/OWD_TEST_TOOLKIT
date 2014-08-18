@@ -57,6 +57,8 @@ message_timestamps = ("xpath", "//div[@id='messages-container']/div[@class='mess
 last_message = ('xpath', '//div[@id="messages-container"]//li[last()]')
 last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
 last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p')
+last_message_text_nested = ('xpath', '//div[@class="message-content"]//p') # Use this with a find_element over the result of getting last_message
+
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')
 messages_from_num = "//*[contains(@id, '{}')]"
@@ -72,6 +74,7 @@ delete_messages_ok_btn = ('id', "messages-delete-button")
 
 message_text = ('xpath', "/html/body/article/section[2]/article/ul/li[{}]/section/div/p/span")
 
+edit_msgs_delete_btn = ("id", "messages-delete-button")
 edit_msgs_header = ("id", "messages-edit-mode")
 edit_msgs_sel_all_btn = ("id", "messages-check-all-button")
 
