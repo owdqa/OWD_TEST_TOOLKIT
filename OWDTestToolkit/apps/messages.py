@@ -1174,7 +1174,6 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
             sms = self.lastMessageInThisThread()
-            self.UTILS.reporting.debug("*** LAST MESSAGE TEXT: {}".format(self.UTILS.element.getElement(DOM.Messages.last_message_text, "Text")))
             self.actions.long_press(sms, 2).perform()
 
             #
