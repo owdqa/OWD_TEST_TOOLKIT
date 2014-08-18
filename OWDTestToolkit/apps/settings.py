@@ -4,7 +4,6 @@ from OWDTestToolkit import DOM
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
-
 class Settings(object):
 
     def __init__(self, parent):
@@ -279,12 +278,9 @@ class Settings(object):
         if do_return:
             return False
 
-        time.sleep(3)
         switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "{} FDN".\
                                                format("Enable" if enable else "Disable"))
         switch.tap()
-        # self.UTILS.element.simulateClick(switch)
-
         header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Enable FDN") if enable else _("Disable FDN")))
         self.UTILS.element.waitForElements(header, "{} FDN header".format("Enable" if enable else "Disable"))
         return True
@@ -711,7 +707,7 @@ class Settings(object):
         #
         # This method sets the SIM security configuration.
         #
-
+        
         self.UTILS.reporting.logResult("info", "Enabling SIM security" if enable else "Disabling SIM Security")
 
         if is_dual_sim is None:

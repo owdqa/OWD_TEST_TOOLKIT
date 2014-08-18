@@ -86,9 +86,9 @@ delete_this_email_btn = ("xpath", "//div[@class='msg-reader-action-toolbar botto
 delete_confirm_buttons = ("xpath", "//button[@id='msg-delete-ok']")
 deleted_email_notif = ("xpath", ".//*[@id='cardContainer']//p[text()='{}']".format(_("1 message deleted")))
 
-confirm_ok = ("xpath", "//form[@class='modal-dialog-confirm generic-dialog visible']/menu/button[@data-l10n-id='ok']")
+confirm_ok = ("xpath", '//form[@class="confirm-dialog-form"]//button[@data-l10n-id="dialog-button-ok"]')
 email_not_setup_ok = ('xpath', '//button[@class="confirm-dialog-ok recommend"]')
-confirm_msg = ("class name", "modal-dialog-confirm-message")
+confirm_msg = ('xpath', '//form[@class="confirm-dialog-form"]//p[@class="confirm-dialog-message"]')
 
 new_account_error_msg = ('css selector', 'section.card-setup-account-info div.scrollregion-below-header div.sup-error-region div.sup-error-message')
 
