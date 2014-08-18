@@ -574,10 +574,8 @@ class Contacts(object):
         # PERMISSIONS (sometimes appears).
         # Seems to happen a few times, so loop through 5 just in case ...
         #
-        stop = False
-        count = 5
-        while not stop:
-            self.UTILS.reporting.logResult('info', "Loop")
+        #
+        for i in range(5, 0, -1):
             try:
                 self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
 
@@ -586,11 +584,9 @@ class Contacts(object):
 
                 self.UTILS.reporting.logResult('info', "Gmail permissions accepted")
                 time.sleep(5)
-                stop = True
+                break
             except:
-                count -= 1
-                if count == 0:
-                    stop = True
+                self.UTILS.reporting.logResult('info', "Checking permissions once again")
 
     def import_hotmail_login(self, name, passwd, click_signin=True, just_signin=False):
         #
@@ -704,27 +700,23 @@ class Contacts(object):
                     x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
                     x.tap()
 
-                    self.UTILS.reporting.logResult('info', "before checking marionette")
                     self.UTILS.general.checkMarionetteOK()
-                    self.UTILS.reporting.logResult('info', "After checking marionette")
                     #
                     # Check to see if sigin failed. If it did then return False.
                     #
                     try:
+                        #
+                        # TODO - Get the error message. The following locator does not seem to be working (See test 27048)
+                        #
                         self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
 
                         x = self.UTILS.debug.screenShotOnErr()
                         self.UTILS.reporting.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
                         return False
                     except:
-                        self.UTILS.reporting.logResult('info', ">>>>>>>>> LOGIN HAS NOT FAILED <<<<<<<<<<<<<")
                         x = self.UTILS.debug.screenShotOnErr()
                         self.UTILS.reporting.logResult("info", "<b>Login NOT failed!</b> Screenshot and details:", x)
-                        l = self.marionette.find_elements(*DOM.Contacts.hotmail_login_error_msg)
 
-                        for e in l:
-                            self.UTILS.reporting.logResult('info', "id: {}".format(e.get_attribute("id")))
-                        pass
 
                     #
                     # Sometimes a message about permissions appears.
