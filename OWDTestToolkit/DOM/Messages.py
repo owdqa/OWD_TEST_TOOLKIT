@@ -82,8 +82,8 @@ received_sms = ('xpath', "//li[@class='message sms received incoming']/section/d
 received_mms = ('xpath', "//li[@class='message mms received incoming']/section/div/p")
 received_mms_subject = ('xpath', "//li[@class='message mms received incoming has-subject']/section/div/p")
 
-fordward_btn_msg_opt = ('xpath', "/html/body/form/menu/button[1]")
-cancel_btn_msg_opt = ('xpath', "/html/body/form/menu/button[3]")
+forward_btn_msg_opt = ('xpath', "//button[@data-l10n-id='forward']")
+cancel_btn_msg_opt = ('xpath', "//button[@data-l10n-id='cancel']")
 
 messages_options_btn = ("id", "messages-options-icon")
 addsubject_btn_msg_opt = ('xpath', "/html/body/form/menu/button[1]")
@@ -101,6 +101,8 @@ header_call_btn = ("xpath", "//button[text()='{}']".format(_("Call")))
 header_send_message_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='sendEmail']")
 header_create_new_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='createNewContact']")
 header_add_to_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='addToExistingContact']")
+contact_cancel_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='cancel']")
+
 header_send_email_btn = ("xpath", "//button[text()='{}']".format(_("Send email")))
 header_cancel_btn = ("xpath", "//button[text()='{}']".format(_("Cancel")))
 header_cancel_btn_no_send = ("xpath", "/html/body/form/menu/button[4]")
