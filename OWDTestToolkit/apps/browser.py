@@ -148,18 +148,14 @@ class Browser(object):
 
         return _title.text.encode('ascii', 'ignore')
 
-    def loadedURL(self):
+    def loaded_url(self):
         """
         Returns the url of the currently loaded web page.
         """
-        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
-        x = self.UTILS.element.getElement(("xpath", "//iframe[contains(@%s,'%s')]" % \
-                                (DOM.Browser.browser_page_frame[0],
-                                DOM.Browser.browser_page_frame[1])), "Loaded page", False, 5, False)
-        return x.get_attribute("src")
-
-    def current_url(self):
-        return self.marionette.execute_script("return window.wrappedJSObject.Browser.currentTab.url;")
+        web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
+        for web_frame in web_frames:
+            if web_frame.is_displayed():
+                url_value = web_frame.get_attribute("src")
 
     def open_url(self, url, timeout=30):
         # """
@@ -170,10 +166,8 @@ class Browser(object):
         self.keyboard.send(url)
         self.tap_go_button(timeout=timeout)
 
-        # self.UTILS.reporting.logResult('info', "Url parameter: {}".format(url))
-        # loaded_url = self.loadedURL()
-        # self.UTILS.reporting.logResult('info', "Current url: {}".format(loaded_url))
         self.check_page_loaded(url, False)
+        self.switch_to_content()
 
 
     def check_page_loaded(self, url, check_throbber=True):
@@ -182,12 +176,8 @@ class Browser(object):
         if check_throbber:
             self.wait_for_throbber_not_visible()
         
-        url_value = None
-        web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
-        for web_frame in web_frames:
-            if web_frame.is_displayed():
-                url_value = web_frame.get_attribute("src")
-
+        url_value = self.loaded_url()
+        
         if url_value:
             self.UTILS.test.TEST(url in url_value, "Loaded URL matches the desired URL")
         else:
