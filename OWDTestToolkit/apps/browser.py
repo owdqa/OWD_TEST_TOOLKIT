@@ -161,6 +161,9 @@ class Browser(object):
         # """
         # Open url.
         # """
+        
+        self.switch_to_chrome()
+
         self.parent.wait_for_element_displayed(*DOM.Browser.url_input)
         self.marionette.find_element(*DOM.Browser.url_input).tap()
         self.keyboard.send(url)
@@ -197,8 +200,8 @@ class Browser(object):
             self.UTILS.reporting.logResult('info', "Screenshot when failing open_url", screenshot)
             if self.is_page_not_loaded():
                 self.retry_load_page()
+                self.switch_to_chrome()
                 self.wait_for_throbber_not_visible(timeout=timeout)
-
 
         self.parent.wait_for_element_displayed(*DOM.Browser.bookmarkmenu_button)
         self.switch_to_content()
