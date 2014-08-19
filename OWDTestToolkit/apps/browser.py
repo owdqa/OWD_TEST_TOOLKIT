@@ -1,9 +1,6 @@
 import time
-import sys
 from OWDTestToolkit import DOM
 from gaiatest.apps.keyboard.app import Keyboard
-
-
 
 
 class Browser(object):
@@ -24,7 +21,8 @@ class Browser(object):
         Launch the app.
         """
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
+                                              self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def addNewTab(self):
@@ -49,7 +47,7 @@ class Browser(object):
         self.UTILS.reporting.logResult("info", "Screenshot before removing tab:", x)
 
         # You have to do this twice for some reason.
-        self.UTILS.reporting.logResult("info", "(FYI: I have to tap this icon twice, so there will be two checks below ...)")
+        self.UTILS.reporting.logResult("info", "(I have to tap this icon twice, so there will be two checks below...)")
         x = self.UTILS.element.getElements(DOM.Browser.tab_tray_tab_list, "Tab list (for first tap)")
         initial_count = len(x)
         close = x[num - 1].find_element(*DOM.Browser.tab_tray_tab_item_close)

@@ -5,8 +5,9 @@ new_download_popup_title = ("xpath", "//div[@id='toaster-title' and contains(tex
 download_list = ("id", "downloadList")
 download_list_elems = ('xpath', "//section[@id='downloadList']/ul/li")
 
-download_element = ("xpath", ".//li[@data-url='%s']")
+download_element = ("xpath", '//li[contains(@data-url, "{}")]')
 download_element_progress = ("xpath", ".//li[@data-url='%s']/progress")
+download_element_info = ("xpath", "//li[contains(@data-url, {})]//p[@class='info']")
 download_element_button = ("xpath", "//*[@id='%s']/aside[2]")
 download_element_button_position = ("xpath", "//section[@id='downloadList']/ul/li[{}]/aside[@class='pack-end']")
 download_element_checkbox = ("xpath", ".//li[@data-url='%s']/label/input")

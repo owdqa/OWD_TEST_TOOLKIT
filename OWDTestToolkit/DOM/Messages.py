@@ -57,6 +57,7 @@ message_timestamps = ("xpath", "//div[@id='messages-container']/div[@class='mess
 last_message = ('xpath', '//div[@id="messages-container"]//li[last()]')
 last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
 last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p')
+last_message_mms_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span')
 last_message_text_nested = ('xpath', '//div[@class="message-content"]//p') # Use this with a find_element over the result of getting last_message
 
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
