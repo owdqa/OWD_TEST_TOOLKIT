@@ -157,7 +157,7 @@ class Browser(object):
         self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
         x = self.UTILS.element.getElement(("xpath", "//iframe[contains(@%s,'%s')]" % \
                                 (DOM.Browser.browser_page_frame[0],
-                                DOM.Browser.browser_page_frame[1])), "Loaded page", False, 1, False)
+                                DOM.Browser.browser_page_frame[1])), "Loaded page", False, 5, False)
         return x.get_attribute("src")
 
     def current_url(self):
@@ -172,9 +172,29 @@ class Browser(object):
         self.keyboard.send(url)
         self.tap_go_button(timeout=timeout)
 
-        self.UTILS.reporting.logResult('info', "Url parameter: {}".format(url))
-        self.UTILS.reporting.logResult('info', "Current url: {}".format(self.loadedURL()))
-        self.UTILS.test.TEST(url in self.loadedURL(), "Loaded URL matches the desired URL")
+        # self.UTILS.reporting.logResult('info', "Url parameter: {}".format(url))
+        # loaded_url = self.loadedURL()
+        # self.UTILS.reporting.logResult('info', "Current url: {}".format(loaded_url))
+        self.check_page_loaded(url, False)
+
+
+    def check_page_loaded(self, url, check_throbber=True):
+        self.switch_to_chrome()
+
+        if check_throbber:
+            self.wait_for_throbber_not_visible()
+        
+        url_value = None
+        web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
+        for web_frame in web_frames:
+            if web_frame.is_displayed():
+                url_value = web_frame.get_attribute("src")
+
+        if url_value:
+            self.UTILS.test.TEST(url in url_value, "Loaded URL matches the desired URL")
+        else:
+            self.UTILS.test.TEST(False, "Loaded URL matches the desired URL")
+
 
     def tap_go_button(self, timeout=30):
         self.marionette.find_element(*DOM.Browser.url_go_button).tap()
@@ -189,6 +209,8 @@ class Browser(object):
             self.UTILS.reporting.logResult('info', "Screenshot when failing open_url", screenshot)
             if self.is_page_not_loaded():
                 self.retry_load_page()
+                self.wait_for_throbber_not_visible(timeout=timeout)
+
 
         self.parent.wait_for_element_displayed(*DOM.Browser.bookmarkmenu_button)
         self.switch_to_content()
@@ -201,8 +223,10 @@ class Browser(object):
     def is_page_not_loaded(self):
         try:
             self.parent.wait_for_element_displayed(*DOM.Browser.embarrasing_tag)
+            self.UTILS.reporting.logResult('info', 'Page not loaded')
             return True
         except:
+            self.UTILS.reporting.logResult('info', 'Page loaded')
             return False
 
     def retry_load_page(self):
