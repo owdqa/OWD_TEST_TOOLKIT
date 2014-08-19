@@ -155,7 +155,7 @@ class Browser(object):
         web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
         for web_frame in web_frames:
             if web_frame.is_displayed():
-                url_value = web_frame.get_attribute("src")
+                return web_frame.get_attribute("src")
 
     def open_url(self, url, timeout=30):
         # """
