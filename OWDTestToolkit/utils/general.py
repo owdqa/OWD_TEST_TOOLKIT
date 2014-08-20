@@ -293,6 +293,7 @@ class general(object):
         self.parent.device.manager.removeFile(file_to_remove)
 
     def restart(self):
+        self.parent.reporting.logResult('info', 'Restarting the device...')
         # Lockscreen does not get on very well with restarts
         lock_enabled = self.parent.data_layer.get_setting("lockscreen.enabled")
         if lock_enabled:

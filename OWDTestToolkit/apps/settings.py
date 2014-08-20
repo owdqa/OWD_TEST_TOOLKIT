@@ -472,11 +472,17 @@ class Settings(object):
         #
         # Open wifi settings.
         #
-        x = self.UTILS.element.getElement(DOM.Settings.downloads, "Downloads settings link")
-        x.tap()
+        self.parent.wait_for_element_displayed(*DOM.Settings.downloads)
+        downloads_link = self.marionette.find_element(*DOM.Settings.downloads)
+        
+        self.UTILS.element.scroll_into_view(downloads_link)
+        time.sleep(2)
+
+        downloads_link.tap()
+        # self.UTILS.element.simulateClick(downloads_link)
 
         self.UTILS.element.waitForElements(DOM.Settings.downloads_header,
-                                    "Downloads header appears.", True, 20, False)
+                                    "Downloads header appears.", True, 20, True)
 
     def enable_hotSpot(self):
         #
@@ -611,14 +617,28 @@ class Settings(object):
         #
         self.parent.data_layer.set_setting('audio.volume.alarm', volume)
 
-    def setNetworkOperator(self):
-        #
-        # Open cellular and data settings.
-        #
-        x = self.UTILS.element.getElement(DOM.Settings.cellData, "Cellular and Data settings link")
-        self.UTILS.element.simulateClick(x)
+    def setNetworkOperator(self, network_type):
 
-        self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
+        x = self.UTILS.element.getElement(DOM.Settings.networkOperator_button, "Network Operator option")
+        x.tap()
+
+        time.sleep(2) # wait some time so that the options are populated
+
+        x = self.UTILS.element.getElement(DOM.Settings.networkOperator_types, "Network Operator type")
+        x.tap()
+
+        self.marionette.switch_to_frame()
+
+        network_type_locator = (DOM.Settings.networkOperator_select_type[0], 
+                                DOM.Settings.networkOperator_select_type[1].format(network_type))
+
+        x = self.UTILS.element.getElement(network_type_locator, "Network Operator. Select: {}".format(network_type))
+        x.tap()
+
+        x = self.UTILS.element.getElement(DOM.Settings.networkOperator_OK_btn, "Network Operator. Click on OK button")
+        x.tap()
+
+        self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
 
     def setRingerAndNotifsVolume(self, volume):
         #
@@ -1151,8 +1171,10 @@ class Settings(object):
         # Tap the network name in the list.
         #
         _wifi_name_element = ("xpath", DOM.Settings.wifi_name_xpath.format(wlan_name))
-        x = self.UTILS.element.getElement(_wifi_name_element, "Wifi '{}'".format(wlan_name), True, 30, True)
-        x.tap()
+        self.parent.wait_for_element_displayed(_wifi_name_element[0], _wifi_name_element[1], timeout=10)
+        wifi = self.marionette.find_element(*_wifi_name_element)
+        
+        wifi.tap()
         time.sleep(2)
 
     def wifi_switchOn(self):
@@ -1168,3 +1190,38 @@ class Settings(object):
         # so just wait a little while before proceeding ...
         #
         time.sleep(3)
+
+    def wifi_switchOff(self):
+        #
+        # Click slider to turn wifi on.
+        #
+        if self.parent.data_layer.get_setting("wifi.enabled"):
+            x = self.UTILS.element.getElement(DOM.Settings.wifi_enabled, "Disable wifi switch")
+            x.tap()
+
+        #
+        # Nothing to check for yet, because the network may require login etc...,
+        # so just wait a little while before proceeding ...
+        #
+        time.sleep(3)
+
+    def connect_to_wifi_with_retries(self, wifi_name, wifi_pass, retries):
+        #
+        # Connect to the wifi.
+        #
+        for i in range(retries, 0, -1):
+            try:
+                #
+                # Make sure wifi is set to 'on'.
+                #
+                self.wifi_switchOn()
+
+                self.wifi_list_tapName(wifi_name)
+                self.UTILS.general.typeThis(DOM.Settings.wifi_login_pass, "Password for the WLAN", wifi_pass)
+                ok_btn = self.UTILS.element.getElement(DOM.Settings.wifi_login_ok_btn, "WLAN login OK button")
+                ok_btn.tap()
+                break
+            except:
+                self.UTILS.reporting.logResult('info', 'WLAN not found -> Try to restart WIFI')
+                self.wifi_switchOff()
+

@@ -166,14 +166,7 @@ passcode_keyb_btn = ('css selector', '#lockscreen-passcode-pad a[data-key="{}"]'
 
 networkOperator_button = ('css selector', '#carrier button[data-l10n-id="networkOperator"]')
 networkOperator_types = ("id", "preferredNetworkType")
-networkOperator_GSM = ("xpath", "//*[@id='value-selector-container']//span[text()='2G only']")
-networkOperator_CDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li[6]/label/span")
-networkOperator_EVDO = ("xpath", "/html/body/div/div[5]/form/section/ol/li[7]/label/span")
-networkOperator_Auto = ("xpath", "/html/body/div/div[5]/form/section/ol/li[8]/label/span")
-networkOperator_WCDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li[3]/label/span")
-networkOperator_PrefWCDMA = ("xpath", "/html/body/div/div[5]/form/section/ol/li/label/span")
-networkOperator_PrefGSM = ("xpath", "/html/body/div/div[5]/form/section/ol/li[4]/label/span")
-networkOperator_PrefEVDO = ("xpath", "/html/body/div/div[5]/form/section/ol/li[5]/label/span")
+networkOperator_select_type = ("xpath", "//*[@id='value-selector-container']//span[text()='{}']")
 networkOperator_OK_btn = ("css selector", "#select-option-popup #select-options-buttons button[data-l10n-id='ok']")
 
 change_pin_done_btn = ('xpath', '//section[@id="simpin-dialog"]//button[@data-l10n-id="done"]')
