@@ -840,7 +840,7 @@ class Settings(object):
 
         # Move the passcode lock slider to the desired position, if required
         passcode_element = self.UTILS.element.getElement(DOM.Settings.passcode_lock, "Passcode lock")
-        passcode_lock = self.marionette.find_element('css selector', '.passcode-enable', passcode_element.id)
+        passcode_lock = self.marionette.find_element(*DOM.Settings.passcode_enable, id=passcode_element.id)
         checked = passcode_lock.get_attribute("checked")
         passcode_enabled = checked is not None and checked == "true"
         self.UTILS.reporting.debug("Checked: {} ({})     Passcode enabled: {}".format(checked, type(checked), passcode_enabled))

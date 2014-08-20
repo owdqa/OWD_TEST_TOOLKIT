@@ -159,6 +159,7 @@ dual_sim_change_pin_sim1 = ('xpath', '//ul[@id="simpin-container"]//li[@class="s
 
 screen_lock_menu = ('id', 'menuItem-screenLock')
 passcode_lock = ('css selector', '.lockscreen-enabled')
+passcode_enable = ('css selector', '.passcode-enable')
 passcode_input = ('id', 'passcode-pseudo-input')
 passcode_confirm = ('id', 'passcode-pseudo-confirm-input')
 passcode_btn_create = ('css selector', '.passcode-create')
