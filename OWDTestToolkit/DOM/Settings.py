@@ -157,6 +157,12 @@ sim_manager_header = ('xpath', GLOBAL.app_head_specific.format(_('SIM manager').
 dual_sim_switch_pin_sim1 = ('xpath', '//ul[@id="simpin-container"]//li[@class="simpin-enabled simpin-enabled-0 simpin-0"]')
 dual_sim_change_pin_sim1 = ('xpath', '//ul[@id="simpin-container"]//li[@class="simpin-change simpin-change-0 simpin-0"]')
 
+screen_lock_menu = ('id', 'menuItem-screenLock')
+passcode_lock = ('css selector', '.lockscreen-enabled')
+passcode_input = ('id', 'passcode-pseudo-input')
+passcode_confirm = ('id', 'passcode-pseudo-confirm-input')
+passcode_btn_create = ('css selector', '.passcode-create')
+passcode_keyb_btn = ('css selector', '#lockscreen-passcode-pad a[data-key="{}"]')
 
 networkOperator_button = ('css selector', '#carrier button[data-l10n-id="networkOperator"]')
 networkOperator_types = ("id", "preferredNetworkType")

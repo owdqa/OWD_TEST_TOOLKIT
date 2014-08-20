@@ -222,12 +222,6 @@ class Settings(object):
         #
         # Enter the data
         #
-
-        #
-        # This has to commented since there's a bug in Keyboard application from gaitestcase
-        # Instead, we have to use the primitive methods from marionette.
-        #
-
         self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
                                     p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
 
@@ -236,23 +230,6 @@ class Settings(object):
 
         self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
                                     p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
-
-#===============================================================================
-#        apn_field = self.UTILS.element.getElement(DOM.Settings.celldata_data_apn, "APN name")
-#        apn_field.clear()
-#        apn_field.send_keys(apn)
-#        time.sleep(2)
-#
-#        identifier_field = self.UTILS.element.getElement(DOM.Settings.celldata_apn_user, "APN identifier")
-#        identifier_field.clear()
-#        identifier_field.send_keys(identifier)
-#        time.sleep(2)
-#
-#        pwd_field = self.UTILS.element.getElement(DOM.Settings.celldata_apn_passwd, "APN pass")
-#        pwd_field.clear()
-#        pwd_field.send_keys(pwd)
-#        time.sleep(2)
-#===============================================================================
 
         #
         # Tap the ok button to save the changes
@@ -707,7 +684,6 @@ class Settings(object):
         #
         # This method sets the SIM security configuration.
         #
-        
         self.UTILS.reporting.logResult("info", "Enabling SIM security" if enable else "Disabling SIM Security")
 
         if is_dual_sim is None:
@@ -722,7 +698,8 @@ class Settings(object):
 
             self.UTILS.reporting.logResult("info", "Time to select SIM security option")
 
-            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
+            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security,
+                                                         "SIM manager -> SIM security")
             sim_security.tap()
 
             self.UTILS.reporting.logResult("info", "Try to switch ON the SIM 1 PIN switch")
@@ -730,18 +707,20 @@ class Settings(object):
                 self.UTILS.reporting.logResult("info", "First we have to check if there's a button to change the PIN")
                 self.parent.wait_for_element_displayed(*DOM.Settings.dual_sim_change_pin_sim1)
                 if enable:
-                    self.UTILS.reporting.logResult("info", "Trying to enable... but IT WAS AlREADY DONE!! Exiting...")
+                    self.UTILS.reporting.logResult("info", "Trying to enable, but it was already done!! Exiting...")
                     return
                 else:
-                    sim_security_pin = self.UTILS.element.getElement(DOM.Settings.dual_sim_switch_pin_sim1, "Enable PIN 1 switch")
+                    sim_security_pin = self.UTILS.element.getElement(DOM.Settings.dual_sim_switch_pin_sim1,
+                                                                     "Enable PIN 1 switch")
                     sim_security_pin.tap()
             except:
                 if not enable:
-                    self.UTILS.reporting.logResult("info", "Trying to disable... but IT WAS AlREADY DONE!! Exiting...")
+                    self.UTILS.reporting.logResult("info", "Trying to disable, but it was already done!! Exiting...")
                     return
 
                 self.UTILS.reporting.logResult("info", "The button was not there, so let's enable security")
-                sim_security_pin = self.UTILS.element.getElement(DOM.Settings.dual_sim_switch_pin_sim1, "Enable PIN 1 switch")
+                sim_security_pin = self.UTILS.element.getElement(DOM.Settings.dual_sim_switch_pin_sim1,
+                                                                 "Enable PIN 1 switch")
                 sim_security_pin.tap()
 
         else:
@@ -754,7 +733,7 @@ class Settings(object):
 
             #
             # If the attribute is already in the desired state, return
-            # 
+            #
             self.UTILS.reporting.logResult("info", "Value of enable: {}".format(enable))
             self.UTILS.reporting.logResult("info", "Value of sim security tag: {}".format(sim_security_tag.text))
             current = sim_security_tag.text == _("Enabled")
@@ -792,7 +771,8 @@ class Settings(object):
             self.UTILS.reporting.logResult("info", "SIM Security header")
             self.parent.wait_for_element_displayed(*DOM.Settings.sim_security_header)
         except:
-            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
+            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security,
+                                                         "SIM manager -> SIM security")
             sim_security.tap()
 
         #
@@ -805,7 +785,8 @@ class Settings(object):
                 # If not, something went wrong
                 #
                 try:
-                    self.UTILS.element.getElement(DOM.Settings.dual_sim_change_pin_sim1, "Change PIN button <b> is there </b>")
+                    self.UTILS.element.getElement(DOM.Settings.dual_sim_change_pin_sim1,
+                                                  "Change PIN button <b> is there </b>")
                 except:
                     self.UTILS.test.TEST(False, "Something went wrong while activating the PIN", True)
             else:
@@ -818,12 +799,58 @@ class Settings(object):
                 # If not, something went wrong
                 #
                 try:
-                    self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin, "Change PIN button <b> is there </b>")
+                    self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin,
+                                                  "Change PIN button <b> is there </b>")
                 except:
                     self.UTILS.test.TEST(False, "Something went wrong while activating the PIN", True)
             else:
                 self.UTILS.element.waitForNotElements(DOM.Settings.sim_security_change_pin,
                                               "Change PIN button <b> is not there </b>")
+
+    def set_passcode_lock(self, enable=False, code=None):
+        """Configure the passcode lock option.
+
+        Enable or disable the passcode lock option.
+        enable: if True, it will enable passcode lock.
+        code: the code used for locking/unlocking.
+        """
+        # Enter the screen lock menu
+        scr_lock_menu = self.UTILS.element.getElement(DOM.Settings.screen_lock_menu, "Screen lock menu")
+        scr_lock_menu.tap()
+
+        # Move the passcode lock slider to the desired position, if required
+        passcode_element = self.UTILS.element.getElement(DOM.Settings.passcode_lock, "Passcode lock")
+        passcode_lock = self.marionette.find_element('css selector', '.passcode-enable', passcode_element.id)
+        checked = passcode_lock.get_attribute("checked")
+        passcode_enabled = checked is not None and checked == "true"
+        self.UTILS.reporting.debug("Checked: {} ({})     Passcode enabled: {}".format(checked, type(checked), passcode_enabled))
+        if passcode_enabled == enable:
+            return
+
+        passcode_element.tap()
+        # Give some time for the keyboard to appear
+        time.sleep(1)
+        passcode_input = self.UTILS.element.getElement(DOM.Settings.passcode_input, "Passcode input")
+        self.UTILS.reporting.debug("* Sending code {} to passcode input".format(code))
+        passcode_input.send_keys(code)
+
+        # If enable is True, we must confirm the code
+        if enable:
+            passcode_confirm = self.UTILS.element.getElement(DOM.Settings.passcode_confirm, "Passcode confirm")
+            self.UTILS.reporting.debug("* Sending code {} to passcode confirm".format(code))
+            passcode_confirm.send_keys(code)
+            passcode_btn_create = self.UTILS.element.getElement(DOM.Settings.passcode_btn_create, "Button Create")
+            passcode_btn_create.tap()
+        # Return to the main settings menu
+        self.goBack()
+
+    def enter_unlock_code(self, code):
+        """Enter the unlock code via the keyboard.
+        """
+        for c in code:
+            btn = self.marionette.find_element(DOM.Settings.passcode_keyb_btn[0],
+                                               DOM.Settings.passcode_keyb_btn[1].format(c))
+            btn.tap()
 
     def turn_dataConn_on(self, wireless_off=False):
         #

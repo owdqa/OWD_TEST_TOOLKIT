@@ -12,7 +12,8 @@ keypad = ("id", "keypad")
 dialer_button_xpath = "//section[@id='keypad']//div[contains(@class,'keypad-key') and @data-value='{}']"
 dialer_button_1 = ("xpath", "/html/body/section/article[3]/div/article/section/div/div")
 phone_number_area = ("id", "fake-phone-number-view")
-phone_number = ('id', 'phone-number-view') # Beware: this number may have a country code prefix on it.
+# Beware: this number may have a country code prefix on it.
+phone_number = ('id', 'phone-number-view')
 
 contacts_sub_iframe = ("id", "iframe-contacts")
 
@@ -26,7 +27,7 @@ add_to_conts_cancel_btn = ("id", "cancel_activity")
 
 suggestion_count = ("id", "suggestion-count")
 suggestion_item = ("class name", "suggestion-item")
-suggestion_item_name = ('xpath', '//section[@id="suggestion-bar"]//div[@class="suggestion-item"]/div[@class="name"]')
+suggestion_item_name = ('css selector', '#suggestion-bar .js-name.si__name.ellipsis')
 suggestion_list = ("xpath", "//ul[@id='suggestion-list']/li")
 suggestion_list_cancel = ("id", "suggestion-overlay-cancel")
 

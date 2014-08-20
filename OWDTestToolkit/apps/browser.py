@@ -162,9 +162,9 @@ class Browser(object):
         return self.marionette.execute_script("return window.wrappedJSObject.Browser.currentTab.url;")
 
     def open_url(self, url, timeout=30):
-        # """
-        # Open url.
-        # """
+        """
+        Open url.
+        """
         self.parent.wait_for_element_displayed(*DOM.Browser.url_input)
         self.marionette.find_element(*DOM.Browser.url_input).tap()
         self.keyboard.send(url)
