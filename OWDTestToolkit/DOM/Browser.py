@@ -8,8 +8,6 @@ url_input = ('id', 'url-input')
 url_go_button = ('id', 'url-button')
 throbber = ("id", "throbber")
 
-browser_iframe_xpath = ("xpath", "//iframe[@class='browser-tab']")
-
 awesome_cancel_btn = ("id", "awesomescreen-cancel-button")
 awesome_top_sites_tab = ("id", "top-sites-tab")
 awesome_bookmarks_tab = ("id", "bookmarks-tab")
@@ -51,3 +49,7 @@ bookmarkmenu_button = ("id", "bookmark-button")
 bookmark_button = ("xpath", "//*[@id='bookmark-menu-add']")
 bookmarks_tab = ("xpath", "//*[@id='bookmarks-tab']")
 bookmark_item1 = ("xpath", "/html/body/div/div/div[2]/div/section[2]/ul/li/a/h5")
+
+
+embarrasing_tag = ('xpath', '//h3[@data-l10n-id="this-is-embarrassing"]')
+embarrasing_reload = ('id', 'try-reloading')

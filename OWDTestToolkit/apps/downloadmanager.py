@@ -12,28 +12,7 @@ class DownloadManager(object):
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
 
-    def clickDownloadNotifier(self, title):
-        #
-        # Click new sms in the home page status bar notificaiton.
-        #
-        self.UTILS.reporting.logResult("info", "Clicking statusbar notification of new Download from {}...".\
-                                       format(title))
-
-        #
-        # Switch to the 'home' frame to click the notifier.
-        #
-        self.marionette.switch_to_frame()
-        self.UTILS.statusbar.displayStatusBar()
-
-        #
-        # Create the strings to wait for.
-        #
-        x = (DOM.DownloadManager.statusbar_new_notif[0], DOM.DownloadManager.statusbar_new_notif[1].format(title))
-
-        x = self.UTILS.element.getElement(x, "Statusbar notification for " + title, True, 20, True)
-        x.tap()
-
-    def restartDownloadsList(self):
+    def clean_downloads_list(self):
 
         time.sleep(3)
         x = self.marionette.find_elements(*DOM.DownloadManager.download_list_elems)
@@ -43,9 +22,9 @@ class DownloadManager(object):
             self.UTILS.reporting.logResult("info", "Downloads list is empty, it's not necessary delete any file")
         else:
             self.UTILS.reporting.logResult("info", "Downloads list is not empty, it's necessary delete some files")
-            self.deleteAllDownloads()
+            self.delete_all_downloads()
 
-    def deleteAllDownloads(self):
+    def delete_all_downloads(self):
 
         #
         # Enter into Edit Mode
@@ -137,7 +116,7 @@ class DownloadManager(object):
         self.UTILS.test.TEST(x.text == "No downloads",
             "Verifying 'No downloads' message is displayed")
 
-    def deleteDownloadByPosition(self, position):
+    def delete_download_by_position(self, position):
         #
         # Deletes a single download from the downloads list by position
         #
@@ -178,7 +157,7 @@ class DownloadManager(object):
                         "Getting Delete button")
         x.tap()
 
-    def deleteDownload(self, filename):
+    def delete_download(self, filename):
         #
         # Deletes a single download from the downloads list
         #
@@ -216,32 +195,22 @@ class DownloadManager(object):
 
         #
         # TODO - CONFIRMATION!!!! - We will add a new parameter, called 'confirm'
-        # and wait for a confirmation popup.... like in stopDownload and restartDownload
+        # and wait for a confirmation popup.... like in stop_download and restart_download
 
         #
         # Wait for download to be deleted
         #
         self.UTILS.element.waitForNotElements(elem, "Download item from downloads list")
 
-    def downloadFile(self, filename):
+    def download_file(self, filename):
         #
         # Start the file download
+        # TODO - This works for our test page. Try to generalize a lil' bit
         #
-        self.UTILS.element.waitForElements(('css selector', 'a[href="%s"] ' % filename), "The file " + filename + " is present")
 
-        link = self.UTILS.element.getElement(('css selector', 'a[href="%s"] ' % filename),
-                                 "getting the file [%s] to download" % filename,
-                                 True, 120)
-        
-        self.actions = Actions(self.marionette)
-        self.actions.long_press(link, 2).perform()
-        time.sleep(1)
-
-        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
-
-        confirm_save = ('xpath', '//section[@data-type="action"]//button[@id="undefined"]')
-        confirm_button = self.UTILS.element.getElement(confirm_save, "Confirmation message")
-        confirm_button.tap()
+        link = self.UTILS.element.getElement(('css selector', 'a[href="{}"]'.format(filename)), 'The file [{}] to download'.format(filename), 
+                                 True, 10)
+        link.tap()
     
     def is_file_downloading(self, file_name):
         #
@@ -265,7 +234,7 @@ class DownloadManager(object):
         file = self.UTILS.element.getElement(elem, "A file")
         return file.get_attribute("data-state") == "downloading"
         
-    def openDownload(self, file):
+    def open_download(self, file):
 
         elem = (DOM.DownloadManager.download_element[0],
                 DOM.DownloadManager.download_element[1] % file)
@@ -273,7 +242,7 @@ class DownloadManager(object):
         x = self.UTILS.element.getElement(elem, "Getting desired download")
         x.tap()
 
-    def restartDownloadByPosition(self, position, confirm):
+    def restart_download_by_position(self, position, confirm):
 
         #
         # Restarts a download that was previously stopped, if <confirm> = True
@@ -345,7 +314,7 @@ class DownloadManager(object):
             self.UTILS.test.TEST("stopped" == x.get_attribute("data-state"),
                             "Verify that the status is stopped")
 
-    def restartDownload(self, download_id, confirm):
+    def restart_download(self, download_id, confirm):
 
         #
         # Restarts a download that was previously stopped, if <confirm> = True
@@ -417,7 +386,7 @@ class DownloadManager(object):
             self.UTILS.test.TEST("stopped" == x.get_attribute("data-state"),
                             "Verify that the status is stopped")
 
-    def stopDownloadByPosition(self, position, confirm):
+    def stop_download_by_position(self, position, confirm):
         # Stops a download in progress if <confirm> = True
         #
 
@@ -488,7 +457,7 @@ class DownloadManager(object):
                         "Verify that the status is downloading")
 
 
-    def stopDownload(self, download_id, confirm):
+    def stop_download(self, download_id, confirm):
 
         #
         # Stops a download in progress if <confirm> = True
@@ -560,50 +529,3 @@ class DownloadManager(object):
             x = self.UTILS.element.getElement(elem, "Obtain the download state")
             self.UTILS.test.TEST("downloading" == x.get_attribute("data-state"),
                         "Verify that the status is downloading")
-
-
-    def waitForDownloadNotifier(self, title, detail, p_timeout=40):
-        #
-        # Get the element of the new SMS from the status bar notification.
-        # returns a boolean (True if found)
-        #
-        self.UTILS.reporting.logResult("info",
-            "Waiting for statusbar notification of download of title [" + title
-            + "] and detail [" + detail + "]")
-
-        #
-        # Create the strings to wait for.
-        #
-        x = (DOM.DownloadManager.statusbar_new_notif[0],
-            DOM.DownloadManager.statusbar_new_notif[1] % title)
-
-        y = (DOM.DownloadManager.statusbar_new_notif[0],
-            DOM.DownloadManager.statusbar_new_notif[1] % detail)
-
-        #
-        # Wait for the notification to be present for this event
-        # in the popup messages (this way we make sure it's coming from our number,
-        # as opposed to just containing our number in the notification).
-        #
-        time.sleep(5)
-        isTitleOK = self.UTILS.statusbar.waitForStatusBarNew(x, p_displayed=False, p_timeOut=p_timeout)
-        isDetailOK = self.UTILS.statusbar.waitForStatusBarNew(y, p_displayed=False, p_timeOut=p_timeout)
-
-        return isTitleOK and isDetailOK
-
-
-    def waitForNewDownloadPopUp(self, file):
-        #
-        # Waits for a new SMS popup notification which
-        # is from this 'p_num' number.
-        #
-        myIframe = self.UTILS.ifreame.currentIframe()
-
-        self.marionette.switch_to_frame()
-        x = (DOM.DownloadManager.new_download_popup_detail[0], DOM.DownloadManager.new_download_popup_detail[1] % file)
-        self.UTILS.element.waitForElements(x,
-									"Popup message saying we have a new download of " + file,
-									True,
-									30)
-
-        self.UTILS.iframe.switchToFrame("src", myIframe)
