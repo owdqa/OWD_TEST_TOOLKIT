@@ -210,7 +210,6 @@ class Browser(object):
         # TODO see if we can reduce this timeout in the future. >10 seconds is poor UX
         self.parent.wait_for_condition(lambda m: not self.is_throbber_visible(), timeout=timeout)
         
-
     def is_page_not_loaded(self):
         try:
             self.parent.wait_for_element_displayed(*DOM.Browser.embarrasing_tag)
