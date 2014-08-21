@@ -128,5 +128,5 @@ message_expected_content = ('xpath', "//div[@class='message-content']//p/span[te
 
 wap_push_message_link = ('xpath', "//*[@id='si-sl-screen']//a[@data-action='url-link']")
 
-sms_class_0_ok_btn = ('xpath', '//form[@class="modal-dialog-alert generic-dialog visible"]/menu/button')
+sms_class_0_ok_btn = ('css selector', 'button.modal-dialog-alert-ok.confirm.affirmative')
 send_email_failed = ('xpath', '//span[@class="modal-dialog-alert-message"]')
