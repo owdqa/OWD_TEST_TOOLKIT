@@ -237,7 +237,7 @@ class DownloadManager(object):
     def open_download(self, file):
 
         elem = (DOM.DownloadManager.download_element[0],
-                DOM.DownloadManager.download_element[1] % file)
+                DOM.DownloadManager.download_element[1].format(file))
 
         x = self.UTILS.element.getElement(elem, "Getting desired download")
         x.tap()

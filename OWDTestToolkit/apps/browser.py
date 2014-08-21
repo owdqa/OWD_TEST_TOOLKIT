@@ -183,9 +183,10 @@ class Browser(object):
         
         if url_value:
             self.UTILS.test.TEST(url in url_value, "Loaded URL matches the desired URL")
+            return True
         else:
             self.UTILS.test.TEST(False, "Loaded URL matches the desired URL")
-
+            return False
 
     def tap_go_button(self, timeout=30):
         self.marionette.find_element(*DOM.Browser.url_go_button).tap()
@@ -237,7 +238,13 @@ class Browser(object):
 
     def switch_to_chrome(self):
         self.marionette.switch_to_frame()
-        self.marionette.switch_to_frame(self.app.frame)
+
+        try:
+            app_frame = self.app.frame
+        except AttributeError:
+            app_frame = self.apps.displayed_app.frame
+
+        self.marionette.switch_to_frame(app_frame)
 
     def openTab(self, num):
         """
