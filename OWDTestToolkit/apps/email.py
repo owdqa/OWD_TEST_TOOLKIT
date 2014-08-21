@@ -266,12 +266,7 @@ class Email(object):
                                    "Header for '" + name + "' folder")
 
     def openMailFolder(self, folder_name):
-        #
-        # Open a specific mail folder (must be called from "Inbox").
-        #
-        x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings menu button")
-        x.tap()
-
+        
         #
         # Check whether we're already there
         #
@@ -416,6 +411,10 @@ class Email(object):
 
         self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
         compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
+
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot before tapping 'Compose msg btn'", screenshot)
+
         compose_new_msg_btn.tap()
 
         #
@@ -447,6 +446,10 @@ class Email(object):
         except:
             self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
             compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
+            
+            screenshot = self.UTILS.debug.screenShotOnErr()
+            self.UTILS.reporting.logResult('info', "Screenshot before tapping 'RETRY - Compose msg btn'", screenshot)
+            
             compose_new_msg_btn.tap()
             return False
     
