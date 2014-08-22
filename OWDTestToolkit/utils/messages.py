@@ -11,6 +11,8 @@ class Messages(object):
         self.api_key = parent.general.get_os_variable("PIGEON_API_KEY")
         self.api_secret = parent.general.get_os_variable("PIGEON_API_SECRET")
         self.url = parent.general.get_os_variable("PIGEON_URL")
+        self.nowsms_user = parent.general.get_os_variable("NOWSMS_USER")
+        self.nowsms_pass = parent.general.get_os_variable("NOWSMS_PASS")
 
     def create_incoming_cp(self, phone_number, pin_type, ota_filename, pin_number=None):
         """Create incoming client provisioning message
@@ -89,7 +91,7 @@ class Messages(object):
     def send_and_check(self, headers, payload, typ):
         response = requests.post(self.url, headers=headers, data=json.dumps(payload))
         result = response.status_code == requests.codes.created
-        self.parent.test.TEST(result, "The {} message could {}be sent. Status code: {}. Body: {}".\
+        self.parent.test.TEST(result, "The {} message could {}be sent. Status code: {}. Body: {}".
                               format(typ, "not " if not result else "", response.status_code, response.text))
         return result
 
@@ -107,7 +109,7 @@ class Messages(object):
 
         if (pinNumber != None):
             url = 'http://10.95.193.226:8800/?PhoneNumber=' + phoneNumber + '&OTAPINTYPE=' + pinType.upper() + \
-                    '&OTAPIN=' + pinNumber + '&OTA=' + otaFilename
+                '&OTAPIN=' + pinNumber + '&OTA=' + otaFilename
         else:
             url = 'http://10.95.193.226:8800/?PhoneNumber=' + phoneNumber + '&OTA=' + otaFilename
 
@@ -115,5 +117,31 @@ class Messages(object):
 
         response = requests.get(url, auth=('owd', 'owdqa'))
         result = response.status_code >= 200 and response.status_code < 400
-        self.parent.reporting.debug("Sending message via NowSMS returned code: {}".format(sponse.status_code))
+        self.parent.reporting.debug("Sending message via NowSMS returned code: {}".format(response.status_code))
+        return result
+
+    def create_incoming_mms_nowsms(self, phone_number, mms_text, file_url, mms_subject=None):
+        """Send an incoming MMS
+
+        phone_number: phone_number destinatary of the MMS
+        mms_subject: subject of the MMS (optional)
+        mms_text: body  of the MMS
+        file_url: URL poiting to a media file
+
+        Example url: http://10.95.207.62:8800/?PhoneNumber=+34649779117&MMSFrom=sender@domain&MMSSubject=Hello&MMSText=Helloooooo&User=owd&Password=qa&MMSFile=http://www.nowsms.com/media/logo.gif
+        """
+
+        url_host = "http://10.95.207.62:8800/"
+
+        if mms_subject is not None:
+            url = "{}?PhoneNumber={}&MMSFrom=sender@domain&MMSSubject={}&MMSText={}&User={}&Password={}&MMSFile={}".format(
+                url_host, phone_number, mms_subject, mms_text, self.nowsms_user, self.nowsms_pass, file_url)
+        else:
+            url = "{}?PhoneNumber={}&MMSFrom=sender@domain&MMSText={}&User={}&Password={}&MMSFile={}".format(
+                url_host, phone_number, mms_text, self.nowsms_user, self.nowsms_pass, file_url)
+
+        response = requests.get(url)
+        result = response.status_code >= 200 and response.status_code < 400
+        self.parent.reporting.debug("Sending message via NowSMS returned code: {}".format(response.status_code))
+
         return result
