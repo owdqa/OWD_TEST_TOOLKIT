@@ -14,9 +14,9 @@ edit_mode_wrapper = ("xpath", "//article[@id='main-wrapper' and @class='wrapper 
 service_unavailable_msg = ("xpath", "//*[@data-l10n-id='sendGeneralErrorTitle']")
 service_unavailable_ok = ("xpath", "//*[@data-l10n-id='sendGeneralErrorBtnOk']")
 
-type_and_carrier_field = ("xpath", "//*[@id='contact-carrier']")
+type_and_carrier_field = ("id", "contact-carrier")
 
-target_numbers_empty = ("xpath", "//*[@id='to-label']")
+target_numbers_empty = ("id", "to-label")
 target_numbers = ("xpath", "//*[@id='messages-recipients-list']/span")
 add_contact_button = ("id", "messages-contact-pick-button")
 cancel_add_contact = ("id", "cancel_activity")
@@ -55,6 +55,7 @@ delete_threads_button = ("css selector", "button[data-l10n-id='deleteMessages-la
 message_list = ('xpath', '//div[@id="messages-container"]//li')
 message_timestamps = ("xpath", "//div[@id='messages-container']/div[@class='messages-date-group'][last()]/header")
 last_message = ('xpath', '//div[@id="messages-container"]//li[last()]')
+last_message_body = ('xpath', '//div[@id="messages-container"]//li[last()]//div[@class="message-body"]')
 last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
 last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p')
 last_message_mms_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span')
@@ -130,3 +131,7 @@ wap_push_message_link = ('xpath', "//*[@id='si-sl-screen']//a[@data-action='url-
 
 sms_class_0_ok_btn = ('css selector', 'button.modal-dialog-alert-ok.confirm.affirmative')
 send_email_failed = ('xpath', '//span[@class="modal-dialog-alert-message"]')
+
+save_as_draft_btn = ('xpath', '//button[@data-l10n-id="save-as-draft"]')
+discard_msg_btn = ('xpath', '//button[@data-l10n-id="discard-message"]')
+cancel_save_msg = ('xpath', '//button[@data-l10n-id="cancel"]')
