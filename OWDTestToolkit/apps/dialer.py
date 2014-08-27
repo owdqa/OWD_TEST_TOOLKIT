@@ -135,20 +135,36 @@ class Dialer(object):
                                     "Outgoing call found with number matching {}".format(p_num))
 
     def callLog_clearAll(self):
-        #
-        # Wipes all entries from the call log.
-        #
+    #
+    # Wipes all entries from the call log.
+    #
         try:
-            self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=2)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
         except:
             self.openCallLog()
 
-        # boolLIST = True
         try:
-            self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_no_calls_msg, timeout=2)
-            # boolLIST = False
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_no_calls_msg, timeout=1)
         except:
-            self.parent.data_layer.delete_all_call_log_entries()
+            self.UTILS.reporting.logResult("info", "Some numbers are in the call log here - removing them ...")
+            edit_btn = self.UTILS.element.getElement(DOM.Dialer.call_log_edit_btn, "Edit button")
+            edit_btn.tap()
+
+            # Here something weird is happening, since the form where this button should appear, remains
+            # hidden. Thus, when we try to get the button, it won't appear. Then, we have have to use
+            # raw JavaScript in order to obtain the button and click on it.
+            
+            self.parent.wait_for_element_present(*DOM.Dialer.call_log_edit_selAll, timeout=10)
+            self.marionette.execute_script("document.getElementById('{}').click();".\
+                                           format(DOM.Dialer.call_log_edit_selAll[1]))
+
+            self.parent.wait_for_element_present(*DOM.Dialer.call_log_edit_delete, timeout=2)
+            self.marionette.execute_script("document.getElementById('{}').click();".\
+                                           format(DOM.Dialer.call_log_edit_delete[1]))
+
+            confirm_delete = self.UTILS.element.getElement(DOM.Dialer.call_log_confirm_delete, "Confirm button")
+            confirm_delete.tap()
+
             self.UTILS.element.waitForElements(DOM.Dialer.call_log_no_calls_msg, "'No calls ...' message")
 
     def callLog_clearSome(self, p_entryNumbers):
@@ -244,20 +260,11 @@ class Dialer(object):
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
         self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call locator", True, 5)
 
+
     def call_this_number_and_hangup(self, delay):
         self.callThisNumber()
         time.sleep(delay)
-
-        self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=1)
-        hangup = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
-        if hangup:
-            hangup.tap()
-        else:
-            try:
-                self.parent.data_layer.kill_active_call()
-            except:
-                self.UTILS.reporting.logResult("info", "Exception when killing active call via data_layer")
-                pass
+        return self.hangUp()
 
     def createContactFromThisNum(self):
         #
@@ -293,16 +300,11 @@ class Dialer(object):
             self.UTILS.date_and_time.setTimeToSpecific(p_day=new_date.day, p_month=new_date.month)
 
             self.enterNumber(p_num)
-            self.callThisNumber()
+            self.call_this_number_and_hangup(delay=5)
+            # This needs to be done bcs sometimes (50%) the Dialer app crushes after hanging up
+            self.apps.kill_all()
             time.sleep(2)
-            self.hangUp()
-
-        #
-        # Open the call log to finish.
-        #
-        self.UTILS.general.checkMarionetteOK()
-        self.launch()
-        self.openCallLog()
+            self.launch()
 
     def enterNumber(self, p_num, validate=True):
         #
@@ -390,38 +392,29 @@ class Dialer(object):
         #
         # Hangs up (assuming we're in the 'calling' frame).
         #
-
-        # The call may already be terminated, so don't throw an error if
-        # the hangup bar isn't there.
         try:
-            self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator)
-
-            try:
-                self.parent.wait_for_element_displayed(*DOM.Dialer.call_busy_button_ok, timeout=5)
-                ok_btn = self.marionette.find_element(*DOM.Dialer.call_busy_button_ok)
-                # If the call destination is the same as the origin, it's very likely to get an error
-                # message. If this is the case, tap the OK button. Otherwise (i.e. using twilio), hang up the call
-                if ok_btn:
-                    self.UTILS.test.TEST(True, "Button text: {}".format(ok_btn.text))
-                    ok_btn.tap()
-                    return
-            except: # non-busy call
-
-                self.marionette.switch_to_frame()
-                elDef = ("xpath", "//iframe[contains(@{}, '{}')]".\
-                                    format(DOM.Dialer.frame_locator_calling[0],
-                                    DOM.Dialer.frame_locator_calling[1]))
-
-                self.parent.wait_for_element_displayed(*elDef, timeout=60)
-                frame_calling = self.marionette.find_element(*elDef)
-                if frame_calling:
-                    self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
-                    self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=1)
-                    hangup = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
-                    if hangup:
-                        hangup.tap()
+            self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=5)
         except:
-            pass
+            # The call may already be terminated, so don't throw an error if
+            # the hangup bar isn't there.
+            self.apps.switch_to_displayed_app() # go back to dialer
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_busy_button_ok, timeout=5)
+            ok_btn = self.marionette.find_element(*DOM.Dialer.call_busy_button_ok)
+            ok_btn.tap()
+            return "Busy"
+
+        hangup = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
+        if hangup:
+            hangup.tap()
+        else:
+            try:
+                self.parent.data_layer.kill_active_call()
+            except:
+                self.UTILS.reporting.logResult("info", "Exception when killing active call via data_layer")
+                pass
+
+        self.apps.switch_to_displayed_app()
+        return "OK"
 
     def openCallLog(self):
         #
