@@ -1,6 +1,6 @@
 import time
 from OWDTestToolkit import DOM
-from gaiatest.apps.system.regions.utility_tray import UtilityTray
+from gaiatest.apps.system.app import System
 
 
 class statusbar(object):
@@ -8,30 +8,14 @@ class statusbar(object):
     def __init__(self, parent):
         self.parent = parent
         self.marionette = parent.marionette
-        self.utility_tray = UtilityTray(self.marionette)
+        self.system = System(self.marionette)
 
     def clearAllStatusBarNotifs(self, p_silent=False):
-#===============================================================================
-#        #
-#        # Opens the statusbar, presses "Clear all", then closes the status bar.<br>
-#        # <b>p_silent</b> will supress any pass/fail (useful if this isn't relevant
-#        # to the test, or if you're just using it for a bit of housekeeping).
-#        #
-#        try:
-#            self.displayStatusBar()
-# 
-#            self.parent.parent.wait_for_element_displayed(*DOM.Statusbar.clear_all_button, timeout=1)
-#            x = self.marionette.find_element(*DOM.Statusbar.clear_all_button)
-#            self.parent.element.simulateClick(x)
-# 
-#            time.sleep(1)
-#            self.hideStatusBar()
-#        except:
-#            if p_silent:
-#                pass
-#            raise
-#===============================================================================
-        self.utility_tray.clear_all_notifications()
+        """Open the system tray and clear all notifications.
+        """
+        utility_tray = self.system.open_utility_tray()
+        utility_tray.wait_for_notification_container_displayed()
+        utility_tray.clear_all_notifications()
 
     def displayStatusBar(self):
         #

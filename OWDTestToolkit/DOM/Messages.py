@@ -87,8 +87,8 @@ received_sms = ('xpath', "//li[@class='message sms received incoming']/section/d
 received_mms = ('xpath', "//li[@class='message mms received incoming']/section/div/p")
 received_mms_subject = ('xpath', "//li[@class='message mms received incoming has-subject']/section/div/p")
 
-forward_btn_msg_opt = ('xpath', "//button[@data-l10n-id='forward']")
-cancel_btn_msg_opt = ('xpath', "//button[@data-l10n-id='cancel']")
+forward_btn_msg_opt = ('css selector', "button[data-l10n-id=forward]")
+cancel_btn_msg_opt = ('css selector', "button[data-l10n-id=forward] ~ button[data-l10n-id=cancel]")
 
 messages_options_btn = ("id", "messages-options-icon")
 addsubject_btn_msg_opt = ('xpath', "/html/body/form/menu/button[1]")
