@@ -10,7 +10,7 @@ class statusbar(object):
         self.marionette = parent.marionette
         self.system = System(self.marionette)
 
-    def clearAllStatusBarNotifs(self, p_silent=False):
+    def clearAllStatusBarNotifs(self):
         """Open the system tray and clear all notifications.
         """
         utility_tray = self.system.open_utility_tray()
