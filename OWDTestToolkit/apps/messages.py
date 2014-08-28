@@ -4,6 +4,7 @@ from OWDTestToolkit.apps.gallery import Gallery
 from OWDTestToolkit.apps.music import Music
 from OWDTestToolkit.apps.contacts import Contacts
 from OWDTestToolkit.apps.camera import Camera
+from OWDTestToolkit.utils.decorators import retry
 
 from marionette import Actions
 import time
@@ -20,6 +21,7 @@ class Messages(object):
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
 
+    @retry(5)
     def launch(self):
         #
         # Launch the app.

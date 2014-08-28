@@ -2,6 +2,7 @@ import binascii
 import json
 import requests
 from pigeon import pigeonpdu
+from decorators import retry
 
 
 class Messages(object):
@@ -88,6 +89,7 @@ class Messages(object):
         payload = {"to": ["tel:{}".format(phone_number)], "binaryMessage": data}
         return self.send_and_check(headers, payload, "WAP PUSH")
 
+    @retry(5)
     def send_and_check(self, headers, payload, typ):
         response = requests.post(self.url, headers=headers, data=json.dumps(payload))
         result = response.status_code == requests.codes.created
@@ -128,14 +130,15 @@ class Messages(object):
         mms_text: body  of the MMS
         file_url: URL poiting to a media file
 
-        Example url: http://10.95.207.62:8800/?PhoneNumber=+34649779117&MMSFrom=sender@domain&MMSSubject=Hello&MMSText=Helloooooo&User=owd&Password=qa&MMSFile=http://www.nowsms.com/media/logo.gif
+        Example url: http://10.95.207.62:8800/?PhoneNumber=+34649779117&MMSFrom=sender@domain&MMSSubject=Hello&\
+        MMSText=Helloooooo&User=owd&Password=qa&MMSFile=http://www.nowsms.com/media/logo.gif
         """
 
         url_host = "http://10.95.207.62:8800/"
 
         if mms_subject is not None:
-            url = "{}?PhoneNumber={}&MMSFrom=sender@domain&MMSSubject={}&MMSText={}&User={}&Password={}&MMSFile={}".format(
-                url_host, phone_number, mms_subject, mms_text, self.nowsms_user, self.nowsms_pass, file_url)
+            url = "{}?PhoneNumber={}&MMSFrom=sender@domain&MMSSubject={}&MMSText={}&User={}&Password={}&MMSFile={}".\
+                  format(url_host, phone_number, mms_subject, mms_text, self.nowsms_user, self.nowsms_pass, file_url)
         else:
             url = "{}?PhoneNumber={}&MMSFrom=sender@domain&MMSText={}&User={}&Password={}&MMSFile={}".format(
                 url_host, phone_number, mms_text, self.nowsms_user, self.nowsms_pass, file_url)
