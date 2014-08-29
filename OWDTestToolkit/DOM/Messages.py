@@ -54,12 +54,13 @@ delete_threads_button = ("css selector", "button[data-l10n-id='deleteMessages-la
 
 message_list = ('xpath', '//div[@id="messages-container"]//li')
 message_timestamps = ("xpath", "//div[@id='messages-container']/div[@class='messages-date-group'][last()]/header")
-last_message = ('xpath', '//div[@id="messages-container"]//li[last()]')
-last_message_body = ('xpath', '//div[@id="messages-container"]//li[last()]//div[@class="message-body"]')
+last_message = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]')
+last_message_body = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-body"]')
 last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
 last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p')
 last_message_mms_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span')
-last_message_text_nested = ('xpath', '//div[@class="message-content"]//p') # Use this with a find_element over the result of getting last_message
+# Use this with a find_element over the result of getting last_message
+last_message_text_nested = ('xpath', '//div[@class="message-content"]//p')
 
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')
@@ -85,14 +86,14 @@ airplane_warning_ok = ("xpath", "//button[text()='{}']".format(_("OK")))
 
 received_sms = ('xpath', "//li[@class='message sms received incoming']/section/div/p")
 received_mms = ('xpath', "//li[@class='message mms received incoming']/section/div/p")
-received_mms_subject = ('xpath', "//li[@class='message mms received incoming has-subject']/section/div/p")
+received_mms_subject = ('css selector', ".message.mms.received.incoming.has-subject div.message-body")
 
 forward_btn_msg_opt = ('css selector', "button[data-l10n-id=forward]")
 cancel_btn_msg_opt = ('css selector', "button[data-l10n-id=forward] ~ button[data-l10n-id=cancel]")
 
 messages_options_btn = ("id", "messages-options-icon")
 addsubject_btn_msg_opt = ('xpath', "/html/body/form/menu/button[1]")
-messages_converting = ('xpath', "/html/body/article/section[2]/div/div[2]/section[2]/p")
+message_convert_notice = ('css selector', "#messages-convert-notice p")
 deletesubject_btn_msg_opt = ("xpath", "//*[@data-l10n-id='remove-subject']")
 cancel_btn_msg = ("xpath", "//body[@role='application']/form/menu/button[@data-l10n-id='cancel']")
 target_subject = ("id", "messages-subject-input")
@@ -113,11 +114,11 @@ header_cancel_btn = ("xpath", "//button[text()='{}']".format(_("Cancel")))
 header_cancel_btn_no_send = ("xpath", "/html/body/form/menu/button[4]")
 header_cancel_btn_absolute = ("xpath", "/html/body/form/menu/button[5]")
 
-mms_from_video = ("xpath", "/html/body/div/form[9]/menu/button")
-mms_from_camera = ("xpath", "/html/body/div/form[9]/menu/button[4]")
-mms_from_gallery = ("xpath", "/html/body/div/form[9]/menu/button[3]")
-mms_from_music = ("xpath", "/html/body/div/form[9]/menu/button[2]")
-mms_cancel_button = ("xpath", "/html/body/div/form[9]/menu/button[5]")
+mms_from_video = ("xpath", "//button[@class='icon' and contains(@style, 'app://video')]")
+mms_from_camera = ("xpath", "//button[@class='icon' and contains(@style, 'app://camera')]")
+mms_from_gallery = ("xpath", "//button[@class='icon' and contains(@style, 'app://gallery')]")
+mms_from_music = ("xpath", "//button[@class='icon' and contains(@style, 'app://music')]")
+mms_cancel_button = ("css selector", "button.icon + button[data-l10n-id=cancel]")
 
 mms_icon = ("css selector", "span.mms-icon")
 
@@ -135,3 +136,7 @@ send_email_failed = ('xpath', '//span[@class="modal-dialog-alert-message"]')
 save_as_draft_btn = ('xpath', '//button[@data-l10n-id="save-as-draft"]')
 discard_msg_btn = ('xpath', '//button[@data-l10n-id="discard-message"]')
 cancel_save_msg = ('xpath', '//button[@data-l10n-id="cancel"]')
+
+button_download_attachment = ('xpath', '//button[@data-l10n-id="download-attachment"]')
+mms_attachment_names = ('css selector', '.attachment-container .file-name')
+mms_attachment_sizes = ('css selector', '.attachment-container .size-indicator')
