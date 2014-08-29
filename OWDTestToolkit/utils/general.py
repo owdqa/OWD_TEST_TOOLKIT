@@ -4,6 +4,7 @@ import json
 import time
 import datetime
 from OWDTestToolkit import DOM
+from OWDTestToolkit.utils.decorators import retry
 from gaiatest.apps.keyboard.app import Keyboard
 from gaiatest import GaiaData
 from gaiatest import GaiaApps
@@ -305,3 +306,9 @@ class general(object):
         self.parent.data_layer = GaiaData(self.marionette, self.parent.parent.testvars)
         # Restore lockscreen status
         self.parent.data_layer.set_setting("lockscreen.enabled", lock_enabled)
+
+    @retry(5, 5)
+    def connect_to_cell_data(self):
+        self.parent.reporting.debug(">>> Trying to connect to cell data...")
+        self.parent.data_layer.connect_to_cell_data()
+        self.parent.reporting.debug("    Connected: {}".format(self.parent.data_layer.is_cell_data_connected))
