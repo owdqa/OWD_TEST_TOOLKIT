@@ -25,3 +25,8 @@ puk_puk_input = ('xpath', '//div[@id="pukArea"]//input')
 puk_new_pin_input = ('xpath', '//div[@id="newPinArea"]//input')
 puk_confirm_pin_input = ('xpath', '//div[@id="confirmPinArea"]//input')
 puk_ok_btn = ('xpath', '//div[@id="simpin-dialog"]//button[@data-l10n-id="ok"]')
+
+# Action menu
+action_menu = ('xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]/menu')
+action_menu_option = ('xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]//button[text()="{}"]')
+action_menu_cancel_btn = ('xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]//button[@data-l10n-id="cancel" and @data-action="cancel"]')

@@ -472,7 +472,13 @@ class Settings(object):
         #
         # Open wifi settings.
         #
-        self.parent.wait_for_element_displayed(*DOM.Settings.downloads)
+        try: # sometimes after checking the notification, downloads list is already opened
+            self.parent.wait_for_element_displayed(DOM.Settings.downloads[0], DOM.Settings.downloads[1], timeout=20)
+        except:
+            self.UTILS.element.waitForElements(DOM.Settings.downloads_header,
+                                    "Downloads header appears.", True, 20, True)
+            return
+
         downloads_link = self.marionette.find_element(*DOM.Settings.downloads)
         
         self.UTILS.element.scroll_into_view(downloads_link)
