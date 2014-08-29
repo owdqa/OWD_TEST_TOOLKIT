@@ -4,6 +4,7 @@ from OWDTestToolkit.apps.gallery import Gallery
 from OWDTestToolkit.apps.music import Music
 from OWDTestToolkit.apps.contacts import Contacts
 from OWDTestToolkit.apps.camera import Camera
+from OWDTestToolkit.utils.decorators import retry
 
 from marionette import Actions
 import time
@@ -20,6 +21,7 @@ class Messages(object):
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
 
+    @retry(5)
     def launch(self):
         #
         # Launch the app.
@@ -768,8 +770,9 @@ class Messages(object):
             # Open sms option with longtap on it
             #
             self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_sms, "Target sms field")
-            self.actions.long_press(x, 2).perform()
+            sms = self.lastMessageInThisThread()
+            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
+            self.actions.long_press(body, 2).perform()
 
             #
             # Press forward button
@@ -789,7 +792,7 @@ class Messages(object):
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
             x.tap()
-            send_time = self.messages.last_sent_message_timestamp()
+            send_time = self.last_sent_message_timestamp()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
@@ -804,8 +807,9 @@ class Messages(object):
             # Open mms option with longtap on it
             #
             self.UTILS.reporting.logResult("info", "Open mms option with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_mms, "Target mms field")
-            self.actions.long_press(x, 2).perform()
+            sms = self.lastMessageInThisThread()
+            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
+            self.actions.long_press(body, 2).perform()
 
             #
             # Press forward button
@@ -830,7 +834,7 @@ class Messages(object):
             # Click send and wait for the message to be received
             #
             self.sendSMS()
-            send_time = self.messages.last_sent_message_timestamp()
+            send_time = self.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -884,7 +888,7 @@ class Messages(object):
             # Click send and wait for the message to be received
             #
             self.sendSMS()
-            send_time = self.messages.last_sent_message_timestamp()
+            send_time = self.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -919,8 +923,9 @@ class Messages(object):
             # Open sms option with longtap on it
             #
             self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_sms, "Target sms field")
-            self.actions.long_press(x, 2).perform()
+            sms = self.lastMessageInThisThread()
+            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
+            self.actions.long_press(body, 2).perform()
 
             #
             # Press forward button
@@ -963,7 +968,7 @@ class Messages(object):
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
             x.tap()
-            send_time = self.messages.last_sent_message_timestamp()
+            send_time = self.last_sent_message_timestamp()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
@@ -978,8 +983,9 @@ class Messages(object):
             # Open mms option with longtap on it
             #
             self.UTILS.reporting.logResult("info", "Open mms option with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_mms, "Target mms field")
-            self.actions.long_press(x, 2).perform()
+            sms = self.lastMessageInThisThread()
+            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
+            self.actions.long_press(body, 2).perform()
 
             #
             # Press forward button
@@ -1027,7 +1033,7 @@ class Messages(object):
             # Click send and wait for the message to be received
             #
             self.sendSMS()
-            send_time = self.messages.last_sent_message_timestamp()
+            send_time = self.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1104,7 +1110,7 @@ class Messages(object):
             # Click send and wait for the message to be received
             #
             self.sendSMS()
-            send_time = self.messages.last_sent_message_timestamp()
+            send_time = self.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1174,7 +1180,8 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
             sms = self.lastMessageInThisThread()
-            self.actions.long_press(sms, 2).perform()
+            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
+            self.actions.long_press(body, 2).perform()
 
             #
             # Press forward button
@@ -1218,7 +1225,7 @@ class Messages(object):
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
             x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
             x.tap()
-            send_time = self.messages.last_sent_message_timestamp()
+            send_time = self.last_sent_message_timestamp()
 
             #
             # Wait for the last message in this thread to be a 'received' one.
@@ -1234,7 +1241,8 @@ class Messages(object):
             #
             self.UTILS.reporting.logResult("info", "Open mms option with longtap on it")
             sms = self.lastMessageInThisThread()
-            self.actions.long_press(sms, 2).perform()
+            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
+            self.actions.long_press(body, 2).perform()
 
             #
             # Press forward button
@@ -1283,7 +1291,7 @@ class Messages(object):
             # Click send and wait for the message to be received
             #
             self.sendSMS()
-            send_time = self.messages.last_sent_message_timestamp()
+            send_time = self.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1361,7 +1369,7 @@ class Messages(object):
             # Click send and wait for the message to be received
             #
             self.sendSMS()
-            send_time = self.messages.last_sent_message_timestamp()
+            send_time = self.last_sent_message_timestamp()
 
             #
             # This step is necessary because our sim cards receive mms with +XXX
@@ -1619,7 +1627,10 @@ class Messages(object):
         # Returns the 'carrier' being used by this thread.
         #
         x = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field, "Type and carrier information")
-        return x.text.split("|")[1].strip()
+        parts = x.text.split("|")
+        if len(parts) > 1:
+            return parts[1].strip()
+        return parts[0].strip()
 
     def threadEditModeOFF(self):
         #
@@ -1655,7 +1666,9 @@ class Messages(object):
         # Returns the 'type' being used by this thread.
         #
         x = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field, "Type and carrier information")
-        return x.text.split("|")[0].strip()
+        parts = x.text.split("|")
+        typ = parts[0].strip()
+        return typ if len(parts) > 1 else ''
 
     def timeOfLastMessageInThread(self):
         #

@@ -101,3 +101,4 @@ then
     fi
     exit 1
 fi
+printf "\nFAILED TESTS: $FAILED_TESTS\n"
