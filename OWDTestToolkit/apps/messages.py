@@ -388,42 +388,14 @@ class Messages(object):
             self.createMMSImage()
             self.gallery.clickThumbMMS(0)
 
-            #
-            # Click send and wait for the message to be received
-            #
             self.sendSMS()
-            time.sleep(5)
-
-            #
-            # Obtaining file attached type
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.attach_preview_img_type, "preview type")
-            typ = x.get_attribute("data-attachment-type")
-
-            if typ != "img":
-                self.UTILS.test.quitTest("Incorrect file type. The file must be img ")
-
         elif attached_type == "cameraImage":
             #
             # Add an image file from camera
             #
             self.createMMSCameraImage()
-
-            #
-            # Click send and wait for the message to be received
-            #
+            time.sleep(3)
             self.sendSMS()
-            time.sleep(5)
-
-            #
-            # Obtaining file attached type
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.attach_preview_img_type, "preview type")
-            typ = x.get_attribute("data-attachment-type")
-
-            if typ != "img":
-                self.UTILS.test.quitTest("Incorrect file type. The file must be img ")
-
         elif attached_type == "video":
             #
             # Load an video file into the device.
@@ -433,16 +405,6 @@ class Messages(object):
             self.createMMSVideo()
             self.video.clickOnVideoMMS(0)
             self.sendSMS()
-
-            #
-            # Obtaining file attached type
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.attach_preview_video_audio_type, "preview type")
-            typ = x.get_attribute("data-attachment-type")
-
-            if typ != "video":
-                self.UTILS.test.quitTest("Incorrect file type. The file must be video")
-
         elif attached_type == "audio":
             #
             # Load an video file into the device.
@@ -452,21 +414,7 @@ class Messages(object):
             self.createMMSMusic()
             self.music.click_on_song_mms()
 
-            #
-            # Click send and wait for the message to be received
-            #
             self.sendSMS()
-            time.sleep(5)
-
-            #
-            # Obtaining file attached type
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.attach_preview_video_audio_type, "preview type")
-            typ = x.get_attribute("data-attachment-type")
-
-            if typ != "audio":
-                self.UTILS.test.quitTest("Incorrect file type. The file must be audio ")
-
         else:
             # self.UTILS.reporting.logResult("info", "incorrect value received")
             msg = "FAILED: Incorrect parameter received in createAndSendMMS()"\
@@ -493,7 +441,7 @@ class Messages(object):
         self.enterSMSMsg(msg)
 
         #
-        # The header should now say how many receipients.
+        # The header should now say how many recipients.
         #
         time.sleep(2)  # give the header time to change.
 
@@ -790,16 +738,7 @@ class Messages(object):
             # Send the sms.
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            x.tap()
-            send_time = self.last_sent_message_timestamp()
-
-            #
-            # Wait for the last message in this thread to be a 'received' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
-            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
+            self.sendSMS()
         elif msg_type == "mms":
 
             self.UTILS.reporting.logResult("info", "is a mms")
@@ -826,30 +765,12 @@ class Messages(object):
             #
             # Send the mms.
             #
-            self.UTILS.reporting.logResult("info", "Cliking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            x.tap()
+            self.UTILS.reporting.logResult("info", "Clicking on Send button")
 
             #
             # Click send and wait for the message to be received
             #
             self.sendSMS()
-            send_time = self.last_sent_message_timestamp()
-
-            #
-            # This step is necessary because our sim cards receive mms with +XXX
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
-            x.tap()
-
-            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
-
-            #
-            # Wait for the last message in this thread to be a 'received' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
-            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
         elif msg_type == "mmssub":
 
             self.UTILS.reporting.logResult("info", "is a mms with subject")
@@ -857,18 +778,15 @@ class Messages(object):
             #
             # Open mms option with longtap on it
             #
-            self.UTILS.reporting.logResult("info",
-                                    "Open mms with subject options with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject,
-                                    "Target MMS field")
+            self.UTILS.reporting.logResult("info", "Open mms with subject options with longtap on it")
+            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject, "Target MMS field")
             self.actions.long_press(x, 2).perform()
 
             #
             # Press forward button
             #
             self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt,
-                                          "Forward button is displayed")
+            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
             x.tap()
 
             #
@@ -880,30 +798,7 @@ class Messages(object):
             # Send the mms.
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
-                                          "Send button is displayed")
-            x.tap()
-
-            #
-            # Click send and wait for the message to be received
-            #
             self.sendSMS()
-            send_time = self.last_sent_message_timestamp()
-
-            #
-            # This step is necessary because our sim cards receive mms with +XXX
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
-            x.tap()
-
-            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
-
-            #
-            # Wait for the last message in this thread to be a 'recieved' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
-            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
             self.UTILS.test.quitTest()
@@ -966,16 +861,7 @@ class Messages(object):
             # Send the sms.
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            x.tap()
-            send_time = self.last_sent_message_timestamp()
-
-            #
-            # Wait for the last message in this thread to be a 'received' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
-            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
+            self.sendSMS()
         elif msg_type == "mms":
 
             self.UTILS.reporting.logResult("info", "is a mms")
@@ -1025,30 +911,8 @@ class Messages(object):
             #
             # Send the mms.
             #
-            self.UTILS.reporting.logResult("info", "Cliking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            x.tap()
-
-            #
-            # Click send and wait for the message to be received
-            #
+            self.UTILS.reporting.logResult("info", "Clicking on Send button")
             self.sendSMS()
-            send_time = self.last_sent_message_timestamp()
-
-            #
-            # This step is necessary because our sim cards receive mms with +XXX
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
-            x.tap()
-
-            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
-
-            #
-            # Wait for the last message in this thread to be a 'received' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
-            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
         elif msg_type == "mmssub":
 
             self.UTILS.reporting.logResult("info", "is a mms with subject")
@@ -1102,30 +966,7 @@ class Messages(object):
             # Send the mms.
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
-                                          "Send button is displayed")
-            x.tap()
-
-            #
-            # Click send and wait for the message to be received
-            #
             self.sendSMS()
-            send_time = self.last_sent_message_timestamp()
-
-            #
-            # This step is necessary because our sim cards receive mms with +XXX
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
-            x.tap()
-
-            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
-
-            #
-            # Wait for the last message in this thread to be a 'recieved' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
-            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
             self.UTILS.test.quitTest()
@@ -1223,16 +1064,7 @@ class Messages(object):
             # Send the sms.
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            x.tap()
-            send_time = self.last_sent_message_timestamp()
-
-            #
-            # Wait for the last message in this thread to be a 'received' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
-            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
+            self.sendSMS()
         elif msg_type == "mms":
 
             self.UTILS.reporting.logResult("info", "is a mms")
@@ -1283,30 +1115,8 @@ class Messages(object):
             #
             # Send the mms.
             #
-            self.UTILS.reporting.logResult("info", "Cliking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send button is displayed")
-            x.tap()
-
-            #
-            # Click send and wait for the message to be received
-            #
+            self.UTILS.reporting.logResult("info", "Clicking on Send button")
             self.sendSMS()
-            send_time = self.last_sent_message_timestamp()
-
-            #
-            # This step is necessary because our sim cards receive mms with +XXX
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
-            x.tap()
-
-            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
-
-            #
-            # Wait for the last message in this thread to be a 'received' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
-            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
         elif msg_type == "mmssub":
 
             self.UTILS.reporting.logResult("info", "is a mms with subject")
@@ -1361,33 +1171,30 @@ class Messages(object):
             # Send the mms.
             #
             self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            x = self.UTILS.element.getElement(DOM.Messages.send_message_button,
-                                          "Send button is displayed")
-            x.tap()
-
-            #
-            # Click send and wait for the message to be received
-            #
             self.sendSMS()
-            send_time = self.last_sent_message_timestamp()
-
-            #
-            # This step is necessary because our sim cards receive mms with +XXX
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
-            x.tap()
-
-            self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
-
-            #
-            # Wait for the last message in this thread to be a 'recieved' one.
-            #
-            returnedSMS = self.waitForReceivedMsgInThisThread(send_time=send_time)
-            self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
             self.UTILS.test.quitTest()
+
+    def get_mms_attachments_info(self, mms):
+        """Give name and file size for all attachments in an MMS.
+
+        Given an MMS, return a list containing a dictionary for every attachment,
+        with two keys, name and size.
+        """
+        attachment_names = self.marionette.find_elements(*DOM.Messages.mms_attachment_names, id=mms.id)
+        attachment_sizes = self.marionette.find_elements(*DOM.Messages.mms_attachment_sizes, id=mms.id)
+        result = []
+        for (i, name) in enumerate(attachment_names):
+            inner_text = self.marionette.execute_script("""return arguments[0].innerHTML;""", script_args=[name])
+            att = {}
+            att["name"] = inner_text
+            size_elem = attachment_sizes[i].get_attribute("data-l10n-args")
+            size = size_elem[size_elem.index(":") + 2:size_elem.rfind("\"")]
+            i = i + 1
+            att["size"] = size
+            result.append(att)
+        return result
 
     def getThreadText(self, num):
         #
