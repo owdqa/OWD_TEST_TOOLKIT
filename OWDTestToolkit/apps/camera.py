@@ -2,7 +2,6 @@ import time
 from OWDTestToolkit import DOM
 
 
-
 class Camera(object):
 
     def __init__(self, parent):
@@ -130,5 +129,6 @@ class Camera(object):
         #
         # Confirm the picture.
         #
+        time.sleep(5)
         y = self.UTILS.element.getElement(DOM.Camera.select_button, "Select Camera photo")
         y.tap()

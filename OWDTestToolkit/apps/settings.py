@@ -1,8 +1,10 @@
 import time
 from OWDTestToolkit import DOM
+from OWDTestToolkit.utils.decorators import retry
 
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
+
 
 class Settings(object):
 
@@ -159,11 +161,12 @@ class Settings(object):
         #
         # Tap on Messaging Settings button
         #
+        self.parent.wait_for_element_displayed(*DOM.Settings.msg_settings, timeout=10)
         x = self.UTILS.element.getElement(DOM.Settings.msg_settings, "Messaging Settings button")
-        x.tap()
+        self.UTILS.element.simulateClick(x)
 
         #
-        # Tap on Auto Retireve Select
+        # Tap on Auto Retrieve Select
         #
         x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_btn, "Auto Retrieve Select")
         x.tap()
@@ -198,10 +201,8 @@ class Settings(object):
         x = self.UTILS.element.getElement(DOM.Settings.ok_btn, "Tapping on OK button in auto Retrieve select")
         x.tap()
 
-        #
-        #Verifying if the option value has been selected
-        #
-        self.verify_autoRetrieve_SelectedItem(value)
+        self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
+        self.goBack()
 
     def createCustomAPN(self, apn, identifier, pwd):
         #
@@ -872,149 +873,6 @@ class Settings(object):
                                                DOM.Settings.passcode_keyb_btn[1].format(c))
             btn.tap()
 
-    def turn_dataConn_on(self, wireless_off=False):
-        #
-        # Click slider to turn data connection on.
-        #
-
-        #
-        # First, make sure we're in "Settings".
-        #
-        try:
-            self.parent.wait_for_element_present(*DOM.Settings.frame_locator, timeout=2)
-            x = self.marionette.find_element(*DOM.Settings.frame_locator)
-        except:
-            #
-            # Settings isn't running, so start it.
-            #
-            self.launch()
-            self.cellular_and_data()
-
-        if wireless_off:
-            if self.parent.data_layer.get_setting("wifi.enabled"):
-                self.parent.data_layer.disable_wifi()
-
-        time.sleep(1)
-
-        if not self.parent.data_layer.get_setting("ril.data.enabled"):
-            #
-            # If we disabled the wifi we'll be in the wrong frame here, so just make sure ...
-            #
-            self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
-
-            x = self.UTILS.element.getElement(DOM.Settings.celldata_DataConn, "Connect to cellular and data switch",
-                                      False, 15, False)
-            try:
-                x.tap()
-            except:
-                #
-                # The element isn't visible, but we still want to enable dataconn,
-                # so try using the 'back door' ...
-                #
-                self.UTILS.reporting.logResult("info", "(Marionette issue) Unable to start dataconn via U.I. -"\
-                                     " trying to force it using gaia data layer instead.")
-                try:
-                    self.parent.data_layer.connect_to_cell_data()
-                    self.UTILS.reporting.logResult("info", "(Marionette issue) Success!")
-                except:
-                    self.UTILS.reporting.logResult("info", "(Marionette issue) Unsuccessful!")
-
-            self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
-
-        #
-        # If we get prompted for action, say 'Turn ON'.
-        #
-        # (Because it's only 'if', we don't verify this element.)
-        #
-        time.sleep(2)
-        try:
-            self.parent.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON, timeout=2)
-            x = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
-            if x.is_displayed():
-                x.tap()
-        except:
-            pass
-
-        #
-        # Give it time to start up.
-        #
-        time.sleep(5)
-
-        #
-        # Check to see if data conn is now enabled (it may be, even if the icon doesn't appear).
-        #
-        self.UTILS.test.TEST(
-            self.parent.data_layer.get_setting("ril.data.enabled"), "Data connection is enabled", True)
-
-        #
-        # Give the statusbar icon time to appear, then check for it.
-        #
-        # NOTE: 'wireless_off' works here: if it's true then the icon SHOULD be there, else
-        #       it shouldn't.
-        #
-        if not self.parent.data_layer.get_setting("wifi.enabled"):
-            x = self.UTILS.statusbar.isIconInStatusBar(DOM.Statusbar.dataConn)
-            time.sleep(5)
-            self.UTILS.test.TEST(x, "Data connection icon is present in the status bar.", True)
-
-        self.apps.kill_all()
-
-    def verify_autoRetrieve_SelectedItem(self, value):
-        #
-        # Launch settings app.
-        #
-        self.launch()
-
-        x = self.UTILS.element.getElement(DOM.Settings.msg_settings, "Messaging Settings button")
-        x.tap()
-
-        #
-        # Tap on Auto Retireve Select
-        #
-        x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_btn, "Auto Retrieve Select")
-        x.tap()
-
-        #
-        # Changing to top level frame
-        #
-        time.sleep(2)
-        self.marionette.switch_to_frame()
-
-        #
-        # Selecting the specific option using que received parameter
-        #
-        if value == "off":
-            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_off,
-                                              "Off option in Auto Retrieve Select")
-        elif value == "on_with_r":
-            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_roaming,
-                                      "On with roaming option in Auto Retrieve Select")
-        elif value == "on_without_r":
-            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_no_roaming,
-                                      "On without roaming option in Auto Retrieve Select")
-        else:
-            self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quitTest("FAILED: Incorrect parameter received in verify_autoRetrieve_SelectedItem()")
-
-        #
-        #Get option
-        #
-        y = x.get_attribute("aria-selected")
-
-        #
-        #Verifyin if the option is selected using the value true
-        #
-        self.UTILS.reporting.logResult("info", "Obtaining Selected option in Auto Retrieve select", y)
-        self.UTILS.test.TEST(y == "true", "Checking value")
-
-        #
-        #Pressing ok button to leave select option
-        #
-        x = self.UTILS.element.getElement(DOM.Settings.ok_btn, "Messaging Settings button")
-        x.tap()
-
     def wifi(self):
         #
         # Open wifi settings.
@@ -1173,7 +1031,7 @@ class Settings(object):
         _wifi_name_element = ("xpath", DOM.Settings.wifi_name_xpath.format(wlan_name))
         self.parent.wait_for_element_displayed(_wifi_name_element[0], _wifi_name_element[1], timeout=10)
         wifi = self.marionette.find_element(*_wifi_name_element)
-        
+
         wifi.tap()
         time.sleep(2)
 
@@ -1205,23 +1063,13 @@ class Settings(object):
         #
         time.sleep(3)
 
-    def connect_to_wifi_with_retries(self, wifi_name, wifi_pass, retries):
+    @retry(10)
+    def connect_to_wifi(self, wifi_name, wifi_pass):
         #
         # Connect to the wifi.
         #
-        for i in range(retries, 0, -1):
-            try:
-                #
-                # Make sure wifi is set to 'on'.
-                #
-                self.wifi_switchOn()
-
-                self.wifi_list_tapName(wifi_name)
-                self.UTILS.general.typeThis(DOM.Settings.wifi_login_pass, "Password for the WLAN", wifi_pass)
-                ok_btn = self.UTILS.element.getElement(DOM.Settings.wifi_login_ok_btn, "WLAN login OK button")
-                ok_btn.tap()
-                break
-            except:
-                self.UTILS.reporting.logResult('info', 'WLAN not found -> Try to restart WIFI')
-                self.wifi_switchOff()
-
+        self.wifi_switchOn()
+        self.wifi_list_tapName(wifi_name)
+        self.UTILS.general.typeThis(DOM.Settings.wifi_login_pass, "Password for the WLAN", wifi_pass)
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.wifi_login_ok_btn, "WLAN login OK button")
+        ok_btn.tap()

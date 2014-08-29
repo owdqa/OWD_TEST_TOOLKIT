@@ -1,5 +1,6 @@
 import time
 from OWDTestToolkit import DOM
+from gaiatest.apps.homescreen.app import Homescreen
 
 
 class home(object):
@@ -7,6 +8,7 @@ class home(object):
     def __init__(self, parent):
         self.parent = parent
         self.marionette = parent.marionette
+        self.homescreen = Homescreen(self.marionette)
 
     def goHome(self):
         #
@@ -25,23 +27,14 @@ class home(object):
         time.sleep(1)
 
     def holdHomeButton(self):
-        #
-        # Long hold the home button to bring up the 'current running apps'.
-        #
-        self.marionette.switch_to_frame()
-        self.marionette.execute_script("window.wrappedJSObject.dispatchEvent(new Event('holdhome'));")
+        """Hold Home button pressed to show active applications.
+        """
+        self.parent.parent.device.hold_home_button()
 
     def putHomeInEditMode(self):
-        #
-        # Just uses the first icon it comes across to put the homescreen into edit mode.
-        #
-        self.goHome()
-        self.scrollHomescreenRight()
-        time.sleep(0.5)
-
-        x = self.parent.element.getElements(DOM.Home.app_icon_pages, "Icon pages on homescreen")
-        _first_icon = x[0].find_element("xpath", "./ol/li[@class='icon']")
-        self.actions.press(_first_icon).wait(2).release().perform()
+        """Activate Edit Mode by holding an app pressed and then releasing.
+        """
+        self.homescreen.activate_edit_mode()
 
     def scrollHomescreenLeft(self):
         #
@@ -58,8 +51,6 @@ class home(object):
         self.marionette.execute_script('window.wrappedJSObject.GridManager.goToNextPage()')
 
     def touchHomeButton(self):
-        #
-        # Touch the home button (sometimes does something different to going home).
-        #
-        self.marionette.switch_to_frame()
-        self.marionette.execute_script("window.wrappedJSObject.dispatchEvent(new Event('home'));")
+        """Touch Home button.
+        """
+        self.parent.parent.device.touch_home_button()
