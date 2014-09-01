@@ -1,6 +1,7 @@
 import time
 from OWDTestToolkit import DOM
 from gaiatest.apps.system.app import System
+from OWDTestToolkit.utils.decorators import retry
 
 
 class statusbar(object):
@@ -13,6 +14,7 @@ class statusbar(object):
     def clearAllStatusBarNotifs(self):
         """Open the system tray and clear all notifications.
         """
+        self.marionette.switch_to_frame()
         utility_tray = self.system.open_utility_tray()
         utility_tray.wait_for_notification_container_displayed()
         utility_tray.clear_all_notifications()
@@ -168,41 +170,33 @@ class statusbar(object):
 
         return x
 
-    def click_on_notification_title(self, text, frame_to_change=None, timeout=30):
+    def click_on_notification(self, dom, text, frame_to_change=None, timeout=30):
         #
-        # Clicks on a certain notification (given by its title)
-        # If @frame_to_change provided, it will switch to that frame
+        # Clicks on a certain notification looking for the given text in the
+        # given DOM element (title or detail) for the specified timeout.
+        # If frame_to_change is not None, frame will be set to its value.
         #
         self.displayStatusBar()
         time.sleep(1)
-
-        x = (DOM.Statusbar.notification_statusbar_title[0], DOM.Statusbar.notification_statusbar_title[1].format(text))
-
+        x = (dom[0], dom[1].format(text))
         self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
         notif = self.marionette.find_element(x[0], x[1])
         notif.tap()
 
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
+
+    def click_on_notification_title(self, text, frame_to_change=None, timeout=30):
+        """Clicks on a certain notification (given by its title)
+        """
+        self.click_on_notification(DOM.Statusbar.notification_statusbar_title, text, frame_to_change, timeout)
 
     def click_on_notification_detail(self, text, frame_to_change=None, timeout=30):
-        #
-        # Clicks on a certain notification (given by its detail)
-        # If @frame_to_change provided, it will switch to that frame
-        #
-        self.displayStatusBar()
-        time.sleep(1)
+        """Clicks on a certain notification (given by its body)
+        """
+        self.click_on_notification(DOM.Statusbar.notification_statusbar_detail, text, frame_to_change, timeout)
 
-        x = (DOM.Statusbar.notification_statusbar_detail[0],
-             DOM.Statusbar.notification_statusbar_detail[1].format(text))
-        self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
-
-        notif = self.marionette.find_element(x[0], x[1])
-        notif.tap()
-
-        if frame_to_change:
-            self.parent.iframe.switchToFrame(*frame_to_change)
-
+    @retry(5, 10)
     def wait_for_notification_toaster_title(self, text, frame_to_change=None, timeout=30):
         #
         # Waits for a new popup notification which contains a certain title
@@ -213,9 +207,15 @@ class statusbar(object):
         self.parent.reporting.debug("** Waiting for notification toaster title: [{}]".format(x))
         self.parent.parent.wait_for_element_present(x[0], x[1], timeout)
 
+        # Check if the notification actually exists or if it is a "ghost" one.
+        dom = (DOM.Statusbar.notification_statusbar_title[0],
+               DOM.Statusbar.notification_statusbar_title[1].format(text))
+        self.marionette.find_element(dom[0], dom[1])
+
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
 
+    @retry(5, 10)
     def wait_for_notification_toaster_detail(self, text, frame_to_change=None, timeout=30):
         #
         # Waits for a new popup notification which contains a certain body
@@ -225,6 +225,10 @@ class statusbar(object):
         x = (DOM.Statusbar.notification_toaster_detail[0], DOM.Statusbar.notification_toaster_detail[1].format(text))
         self.parent.reporting.debug("** Waiting for notification toaster detail: [{}]".format(x))
         self.parent.parent.wait_for_element_present(x[0], x[1], timeout)
+        #self.displayStatusBar()
+        dom = (DOM.Statusbar.notification_statusbar_detail[0],
+             DOM.Statusbar.notification_statusbar_detail[1].format(text))
+        self.marionette.find_element(dom[0], dom[1])
 
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
