@@ -136,12 +136,10 @@ class Dialer(object):
         except:
             self.openCallLog()
 
-        x = self.UTILS.element.getElement(("xpath", DOM.Dialer.call_log_number_xpath.format(p_num)),
+        entry = self.UTILS.element.getElement(("xpath", DOM.Dialer.call_log_number_xpath.format(p_num)),
                                           "The call log for number {}".format(p_num))
-        x.tap()
+        entry.tap()
 
-        x = self.UTILS.element.getElement(DOM.Dialer.call_log_numtap_call, "Call button")
-        x.tap()
         if own_num == p_num:
             time.sleep(2)
             # self.marionette.switch_to_frame()
