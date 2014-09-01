@@ -152,7 +152,7 @@ class statusbar(object):
             boolReturn = self.parent.network.waitForNetworkItemDisabled(p_type)
         else:
             boolReturn = self.parent.network.waitForNetworkItemEnabled(p_type)
-
+        self.hideStatusBar()
         return boolReturn
 
     def waitForStatusBarNew(self, p_dom=DOM.Statusbar.status_bar_new, p_displayed=True, p_timeOut=20):
