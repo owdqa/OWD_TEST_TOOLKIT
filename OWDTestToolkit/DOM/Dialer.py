@@ -26,6 +26,8 @@ keypad_delete = ("id", "keypad-delete")
 add_to_conts_cancel_btn = ("id", "cancel_activity")
 
 suggestion_count = ("id", "suggestion-count")
+# When only a single suggestion is displayed, we have a div instead a button
+suggestion_item_single = ('xpath', '//div[@class="js-suggestion-item suggestion-item"]')
 suggestion_item = ('xpath', '//button[@class="js-suggestion-item suggestion-item si--action-menu"]')
 suggestion_item_name = ('xpath', '//button[@class="js-suggestion-item suggestion-item si--action-menu"]//div[@class="js-name si__name ellipsis"]') 
 suggestion_list = ('id', 'suggestion-list')
