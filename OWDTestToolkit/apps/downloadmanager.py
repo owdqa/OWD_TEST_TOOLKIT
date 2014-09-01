@@ -5,6 +5,7 @@ from marionette import Actions
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
+
 class DownloadManager(object):
 
     def __init__(self, parent):
@@ -19,16 +20,17 @@ class DownloadManager(object):
         Checks a certain button status
         """
         button = self.UTILS.element.getElement(locator, "Getting '{button_type}' button")
-        self.UTILS.test.TEST(button.get_attribute(attribute) == desired_value, 'Checking "{}" button is "{}"'.format(button_type, desired_value))
+        self.UTILS.test.TEST(button.get_attribute(attribute) == desired_value,
+                             'Checking "{}" button is "{}"'.format(button_type, desired_value))
         if return_button:
             return button
-        
+
     def _enter_edit_mode(self):
         """
         Enter into Edit Mode
         """
         edit_mode = self.UTILS.element.getElement(DOM.DownloadManager.download_edit_button,
-                                          "Getting download edit button", True, 10)
+                                                  "Getting download edit button", True, 10)
         edit_mode.tap()
         self.UTILS.element.waitForElements(DOM.DownloadManager.downloads_edit_header_title,
                                            "Getting edit downloads header")
@@ -43,8 +45,8 @@ class DownloadManager(object):
         return download_entry.get_attribute("data-state")
 
     def verify_download_status(self, data_url, status):
-        self.UTILS.test.TEST(self.get_download_state(data_url) == status, 
-                            "The download entry {} has the state: {}".format(data_url, status))
+        self.UTILS.test.TEST(self.get_download_state(data_url) == status,
+                             "The download entry {} has the state: {}".format(data_url, status))
 
     def clean_downloads_list(self):
         """
@@ -67,7 +69,8 @@ class DownloadManager(object):
         self._enter_edit_mode()
 
         # Verify "Select All button" is enabled and "Deselect All" is disabled
-        select_all = self._check_button_status(DOM.DownloadManager.download_select_all, "Select All", "disabled", "false", return_button=True)
+        select_all = self._check_button_status(
+            DOM.DownloadManager.download_select_all, "Select All", "disabled", "false", return_button=True)
         self._check_button_status(DOM.DownloadManager.download_deselect_all, "Deselect All", "disabled", "true")
 
         # Select all downloads
@@ -79,7 +82,6 @@ class DownloadManager(object):
         self._check_button_status(DOM.DownloadManager.download_select_all, "Select All", "disabled", "true")
         self._check_button_status(DOM.DownloadManager.download_deselect_all, "Deselect All", "disabled", "false")
 
-
         delete_btn = self.UTILS.element.getElement(DOM.DownloadManager.download_delete_button, "Getting Delete button")
         delete_btn.tap()
 
@@ -88,8 +90,10 @@ class DownloadManager(object):
         # self.UTILS.element.simulateClick(x)
 
         # Verify no downloads are present
-        no_downloads = self.UTILS.element.getElement(DOM.DownloadManager.download_empty_list_content, "Getting empty list content")
-        self.UTILS.test.TEST(no_downloads.text == _("No downloads"), "Verifying '{}' message is displayed".format(_("No downloads")))
+        no_downloads = self.UTILS.element.getElement(
+            DOM.DownloadManager.download_empty_list_content, "Getting empty list content")
+        self.UTILS.test.TEST(no_downloads.text == _(
+            "No downloads"), "Verifying '{}' message is displayed".format(_("No downloads")))
 
     def delete_download(self, data_url):
         """
@@ -98,12 +102,9 @@ class DownloadManager(object):
 
         self._enter_edit_mode()
 
-        elem = (DOM.DownloadManager.download_element_checkbox[0], 
-                DOM.DownloadManager.download_element_checkbox[1].format(data_url))
-
-        self.UTILS.reporting.logResult('info', ">>>>> Getting checkbox.....")
-        # check = self.UTILS.element.getElementByXpath(DOM.DownloadManager.download_element_checkbox[1].format(data_url))
-        entry = self.UTILS.element.getElementByXpath(DOM.DownloadManager.download_element[1].format(data_url))
+        entry_locator = (DOM.DownloadManager.download_element[0],
+                         DOM.DownloadManager.download_element[1].format(data_url))
+        entry = self.UTILS.element.getElementByXpath(entry_locator[1])
         self.UTILS.element.simulateClick(entry)
 
         delete_btn = self.UTILS.element.getElement(DOM.DownloadManager.download_delete_button, "Getting Delete button")
@@ -112,13 +113,11 @@ class DownloadManager(object):
         confirm_btn = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes, "Getting Confirm button")
         self.UTILS.element.simulateClick(confirm_btn)
 
-        
         # TODO - CONFIRMATION!!!! - We will add a new parameter, called 'confirm'
         # and wait for a confirmation popup.... like in stop_download and restart_download
-        
+
         # Wait for download to be deleted
-        
-        self.UTILS.element.waitForNotElements(entry, "Download item from downloads list")
+        self.UTILS.element.waitForNotElements(entry_locator, "Download item from downloads list", timeout=5)
 
     def download_file(self, file_name):
         #
@@ -357,4 +356,3 @@ class DownloadManager(object):
             x = self.UTILS.element.getElement(elem, "Obtain the download state")
             self.UTILS.test.TEST("downloading" == x.get_attribute("data-state"),
                                  "Verify that the status is downloading")
-    
