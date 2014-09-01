@@ -70,19 +70,25 @@ class general(object):
         #
         # Get a variable from the OS.
         #
-        if name == "ENTER":
-            return ""
-        else:
-            x = False
-            try:
-                x = os.environ[name]
-            except:
-                self.parent.reporting.logResult("info", "NOTE: OS variable '{}' was not set.".format(name))
-                if validate:
-                    self.parent.reporting.reportResults()
-                    sys.exit(1)
-                return False
-            return x
+        #=======================================================================
+        # if name == "ENTER":
+        #    return ""
+        # else:
+        #    x = False
+        #    try:
+        #        x = os.environ[name]
+        #    except:
+        #        self.parent.reporting.logResult("info", "NOTE: OS variable '{}' was not set.".format(name))
+        #        if validate:
+        #            self.parent.reporting.reportResults()
+        #            sys.exit(1)
+        #        return False
+        #    return x
+        #=======================================================================
+        try:
+            return os.environ[name]
+        except:
+            return False
 
     def insertContact(self, contact):
         self.marionette.switch_to_frame()
