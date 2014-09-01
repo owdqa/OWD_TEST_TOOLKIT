@@ -26,6 +26,12 @@ puk_new_pin_input = ('xpath', '//div[@id="newPinArea"]//input')
 puk_confirm_pin_input = ('xpath', '//div[@id="confirmPinArea"]//input')
 puk_ok_btn = ('xpath', '//div[@id="simpin-dialog"]//button[@data-l10n-id="ok"]')
 
+confirmation_msg_header = ('xpath', '//form[@id="confirmation-message"]//h1[contains(text(), "{}")]')
+confirmation_msg_content = ('xpath', '//form[@id="confirmation-message"]//p[contains(text(), "{}")]') 
+confirmation_msg_ok_btn = ('xpath', '//form[@id="confirmation-message"]//button[@class="full"]')
+
+confirm_form_delete_btn = ('xpath', '//form[@data-type="confirm"]//button[@class="danger"]')
+
 # Action menu
 action_menu = ('xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]/menu')
 action_menu_option = ('xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]//button[text()="{}"]')
