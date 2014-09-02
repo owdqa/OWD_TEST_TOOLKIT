@@ -92,3 +92,17 @@ class Music(object):
                 return len(self.marionette.find_elements(*('css selector', '#views-list-anchor .list-item')))
             except:
                 return 0
+
+    def is_player_playing(self):
+        # get 4 timestamps during approx. 1 sec
+        # ensure that newer timestamp has greater value than previous one
+        timestamps = []
+        for i in range(4):
+            timestamps.append(self.player_current_timestamp)
+            time.sleep(.25)
+        return all([timestamps[i - 1] < timestamps[i] for i in range(1, 3)])
+
+    @property
+    def player_current_timestamp(self):
+        player = self.marionette.find_element(*DOM.Music.audio)
+        return float(player.get_attribute('currentTime'))

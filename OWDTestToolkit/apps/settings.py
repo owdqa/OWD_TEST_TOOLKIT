@@ -484,12 +484,17 @@ class Settings(object):
         
         self.UTILS.element.scroll_into_view(downloads_link)
         time.sleep(2)
-
         downloads_link.tap()
-        # self.UTILS.element.simulateClick(downloads_link)
-
         self.UTILS.element.waitForElements(DOM.Settings.downloads_header,
                                     "Downloads header appears.", True, 20, True)
+
+        # Code commented due to Bug 1042404 - in the meantime, we just wait some time to make
+        # sure everything is loaded
+        # try:
+        #     self.parent.wait_for_element_displayed(*DOM.DownloadManager.download_empty_list_content)
+        # except:
+        #     self.parent.wait_for_element_displayed(*DOM.DownloadManager.download_list_elems)
+        time.sleep(5)
 
     def enable_hotSpot(self):
         #

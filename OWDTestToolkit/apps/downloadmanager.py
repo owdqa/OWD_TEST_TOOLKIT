@@ -21,7 +21,7 @@ class DownloadManager(object):
         """
         button = self.UTILS.element.getElement(locator, "Getting '{button_type}' button")
         self.UTILS.test.TEST(button.get_attribute(attribute) == desired_value,
-                             'Checking "{}" button is "{}"'.format(button_type, desired_value))
+                             'Checking "{}" button is "{}={}"'.format(button_type, attribute, desired_value))
         if return_button:
             return button
 
@@ -30,23 +30,59 @@ class DownloadManager(object):
         Enter into Edit Mode
         """
         edit_mode = self.UTILS.element.getElement(DOM.DownloadManager.download_edit_button,
-                                                  "Getting download edit button", True, 10)
+                                                  "Download edit button", True, 10)
         edit_mode.tap()
         self.UTILS.element.waitForElements(DOM.DownloadManager.downloads_edit_header_title,
-                                           "Getting edit downloads header")
+                                           "Edit downloads header")
+    def _unable_open_option(self):
+        """
+        Select open option when tap on a non-recognized file
+        """
+        self.tap_on_open_option()
+
+        unable_msg = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_h1, "Unable to open msg")
+        self.UTILS.test.TEST(unable_msg.text == _("Unable to open"), "Unable to open msg")
+
+    def _tap_on_confirm_button(self, yes=True, msg="Confirm dialog button"):
+        """
+        Taps on confirmation buttons
+        """
+        btn = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes if 
+                                            yes else DOM.DownloadManager.download_confirm_no
+                                            , msg)
+        btn.tap()
 
     def get_download_entry(self, data_url):
         elem = (DOM.DownloadManager.download_element[0],
                 DOM.DownloadManager.download_element[1].format(data_url))
         return self.UTILS.element.getElement(elem, "Obtain the download entry")
 
-    def get_download_state(self, data_url):
+    def get_download_status(self, data_url):
         download_entry = self.get_download_entry(data_url)
         return download_entry.get_attribute("data-state")
 
     def verify_download_status(self, data_url, status):
-        self.UTILS.test.TEST(self.get_download_state(data_url) == status,
+        self.UTILS.test.TEST(self.get_download_status(data_url) == status,
                              "The download entry {} has the state: {}".format(data_url, status))
+
+    def verify_download_graphical_status(self, data_url, status):
+        """
+        Verify text during the download process (graphically)
+        """
+        elem = (DOM.DownloadManager.download_status_text[0],
+                DOM.DownloadManager.download_status_text[1].format(data_url))
+        status_element = self.UTILS.element.getElement(elem,
+                                                       "Obtain the text displayed to verify the text 'X' MB of 'Y' MB")
+
+        self.UTILS.reporting.logResult('info', 'The status [element_text] is: {}'.format(status_element.text))
+        self.UTILS.reporting.logResult('info', 'The status [parameter] is: {}'.format(status))
+
+        if status == "downloading":
+            match = re.search(r"(\d)+(.(\d)+)*\s(GB|MB|KB)\sof\s(\d)+(.(\d)+)*\s(GB|MB|KB)",
+                              status_element.text)
+            self.UTILS.test.TEST(match is not None, "Verify the the text is of the type: 'X' MB of 'Y' MB")
+        else:
+            self.UTILS.test.TEST(status_element.text == status, "Verify the the status is: {}".format(status))
 
     def clean_downloads_list(self):
         """
@@ -85,9 +121,7 @@ class DownloadManager(object):
         delete_btn = self.UTILS.element.getElement(DOM.DownloadManager.download_delete_button, "Getting Delete button")
         delete_btn.tap()
 
-        confirm_btn = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes, "Getting Confirm button")
-        confirm_btn.tap()
-        # self.UTILS.element.simulateClick(x)
+        self._tap_on_confirm_button(yes=True, msg="Confirm button")
 
         # Verify no downloads are present
         no_downloads = self.UTILS.element.getElement(
@@ -139,11 +173,45 @@ class DownloadManager(object):
         #
         self.parent.wait_for_element_displayed(DOM.DownloadManager.download_list[0],
                                                DOM.DownloadManager.download_list[1], 60)
-        return self.get_download_state(data_url) == "downloading"
+        return self.get_download_status(data_url) == "downloading"
 
     def open_download(self, data_url):
         download_entry = self.get_download_entry(data_url)
         download_entry.tap()
+
+
+    def open_download_delete_file(self):
+        """
+        Deletes the file when it was unable to open it
+        """
+        self._unable_open_option()
+        self._tap_on_confirm_button(yes=True, msg="Delete button")
+        self._tap_on_confirm_button(yes=True, msg="Confirm Delete button")
+
+    def open_download_keep_file(self):
+        """
+        Keeps the file when it was unable to open it
+        """
+        self._unable_open_option()
+        self._tap_on_confirm_button(yes=False, msg="Keep file button")
+     
+    def tap_on_open_option(self):
+        open_btn = self.UTILS.element.getElement(DOM.DownloadManager.download_file_option_open, "Open option button")
+        open_btn.tap()
+    #
+    #   
+    #      
+    #         
+    #            
+    #               
+    #                  
+    #                     
+    #                        
+    #                           
+    #                              
+    #                                 
+    #                                    
+    #                                          
 
     def restart_download(self, download_id, confirm):
 
@@ -216,76 +284,76 @@ class DownloadManager(object):
             self.UTILS.test.TEST("stopped" == x.get_attribute("data-state"),
                                  "Verify that the status is stopped")
 
-    def stop_download_by_position(self, position, confirm):
-        # Stops a download in progress if <confirm> = True
-        #
+    # def stop_download_by_position(self, position, confirm):
+    #     # Stops a download in progress if <confirm> = True
+    #     #
 
-        #
-        # Tap in Stopping Download by download_id
-        #
-        elem = (DOM.DownloadManager.download_element_button_position[0],
-                DOM.DownloadManager.download_element_button_position[1].format(position))
-        x = self.UTILS.element.getElement(elem, "Get element by position")
-        x.tap()
+    #     #
+    #     # Tap in Stopping Download by download_id
+    #     #
+    #     elem = (DOM.DownloadManager.download_element_button_position[0],
+    #             DOM.DownloadManager.download_element_button_position[1].format(position))
+    #     x = self.UTILS.element.getElement(elem, "Get element by position")
+    #     x.tap()
 
-        #
-        # Verify if we must press yes or no button
-        #
-        if confirm:
-            #
-            # Press Yes button and Confirm Stop Download.
-            #
-            x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
-                                              "Confirm Stop Download, Yes button")
-            x.tap()
+    #     #
+    #     # Verify if we must press yes or no button
+    #     #
+    #     if confirm:
+    #         #
+    #         # Press Yes button and Confirm Stop Download.
+    #         #
+    #         x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_yes,
+    #                                           "Confirm Stop Download, Yes button")
+    #         x.tap()
 
-            #
-            # Verify text Stopped.
-            #
-            elem = (DOM.DownloadManager.download_status_text_position[0],
-                    DOM.DownloadManager.download_status_text_position[1].format(position))
-            x = self.UTILS.element.getElement(elem,
-                                              "Obtain the text displayed to verify the text stopped")
-            self.UTILS.test.TEST("Stopped" in x.text, "Verify the text Stopped")
+    #         #
+    #         # Verify text Stopped.
+    #         #
+    #         elem = (DOM.DownloadManager.download_status_text_position[0],
+    #                 DOM.DownloadManager.download_status_text_position[1].format(position))
+    #         x = self.UTILS.element.getElement(elem,
+    #                                           "Obtain the text displayed to verify the text stopped")
+    #         self.UTILS.test.TEST("Stopped" in x.text, "Verify the text Stopped")
 
-            #
-            # Verify status Stopped using data-state="stopped".
-            #
-            elem = (DOM.DownloadManager.download_status_position[
-                    0], DOM.DownloadManager.download_status_position[1].format(position))
-            x = self.UTILS.element.getElement(elem, "Obtain the download state")
-            self.UTILS.test.TEST("stopped" == x.get_attribute("data-state"),
-                                 "Verify the status stopped")
+    #         #
+    #         # Verify status Stopped using data-state="stopped".
+    #         #
+    #         elem = (DOM.DownloadManager.download_status_position[
+    #                 0], DOM.DownloadManager.download_status_position[1].format(position))
+    #         x = self.UTILS.element.getElement(elem, "Obtain the download state")
+    #         self.UTILS.test.TEST("stopped" == x.get_attribute("data-state"),
+    #                              "Verify the status stopped")
 
-        else:
-            #
-            # Press No button and Cancel Stop Download
-            #
-            x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_no,
-                                              "Confirm Stop Download, Yes button")
-            x.tap()
+    #     else:
+    #         #
+    #         # Press No button and Cancel Stop Download
+    #         #
+    #         x = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_no,
+    #                                           "Confirm Stop Download, Yes button")
+    #         x.tap()
 
-            #
-            # Verify text during the download process.
-            #
+    #         #
+    #         # Verify text during the download process.
+    #         #
 
-            elem = (DOM.DownloadManager.download_status_text_position[0],
-                    DOM.DownloadManager.download_status_text_position[1].format(position))
-            x = self.UTILS.element.getElement(elem,
-                                              "Obtain the text displayed to verify the text 'X' MB of 'Y' MB")
+    #         elem = (DOM.DownloadManager.download_status_text_position[0],
+    #                 DOM.DownloadManager.download_status_text_position[1].format(position))
+    #         x = self.UTILS.element.getElement(elem,
+    #                                           "Obtain the text displayed to verify the text 'X' MB of 'Y' MB")
 
-            pattern = r"^(\d)+(.(\d)+)*\s(GB|MB|KB)\sof\s(\d)+(.(\d)+)*\s(GB|MB|KB)$"
-            match = re.search(pattern, x.text)
-            self.UTILS.test.TEST(match is not None, "Verify the text is : 'X' MB of 'Y' MB")
+    #         pattern = r"^(\d)+(.(\d)+)*\s(GB|MB|KB)\sof\s(\d)+(.(\d)+)*\s(GB|MB|KB)$"
+    #         match = re.search(pattern, x.text)
+    #         self.UTILS.test.TEST(match is not None, "Verify the text is : 'X' MB of 'Y' MB")
 
-            #
-            # Verify status downloading using data-state="downloading".
-            #
-            elem = (DOM.DownloadManager.download_status_position[
-                    0], DOM.DownloadManager.download_status_position[1].format(position))
-            x = self.UTILS.element.getElement(elem, "Obtain the download state")
-            self.UTILS.test.TEST("downloading" == x.get_attribute("data-state"),
-                                 "Verify that the status is downloading")
+    #         #
+    #         # Verify status downloading using data-state="downloading".
+    #         #
+    #         elem = (DOM.DownloadManager.download_status_position[
+    #                 0], DOM.DownloadManager.download_status_position[1].format(position))
+    #         x = self.UTILS.element.getElement(elem, "Obtain the download state")
+    #         self.UTILS.test.TEST("downloading" == x.get_attribute("data-state"),
+    #                              "Verify that the status is downloading")
 
     def stop_download(self, download_id, confirm):
 
