@@ -85,10 +85,7 @@ class general(object):
         #        return False
         #    return x
         #=======================================================================
-        try:
-            return os.environ[name]
-        except:
-            return False
+        return os.getenv(name, False)
 
     def insertContact(self, contact):
         self.marionette.switch_to_frame()
