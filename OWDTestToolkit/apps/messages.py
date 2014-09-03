@@ -1481,7 +1481,6 @@ class Messages(object):
         #
         # Returns the time of the last message in the current thread.
         #
-        self.parent.wait_for_element_displayed(*DOM.Messages.last_message_time)
         t = self.UTILS.element.getElement(DOM.Messages.last_message_time, "Last message time")
         return t.text
 
@@ -1529,31 +1528,6 @@ class Messages(object):
             msg = "Incorrect file type. The file must be {}, but is {} instead".format(attached_type, typ)
             self.UTILS.test.quitTest(msg)
 
-    def _verify(self, DOM_elem, attached_type):
-        #
-        # This step is necessary because our sim cards receive mms with +XXX
-        #
-        x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
-        x.tap()
-
-        self.openThread(self.UTILS.general.get_os_variable("TARGET_MMS_NUM"))
-
-        #
-        # Wait for the last message in this thread to be a 'recieved' one.
-        #
-        returnedSMS = self.waitForReceivedMsgInThisThread()
-        self.UTILS.test.TEST(returnedSMS, "A received message appeared in the thread.", True)
-
-        #
-        # Obtaining file attached type
-        #
-        x = self.UTILS.element.getElement(DOM_elem, "preview type")
-        typ = x.get_attribute("data-attachment-type")
-
-        if typ != attached_type:
-            msg = "Incorrect file type. The file must be {}, but is {} instead".format(attached_type, typ)
-            self.UTILS.test.quitTest(msg)
-
     def waitForReceivedMsgInThisThread(self, send_time=None, timeOut=30):
         #
         # Waits for the last message in this thread to be a 'received' message
@@ -1576,7 +1550,7 @@ class Messages(object):
             if send_time:
                 message_data_time = float(x.get_attribute("data-timestamp")) / 1000
                 fmt = "data-timestamp of last message in thread: {:.3f} send_time: {:.3f} --> {}"
-                self.UTILS.reporting.log_to_file(fmt.format(message_data_time, send_time, send_time > message_data_time))
+                self.UTILS.reporting.debug(fmt.format(message_data_time, send_time, send_time > message_data_time))
                 if send_time > message_data_time:
                     continue
 
