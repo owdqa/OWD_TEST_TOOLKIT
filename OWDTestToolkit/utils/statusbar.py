@@ -85,7 +85,6 @@ class statusbar(object):
         # <b>bluetooth</b>
         #
         self.parent.reporting.logResult("info", "Toggling " + p_type + " mode via statusbar ...")
-        orig_iframe = self.marionette.get_active_frame()
 
         #
         # Toggle (and wait).
@@ -107,13 +106,7 @@ class statusbar(object):
 
         boolReturn = self._sb_doToggle(typedef, p_type)
 
-        #
-        # Close the statusbar and return to the original frame (if required).
-        #
         self.parent.home.touchHomeButton()
-        if orig_iframe:
-            self.marionette.switch_to_frame(orig_iframe)
-
         return boolReturn
 
     def _sb_doToggle(self, p_def, p_type):
@@ -135,7 +128,6 @@ class statusbar(object):
         # Sometimes, when we activate data connection, the devices goes till settings and
         # show a confirmation screen. We have to accept it.
         #
-        # try:
         success = self.parent.iframe.switchToFrame(DOM.Settings.frame_locator[0], DOM.Settings.frame_locator[1],
                                          quit_on_error=True, via_root_frame=True, test=False)
         if success:
