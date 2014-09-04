@@ -1,5 +1,6 @@
 frame_locator = ('src', 'music')
 
+audio = ('id', 'player-audio')
 done_button = ("xpath", "//*[@id='title-done']")
 song_by_title = ("xpath", "//span[@class='list-main-title'][text()='{}']")
 song1 = ("xpath", "/html/body/div/div[2]/div/li[2]/span")

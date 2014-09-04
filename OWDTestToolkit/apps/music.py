@@ -22,7 +22,7 @@ class Music(object):
 
     def click_on_song_mms(self, title=None):
         dom_elem = DOM.Music.song1  if not title\
-                                    else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
+            else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
         song = self.UTILS.element.getElement(dom_elem, "Song")
         time.sleep(1)
         song.tap()
@@ -85,10 +85,24 @@ class Music(object):
                 return len(self.marionette.find_elements(*DOM.Music.music_songs))
             except:
                 return 0
-        except: # This could be the music frame comes from the SMS app or Email (attach)
+        except:  # This could be the music frame comes from the SMS app or Email (attach)
             self.parent.wait_for_element_displayed(*('id', 'views-list-anchor'))
             try:
                 self.parent.wait_for_element_displayed(*('css selector', '#views-list-anchor .list-item'))
                 return len(self.marionette.find_elements(*('css selector', '#views-list-anchor .list-item')))
             except:
                 return 0
+
+    def is_player_playing(self):
+        # get 4 timestamps during approx. 1 sec
+        # ensure that newer timestamp has greater value than previous one
+        timestamps = []
+        for i in range(4):
+            timestamps.append(self.player_current_timestamp)
+            time.sleep(.25)
+        return all([timestamps[i - 1] < timestamps[i] for i in range(1, 3)])
+
+    @property
+    def player_current_timestamp(self):
+        player = self.marionette.find_element(*DOM.Music.audio)
+        return float(player.get_attribute('currentTime'))

@@ -16,7 +16,8 @@ class Video(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(
+            DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def checkThumbDuration(self, thumb_num, length_str_mmss, error_margin_ss):
@@ -24,7 +25,7 @@ class Video(object):
         # Check the duration of a video thumbnail.
         #
         durations = self.UTILS.element.getElements(DOM.Video.thumb_durations,
-                                           "Thumbnail durations", True, 20, False)
+                                                   "Thumbnail durations", True, 20, False)
 
         if not durations:
             return False
@@ -49,8 +50,8 @@ class Video(object):
             in_errorMargin = True
 
         self.UTILS.test.TEST(in_errorMargin,
-                        "Expected video length on thumbnail to be {}, +- {} seconds (it was {} seconds).".\
-                        format(length_str_mmss, error_margin_ss, myDur))
+                             "Expected video length on thumbnail to be {}, +- {} seconds (it was {} seconds).".
+                             format(length_str_mmss, error_margin_ss, myDur))
 
     def checkVideoLength(self, vid_num, from_ss, to_ss):
         self.UTILS.reporting.logResult("info", "CANNOT USE checkVideoLength() AT THIS TIME!")
@@ -66,8 +67,8 @@ class Video(object):
         self.startVideo(vid_num)
         time.sleep(1)
         x = self.UTILS.element.getElement(DOM.Video.current_video_duration,
-                                  "Duration of current video",
-                                  False, 3, False)
+                                          "Duration of current video",
+                                          False, 3, False)
         self.UTILS.reporting.logResult("info", "Video duration during playback was " + x.text + ".")
 
         elapsed_time = float(x.text[-2:])
@@ -75,10 +76,10 @@ class Video(object):
         #
         # Check the elapsed time.
         #
-        self.UTILS.test.TEST((elapsed_time >= from_ss), "Video is not shorter than expected (played for {:.2f} seconds).".\
-                        format(elapsed_time))
-        self.UTILS.test.TEST((elapsed_time <= to_ss), "Video is not longer than expected (played for {:.2f} seconds).".\
-                        format(elapsed_time))
+        self.UTILS.test.TEST((elapsed_time >= from_ss), "Video is not shorter than expected (played for {:.2f} seconds).".
+                             format(elapsed_time))
+        self.UTILS.test.TEST((elapsed_time <= to_ss), "Video is not longer than expected (played for {:.2f} seconds).".
+                             format(elapsed_time))
 
     def clickOnVideoMMS(self, num):
         #
@@ -138,3 +139,17 @@ class Video(object):
         # Wait for the video to start playing before returning.
         #
         self.UTILS.element.waitForElements(DOM.Video.video_loaded, "Loaded video", True, 20, False)
+
+    def is_video_playing(self):
+        return self.marionette.find_element(*DOM.Video.video_player).get_attribute('paused') == 'false'
+
+    def show_controls(self):
+        self.marionette.find_element(*DOM.Video.video_player).tap()
+        self.parent.wait_for_element_displayed(*DOM.Video.video_controls)
+
+    def is_this_video_being_played(self, video_name):
+        self.show_controls()
+        video_title = self.UTILS.element.getElement(DOM.Video.video_title, "Video title")
+
+        self.UTILS.test.TEST(video_name == video_title.text and self.is_video_playing(),
+                             "This video [{}] is actually being played".format(video_name))

@@ -189,7 +189,7 @@ class statusbar(object):
         self.click_on_notification(DOM.Statusbar.notification_statusbar_detail, text, frame_to_change, timeout)
 
     @retry(5, 10)
-    def wait_for_notification_toaster_title(self, text, frame_to_change=None, timeout=30):
+    def wait_for_notification_toaster_title(self, text, notif_text=None, frame_to_change=None, timeout=30):
         #
         # Waits for a new popup notification which contains a certain title
         #
@@ -200,15 +200,14 @@ class statusbar(object):
         self.parent.parent.wait_for_element_present(x[0], x[1], timeout)
 
         # Check if the notification actually exists or if it is a "ghost" one.
-        dom = (DOM.Statusbar.notification_statusbar_title[0],
-               DOM.Statusbar.notification_statusbar_title[1].format(text))
-        self.marionette.find_element(dom[0], dom[1])
+        # Note that we can use either @text or @notif_text
+        self.wait_for_notification_statusbar_title(notif_text if notif_text else text)
 
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
 
     @retry(5, 10)
-    def wait_for_notification_toaster_detail(self, text, frame_to_change=None, timeout=30):
+    def wait_for_notification_toaster_detail(self, text, notif_text=None, frame_to_change=None, timeout=30):
         #
         # Waits for a new popup notification which contains a certain body
         #
@@ -217,10 +216,10 @@ class statusbar(object):
         x = (DOM.Statusbar.notification_toaster_detail[0], DOM.Statusbar.notification_toaster_detail[1].format(text))
         self.parent.reporting.debug("** Waiting for notification toaster detail: [{}]".format(x))
         self.parent.parent.wait_for_element_present(x[0], x[1], timeout)
-        #self.displayStatusBar()
-        dom = (DOM.Statusbar.notification_statusbar_detail[0],
-             DOM.Statusbar.notification_statusbar_detail[1].format(text))
-        self.marionette.find_element(dom[0], dom[1])
+        
+        # Check if the notification actually exists or if it is a "ghost" one.
+        # Note that we can use either @text or @notif_text
+        self.wait_for_notification_statusbar_detail(notif_text if notif_text else text)
 
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
@@ -256,3 +255,20 @@ class statusbar(object):
             raise exception
         # Return the title found, so it can be used later, to click on or whatever
         return title
+
+    def wait_for_notification_statusbar_title(self, text):
+        self.marionette.switch_to_frame()
+        
+        self.parent.reporting.debug("** Waiting for notification statusbar title: [{}]".format(text))
+        dom = (DOM.Statusbar.notification_statusbar_title[0],
+               DOM.Statusbar.notification_statusbar_title[1].format(text))
+        self.marionette.find_element(dom[0], dom[1])
+
+    def wait_for_notification_statusbar_detail(self, text):
+        self.marionette.switch_to_frame()
+        
+        self.parent.reporting.debug("** Waiting for notification statusbar detail: [{}]".format(text))
+        dom = (DOM.Statusbar.notification_statusbar_detail[0],
+             DOM.Statusbar.notification_statusbar_detail[1].format(text))
+        self.marionette.find_element(dom[0], dom[1])
+
