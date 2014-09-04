@@ -1,0 +1,30 @@
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
+frame_locator = ('src', 'loop')
+
+wizard = ('id', 'wizard-tutorial-section')
+wizard_header = ('id', 'wizard-tutorial-header')
+wizard_slideshow = ('id', 'wizard-tutorial-slideshow')
+wizard_slideshow_step = ('xpath', '//ul[@id="wizard-tutorial-slideshow"]/li[@class="wizard-tutorial-step"]')
+wizard_slideshow_progress = ('id', 'wizard-tutorial-progress')
+wizard_slideshow_progress_step = ('id', 'progress-step-{}')
+wizard_slideshow_progress_step_active = ('css selector', '#wizard-tutorial-progress li.active')
+wizard_login = ('id', 'wizard-login')
+wizard_login_phone_number = ('id', 'authenticate-msisdn-button')
+wizard_login_ffox_account = ('id', 'authenticate-fxa-button')
+
+ffox_account_login_title = ('xpath', '//h1[@data-l10n-id="firefox-accounts-title"]')
+ffox_account_login_mail = ('id', 'fxa-email-input')
+ffox_account_login_pass = ('id', 'fxa-pw-input')
+ffox_account_login_next = ('id', 'fxa-module-next')
+ffox_account_login_done = ('id', 'fxa-module-done')
+ffox_account_login_back = ('id', 'fxa-module-back')
+ffox_account_login_close = ('id', 'fxa-module-close')
+ffox_account_login_overlay = ('id', 'fxa-overlay')
+
+# App permision (top-frame)
+app_permision_dialog = ('id', 'permission-dialog')
+app_permision_msg = ('id', 'permission-message')
+app_permision_btn_yes = ('id', 'permision-yes')
+app_permision_btn_no = ('id', 'permision-no')
