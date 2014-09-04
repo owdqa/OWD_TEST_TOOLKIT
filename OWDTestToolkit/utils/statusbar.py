@@ -209,10 +209,7 @@ class statusbar(object):
 
         # Check if the notification actually exists or if it is a "ghost" one.
         # Note that we can use either @text or @notif_text
-        self.parent.reporting.debug("** Waiting for notification statusbar detail: [{}]".format(notif_text))
-        dom = (DOM.Statusbar.notification_statusbar_title[0],
-               DOM.Statusbar.notification_statusbar_title[1].format(notif_text if notif_text else text))
-        self.marionette.find_element(dom[0], dom[1])
+        self.wait_for_notification_statusbar_title(notif_text if notif_text else text)
 
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
@@ -230,10 +227,7 @@ class statusbar(object):
         
         # Check if the notification actually exists or if it is a "ghost" one.
         # Note that we can use either @text or @notif_text
-        self.parent.reporting.debug("** Waiting for notification statusbar detail: [{}]".format(notif_text))
-        dom = (DOM.Statusbar.notification_statusbar_detail[0],
-             DOM.Statusbar.notification_statusbar_detail[1].format(notif_text if notif_text else text))
-        self.marionette.find_element(dom[0], dom[1])
+        self.wait_for_notification_statusbar_detail(notif_text if notif_text else text)
 
         if frame_to_change:
             self.parent.iframe.switchToFrame(*frame_to_change)
@@ -269,3 +263,20 @@ class statusbar(object):
             raise exception
         # Return the title found, so it can be used later, to click on or whatever
         return title
+
+    def wait_for_notification_statusbar_title(self, text):
+        self.marionette.switch_to_frame()
+        
+        self.parent.reporting.debug("** Waiting for notification statusbar title: [{}]".format(text))
+        dom = (DOM.Statusbar.notification_statusbar_title[0],
+               DOM.Statusbar.notification_statusbar_title[1].format(text))
+        self.marionette.find_element(dom[0], dom[1])
+
+    def wait_for_notification_statusbar_detail(self, text):
+        self.marionette.switch_to_frame()
+        
+        self.parent.reporting.debug("** Waiting for notification statusbar detail: [{}]".format(text))
+        dom = (DOM.Statusbar.notification_statusbar_detail[0],
+             DOM.Statusbar.notification_statusbar_detail[1].format(text))
+        self.marionette.find_element(dom[0], dom[1])
+
