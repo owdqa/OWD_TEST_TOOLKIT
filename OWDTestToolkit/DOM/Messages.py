@@ -36,8 +36,8 @@ header_back_button = ("id", "messages-back-button")
 phone_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//span/a[@data-action="dial-link"]')
 email_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//span/a[@data-action="email-link"]')
 
-threads = ("xpath", "//p[@class='name']")
-threads_list = ('xpath', '//article[@id="threads-container"]//li')
+threads = ("css selector", "p.name")
+threads_list = ('css selector', '#threads-container li')
 
 threads_list_element = ('xpath', '//article[@id="threads-container"]/div/ul/li/a/p')
 

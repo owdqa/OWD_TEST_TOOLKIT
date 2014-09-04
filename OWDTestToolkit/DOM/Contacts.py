@@ -9,7 +9,7 @@ view_all_header = ('xpath', GLOBAL.app_head_specific.format(_('Contacts')))
 view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath = "//li[@class='contact-item']//p[contains(@data-search,'{}')]"
-view_all_contact_HM = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
+contact_names = ('css selector', '.contact-item .contact-text')
 view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
 
 # To be erased when we know they don't break anything
