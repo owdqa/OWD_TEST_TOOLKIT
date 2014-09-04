@@ -22,7 +22,7 @@ class Music(object):
 
     def click_on_song_mms(self, title=None):
         dom_elem = DOM.Music.song1  if not title\
-                                    else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
+            else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
         song = self.UTILS.element.getElement(dom_elem, "Song")
         time.sleep(1)
         song.tap()
@@ -85,7 +85,7 @@ class Music(object):
                 return len(self.marionette.find_elements(*DOM.Music.music_songs))
             except:
                 return 0
-        except: # This could be the music frame comes from the SMS app or Email (attach)
+        except:  # This could be the music frame comes from the SMS app or Email (attach)
             self.parent.wait_for_element_displayed(*('id', 'views-list-anchor'))
             try:
                 self.parent.wait_for_element_displayed(*('css selector', '#views-list-anchor .list-item'))

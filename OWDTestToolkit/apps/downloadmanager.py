@@ -98,6 +98,18 @@ class DownloadManager(object):
         else:
             self.UTILS.test.TEST(status in download_info.text.lower(), "Verify the the status is: {}".format(status))
 
+    def tap_on_open_option(self):
+        open_btn = self.UTILS.element.getElement(DOM.DownloadManager.download_file_option_open, "Open option button")
+        open_btn.tap()
+
+    def get_aside_element(self, data_url):
+        elem = (DOM.DownloadManager.download_element_aside[0],
+                DOM.DownloadManager.download_element_aside[1].format(data_url))
+        return self.UTILS.element.getElement(elem, "Download entry aside button")
+
+    def tap_on_aside_element(self, data_url):
+        self.get_aside_element(data_url).tap()
+
     def clean_downloads_list(self):
         """
         Wipes the download list (NOTE, first it has to be opened from settings)
@@ -209,18 +221,6 @@ class DownloadManager(object):
         """
         self._unable_open_option()
         self._tap_on_confirm_button(yes=False, msg="Keep file button")
-
-    def tap_on_open_option(self):
-        open_btn = self.UTILS.element.getElement(DOM.DownloadManager.download_file_option_open, "Open option button")
-        open_btn.tap()
-
-    def get_aside_element(self, data_url):
-        elem = (DOM.DownloadManager.download_element_aside[0],
-                DOM.DownloadManager.download_element_aside[1].format(data_url))
-        return self.UTILS.element.getElement(elem, "Download entry aside button")
-
-    def tap_on_aside_element(self, data_url):
-        self.get_aside_element(data_url).tap()
 
     def stop_download(self, data_url, confirm):
         """
