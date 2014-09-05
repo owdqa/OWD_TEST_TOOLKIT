@@ -344,13 +344,19 @@ class Messages(object):
         # Returns the number of messages in this thread
         # (assumes you're already in the thread).
         #
-        return len(self.UTILS.element.getElements(DOM.Messages.message_list, "Messages"))
+        try:
+            len(self.UTILS.element.getElements(DOM.Messages.message_list, "Messages"))
+        except:
+            return 0
 
     def countNumberOfThreads(self):
         #
         # Count all threads (assumes the messagin app is already open).
         #
-        return len(self.UTILS.element.getElements(DOM.Messages.threads_list, "Threads"))
+        try:
+            return len(self.UTILS.element.getElements(DOM.Messages.threads_list, "Threads"))
+        except:
+            return 0
 
     def createAndSendMMS(self, attached_type, nums, m_text):
 
@@ -1232,18 +1238,10 @@ class Messages(object):
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
     def header_call(self):
-        #
-        # Taps the header and tries to tap the 'send message' button.
-        # - Assumes we are looking at a message thread already.
-        # - Leaves you in the correct iframe to continue.
-        #
+        """Tap on the header of a messages thread and dial the number
+        """
         x = self.UTILS.element.getElement(DOM.Messages.message_header, "Thread header")
         x.tap()
-
-        #
-        # If we tapped this from a contact header then we will already be in the
-        # dialer so this won't be necessary.
-        #
 
         #
         # Select dialer option.
@@ -1290,7 +1288,6 @@ class Messages(object):
         #
         # Returns an object of the last message in the current thread.
         #
-        time.sleep(5)
         self.parent.wait_for_element_present(*DOM.Messages.last_message, timeout=20)
         return self.marionette.find_element(*DOM.Messages.last_message)
 

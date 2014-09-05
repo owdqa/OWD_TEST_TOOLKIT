@@ -189,7 +189,7 @@ class statusbar(object):
         self.click_on_notification(DOM.Statusbar.notification_statusbar_detail, text, frame_to_change, timeout)
 
     @retry(5, 10)
-    def wait_for_notification_toaster_title(self, text, notif_text=None, frame_to_change=None, timeout=30):
+    def wait_for_notification_toaster_title(self, text, frame_to_change=None, notif_text=None, timeout=30):
         #
         # Waits for a new popup notification which contains a certain title
         #
@@ -207,7 +207,7 @@ class statusbar(object):
             self.parent.iframe.switchToFrame(*frame_to_change)
 
     @retry(5, 10)
-    def wait_for_notification_toaster_detail(self, text, notif_text=None, frame_to_change=None, timeout=30):
+    def wait_for_notification_toaster_detail(self, text, frame_to_change=None, notif_text=None, timeout=30):
         #
         # Waits for a new popup notification which contains a certain body
         #
@@ -216,7 +216,7 @@ class statusbar(object):
         x = (DOM.Statusbar.notification_toaster_detail[0], DOM.Statusbar.notification_toaster_detail[1].format(text))
         self.parent.reporting.debug("** Waiting for notification toaster detail: [{}]".format(x))
         self.parent.parent.wait_for_element_present(x[0], x[1], timeout)
-        
+
         # Check if the notification actually exists or if it is a "ghost" one.
         # Note that we can use either @text or @notif_text
         self.wait_for_notification_statusbar_detail(notif_text if notif_text else text)
