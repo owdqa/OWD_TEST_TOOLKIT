@@ -83,3 +83,6 @@ class Loop(object):
 
     def phone_login(self):
         self.UTILS.reporting.logResult('info', 'Starting phone login...')
+
+    def wait_for_not_overlay(self):
+        #Authentication overlay in login
