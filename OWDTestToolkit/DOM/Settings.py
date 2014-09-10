@@ -180,3 +180,10 @@ downloads = ("id", "menuItem-downloads")
 downloads_header = ("id", "downloads")
 downloads_edit_mode_header = ("id", "downloads-title-edit")
 downloads_edit_button = ("id", "downloads-edit-button")
+
+# Firefox accounts
+fxa = ('id', 'menuItem-fxa')
+fxa_logged_out_screen = ('id', 'fxa-logged-out')
+fxa_logged_in_screen = ('id', 'fxa-logged-in')
+fxa_log_out_btn = ('id', 'fxa-logout')
+fxa_log_in_btn = ('id', 'fxa-login')
