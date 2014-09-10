@@ -533,6 +533,24 @@ class Settings(object):
         self.UTILS.test.TEST(is_enabled, "Hotspot settings are disabled (because 'hotspot' is now running).")
         self.UTILS.test.TEST(is_status_icon, "Hotspot icon is present in the status bar.")
 
+    def fxa(self):
+        self.parent.wait_for_element_displayed(DOM.Settings.fxa[0], DOM.Settings.fxa[1], timeout=20)
+        fxa_link = self.marionette.find_element(*DOM.Settings.fxa)
+        self.UTILS.element.scroll_into_view(fxa_link)
+        time.sleep(2)
+        fxa_link.tap()
+
+    def fxa_log_out(self):
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Settings.fxa_logged_in_screen)
+        except:
+            self.UTILS.reporting.logResult('info', 'Already logged out')
+            return
+
+        log_out_btn = self.marionette.find_element(*DOM.Settings.fxa_log_out_btn)
+        log_out_btn.tap()
+        self.parent.wait_for_element_displayed(*DOM.Settings.fxa_logged_out_screen)
+
     def goBack(self):
         #
         # Tap the back icon (gets a bit complicated sometimes, because

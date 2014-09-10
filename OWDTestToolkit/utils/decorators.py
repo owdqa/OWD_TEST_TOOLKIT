@@ -1,8 +1,7 @@
 import functools
 import time
 
-
-def retry(num_retries, delay=2):
+def retry(num_retries, delay=2, aux_func=None):
     """Decorator factory for retries.
 
     This decorator factory will return a decorator that implements
@@ -24,6 +23,13 @@ def retry(num_retries, delay=2):
                         pass
                     else:
                         raise
+                try:
+                    func = args[0].__getattribute__(func_to_retry.__name__)
+                    self = func.im_self
+                    f = self.__getattribute__(aux_func)
+                    f()
+                except:
+                    pass
                 time.sleep(delay)
         return func_with_retries
     return retry_any_function
