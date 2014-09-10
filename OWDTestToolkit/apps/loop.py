@@ -115,7 +115,7 @@ class Loop(object):
     def phone_login(self):
         self.UTILS.reporting.logResult('info', '[TODO] Starting phone login...')
 
-    @retry(5, aux_func="retry_loop_connection")
+    @retry(5, aux_func="loop.retry_loop_connection")
     def allow_permission(self):
         """ Allows Loop to read our contacts
 

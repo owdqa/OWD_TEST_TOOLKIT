@@ -23,13 +23,31 @@ def retry(num_retries, delay=2, aux_func=None):
                         pass
                     else:
                         raise
-                try:
-                    func = args[0].__getattribute__(func_to_retry.__name__)
-                    self = func.im_self
-                    f = self.__getattribute__(aux_func)
-                    f()
-                except:
-                    pass
+
+                if aux_func is not None:
+                    try:
+                        last_dot = aux_func.rfind('.')
+                        m, fn = aux_func[:last_dot], aux_func[last_dot + 1: ]
+                        try:
+                            mo = sys.modules[m]
+                        except KeyError:
+                            __import__( m )
+                        f = sys.modules[m].__getattribute__(fn)
+                        try:
+                            f()
+                        except:
+                            break
+                    except:
+                        pass
+
+                    # func = args[0].__getattribute__(func_to_retry.__name__)
+                    # self = func.im_self
+                    # f = self.__getattribute__(aux_func)
+                    # try:
+                    #     f()
+                    # except:
+
+                    #     break
                 time.sleep(delay)
         return func_with_retries
     return retry_any_function
