@@ -1,7 +1,6 @@
 import time
 from OWDTestToolkit import DOM
 from marionette import Actions
-import functools
 from OWDTestToolkit.utils.decorators import retry
 
 
@@ -115,7 +114,7 @@ class Loop(object):
     def phone_login(self):
         self.UTILS.reporting.logResult('info', '[TODO] Starting phone login...')
 
-    @retry(5, aux_func="loop.retry_loop_connection")
+    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_loop_connection")
     def allow_permission(self):
         """ Allows Loop to read our contacts
 
@@ -125,15 +124,18 @@ class Loop(object):
         """
         self.marionette.switch_to_frame()
         try:
+            self.UTILS.reporting.debug("Looking for permission panel....")
             self.parent.wait_for_element_displayed(
                 DOM.GLOBAL.app_permission_dialog[0], DOM.GLOBAL.app_permission_dialog[1], timeout=10)
         except:
             try:
+                self.UTILS.reporting.debug("Now looking for permission Loop main view....")
                 self.apps.switch_to_displayed_app()
                 header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
                 self.parent.wait_for_element_displayed(*header)
                 return
             except:
+                self.UTILS.reporting.debug("And Now looking for error....")
                 self.marionette.switch_to_frame()
                 self.parent.wait_for_element_displayed(*DOM.GLOBAL.modal_dialog_alert_title)
                 self.UTILS.reporting.logResult('info', "Error connecting...")
@@ -153,6 +155,8 @@ class Loop(object):
 
         This method is called as the aux_func for our brand new retry decorator
         """
+
+        self.UTILS.reporting.logResult('info', "Retrying...")
         self.parent.wait_for_element_displayed(*DOM.GLOBAL.modal_dialog_alert_ok)
         ok_btn = self.marionette.find_element(*DOM.GLOBAL.modal_dialog_alert_ok)
         self.UTILS.element.simulateClick(ok_btn)
