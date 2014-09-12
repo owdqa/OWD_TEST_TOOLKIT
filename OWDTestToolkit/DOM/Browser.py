@@ -7,6 +7,7 @@ browser_page_frame = ('mozbrowser', "")
 url_input = ('id', 'url-input')
 url_go_button = ('id', 'url-button')
 throbber = ("id", "throbber")
+secure_icon = ("id", "ssl-indicator")
 
 awesome_cancel_btn = ("id", "awesomescreen-cancel-button")
 awesome_top_sites_tab = ("id", "top-sites-tab")
