@@ -404,7 +404,7 @@ class Dialer(object):
         # Hangs up (assuming we're in the 'calling' frame).
         #
         try:
-            self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=5)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=10)
         except:
             # The call may already be terminated, so don't throw an error if
             # the hangup bar isn't there.
