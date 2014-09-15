@@ -434,3 +434,17 @@ class Dialer(object):
         x.tap()
 
         time.sleep(2)
+
+    def check_incoming_call(self, incoming_number):
+        try:
+            self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
+            self.parent.wait_for_element_displayed(
+                "xpath", DOM.Dialer.outgoing_call_numberXP.format(incoming_number), timeout=30)
+        except:
+            self.UTILS.test.TEST(False, "No incoming call received", True)
+
+    def resume_hidden_call(self):
+        self.marionette.switch_to_frame()
+        attention = self.marionette.find_element("id", "attention-screen")
+        attention.tap()
+        self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
