@@ -17,6 +17,10 @@ class statusbar(object):
         self.marionette.switch_to_frame()
         utility_tray = self.system.open_utility_tray()
         utility_tray.wait_for_notification_container_displayed()
+        # Gaiatestcase wait_for_notification_container_displayed not working properly
+        # so we have to manually wait some time in order to make sure the statusbar 
+        # is fully shown
+        time.sleep(2)
         utility_tray.clear_all_notifications()
 
     def displayStatusBar(self):
