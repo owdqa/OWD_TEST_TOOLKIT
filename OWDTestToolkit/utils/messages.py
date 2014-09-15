@@ -130,7 +130,7 @@ class Messages(object):
         mms_text: body  of the MMS
         file_url: URL poiting to a media file
 
-        Example url: http://10.95.207.62:8800/?PhoneNumber=+34649779117&MMSFrom=sender@domain&MMSSubject=Hello&\
+        Example url: http://10.95.207.62:8800/?PhoneNumber=+34638211409&MMSFrom=sender@domain&MMSSubject=Hello&\
         MMSText=Helloooooo&User=owd&Password=qa&MMSFile=http://www.nowsms.com/media/logo.gif
         """
 
