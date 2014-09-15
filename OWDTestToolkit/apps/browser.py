@@ -1,6 +1,5 @@
 import time
 from OWDTestToolkit import DOM
-from gaiatest.apps.keyboard.app import Keyboard
 
 
 class Browser(object):
@@ -14,7 +13,6 @@ class Browser(object):
         self.parent = parent
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
-        self.keyboard = Keyboard(self.marionette)
 
     def launch(self):
         """
@@ -82,11 +80,11 @@ class Browser(object):
         """
         details = {}
         details["top_sites"] = {"tab": DOM.Browser.awesome_top_sites_tab,
-                                 "links": DOM.Browser.awesome_top_sites_links}
+                                "links": DOM.Browser.awesome_top_sites_links}
         details["bookmarks"] = {"tab": DOM.Browser.awesome_bookmarks_tab,
-                                 "links": DOM.Browser.awesome_bookmarks_links}
+                                "links": DOM.Browser.awesome_bookmarks_links}
         details["history"] = {"tab": DOM.Browser.awesome_history_tab,
-                               "links": DOM.Browser.awesome_history_links}
+                              "links": DOM.Browser.awesome_history_links}
 
         # Make sure the input is correct.
         tab = tab_name.lower().replace(" ", "_")
@@ -97,7 +95,8 @@ class Browser(object):
              was passed to \"getAwesomeList()\".)".format(tab_name))
             return False
 
-        self.UTILS.reporting.logResult("info", "Examining the list of sites for the <b>{}</b> tab ...".format(tab_name))
+        self.UTILS.reporting.logResult(
+            "info", "Examining the list of sites for the <b>{}</b> tab ...".format(tab_name))
 
         self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
         x = self.UTILS.element.getElement(DOM.Browser.url_input, "Search input field")
@@ -161,26 +160,26 @@ class Browser(object):
         # """
         # Open url.
         # """
-        
+
         self.switch_to_chrome()
 
         self.parent.wait_for_element_displayed(*DOM.Browser.url_input)
-        self.marionette.find_element(*DOM.Browser.url_input).tap()
-        self.keyboard.send(url)
+        url_input = self.marionette.find_element(*DOM.Browser.url_input)
+        url_input.clear()
+        url_input.send_keys(url)
         self.tap_go_button(timeout=timeout)
 
         self.check_page_loaded(url, False)
         self.switch_to_content()
-
 
     def check_page_loaded(self, url, check_throbber=True):
         self.switch_to_chrome()
 
         if check_throbber:
             self.wait_for_throbber_not_visible()
-        
+
         url_value = self.loaded_url()
-        
+
         if url_value:
             self.UTILS.test.TEST(url in url_value, "Loaded URL matches the desired URL")
             return True
@@ -210,7 +209,7 @@ class Browser(object):
     def wait_for_throbber_not_visible(self, timeout=30):
         # TODO see if we can reduce this timeout in the future. >10 seconds is poor UX
         self.parent.wait_for_condition(lambda m: not self.is_throbber_visible(), timeout=timeout)
-        
+
     def is_page_not_loaded(self):
         try:
             self.parent.wait_for_element_displayed(*DOM.Browser.embarrasing_tag)
@@ -224,7 +223,6 @@ class Browser(object):
         self.parent.wait_for_element_displayed(*DOM.Browser.embarrasing_reload)
         reload_btn = self.marionette.find_element(*DOM.Browser.embarrasing_reload)
         reload_btn.tap()
-
 
     def is_throbber_visible(self):
         return self.marionette.find_element(*DOM.Browser.throbber).get_attribute('class') == 'loading'
