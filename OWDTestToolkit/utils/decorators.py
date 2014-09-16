@@ -22,7 +22,7 @@ def retry(num_retries, delay=2, context=None, aux_func_name=None):
             for i in range(num_retries):
                 try:
                     retry_self.UTILS.reporting.debug(
-                        ">>>>>> Trying function[{}] for the #{} time".format(func_to_retry, i + 1))
+                        ">>>>>> Trying function[{}] for the #{} time".format(func_to_retry.__name__, i + 1))
                     res = func_to_retry(*args, **kwargs)
                     return res
                 except Exception, e:
