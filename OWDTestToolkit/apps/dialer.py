@@ -404,7 +404,7 @@ class Dialer(object):
         # Hangs up (assuming we're in the 'calling' frame).
         #
         try:
-            self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=5)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=10)
         except:
             # The call may already be terminated, so don't throw an error if
             # the hangup bar isn't there.
@@ -434,3 +434,17 @@ class Dialer(object):
         x.tap()
 
         time.sleep(2)
+
+    def check_incoming_call(self, incoming_number):
+        try:
+            self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
+            self.parent.wait_for_element_displayed(
+                "xpath", DOM.Dialer.outgoing_call_numberXP.format(incoming_number), timeout=30)
+        except:
+            self.UTILS.test.TEST(False, "No incoming call received", True)
+
+    def resume_hidden_call(self):
+        self.marionette.switch_to_frame()
+        attention = self.marionette.find_element("id", "attention-screen")
+        attention.tap()
+        self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
