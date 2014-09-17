@@ -140,23 +140,22 @@ class reporting(object):
         test_time = round(test_time, 0)
         test_time = str(datetime.timedelta(seconds=test_time))
 
-        #DET_FILE = open(self.det_fnam, "w")
-        DET_FILE = codecs.open(self.det_fnam, "w", encoding='utf-8')
-        SUM_FILE = codecs.open(self.sum_fnam, "w", encoding='utf-8')
+        detail_file = codecs.open(self.det_fnam, "w", encoding='utf-8')
+        sum_file = codecs.open(self.sum_fnam, "w", encoding='utf-8')
 
-        DET_FILE.write("<span style=\"font-size:14px\">")
-        DET_FILE.write("<b>Test case</b>      : <b>{}</b>\n".format(self.testNum))
-        DET_FILE.write("<b>Test desc</b>      : XXDESCXX\n")
+        detail_file.write("<span style=\"font-size:14px\">")
+        detail_file.write("<b>Test case</b>      : <b>{}</b>\n".format(self.testNum))
+        detail_file.write("<b>Test desc</b>      : XXDESCXX\n")
 
-        DET_FILE.write("<b>Time taken</b>     : {} (not including restarting device etc...)\n".format(test_time))
+        detail_file.write("<b>Time taken</b>     : {} (not including restarting device etc...)\n".format(test_time))
 
         boolStart = False
         for i in self._commentArray:
             if not boolStart:
                 boolStart = True
-                DET_FILE.write("<b>Comments</b>       : {}\n".format(i))
+                detail_file.write("<b>Comments</b>       : {}\n".format(i))
             else:
-                DET_FILE.write("               : {}\n".format(i))
+                detail_file.write("               : {}\n".format(i))
 
         if self.failed == 0:
             res_str = pass_str
@@ -173,33 +172,33 @@ class reporting(object):
         #
         # Return summary information to stdout.
         #
-        SUM_FILE.write("{}\t{}\t{}".format(self.passed, self.failed, total_tests))
+        sum_file.write("{}\t{}\t{}".format(self.passed, self.failed, total_tests))
 
         #
         # Update details file.
         #
-        DET_FILE.write("<b>Asserts passed</b> : {}\n".format(self.passed))
-        DET_FILE.write("<b>Asserts failed</b> : {}\n".format(self.failed))
-        DET_FILE.write("<b>Asserts result</b> : <b>{}{}</span></b>\n".format(res_span, res_str))
-        DET_FILE.write("</span>")
-        DET_FILE.write("\n")
+        detail_file.write("<b>Asserts passed</b> : {}\n".format(self.passed))
+        detail_file.write("<b>Asserts failed</b> : {}\n".format(self.failed))
+        detail_file.write("<b>Asserts result</b> : <b>{}{}</span></b>\n".format(res_span, res_str))
+        detail_file.write("</span>")
+        detail_file.write("\n")
 
         x = len(self._resultArray)
         if x > 0:
             for i in self._resultArray:
                 try:
                     if i[1]:
-                        DET_FILE.write(" " * (len(fail_str) + 2))
+                        detail_file.write(" " * (len(fail_str) + 2))
                     else:
-                        DET_FILE.write("<span style=\"font-weight:bold;color:#ff0000\">*" + fail_str + "*</span>")
-                    DET_FILE.write(" ")
+                        detail_file.write("<span style=\"font-weight:bold;color:#ff0000\">*" + fail_str + "*</span>")
+                    detail_file.write(" ")
                 except:
                     # Sometimes a pass means that item [1] is an object!
-                    DET_FILE.write(pass_str)
+                    detail_file.write(pass_str)
 
-                DET_FILE.write(i[0])  # (Timestamp)
-                #DET_FILE.write(" " + i[2].encode('ascii', 'ignore') + "\n")
-                DET_FILE.write(" " + i[2] + "\n")
+                detail_file.write(i[0])  # (Timestamp)
+                #detail_file.write(" " + i[2].encode('ascii', 'ignore') + "\n")
+                detail_file.write(" " + i[2] + "\n")
 
-        DET_FILE.close()
-        SUM_FILE.close()
+        detail_file.close()
+        sum_file.close()

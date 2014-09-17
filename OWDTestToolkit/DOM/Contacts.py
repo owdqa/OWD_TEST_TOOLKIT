@@ -12,12 +12,6 @@ view_all_contact_name_xpath = "//li[@class='contact-item']//p[contains(@data-sea
 contact_names = ('css selector', '.contact-item .contact-text')
 view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
 
-# To be erased when we know they don't break anything
-# view_all_contact_JS = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li")
-# view_all_contact_JSname = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
-# view_all_contact_import = ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li/p/strong")
-# view_all_contact_import2 = ("xpath", "/html/body/section/article/div[2]/div/div/section/section[2]/ol/li[2]/p/strong")
-
 view_all_contact_specific_contact = ('xpath', '//section[@class="group-section"]//li/p[@class="contact-text"]/strong[contains(text(), "{}")]')
 
 
@@ -44,7 +38,7 @@ settings_button = ('id', 'settings-button')
 settings_header = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode("utf8")))
 settings_done_button = ('id', 'settings-close')
 settings_fb_enable = ('xpath', '//li[@class="fb-item"]')
-settings_import_fb = ('id', 'import-fb') 
+settings_import_fb = ('id', 'import-fb')
 settings_fb_frame = ("id", 'fb-extensions')
 settings_fb_logout_wait = ('id', 'progress-title')
 add_contact_button = ('id', 'add-contact-button')
@@ -89,14 +83,13 @@ sms_button_specific_id = 'send-sms-button-{}'
 email_button_spec_id = 'email-or-pick-{}'
 link_button = ('id', "link_button")  # WARNING: >1 element has this id!
 
-
 #
 # Importing from gmail / hotmail etc...
 #
 import_all_imported_msg = ("xpath", "//*[@id='friends-msg' and contains(text(), 'your friends are imported')]")
 import_cancel_login = ("xpath", '//button[@class="kill popup-close"]')
-import_close_icon   = ("id", "import-close")
-import_throbber     = ("id", "popup-throbber")
+import_close_icon = ("id", "import-close")
+import_throbber = ("id", "popup-throbber")
 import_num_of_conts = ("id", "friends-msg")
 import_select_all = ("id", "select-all")
 import_desel_all = ("id", "deselect-all")
@@ -129,21 +122,23 @@ hotmail_login_error_msg = ("xpath", "//*[contains(@id, 'error')")
 hotmail_import_frame = ("src", "live")  # It's in the contacts iframe.
 hotmail_import_frame2 = ("data-url", "live")  # It's in the contacts iframe.
 
-memorycard_button = ("xpath", "/html/body/article/section[2]/article/section/ul/li[2]/button")
-
-sim_button = ("xpath", "/html/body/article/section[2]/article/section/ul/li/button")
+import_sim_btn = ('css selector', '#import-options button.icon-sim')
+reading_sim_card = ('xpath', '//h1[@id="progress-title" and contains(text(), "{}")]'.\
+                    format(_("Reading from SIM card")))
+importing_sim_contacts = ('xpath', '//h1[@id="progress-title" and contains(text(), "{}")]'.\
+                          format(_("Importing SIM contacts")))
+importing_progress = ('css selector', '#progress-activity #progress-msg')
+imported_contacts_path = "//section[@id='statusMsg']/p[contains(text(), '{}')]"
 
 #
 # Export
 #
 export_export_btn = ("id", "export-action")
-export_contacts = ("id" , "exportContacts")
-export_sd_card = ("id" , "export-sd-option")
+export_contacts = ("id", "exportContacts")
+export_sd_card = ("id", "export-sd-option")
 export_select_all = ("id", "select-all")
-export = ("xpath" , "//*[@id='select-action']")
-export_import_banner = ("id" , "statusMsg")
+export = ("xpath", "//*[@id='select-action']")
+export_import_banner = ("id", "statusMsg")
 
-export_sim_card = ("id" , "export-sim-option-8934071100275319352")
-export_bluetooth = ("id" , "export-bluetooth-option")
-
-
+export_sim_card = ("id", "export-sim-option-8934071100275319352")
+export_bluetooth = ("id", "export-bluetooth-option")

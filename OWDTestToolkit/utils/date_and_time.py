@@ -42,7 +42,7 @@ class date_and_time(object):
 
         x = datetime.date(value.tm_year, value.tm_mon, value.tm_mday)
         day_name = x.strftime("%A")
-        month_name = x.strftime("%B")
+        month_name = x.strftime("%b")
 
         x = namedtuple("x", "year    " "mon     " "mday    " "hour    " "min     " "sec     " "wday    " \
                        "yday    " "isdst   " "day_name   " "month_name ")
