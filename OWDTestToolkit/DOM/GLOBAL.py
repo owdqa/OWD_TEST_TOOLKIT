@@ -43,8 +43,17 @@ modal_dialog = ('xpath', '//form[contains(@class, "modal-dialog-alert")]')
 modal_dialog_alert_title = ("xpath", '//form[contains(@class, "modal-dialog-alert")]//h3[@class="modal-dialog-alert-title"]')
 modal_dialog_alert_msg = ("xpath", '//form[contains(@class, "modal-dialog-alert")]//span[@class="modal-dialog-alert-message"]')
 modal_dialog_alert_ok = ("xpath", '//form[contains(@class, "modal-dialog-alert")]//button[contains(@class, "modal-dialog-alert-ok")]')
+
 # App permision (top-frame)
 app_permission_dialog = ('id', 'permission-dialog')
 app_permission_msg = ('id', 'permission-message')
 app_permission_btn_yes = ('id', 'permission-yes')
 app_permission_btn_no = ('id', 'permission-no')
+
+# App install dialog
+app_install_ok = ('id', 'app-install-install-button')
+app_install_cancel = ('id', 'app-install-cancel-button')
+
+# Bottom toaster
+system_banner = ('xpath', '//section[@data-z-index-level="system-notification-banner"]')
+system_banner_msg = ('xpath', '//section[@data-z-index-level="system-notification-banner"]//p[contains(text(), "{}")]')
