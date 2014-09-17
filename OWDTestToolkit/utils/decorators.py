@@ -52,7 +52,6 @@ def retry(num_retries, delay=2, context=None, aux_func_name=None):
                         try:
                             # We get the context of the aux_func
                             class_context = getattr(sys.modules[module_context], function_context)
-                            f = getattr(class_context, aux_func_name)
                         except Exception, e:
                             utils.reporting.debug(
                                 ">>>>>> Failed getting aux_func context: {}".format(e))
