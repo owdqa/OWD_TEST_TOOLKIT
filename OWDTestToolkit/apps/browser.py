@@ -225,7 +225,6 @@ class Browser(object):
         reload_btn = self.marionette.find_element(*DOM.Browser.embarrasing_reload)
         reload_btn.tap()
 
-
     def is_throbber_visible(self):
         return self.marionette.find_element(*DOM.Browser.throbber).get_attribute('class') == 'loading'
 
@@ -235,6 +234,22 @@ class Browser(object):
             if web_frame.is_displayed():
                 self.marionette.switch_to_frame(web_frame)
                 break
+
+    def switch_to_frame_by_url(self, url, position=0):
+        """
+        Switch to a frame inside the browser with the given url.
+
+        The frame with the given url will be switched to. It can be selected the position
+        as well, in case there are more frames for the same url.
+        Returns True if the switch was successful. False otherwise.
+        """
+        web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
+        result = False
+        for web_frame in web_frames:
+            if url in web_frame.get_attribute("src") and web_frame.is_displayed():
+                result = self.marionette.switch_to_frame(web_frame)
+                break
+        return result
 
     def switch_to_chrome(self):
         self.marionette.switch_to_frame()

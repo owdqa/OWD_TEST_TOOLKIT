@@ -196,7 +196,7 @@ class statusbar(object):
         self.marionette.switch_to_frame()
 
         x = (DOM.Statusbar.notification_toaster_title[0], DOM.Statusbar.notification_toaster_title[1].format(text))
-        self.parent.reporting.debug("** Waiting for notification toaster title: [{}]".format(x))
+        self.parent.reporting.debug(u"** Waiting for notification toaster title: [{}]".format(x))
         self.parent.parent.wait_for_element_present(x[0], x[1], timeout)
 
         # Check if the notification actually exists or if it is a "ghost" one.
@@ -214,7 +214,7 @@ class statusbar(object):
         self.marionette.switch_to_frame()
 
         x = (DOM.Statusbar.notification_toaster_detail[0], DOM.Statusbar.notification_toaster_detail[1].format(text))
-        self.parent.reporting.debug("** Waiting for notification toaster detail: [{}]".format(x))
+        self.parent.reporting.debug(u"** Waiting for notification toaster detail: [{}]".format(x))
         self.parent.parent.wait_for_element_present(x[0], x[1], timeout)
 
         # Check if the notification actually exists or if it is a "ghost" one.
@@ -234,7 +234,7 @@ class statusbar(object):
         exception = None
         title = None
         for t in titles:
-            self.parent.reporting.log_to_file("Waiting for notification with title {}".format(t))
+            self.parent.reporting.log_to_file(u"Waiting for notification with title {}".format(t))
             toaster = (dom[0], dom[1].format(t))
             try:
                 self.parent.parent.wait_for_element_present(toaster[0], toaster[1], timeout)
@@ -242,7 +242,7 @@ class statusbar(object):
                     self.parent.iframe.switchToFrame(*frame_to_change)
                 # Success. Clear the exception, if any
                 exception = None
-                self.parent.reporting.log_to_file("Title found: {}".format(t))
+                self.parent.reporting.log_to_file(u"Title found: {}".format(t))
                 title = t
                 break
             except Exception as e:
@@ -258,17 +258,16 @@ class statusbar(object):
 
     def wait_for_notification_statusbar_title(self, text):
         self.marionette.switch_to_frame()
-        
-        self.parent.reporting.debug("** Waiting for notification statusbar title: [{}]".format(text))
+
+        self.parent.reporting.debug(u"** Waiting for notification statusbar title: [{}]".format(text))
         dom = (DOM.Statusbar.notification_statusbar_title[0],
                DOM.Statusbar.notification_statusbar_title[1].format(text))
         self.marionette.find_element(dom[0], dom[1])
 
     def wait_for_notification_statusbar_detail(self, text):
         self.marionette.switch_to_frame()
-        
-        self.parent.reporting.debug("** Waiting for notification statusbar detail: [{}]".format(text))
+
+        self.parent.reporting.debug(u"** Waiting for notification statusbar detail: [{}]".format(text))
         dom = (DOM.Statusbar.notification_statusbar_detail[0],
              DOM.Statusbar.notification_statusbar_detail[1].format(text))
         self.marionette.find_element(dom[0], dom[1])
-
