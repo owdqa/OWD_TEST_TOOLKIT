@@ -27,6 +27,16 @@ ffox_account_login_back = ('id', 'fxa-module-back')
 ffox_account_login_close = ('id', 'fxa-module-close')
 ffox_account_login_overlay = ('id', 'fxa-overlay')
 
+# Mobile ID login
+mobile_id_frame_locator = ('src', 'mobile_id')
+mobile_id_explanation = ('id', 'mobile-id-explanation')
+mobile_id_sim_list = ('css selector', 'ul.phone-options-list')
+mobile_id_sim_list_item = ('css selector', 'ul.phone-options-list li')
+mobile_id_allow_button = ('id', 'allow-button')
+mobile_id_verified_button = ('id', 'verify-button')
+mobile_id_error = ('id', 'mobileid-error-overlay')
+mobile_id_error_ok_btn = ('id', 'mobileid-error-ok')
+
 # Call log
 call_log = ('id', 'calllog-panel')
 open_settings_btn = ('id', 'open-settings-button')
