@@ -205,7 +205,7 @@ class DownloadManager(object):
 
     def open_download(self, data_url):
         download_entry = self.get_download_entry(data_url)
-        download_entry.tap()
+        self.UTILS.element.simulateClick(download_entry)
 
     def open_download_delete_file(self):
         """
