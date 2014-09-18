@@ -155,7 +155,7 @@ gcli listrunningapps
 printf "\n\nKilling apps\n"
 gcli killapps
 
-if [ "$DEVICE" = "flame-JB" ]
+if [ "$DEVICE" = "flame-JB" ] || [ "$DEVICE" = "flame-KK" ]
 then
     printf "\nFLAME device: adjusting RAM to 512Mb\n"
     sudo $OWD_TEST_TOOLKIT_BIN/adjustRAM.sh 512
