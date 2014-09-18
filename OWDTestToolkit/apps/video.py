@@ -144,12 +144,12 @@ class Video(object):
         return self.marionette.find_element(*DOM.Video.video_player).get_attribute('paused') == 'false'
 
     def show_controls(self):
+        self.parent.wait_for_element_displayed(*DOM.Video.video_player)
         self.marionette.find_element(*DOM.Video.video_player).tap()
         self.parent.wait_for_element_displayed(*DOM.Video.video_controls)
 
     def is_this_video_being_played(self, video_name):
         self.show_controls()
         video_title = self.UTILS.element.getElement(DOM.Video.video_title, "Video title")
-
         self.UTILS.test.TEST(video_name == video_title.text and self.is_video_playing(),
                              "This video [{}] is actually being played".format(video_name))
