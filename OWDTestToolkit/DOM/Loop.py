@@ -51,6 +51,9 @@ shared_links_section = ('id', 'urls-section')
 shared_links_empty = ('css selector', '#urls-section div.section-empty p.section-empty-label')
 shared_links_entries = ('id', 'urls-section-entries')
 shared_links_entry = ('css selector', '#urls-section-entries li')
+shared_links_entry_revoked = ('xpath', '//div[@id="urls-section-entries"]//li//p[@data-revoked="true"]')
+shared_links_entry_revoked_nested = ('xpath', '//p[@data-revoked="true"]')
+shared_links_entry_available = ('xpath', '//div[@id="urls-section-entries"]//li//p[@data-revoked="false"]')
 
 # Call log - footer
 call_from_loop = ('id', 'call-from-loop')
