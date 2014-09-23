@@ -262,3 +262,91 @@ class Loop(object):
 
         self.parent.wait_for_element_not_displayed(*DOM.Loop.loading_overlay)
         self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login)
+
+    def switch_to_urls(self):
+        self.parent.wait_for_element_displayed(*DOM.Loop.call_log_shared_links_tab)
+        tab = self.marionette.find_element(*DOM.Loop.call_log_shared_links_tab)
+        tab.tap()
+        self.parent.wait_for_condition(lambda m: tab.get_attribute(
+            "aria-selected") == "true", timeout=10, message="Checking that 'Shared links' is selected")
+
+    def _get_number_of_urls(self, locator):
+        try:
+            entries = self.marionette.find_elements(*locator)
+            return len(entries)
+        except:
+            return 0
+
+    def get_number_of_all_urls(self):
+        return self._get_number_of_urls(DOM.Loop.shared_links_entry)
+
+    def get_number_of_available_urls(self):
+        return self._get_number_of_urls(DOM.Loop.shared_links_entry_available)
+
+    def get_number_of_revoked_urls(self):
+        return self._get_number_of_urls(DOM.Loop.shared_links_entry_revoked)
+
+    def _select_action(self, action):
+        elem = (DOM.Loop.form_action_action[0], DOM.Loop.form_action_action[1].format(action))
+        self.parent.wait_for_element_displayed(*elem)
+        self.marionette.find_element(*elem).tap()
+
+    def _confirm(self, decission):
+        elem = DOM.Loop.form_confirm_delete if decission else DOM.Loop.form_confirm_cancel
+        self.parent.wait_for_element_displayed(*elem)
+        self.marionette.find_element(*elem).tap()
+
+    def _is_entry_revoked(self, entry):
+        try:
+            entry.find_element(*DOM.Loop.shared_links_entry_revoked_nested)
+            return True
+        except Exception, e:
+            self.UTILS.reporting.logResult('info', "What happened here? {}".format(e))
+            return False
+
+    def delete_single_entry_by_pos(self, position, confirm=True):
+        try:
+            entry = self.marionette.find_elements(*DOM.Loop.shared_links_entry)[position]
+        except:
+            self.UTILS.test.TEST(False, "No entry to delete by position", True)
+
+        is_revoked = self._is_entry_revoked(entry)
+        self.actions.long_press(entry, 2).perform()
+
+        self._select_action("delete")
+
+        if not is_revoked:
+            self._confirm(confirm)
+
+    def revoke_single_entry_by_pos(self, position, confirm=True):
+        try:
+            entry = self.marionette.find_elements(*DOM.Loop.shared_links_entry)[position]
+        except:
+            self.UTILS.test.TEST(False, "No entry to delete by position", True)
+
+        self.actions.long_press(entry, 2).perform()
+        self._select_action("revoke")
+
+    def delete_all_urls(self, cancel=False):
+        self.parent.wait_for_element_displayed(*DOM.Loop.settings_clean_shared_links)
+        self.marionette.find_element(*DOM.Loop.settings_clean_shared_links).tap()
+
+        if cancel:
+            self.parent.wait_for_element_displayed(*DOM.Loop.form_action_cancel)
+            self.marionette.find_element(*DOM.Loop.form_action_cancel).tap()
+        else:
+            self._select_action("cleanAll")
+
+    def delete_just_revoked(self, cancel=False):
+        self.parent.wait_for_element_displayed(*DOM.Loop.settings_clean_shared_links)
+        self.marionette.find_element(*DOM.Loop.settings_clean_shared_links).tap()
+
+        if cancel:
+            self.parent.wait_for_element_displayed(*DOM.Loop.form_action_cancel)
+            self.marionette.find_element(*DOM.Loop.form_action_cancel).tap()
+        else:
+            self._select_action("cleanJustRevoked")
+
+    def settings_go_back(self):
+        self.parent.wait_for_element_displayed(*DOM.Loop.settings_panel_back_btn)
+        self.marionette.find_element(*DOM.Loop.settings_panel_back_btn).tap()

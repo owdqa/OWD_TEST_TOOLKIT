@@ -50,6 +50,10 @@ calls_section_entries = ('id', 'calls-section-entries')
 shared_links_section = ('id', 'urls-section')
 shared_links_empty = ('css selector', '#urls-section div.section-empty p.section-empty-label')
 shared_links_entries = ('id', 'urls-section-entries')
+shared_links_entry = ('css selector', '#urls-section-entries li')
+shared_links_entry_revoked = ('xpath', '//div[@id="urls-section-entries"]//li//p[@data-revoked="true"]')
+shared_links_entry_revoked_nested = ('xpath', '//p[@data-revoked="true"]')
+shared_links_entry_available = ('xpath', '//div[@id="urls-section-entries"]//li//p[@data-revoked="false"]')
 
 # Call log - footer
 call_from_loop = ('id', 'call-from-loop')
@@ -70,3 +74,11 @@ settings_clean_shared_links =  ('id', 'settings-clean-urls-button')
 # Settings panel - footer
 settings_logged_as = ('id', 'settings-logout-identity')
 settings_logout = ('id', 'settings-logout-button')
+
+# Form action (actions so far: delete, revoke, cleanAll, cleanJustRemoved)
+form_action_cancel = ('xpath', '//form[@data-type="action"]//button[last()]')
+form_action_action = ('xpath', '//form[@data-type="action"]//button[@data-l10n-id="{}"]')
+
+# Form confirm
+form_confirm_cancel = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="cancel"]')
+form_confirm_delete = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="delete"]')
