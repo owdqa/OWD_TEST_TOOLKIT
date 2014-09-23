@@ -583,18 +583,18 @@ class Settings(object):
         x.tap()
 
     def hotSpot(self):
-        #
-        # Open 'Internet sharing' settings (also known as 'hotspot').
-        #
-        self.UTILS.test.TEST(True, "Executing script to scroll hotspot")
-        self.marionette.execute_script("document.getElementById('{}').scrollIntoView();".\
-                                       format(DOM.Settings.hotspot[1]))
+        """
+        Open 'Internet sharing' settings (also known as 'hotspot').
+        """
+        self.UTILS.reporting.debug("*** Looking for hotspot: {}".format(DOM.Settings.hotspot))
+        self.parent.wait_for_element_displayed(*DOM.Settings.hotspot, timeout=30)
+        hotspot_elem = self.marionette.find_element(*DOM.Settings.hotspot)
+        self.UTILS.reporting.debug("*** Found hotspot menu: {}".format(hotspot_elem))
+        self.UTILS.element.scroll_into_view(hotspot_elem)
 
-        self.UTILS.test.TEST(True, "Get element hotspot")
         x = self.UTILS.element.getElement(DOM.Settings.hotspot, "'Internet sharing' (hotspot) link")
         x.tap()
 
-        self.UTILS.test.TEST(True, "Get element hotspot")
         self.UTILS.element.waitForElements(DOM.Settings.hotspot_header, "Hotspot header appears.", True, 20, False)
 
     def open_data_settings(self):
@@ -1001,12 +1001,8 @@ class Settings(object):
             # Takes a few seconds to disconnect, so check a few times.
             #
             is_forgotten = False
-            for i in range(10):
-                if self._checkDisconnected(wlan):
-                    is_forgotten = True
-                    break
-                else:
-                    time.sleep(2)
+            network = {'ssid': wlan}
+            self.parent.wait_for_condition(lambda m: not self.parent.data_layer.is_wifi_connected(network), timeout=30)
         except:
             pass
 

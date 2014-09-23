@@ -65,8 +65,6 @@ wifi_header = ('xpath', GLOBAL.app_head_specific.format('Wi-Fi'))
 wifi_enabled = ('xpath', ".//*[@id='wifi-enabled']/label")
 wifi_available_networks = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside[contains(@class, 'pack-end wifi-icon level-')]")
 wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
-# wifi_available_status = ".//*[@id='wifi-availableNetworks']/li[%s]//small"
-# wifi_available_name = ".//*[@id='wifi-availableNetworks']/li[%s]//a"
 wifi_name_xpath = '//*[@id="wifi-availableNetworks"]//a[text()="{}"]'
 wifi_connected = ('xpath', '//small[text()="{}"]'.format(_("Connected")))
 wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='{}']"
@@ -103,18 +101,16 @@ enable_data_roaming = ('xpath', "//section[@id='carrier']//span[@data-l10n-id='d
 celldata_DataSettings = ('xpath', "//section[@id='carrier']//button[@data-l10n-id='dataSettings']")
 celldata_MsgSettings = ('xpath', "//*[@id='carrier']//button[@data-l10n-id='messageSettings']")
 custom_settings_apn = ('xpath', "//*[@id='carrier-dataSettings']//li//span[@data-l10n-id='custom']")
-celldata_data_apn = ('xpath', "//*[@id='ril.data.apn']")
-celldata_apn_user = ('xpath', "//*[@id='ril.data.user']")
-celldata_apn_passwd = ('xpath', "//*[@id='ril.data.passwd']")
-celldata_ok_button = ('xpath', "//*[@id='carrier-dataSettings']/header/menu/button/span[@data-l10n-id='ok']")
-celldata_mms_ok_button = ('xpath', "//*[@id='carrier-mmsSettings']/header/menu/button/span[@data-l10n-id='ok']")
+celldata_data_apn = ('id', "ril.data.apn")
+celldata_apn_user = ('id', "ril.data.user")
+celldata_apn_passwd = ('id', "ril.data.passwd")
+celldata_ok_button = ('css selector', "#carrier-dataSettings span[data-l10n-id=ok]")
+celldata_mms_ok_button = ('css selector', "#carrier-mmsSettings span[data-l10n-id=ok]")
 apn_settings_list = ('xpath', "//li//input[@name='defaultApn']")
 selected_apn = ('css selector', 'label > input[name=defaultApn]:checked + span')
 default_apn = ('xpath', "//*[@id='carrier-dataSettings']//span[text()='{}']/..")
 default_apn_mms = ('xpath', "//*[@id='carrier-mmsSettings']//span[text()='{}']/..")
 selected_apn_mms = ('css selector', 'label > input[name=mmsApn]:checked + span')
-mms_second = ('xpath', "/html/body/section[24]/div/ul/li[2]/label")
-apn_sixth = ('xpath', "/html/body/section[23]/div/ul/li[6]/label")
 data_settings_back_btn = ('xpath', '//section[@id="carrier-dataSettings"]//button/span[@data-l10n-id="back"]')
 mms_settings_back_btn = ('xpath', '//section[@id="carrier-mmsSettings"]//button/span[@data-l10n-id="back"]')
 
@@ -126,8 +122,8 @@ sound_alarm_vol = ('name', 'audio.volume.alarm')
 
 hotspot = ("id", "menuItem-internetSharing")
 hotspot_header = ('xpath', GLOBAL.app_head_specific.format(_('Internet sharing')))
-hotspot_switch = ("xpath", "/html/body/section[32]/div/ul/li/label")
-hotspot_settings = ("xpath", "/html/body/section[32]/div/ul/li[6]/label/button")
+hotspot_switch = ("css selector", "#hotspot span[data-l10n-id=wifi-hotspot]")
+hotspot_settings = ("css selector", "#hotspot-settings-section button[data-l10n-id=hotspotSettings]")
 
 msg_settings = ("xpath", "//*[@data-l10n-id='messagingSettings']")
 auto_retrieve_select_btn = ("name", "ril.mms.retrieval_mode")

@@ -62,3 +62,6 @@ call_log_number_cont_highlight = "//button[contains(@id, 'call-or-pick') and @cl
 
 call_busy_button_ok = ("xpath", '//form[@id="confirmation-message"]/menu/button[@class="full"]')
 number_busy_windows_ok_button = ("xpath", "//form[@id='confirmation-message']/menu/button[@class='full']")
+
+imei_header = ('xpath', '//h1[text()="IMEI"]')
+imei_contents = ('css selector', '#mmi-screen #mmi-container #message')

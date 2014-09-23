@@ -575,7 +575,7 @@ class Contacts(object):
         # Seems to happen a few times, so loop through 5 just in case ...
         #
         #
-        for i in range(5, 0, -1):
+        for i in range(5):
             try:
                 self.parent.wait_for_element_displayed(*DOM.Contacts.gmail_permission_accept, timeout=2)
 
@@ -603,6 +603,7 @@ class Contacts(object):
 
         time.sleep(2)
 
+        self.parent.wait_for_element_displayed(*DOM.Contacts.import_contacts, timeout=30)
         x = self.UTILS.element.getElement(DOM.Contacts.import_contacts, "Import button")
         x.tap()
 
@@ -633,12 +634,11 @@ class Contacts(object):
         #
         self.UTILS.reporting.logResult('info', "Doing the switch to contacts......")
         time.sleep(2)
-        # self.UTILS.general.checkMarionetteOK()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        
+
         screenshot = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult('info', "Screenshot before swithing", screenshot)
-        
+        self.UTILS.reporting.logResult('info', "Screenshot before switching", screenshot)
+
         #
         # Change to import frame -> it is whithin Contacts frame
         #
@@ -665,7 +665,8 @@ class Contacts(object):
     def switch_to_hotmail_login_frame(self):
         self.marionette.switch_to_frame()
         hotmail_sign_in = self.marionette.find_element(*DOM.Contacts.hotmail_signin_frame)
-        self.marionette.switch_to_frame(hotmail_sign_in)
+        result = self.marionette.switch_to_frame(hotmail_sign_in)
+        self.UTILS.reporting.debug("**** Switched to hotmail frame: {}".format(result))
 
     def hotmail_login(self, name, passwd, click_signin):
         #
@@ -698,16 +699,14 @@ class Contacts(object):
 
                 if click_signin:
                     x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
-                    x.tap()
+                    self.UTILS.reporting.debug("Sign in button: {}".format(x.value))
+                    self.UTILS.element.simulateClick(x)
+                    self.UTILS.reporting.debug("Simulated click")
 
-                    self.UTILS.general.checkMarionetteOK()
                     #
-                    # Check to see if sigin failed. If it did then return False.
+                    # Check to see if sign in failed. If it did then return False.
                     #
                     try:
-                        #
-                        # TODO - Get the error message. The following locator does not seem to be working (See test 27048)
-                        #
                         self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
 
                         x = self.UTILS.debug.screenShotOnErr()
@@ -715,8 +714,7 @@ class Contacts(object):
                         return False
                     except:
                         x = self.UTILS.debug.screenShotOnErr()
-                        self.UTILS.reporting.logResult("info", "<b>Login NOT failed!</b> Screenshot and details:", x)
-
+                        self.UTILS.reporting.logResult("info", "<b>Login succeeded!</b> Screenshot and details:", x)
 
                     #
                     # Sometimes a message about permissions appears.

@@ -57,21 +57,19 @@ class EverythingMe(object):
         #
         # Pick an app from the apps listed in this group.
         #
-        x = self.UTILS.element.getElements(DOM.EME.app_to_install, "The first game that is not installed already")[0]
-        APP_NAME = x.get_attribute("data-name")
+        x = self.UTILS.element.getElementByXpath(DOM.EME.app_to_install.format(name))
+        app_name = x.text
         self.UTILS.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
+        time.sleep(2)
 
-        self.UTILS.test.TEST(APP_NAME == name, "" + APP_NAME + "'is the correct app", True)
+        self.UTILS.test.TEST(app_name == name, "" + app_name + "'is the correct app", True)
 
         actions = Actions(self.marionette)
-        actions.press(x).wait(2).release()
-        try:
-            actions.perform()
-        except:
-            pass
+        actions.long_press(x, 2).perform()
 
-        x = self.UTILS.element.getElement(DOM.EME.add_app_to_homescreen, "Add app to homescreen button")
+        x = self.UTILS.element.getElement(DOM.EME.add_to_home_screen_btn, "Add app to homescreen button")
         x.tap()
+        time.sleep(2)
 
         return True
 
@@ -297,15 +295,17 @@ class EverythingMe(object):
 
         ok = False
 
-        x = self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(name))
+        x = self.marionette.find_element('xpath', DOM.Home.app_icon_xpath.format(name))
         self.UTILS.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
         x.tap()
 
         try:
+            self.UTILS.iframe.switchToFrame(*DOM.EME.frame_locator)
             self.parent.wait_for_element_displayed(*DOM.EME.apps_not_installed, timeout=20)
             self.UTILS.reporting.logResult("info", "(Apps for group {} were displayed.)".format(name))
             ok = True
-        except:
+        except Exception as e:
+            self.UTILS.reporting.debug("*** Error getting apps not installed: {}".format(e))
             x = self.UTILS.debug.screenShotOnErr()
             self.UTILS.reporting.logResult("info", "(<b>NOTE:</b>Apps for group {} were not displayed.)|{}|{}".\
                                  format(name, x[0], x[1]))
@@ -326,7 +326,7 @@ class EverythingMe(object):
         # of time you press the icon until it works!
         #
         ok = False
-        x = self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(group_array[0]))
+        x = self.marionette.find_element('xpath', DOM.Home.app_icon_xpath.format(group_array[0]))
         actions = Actions(self.marionette)
         actions.press(x).wait(3).release()
         try:
@@ -361,7 +361,7 @@ class EverythingMe(object):
             #
             # Remove it.
             #
-            self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(group_specified))
+            self.marionette.find_element('xpath', DOM.Home.app_icon_xpath.format(group_specified))
             y = self.UTILS.element.getElement(("xpath", DOM.Home.app_delete_icon_xpath.format(group_specified)),
                                       "Delete button", False, 5, True)
             y.tap()
