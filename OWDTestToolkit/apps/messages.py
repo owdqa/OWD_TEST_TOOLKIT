@@ -345,7 +345,7 @@ class Messages(object):
         # (assumes you're already in the thread).
         #
         try:
-            len(self.UTILS.element.getElements(DOM.Messages.message_list, "Messages"))
+            return len(self.UTILS.element.getElements(DOM.Messages.message_list, "Messages"))
         except:
             return 0
 

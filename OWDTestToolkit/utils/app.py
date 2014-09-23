@@ -94,41 +94,41 @@ class app(object):
         #
         # Scroll around the homescreen until we find our app icon.
         #
-
-        #
-        # I had all kinds of weird issues when returning to this method,
-        # this awful solution works.
-        #
         self.parent.home.goHome()
 
         try:
             #
             # If this works, then the icon is visible at the moment.
             #
-            x = self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(app_name))
-            self.parent.reporting.logResult("debug", "icon displayed: %s" % str(x.is_displayed()))
-            if x.is_displayed():
-                return x
-        except:
-            pass
+            app_icon = self.marionette.find_element('xpath', DOM.Home.app_name_xpath.format(app_name))
+            icons = self.marionette.find_elements(*DOM.Home.apps)
+            self.parent.reporting.debug("*** Found {} Applications".format(len(icons)))
+            self.parent.element.scroll_into_view(app_icon)
+            self.parent.reporting.logResult("debug", "icon displayed: {}".format(app_icon.is_displayed()))
+            if app_icon.is_displayed():
+                return app_icon
+        except Exception as e:
+            self.parent.reporting.error("*** Error detected: {}".format(e))
 
-        self.parent.home.scrollHomescreenRight()
-        time.sleep(0.5)
-
-        _pages = self.parent.element.getElements(DOM.Home.app_icon_pages, "Homescreen icon pages")
-        for i in _pages:
-            try:
-                #
-                # If this works, then the icon is visible at the moment.
-                #
-                x = self.marionette.find_element('css selector', DOM.Home.app_icon_css.format(app_name))
-                self.parent.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
-                if x.is_displayed():
-                    return x
-            except:
-                pass
-
-            self.parent.home.scrollHomescreenRight()
+#===============================================================================
+#        self.parent.home.scrollHomescreenRight()
+#        time.sleep(0.5)
+# 
+#        _pages = self.parent.element.getElements(DOM.Home.app_icon_pages, "Homescreen icon pages")
+#        for i in _pages:
+#            try:
+#                #
+#                # If this works, then the icon is visible at the moment.
+#                #
+#                x = self.marionette.find_element('xpath', DOM.Home.app_name_xpath.format(app_name))
+#                self.parent.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
+#                if x.is_displayed():
+#                    return x
+#            except:
+#                pass
+# 
+#            self.parent.home.scrollHomescreenRight()
+#===============================================================================
         return False
 
     def isAppInstalled(self, app_name):
@@ -137,7 +137,7 @@ class app(object):
         #
         self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
 
-        x = ('css selector', DOM.Home.app_icon_css.format(app_name))
+        x = ('xpath', DOM.Home.app_icon_xpath.format(app_name))
         try:
             self.marionette.find_element(*x)
             self.parent.reporting.logResult("info", "App <b>{}</b> is currently installed.".format(app_name))
@@ -196,11 +196,9 @@ class app(object):
         # Launch an app via the homescreen.
         #
         ok = False
-        if self.findAppIcon(app_name):
-            time.sleep(1)
-            x = ('css selector', DOM.Home.app_icon_css.format(app_name))
-            myApp = self.parent.element.getElement(x, "App icon")
-            myApp.tap()
+        app_icon = self.findAppIcon(app_name)
+        if app_icon:
+            app_icon.tap()
             time.sleep(10)
             ok = True
         return ok
@@ -291,7 +289,6 @@ class app(object):
             #
             # The app isn't open yet, so try to launch it.
             #
-            # (This throws an error, even though the app launches. 'Hacky', but it works.)
             try:
                 self.parent.reporting.logResult("info", "(Looks like app '{}' is not currently running, so I'll launch it.)".\
                                format(app_name))
@@ -306,14 +303,12 @@ class app(object):
         # Remove an app using the UI.
         #
         self.parent.reporting.logResult("info", "Making sure app <b>{}</b> is uninstalled.".format(app_name))
-
         myApp = self.findAppIcon(app_name)
         if myApp:
-            self.parent.actions.press(myApp).wait(2).release()
-            self.parent.actions.perform()
-
-            delete_button = self.parent.element.getElement(("xpath", DOM.Home.app_delete_icon_xpath.format(app_name)),
-                                            "Delete button", False, 5, True)
+            self.parent.element.scroll_into_view(myApp)
+            self.parent.actions.long_press(myApp, 2).perform()
+            delete_btn = ("xpath", DOM.Home.app_delete_icon_xpath.format(app_name))
+            delete_button = self.parent.element.getElement(delete_btn, "Delete button", False, 30, True)
             delete_button.tap()
 
             delete = self.parent.element.getElement(DOM.Home.app_confirm_delete, "Confirm app delete button")
