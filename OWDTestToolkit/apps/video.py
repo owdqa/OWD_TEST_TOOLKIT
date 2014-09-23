@@ -1,5 +1,6 @@
-from OWDTestToolkit import DOM
 import time
+from OWDTestToolkit import DOM
+from OWDTestToolkit.utils.decorators import retry
 
 
 class Video(object):
@@ -148,8 +149,12 @@ class Video(object):
         self.marionette.find_element(*DOM.Video.video_player).tap()
         self.parent.wait_for_element_displayed(*DOM.Video.video_controls)
 
+    @retry(5, 1)
     def is_this_video_being_played(self, video_name):
         self.show_controls()
         video_title = self.UTILS.element.getElement(DOM.Video.video_title, "Video title")
-        self.UTILS.test.TEST(video_name == video_title.text and self.is_video_playing(),
-                             "This video [{}] is actually being played".format(video_name))
+
+        if video_name == video_title.text and self.is_video_playing():
+            return True
+        else:
+            raise

@@ -112,7 +112,7 @@ gmail_login_error_msg = ("id", "errormsg_0_Passwd")
 gmail_import_frame = ("src", "gmail")  # It's in the contacts iframe.
 
 hotmail_button = ("xpath", "//button[text()='Outlook']")
-hotmail_signin_frame = ('css selector', '.popupWindow.active iframe[data-url*="live"]')
+hotmail_signin_frame = ('css selector', '.popupWindow.active iframe[data-url*=live]')
 hotmail_username = ("id", "i0116")
 hotmail_password = ("id", "i0118")
 hotmail_signIn_button = ("id", "idSIButton9")
