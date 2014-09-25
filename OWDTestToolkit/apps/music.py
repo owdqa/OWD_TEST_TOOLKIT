@@ -1,5 +1,6 @@
 from OWDTestToolkit import DOM
 import time
+from marionette import Actions
 
 
 class Music(object):
@@ -78,7 +79,7 @@ class Music(object):
                 return len(self.marionette.find_elements(*DOM.Music.music_songs))
             except:
                 return 0
-        except: # This could be the music frame comes from the SMS app or Email (attach)
+        except:  # This could be the music frame comes from the SMS app or Email (attach)
             self.parent.wait_for_element_displayed(*('id', 'views-list-anchor'))
             try:
                 self.parent.wait_for_element_displayed(*('css selector', '#views-list-anchor .list-item'))
@@ -99,3 +100,8 @@ class Music(object):
     def player_current_timestamp(self):
         player = self.marionette.find_element(*DOM.Music.audio)
         return float(player.get_attribute('currentTime'))
+
+    def tap_play(self):
+        play_button = self.marionette.find_element(*DOM.Music.controls_play)
+        # TODO: Change this to a simple tap when bug 862156 is fixed
+        Actions(self.marionette).tap(play_button).perform()

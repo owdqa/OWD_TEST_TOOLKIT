@@ -104,6 +104,8 @@ attach_preview_img_type = ("xpath", "//*[@class='attachment-container preview']"
 attach_preview_video_audio_type = ("xpath", "//*[@class='attachment-container nopreview']")
 last_message_attachment_img = ('xpath', '//*[@id="messages-container"]//li[last()]//div[@class="attachment-container preview"]')
 last_message_attachment_av = ('xpath', '//*[@id="messages-container"]//li[last()]//div[@class="attachment-container nopreview"]')
+# Use this selector, after having used either last_message_attachment_img, last_message_attachment_av
+last_message_thumbnail = ('xpath', '//div[contains(@class, "thumbnail-placeholder")]')
 
 header_call_btn = ("xpath", "//button[text()='{}']".format(_("Call")))
 header_send_message_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='sendEmail']")

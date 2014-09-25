@@ -278,57 +278,6 @@ class Messages(object):
         self.UTILS.test.TEST(boolOK, "\"" + header + "\" is the header in the SMS conversation.")
         return boolOK
 
-    def clickSMSNotifier(self, num):
-        #
-        # Click new sms in the home page status bar notificaiton.
-        #
-        self.UTILS.reporting.logResult("info",
-            "Clicking statusbar notification of new SMS from " + num + " ...")
-
-        #
-        # Switch to the 'home' frame to click the notifier.
-        #
-        self.marionette.switch_to_frame()
-        self.UTILS.statusbar.displayStatusBar()
-
-        x = (DOM.Messages.statusbar_new_sms[0],
-            DOM.Messages.statusbar_new_sms[1].format(num))
-        x = self.UTILS.element.getElement(x, "Statusbar notification for " + num)
-        x.tap()
-
-        #
-        # Switch back to the messaging app.
-        #
-        self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
-
-        #
-        # Wait for the message thread to finish loading.
-        #
-        self.UTILS.element.waitForElements(("xpath", "//h1[text()='" + num + "']"),
-                                   "SMS thread header for " + str(num), True, 20)
-        self.waitForReceivedMsgInThisThread()
-
-    def click_wap_push_notifier(self, num):
-        #
-        # Click new WAP push in the home page status bar notification.
-        #
-        self.UTILS.reporting.logResult("info", "Clicking status bar notification of new WAPPush from " + num + " ...")
-
-        #
-        # Switch to the 'home' frame to click the notifier.
-        #
-        self.marionette.switch_to_frame()
-        self.UTILS.statusbar.displayStatusBar()
-        notif = (DOM.Messages.statusbar_new_sms[0], DOM.Messages.statusbar_new_sms[1].format(num))
-        elem = self.UTILS.element.getElement(notif, "Status bar notification for " + num)
-        elem.tap()
-
-        #
-        # Switch back to the messaging app.
-        #
-        time.sleep(5)
-        self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
-
     def closeThread(self):
         #
         # Closes the current thread (returns you to the
@@ -1296,6 +1245,16 @@ class Messages(object):
         """
         send_time = self.marionette.find_element(*DOM.Messages.last_sent_message).get_attribute("data-timestamp")
         return float(send_time) / 1000
+
+    def open_attached_file(self, frame_to_change):
+        elem = DOM.Messages.last_message_attachment_av
+        last = self.UTILS.element.getElement(elem, "Last message attachment")
+        self.UTILS.element.scroll_into_view(last)
+
+        # Now get the thumbnail in order to open it
+        thumb = last.find_element(*DOM.Messages.last_message_thumbnail)
+        thumb.tap()
+        self.UTILS.iframe.switchToFrame(*frame_to_change)
 
     def openThread(self, num):
         #

@@ -14,3 +14,4 @@ progress_bar = ('xpath', '//progress[@id="player-seek-bar-progress"]')
 seek_elapsed = ('id', 'player-seek-elapsed')
 
 mix_tab = ('id', 'tabs-mix')
+controls_play = ('id', 'player-controls-play')

@@ -1,7 +1,7 @@
-from OWDTestToolkit import DOM
 import time
 import sys
-
+from OWDTestToolkit import DOM
+from OWDTestToolkit.utils.decorators import retry
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
@@ -470,6 +470,13 @@ class Contacts(object):
             'country': self.UTILS.element.getElement(DOM.Contacts.country_field, "Country field", True, 5, False),
             }
 
+    @retry(5, 5)
+    def switch_to_gmail_login_frame(self):
+        self.marionette.switch_to_frame()
+        gmail_frame = self.marionette.find_element(*DOM.Contacts.gmail_frame)
+        result = self.marionette.switch_to_frame(gmail_frame)
+        self.UTILS.reporting.debug("**** Switched to gmail frame: {}".format(result))
+
     def import_gmail_login(self, name, passwd, click_signin=True):
         #
         # Presses the Settings button, then Gmail, then logs in using
@@ -502,17 +509,8 @@ class Contacts(object):
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
         #
-        self.marionette.switch_to_frame()
+        self.switch_to_gmail_login_frame()
         try:
-            self.parent.wait_for_element_present("xpath", "//iframe[contains(@{}, '{}')]".
-                                          format(DOM.Contacts.gmail_frame[0], DOM.Contacts.gmail_frame[1]),
-                                          timeout=5)
-
-            #
-            # Switch to the gmail login frame.
-            #
-            self.UTILS.iframe.switchToFrame(*DOM.Contacts.gmail_frame)
-
             time.sleep(2)
             self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
 
@@ -534,7 +532,6 @@ class Contacts(object):
             if click_signin:
                 x = self.UTILS.element.getElement(DOM.Contacts.gmail_signIn_button, "Sign In button")
                 x.tap()
-
                 #
                 # Check to see if sigin failed. If it did then stay here.
                 #
@@ -662,6 +659,7 @@ class Contacts(object):
         self.UTILS.reporting.logResult("info", "Contacts list in the Hotmail / Outlook app:", x)
         return True
 
+    @retry(5, 5)
     def switch_to_hotmail_login_frame(self):
         self.marionette.switch_to_frame()
         hotmail_sign_in = self.marionette.find_element(*DOM.Contacts.hotmail_signin_frame)
@@ -691,7 +689,8 @@ class Contacts(object):
 
                     x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
                     x.send_keys(name)
-                except:
+                except Exception as e:
+                    self.UTILS.reporting.logResult('info', "[hotmail_username]: {}".format(e))
                     pass
 
                 x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
@@ -720,10 +719,12 @@ class Contacts(object):
                     # Sometimes a message about permissions appears.
                     #
                     self.hotmail_check_permissions(passwd)
-            except:
-                pass
-        except:
-            self.UTILS.reporting.logResult('info', 'Log in was previously done. Keep walking...')
+            except Exception as e:
+                    self.UTILS.reporting.logResult('info', "[Throbber]: {}".format(e))
+                    pass
+        except Exception as e:
+                    self.UTILS.reporting.logResult('info', "[Switch to hotmail frame]: {}".format(e))
+                    pass
 
         return True
 
