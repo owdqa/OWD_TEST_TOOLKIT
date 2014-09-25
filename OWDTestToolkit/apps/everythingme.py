@@ -194,75 +194,40 @@ class EverythingMe(object):
 
             self.UTILS.test.TEST(ok, "'{}' is now among the groups.".format(name))
 
-    def bookmark_app(self, app_name):
-        #
-        # 'Bookmarks' (installs) an app from EME (assumes everything.me is already running).
-        #
-        x = self.search_for_app(app_name)
-        if not x:
-            #
-            # No point going beyond this point.
-            #
-            return False
+    def install_app(self, category, name, expect_btn=True):
+        """Try to install an application.
 
-        x.tap()
+        Try to install the application with the given name in the given category.
+        expect_btn determines if we expect the "Add to Home Screen" button in the
+        bookmark page.
+        Returns True if the application was successfully installed.
+        """
+        self.pick_group(category)
 
-        self.marionette.switch_to_frame()
-        self.UTILS.element.waitForElements(DOM.EME.launched_button_bar, "Button bar", False)
+        self.UTILS.iframe.switchToFrame(*DOM.EME.frame_locator)
+        app_name = self.UTILS.element.getElementByXpath(DOM.EME.app_to_install.format(name)).text
 
         #
-        # Wait for the bookmark option to be enabled (can take a few seconds).
+        # Add the app to the homescreen.
         #
-        boolOK = False
-        for i in range(10):
-            x = self.marionette.find_element(*DOM.EME.launched_button_bookmark)
-            if not x.get_attribute("data-disabled"):
-                boolOK = True
-                break
+        self.add_app_to_homescreen(app_name)
 
-            time.sleep(6)
+        self.UTILS.iframe.switchToFrame(*DOM.EME.bookmark_frame_locator)
+        time.sleep(4)
 
-        x = self.UTILS.element.getElement(DOM.EME.launched_display_button_bar, "Button bar 'displayer' element")
-        x.tap()
-
-        self.UTILS.test.TEST(boolOK, "Bookmark button is enabled in the button bar.", True)
-
-        time.sleep(1)
-
-        x = self.UTILS.element.getElement(DOM.EME.launched_button_bookmark, "Button bar - bookmark button")
-        self.UTILS.test.TEST(not x.get_attribute("data-disabled"), "Bookmark button is enabled.", True)
-        x.tap()
-
-        self.marionette.switch_to_frame()
-        _boolOK = False
-        x = self.UTILS.element.getElements(DOM.EME.launched_add_to_homescreen, "Apps to be added to homescreen")
-        for i in x:
-            if i.text == app_name:
-                i.tap()
-                _boolOK = True
-                break
-
-        self.UTILS.test.TEST(_boolOK, "Adding '{}' to homescreen (app selected).".format(app_name))
-
-        self.UTILS.iframe.switchToFrame(*DOM.EME.add_to_home_screen_frame)
-        x = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult("info", "Screenshot at this point:", x)
-
-        x = self.UTILS.element.getElement(DOM.EME.add_to_home_screen_btn, "Add to homescreen (button)")
-        x.tap()
-
-        self.marionette.switch_to_frame()
-        x = self.UTILS.element.getElement(DOM.EME.launched_display_button_bar, "Button bar 'displayer' element")
-        x.tap()
-
-        x = self.UTILS.element.getElement(DOM.EME.launched_button_bookmark, "Button bar - bookmark button")
-        self.UTILS.test.TEST(x.get_attribute("data-disabled") == "true", "Bookmark button is now disabled.")
-
-        self.UTILS.test.TEST(self.UTILS.findAppIcon(app_name), "'{}' is now installed.".format(app_name))
-
-        x = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult("info", "Screenshot of the button bar:", x)
-        return True
+        result = False
+        # We expect the application to be installed, so find the Add to Home Screen button and tap it
+        if expect_btn:
+            url = self.UTILS.element.getElement(DOM.EME.bookmark_url, "Bookmark_url").get_attribute("value")
+            self.UTILS.reporting.debug("Application '{}' URL: {}".format(app_name, url))
+            add_btn = self.UTILS.element.getElement(DOM.EME.add_bookmark_btn, "Add bookmark to Home Screen Button")
+            add_btn.tap()
+            result = True
+        else:
+        # We expect the application is already installed, so find the proper header
+            title = self.UTILS.element.getElement(DOM.EME.edit_bookmark_header, "Edit link header")
+            self.UTILS.test.TEST(title, "Title '{}' found".format(title.text))
+        return result
 
     def launch_from_group(self, app_name):
         #

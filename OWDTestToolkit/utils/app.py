@@ -91,9 +91,8 @@ class app(object):
             return False
 
     def findAppIcon(self, app_name):
-        #
-        # Scroll around the homescreen until we find our app icon.
-        #
+        """Try to find an application icon in the homescreen.
+        """
         self.parent.home.goHome()
 
         try:
@@ -110,25 +109,6 @@ class app(object):
         except Exception as e:
             self.parent.reporting.error("*** Error detected: {}".format(e))
 
-#===============================================================================
-#        self.parent.home.scrollHomescreenRight()
-#        time.sleep(0.5)
-# 
-#        _pages = self.parent.element.getElements(DOM.Home.app_icon_pages, "Homescreen icon pages")
-#        for i in _pages:
-#            try:
-#                #
-#                # If this works, then the icon is visible at the moment.
-#                #
-#                x = self.marionette.find_element('xpath', DOM.Home.app_name_xpath.format(app_name))
-#                self.parent.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
-#                if x.is_displayed():
-#                    return x
-#            except:
-#                pass
-# 
-#            self.parent.home.scrollHomescreenRight()
-#===============================================================================
         return False
 
     def isAppInstalled(self, app_name):

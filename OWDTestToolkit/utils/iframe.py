@@ -65,6 +65,19 @@ class iframe(object):
         except:
             return False
 
+    def switch_to_frame(self, name, exact=False):
+        if name is None:
+            self.marionette.switch_to_frame()
+            return
+        frames = self.marionette.find_elements("tag name", "iframe")
+        frame = None
+        for f in frames:
+            src = f.get_attribute("src")
+            if name in src and (name == src) == exact:
+                frame = f
+                break
+        return self.marionette.switch_to_frame(frame)
+
     def switchToFrame(self, attrib, value, quit_on_error=True, via_root_frame=True, test=True):
         #
         # Switch to the iframe containing the attribute value <b>value</b>.<br>
