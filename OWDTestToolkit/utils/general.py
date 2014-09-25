@@ -315,3 +315,18 @@ class general(object):
         self.parent.reporting.debug(">>> Trying to connect to cell data...")
         self.parent.data_layer.connect_to_cell_data()
         self.parent.reporting.debug("    Connected: {}".format(self.parent.data_layer.is_cell_data_connected))
+
+    # TODO: Uncomment this method when we finally move MockContact to this repository
+    # def insert_some_mock_contacts(self, number_of_contacts):
+    #     contact_given = "Test"
+    #     contact_family = map(str, range(1, number_of_contacts + 1))
+    #     contact_name = ["{} {}".format(contact_given, contact_family[i])
+    #                          for i in range(number_of_contacts)]
+
+    #     contact_numbers = [str(i)*12 for i in range(1, number_of_contacts + 1)]
+
+    #     test_contacts = [MockContact(name=contact_name[i], givenName=contact_given,
+    #                                       familyName=contact_family[i],
+    #                                       tel={'type': 'Mobile', 'value': contact_numbers[i]})
+    #                           for i in range(number_of_contacts)]
+    #     map(insertContact, test_contacts)

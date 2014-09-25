@@ -1,8 +1,10 @@
 import time
+import os
 from OWDTestToolkit import DOM
+from OWDTestToolkit.apps.browser import Browser
 from marionette import Actions
 from OWDTestToolkit.utils.decorators import retry
-
+# from tests._mock_data.contacts import MockContact
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
@@ -19,7 +21,10 @@ class Loop(object):
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
         self.actions = Actions(self.marionette)
+        self.browser = Browser(self.parent)
         self.app_name = "Firefox Hello"
+        self.market_url = "https://owd.tid.es/B3lg1r89n/market/appList.html"
+        self.persistent_directory = "/data/local/storage/persistent"
 
     def launch(self):
         """
@@ -29,6 +34,54 @@ class Loop(object):
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
+
+    def is_installed(self):
+        return self.apps.is_app_installed(self.app_name)
+    
+    def install(self):
+        # Make sure we install the latest version
+        self.update_and_publish()
+
+        self.browser.launch()
+        time.sleep(1)
+        self.browser.open_url(self.market_url)
+
+        loop_link = self.UTILS.element.getElement(
+            ('xpath', '//p[contains(text(), "{}")]'.format(self.app_name)), "App link")
+        loop_link.tap()
+
+        self.marionette.switch_to_frame()
+        install_ok = self.UTILS.element.getElement(DOM.GLOBAL.app_install_ok, "Install button")
+        install_ok.tap()
+
+        msg = "{} installed".format(self.app_name)
+        installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
+        self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
+
+    def reinstall(self):
+        self.uninstall()
+        time.sleep(2)
+        self.install()
+
+    def uninstall(self):
+        self.UTILS.reporting.logResult('info', "uninstalling.........")
+        self.apps.uninstall(self.app_name)
+        self.parent.wait_for_condition(lambda m: not self.apps.is_app_installed(
+            self.app_name), timeout=20, message="{} is not installed".format(self.app_name))
+
+    def update_and_publish(self):
+        self.loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_DIR")
+        self.publish_loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_AUX_FILES")
+
+        result= os.popen("cd {} && ./publish_app.sh {}".format(self.publish_loop_dir, self.loop_dir)).read()
+        chops = result.split("\n")
+        self.UTILS.reporting.logResult('info', "result: {}".format(chops))
+        self.UTILS.test.TEST("And all done, hopefully." in chops, "The script to publish an app is OK", True)
+    
+    def update_db(self, local_dir):
+        loop_dir = os.popen("adb shell ls {} | grep loop".format(self.persistent_directory)).read().rstrip()
+        target_dir = "{}/{}/idb/".format(self.persistent_directory, loop_dir)
+        os.system("cd {} && adb push . {}".format(local_dir, target_dir))
 
     def _fill_fxa_field(self, field_locator, text):
         """ Auxiliary method to fill "Firefox account login" fields
@@ -80,13 +133,14 @@ class Loop(object):
                     self.parent.wait_for_element_displayed(*header)
                     return False
                 except:
-                    self.UTILS.test.TEST(False, "Ooops. Something went wrong")
+                    self.UTILS.test.TEST(False, "Ooops. Something went wrong", True)
 
     def get_wizard_steps(self):
         """ Returns the number of steps of the wizard
         """
         return len(self.marionette.find_elements(*DOM.Loop.wizard_slideshow_step))
 
+    @retry(5)
     def skip_wizard(self):
         """ Skips first time use wizard by flicking the screen
         """
