@@ -689,8 +689,8 @@ class Contacts(object):
 
                     x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
                     x.send_keys(name)
-                except Exception, e:
-                    self.UTILS.reporting.logResult('info', "[hotmail_username] Da fuck is this. Da fuck is that: {}".format(e))
+                except Exception as e:
+                    self.UTILS.reporting.logResult('info', "[hotmail_username]: {}".format(e))
                     pass
 
                 x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
@@ -719,11 +719,11 @@ class Contacts(object):
                     # Sometimes a message about permissions appears.
                     #
                     self.hotmail_check_permissions(passwd)
-            except Exception, e:
-                    self.UTILS.reporting.logResult('info', "[Throbber]Da fuck is this. Da fuck is that: {}".format(e))
+            except Exception as e:
+                    self.UTILS.reporting.logResult('info', "[Throbber]: {}".format(e))
                     pass
-        except Exception, e:
-                    self.UTILS.reporting.logResult('info', "[Switch to hotmail frame]Da fuck is this. Da fuck is that: {}".format(e))
+        except Exception as e:
+                    self.UTILS.reporting.logResult('info', "[Switch to hotmail frame]: {}".format(e))
                     pass
 
         return True
