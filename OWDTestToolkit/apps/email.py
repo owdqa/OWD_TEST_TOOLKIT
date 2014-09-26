@@ -140,30 +140,27 @@ class Email(object):
         # Open the message.
         #
         self.openMsg(subject)
+        time.sleep(5)
 
         #
         # Press the delete button and confirm deletion.
         #
-        x = self.UTILS.element.getElement(DOM.Email.delete_this_email_btn, "Delete button")
-        x.tap()
+        delete_btn = self.UTILS.element.getElement(DOM.Email.delete_this_email_btn, "Delete button")
+        delete_btn.tap()
 
         #
         # Horrific, but there's > 1 button with this id and > 1 button with this text.
         # For some reason, I can't wait_for_displayed() here either, so I have to wait for the buttons
         # to be 'present' (not 'displayed'), then look through them until I find the one I want.
         #
-        x = self.UTILS.element.getElements(DOM.Email.delete_confirm_buttons, "Confirmation buttons", False, 2, False)
-        for i in x:
-            if i.is_displayed() and i.text == "Delete":
-                self.UTILS.reporting.logResult("info", "Clicking confirmation button.")
-                # (click, not tap!)
-                i.click()
-                break
-
+        delete_confirm = self.UTILS.element.getElement(DOM.Email.confirmation_delete_ok, "Confirmation button")
+        delete_confirm.tap()
+        
         #
         # "1 message deleted" displayed.
         #
-        x = self.UTILS.element.getElement(DOM.Email.deleted_email_notif, "Email deletion notifier")
+        self.UTILS.element.waitForElements(DOM.Email.deleted_email_notif, "Email deletion notifier")
+        self.UTILS.element.waitForNotElements(DOM.Email.deleted_email_notif, "Email deletion notifier")
 
         #
         # Refresh and check that the message is no longer in the inbox.
@@ -864,11 +861,12 @@ class Email(object):
             #
             # It's not setup already, so prepare to set it up!
             #
-            x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
-            x.tap()
+            set_settings = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Settings set button")
+            set_settings.tap()
 
-            x = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
-            x.tap()
+            add_account_btn = self.UTILS.element.getElement(DOM.Email.settings_add_account_btn, "Add account button")
+            time.sleep(2)
+            add_account_btn.tap()
             return True
 
     def switchAccount(self, address):

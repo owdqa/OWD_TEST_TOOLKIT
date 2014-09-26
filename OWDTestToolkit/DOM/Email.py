@@ -32,7 +32,8 @@ compose_cc = ('class name', 'cmp-cc-text cmp-addr-text')
 compose_bcc = ('class name', 'cmp-bcc-text cmp-addr-text')
 compose_subject = ('class name', 'cmp-subject-text')
 
-compose_msg = ('class name', 'cmp-body-text')  # Caution: there's >1 of these in the html!
+# Caution: there's >1 of these in the html!
+compose_msg = ('class name', 'cmp-body-text') 
 
 reply_btn = ('class name', "msg-reply-btn")
 reply_menu_reply = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-reply"]')
@@ -79,12 +80,13 @@ open_email_from = ('xpath', "//div[@class='msg-envelope-line msg-envelope-from-l
 open_email_to = ('xpath', "//div[@class='msg-envelope-line msg-envelope-to-line']//span[@class='msg-peep-content' or @class='msg-peep-content msg-peep-address']")
 open_email_subject = ('class name', 'msg-envelope-subject')
 open_email_attached_file = ("xpath", "//ul[@class='msg-attachments-container']/li[contains(@class, 'msg-attachment-item')]")
+open_email_body = ('class name', 'msg-body-content')
+open_email_body_link = ("css selector", "a.moz-external-link")
 
 # NOTE: complex, but there's > 1 of these so you have to be this specific!
-delete_this_email_btn = ("xpath", "//div[@class='msg-reader-action-toolbar bottom-toolbar']//button[@class='msg-delete-btn bottom-btn']")
+delete_this_email_btn = ('xpath', '//button[@class="icon msg-delete-btn"]')
 # NOTE: Nightmare - you need to getElements(this, desc, False) and loop through the list, there's > 1 of everything here!!
-delete_confirm_buttons = ("xpath", "//button[@id='msg-delete-ok']")
-deleted_email_notif = ("xpath", ".//*[@id='cardContainer']//p[text()='{}']".format(_("1 message deleted")))
+deleted_email_notif = ("xpath", "//section[contains(@class, 'banner customized')]//p[text()='{}']".format(_("1 message deleted")))
 
 confirm_ok = ("xpath", '//form[@class="confirm-dialog-form"]//button[@data-l10n-id="dialog-button-ok"]')
 email_not_setup_ok = ('xpath', '//button[@class="confirm-dialog-ok recommend"]')
@@ -101,3 +103,10 @@ switch_account_scroll_outer = ('xpath', '//div[@class="fld-acct-scrollouter"]')
 switch_account_scroll = ('class name', 'fld-acct-header closed')
 switch_account_current_account = ('xpath', '//div[@class="fld-acct-scrollouter"]//a[@class="fld-acct-header closed"]//span[@class="fld-acct-header-account-label"]')
 switch_account_accounts_to_change = ('xpath', '//div[@class="fld-accountlist-container"]//a[@class="fld-account-item"]//span[@class="fld-account-name"]') # This selector does not return the current account
+
+# Open external link confirmation
+confirmation_browser_cancel = ('id', 'msg-browse-cancel')
+confirmation_browser_ok = ('id', 'msg-browse-ok')
+
+confirmation_delete_cancel = ('id', 'msg-delete-cancel')
+confirmation_delete_ok = ('id', 'msg-delete-ok')
