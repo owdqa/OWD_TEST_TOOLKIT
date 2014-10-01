@@ -84,7 +84,7 @@ open_email_body = ('class name', 'msg-body-content')
 open_email_body_link = ("css selector", "a.moz-external-link")
 
 # NOTE: complex, but there's > 1 of these so you have to be this specific!
-delete_this_email_btn = ('xpath', '//button[@class="icon msg-delete-btn"]')
+delete_this_email_btn = ('xpath', '//div[@class="card-message-reader card center"]//button[@class="icon msg-delete-btn"]')
 # NOTE: Nightmare - you need to getElements(this, desc, False) and loop through the list, there's > 1 of everything here!!
 deleted_email_notif = ("xpath", "//section[contains(@class, 'banner customized')]//p[text()='{}']".format(_("1 message deleted")))
 
