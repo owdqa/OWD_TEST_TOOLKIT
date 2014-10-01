@@ -118,7 +118,7 @@ hotmail_password = ("id", "i0118")
 hotmail_signIn_button = ("id", "idSIButton9")
 hotmail_permission_accept = ("id", "idBtn_Accept")
 hotmail_login_extra_msg = ("id", "idDiv_FSI_HeaderInfo")
-hotmail_login_error_msg = ("xpath", "//*[contains(@id, 'error')")
+hotmail_login_error_msg = ("id", "idTd_Tile_ErrorMsg_Login")
 hotmail_import_frame = ("src", "live")  # It's in the contacts iframe.
 hotmail_import_frame2 = ("data-url", "live")  # It's in the contacts iframe.
 

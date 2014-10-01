@@ -639,7 +639,7 @@ class Contacts(object):
         #
         # Change to import frame -> it is whithin Contacts frame
         #
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_import_frame, via_root_frame=False)
+        self.hotmail_login(name, passwd, click_signin)
 
         #
         # Check to see if the 'all friends are imported' message is being
@@ -662,8 +662,8 @@ class Contacts(object):
     @retry(5, 5)
     def switch_to_hotmail_login_frame(self):
         self.marionette.switch_to_frame()
-        hotmail_sign_in = self.marionette.find_element(*DOM.Contacts.hotmail_signin_frame)
-        result = self.marionette.switch_to_frame(hotmail_sign_in)
+        #hotmail_sign_in = self.marionette.find_element(*DOM.Contacts.hotmail_signin_frame)
+        result = self.UTILS.iframe.switch_to_frame("", True)
         self.UTILS.reporting.debug("**** Switched to hotmail frame: {}".format(result))
 
     def hotmail_login(self, name, passwd, click_signin):
@@ -691,16 +691,13 @@ class Contacts(object):
                     x.send_keys(name)
                 except Exception as e:
                     self.UTILS.reporting.logResult('info', "[hotmail_username]: {}".format(e))
-                    pass
 
                 x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
                 x.send_keys(passwd)
 
                 if click_signin:
                     x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
-                    self.UTILS.reporting.debug("Sign in button: {}".format(x.value))
                     self.UTILS.element.simulateClick(x)
-                    self.UTILS.reporting.debug("Simulated click")
 
                     #
                     # Check to see if sign in failed. If it did then return False.
@@ -714,17 +711,10 @@ class Contacts(object):
                     except:
                         x = self.UTILS.debug.screenShotOnErr()
                         self.UTILS.reporting.logResult("info", "<b>Login succeeded!</b> Screenshot and details:", x)
-
-                    #
-                    # Sometimes a message about permissions appears.
-                    #
-                    self.hotmail_check_permissions(passwd)
             except Exception as e:
-                    self.UTILS.reporting.logResult('info', "[Throbber]: {}".format(e))
-                    pass
+                self.UTILS.reporting.logResult('info', "[Throbber]: {}".format(e))
         except Exception as e:
-                    self.UTILS.reporting.logResult('info', "[Switch to hotmail frame]: {}".format(e))
-                    pass
+            self.UTILS.reporting.logResult('info', "[Switch to hotmail frame]: {}".format(e))
 
         return True
 
@@ -734,7 +724,7 @@ class Contacts(object):
             It assumes it is already the contact_view
         """
         fav_button = element or self.UTILS.element.getElement(DOM.Contacts.favourite_button, "Favourite toggle button")
-        
+
         classes = fav_button.get_attribute("class").split()
         try:
             classes.index("on")
@@ -747,16 +737,23 @@ class Contacts(object):
         # Sometimes hotmail asks for permission - just accept it if it's there.
         #
         try:
+            self.UTILS.reporting.debug("*** Entering hotmail_check_permissions")
+            self.marionette.start_session()
             self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_permission_accept, timeout=2)
+            self.UTILS.reporting.debug(">>> Finding element hotmail_permission_accept")
             x = self.marionette.find_element(*DOM.Contacts.hotmail_permission_accept)
             x.tap()
+            self.UTILS.reporting.debug(">>> Get element hotmail password")
             x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
             x.send_keys(passwd)
+            self.UTILS.reporting.debug(">>> Get element hotmail sign in button")
             x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
             x.tap()
+            self.UTILS.reporting.debug(">>> Wait for not elements import throbber")
             self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
-        except:
-            pass
+            self.UTILS.reporting.debug(">>> Ending checking hotmail permissions")
+        except Exception as e:
+            self.UTILS.reporting.debug("*** Error checking hotmail permissions: {}".format(e))
 
     def check_all_friends_imported(self):
         #
