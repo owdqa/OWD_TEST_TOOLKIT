@@ -140,36 +140,25 @@ class Email(object):
         # Open the message.
         #
         self.openMsg(subject)
-        time.sleep(5)
 
         #
         # Press the delete button and confirm deletion.
         #
-        delete_btn = self.UTILS.element.getElement(DOM.Email.delete_this_email_btn, "Delete button")
+        delete_btn = self.UTILS.element.getElementByXpath(DOM.Email.delete_this_email_btn[1])
         delete_btn.tap()
-
-        #
-        # Horrific, but there's > 1 button with this id and > 1 button with this text.
-        # For some reason, I can't wait_for_displayed() here either, so I have to wait for the buttons
-        # to be 'present' (not 'displayed'), then look through them until I find the one I want.
-        #
         delete_confirm = self.UTILS.element.getElement(DOM.Email.confirmation_delete_ok, "Confirmation button")
         delete_confirm.tap()
         
-        #
-        # "1 message deleted" displayed.
-        #
         self.UTILS.element.waitForElements(DOM.Email.deleted_email_notif, "Email deletion notifier")
-        self.UTILS.element.waitForNotElements(DOM.Email.deleted_email_notif, "Email deletion notifier")
 
         #
         # Refresh and check that the message is no longer in the inbox.
         #
-        x = self.marionette.find_element(*DOM.Email.folder_refresh_button)
-        x.tap()
-        time.sleep(5)
-        x = self.UTILS.element.getElements(DOM.Email.folder_subject_list, "Email messages in this folder")
+        refresh_btn = self.marionette.find_element(*DOM.Email.folder_refresh_button)
+        refresh_btn.tap()
+        time.sleep(2)
 
+        x = self.UTILS.element.getElements(DOM.Email.folder_subject_list, "Email messages in this folder")
         self.UTILS.test.TEST(x[0].text != subject, "Email '" + subject + "' no longer found in this folder.", False)
 
     def emailIsInFolder(self, subject):
@@ -408,21 +397,13 @@ class Email(object):
 
         self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
         compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
-
-        screenshot = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult('info', "Screenshot before tapping 'Compose msg btn'", screenshot)
-
         compose_new_msg_btn.tap()
 
-        #
         # Sometimes, the tap on the "Compose message button" does not work, resulting in a failed test
         # Let's try to do something about it
-        #
         self.parent.wait_for_condition(lambda m: self._is_composed_btn_tapped(),
                                         timeout=30, message="'Compose message' button tapped")
-        #
         # Put items in the corresponsing fields.
-        # 
         if type(p_target) is list:
             for addr in p_target:
                 self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", addr, True, False, True, False)
@@ -456,24 +437,16 @@ class Email(object):
         # It assumes we already are viewing that message
         #
         
-        #
         # Get who sent us the email
-        #
         from_field = self.UTILS.element.getElement(DOM.Email.open_email_from, "'From' field").text
         
         reply_btn = self.UTILS.element.getElement(DOM.Email.reply_btn, "Reply message button")
         reply_btn.tap()
-
-        #
-        # Now choose the "Reply" option
-        #
         
         reply_opt = self.UTILS.element.getElement(DOM.Email.reply_menu_reply, "'Reply' option button")
         reply_opt.tap()
 
-        #
         # Wait for 'compose message' header.
-        #
         x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
         time.sleep(5)
@@ -494,9 +467,7 @@ class Email(object):
         # self.UTILS.reporting.logResult("info", "'To' field: {}".format(to_field))
         # self.UTILS.test.TEST(from_field == to_field, "Checking we are replying correctly")
 
-        #
         # Write some reply content
-        #
         self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False, False)
 
         self.replyTheMessage(from_field.split("@")[0])
@@ -507,45 +478,30 @@ class Email(object):
         # It assumes we already are viewing that message
         #
         
-        #
         # Get who sent us the email
-        #
         from_field = self.UTILS.element.getElement(DOM.Email.open_email_from, "'From' field").text
         
         reply_btn = self.UTILS.element.getElement(DOM.Email.reply_btn, "Reply message button")
         reply_btn.tap()
 
-        #
         # Now choose the "Reply all" option
-        #
         reply_opt = self.UTILS.element.getElement(DOM.Email.reply_menu_reply_all, "'Reply all' option button")
         reply_opt.tap()
 
-        #
         # Wait for 'compose message' header.
-        #
         self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
         time.sleep(5)
 
-        #
         # Check the sender is not included in the 'To' field
-        #
         bubbles = self.UTILS.element.getElements(('css selector', '.cmp-to-container.cmp-addr-container .cmp-bubble-container .cmp-peep-name'), 
                                             '"To" field bubbles')
-
         bubbles_text = [bubble.text for bubble in bubbles]
-
-        self.UTILS.reporting.logResult("info", "Content of To field (bubbles): {}".format(bubbles_text))
-        self.UTILS.reporting.logResult("info", "Username: {}".format(sender['username']))
-        x = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult("info", "Screen shot of REPLY ALL:", x)
 
         if sender['username'] in bubbles_text:
             self.UTILS.test.TEST(False, "Sender ({}) must not appear in the 'To field' when replying".format(sender['username']), True)
-        #
+
         # Write some reply content
-        #
         self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False, False)
 
         self.replyTheMessage(from_field.split("@")[0])
@@ -556,30 +512,22 @@ class Email(object):
         # It assumes we already are viewing that message
         #
         
-        #
         # Get who sent us the email
-        #
         from_field = self.UTILS.element.getElement(DOM.Email.open_email_from, "'From' field").text
         
         reply_btn = self.UTILS.element.getElement(DOM.Email.reply_btn, "Reply message button")
         reply_btn.tap()
 
-        #
-        # Now choose the "Reply all" option
-        #
+        # Now choose the "Forward" option
         fw_opt = self.UTILS.element.getElement(DOM.Email.reply_menu_forward, "'Forward' option button")
         fw_opt.tap()
 
-        #
         # Wait for 'compose message' header.
-        #
         self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
                                   "Compose message header")
         time.sleep(5)
 
-        #
         # Put items in the corresponding fields.
-        #
         if type(p_target) is list:
             for addr in p_target:
                 self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", addr, True, False, True, False)
@@ -587,9 +535,7 @@ class Email(object):
         else:
             self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", p_target, True, False)
 
-        #
         # Write some reply content
-        #
         self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", fwd_message, True, True, False, False)
 
         if attach:
@@ -608,10 +554,8 @@ class Email(object):
 
         self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
 
-        #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
-        #
         self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
         
@@ -623,8 +567,6 @@ class Email(object):
         # self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
         #                                       False)
         #                                       
-
-
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(sender_name))
         self.UTILS.element.waitForElements(x, "Previous received message", True, 120)
 
@@ -637,10 +579,8 @@ class Email(object):
         x.tap()
         self.UTILS.element.waitForElements(DOM.Email.compose_sending_spinner, "Sending email spinner")
 
-        #
         # Wait for inbox to re-appear (give it a BIG wait time because sometimes
         # it just needs it).
-        #
         self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
         
@@ -651,9 +591,6 @@ class Email(object):
         #                                        False)
         # self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
         #                                       False)
-        #   
-        #   
-
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox")))
         self.UTILS.element.waitForElements(x, "Inbox", True, 120)
 
@@ -702,58 +639,39 @@ class Email(object):
         if not self.no_existing_account(email):
             return
 
-        #
         # (At this point we are now in the 'New account' screen by one path or
         # another.)
-        #
         self.UTILS.general.typeThis(DOM.Email.username, "Username field", user, True, True, False)
         self.UTILS.general.typeThis(DOM.Email.email_addr, "Address field", email, True, True, False)
         self.UTILS.general.typeThis(DOM.Email.password, "Password field", passwd, True, True, False)
 
-        #
         # Now tap on Manual setUp
-        #
         manual_setup = self.UTILS.element.getElement(DOM.Email.manual_setup, "Manual setup button")
         manual_setup.tap()
 
-        #
         # Check that we are indeed setting up an account manually
-        #
         self.UTILS.element.waitForElements(DOM.Email.manual_setup_sup_header, "Manual setup header", True, 5)
 
-        #
         # Change the account type to ActiveSync
-        #
         account_type = self.UTILS.element.getElement(DOM.Email.manual_setup_account_type, "Account type select")
         account_type.tap()
 
-        #
         # Change to top frame is needed in order to be able of choosing an option
-        #
         self.marionette.switch_to_frame()
         self.UTILS.element.waitForElements(DOM.Email.manual_setup_account_options, "Account type options", True, 5)
-
-        #
         # Select active sync
-        #
         elem = (DOM.Email.manual_setup_account_option[0], DOM.Email.manual_setup_account_option[1].format("ActiveSync"))
         active_sync = self.UTILS.element.getElement(elem, "ActiveSync option")
         active_sync.tap()
 
-        #
         # Confirm
-        #
         ok_btn = self.UTILS.element.getElement(DOM.Email.manual_setup_account_type_ok, "Ok button")
         ok_btn.tap()
 
-        #
         # Going back to Email frame
-        #
         self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
 
-        #
         #  Finish setting things up
-        #
         self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_host, "Active Sync Hostname field", hostname,
                                     True, True, False)
         self.UTILS.general.typeThis(DOM.Email.manual_setup_activesync_user, "Active Sync Username field", user, True,
@@ -767,9 +685,7 @@ class Email(object):
         x = self.UTILS.element.getElement(DOM.Email.login_account_prefs_next_btn, "Next button", True, 60)
         x.tap()
 
-        #
         # Click the 'continue to mail' button.
-        #
         time.sleep(1)
         x = self.UTILS.element.getElement(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button", True, 60)
         x.tap()
