@@ -57,3 +57,6 @@ app_install_cancel = ('id', 'app-install-cancel-button')
 # Bottom toaster
 system_banner = ('xpath', '//section[@data-z-index-level="system-notification-banner"]')
 system_banner_msg = ('xpath', '//section[@data-z-index-level="system-notification-banner"]//p[contains(text(), "{}")]')
+
+charge_warning = ('css selector', '#charge-warning.visible')
+charge_warning_ok_btn = ('id', 'charge-warning-ok')

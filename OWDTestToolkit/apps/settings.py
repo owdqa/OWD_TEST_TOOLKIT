@@ -19,21 +19,19 @@ class Settings(object):
         #
         # Launch the app.
         #
+        try:
+            self.marionette.switch_to_frame()
+            self.wait_for_element_displayed(*DOM.GLOBAL.charge_warning)
+            ok_btn = self.UTILS.element.getElement(DOM.GLOBAL.charge_warning_ok_btn, "OK Button")
+            ok_btn.tap()
+        except:
+            pass
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def wait_for_option_to_be_enabled(self, locator):
-        #
-        # Wait for option to be enabled
-        #
-        # self.parent.wait_for_element_displayed(*locator)
-        # option = self.marionette.find_element(*locator)
-
-        # while option.get_attribute("aria-disabled"):
-        #     option = self.marionette.find_element(*locator)
-        #     continue
         self.parent.wait_for_condition(lambda m: m.find_element(*locator).get_attribute("aria-disabled") is None,
                                          timeout=30, message="Option to be enabled")
 
@@ -46,7 +44,7 @@ class Settings(object):
 
         #
         # In case the device supports dual sim, we have to select one before
-        # entering the call_settings menu. 
+        # entering the call_settings menu.
         #
         try:
             elem = (DOM.Settings.call_settings_sim_card_number[0],
@@ -125,7 +123,8 @@ class Settings(object):
         # entering the call_settings menu.
         #
         sim_card_option = self.get_multi_sim(sim_card_number)
-        sim_card_option.tap()
+        if sim_card_option:
+            sim_card_option.tap()
 
         self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
 
