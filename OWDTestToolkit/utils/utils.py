@@ -69,3 +69,8 @@ class UTILS(object):
         self.reporting.logResult("debug", "Initializing 'UTILS' took {} seconds.".format(elapsed))
         current_lang = parent.data_layer.get_setting("language.current").split('-')[0]
         self.reporting.log_to_file("Current Toolkit language: [{}]".format(current_lang))
+        try:
+            btn = self.marionette.find_element('id', 'charge-warning-ok')
+            btn.tap()
+        except:
+            pass

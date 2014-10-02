@@ -80,7 +80,7 @@ TOTAL_CSV_FILE="/var/www/html/owd_tests/total_csv_file_CERT.csv"
     # Only first substring of $DEVICE_BUILDNAME
     printf "%s," $DEVICE_BUILDNAME_cert | sed -e "s/.Gecko.*/,/g" | sudo tee -a $TOTAL_CSV_FILE
     # URL without prefix (http://hostname/owd-qa)
-    printf "%s/" "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $TOTAL_CSV_FILE
+    printf "%s/" "$HTML_FILEDIR" | sed -e "s/http:\/\/ci-owd-deven-01\/owd_tests//g" | sudo tee -a $TOTAL_CSV_FILE
     printf "\n" | sudo tee -a $TOTAL_CSV_FILE
 
     # TODO 1: Done from Jenkins
@@ -128,7 +128,7 @@ PARTIAL_CSV_FILE="$ALTERNATIVE_RESULTS_DIR/partial_csv_file_NEW_CERT.csv"
     # Only first substring of $DEVICE_BUILDNAME
     printf "%s," $DEVICE_BUILDNAME_cert | sed -e "s/.Gecko.*/,/g" | sudo tee -a $PARTIAL_CSV_FILE
     # URL without prefix (http://hostname/owd-qa)
-    printf "%s/" "$HTML_FILEDIR" | sed -e "s/http:\/\/owd-qa-server\/owd_tests//g" | sudo tee -a $PARTIAL_CSV_FILE
+    printf "%s/" "$HTML_FILEDIR" | sed -e "s/http:\/\/ci-owd-deven-01\/owd_tests//g" | sudo tee -a $PARTIAL_CSV_FILE
     printf "\n" | sudo tee -a $PARTIAL_CSV_FILE
 
     # TODO 3: Done from Jenkins
