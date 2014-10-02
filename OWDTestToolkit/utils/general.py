@@ -37,6 +37,7 @@ class general(object):
         except:
             self.parent.reporting.logResult('debug',  "Marionette session still running")
             pass
+        self.parent.parent.apps.switch_to_displayed_app()
 
     def clearGeolocPermission(self, allow_geoloc=False):
         #
@@ -330,3 +331,6 @@ class general(object):
     #                                       tel={'type': 'Mobile', 'value': contact_numbers[i]})
     #                           for i in range(number_of_contacts)]
     #     map(insertContact, test_contacts)
+
+    def show_all_settings(self):
+        self.parent.reporting.debug("** Device current settings: {}".format(self.parent.data_layer.all_settings))

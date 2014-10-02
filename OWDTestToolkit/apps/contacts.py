@@ -626,37 +626,11 @@ class Contacts(object):
             #
             return True
 
-        #
-        # Go to the hotmail import iframe.
-        #
         self.UTILS.reporting.logResult('info', "Doing the switch to contacts......")
         time.sleep(2)
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
         screenshot = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult('info', "Screenshot before switching", screenshot)
-
-        #
-        # Change to import frame -> it is whithin Contacts frame
-        #
-        self.hotmail_login(name, passwd, click_signin)
-
-        #
-        # Check to see if the 'all friends are imported' message is being
-        # displayed.
-        #
-        all_imported = self.check_all_friends_imported()
-
-        if all_imported:
-            return "ALLIMPORTED"
-
-        #
-        # Wait for the hotmail contacts for this p_user to be displayed.
-        #
-        self.UTILS.element.waitForElements(DOM.Contacts.import_conts_list, "Contacts list")
-
-        x = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult("info", "Contacts list in the Hotmail / Outlook app:", x)
         return True
 
     @retry(5, 5)
@@ -687,35 +661,34 @@ class Contacts(object):
                 try:
                     self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
 
-                    x = self.marionette.find_element(*DOM.Contacts.hotmail_username)
-                    x.send_keys(name)
+                    user_input = self.marionette.find_element(*DOM.Contacts.hotmail_username)
+                    user_input.send_keys(name)
                 except Exception as e:
                     self.UTILS.reporting.logResult('info', "[hotmail_username]: {}".format(e))
 
-                x = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
-                x.send_keys(passwd)
+                passwd_input = self.UTILS.element.getElement(DOM.Contacts.hotmail_password, "Password field")
+                passwd_input.send_keys(passwd)
 
                 if click_signin:
-                    x = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
-                    self.UTILS.element.simulateClick(x)
+                    signin_btn = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
+                    self.UTILS.element.simulateClick(signin_btn)
 
                     #
                     # Check to see if sign in failed. If it did then return False.
                     #
                     try:
-                        self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_login_error_msg)
-
-                        x = self.UTILS.debug.screenShotOnErr()
-                        self.UTILS.reporting.logResult("info", "<b>Login failed!</b> Screenshot and details:", x)
-                        return False
+                        self.marionette.switch_to_frame()
+                        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+                        self.parent.wait_for_element_displayed("id", "fb-curtain", timeout=10)
+                        self.UTILS.reporting.debug("*** Login succeeded!")
+                        self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_import_frame, via_root_frame=False)
                     except:
-                        x = self.UTILS.debug.screenShotOnErr()
-                        self.UTILS.reporting.logResult("info", "<b>Login succeeded!</b> Screenshot and details:", x)
+                        self.UTILS.reporting.debug("*** Login failed! Returning False")
+                        return False
             except Exception as e:
                 self.UTILS.reporting.logResult('info', "[Throbber]: {}".format(e))
         except Exception as e:
             self.UTILS.reporting.logResult('info', "[Switch to hotmail frame]: {}".format(e))
-
         return True
 
     def is_contact_a_favorite(self, element=None):
