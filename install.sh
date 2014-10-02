@@ -86,4 +86,3 @@ sudo python setup.py clean --all >> $LOGFILE 2>&1
 sudo python setup.py install >> $LOGFILE 2>&1
 
 [ ! -d "/tmp/tests" ] && mkdir /tmp/tests >/dev/null 2>&1
-
