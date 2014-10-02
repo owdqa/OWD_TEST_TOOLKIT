@@ -1,4 +1,4 @@
-s#!/bin/bash
+#!/bin/bash
 
 # Create file containing the required vars...
 export OWD_TEST_TOOLKIT_DIR=$(pwd)
