@@ -101,10 +101,7 @@ class statusbar(object):
         if p_type == "airplane":
             locator = DOM.Statusbar.toggle_airplane
 
-        boolReturn = self._toggle_and_wait(locator, p_type)
-
-        self.parent.home.touchHomeButton()
-        return boolReturn
+        return self._toggle_and_wait(locator, p_type)
 
     def _toggle_and_wait(self, locator, p_type):
         #
