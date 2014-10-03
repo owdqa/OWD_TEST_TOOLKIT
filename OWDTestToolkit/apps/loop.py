@@ -381,7 +381,7 @@ class Loop(object):
         self.actions.long_press(entry, 2).perform()
         self._select_action("revoke")
 
-    def delete_all_urls(self, cancel=False):
+    def delete_all_urls(self, cancel=False, decission=True):
         self.parent.wait_for_element_displayed(*DOM.Loop.settings_clean_shared_links)
         self.marionette.find_element(*DOM.Loop.settings_clean_shared_links).tap()
 
@@ -390,6 +390,7 @@ class Loop(object):
             self.marionette.find_element(*DOM.Loop.form_action_cancel).tap()
         else:
             self._select_action("cleanAll")
+            self._confirm(decission)
 
     def delete_just_revoked(self, cancel=False):
         self.parent.wait_for_element_displayed(*DOM.Loop.settings_clean_shared_links)
