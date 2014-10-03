@@ -60,3 +60,6 @@ system_banner_msg = ('xpath', '//section[@data-z-index-level="system-notificatio
 
 charge_warning = ('css selector', '#charge-warning.visible')
 charge_warning_ok_btn = ('id', 'charge-warning-ok')
+
+# Frame
+frame_containing = ("xpath","//iframe[contains({},'{}')]")
