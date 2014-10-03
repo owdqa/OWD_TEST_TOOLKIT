@@ -1,9 +1,13 @@
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
 status_bar_new = ('xpath', "//*[@id='statusbar-notification'][@data-unread='true']")
 wifi = ('id', 'statusbar-wifi')
 dataConn = ('css selector', '#statusbar-connections .statusbar-data')
+dataConn = ('xpath', '//div[@id="statusbar-connections"]//div[contains(@class, "statusbar-data") and @aria-hidden="true"]')
 bluetooth = ('id', 'statusbar-bluetooth')
 airplane = ('id', 'statusbar-flight-mode')
-signal = ("xpath", "/html/body/div/div/div[8]/div")
+signal_connected = ('xpath', '//div[@id="statusbar-connections"]//div[contains(@class, "statusbar-signal") and contains(@aria-label, "{}")]'.format(_("bars")))
 hotspot = ("id", "statusbar-tethering")
 network_activity = ("id", "statusbar-network-activity")
 downloads = ("id", "statusbar-system-downloads")

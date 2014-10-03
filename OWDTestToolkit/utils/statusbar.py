@@ -41,6 +41,7 @@ class statusbar(object):
         # The only reliable way I have to do this at the moment is via JS
         # (tapping it only worked sometimes).
         #
+        self.marionette.switch_to_frame()
         self.marionette.execute_script("window.wrappedJSObject.UtilityTray.hide()")
 
     def isIconInStatusBar(self, p_dom):
@@ -90,43 +91,33 @@ class statusbar(object):
         #
         self.parent.reporting.logResult("info", "Toggling " + p_type + " mode via statusbar ...")
 
-        #
-        # Toggle (and wait).
-        #
-        _wifi = {"name": "wifi", "notif": DOM.Statusbar.wifi, "toggle": DOM.Statusbar.toggle_wifi}
-        _data = {"name": "data", "notif": DOM.Statusbar.dataConn, "toggle": DOM.Statusbar.toggle_dataconn}
-        _bluetooth = {"name": "bluetooth", "notif": DOM.Statusbar.bluetooth, "toggle": DOM.Statusbar.toggle_bluetooth}
-        _airplane = {"name": "airplane", "notif": DOM.Statusbar.airplane, "toggle": DOM.Statusbar.toggle_airplane}
-        self.parent.reporting.log_to_file("*** toggle: p_type = {}".format(p_type))
-
+        # Toggle (and wait)
         if p_type == "data":
-            typedef = _data
+            locator = DOM.Statusbar.toggle_dataconn
         if p_type == "wifi":
-            typedef = _wifi
+            locator = DOM.Statusbar.toggle_wifi
         if p_type == "bluetooth":
-            typedef = _bluetooth
+            locator = DOM.Statusbar.toggle_bluetooth
         if p_type == "airplane":
-            typedef = _airplane
+            locator = DOM.Statusbar.toggle_airplane
 
-        boolReturn = self._sb_doToggle(typedef, p_type)
+        return self._toggle_and_wait(locator, p_type)
 
-        self.parent.home.touchHomeButton()
-        return boolReturn
-
-    def _sb_doToggle(self, p_def, p_type):
+    def _toggle_and_wait(self, locator, p_type):
         #
-        # (private) Toggle a button in the statusbar.
+        # (private) Toggle a button in the statusbar and waits for the item to be enabled/disabled
         # Don't call this directly, it's used by toggleViaStatusBar().
         #
-        boolWasEnabled = self.parent.network.isNetworkTypeEnabled(p_type)
-
+        
         #
         # Open the status bar.
         #
         self.displayStatusBar()
+        boolWasEnabled = self.parent.network.is_network_type_enabled(p_type)
 
-        x = self.parent.element.getElement(p_def["toggle"], "Toggle " + p_def["name"] + " icon")
-        x.tap()
+
+        toggle_icon = self.parent.element.getElement(locator, "Toggle {} icon".format(p_type))
+        toggle_icon.tap()
 
         #
         # Sometimes, when we activate data connection, the devices goes till settings and
@@ -145,9 +136,10 @@ class statusbar(object):
             self.parent.reporting.logResult("debug", "No 3G confirmation asked")
 
         if boolWasEnabled:
-            boolReturn = self.parent.network.waitForNetworkItemDisabled(p_type)
+            boolReturn = self.parent.network.wait_for_network_item_disabled(p_type)
         else:
-            boolReturn = self.parent.network.waitForNetworkItemEnabled(p_type)
+            boolReturn = self.parent.network.wait_for_network_item_enabled(p_type)
+        
         self.hideStatusBar()
         return boolReturn
 

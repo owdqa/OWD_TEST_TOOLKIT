@@ -39,30 +39,7 @@ class network(object):
             except:
                 self.parent.reporting.logResult(False, "Disabled wifi")
 
-    def getNetworkConnection(self):
-        #
-        # Tries several methods to get ANY network connection
-        # (either wifi or dataConn).
-        #
-
-        # The other methods seem to hit a marionette error just now,
-        # but gaiatest has this method so I'll stick to that if it works.
-        try:
-            self.parent.parent.connect_to_network()
-            return
-        except:
-            # make sure airplane mode is off.
-            if self.isNetworkTypeEnabled("airplane"):
-                self.parent.statusbar.toggleViaStatusBar("airplane")
-
-            # make sure at least dataconn is on.
-            if not self.isNetworkTypeEnabled("data"):
-                self.parent.statusbar.toggleViaStatusBar("data")
-
-                # Device shows data mode in status bar.
-                self.parent.statusbar.waitForStatusBarNew(DOM.Statusbar.dataConn, p_timeOut=60)
-
-    def isNetworkTypeEnabled(self, p_type):
+    def is_network_type_enabled(self, network_type):
         #
         # Returns True or False.<br><br>
         # Accepted 'types' are:<br>
@@ -71,19 +48,17 @@ class network(object):
         # <b>airplane</b><br>
         # <i>bluetooth (**NOT WORKING CURRENTLY!!**)</i>
         #
-        enabled = False
-        if p_type == "data":
-            enabled = self.parent.data_layer.is_cell_data_enabled
-        elif p_type == "wifi":
-            enabled = self.parent.data_layer.is_wifi_enabled
-        elif p_type == "airplane":
-            enabled = self.parent.data_layer.get_setting('ril.radio.disabled')
-        elif p_type == "bluetooth":
-            enabled = self.parent.data_layer.bluetooth_is_enabled
+        if network_type == "data":
+            return self.parent.data_layer.is_cell_data_enabled
+        elif network_type == "wifi":
+            return self.parent.data_layer.is_wifi_enabled
+        elif network_type == "airplane":
+            return self.parent.data_layer.get_setting('ril.radio.disabled')
+        elif network_type == "bluetooth":
+            return self.parent.data_layer.bluetooth_is_enabled
         else:
-            self.parent.test.TEST(False, "Incorrect parameter '" + str(p_type) +
-                              "' passed to UTILS.isNetworkTypeEnabled()!", True)
-        return enabled
+            self.parent.test.TEST(False, 
+                "Incorrect parameter '{}' passed to UTILS.is_network_type_enabled()!".format(network_type), True)
 
     def turnOnDataConn(self):
         """Turn the data connection on.
@@ -96,7 +71,15 @@ class network(object):
             x = self.parent.element.getElement(DOM.Settings.celldata_DataConn_ON, "Confirm enabling data connection")
             x.tap()
 
-    def waitForNetworkItemDisabled(self, p_type, retries=30):
+    def _wait_for_item(self, network_type, value):
+        if value:
+            self.parent.parent.wait_for_condition(lambda m: self.is_network_type_enabled(
+                network_type), timeout=30, message="Checking network item is enabled")
+        else:
+            self.parent.parent.wait_for_condition(lambda m: not self.is_network_type_enabled(
+                network_type), timeout=30, message="Checking network item is disabled")
+
+    def wait_for_network_item_disabled(self, network_type):
         #
         # Waits for network 'item' to be disabled.
         # <br><br>
@@ -106,15 +89,9 @@ class network(object):
         # <b>airplane</b><br>
         # <b>bluetooth</b>
         #
-        is_ok = False
-        for i in range(retries):
-            if not self.isNetworkTypeEnabled(p_type):
-                is_ok = True
-                break
-            time.sleep(2)
-        self.parent.test.TEST(is_ok, "'{}' mode disabled within {} seconds.".format(p_type, retries * 2))
+        self._wait_for_item(network_type, False)
 
-    def waitForNetworkItemEnabled(self, p_type, retries=30):
+    def wait_for_network_item_enabled(self, network_type, retries=30):
         #
         # Waits for network 'item' to be enabled.
         # <br><br>
@@ -124,14 +101,7 @@ class network(object):
         # <b>airplane</b><br>
         # <b>bluetooth</b>
         #
-        is_ok = False
-        for i in range(retries):
-            if self.isNetworkTypeEnabled(p_type):
-                is_ok = True
-                break
-            time.sleep(2)
-        self.parent.test.TEST(is_ok, "'{}' mode enabled within {} seconds.".format(p_type, retries * 2))
-        return is_ok
+        self._wait_for_item(network_type, True)
 
     def waitForNoNetworkActivity(self, p_timeout=10):
         #

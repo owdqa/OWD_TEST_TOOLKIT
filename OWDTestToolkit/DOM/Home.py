@@ -2,6 +2,7 @@ frame_locator = ("src", "verticalhome")
 cards_view = ('id', 'cards-view')
 lockscreen_frame = ('id', 'lockscreen')
 
+grid = ('css selector', 'div.scrollable gaia-grid')
 apps = ("css selector", "div.icon")
 app_icon_xpath = "//gaia-grid[@id='icons']/div[contains(@data-identifier, '{}')]"
 # The /../.. at the end is necessary so that we can long_press on the element

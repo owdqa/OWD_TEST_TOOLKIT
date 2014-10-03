@@ -3,6 +3,7 @@
 # Manage the execution and reporting of all required tests.
 #
 export RUN_INPUT_LIST="$@"
+export RESTART_COUNTER_LIMIT=50
 
 . $0.parts/set_up_parameters.sh
 
@@ -56,7 +57,7 @@ do
             _scheduled_restart_counter=$(($_scheduled_restart_counter+1))
 			unset SCHEDULED_RESTART
 			
-		    if [ $_scheduled_restart_counter -ge 10 ]
+		    if [ $_scheduled_restart_counter -ge $RESTART_COUNTER_LIMIT ]
 		    then
 		        export SCHEDULED_RESTART="Y"
 		        _scheduled_restart_counter=0
