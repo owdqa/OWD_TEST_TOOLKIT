@@ -2,6 +2,7 @@ import os
 import time
 import sys
 
+
 class iframe(object):
 
     def __init__(self, parent):
@@ -65,18 +66,31 @@ class iframe(object):
         except:
             return False
 
-    def switch_to_frame(self, name, exact=False):
-        if name is None:
-            self.marionette.switch_to_frame()
+    def switch_to_frame(self, attr, value, exact=False, is_displayed=True, test=True):
+        self.marionette.switch_to_frame()
+        if value is None:
             return
+
         frames = self.marionette.find_elements("tag name", "iframe")
         frame = None
         for f in frames:
-            src = f.get_attribute("src")
-            if name in src and (name == src) == exact:
-                frame = f
+            attr_value = f.get_attribute(attr)
+            if value in attr_value and (value == attr_value) == exact:
+                if is_displayed:
+                    if f.is_displayed():
+                        frame = f
+                else:
+                    frame = f
                 break
-        return self.marionette.switch_to_frame(frame)
+
+        result = self.marionette.switch_to_frame(frame)
+        if test:
+            if exact:
+                msg = '<i>(Sucessfully switched to iframe whose src attribute <b>is</b>: "{}".)</i>'.format(value)
+            else:
+                msg = '<i>(Sucessfully switched to iframe whose src attribute <b>contains</b>: "{}".)</i>'.format(value)
+
+            self.parent.test.TEST(result, msg, True)
 
     def switchToFrame(self, attrib, value, quit_on_error=True, via_root_frame=True, test=True):
         #
@@ -142,7 +156,7 @@ class iframe(object):
 
         if test:
             self.parent.test.TEST(is_ok, "<i>(Sucessfully switched to iframe where '{}' contains '{}'.)</i>".format(attrib, value),
-                    quit_on_error)
+                                  quit_on_error)
 
     def view_all_iframes(self, frame_src=None):
         #
@@ -155,7 +169,8 @@ class iframe(object):
 
         if has_switched:
             dump = self.parent.debug.screenShotOnErr()
-            self.parent.reporting.logResult("info",  "Iframe details for frame with path: {}".format(frame_src if frame_src else "root"), dump)
+            self.parent.reporting.logResult(
+                "info",  "Iframe details for frame with path: {}".format(frame_src if frame_src else "root"), dump)
 
             frames = self.marionette.find_elements('tag name', 'iframe')
 
@@ -192,14 +207,15 @@ class iframe(object):
 
             if appname in ignore_list:
                 return "skip"
-            
+
             _frameDef = ("xpath", "//iframe[contains(@{},'{}')]".format('src', appname))
             try:
 
                 frame_elem = self.marionette.find_element(*_frameDef)
                 self.marionette.switch_to_frame(frame_elem)
             except:
-                self.parent.reporting.logResult('info', '<i>exception launched while doing the switch!!. Frame_src: {}</i>'.format(frame_src))
+                self.parent.reporting.logResult(
+                    'info', '<i>exception launched while doing the switch!!. Frame_src: {}</i>'.format(frame_src))
                 return False
         else:
             self.marionette.switch_to_frame()
