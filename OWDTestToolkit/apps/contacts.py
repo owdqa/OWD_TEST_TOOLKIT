@@ -387,15 +387,18 @@ class Contacts(object):
         settings_btn.tap()
 
         import_btn = self.UTILS.element.getElement(DOM.Contacts.import_contacts, "Import button")
-        import_btn.tap()
+        # import_btn.tap()
+        self.UTILS.element.simulateClick(import_btn)
 
         # Press the Gmail button.
         import_gmail_btn = self.UTILS.element.getElement(DOM.Contacts.gmail_button, "Gmail button")
+        time.sleep(1)
         import_gmail_btn.tap()
 
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
-        self.switch_to_gmail_login_frame()
+        # self.switch_to_gmail_login_frame()
+        self.UTILS.iframe.switch_to_frame("data-url", "google")
         try:
             time.sleep(2)
             self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
@@ -485,6 +488,7 @@ class Contacts(object):
 
         # Press the Hotmail button.
         x = self.UTILS.element.getElement(DOM.Contacts.hotmail_button, "Hotmail button")
+        time.sleep(1)
         x.tap()
 
         # Login.
@@ -521,7 +525,7 @@ class Contacts(object):
 
         self.UTILS.reporting.logResult("info", "Entering hotmail_login ...")
         try:
-            self.switch_to_hotmail_login_frame()
+            self.UTILS.iframe.switch_to_frame("data-url", "live")
             try:
                 self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
 
