@@ -82,3 +82,4 @@ form_action_action = ('xpath', '//form[@data-type="action"]//button[@data-l10n-i
 # Form confirm
 form_confirm_cancel = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="cancel"]')
 form_confirm_delete = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="delete"]')
+form_confirm_logout = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="logOut"]')

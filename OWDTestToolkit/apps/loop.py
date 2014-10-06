@@ -140,7 +140,6 @@ class Loop(object):
         """
         return len(self.marionette.find_elements(*DOM.Loop.wizard_slideshow_step))
 
-    @retry(5)
     def skip_wizard(self):
         """ Skips first time use wizard by flicking the screen
         """
@@ -149,12 +148,12 @@ class Loop(object):
 
         current_frame = self.apps.displayed_app.frame
         x_start = current_frame.size['width']
-        x_end = x_start // 3
+        x_end = x_start // 4
         y_start = current_frame.size['height'] // 2
 
         for i in range(wizard_steps):
             self.actions.flick(
-                current_frame, x_start, y_start, x_end, y_start, duration=500).perform()
+                current_frame, x_start, y_start, x_end, y_start, duration=600).perform()
             time.sleep(1)
 
         self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
@@ -305,7 +304,7 @@ class Loop(object):
         self.UTILS.element.simulateClick(settings_btn)
         self.parent.wait_for_element_displayed(*DOM.Loop.settings_panel_header)
 
-    def logout(self):
+    def logout(self, confirm=True):
         """ This methods logs us out from Loop.
 
         It assumes we already are in the Loop Settings panel
@@ -314,8 +313,15 @@ class Loop(object):
         logout_btn = self.marionette.find_element(*DOM.Loop.settings_logout)
         self.UTILS.element.simulateClick(logout_btn)
 
-        self.parent.wait_for_element_not_displayed(*DOM.Loop.loading_overlay)
-        self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login)
+        self.parent.wait_for_element_displayed(*DOM.Loop.form_confirm_logout)
+        if confirm:
+            confirm_btn = self.marionette.find_element(*DOM.Loop.form_confirm_logout)
+            self.UTILS.element.simulateClick(confirm_btn)
+            self.parent.wait_for_element_not_displayed(*DOM.Loop.loading_overlay)
+            self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login)
+        else:
+            cancel_btn = self.marionette.find_element(*DOM.Loop.form_confirm_cancel)
+            self.parent.wait_for_element_displayed(*DOM.Loop.settings_panel_header)
 
     def switch_to_urls(self):
         self.parent.wait_for_element_displayed(*DOM.Loop.call_log_shared_links_tab)
