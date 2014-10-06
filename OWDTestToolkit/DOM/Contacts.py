@@ -102,7 +102,7 @@ import_contacts = ("id", "importContacts")
 import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import Contacts')))
 import_contacts_back = ("id", "import-settings-back")
 
-gmail_button = ("xpath", "//button[text()='Gmail']")
+gmail_button = ("css selector", "button.icon-gmail[data-l10n-id=importGmail]")
 gmail_frame = ("css selector", ".popupWindow.active iframe[data-url*=google]")
 gmail_username = ("id", "Email")
 gmail_password = ("id", "Passwd")

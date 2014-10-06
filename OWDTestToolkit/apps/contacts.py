@@ -318,6 +318,7 @@ class Contacts(object):
         export_option_btn = self.UTILS.element.getElement(locator, "Export {}".format(msg))
         self.UTILS.test.TEST(export_option_btn.get_attribute(
             "disabled") == "false", "{} button is enabled.".format(msg))
+        time.sleep(1)
         export_option_btn.tap()
 
     def export_bluetooth(self):
@@ -391,6 +392,7 @@ class Contacts(object):
 
         # Press the Gmail button.
         import_gmail_btn = self.UTILS.element.getElement(DOM.Contacts.gmail_button, "Gmail button")
+        time.sleep(1)
         import_gmail_btn.tap()
 
         # Sometimes the device remembers your login from before (even if the device is
@@ -501,7 +503,6 @@ class Contacts(object):
         self.UTILS.reporting.logResult('info', "Doing the switch to contacts......")
         time.sleep(2)
 
-
         screenshot = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult('info', "Screenshot before switching", screenshot)
         return True
@@ -509,8 +510,8 @@ class Contacts(object):
     @retry(5, 5)
     def switch_to_hotmail_login_frame(self):
         self.marionette.switch_to_frame()
-        #hotmail_sign_in = self.marionette.find_element(*DOM.Contacts.hotmail_signin_frame)
-        result = self.UTILS.iframe.switch_to_frame("", True)
+        hotmail_sign_in = self.marionette.find_element(*DOM.Contacts.hotmail_signin_frame)
+        result = self.marionette.switch_to_frame(hotmail_sign_in)
         self.UTILS.reporting.debug("**** Switched to hotmail frame: {}".format(result))
 
     def hotmail_login(self, name, passwd, click_signin):
@@ -552,7 +553,6 @@ class Contacts(object):
                         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
                         self.parent.wait_for_element_displayed("id", "fb-curtain", timeout=10)
                         self.UTILS.reporting.debug("*** Login succeeded!")
-                        self.UTILS.iframe.switchToFrame(*DOM.Contacts.hotmail_import_frame, via_root_frame=False)
                     except:
                         self.UTILS.reporting.debug("*** Login failed! Returning False")
                         return False
