@@ -98,7 +98,8 @@ import_conts_list = ("xpath", "//*[@id='groups-list']//li[@class='block-item']")
 import_search_list = ("xpath", "//*[@id='search-list']//li[@class='block-item']")
 import_conts_xp = "//span[@id='groups-list']//li[@class='block-item' and contains(@data-search, '{}')]"
 
-import_contacts = ("id", "importContacts")
+import_contacts = ('xpath', '//button[@data-l10n-id="importContactsButton"]')
+# import_contacts = ("id", "importContacts")
 import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import Contacts')))
 import_contacts_back = ("id", "import-settings-back")
 
