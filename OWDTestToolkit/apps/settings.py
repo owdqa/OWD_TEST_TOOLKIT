@@ -470,9 +470,10 @@ class Settings(object):
 
     def downloads(self):
         #
-        # Open wifi settings.
+        # Open downloads.
         #
-        try: # sometimes after checking the notification, downloads list is already opened
+        # sometimes after checking the notification, downloads list is already opened
+        try:
             self.parent.wait_for_element_displayed(DOM.Settings.downloads[0], DOM.Settings.downloads[1], timeout=10)
         except:
             self.UTILS.element.waitForElements(DOM.Settings.downloads_header,
@@ -480,7 +481,7 @@ class Settings(object):
             return
 
         downloads_link = self.marionette.find_element(*DOM.Settings.downloads)
-        
+
         self.UTILS.element.scroll_into_view(downloads_link)
         time.sleep(2)
         downloads_link.tap()
@@ -1064,8 +1065,8 @@ class Settings(object):
         # Click slider to turn wifi on.
         #
         if not self.parent.data_layer.get_setting("wifi.enabled"):
-            x = self.UTILS.element.getElement(DOM.Settings.wifi_enabled, "Enable wifi switch")
-            x.tap()
+            wifi_switch = self.UTILS.element.getElement(DOM.Settings.wifi_enabled, "Enable wifi switch")
+            wifi_switch.tap()
 
         #
         # Nothing to check for yet, because the network may require login etc...,
@@ -1078,8 +1079,8 @@ class Settings(object):
         # Click slider to turn wifi on.
         #
         if self.parent.data_layer.get_setting("wifi.enabled"):
-            x = self.UTILS.element.getElement(DOM.Settings.wifi_enabled, "Disable wifi switch")
-            x.tap()
+            wifi_switch = self.UTILS.element.getElement(DOM.Settings.wifi_enabled, "Disable wifi switch")
+            wifi_switch.tap()
 
         #
         # Nothing to check for yet, because the network may require login etc...,
