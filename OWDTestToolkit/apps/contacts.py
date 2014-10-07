@@ -485,6 +485,7 @@ class Contacts(object):
 
         self.parent.wait_for_element_displayed(*DOM.Contacts.import_contacts, timeout=30)
         import_btn = self.UTILS.element.getElement(DOM.Contacts.import_contacts, "Import button")
+        time.sleep(1)
         import_btn.tap()
 
         # Press the Hotmail button.
