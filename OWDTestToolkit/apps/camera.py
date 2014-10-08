@@ -79,6 +79,11 @@ class Camera(object):
         self.UTILS.test.TEST((elapsed_time <= to_ss), "Video is not longer than expected (played for {:.2f} seconds)."
                              .format(elapsed_time))
 
+    def _tap_on_capture_button(self):
+        capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
+        time.sleep(1)
+        capture_button.tap()
+
     def take_video(self, video_length):
         """
         Record a video.
@@ -89,9 +94,7 @@ class Camera(object):
         self.switch_source()
 
         # Record a video and click the thumbnail to play it.
-        capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
-        time.sleep(1)
-        capture_button.tap()
+        self._tap_on_capture_button()
         
         self.UTILS.test.TEST(self.is_video_being_recorded(), "Video recording")
         self.UTILS.element.waitForElements(DOM.Camera.open_thumbs,
@@ -100,7 +103,7 @@ class Camera(object):
         # Record for video_length seconds
         time.sleep(video_length)
         # Stop recording
-        capture_button.tap()
+        self._tap_on_capture_button()
 
         self.UTILS.element.waitForNotElements(DOM.Camera.recording_timer, "Video timer", True, 10, False)
         self.UTILS.element.waitForElements(DOM.Camera.open_thumbs,
