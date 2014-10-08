@@ -20,7 +20,7 @@ class Gallery(object):
         self.UTILS.element.waitForNotElements(DOM.Gallery.loading_bar, "Loading bar", True, 10)
         return self.app
 
-    def checkVideoLength(self, from_ss, to_ss):
+    def check_video_length(self, from_ss, to_ss):
         #
         # Check the length of a video.
         #
