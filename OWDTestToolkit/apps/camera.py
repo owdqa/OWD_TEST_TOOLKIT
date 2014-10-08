@@ -97,7 +97,7 @@ class Camera(object):
         self._tap_on_capture_button()
         
         self.UTILS.test.TEST(self.is_video_being_recorded(), "Video recording")
-        self.UTILS.element.waitForElements(DOM.Camera.open_thumbs,
+        self.UTILS.element.waitForNotElements(DOM.Camera.open_thumbs,
                                            "Thumbnail appears after recording video", True, 10, False)
 
         # Record for video_length seconds
