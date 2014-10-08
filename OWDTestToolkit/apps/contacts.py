@@ -174,9 +174,8 @@ class Contacts(object):
             try:
                 self.parent.wait_for_element_displayed(*DOM.Contacts.view_contact_image, timeout=1)
                 image = self.marionette.find_element(*DOM.Contacts.view_contact_image)
-                image_style = image.get_attribute("style")
-                if "blob" in x_style:
-                    boolOK = True
+                attrs = ["style", "data-img-hash", "data-photo-ready"]
+                boolOK = all(image.get_attribute(attr) is not None for attr in attrs)
             except:
                 pass
 
