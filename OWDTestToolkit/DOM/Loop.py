@@ -36,6 +36,7 @@ mobile_id_allow_button = ('id', 'allow-button')
 mobile_id_verified_button = ('id', 'verify-button')
 mobile_id_error = ('id', 'mobileid-error-overlay')
 mobile_id_error_ok_btn = ('id', 'mobileid-error-ok')
+mobile_id_back = ('id', 'close-button')
 
 # Call log
 call_log = ('id', 'calllog-panel')
