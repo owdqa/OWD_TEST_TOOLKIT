@@ -857,7 +857,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>thumbCount</td>
+        <td align=center>get_number_of_thumbnails</td>
         <td align=left></td>
         <td align=left>Returns the number of thumbnails.</td>
     </tr>
@@ -878,14 +878,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>deleteThumbnails</td>
+        <td align=center>delete_thumbnails</td>
         <td align=left>p_num_array</td>
-        <td align=left>Deletes the thumbnails listed in p_num_array  (following an index starting at number 0).<br>  The list must be numeric, i.e "deleteThumbnails( (0,1,2) )".</td>
+        <td align=left>Deletes the thumbnails listed in p_num_array  (following an index starting at number 0).<br>  The list must be numeric, i.e "delete_thumbnails( (0,1,2) )".</td>
     </tr>
 
 
     <tr>
-        <td align=center>clickThumb</td>
+        <td align=center>click_on_thumbnail_at_position</td>
         <td align=left>p_num</td>
         <td align=left>Clicks a thumbnail from the gallery.</td>
     </tr>

@@ -165,3 +165,11 @@ class Camera(object):
         self.UTILS.element.simulateClick(play_btn)
 
         self.UTILS.element.waitForElements(DOM.Gallery.preview_video_pause, "Pause button", True, 20, False)
+
+    # def takeAndSelectPicture(self):
+    #     self.take_picture()
+
+    # Confirm the picture.
+    #     time.sleep(5)
+    #     select_button = self.UTILS.element.getElement(DOM.Camera.select_button, "Select Camera photo")
+    #     select_button.tap()

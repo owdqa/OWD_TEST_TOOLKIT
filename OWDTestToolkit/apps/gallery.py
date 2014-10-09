@@ -33,7 +33,7 @@ class Gallery(object):
     def check_video_length(self, expected_duration):
         """
         This method asserts that the video has the desired duration
-        @param  int expected_duration   specifies the video duration in seconds
+        @expected_duration: specify the video duration in seconds
         """
 
         # Play the video and get total duration
@@ -45,32 +45,25 @@ class Gallery(object):
         interval = [expected_duration, expected_duration - 1, expected_duration + 1]
         self.UTILS.test.TEST(real_duration in interval, "Duration matches")
 
-    def click_on_thumbnail_at_position(self, position, preview=True):
+    def click_on_thumbnail_at_position(self, position):
         """
         Clicks on a thumbnail at a certain position from the gallery.
-        @param  boolean     preview     specifies whether we have to check for the preview screen or not 
         """
         thumb_list = self.UTILS.element.getElements(DOM.Gallery.thumbnail_items, "Thumbnail list")
         time.sleep(1)
         thumb_list[position].tap()
 
         self.UTILS.element.waitForNotElements(DOM.Gallery.thumbnail_items, "Thumbnail list", True, 10)
-        if preview:
-            self.UTILS.element.waitForElements(DOM.Gallery.preview, "Thumbnail preview", True, 10)
+        self.UTILS.element.waitForElements(DOM.Gallery.preview, "Thumbnail list", True, 10)
 
     def _click_on_thumb_external(self, position, frame_to_change):
-        """
-        Private method which handles image selection and image cropping
-        @param  int     position            thumbnail to click 
-        @param  tuple   frame_to_change     frame to switch once the image has been cropped
-        """
-        self.click_on_thumbnail_at_position(position, preview=False)
+        self.click_on_thumbnail_at_position(position)
 
         time.sleep(2)
         crop = self.UTILS.element.getElement(DOM.Gallery.crop_done, "Crop Done")
         crop.tap()
 
-        self.UTILS.iframe.switchToFrame(*frame_to_change)
+        self.self.UTILS.iframe.switchToFrame(*frame_to_change)
 
     def click_on_thumbnail_at_position_mms(self, position):
         """
