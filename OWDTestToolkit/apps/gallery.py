@@ -91,16 +91,20 @@ class Gallery(object):
         # Clicks a thumbnail from the gallery.
         #
         gallery_items = self.getGalleryItems()
-        for index, item in enumerate(gallery_items):
-            self.UTILS.reporting.debug("** Searching for gallery item {} with index {} and item {}".\
-                                       format(num, index, item))
-            if index == num:
-                img = self.UTILS.element.getElements(DOM.Gallery.thumbnail_items,
-                                                 "Gallery item list", True, 20, False)[index]
-                self.UTILS.reporting.debug("---> Image found! [{}]".format(img))
-                time.sleep(1)
-                img.tap()
-                break
+        #=======================================================================
+        # for index, item in enumerate(gallery_items):
+        #    self.UTILS.reporting.debug("** Searching for gallery item {} with index {} and item {}".\
+        #                               format(num, index, item))
+        #    if index == num:
+        #        img = self.UTILS.element.getElements(DOM.Gallery.thumbnail_items,
+        #                                         "Gallery item list", True, 20, False)[index]
+        #        self.UTILS.reporting.debug("---> Image found! [{}]".format(img))
+        #        time.sleep(1)
+        #        img.tap()
+        #        break
+        #=======================================================================
+        img = gallery_items[num]
+        img.tap()
 
         time.sleep(2)
 
@@ -198,8 +202,9 @@ class Gallery(object):
         #
         # Returns a list of gallery item objects.
         #
-        self.UTILS.element.waitForElements(DOM.Gallery.thumbnail_items, "Thumbnails", True, 20, False)
-        return self.marionette.execute_script("return window.wrappedJSObject.files;")
+        return self.UTILS.element.getElements(DOM.Gallery.thumbnail_items, "Gallery items", timeout=20)
+        #self.UTILS.element.waitForElements(DOM.Gallery.thumbnail_items, "Thumbnails", True, 20, False)
+        #return self.marionette.execute_script("return window.wrappedJSObject.files;")
 
     def playCurrentVideo(self):
         #

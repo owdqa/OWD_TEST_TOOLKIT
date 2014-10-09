@@ -1,3 +1,4 @@
+import sys
 import time
 import datetime
 from marionette import Actions
@@ -44,9 +45,14 @@ class UTILS(object):
         # Get run details from the OS.
         #
         self.general = general(self)
-        self.testNum = self.general.get_os_variable("TEST_NUM", True)
-        self.det_fnam = self.general.get_os_variable("DET_FILE", True)
-        self.sum_fnam = self.general.get_os_variable("SUM_FILE", True)
+        #=======================================================================
+        # self.testNum = self.general.get_os_variable("TEST_NUM", True)
+        # self.det_fnam = self.general.get_os_variable("DET_FILE", True)
+        # self.sum_fnam = self.general.get_os_variable("SUM_FILE", True)
+        #=======================================================================
+        self.testNum = parent.__module__[5:]
+        self.det_fnam = parent.data_layer.testvars["RESULT_DIR"] + "/" + self.testNum + "_detail"
+        self.sum_fnam = parent.data_layer.testvars["RESULT_DIR"] + "/" + self.testNum + "_summary"
 
         self.app = app(self)
         self.date_and_time = date_and_time(self)

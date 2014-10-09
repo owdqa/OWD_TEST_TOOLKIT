@@ -22,7 +22,8 @@ class general(object):
         # Put a file onto the device (path is relative to the dir
         # you are physically in when running the tests).
         #
-        self.parent.device.push_file(file_name, count, '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination))
+        self.parent.device.push_file(file_name, count, '{}/{}'.format(self.get_os_variable("OWD_DEVICE_SDCARD", False),
+                                                                      destination))
 
     def checkMarionetteOK(self):
         #
@@ -71,7 +72,11 @@ class general(object):
         #
         # Get a variable from the OS.
         #
-        return os.getenv(name, False)
+        #return os.getenv(name, False)
+        try:
+            return self.parent.data_layer.testvars[name]
+        except:
+            return False
 
     def insertContact(self, contact):
         self.marionette.switch_to_frame()
@@ -279,7 +284,7 @@ class general(object):
         # remove file from sdcard
         #
         destination = destination_prefix + file_name
-        file_to_remove = '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination)
+        file_to_remove = '{}/{}'.format(self.get_os_variable("OWD_DEVICE_SDCARD", False), destination)
         self.parent.device.manager.removeFile(file_to_remove)
 
     def restart(self):
