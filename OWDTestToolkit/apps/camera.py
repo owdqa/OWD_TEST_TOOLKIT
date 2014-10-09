@@ -35,8 +35,14 @@ class Camera(object):
         Clicks the Gallery button to switch to the Gallery application
         (warning: this will land you in the gallery iframe).
         """
-        gallery_button = self.UTILS.element.getElement(DOM.Camera.gallery_button, "Gallery button")
-        gallery_button.tap()
+        options = self.UTILS.element.getElement(DOM.Camera.preview_options, "preview options")
+        time.sleep(1)
+        options.tap()
+
+        gallery_option = self.UTILS.element.getElement(DOM.Camera.action_menu_gallery, "Gallery option")
+        time.sleep(1)
+        gallery_option.tap()
+
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
 
     def click_on_thumbnail_at_pos(self, num):
@@ -48,36 +54,27 @@ class Camera(object):
         the_thumb = thumb_list[num]
         the_thumb.tap()
 
-    def check_video_length(self, vid_num, from_ss, to_ss):
+    def _convert_str_to_seconds(self, the_string):
         """
-        Check the length of a video.
+        Converts a str of the form "aa:bb" into seconds
+        """
+        processed = time.strptime(the_string, '%M:%S')
+        return (int(datetime.timedelta(minutes=processed.tm_min, seconds=processed.tm_sec).total_seconds()))
+
+    def check_video_length(self, expected_duration):
+        """
+        This method asserts that the video has the desired duration
+        @expected_duration: specify the video duration in seconds
         """
 
-        self.click_on_thumbnail_at_pos(vid_num)
+        # Play the video and get total duration
+        self.play_current_video()
+        video_length = self.UTILS.element.getElement(DOM.Gallery.preview_video_slider_duration, "Video length")
+        real_duration = self._convert_str_to_seconds(video_length.text)
 
-        #
-        # Click the button to play the video and make sure it takes between
-        # 5 and 9 seconds to complete (to allow time delay in element
-        # loading).
-        #
-        play_button = self.UTILS.element.getElement(DOM.Camera.video_play_button, "Video play button")
-        play_button.tap()
-
-        # Start the timer when the pause button is visible.
-        self.UTILS.element.waitForElements(DOM.Camera.video_pause_button,
-                                           "Video pause button", True, 20, False)
-        start_time = time.time()
-
-        # Stop the timer when the pause button is no longer visible.
-        self.UTILS.element.waitForNotElements(DOM.Camera.video_pause_button,
-                                              "Video pause button", True, 20, False)
-
-        elapsed_time = int(time.time() - start_time)
-
-        self.UTILS.test.TEST((elapsed_time >= from_ss), "Video is not shorter than expected (played for {:.2f} seconds)."
-                             .format(elapsed_time))
-        self.UTILS.test.TEST((elapsed_time <= to_ss), "Video is not longer than expected (played for {:.2f} seconds)."
-                             .format(elapsed_time))
+        # Note: we give 1 second margin in case the things went a little bit slower when recording the video
+        interval = [expected_duration, expected_duration - 1, expected_duration + 1]
+        self.UTILS.test.TEST(real_duration in interval, "Duration matches")
 
     def _tap_on_capture_button(self):
         capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
@@ -95,12 +92,12 @@ class Camera(object):
 
         # Record a video and click the thumbnail to play it.
         self._tap_on_capture_button()
-        
+
         self.UTILS.test.TEST(self.is_video_being_recorded(), "Video recording")
         self.UTILS.element.waitForNotElements(DOM.Camera.open_thumbs,
-                                           "Thumbnail appears after recording video", True, 10, False)
+                                              "Thumbnail appears after recording video", True, 10, False)
 
-        # Record for video_length seconds
+        # Record for video_length seconds. Looks like it always takes one second more
         time.sleep(video_length)
         # Stop recording
         self._tap_on_capture_button()
@@ -121,10 +118,53 @@ class Camera(object):
         """
         Take a picture.
         """
-        x = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
+        capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
         time.sleep(4)
-        x.tap()
+        capture_button.tap()
         self.UTILS.element.waitForElements(DOM.Camera.open_thumbs, "Camera thumbnails")
+
+    def open_preview(self):
+        """
+        Open the preview screen by clicking thumbnail's shortcut
+        """
+        open_thumbs = self.UTILS.element.getElement(DOM.Camera.open_thumbs, "Thumbnail bubble")
+        time.sleep(1)
+        open_thumbs.tap()
+        self.UTILS.element.waitForElements(DOM.Camera.preview_header, "Preview header")
+
+        # Check the last picture is shown
+        count_text = self.UTILS.element.getElement(DOM.Camera.preview_count_text, "Preview count")
+        self.UTILS.reporting.logResult('info', "The text is: {}".format(count_text.text))
+        self.UTILS.test.TEST(count_text.text.split(
+            "/")[0] == "1", "Once we open the preview screen, the last picture is shown")
+
+    def delete_from_preview(self, confirm=True):
+        options = self.UTILS.element.getElement(DOM.Camera.preview_options, "preview options")
+        time.sleep(1)
+        options.tap()
+
+        delete_option = self.UTILS.element.getElement(DOM.Camera.action_menu_delete, "Delete option")
+        time.sleep(1)
+        delete_option.tap()
+
+        if confirm:
+            confirm = self.UTILS.element.getElement(DOM.Camera.dialog_menu_yes, "Delete option")
+            time.sleep(1)
+            confirm.tap()
+        else:
+            cancel = self.UTILS.element.getElement(DOM.Camera.dialog_menu_no, "Delete option")
+            time.sleep(1)
+            cancel.tap()
+
+    def play_current_video(self):
+        """
+        Plays the video that has previously been loaded (by pressing its thumbnail first), then press a play button.
+        """
+        play_btn = self.UTILS.element.getElement(DOM.Gallery.preview_video_play, "Video play button")
+        time.sleep(1)
+        self.UTILS.element.simulateClick(play_btn)
+
+        self.UTILS.element.waitForElements(DOM.Gallery.preview_video_pause, "Pause button", True, 20, False)
 
     # def takeAndSelectPicture(self):
     #     self.take_picture()

@@ -99,7 +99,7 @@ class Email(object):
             self.UTILS.general.addFileToDevice('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
 
             self.createEmailImage()
-            self.gallery.clickThumbEmail(0)
+            self.gallery.click_on_thumbnail_at_position_email(0)
 
         elif attached_type == "cameraImage":
             #

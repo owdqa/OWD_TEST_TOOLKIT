@@ -1,10 +1,7 @@
 frame_locator = ("src", "camera")
 
 trash_icon = ("id", "delete-button")
-video_play_button = ('xpath', "//button[@class='videoPlayerPlayButton']")
-video_pause_button = ('xpath', "//button[@class='videoPlayerPauseButton']")
 
-video_timer = ('id', 'video-timer')
 gallery_button = ("id", "gallery-button")
 select_button = ('css selector', '.select-button')
 retake_button = ('css selector', '.retake-button')
@@ -37,14 +34,14 @@ open_thumbs = ('css selector', '.controls-left > [name=thumbnail]')
 
 # Preview section
 preview = ('class name', 'preview-gallery')
-preview_header = ('xpath', '//div[contains(class, "preview-menu")]//header')
-preview_back = ('xpath', '//div[contains(class, "preview-menu")]//header//button[@name, "back"]')
-preview_share = ('xpath', '//div[contains(class, "preview-menu")]//header//button[@name, "share"]')
-preview_options = ('xpath', '//div[contains(class, "preview-menu")]//header//button[@name, "options"]')
-preview_count_text = ('xpath', '//div[contains(class, "preview-menu")]//div[contains(@class, "count-text")]')
+preview_header = ('xpath', '//div[contains(@class, "preview-menu")]//header')
+preview_back = ('xpath', '//div[contains(@class, "preview-menu")]//header//button[@name="back"]')
+preview_share = ('xpath', '//div[contains(@class, "preview-menu")]//header//button[@name="share"]')
+preview_options = ('xpath', '//div[contains(@class, "preview-menu")]//header//button[@name="options"]')
+preview_count_text = ('xpath', '//div[contains(@class, "preview-menu")]//div[contains(@class, "count-text")]')
 
 preview_container = ('xpath', '//div[@class="preview-gallery"]//div[contains(@class, "frame-container")]')
-preview_container_video = ('xpath', '//div[@class="preview-gallery"]//div[contains(@class, "frame-container")]//img[@class, "videoPoster"]')
+preview_container_video = ('xpath', '//div[@class="preview-gallery"]//div[contains(@class, "frame-container")]//img[@class="videoPoster"]')
 preview_video_controls = ('class name', 'videoPlayerControls')
 preview_video_play = ('class name', 'videoPlayerPlayButton')
 preview_video_pause = ('class name', 'videoPlayerPauseButton')
@@ -53,3 +50,12 @@ preview_video_slider_duration = ('class name', 'videoPlayerDurationText')
 
 # Recording timer
 recording_timer = ('class name', 'recording-timer visible')
+
+# action menu
+action_menu_gallery = ("xpath", "//form[@data-type='action']//button[@name='gallery']")
+action_menu_delete = ("xpath", "//form[@data-type='action']//button[@name='delete']")
+action_menu_cancel = ("xpath", "//form[@data-type='action']//button[@name='cancel']")
+
+# Dialog menu
+dialog_menu_no = ('id', 'dialog-no')
+dialog_menu_yes = ('id', 'dialog-yes')
