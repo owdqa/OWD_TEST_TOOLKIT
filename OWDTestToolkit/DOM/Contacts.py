@@ -25,13 +25,15 @@ view_contact_tels_xpath = "//*[contains(@id, 'call-or-pick-') and contains(@data
 dialer_frame = ("data-url", "oncall")
 
 search_field = ("xpath", ".//*[@id='search-start']/input")
-search_contact_input = ("id", "search-contact")
-search_results_list = ("xpath", ".//*[@id='search-list']/li")
+search_contact_input = ("css selector", "input[data-l10n-id=search-contact]")
+search_contact_result_input = ('id', 'search-contact')
+search_results_list = ("css selector", "#search-list li")
 search_cancel_btn = ('id', 'cancel-search')
 search_no_contacts_found = ("id", "no-result")
 favourites_section = ("id", "contacts-list-favorites")
 favourites_list_xpath = "//ol[@id='contacts-list-favorites']//li[@data-order='{}']"
-favourite_JS = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
+favourites_search_section = ('id', 'section-group-favorites')
+favourite_by_name = ("xpath", "//section[@id='section-group-favorites']//strong[text()='{}']")
 
 social_network_contacts = ('class name', "icon-social icon-fb")
 settings_button = ('id', 'settings-button')

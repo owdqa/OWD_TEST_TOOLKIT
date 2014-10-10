@@ -1334,23 +1334,10 @@ class Messages(object):
 
     def selectAddContactButton(self):
         #
-        # Taps the 'add contact' button and switches to the
-        # correct 'contacts' frame.<br>
-        # Returns the "src" of the original iframe.
+        # Taps the 'add contact' button
         #
-        x = self.UTILS.element.getElement(DOM.Messages.add_contact_button, "Add contact button")
-        x.tap()
-
-        time.sleep(2)
-
-        #
-        # Switch to the contacts frame.
-        #
-        orig_iframe = self.UTILS.iframe.currentIframe()
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-
-        time.sleep(2)
-        return orig_iframe
+        add_btn = self.UTILS.element.getElement(DOM.Messages.add_contact_button, "Add contact button")
+        add_btn.tap()
 
     def sendSMS(self):
         #

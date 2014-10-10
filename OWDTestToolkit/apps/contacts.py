@@ -476,7 +476,7 @@ class Contacts(object):
         If click_signin is set to True then this method will also click
         the Sign in button (defaults to true).
         <br>
-        Returns False if the login failed, "ALLIMPORTED" if all your contacts are already imported else True.
+        Returns False if the login failed, True otherwise.
         """
 
         settings_btn = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
