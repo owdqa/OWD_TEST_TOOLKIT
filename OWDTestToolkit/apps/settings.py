@@ -19,13 +19,6 @@ class Settings(object):
         #
         # Launch the app.
         #
-        try:
-            self.marionette.switch_to_frame()
-            self.wait_for_element_displayed(*DOM.GLOBAL.charge_warning)
-            ok_btn = self.UTILS.element.getElement(DOM.GLOBAL.charge_warning_ok_btn, "OK Button")
-            ok_btn.tap()
-        except:
-            pass
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
