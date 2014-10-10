@@ -1,8 +1,3 @@
-
-
-file_name_header = ('css selector', 'h1#filename')
-
-########################################################################################################################
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
@@ -39,3 +34,4 @@ preview_current_video_duration = ('xpath', '//div[@class="frame" and contains(@s
 # Others
 no_thumbnails_message = ("xpath", "//h1[@id='overlay-title' and text()='{}']".format(_("No photos or videos")))
 crop_done = ("xpath", "//*[@id='crop-done-button']")
+file_name_header = ('css selector', 'h1#filename')

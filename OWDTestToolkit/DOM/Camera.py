@@ -1,11 +1,5 @@
 frame_locator = ("src", "camera")
 
-trash_icon = ("id", "delete-button")
-
-gallery_button = ("id", "gallery-button")
-select_button = ('css selector', '.select-button')
-retake_button = ('css selector', '.retake-button')
-#######################################################################################################
 # Superior HUD
 top_hud = ('class name', 'hud visible')
 top_hud_switch_camera = ('xpath', '//div[contains(@class="hud_btn hud_camera")]')
@@ -59,3 +53,7 @@ action_menu_cancel = ("xpath", "//form[@data-type='action']//button[@name='cance
 # Dialog menu
 dialog_menu_no = ('id', 'dialog-no')
 dialog_menu_yes = ('id', 'dialog-yes')
+
+# Attach picture just taken
+select_button = ('css selector', '.select-button')
+retake_button = ('css selector', '.retake-button')
