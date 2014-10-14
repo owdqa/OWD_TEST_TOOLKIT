@@ -358,7 +358,7 @@ class Messages(object):
             self.UTILS.general.addFileToDevice('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
 
             self.createMMSVideo()
-            self.video.clickOnVideoMMS(0)
+            self.video.click_on_video_at_position_mms(0)
             self.sendSMS()
         elif attached_type == "audio":
             #
