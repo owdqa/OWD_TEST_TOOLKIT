@@ -1,5 +1,4 @@
 import time
-import datetime
 from OWDTestToolkit import DOM
 from OWDTestToolkit.utils.decorators import retry
 
@@ -22,18 +21,38 @@ class Video(object):
             DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def check_thumb_duration(self, position, expected_duration, margin=2):
-        """
-        Check the duration of a video thumbnail.
-        """
-        thumb = self.UTILS.element.getElements(DOM.Video.thumbnails_thumbs, "thumbnails")[position]
+    def checkThumbDuration(self, thumb_num, length_str_mmss, error_margin_ss):
+        #
+        # Check the duration of a video thumbnail.
+        #
+        durations = self.UTILS.element.getElements(DOM.Video.thumb_durations,
+                                                   "Thumbnail durations", True, 20, False)
 
-        duration_text = thumb.find_element(*DOM.Video.thumbnail_duration).text.strip()
-        duration_in_secs = self._convert_str_to_seconds(duration_text)
+        if not durations:
+            return False
 
-        # Note: we give 2 second margin in case the things went a little bit slower when recording the video
-        interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
-        self.UTILS.test.TEST(duration_in_secs in interval, "Duration matches")
+        myDur = durations[thumb_num].text.strip()
+
+        #
+        # Video length didn't match exactly, but is it within the acceptable error margin?
+        #
+        from datetime import datetime, timedelta
+
+        actual_time = datetime.strptime(myDur, '%M:%S')
+        expect_time = datetime.strptime(length_str_mmss, '%M:%S')
+        margin_time = timedelta(seconds=error_margin_ss)
+
+        diff_time = actual_time - expect_time
+
+        in_errorMargin = False
+
+        # Less than expected, but within the error margin?
+        if margin_time >= diff_time:
+            in_errorMargin = True
+
+        self.UTILS.test.TEST(in_errorMargin,
+                             "Expected video length on thumbnail to be {}, +- {} seconds (it was {} seconds).".
+                             format(length_str_mmss, error_margin_ss, myDur))
 
     def _convert_str_to_seconds(self, the_string):
         """
@@ -42,19 +61,19 @@ class Video(object):
         processed = time.strptime(the_string, '%M:%S')
         return (int(datetime.timedelta(minutes=processed.tm_min, seconds=processed.tm_sec).total_seconds()))
 
-    def check_video_length(self, position, expected_duration, margin=2):
+    def check_video_length(self, expected_duration):
         """
         This method asserts that the video has the desired duration
         @param  int expected_duration   specifies the video duration in seconds
         """
 
         # Play the video and get total duration
-        self.play_video(position)
-        video_length = self.UTILS.element.getElement(DOM.Video.player_time_slider_duration, "Video length")
+        self.play_current_video()
+        video_length = self.UTILS.element.getElement(DOM.Gallery.preview_current_video_duration, "Video length")
         real_duration = self._convert_str_to_seconds(video_length.text)
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
-        interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
+        interval = [expected_duration, expected_duration - 1, expected_duration + 1]
         self.UTILS.test.TEST(real_duration in interval, "Duration matches")
 
     def _click_on_video_external(self, position, frame_to_change):
@@ -63,7 +82,7 @@ class Video(object):
         @param  int     position            thumbnail to click 
         @param  tuple   frame_to_change     frame to switch once the image has been cropped
         """
-        all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails_thumbs, "Videos")
+        all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails, "Videos")
         my_video = all_videos[num]
         my_video.tap()
 
@@ -86,25 +105,29 @@ class Video(object):
         """
         self._click_on_video_external(position, DOM.Email.frame_locator)
 
-    def play_video(self, position):
-        """
-        Clicks the thumbnail to start the video.
-        """
+    def play_video(self, num):
+        #
+        # Clicks the thumbnail to start the video.
+        #
 
+        #
         # Get the list of video items and click the 'num' one.
-        all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails_thumbs, "Videos")
-        my_video = all_videos[position]
-        self.UTILS.element.simulateClick(my_video)
+        #
+        all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails, "Videos")
+        my_video = all_videos[num]
+        my_video.tap()
 
+        #
         # Wait for the video to start playing before returning.
-        self.UTILS.element.waitForElements(DOM.Video.player_video_loaded, "Loaded video", True, 20, False)
+        #
+        self.UTILS.element.waitForElements(DOM.Video.video_loaded, "Loaded video", True, 20, False)
 
     def is_video_playing(self):
-        return "paused" in self.marionette.find_element(*DOM.Video.player_toolbar_play).get_attribute('class')
+        return self.marionette.find_element(*DOM.Video.video_player).get_attribute('paused') == 'false'
 
     def show_controls(self):
-        self.parent.wait_for_element_displayed(*DOM.Video.player_video)
-        self.marionette.find_element(*DOM.Video.player_video).tap()
+        self.parent.wait_for_element_displayed(*DOM.Video.video_player)
+        self.marionette.find_element(*DOM.Video.video_player).tap()
         self.parent.wait_for_element_displayed(*DOM.Video.video_controls)
 
     @retry(5, 1)

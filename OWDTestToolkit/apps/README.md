@@ -1364,7 +1364,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>startVideo</td>
+        <td align=center>play_video</td>
         <td align=left>p_num</td>
         <td align=left>Clicks the thumbnail to start the video.</td>
     </tr>
