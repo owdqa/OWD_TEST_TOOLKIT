@@ -193,42 +193,42 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>takePicture</td>
+        <td align=center>take_picture</td>
         <td align=left></td>
         <td align=left>Take a picture.</td>
     </tr>
 
 
     <tr>
-        <td align=center>goToGallery</td>
+        <td align=center>go_to_gallery</td>
         <td align=left></td>
         <td align=left>Clicks the Gallery button to switch to the Gallery application  (warning: this will land you in the gallery iframe).</td>
     </tr>
 
 
     <tr>
-        <td align=center>checkVideoLength</td>
+        <td align=center>check_video_length</td>
         <td align=left>p_vid_num<br>p_from_SS<br>p_to_SS</td>
         <td align=left>Check the length of a video.</td>
     </tr>
 
 
     <tr>
-        <td align=center>switchSource</td>
+        <td align=center>switch_source</td>
         <td align=left></td>
         <td align=left>Switch between still shot and video.</td>
     </tr>
 
 
     <tr>
-        <td align=center>clickThumbnail</td>
+        <td align=center>click_on_thumbnail_at_pos</td>
         <td align=left>p_num</td>
         <td align=left>Click thumbnail.</td>
     </tr>
 
 
     <tr>
-        <td align=center>recordVideo</td>
+        <td align=center>record_video</td>
         <td align=left>p_length</td>
         <td align=left>Record a video.  p_length is the number of seconds to record for.</td>
     </tr>
@@ -857,14 +857,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>thumbCount</td>
+        <td align=center>get_number_of_thumbnails</td>
         <td align=left></td>
         <td align=left>Returns the number of thumbnails.</td>
     </tr>
 
 
     <tr>
-        <td align=center>checkVideoLength</td>
+        <td align=center>check_video_length</td>
         <td align=left>p_from_SS<br>p_to_SS</td>
         <td align=left>Check the length of a video.</td>
     </tr>
@@ -878,14 +878,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>deleteThumbnails</td>
+        <td align=center>delete_thumbnails</td>
         <td align=left>p_num_array</td>
-        <td align=left>Deletes the thumbnails listed in p_num_array  (following an index starting at number 0).<br>  The list must be numeric, i.e "deleteThumbnails( (0,1,2) )".</td>
+        <td align=left>Deletes the thumbnails listed in p_num_array  (following an index starting at number 0).<br>  The list must be numeric, i.e "delete_thumbnails( (0,1,2) )".</td>
     </tr>
 
 
     <tr>
-        <td align=center>clickThumb</td>
+        <td align=center>click_on_thumbnail_at_position</td>
         <td align=left>p_num</td>
         <td align=left>Clicks a thumbnail from the gallery.</td>
     </tr>
@@ -1357,7 +1357,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>checkVideoLength</td>
+        <td align=center>check_video_length</td>
         <td align=left>p_vid_num<br>p_from_SS<br>p_to_SS</td>
         <td align=left></td>
     </tr>

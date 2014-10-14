@@ -54,8 +54,8 @@ class Video(object):
                              "Expected video length on thumbnail to be {}, +- {} seconds (it was {} seconds).".
                              format(length_str_mmss, error_margin_ss, myDur))
 
-    def checkVideoLength(self, vid_num, from_ss, to_ss):
-        self.UTILS.reporting.logResult("info", "CANNOT USE checkVideoLength() AT THIS TIME!")
+    def check_video_length(self, vid_num, from_ss, to_ss):
+        self.UTILS.reporting.logResult("info", "CANNOT USE check_video_length() AT THIS TIME!")
         return
 
         #

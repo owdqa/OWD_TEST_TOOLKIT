@@ -341,7 +341,7 @@ class Messages(object):
             self.UTILS.general.addFileToDevice('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
 
             self.createMMSImage()
-            self.gallery.clickThumbMMS(0)
+            self.gallery.click_on_thumbnail_at_position_mms(0)
 
             self.sendSMS()
         elif attached_type == "cameraImage":
