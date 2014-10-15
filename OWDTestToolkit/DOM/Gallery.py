@@ -35,3 +35,4 @@ preview_current_video_duration = ('xpath', '//div[@class="frame" and contains(@s
 no_thumbnails_message = ("xpath", "//h1[@id='overlay-title' and text()='{}']".format(_("No photos or videos")))
 crop_done = ("xpath", "//*[@id='crop-done-button']")
 file_name_header = ('css selector', 'h1#filename')
+download_manager_preview = ('css selector', 'div#frame div.image-view')
