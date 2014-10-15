@@ -958,7 +958,6 @@ class Settings(object):
         # A couple of checks to wait for 'anything' to be Connected (only look for 'present' because it
         # might be off the bottom of the page).
         #
-        self.UTILS.test.TEST(True, "Connected: {}".format(self.wifi_list_isConnected(wlan_name, timeout=10)))
         self.UTILS.test.TEST(self.wifi_list_isConnected(wlan_name, timeout=60),
                 "Wifi '{}' is listed as 'connected' in wifi settings.".format(wlan_name), False)
 
@@ -1046,11 +1045,14 @@ class Settings(object):
         #
         # Tap the network name in the list.
         #
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
+        
         _wifi_name_element = ("xpath", DOM.Settings.wifi_name_xpath.format(wlan_name))
         self.parent.wait_for_element_displayed(_wifi_name_element[0], _wifi_name_element[1], timeout=10)
         wifi = self.marionette.find_element(*_wifi_name_element)
 
-        wifi.tap()
+        self.UTILS.element.simulateClick(wifi)
         time.sleep(2)
 
     def wifi_switchOn(self):
