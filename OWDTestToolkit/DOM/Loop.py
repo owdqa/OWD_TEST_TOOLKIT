@@ -3,6 +3,7 @@ _ = I18nSetup(I18nSetup).setup()
 
 frame_locator = ('src', 'loop')
 loading_overlay = ('id', 'loading-overlay')
+app_header = ('xpath', '//section[@id="calllog-panel"]//h1[text()="Firefox Hello"]')
 
 # Wizard
 wizard = ('id', 'wizard-tutorial-section')
