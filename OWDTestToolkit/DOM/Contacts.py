@@ -25,7 +25,7 @@ view_contact_tels_xpath = "//*[contains(@id, 'call-or-pick-') and contains(@data
 dialer_frame = ("data-url", "oncall")
 
 search_field = ("xpath", ".//*[@id='search-start']/input")
-search_contact_input = ("css selector", "input[data-l10n-id=search-contact]")
+search_contact_input = ("id", "search-contact")
 search_contact_result_input = ('id', 'search-contact')
 search_results_list = ("css selector", "#search-list li")
 search_cancel_btn = ('id', 'cancel-search')
