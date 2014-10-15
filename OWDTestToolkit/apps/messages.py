@@ -183,10 +183,10 @@ class Messages(object):
         """Get the last message text and check it against the expected value.
         """
         returnedSMS = self.lastMessageInThisThread()
-        returnedSMS_text = self.marionette.find_element(*DOM.Messages.last_message_text,
-                                                                      id=returnedSMS.id)
+        returnedSMS_text = self.marionette.find_element(*DOM.Messages.last_message_text, id=returnedSMS.id)
         self.UTILS.test.TEST((returnedSMS_text and returnedSMS_text.text == expected),
-                             "Expected SMS text = '{}' (got '{}').".format(expected, returnedSMS_text.text))
+                             "Expected SMS text = '{}' ({}) (got '{}' ({})).".\
+                             format(expected, len(expected), returnedSMS_text.text, len(returnedSMS_text.text)))
 
     def checkIsInToField(self, target, targetIsPresent=True):
         #
