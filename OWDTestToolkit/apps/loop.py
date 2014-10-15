@@ -128,9 +128,8 @@ class Loop(object):
                 self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login)
                 return True
             except:
-                header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
                 try:
-                    self.parent.wait_for_element_displayed(*header)
+                    self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
                     return False
                 except:
                     self.UTILS.test.TEST(False, "Ooops. Something went wrong", True)
@@ -225,8 +224,7 @@ class Loop(object):
             try:
                 self.UTILS.reporting.debug("Now looking for permission Loop main view....")
                 self.apps.switch_to_displayed_app()
-                header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
-                self.parent.wait_for_element_displayed(*header)
+                self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
                 return
             except:
                 self.UTILS.reporting.debug("And Now looking for error....")
@@ -261,8 +259,7 @@ class Loop(object):
         except:
             self.UTILS.reporting.debug("Now looking for permission Loop main view....")
             self.apps.switch_to_displayed_app()
-            header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
-            self.parent.wait_for_element_displayed(*header)
+            self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
             return
 
         msg_text = self.marionette.find_element(*DOM.GLOBAL.app_permission_msg).text
