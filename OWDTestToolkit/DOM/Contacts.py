@@ -10,8 +10,6 @@ view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath = "//li[@class='contact-item']//p[contains(@data-search,'{}')]"
 contact_names = ('css selector', '.contact-item .contact-text')
-view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
-
 view_all_contact_specific_contact = ('xpath', '//section[@class="group-section"]//li/p[@class="contact-text"]/strong[contains(text(), "{}")]')
 
 
