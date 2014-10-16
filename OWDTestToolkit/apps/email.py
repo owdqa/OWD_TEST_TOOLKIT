@@ -114,7 +114,7 @@ class Email(object):
             self.UTILS.general.addFileToDevice('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
 
             self.createEmailVideo()
-            self.video.clickOnVideoEmail(0)
+            self.video.click_on_video_at_position_email(0)
 
         elif attached_type == "audio":
             #

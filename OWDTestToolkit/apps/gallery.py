@@ -30,7 +30,7 @@ class Gallery(object):
         processed = time.strptime(the_string, '%M:%S')
         return (int(datetime.timedelta(minutes=processed.tm_min, seconds=processed.tm_sec).total_seconds()))
 
-    def check_video_length(self, expected_duration):
+    def check_video_length(self, expected_duration, margin=2):
         """
         This method asserts that the video has the desired duration
         @param  int expected_duration   specifies the video duration in seconds
@@ -42,7 +42,7 @@ class Gallery(object):
         real_duration = self._convert_str_to_seconds(video_length.text)
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
-        interval = [expected_duration, expected_duration - 1, expected_duration + 1]
+        interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
         self.UTILS.test.TEST(real_duration in interval, "Duration matches")
 
     def click_on_thumbnail_at_position(self, position, preview=True):

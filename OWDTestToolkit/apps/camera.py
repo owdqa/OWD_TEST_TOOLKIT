@@ -1,4 +1,5 @@
 import time
+import datetime
 from OWDTestToolkit import DOM
 
 
@@ -61,7 +62,7 @@ class Camera(object):
         processed = time.strptime(the_string, '%M:%S')
         return (int(datetime.timedelta(minutes=processed.tm_min, seconds=processed.tm_sec).total_seconds()))
 
-    def check_video_length(self, expected_duration):
+    def check_video_length(self, expected_duration, margin=2):
         """
         This method asserts that the video has the desired duration
         @expected_duration: specify the video duration in seconds
@@ -69,11 +70,11 @@ class Camera(object):
 
         # Play the video and get total duration
         self.play_current_video()
-        video_length = self.UTILS.element.getElement(DOM.Gallery.preview_video_slider_duration, "Video length")
+        video_length = self.UTILS.element.getElement(DOM.Camera.preview_video_slider_duration, "Video length")
         real_duration = self._convert_str_to_seconds(video_length.text)
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
-        interval = [expected_duration, expected_duration - 1, expected_duration + 1]
+        interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
         self.UTILS.test.TEST(real_duration in interval, "Duration matches")
 
     def _tap_on_capture_button(self):
@@ -160,8 +161,9 @@ class Camera(object):
         """
         Plays the video that has previously been loaded (by pressing its thumbnail first), then press a play button.
         """
-        play_btn = self.UTILS.element.getElement(DOM.Gallery.preview_video_play, "Video play button")
+        play_btn = self.UTILS.element.getElement(DOM.Camera.preview_video_play, "Video play button")
         time.sleep(1)
         self.UTILS.element.simulateClick(play_btn)
+        play_btn.tap()
 
-        self.UTILS.element.waitForElements(DOM.Gallery.preview_video_pause, "Pause button", True, 20, False)
+        self.UTILS.element.waitForElements(DOM.Camera.preview_video_pause, "Pause button", True, 20, False)
