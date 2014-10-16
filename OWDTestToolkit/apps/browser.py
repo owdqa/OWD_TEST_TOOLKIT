@@ -156,10 +156,10 @@ class Browser(object):
             if web_frame.is_displayed():
                 return web_frame.get_attribute("src")
 
-    def open_url(self, url, timeout=30):
-        # """
-        # Open url.
-        # """
+    def open_url(self, url, timeout=30, trusted=True):
+        """
+        Open url.
+        """
 
         self.switch_to_chrome()
 
@@ -168,6 +168,17 @@ class Browser(object):
         url_input.clear()
         url_input.send_keys(url)
         self.tap_go_button(timeout=timeout)
+
+        # If the site is trusted, check for the warning and get rid of it.
+        if trusted:
+            # If the untrusted site warning is present, just accept it. Otherwise, silently pass.
+            try:
+                understand = self.marionette.find_element(*DOM.Browser.understand_risks)
+                understand.tap()
+                btn = self.marionette.find_element(*DOM.Browser.add_permanent_exception)
+                btn.tap()
+            except:
+                pass
 
         self.check_page_loaded(url, False)
         self.switch_to_content()
