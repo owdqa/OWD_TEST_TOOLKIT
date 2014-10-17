@@ -33,68 +33,6 @@ class Messages(object):
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def addNumbersInToField(self, nums):
-        """
-        Add the phone numbers in the 'To' field of this sms message.
-        Assumes you are in 'create sms' screen.
-        """
-
-        # This variable is used to keep track of the appearance of the keyboard frame
-        n = 0
-
-        for num in nums:
-            # Even though we don't use the keyboard for putting the number in,
-            # we need it for the ENTER button (which allows us to put more than
-            # one number in).
-            #
-            # So check that the keyboard appears when we tap the "TO" field if we have
-            # more than one number.
-            if len(nums) > 1:
-                self.UTILS.reporting.logResult("info", "Checking the keyboard appears when I tap the 'To' field ...")
-                to_field = self.UTILS.element.getElement(DOM.Messages.target_numbers_empty, "Target number field")
-                to_field.tap()
-
-                boolKBD = False
-                self.marionette.switch_to_frame()
-
-                if n < 1:
-
-                    try:
-                        # A 'silent' check to see if the keyboard iframe appears.
-                        elDef = ("xpath", "//iframe[contains(@{}, '{}')]".
-                                 format(DOM.Keyboard.frame_locator[0], DOM.Keyboard.frame_locator[1]))
-                        self.parent.wait_for_element_displayed(*elDef, timeout=2)
-                        boolKBD = True
-                    except:
-                        boolKBD = False
-
-                    self.UTILS.test.TEST(boolKBD, "Keyboard is displayed when 'To' field is clicked for the first time")
-
-                self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
-
-            if n == 0:
-
-                self.UTILS.general.typeThis(DOM.Messages.target_numbers_empty,
-                                            "Target number field",
-                                            num,
-                                            p_no_keyboard=True,
-                                            p_validate=False,
-                                            p_clear=False,
-                                            p_enter=True)
-
-            else:
-                self.UTILS.general.typeThis(DOM.Messages.target_numbers_empty,
-                                            "Target number field",
-                                            num,
-                                            p_no_keyboard=True,
-                                            p_validate=False,
-                                            p_clear=False,
-                                            p_enter=False)
-                input_area = self.UTILS.element.getElement(DOM.Messages.input_message_area, "Target number field")
-                input_area.tap()
-
-            n += 1
-
     def cancelSettings(self):
 
         #
@@ -651,6 +589,74 @@ class Messages(object):
                              "|EXPECTED: '" + msg + "'" +
                              "|ACTUAL  : '" + x.text + "'")
 
+    def addNumbersInToField(self, nums):
+        """
+        Add the phone numbers in the 'To' field of this sms message.
+        Assumes you are in 'create sms' screen.
+        """
+
+        # This variable is used to keep track of the appearance of the keyboard frame
+        n = 0
+
+        for num in nums:
+            # Even though we don't use the keyboard for putting the number in,
+            # we need it for the ENTER button (which allows us to put more than
+            # one number in).
+            #
+            # So check that the keyboard appears when we tap the "TO" field if we have
+            # more than one number.
+            if len(nums) > 1:
+                self.UTILS.reporting.logResult("info", "Checking the keyboard appears when I tap the 'To' field ...")
+                to_field = self.UTILS.element.getElement(DOM.Messages.target_numbers_empty, "Target number field")
+                to_field.tap()
+
+                boolKBD = False
+                self.marionette.switch_to_frame()
+
+                if n < 1:
+
+                    try:
+                        # A 'silent' check to see if the keyboard iframe appears.
+                        elDef = ("xpath", "//iframe[contains(@{}, '{}')]".
+                                 format(DOM.Keyboard.frame_locator[0], DOM.Keyboard.frame_locator[1]))
+                        self.parent.wait_for_element_displayed(*elDef, timeout=2)
+                        boolKBD = True
+                    except:
+                        boolKBD = False
+
+                    self.UTILS.test.TEST(
+                        boolKBD, "Keyboard is displayed when 'To' field is clicked for the first time")
+
+                self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
+
+            if n == 0:
+
+                self.UTILS.general.typeThis(DOM.Messages.target_numbers_empty,
+                                            "Target number field",
+                                            num,
+                                            p_no_keyboard=True,
+                                            p_validate=False,
+                                            p_clear=False,
+                                            p_enter=True)
+
+            else:
+                self.UTILS.general.typeThis(DOM.Messages.target_numbers_empty,
+                                            "Target number field",
+                                            num,
+                                            p_no_keyboard=True,
+                                            p_validate=False,
+                                            p_clear=False,
+                                            p_enter=False)
+                input_area = self.UTILS.element.getElement(DOM.Messages.input_message_area, "Target number field")
+                input_area.tap()
+
+            n += 1
+
+    def addContactToField(self, contact_name):
+        self._search_for_contact(contact_name)
+        # Now check the correct name is in the 'To' list.
+        self.checkIsInToField(contact_name)
+
     def _select_forward_option_for(self, element):
         self.actions.long_press(element, 2).perform()
         self.UTILS.reporting.logResult("info", "Clicking on forward button")
@@ -673,11 +679,6 @@ class Messages(object):
 
         # Switch back to the sms iframe.
         self.apps.switch_to_displayed_app()
-
-    def addContactToField(self, contact_name):
-        self._search_for_contact(contact_name)
-        # Now check the correct name is in the 'To' list.
-        self.checkIsInToField(contact_name)
 
     def forwardMessage(self, msg_type, target_telNum):
         """
@@ -766,8 +767,6 @@ class Messages(object):
         # Send the mms.
         self.UTILS.reporting.logResult("info", "Clicking on Send button")
         self.sendSMS()
-        
-
 
     def get_mms_attachments_info(self, mms):
         """Give name and file size for all attachments in an MMS.
