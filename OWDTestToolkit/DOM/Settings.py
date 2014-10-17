@@ -122,7 +122,7 @@ sound_alarm_vol = ('name', 'audio.volume.alarm')
 
 hotspot = ("id", "menuItem-internetSharing")
 hotspot_header = ('xpath', GLOBAL.app_head_specific.format(_('Internet sharing')))
-hotspot_switch = ("css selector", "#hotspot span[data-l10n-id=wifi-hotspot]")
+hotspot_switch = ("id", "hotspot-enabled")
 hotspot_settings = ("css selector", "#hotspot-settings-section button[data-l10n-id=hotspotSettings]")
 
 msg_settings = ("xpath", "//*[@data-l10n-id='messagingSettings']")
@@ -154,6 +154,8 @@ dual_sim_switch_pin_sim1 = ('xpath', '//ul[@id="simpin-container"]//li[@class="s
 dual_sim_change_pin_sim1 = ('xpath', '//ul[@id="simpin-container"]//li[@class="simpin-change simpin-change-0 simpin-0"]')
 
 screen_lock_menu = ('id', 'menuItem-screenLock')
+lockscreen_enable = ('css selector', '.lockscreen-enable')
+lockscreen_enable_span = ('css selector', '[data-l10n-id=lockScreen]')
 passcode_lock = ('css selector', '.lockscreen-enabled')
 passcode_enable = ('css selector', '.passcode-enable')
 passcode_input = ('id', 'passcode-pseudo-input')
