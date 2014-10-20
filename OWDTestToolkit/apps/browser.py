@@ -342,13 +342,10 @@ class Browser(object):
         url_input = self.UTILS.element.getElement(DOM.Browser.url_input, "url input")
         url_input.tap()
         url_value = url_input.get_attribute("value")
-        self.UTILS.reporting.logResult('info', "URL VALUE: {}".format(url_value))
-        # url_value = self.marionette.exceute_script(""" return arguments[0].value; """, script_args=[url_input])
 
         bookmark_tab = self.UTILS.element.getElement(DOM.Browser.bookmarks_tab, "Bookmark tab")
         bookmark_tab.tap()
-        time.sleep(2)
 
         # Verify that the bookmark is correctly created
         elem = (DOM.Browser.bookmark_item[0], DOM.Browser.bookmark_item[1].format(url_value))
-        self.UTILS.element.waitForElements(elem, "Bookmark just added")
+        self.UTILS.element.waitForElements(elem, "Bookmark just added", timeout=10)
