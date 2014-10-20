@@ -34,6 +34,9 @@ class OMACP(object):
         x = self.UTILS.element.getElement(DOM.OMACP.CP_Close_Button, "Close button")
         x.tap()
 
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
+
         x = self.UTILS.element.getElement(DOM.OMACP.CP_Cancel_Message, "Cancel Message")
         self.UTILS.test.TEST(x.text == "The message has not been processed yet, do you really want to quit?",
                         "Cancel Message Text")

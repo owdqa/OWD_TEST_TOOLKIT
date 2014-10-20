@@ -59,7 +59,6 @@ confirm_delete_btn = ('xpath', '//*[@id="confirmation-message"]//button[text()="
 done_button = ('id', 'save-button')
 
 add_photo = ("id", "thumbnail-photo")
-photo_from_gallery = ("xpath", "/html/body/div/form[9]/menu/button")
 cancel_photo_source = ("xpath", '//button[@data-action="cancel"]')
 picture_thumbnails = ("xpath", "//*[@id='thumbnails']//div[@class='thumbnail-group-container']//img")
 picture_crop_done_btn = ("id", "crop-done-button")
