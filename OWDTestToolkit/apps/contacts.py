@@ -40,8 +40,9 @@ class Contacts(object):
         self.marionette.switch_to_frame()
 
         # Choose to get a picture from the Gallery.
-        x = self.UTILS.element.getElement(DOM.Contacts.photo_from_gallery, "Gallery link")
-        x.tap()
+        elem = (DOM.GLOBAL.action_menu_option[0], DOM.GLOBAL.action_menu_option[1].format("Gallery"))
+        gallery_option = self.UTILS.element.getElement(elem, "Gallery link")
+        gallery_option.tap()
 
         # Switch to Gallery iframe.
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)

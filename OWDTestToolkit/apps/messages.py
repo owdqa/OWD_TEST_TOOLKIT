@@ -80,6 +80,9 @@ class Messages(object):
         #
         # Press add subject button
         #
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
+        
         self.UTILS.reporting.logResult("info", "Cliking on add subject button")
         x = self.UTILS.element.getElement(DOM.Messages.addsubject_btn_msg_opt,
                                           "add subject option button is displayed")

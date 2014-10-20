@@ -330,22 +330,25 @@ class Browser(object):
         """
         self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
 
-        #
         # Add the page to the bookmark
-        #
-        x = self.UTILS.element.getElement(DOM.Browser.bookmarkmenu_button, "Bookmark button")
-        x.tap()
+        bookmarkmenu_button = self.UTILS.element.getElement(DOM.Browser.bookmarkmenu_button, "Bookmark menu button")
+        bookmarkmenu_button.tap()
 
-        x = self.UTILS.element.getElement(DOM.Browser.bookmark_button, "Bookmark button")
-        x.tap()
+        bookmark_button = self.UTILS.element.getElement(DOM.Browser.bookmark_button, "Bookmark button")
+        bookmark_button.tap()
 
-        x = self.UTILS.element.getElement(DOM.Browser.url_input, "Bookmark button")
-        x.tap()
+        # Check the page has been added as a bookmark. For that, we have to tap on the url input field and then
+        # on the bookmark tab that will appear
+        url_input = self.UTILS.element.getElement(DOM.Browser.url_input, "url input")
+        url_input.tap()
+        url_value = url_input.get_attribute("value")
+        self.UTILS.reporting.logResult('info', "URL VALUE: {}".format(url_value))
+        # url_value = self.marionette.exceute_script(""" return arguments[0].value; """, script_args=[url_input])
 
-        x = self.UTILS.element.getElement(DOM.Browser.bookmarks_tab, "Bookmark tab")
-        x.tap()
+        bookmark_tab = self.UTILS.element.getElement(DOM.Browser.bookmarks_tab, "Bookmark tab")
+        bookmark_tab.tap()
+        time.sleep(2)
 
-        #
-        # Very that the bookmark is correctly created
-        #
-        self.UTILS.element.waitForElements(DOM.Browser.bookmark_item1, "Bookmark")
+        # Verify that the bookmark is correctly created
+        elem = (DOM.Browser.bookmark_item[0], DOM.Browser.bookmark_item[1].format(url_value))
+        self.UTILS.element.waitForElements(elem, "Bookmark just added")

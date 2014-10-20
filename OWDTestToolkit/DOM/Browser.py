@@ -46,9 +46,9 @@ page_title = ('xpath', ".//*[@id='results']/ul//h5[text()='{}']".format(_("Probl
 page_problem = ("xpath", "//*[text()='{}']".format(_("Problemloadingpage")))
 
 bookmarkmenu_button = ("id", "bookmark-button")
-bookmark_button = ("xpath", "//*[@id='bookmark-menu-add']")
-bookmarks_tab = ("xpath", "//*[@id='bookmarks-tab']")
-bookmark_item1 = ("xpath", "/html/body/div/div/div[2]/div/section[2]/ul/li/a/h5")
+bookmark_button = ('id', 'bookmark-menu-add')
+bookmarks_tab = ('id', 'bookmarks-tab')
+bookmark_item = ("xpath", '//section[@id="bookmarks"]//a[@href="{}"]')
 
 embarrasing_tag = ('xpath', '//h3[@data-l10n-id="this-is-embarrassing"]')
 embarrasing_reload = ('id', 'try-reloading')

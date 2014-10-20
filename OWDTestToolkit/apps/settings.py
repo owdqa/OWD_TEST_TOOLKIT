@@ -52,25 +52,6 @@ class Settings(object):
         self.UTILS.element.waitForElements(('xpath',
             DOM.GLOBAL.app_head_specific.format(_("Call Settings").encode("utf8"))), "Call settings header")
 
-    def callID_verify(self):
-        self.call_settings()
-
-        self.UTILS.reporting.logResult("info", "Call number presses")
-
-        x = self.UTILS.element.getElement(DOM.Settings.call_button, "Call ID button")
-        x.tap()
-        self.UTILS.reporting.logResult("info", "Call ID button presses")
-
-        #Change Frame
-        self.marionette.switch_to_frame()
-
-        #Get option selected
-        x = self.UTILS.element.getElement(DOM.Settings.call_show_number, "Call Option value")
-        y = x.get_attribute("aria-selected")
-
-        self.UTILS.reporting.logResult("info", "Screen shot of the result of tapping call button", y)
-        self.UTILS.test.TEST(y == "true", "Checking Call ID value")
-
     def three_times_bad_pin2(self, wrong_pin2):
         """Change the PIN2.
 
