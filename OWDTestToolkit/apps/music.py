@@ -1,6 +1,7 @@
 from OWDTestToolkit import DOM
 import time
 from marionette import Actions
+from OWDTestToolkit.utils.decorators import retry
 
 
 class Music(object):
@@ -21,6 +22,7 @@ class Music(object):
                                               " app - loading overlay")
         return self.app
 
+    @retry(5)
     def click_on_song(self, title=None, frame=None):
         dom_elem = DOM.Music.first_song if not title\
             else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
