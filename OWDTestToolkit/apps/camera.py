@@ -119,6 +119,8 @@ class Camera(object):
         """
         Take a picture.
         """
+        self.parent.wait_for_condition(lambda m: m.find_element(
+            *DOM.Camera.controls_pane).get_attribute('data-enabled') == 'true', 20)
         capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
         time.sleep(1)
         capture_button.tap()
