@@ -1,30 +1,24 @@
 frame_locator = ("src", "camera")
 
-trash_icon = ("id", "delete-button")
-
-gallery_button = ("id", "gallery-button")
-select_button = ('css selector', '.select-button')
-retake_button = ('css selector', '.retake-button')
-#######################################################################################################
 # Superior HUD
 top_hud = ('class name', 'hud visible')
-top_hud_switch_camera = ('xpath', '//div[contains(@class="hud_btn hud_camera")]')
-top_hud_switch_flash_auto = ('xpath', '//div[contains(@class="hud_btn hud_flash icon-flash-auto")]')
-top_hud_switch_flash_on = ('xpath', '//div[contains(@class="hud_btn hud_flash icon-flash-on")]')
-top_hud_switch_flash_off = ('xpath', '//div[contains(@class="hud_btn hud_flash icon-flash-off")]')
-top_hud_settings = ('xpath', '//div[contains(@class="hud_btn hud_settings")]')
+top_hud_switch_camera = ('xpath', '//div[contains(@class, "hud_btn hud_camera")]')
+top_hud_switch_flash_auto = ('xpath', '//div[contains(@class, "hud_btn hud_flash icon-flash-auto")]')
+top_hud_switch_flash_on = ('xpath', '//div[contains(@class, "hud_btn hud_flash icon-flash-on")]')
+top_hud_switch_flash_off = ('xpath', '//div[contains(@class, "hud_btn hud_flash icon-flash-off")]')
+top_hud_settings = ('xpath', '//div[contains(@class, "hud_btn hud_settings")]')
 
 # Settings menu
 settings = ('class name', 'settings visible')
 settings_menu_title = ('xpath', '//h2[@class="settings_title"]')
-settings_close = ('xpath', '//div[contains(@class="settings-close")]')
+settings_close = ('xpath', '//div[contains(@class, "settings-close")]')
 settings_items = ('xpath', '//div[@class="settings_items"]')
-settings_hdr = ('xpath', '//div[@class="settings_items"]//li[contains(@class="setting hdr)]')
-settings_hdr_value = ('xpath', '//div[@class="settings_items"]//li[contains(@class="setting hdr")]//h5[@class="setting_value"]')
-settings_timer = ('xpath', '//div[@class="settings_items"]//li[contains(@class="setting timer")]')
-settings_timer_value = ('xpath', '//div[@class="settings_items"]//li[contains(@class="setting timer")]//h5[@class="setting_value"]')
-settings_grid = ('xpath', '//div[@class="settings_items"]//li[contains(@class="setting hdr-setting")]')
-settings_grid_value = ('xpath', '//div[@class="settings_items"]//li[contains(@class="setting grid")]//h5[@class="setting_value"]')
+settings_hdr = ('xpath', '//div[@class="settings_items"]//li[contains(@class, "setting hdr)]')
+settings_hdr_value = ('xpath', '//div[@class="settings_items"]//li[contains(@class, "setting hdr")]//h5[@class="setting_value"]')
+settings_timer = ('xpath', '//div[@class="settings_items"]//li[contains(@class, "setting timer")]')
+settings_timer_value = ('xpath', '//div[@class="settings_items"]//li[contains(@class, "setting timer")]//h5[@class="setting_value"]')
+settings_grid = ('xpath', '//div[@class="settings_items"]//li[contains(@class, "setting hdr-setting")]')
+settings_grid_value = ('xpath', '//div[@class="settings_items"]//li[contains(@class, "setting grid")]//h5[@class="setting_value"]')
 
 # Camera controls
 controls_pane = ('xpath', '//div[contains(@class, "controls")]')
@@ -59,3 +53,7 @@ action_menu_cancel = ("xpath", "//form[@data-type='action']//button[@name='cance
 # Dialog menu
 dialog_menu_no = ('id', 'dialog-no')
 dialog_menu_yes = ('id', 'dialog-yes')
+
+# Attach picture just taken
+select_button = ('css selector', '.select-button')
+retake_button = ('css selector', '.retake-button')

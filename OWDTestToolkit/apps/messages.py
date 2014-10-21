@@ -14,12 +14,14 @@ _ = I18nSetup(I18nSetup).setup()
 
 
 class Messages(object):
+
     def __init__(self, parent):
         self.apps = parent.apps
         self.data_layer = parent.data_layer
         self.parent = parent
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
+        self.actions = Actions(self.marionette)
 
     @retry(5)
     def launch(self):
@@ -31,77 +33,6 @@ class Messages(object):
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def addNumbersInToField(self, nums):
-        #
-        # Add the numbers (or contact name) in the 'To'
-        # field of this sms message.
-        # Assumes you are in 'create sms' screen.
-        # <br>
-        # <b>nums</b> must be an array.
-        #
-        n = 0
-
-        for i in nums:
-            x = self.UTILS.debug.screenShotOnErr()
-
-            #
-            # Even though we don't use the keyboard for putting the number in,
-            # we need it for the ENTER button (which allows us to put more than
-            # one number in).
-            #
-            # So check that the keyboard appears when we tap the "TO" field if we have
-            # more than one number.
-            #
-            if len(nums) > 1:
-                self.UTILS.reporting.logResult("info", "Checking the keyboard appears when I tap the 'To' field ...")
-                x = self.UTILS.element.getElement(DOM.Messages.target_numbers_empty, "Target number field")
-                x.tap()
-
-                boolKBD = False
-                self.marionette.switch_to_frame()
-
-                if n < 1:
-
-                    try:
-                        #
-                        # A 'silent' check to see if the keyboard iframe appears.
-                        elDef = ("xpath", "//iframe[contains(@{}, '{}')]".\
-                                 format(DOM.Keyboard.frame_locator[0], DOM.Keyboard.frame_locator[1]))
-                        self.parent.wait_for_element_displayed(*elDef, timeout=2)
-                        boolKBD = True
-                    except:
-                        boolKBD = False
-
-                    self.UTILS.test.TEST(boolKBD, "Keyboard is displayed when 'To' field is clicked.")
-
-                self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
-
-            #
-            # Seems okay, so proceed ...
-            #
-            if n == 0:
-
-                self.UTILS.general.typeThis(DOM.Messages.target_numbers_empty,
-                                    "Target number field",
-                                    i,
-                                    p_no_keyboard=True,
-                                    p_validate=False,
-                                    p_clear=False,
-                                    p_enter=True)
-
-            else:
-                self.UTILS.general.typeThis(DOM.Messages.target_numbers_empty,
-                                    "Target number field",
-                                    i,
-                                    p_no_keyboard=True,
-                                    p_validate=False,
-                                    p_clear=False,
-                                    p_enter=False)
-                x = self.UTILS.element.getElement(DOM.Messages.input_message_area, "Target number field")
-                x.tap()
-
-            n += 1
-
     def cancelSettings(self):
 
         #
@@ -109,14 +40,14 @@ class Messages(object):
         #
         self.UTILS.reporting.logResult("info", "Cliking on messages options button")
         x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
-            "Messages option button is displayed")
+                                          "Messages option button is displayed")
         x.tap()
 
         #
         # Press cancel button
         #
         cancelBtn = self.UTILS.element.getElement(DOM.Messages.cancel_btn_msg,
-            "Press Cancel button")
+                                                  "Press Cancel button")
         cancelBtn.tap()
 
     def deleteSubject(self, subject):
@@ -125,7 +56,7 @@ class Messages(object):
         #
         self.UTILS.reporting.logResult("info", "Cliking on messages options button")
         x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
-            "Messages option button is displayed")
+                                          "Messages option button is displayed")
         x.tap()
 
         #
@@ -133,7 +64,7 @@ class Messages(object):
         #
         self.UTILS.reporting.logResult("info", "Cliking on delete subject button")
         x = self.UTILS.element.getElement(DOM.Messages.deletesubject_btn_msg_opt,
-            "delete subject option button is displayed")
+                                          "delete subject option button is displayed")
         x.tap()
 
     def addSubject(self, subject):
@@ -143,15 +74,18 @@ class Messages(object):
         #
         self.UTILS.reporting.logResult("info", "Cliking on messages options button")
         x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
-            "Messages option button is displayed")
+                                          "Messages option button is displayed")
         x.tap()
 
         #
         # Press add subject button
         #
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
+        
         self.UTILS.reporting.logResult("info", "Cliking on add subject button")
         x = self.UTILS.element.getElement(DOM.Messages.addsubject_btn_msg_opt,
-            "add subject option button is displayed")
+                                          "add subject option button is displayed")
         x.tap()
 
         self.UTILS.general.typeThis(DOM.Messages.target_subject,
@@ -170,11 +104,11 @@ class Messages(object):
         # the message so you can continue).
         #
         x = self.UTILS.element.getElement(DOM.Messages.airplane_warning_message,
-                                    "Airplane mode warning message",
-                                    True, 5, False)
+                                          "Airplane mode warning message",
+                                          True, 5, False)
         if x:
             self.UTILS.reporting.logResult("info",
-                                 "Warning message title detected = '" + x.text + "'.")
+                                           "Warning message title detected = '" + x.text + "'.")
 
             x = self.UTILS.element.getElement(DOM.Messages.airplane_warning_ok, "OK button")
             x.tap()
@@ -185,7 +119,7 @@ class Messages(object):
         returnedSMS = self.lastMessageInThisThread()
         returnedSMS_text = self.marionette.find_element(*DOM.Messages.last_message_text, id=returnedSMS.id)
         self.UTILS.test.TEST((returnedSMS_text and returnedSMS_text.text == expected),
-                             "Expected SMS text = '{}' ({}) (got '{}' ({})).".\
+                             "Expected SMS text = '{}' ({}) (got '{}' ({})).".
                              format(expected, len(expected), returnedSMS_text.text, len(returnedSMS_text.text)))
 
     def checkIsInToField(self, target, targetIsPresent=True):
@@ -248,7 +182,7 @@ class Messages(object):
                 break
 
         self.UTILS.test.TEST(boolOK,
-            "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
+                             "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
         return boolOK
 
     def checkThreadHeader(self, header):
@@ -259,7 +193,7 @@ class Messages(object):
 
         boolOK = False
         if x.get_attribute("data-number") == header:
-                boolOK = True
+            boolOK = True
 
         self.UTILS.test.TEST(boolOK, "\"" + str(header) + "\" is the header in the SMS conversation.")
         return boolOK
@@ -273,7 +207,7 @@ class Messages(object):
         boolOK = False
 
         if x.text == header:
-                boolOK = True
+            boolOK = True
 
         self.UTILS.test.TEST(boolOK, "\"" + header + "\" is the header in the SMS conversation.")
         return boolOK
@@ -309,9 +243,9 @@ class Messages(object):
 
     def createAndSendMMS(self, attached_type, nums, m_text):
 
-        self.gallery = Gallery(self)
-        self.video = Video(self)
-        self.music = Music(self)
+        self.gallery = Gallery(self.parent)
+        self.video = Video(self.parent)
+        self.music = Music(self.parent)
 
         #
         # Launch messages app.
@@ -326,7 +260,6 @@ class Messages(object):
         #
         # Insert the phone number in the To field
         #
-        # self.addNumbersInToField([self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM")])
         self.addNumbersInToField(nums)
 
         #
@@ -422,7 +355,7 @@ class Messages(object):
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
 
     def createMMSCameraImage(self):
-        self.camera = Camera(self)
+        self.camera = Camera(self.parent)
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
         attach.tap()
@@ -437,7 +370,7 @@ class Messages(object):
         #
         # Take a picture.
         #
-        self.camera.takeAndSelectPicture()
+        self.camera.take_and_select_picture()
 
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
@@ -481,12 +414,12 @@ class Messages(object):
             x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
             x.tap()
             x = self.UTILS.element.getElement(DOM.Messages.check_all_threads_btn,
-                                        "Select all button")
+                                              "Select all button")
             x.tap()
 
             self.deleteSelectedThreads()
             self.UTILS.element.waitForElements(DOM.Messages.no_threads_message,
-                                       "No message threads notification", True, 60)
+                                               "No message threads notification", True, 60)
 
     def deleteMessagesInThisThread(self, msg_array=False):
         #
@@ -624,7 +557,7 @@ class Messages(object):
         for i in target_array:
             self.UTILS.reporting.debug("selecting thread for [{}]".format(i))
             x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_selector_xpath.format(i)),
-                                      "Thread checkbox for '{}'".format(i))
+                                              "Thread checkbox for '{}'".format(i))
             self.UTILS.reporting.debug("Trying to tap in element {}".format(x))
             x.tap()
 
@@ -642,494 +575,201 @@ class Messages(object):
         #
         time.sleep(1)  # Trying to remove an intermittent issue.
         self.UTILS.general.typeThis(DOM.Messages.input_message_area,
-                            "Input message area",
-                            msg,
-                            p_no_keyboard=not_keyboard,
-                            p_clear=False,
-                            p_enter=False,
-                            p_validate=False)  # it's the text() of this field, not the value.
+                                    "Input message area",
+                                    msg,
+                                    p_no_keyboard=not_keyboard,
+                                    p_clear=False,
+                                    p_enter=False,
+                                    p_validate=False)  # it's the text() of this field, not the value.
 
         #
         # Validate the field.
         #
         x = self.UTILS.element.getElement(DOM.Messages.input_message_area,
-                                    "Input message area (for validation)")
+                                          "Input message area (for validation)")
         self.UTILS.test.TEST(x.text == msg,
-                        "The text in the message area is as expected." + \
-                        "|EXPECTED: '" + msg + "'" + \
-                        "|ACTUAL  : '" + x.text + "'")
+                             "The text in the message area is as expected." +
+                             "|EXPECTED: '" + msg + "'" +
+                             "|ACTUAL  : '" + x.text + "'")
 
-    def forwardMessage(self, msg_type, target_telNum):
-        self.actions = Actions(self.marionette)
+    def addNumbersInToField(self, nums):
+        """
+        Add the phone numbers in the 'To' field of this sms message.
+        Assumes you are in 'create sms' screen.
+        """
 
-        #
-        # Establish which phone number to use.
-        #
+        # This variable is used to keep track of the appearance of the keyboard frame
+        n = 0
 
-        if msg_type == "sms":
+        for num in nums:
+            # Even though we don't use the keyboard for putting the number in,
+            # we need it for the ENTER button (which allows us to put more than
+            # one number in).
+            #
+            # So check that the keyboard appears when we tap the "TO" field if we have
+            # more than one number.
+            if len(nums) > 1:
+                self.UTILS.reporting.logResult("info", "Checking the keyboard appears when I tap the 'To' field ...")
+                to_field = self.UTILS.element.getElement(DOM.Messages.target_numbers_empty, "Target number field")
+                to_field.tap()
 
-            self.UTILS.reporting.logResult("info", "is a sms")
-            #
-            # Open sms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
-            sms = self.lastMessageInThisThread()
-            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
-            self.actions.long_press(body, 2).perform()
+                boolKBD = False
+                self.marionette.switch_to_frame()
 
-            #
-            # Press forward button
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
-            x.tap()
+                if n < 1:
 
-            #
-            # Add a phone number.
-            #
-            self.addNumbersInToField([target_telNum])
+                    try:
+                        # A 'silent' check to see if the keyboard iframe appears.
+                        elDef = ("xpath", "//iframe[contains(@{}, '{}')]".
+                                 format(DOM.Keyboard.frame_locator[0], DOM.Keyboard.frame_locator[1]))
+                        self.parent.wait_for_element_displayed(*elDef, timeout=2)
+                        boolKBD = True
+                    except:
+                        boolKBD = False
 
-            #
-            # Send the sms.
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            self.sendSMS()
-        elif msg_type == "mms":
+                    self.UTILS.test.TEST(
+                        boolKBD, "Keyboard is displayed when 'To' field is clicked for the first time")
 
-            self.UTILS.reporting.logResult("info", "is a mms")
-            #
-            # Open mms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info", "Open mms option with longtap on it")
-            sms = self.lastMessageInThisThread()
-            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
-            self.actions.long_press(body, 2).perform()
+                self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
-            #
-            # Press forward button
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
-            x.tap()
+            if n == 0:
 
-            #
-            # Add a phone number.
-            #
-            self.addNumbersInToField([target_telNum])
+                self.UTILS.general.typeThis(DOM.Messages.target_numbers_empty,
+                                            "Target number field",
+                                            num,
+                                            p_no_keyboard=True,
+                                            p_validate=False,
+                                            p_clear=False,
+                                            p_enter=True)
 
-            #
-            # Send the mms.
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on Send button")
+            else:
+                self.UTILS.general.typeThis(DOM.Messages.target_numbers_empty,
+                                            "Target number field",
+                                            num,
+                                            p_no_keyboard=True,
+                                            p_validate=False,
+                                            p_clear=False,
+                                            p_enter=False)
+                input_area = self.UTILS.element.getElement(DOM.Messages.input_message_area, "Target number field")
+                input_area.tap()
 
-            #
-            # Click send and wait for the message to be received
-            #
-            self.sendSMS()
-        elif msg_type == "mmssub":
-
-            self.UTILS.reporting.logResult("info", "is a mms with subject")
-
-            #
-            # Open mms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info", "Open mms with subject options with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject, "Target MMS field")
-            self.actions.long_press(x, 2).perform()
-
-            #
-            # Press forward button
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
-            x.tap()
-
-            #
-            # Add a phone number.
-            #
-            self.addNumbersInToField([target_telNum])
-
-            #
-            # Send the mms.
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            self.sendSMS()
-        else:
-            self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quitTest()
-
-    def forwardMessageToContact(self, msg_type, contact_name):
-        self.actions = Actions(self.marionette)
-        self.contacts = Contacts(self)
-
-        #
-        # Establish which phone number to use.
-        #
-
-        if msg_type == "sms":
-
-            self.UTILS.reporting.logResult("info", "is a sms")
-            #
-            # Open sms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
-            sms = self.lastMessageInThisThread()
-            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
-            self.actions.long_press(body, 2).perform()
-
-            #
-            # Press forward button
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
-            x.tap()
-
-            #
-            # Add a phone number.
-            #
-
-            #
-            # Search for our contact.
-            #
-            orig_iframe = self.selectAddContactButton()
-            self.contacts.search(contact_name)
-            self.contacts.check_search_results(contact_name)
-
-            x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
-            for i in x:
-                if i.text == contact_name:
-                    i.tap()
-                    break
-
-            #
-            # Switch back to the sms iframe.
-            #
-            self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src", orig_iframe)
-
-            #
-            # Now check the correct name is in the 'To' list.
-            #
-            self.checkIsInToField(contact_name)
-
-            #
-            # Send the sms.
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            self.sendSMS()
-        elif msg_type == "mms":
-
-            self.UTILS.reporting.logResult("info", "is a mms")
-            #
-            # Open mms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info", "Open mms option with longtap on it")
-            sms = self.lastMessageInThisThread()
-            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
-            self.actions.long_press(body, 2).perform()
-
-            #
-            # Press forward button
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
-            x.tap()
-
-            #
-            # Add a phone number.
-            #
-
-            #
-            # Search for our contact.
-            #
-            orig_iframe = self.selectAddContactButton()
-            self.contacts.search(contact_name)
-            self.contacts.check_search_results(contact_name)
-
-            x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
-            for i in x:
-                if i.text == contact_name:
-                    i.tap()
-                    break
-
-            #
-            # Switch back to the sms iframe.
-            #
-            self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src", orig_iframe)
-
-            #
-            # Now check the correct name is in the 'To' list.
-            #
-            self.checkIsInToField(contact_name)
-
-            #
-            # Send the mms.
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            self.sendSMS()
-        elif msg_type == "mmssub":
-
-            self.UTILS.reporting.logResult("info", "is a mms with subject")
-
-            #
-            # Open mms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info",
-                                    "Open mms with subject options with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject,
-                                    "Target MMS field")
-            self.actions.long_press(x, 2).perform()
-
-            #
-            # Press forward button
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt,
-                                          "Forward button is displayed")
-            x.tap()
-
-            #
-            # Add a phone number.
-            #
-
-            #
-            # Search for our contact.
-            #
-            orig_iframe = self.selectAddContactButton()
-            self.contacts.search(contact_name)
-            self.contacts.check_search_results(contact_name)
-
-            x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
-            for i in x:
-                if i.text == contact_name:
-                    i.tap()
-                    break
-
-            #
-            # Switch back to the sms iframe.
-            #
-            self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src", orig_iframe)
-
-            #
-            # Now check the correct name is in the 'To' list.
-            #
-            self.checkIsInToField(contact_name)
-
-            #
-            # Send the mms.
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            self.sendSMS()
-        else:
-            self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quitTest()
+            n += 1
 
     def addContactToField(self, contact_name):
-        self.actions = Actions(self.marionette)
-        self.contacts = Contacts(self)
+        self._search_for_contact(contact_name)
+        # Now check the correct name is in the 'To' list.
+        self.checkIsInToField(contact_name)
 
-        self.UTILS.reporting.logResult("info", "is a sms")
-        #
-        # Create and send a new SMS.<br>
-        # <b>Note:</b> The nums field must be an array of numbers
-        # or contact names.
-        #
+    def _select_forward_option_for(self, element):
+        self.actions.long_press(element, 2).perform()
+        self.UTILS.reporting.logResult("info", "Clicking on forward button")
+        forward_option = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
+        forward_option.tap()
 
-        # self.startNewSMS()
+    def _search_for_contact(self, contact_name):
+        self.contacts = Contacts(self.parent)
+        self.selectAddContactButton()
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
-        #
-        # Search for our contact.
-        #
-        orig_iframe = self.selectAddContactButton()
         self.contacts.search(contact_name)
         self.contacts.check_search_results(contact_name)
 
-        x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
-        for i in x:
-            if i.text == contact_name:
-                i.tap()
+        results = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
+        for result in results:
+            if result.text == contact_name:
+                result.tap()
                 break
 
-        #
         # Switch back to the sms iframe.
-        #
-        self.marionette.switch_to_frame()
-        self.UTILS.iframe.switchToFrame("src", orig_iframe)
+        self.apps.switch_to_displayed_app()
 
-        #
-        # Now check the correct name is in the 'To' list.
-        #
-        self.checkIsInToField(contact_name)
+    def forwardMessage(self, msg_type, target_telNum):
+        """
+        Forwards the last message of the thread to a number
+        """
 
-    def forwardMessageToMultipleRecipients(self, msg_type, target_telNum, contact_name):
-        self.actions = Actions(self.marionette)
-        self.contacts = Contacts(self)
+        self.UTILS.reporting.logResult('info', "The message type to forward is: {}".format(msg_type))
 
-        self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
-        if msg_type == "sms":
+        if msg_type == "sms" or msg_type == "mms":
+            self.UTILS.reporting.logResult("info", "Open {} option with longtap on it".format(msg_type))
+            last = self.lastMessageInThisThread()
+            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=last.id)
+            self._select_forward_option_for(body)
 
-            self.UTILS.reporting.logResult("info", "is a sms")
-            #
-            # Open sms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
-            sms = self.lastMessageInThisThread()
-            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
-            self.actions.long_press(body, 2).perform()
-
-            #
-            # Press forward button
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
-            x.tap()
-
-            #
-            # Add a phone number.
-            #
-            self.addNumbersInToField([target_telNum])
-
-            #
-            # Search for our contact.
-            #
-            orig_iframe = self.selectAddContactButton()
-            self.contacts.search(contact_name)
-            self.contacts.check_search_results(contact_name)
-
-            x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
-            for i in x:
-                if i.text == contact_name:
-                    i.tap()
-                    break
-
-            #
-            # Switch back to the sms iframe.
-            #
-            self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src", orig_iframe)
-
-            #
-            # Now check the correct name is in the 'To' list.
-            #
-            self.checkIsInToField(contact_name)
-
-            #
-            # Send the sms.
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            self.sendSMS()
-        elif msg_type == "mms":
-
-            self.UTILS.reporting.logResult("info", "is a mms")
-            #
-            # Open mms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info", "Open mms option with longtap on it")
-            sms = self.lastMessageInThisThread()
-            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
-            self.actions.long_press(body, 2).perform()
-
-            #
-            # Press forward button
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt, "Forward button is displayed")
-            x.tap()
-
-            #
-            # Add a phone number.
-            #
-            self.addNumbersInToField([target_telNum])
-
-            #
-            # Search for our contact.
-            #
-            orig_iframe = self.selectAddContactButton()
-            self.contacts.search(contact_name)
-            self.contacts.check_search_results(contact_name)
-
-            x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
-            for i in x:
-                if i.text == contact_name:
-                    i.tap()
-                    break
-
-            #
-            # Switch back to the sms iframe.
-            #
-            self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src", orig_iframe)
-
-            #
-            # Now check the correct name is in the 'To' list.
-            #
-            self.checkIsInToField(contact_name)
-
-            #
-            # Send the mms.
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            self.sendSMS()
         elif msg_type == "mmssub":
+            self.UTILS.reporting.logResult("info", "Open mms with subject options with longtap on it")
+            mms_subject = self.UTILS.element.getElement(DOM.Messages.received_mms_subject, "Target MMS field")
+            self._select_forward_option_for(mms_subject)
 
-            self.UTILS.reporting.logResult("info", "is a mms with subject")
-
-            #
-            # Open mms option with longtap on it
-            #
-            self.UTILS.reporting.logResult("info",
-                                    "Open mms with subject options with longtap on it")
-            x = self.UTILS.element.getElement(DOM.Messages.received_mms_subject,
-                                    "Target MMS field")
-            self.actions.long_press(x, 2).perform()
-
-            #
-            # Press forward button
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on forward button")
-            x = self.UTILS.element.getElement(DOM.Messages.forward_btn_msg_opt,
-                                          "Forward button is displayed")
-            x.tap()
-
-            #
-            # Add a phone number.
-            #
-            self.addNumbersInToField([target_telNum])
-
-            #
-            # Search for our contact.
-            #
-            orig_iframe = self.selectAddContactButton()
-            self.contacts.search(contact_name)
-            self.contacts.check_search_results(contact_name)
-
-            x = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Contacts search results")
-            for i in x:
-                if i.text == contact_name:
-                    i.tap()
-                    break
-
-            #
-            # Switch back to the sms iframe.
-            #
-            self.marionette.switch_to_frame()
-            self.UTILS.iframe.switchToFrame("src", orig_iframe)
-
-            #
-            # Now check the correct name is in the 'To' list.
-            #
-            self.checkIsInToField(contact_name)
-
-            #
-            # Send the mms.
-            #
-            self.UTILS.reporting.logResult("info", "Clicking on Send button")
-            self.sendSMS()
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
             self.UTILS.test.quitTest()
+
+        self.addNumbersInToField([target_telNum])
+
+        self.UTILS.reporting.logResult("info", "Clicking on Send button")
+        self.sendSMS()
+
+    def forwardMessageToContact(self, msg_type, contact_name):
+        """
+        Forwards the last message of the thread to a contact, searching for it
+        """
+        self.UTILS.reporting.logResult('info', "The message type to forward is: {}".format(msg_type))
+
+        if msg_type == "sms" or msg_type == "mms":
+            # Open sms option with longtap on it
+            self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
+            sms = self.lastMessageInThisThread()
+            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
+            self._select_forward_option_for(body)
+
+        elif msg_type == "mmssub":
+            # Open mms option with longtap on it
+            self.UTILS.reporting.logResult("info", "Open mms with subject options with longtap on it")
+            mms_subject = self.UTILS.element.getElement(DOM.Messages.received_mms_subject,
+                                                        "Target MMS field")
+            self._select_forward_option_for(mms_subject)
+
+        else:
+            self.UTILS.reporting.logResult("info", "incorrect value received")
+            self.UTILS.test.quitTest()
+
+        # Search for the contact and check it's been added
+        self.addContactToField(contact_name)
+
+        # Send the mms.
+        self.UTILS.reporting.logResult("info", "Clicking on Send button")
+        self.sendSMS()
+
+    def forwardMessageToMultipleRecipients(self, msg_type, target_telNum, contact_name):
+        self.UTILS.reporting.logResult('info', "The message type to forward is: {}".format(msg_type))
+
+        if msg_type == "sms" or msg_type == "mms":
+            # Open sms option with longtap on it
+            self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
+            sms = self.lastMessageInThisThread()
+            body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
+            self._select_forward_option_for(body)
+
+        elif msg_type == "mmssub":
+            # Open mms option with longtap on it
+            self.UTILS.reporting.logResult("info", "Open mms with subject options with longtap on it")
+            mms_subject = self.UTILS.element.getElement(DOM.Messages.received_mms_subject,
+                                                        "Target MMS field")
+            self._select_forward_option_for(mms_subject)
+
+        else:
+            self.UTILS.reporting.logResult("info", "incorrect value received")
+            self.UTILS.test.quitTest()
+
+        # Add phone numbers
+        self.addNumbersInToField([target_telNum])
+        # Search for the contact and check it's been added
+        self.addContactToField(contact_name)
+
+        # Send the mms.
+        self.UTILS.reporting.logResult("info", "Clicking on Send button")
+        self.sendSMS()
 
     def get_mms_attachments_info(self, mms):
         """Give name and file size for all attachments in an MMS.
@@ -1178,7 +818,7 @@ class Messages(object):
         x.tap()
 
         x = self.UTILS.element.getElement(DOM.Messages.header_add_to_contact_btn,
-                                    "'Add to an existing contact' button")
+                                          "'Add to an existing contact' button")
         x.tap()
 
         #
@@ -1213,7 +853,7 @@ class Messages(object):
         x.tap()
 
         x = self.UTILS.element.getElement(DOM.Messages.header_create_new_contact_btn,
-                                    "'Create new contact' button")
+                                          "'Create new contact' button")
         x.tap()
 
         #
@@ -1277,7 +917,7 @@ class Messages(object):
         # Read last message in the current thread.
         #
         received_message = self.UTILS.element.getElements(DOM.Messages.received_messages,
-                                                     "Received messages")[-1]
+                                                          "Received messages")[-1]
         return str(received_message.text)
 
     def readNewSMS(self, fromNum):
@@ -1285,7 +925,7 @@ class Messages(object):
         # Read and return the value of the new message received from number.
         #
         x = self.UTILS.element.getElement(("xpath", DOM.Messages.messages_from_num.format(fromNum)),
-                                     "Message from '" + fromNum + "'")
+                                          "Message from '" + fromNum + "'")
         x.tap()
 
         # (From gaiatest: "TODO Due to displayed bugs I cannot find a good wait
@@ -1306,7 +946,7 @@ class Messages(object):
 
         for i in range(len(x)):
             self.UTILS.reporting.logResult("info",
-                                "Checking target '{}' to '{}' ...".format(x[i].text, target))
+                                           "Checking target '{}' to '{}' ...".format(x[i].text, target))
 
             if x[i].text.lower() == target.lower():
                 self.UTILS.reporting.logResult("info", "Tapping contact '" + target + "' ...")
@@ -1317,7 +957,7 @@ class Messages(object):
                     # This contact was added via 'add contact' icon.
                     #
                     self.parent.wait_for_element_displayed("xpath", "//button[text()='{}']".format(_("Remove")),
-                                                    timeout=2)
+                                                           timeout=2)
                     y = self.marionette.find_element("xpath", "//button[text()='{}']".format(_("Remove")))
                     self.UTILS.reporting.logResult("info", "Tapping 'Remove' button.")
                     y.tap()
@@ -1327,30 +967,17 @@ class Messages(object):
                     # This contact was manually entered.
                     #
                     z = self.UTILS.element.getElements(DOM.Messages.target_numbers,
-                                                "Target to be removed")[i]
+                                                       "Target to be removed")[i]
                     z.clear()
                     return True
         return False
 
     def selectAddContactButton(self):
         #
-        # Taps the 'add contact' button and switches to the
-        # correct 'contacts' frame.<br>
-        # Returns the "src" of the original iframe.
+        # Taps the 'add contact' button
         #
-        x = self.UTILS.element.getElement(DOM.Messages.add_contact_button, "Add contact button")
-        x.tap()
-
-        time.sleep(2)
-
-        #
-        # Switch to the contacts frame.
-        #
-        orig_iframe = self.UTILS.iframe.currentIframe()
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-
-        time.sleep(2)
-        return orig_iframe
+        add_btn = self.UTILS.element.getElement(DOM.Messages.add_contact_button, "Add contact button")
+        add_btn.tap()
 
     def sendSMS(self):
         #
@@ -1445,7 +1072,7 @@ class Messages(object):
         # Returns the time of a thread.
         #
         x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_timestamp_xpath.format(num)),
-                                    "Thread time", True, 5, False)
+                                          "Thread time", True, 5, False)
         return x.text
 
     def thread_timestamp(self, num):
@@ -1519,5 +1146,5 @@ class Messages(object):
             time.sleep(pollTime)
 
         self.UTILS.test.TEST(lastEl,
-                        "Last message in thread is a 'received' message within " + str(timeOut) + " seconds.")
+                             "Last message in thread is a 'received' message within " + str(timeOut) + " seconds.")
         return lastEl

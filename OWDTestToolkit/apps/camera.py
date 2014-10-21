@@ -119,8 +119,10 @@ class Camera(object):
         """
         Take a picture.
         """
+        self.parent.wait_for_condition(lambda m: m.find_element(
+            *DOM.Camera.controls_pane).get_attribute('data-enabled') == 'true', 20)
         capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
-        time.sleep(4)
+        time.sleep(1)
         capture_button.tap()
         self.UTILS.element.waitForElements(DOM.Camera.open_thumbs, "Camera thumbnails")
 
@@ -167,3 +169,18 @@ class Camera(object):
         play_btn.tap()
 
         self.UTILS.element.waitForElements(DOM.Camera.preview_video_pause, "Pause button", True, 20, False)
+
+    def take_and_select_picture(self):
+        """
+        This method takes a picture and hits on select. It is 
+        """
+        self.parent.wait_for_condition(lambda m: m.find_element(
+            *DOM.Camera.controls_pane).get_attribute('data-enabled') == 'true', 20)
+        capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
+        time.sleep(1)
+        capture_button.tap()
+
+        # Confirm the picture.
+        select_button = self.UTILS.element.getElement(DOM.Camera.select_button, "Select Camera photo", timeout=10)
+        time.sleep(1)
+        select_button.tap()

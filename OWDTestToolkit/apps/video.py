@@ -64,7 +64,7 @@ class Video(object):
         @param  tuple   frame_to_change     frame to switch once the image has been cropped
         """
         all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails_thumbs, "Videos")
-        my_video = all_videos[num]
+        my_video = all_videos[position]
         my_video.tap()
 
         time.sleep(1)
@@ -80,7 +80,7 @@ class Video(object):
         """
         self._click_on_video_external(position, DOM.Messages.frame_locator)
 
-    def click_on_video_at_position_email(self, num):
+    def click_on_video_at_position_email(self, position):
         """
         Clicks a thumbnail from the gallery in order to attach it to an email
         """
