@@ -243,9 +243,9 @@ class Messages(object):
 
     def createAndSendMMS(self, attached_type, nums, m_text):
 
-        self.gallery = Gallery(self)
-        self.video = Video(self)
-        self.music = Music(self)
+        self.gallery = Gallery(self.parent)
+        self.video = Video(self.parent)
+        self.music = Music(self.parent)
 
         #
         # Launch messages app.
@@ -355,7 +355,7 @@ class Messages(object):
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
 
     def createMMSCameraImage(self):
-        self.camera = Camera(self)
+        self.camera = Camera(self.parent)
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
         attach.tap()
@@ -370,7 +370,7 @@ class Messages(object):
         #
         # Take a picture.
         #
-        self.camera.takeAndSelectPicture()
+        self.camera.take_and_select_picture()
 
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
@@ -667,7 +667,7 @@ class Messages(object):
         forward_option.tap()
 
     def _search_for_contact(self, contact_name):
-        self.contacts = Contacts(self)
+        self.contacts = Contacts(self.parent)
         self.selectAddContactButton()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
