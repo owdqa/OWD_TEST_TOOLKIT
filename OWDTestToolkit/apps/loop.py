@@ -4,7 +4,7 @@ from OWDTestToolkit import DOM
 from OWDTestToolkit.apps.browser import Browser
 from marionette import Actions
 from OWDTestToolkit.utils.decorators import retry
-# from tests._mock_data.contacts import MockContact
+# from OWDTestToolkit.utils.contacts import MockContact
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
