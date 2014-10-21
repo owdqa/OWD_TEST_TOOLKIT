@@ -43,8 +43,9 @@ class Marketplace(object):
         #
         # Click to install the app.
         #
-        x = self.UTILS.element.getElement(DOM.Market.app_details_header, "App details header")
-        self.UTILS.test.TEST(x.text == app, "Title in app details matches '" + app + "' (it was '" + x.text + "').")
+        app_header = self.UTILS.element.getElement(DOM.Market.app_details_header, "App details header")
+        self.UTILS.test.TEST(app_header.text == app, "Title in app detail is {} (expected: {})".\
+                             format(app_header.text, app))
 
         x = self.UTILS.element.getElement(DOM.Market.install_button, "Install button")
 
@@ -76,12 +77,11 @@ class Marketplace(object):
         #
         # Search for an app in the market.
         #
-
-        #
-        # Scroll a little to make the search area visible.
-        #
-        x = self.UTILS.element.getElement(DOM.Market.search_query, "Search field")
-        x.send_keys(app + Keys.RETURN)
+        self.UTILS.iframe.switchToFrame(*DOM.Market.frame_locator, via_root_frame=False)
+        self.UTILS.reporting.debug("*** Searching {}".format(app))
+        search_field = self.UTILS.element.getElement(DOM.Market.search_query, "Search field", timeout=30)
+        self.UTILS.reporting.debug("*** Search field: {}".format(search_field))
+        search_field.send_keys(app + Keys.RETURN)
 
     def select_search_result_app(self, app, author):
         #
@@ -94,10 +94,10 @@ class Marketplace(object):
         if len(results) <= 0:
             return False
 
-        for app in results:
-            if  app.find_element(*DOM.Market.app_name).text == app and \
-                app.find_element(*DOM.Market.author).text == author:
-                app.tap()
+        for result in results:
+            if  result.find_element(*DOM.Market.app_name).text == app and \
+                result.find_element(*DOM.Market.author).text == author:
+                result.tap()
                 return True
 
         return False

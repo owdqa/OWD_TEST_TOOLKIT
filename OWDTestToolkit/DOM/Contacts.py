@@ -10,8 +10,6 @@ view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath = "//li[@class='contact-item']//p[contains(@data-search,'{}')]"
 contact_names = ('css selector', '.contact-item .contact-text')
-view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
-
 view_all_contact_specific_contact = ('xpath', '//section[@class="group-section"]//li/p[@class="contact-text"]/strong[contains(text(), "{}")]')
 
 
@@ -26,12 +24,14 @@ dialer_frame = ("data-url", "oncall")
 
 search_field = ("xpath", ".//*[@id='search-start']/input")
 search_contact_input = ("id", "search-contact")
-search_results_list = ("xpath", ".//*[@id='search-list']/li")
+search_contact_result_input = ('id', 'search-contact')
+search_results_list = ("css selector", "#search-list li")
 search_cancel_btn = ('id', 'cancel-search')
 search_no_contacts_found = ("id", "no-result")
 favourites_section = ("id", "contacts-list-favorites")
 favourites_list_xpath = "//ol[@id='contacts-list-favorites']//li[@data-order='{}']"
-favourite_JS = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
+favourites_search_section = ('id', 'section-group-favorites')
+favourite_by_name = ("xpath", "//section[@id='section-group-favorites']//strong[text()='{}']")
 
 social_network_contacts = ('class name', "icon-social icon-fb")
 settings_button = ('id', 'settings-button')
@@ -59,7 +59,6 @@ confirm_delete_btn = ('xpath', '//*[@id="confirmation-message"]//button[text()="
 done_button = ('id', 'save-button')
 
 add_photo = ("id", "thumbnail-photo")
-photo_from_gallery = ("xpath", "/html/body/div/form[9]/menu/button")
 cancel_photo_source = ("xpath", '//button[@data-action="cancel"]')
 picture_thumbnails = ("xpath", "//*[@id='thumbnails']//div[@class='thumbnail-group-container']//img")
 picture_crop_done_btn = ("id", "crop-done-button")

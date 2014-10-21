@@ -19,13 +19,6 @@ class Settings(object):
         #
         # Launch the app.
         #
-        try:
-            self.marionette.switch_to_frame()
-            self.wait_for_element_displayed(*DOM.GLOBAL.charge_warning)
-            ok_btn = self.UTILS.element.getElement(DOM.GLOBAL.charge_warning_ok_btn, "OK Button")
-            ok_btn.tap()
-        except:
-            pass
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
@@ -58,25 +51,6 @@ class Settings(object):
 
         self.UTILS.element.waitForElements(('xpath',
             DOM.GLOBAL.app_head_specific.format(_("Call Settings").encode("utf8"))), "Call settings header")
-
-    def callID_verify(self):
-        self.call_settings()
-
-        self.UTILS.reporting.logResult("info", "Call number presses")
-
-        x = self.UTILS.element.getElement(DOM.Settings.call_button, "Call ID button")
-        x.tap()
-        self.UTILS.reporting.logResult("info", "Call ID button presses")
-
-        #Change Frame
-        self.marionette.switch_to_frame()
-
-        #Get option selected
-        x = self.UTILS.element.getElement(DOM.Settings.call_show_number, "Call Option value")
-        y = x.get_attribute("aria-selected")
-
-        self.UTILS.reporting.logResult("info", "Screen shot of the result of tapping call button", y)
-        self.UTILS.test.TEST(y == "true", "Checking Call ID value")
 
     def three_times_bad_pin2(self, wrong_pin2):
         """Change the PIN2.
@@ -965,7 +939,6 @@ class Settings(object):
         # A couple of checks to wait for 'anything' to be Connected (only look for 'present' because it
         # might be off the bottom of the page).
         #
-        self.UTILS.test.TEST(True, "Connected: {}".format(self.wifi_list_isConnected(wlan_name, timeout=10)))
         self.UTILS.test.TEST(self.wifi_list_isConnected(wlan_name, timeout=60),
                 "Wifi '{}' is listed as 'connected' in wifi settings.".format(wlan_name), False)
 
@@ -1053,11 +1026,14 @@ class Settings(object):
         #
         # Tap the network name in the list.
         #
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
+        
         _wifi_name_element = ("xpath", DOM.Settings.wifi_name_xpath.format(wlan_name))
         self.parent.wait_for_element_displayed(_wifi_name_element[0], _wifi_name_element[1], timeout=10)
         wifi = self.marionette.find_element(*_wifi_name_element)
 
-        wifi.tap()
+        self.UTILS.element.simulateClick(wifi)
         time.sleep(2)
 
     def wifi_switchOn(self):

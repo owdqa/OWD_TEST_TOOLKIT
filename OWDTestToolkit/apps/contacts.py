@@ -40,8 +40,9 @@ class Contacts(object):
         self.marionette.switch_to_frame()
 
         # Choose to get a picture from the Gallery.
-        x = self.UTILS.element.getElement(DOM.Contacts.photo_from_gallery, "Gallery link")
-        x.tap()
+        elem = (DOM.GLOBAL.action_menu_option[0], DOM.GLOBAL.action_menu_option[1].format("Gallery"))
+        gallery_option = self.UTILS.element.getElement(elem, "Gallery link")
+        gallery_option.tap()
 
         # Switch to Gallery iframe.
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
@@ -174,9 +175,8 @@ class Contacts(object):
             try:
                 self.parent.wait_for_element_displayed(*DOM.Contacts.view_contact_image, timeout=1)
                 image = self.marionette.find_element(*DOM.Contacts.view_contact_image)
-                image_style = image.get_attribute("style")
-                if "blob" in x_style:
-                    boolOK = True
+                attrs = ["style", "data-img-hash", "data-photo-ready"]
+                boolOK = all(image.get_attribute(attr) is not None for attr in attrs)
             except:
                 pass
 
@@ -419,7 +419,8 @@ class Contacts(object):
 
             if click_signin:
                 signin_btn = self.UTILS.element.getElement(DOM.Contacts.gmail_signIn_button, "Sign In button")
-                signin_btn.tap()
+                time.sleep(1)
+                self.UTILS.element.simulateClick(signin_btn)
 
                 # Check to see if sigin failed. If it did then stay here.
                 try:
@@ -477,7 +478,7 @@ class Contacts(object):
         If click_signin is set to True then this method will also click
         the Sign in button (defaults to true).
         <br>
-        Returns False if the login failed, "ALLIMPORTED" if all your contacts are already imported else True.
+        Returns False if the login failed, True otherwise.
         """
 
         settings_btn = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
@@ -485,6 +486,7 @@ class Contacts(object):
 
         self.parent.wait_for_element_displayed(*DOM.Contacts.import_contacts, timeout=30)
         import_btn = self.UTILS.element.getElement(DOM.Contacts.import_contacts, "Import button")
+        time.sleep(1)
         import_btn.tap()
 
         # Press the Hotmail button.

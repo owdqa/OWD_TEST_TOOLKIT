@@ -156,10 +156,10 @@ class Browser(object):
             if web_frame.is_displayed():
                 return web_frame.get_attribute("src")
 
-    def open_url(self, url, timeout=30):
-        # """
-        # Open url.
-        # """
+    def open_url(self, url, timeout=30, trusted=True):
+        """
+        Open url.
+        """
 
         self.switch_to_chrome()
 
@@ -168,6 +168,17 @@ class Browser(object):
         url_input.clear()
         url_input.send_keys(url)
         self.tap_go_button(timeout=timeout)
+
+        # If the site is trusted, check for the warning and get rid of it.
+        if trusted:
+            # If the untrusted site warning is present, just accept it. Otherwise, silently pass.
+            try:
+                understand = self.marionette.find_element(*DOM.Browser.understand_risks)
+                understand.tap()
+                btn = self.marionette.find_element(*DOM.Browser.add_permanent_exception)
+                btn.tap()
+            except:
+                pass
 
         self.check_page_loaded(url, False)
         self.switch_to_content()
@@ -319,22 +330,22 @@ class Browser(object):
         """
         self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
 
-        #
         # Add the page to the bookmark
-        #
-        x = self.UTILS.element.getElement(DOM.Browser.bookmarkmenu_button, "Bookmark button")
-        x.tap()
+        bookmarkmenu_button = self.UTILS.element.getElement(DOM.Browser.bookmarkmenu_button, "Bookmark menu button")
+        bookmarkmenu_button.tap()
 
-        x = self.UTILS.element.getElement(DOM.Browser.bookmark_button, "Bookmark button")
-        x.tap()
+        bookmark_button = self.UTILS.element.getElement(DOM.Browser.bookmark_button, "Bookmark button")
+        bookmark_button.tap()
 
-        x = self.UTILS.element.getElement(DOM.Browser.url_input, "Bookmark button")
-        x.tap()
+        # Check the page has been added as a bookmark. For that, we have to tap on the url input field and then
+        # on the bookmark tab that will appear
+        url_input = self.UTILS.element.getElement(DOM.Browser.url_input, "url input")
+        url_input.tap()
+        url_value = url_input.get_attribute("value")
 
-        x = self.UTILS.element.getElement(DOM.Browser.bookmarks_tab, "Bookmark tab")
-        x.tap()
+        bookmark_tab = self.UTILS.element.getElement(DOM.Browser.bookmarks_tab, "Bookmark tab")
+        bookmark_tab.tap()
 
-        #
-        # Very that the bookmark is correctly created
-        #
-        self.UTILS.element.waitForElements(DOM.Browser.bookmark_item1, "Bookmark")
+        # Verify that the bookmark is correctly created
+        elem = (DOM.Browser.bookmark_item[0], DOM.Browser.bookmark_item[1].format(url_value))
+        self.UTILS.element.waitForElements(elem, "Bookmark just added", timeout=10)

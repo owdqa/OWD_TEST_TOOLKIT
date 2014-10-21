@@ -3,6 +3,7 @@ _ = I18nSetup(I18nSetup).setup()
 
 frame_locator = ('src', 'loop')
 loading_overlay = ('id', 'loading-overlay')
+app_header = ('xpath', '//section[@id="calllog-panel"]//h1[text()="Firefox Hello"]')
 
 # Wizard
 wizard = ('id', 'wizard-tutorial-section')
@@ -36,6 +37,7 @@ mobile_id_allow_button = ('id', 'allow-button')
 mobile_id_verified_button = ('id', 'verify-button')
 mobile_id_error = ('id', 'mobileid-error-overlay')
 mobile_id_error_ok_btn = ('id', 'mobileid-error-ok')
+mobile_id_back = ('id', 'close-button')
 
 # Call log
 call_log = ('id', 'calllog-panel')

@@ -37,7 +37,7 @@ class Loop(object):
 
     def is_installed(self):
         return self.apps.is_app_installed(self.app_name)
-    
+
     def install(self):
         # Make sure we install the latest version
         self.update_and_publish()
@@ -73,11 +73,11 @@ class Loop(object):
         self.loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_DIR")
         self.publish_loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_AUX_FILES")
 
-        result= os.popen("cd {} && ./publish_app.sh {}".format(self.publish_loop_dir, self.loop_dir)).read()
+        result = os.popen("cd {} && ./publish_app.sh {}".format(self.publish_loop_dir, self.loop_dir)).read()
         chops = result.split("\n")
         self.UTILS.reporting.logResult('info', "result: {}".format(chops))
         self.UTILS.test.TEST("And all done, hopefully." in chops, "The script to publish an app is OK", True)
-    
+
     def update_db(self, local_dir):
         loop_dir = os.popen("adb shell ls {} | grep loop".format(self.persistent_directory)).read().rstrip()
         target_dir = "{}/{}/idb/".format(self.persistent_directory, loop_dir)
@@ -128,9 +128,8 @@ class Loop(object):
                 self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login)
                 return True
             except:
-                header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
                 try:
-                    self.parent.wait_for_element_displayed(*header)
+                    self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
                     return False
                 except:
                     self.UTILS.test.TEST(False, "Ooops. Something went wrong", True)
@@ -199,7 +198,8 @@ class Loop(object):
             verified_button = self.marionette.find_element(*DOM.Loop.mobile_id_verified_button)
             self.UTILS.element.simulateClick(verified_button)
         except:
-            self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_error)
+            self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
+                *DOM.Loop.mobile_id_allow_button).get_attribute("class"), timeout=5, message="Button is still sending")
             # Make @retry do its work
             raise
 
@@ -224,8 +224,7 @@ class Loop(object):
             try:
                 self.UTILS.reporting.debug("Now looking for permission Loop main view....")
                 self.apps.switch_to_displayed_app()
-                header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
-                self.parent.wait_for_element_displayed(*header)
+                self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
                 return
             except:
                 self.UTILS.reporting.debug("And Now looking for error....")
@@ -260,8 +259,7 @@ class Loop(object):
         except:
             self.UTILS.reporting.debug("Now looking for permission Loop main view....")
             self.apps.switch_to_displayed_app()
-            header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
-            self.parent.wait_for_element_displayed(*header)
+            self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
             return
 
         msg_text = self.marionette.find_element(*DOM.GLOBAL.app_permission_msg).text
@@ -278,7 +276,7 @@ class Loop(object):
         This method is called as the aux_func for our brand new retry decorator
         """
 
-        self.UTILS.reporting.logResult('info', "Retrying...")
+        self.UTILS.reporting.logResult('info', "Retrying FxA login...")
         self.parent.wait_for_element_displayed(*DOM.GLOBAL.modal_dialog_alert_ok)
         ok_btn = self.marionette.find_element(*DOM.GLOBAL.modal_dialog_alert_ok)
         self.UTILS.element.simulateClick(ok_btn)
@@ -290,11 +288,14 @@ class Loop(object):
     def retry_phone_login(self):
         """ Retry phone login if it has failed
         """
-        self.UTILS.reporting.logResult('info', "Retrying...")
-        self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_error_ok_btn)
-        ok_btn = self.marionette.find_element(*DOM.Loop.mobile_id_error_ok_btn)
-        self.UTILS.element.simulateClick(ok_btn)
-        self.skip_wizard()
+        self.UTILS.reporting.logResult('info', "Retrying phone login...")
+        self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_back)
+        back_btn = self.marionette.find_element(*DOM.Loop.mobile_id_back)
+        self.UTILS.element.simulateClick(back_btn)
+
+        self.apps.switch_to_displayed_app()
+        time.sleep(2)
+        self._tap_on_phone_login_button()
 
     def open_settings(self):
         """ Open settings panel from call log 

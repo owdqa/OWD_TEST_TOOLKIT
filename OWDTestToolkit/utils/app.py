@@ -99,6 +99,7 @@ class app(object):
             #
             # If this works, then the icon is visible at the moment.
             #
+            self.parent.reporting.debug("*** Looking for application icon {}".format(app_name))
             app_icon = self.marionette.find_element('xpath', DOM.Home.app_name_xpath.format(app_name))
             icons = self.marionette.find_elements(*DOM.Home.apps)
             self.parent.reporting.debug("*** Found {} Applications".format(len(icons)))
