@@ -139,7 +139,7 @@ class Gallery(object):
         """
         play_btn = self.UTILS.element.getElement(DOM.Gallery.preview_current_video_play, "Video play button")
         time.sleep(1)
-        self.UTILS.element.simulateClick(play_btn)
+        play_btn.tap()
 
         self.UTILS.element.waitForElements(DOM.Gallery.preview_current_video_pause, "Pause button", True, 20, False)
 

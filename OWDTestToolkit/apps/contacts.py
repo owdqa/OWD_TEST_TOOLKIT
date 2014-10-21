@@ -419,7 +419,8 @@ class Contacts(object):
 
             if click_signin:
                 signin_btn = self.UTILS.element.getElement(DOM.Contacts.gmail_signIn_button, "Sign In button")
-                signin_btn.tap()
+                time.sleep(1)
+                self.UTILS.element.simulateClick(signin_btn)
 
                 # Check to see if sigin failed. If it did then stay here.
                 try:
