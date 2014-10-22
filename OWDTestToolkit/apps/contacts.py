@@ -113,6 +113,7 @@ class Contacts(object):
 
         # Return to the contact list screen.
         back_btn = self.UTILS.element.getElement(DOM.Contacts.details_back_button, "Details 'back' button")
+        time.sleep(1)
         back_btn.tap()
 
         self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
