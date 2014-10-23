@@ -89,3 +89,5 @@ form_confirm_delete = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n
 form_confirm_logout = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="logOut"]')
 
 connection_error_msg = ('xpath', "//span[@class='modal-dialog-alert-message' and contains(text(), '{}')]")
+not_a_hello_user_msg = ('xpath', "//p[@id='sharing-reason' and text()='{}']")
+msisdn_input = ('id', 'msisdn-input')

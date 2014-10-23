@@ -310,7 +310,11 @@ class Loop(object):
 
         It assumes we already are in the Loop Settings panel
         """
-        self.parent.wait_for_element_displayed(*DOM.Loop.settings_logout)
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Loop.settings_logout)
+        except:
+            self.UTILS.reporting.logResult('info', "Already logged out")
+            return
         logout_btn = self.marionette.find_element(*DOM.Loop.settings_logout)
         self.UTILS.element.simulateClick(logout_btn)
 
