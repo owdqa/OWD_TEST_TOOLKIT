@@ -20,6 +20,7 @@ view_contact_email_field = ("id", "email-or-pick-0")
 view_contact_address = ("xpath", "//li[@id='address-details-template-0']//a[@class='action action-block']/b")
 view_contact_comments = ("id", "note-details-template-0")
 view_contact_tels_xpath = "//*[contains(@id, 'call-or-pick-') and contains(@data-tel, '{}')]"
+view_contact_hello_option = ('css selector', '#webrtc-client-actions button[data-l10n-id={}]')
 dialer_frame = ("data-url", "oncall")
 
 search_field = ("xpath", ".//*[@id='search-start']/input")
