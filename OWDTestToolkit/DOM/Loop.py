@@ -97,3 +97,14 @@ form_confirm_delete = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n
 form_confirm_logout = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="logOut"]')
 
 connection_error_msg = ('xpath', "//span[@class='modal-dialog-alert-message' and contains(text(), '{}')]")
+
+# Share panel
+share_panel = ('id', 'share-panel')
+share_panel_close = ('id', 'share-close-button')
+share_panel_header = ('xpath', '//h1[@data-l10n-id="shareTitle"]')
+share_panel_contact_name = ('id', 'contact-name-to-share')
+share_panel_contact_reason = ('id', 'sharing-reason')
+share_panel_share_link = ('id', 'link-to-share')
+share_panel_sms_share = ('id', 'share-by-sms')
+share_panel_email_share = ('id', 'share-by-email')
+share_panel_others_share = ('id', 'share-by-others')
