@@ -460,3 +460,14 @@ class Loop(object):
     def settings_go_back(self):
         self.parent.wait_for_element_displayed(*DOM.Loop.settings_panel_back_btn)
         self.marionette.find_element(*DOM.Loop.settings_panel_back_btn).tap()
+
+    def share_micro_and_camera(self):
+        self.marionette.switch_to_frame()
+        try:
+            self.parent.wait_for_element_displayed(*DOM.GLOBAL.app_permission_btn_yes, timeout=10)
+            allow_btn = self.marionette.find_element(*DOM.GLOBAL.app_permission_btn_yes)
+            self.UTILS.reporting.debug("*** allow_btn: {}".format(allow_btn))
+            self.UTILS.element.simulateClick(allow_btn)
+        except Exception as e:
+            self.UTILS.reporting.debug("Error waiting for button: {}".format(e))
+        self.UTILS.iframe.switch_to_frame(*DOM.Loop.frame_locator)

@@ -75,11 +75,13 @@ settings_panel_back_btn = ('id', 'settings-close-button')
 
 # Settings panel - content
 settings_select_call_mode = ('id', 'video-default-setting')
+settings_selected_call_mode = ('css selector', '#video-default-setting option[value=true]')
 settings_select_call_mode_option = ('xpath', '//select[@id="video-default-setting"]/option[@data-l10n-id="{}"]')
 settings_select_camera = ('id', 'camera-default-setting')
+settings_selected_camera = ('css selector', '#camera-default-setting option[value=true]')
 settings_select_camera_option = ('xpath', '//select[@id="camera-default-setting"]/option[@data-l10n-id="{}"]')
 settings_clean_calls = ('id', 'settings-clean-calls-button')
-settings_clean_shared_links =  ('id', 'settings-clean-urls-button')
+settings_clean_shared_links = ('id', 'settings-clean-urls-button')
 
 # Settings panel - footer
 settings_logged_as = ('id', 'settings-logout-identity')
@@ -93,3 +95,5 @@ form_action_action = ('xpath', '//form[@data-type="action"]//button[@data-l10n-i
 form_confirm_cancel = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="cancel"]')
 form_confirm_delete = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="delete"]')
 form_confirm_logout = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="logOut"]')
+
+connection_error_msg = ('xpath', "//span[@class='modal-dialog-alert-message' and contains(text(), '{}')]")
