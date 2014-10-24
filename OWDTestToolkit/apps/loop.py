@@ -231,7 +231,6 @@ class Loop(object):
         phone_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
         phone_input.send_keys(phone_number_without_prefix)
 
-
         # NOTE: before you virtually kill me, I cannot take this duplicated code into another
         # separated method due to the @reply decorator. Just letting you know :).
         allow_button = self.marionette.find_element(*DOM.Loop.mobile_id_allow_button)
@@ -249,7 +248,6 @@ class Loop(object):
             raise
 
         self.apps.switch_to_displayed_app()
-
 
     @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_ffox_login")
     def allow_permission_ffox_login(self):
@@ -471,3 +469,10 @@ class Loop(object):
         except Exception as e:
             self.UTILS.reporting.debug("Error waiting for button: {}".format(e))
         self.UTILS.iframe.switch_to_frame(*DOM.Loop.frame_locator)
+
+    def open_address_book(self):
+        self.parent.wait_for_element_displayed(*DOM.Loop.call_from_loop)
+        open_link = self.marionette.find_element(*DOM.Loop.call_from_loop)
+        time.sleep(1)
+        open_link.tap()
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
