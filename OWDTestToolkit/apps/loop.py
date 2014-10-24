@@ -98,7 +98,7 @@ class Loop(object):
         next_btn.tap()
         self.parent.wait_for_element_not_displayed(*DOM.Loop.ffox_account_login_overlay)
 
-    def _tap_on_firefox_login_button(self):
+    def tap_on_firefox_login_button(self):
         ffox_btn = self.marionette.find_element(*DOM.Loop.wizard_login_ffox_account)
         self.UTILS.element.simulateClick(ffox_btn)
 
@@ -128,6 +128,7 @@ class Loop(object):
                 self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login)
                 return True
             except:
+                self.UTILS.reporting.logResult('info', '[wizard_or_login] Loop')
                 try:
                     self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
                     return False
@@ -158,10 +159,10 @@ class Loop(object):
         self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
         self.parent.wait_for_element_displayed(DOM.Loop.wizard_login[0], DOM.Loop.wizard_login[1], timeout=10)
 
-    def firefox_login(self, email, password):
+    def firefox_login(self, email, password, is_wrong=False):
         """ Logs in using Firefox account
         """
-        self._tap_on_firefox_login_button()
+        self.tap_on_firefox_login_button()
 
         self.UTILS.iframe.switchToFrame(*DOM.Loop.ffox_account_frame_locator)
         self.parent.wait_for_element_displayed(
@@ -170,8 +171,9 @@ class Loop(object):
         self._fill_fxa_field(DOM.Loop.ffox_account_login_mail, email)
         self._fill_fxa_field(DOM.Loop.ffox_account_login_pass, password)
 
-        done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
-        done_btn.tap()
+        if not is_wrong:
+            done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
+            done_btn.tap()
 
     @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login(self, option_number=1):
@@ -204,6 +206,50 @@ class Loop(object):
             raise
 
         self.apps.switch_to_displayed_app()
+
+    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
+    def phone_login_manually(self, phone_number_without_prefix):
+        """
+        Logs in using mobile id, but instead of using the automatically provided by the app
+        selecting the manual option
+        @phone_number_without_prefix str Phone number to register into Loop
+        NOTE: for the shake of simplicity, we assume the prefix is the spanish one (+34) by default
+        """
+
+        self._tap_on_phone_login_button()
+        self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
+        self.parent.wait_for_element_not_displayed(*DOM.Loop.ffox_account_login_overlay)
+
+        mobile_id_header = ("xpath", DOM.GLOBAL.app_head_specific.format(_("Mobile ID")))
+        self.parent.wait_for_element_displayed(*mobile_id_header)
+
+        # Manually!
+        manually_link = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number)
+        manually_link.tap()
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_add_phone_number_number)
+        phone_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
+        phone_input.send_keys(phone_number_without_prefix)
+
+
+        # NOTE: before you virtually kill me, I cannot take this duplicated code into another
+        # separated method due to the @reply decorator. Just letting you know :).
+        allow_button = self.marionette.find_element(*DOM.Loop.mobile_id_allow_button)
+        allow_button.tap()
+
+        try:
+            self.parent.wait_for_element_displayed(
+                DOM.Loop.mobile_id_verified_button[0], DOM.Loop.mobile_id_verified_button[1], timeout=30)
+            verified_button = self.marionette.find_element(*DOM.Loop.mobile_id_verified_button)
+            self.UTILS.element.simulateClick(verified_button)
+        except:
+            self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
+                *DOM.Loop.mobile_id_allow_button).get_attribute("class"), timeout=5, message="Button is still sending")
+            # Make @retry do its work
+            raise
+
+        self.apps.switch_to_displayed_app()
+
 
     @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_ffox_login")
     def allow_permission_ffox_login(self):
@@ -277,13 +323,15 @@ class Loop(object):
         """
 
         self.UTILS.reporting.logResult('info', "Retrying FxA login...")
-        self.parent.wait_for_element_displayed(*DOM.GLOBAL.modal_dialog_alert_ok)
-        ok_btn = self.marionette.find_element(*DOM.GLOBAL.modal_dialog_alert_ok)
-        self.UTILS.element.simulateClick(ok_btn)
-
         self.apps.switch_to_displayed_app()
         time.sleep(2)
-        self._tap_on_firefox_login_button()
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.error_screen_ok)
+        ok_btn = self.marionette.find_element(*DOM.Loop.error_screen_ok)
+        self.UTILS.element.simulateClick(ok_btn)
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login)
+        self.tap_on_firefox_login_button()
 
     def retry_phone_login(self):
         """ Retry phone login if it has failed
