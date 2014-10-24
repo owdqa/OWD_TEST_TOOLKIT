@@ -113,7 +113,7 @@ class Loop(object):
         """ Checks if we have to skip the Wizard, log in, or if we're already at the main screen of Loop
 
             For the first two scenarios, it returns True.
-            If we are alredy inside Loop, it returns False.
+            If we are already inside Loop, it returns False.
         """
         # TODO: switch try-except code -> first check login instead of wizard
         #      see if it works, when the wizard is first
@@ -147,13 +147,12 @@ class Loop(object):
         wizard_steps = self.get_wizard_steps()
 
         current_frame = self.apps.displayed_app.frame
-        x_start = current_frame.size['width']
+        x_start = current_frame.size['width'] // 2
         x_end = x_start // 4
         y_start = current_frame.size['height'] // 2
 
         for i in range(wizard_steps):
-            self.actions.flick(
-                current_frame, x_start, y_start, x_end, y_start, duration=600).perform()
+            self.actions.flick(current_frame, x_start, y_start, x_end, y_start, duration=600).perform()
             time.sleep(1)
 
         self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
@@ -231,6 +230,7 @@ class Loop(object):
         phone_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
         phone_input.send_keys(phone_number_without_prefix)
 
+
         # NOTE: before you virtually kill me, I cannot take this duplicated code into another
         # separated method due to the @reply decorator. Just letting you know :).
         allow_button = self.marionette.find_element(*DOM.Loop.mobile_id_allow_button)
@@ -249,12 +249,13 @@ class Loop(object):
 
         self.apps.switch_to_displayed_app()
 
+
     @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_ffox_login")
     def allow_permission_ffox_login(self):
         """ Allows Loop to read our contacts
 
         This method checks whether is necessary to allow extra permissions for loop or not ater
-        loggin in wit Firefox accounts
+        loggin in with Firefox accounts
 
         Also, since this is is the last step before connecting to the Loop server, it checks
         that no error has been raised. If that happens, it retries the connection up to 5 times.
@@ -356,7 +357,11 @@ class Loop(object):
 
         It assumes we already are in the Loop Settings panel
         """
-        self.parent.wait_for_element_displayed(*DOM.Loop.settings_logout)
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Loop.settings_logout)
+        except:
+            self.UTILS.reporting.logResult('info', "Already logged out")
+            return
         logout_btn = self.marionette.find_element(*DOM.Loop.settings_logout)
         self.UTILS.element.simulateClick(logout_btn)
 
@@ -470,7 +475,21 @@ class Loop(object):
             self.UTILS.reporting.debug("Error waiting for button: {}".format(e))
         self.UTILS.iframe.switch_to_frame(*DOM.Loop.frame_locator)
 
-    def open_address_book(self):
+    def initial_test_checks(self):
+        # Make sure Loop is installed
+        result = True
+        if not self.is_installed():
+            self.install()
+        else:
+            self.launch()
+            # If already logged in, logout
+            result = self.wizard_or_login()
+            if not result:
+                self.open_settings()
+                self.logout()
+        return result
+
+	def open_address_book(self):
         self.parent.wait_for_element_displayed(*DOM.Loop.call_from_loop)
         open_link = self.marionette.find_element(*DOM.Loop.call_from_loop)
         time.sleep(1)
