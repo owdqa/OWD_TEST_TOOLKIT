@@ -4,6 +4,7 @@ _ = I18nSetup(I18nSetup).setup()
 frame_locator = ('src', 'loop')
 loading_overlay = ('id', 'loading-overlay')
 app_header = ('xpath', '//section[@id="calllog-panel"]//h1[text()="Firefox Hello"]')
+error_screen_ok = ('id', 'error-screen-ok')
 
 # Wizard
 wizard = ('id', 'wizard-tutorial-section')
@@ -27,6 +28,9 @@ ffox_account_login_done = ('id', 'fxa-module-done')
 ffox_account_login_back = ('id', 'fxa-module-back')
 ffox_account_login_close = ('id', 'fxa-module-close')
 ffox_account_login_overlay = ('id', 'fxa-overlay')
+ffox_account_error_overlay = ('id', 'fxa-error-overlay')
+ffox_account_error_overlay_title = ('id', 'fxa-error-title')
+ffox_account_error_overlay_ok = ('id', 'fxa-error-ok')
 
 # Mobile ID login
 mobile_id_frame_locator = ('src', 'mobile_id')
@@ -38,6 +42,10 @@ mobile_id_verified_button = ('id', 'verify-button')
 mobile_id_error = ('id', 'mobileid-error-overlay')
 mobile_id_error_ok_btn = ('id', 'mobileid-error-ok')
 mobile_id_back = ('id', 'close-button')
+mobile_id_add_phone_number = ('id', 'add-msisdn')
+mobile_id_add_phone_number_prefix = ('id', 'country-codes-select')
+mobile_id_add_phone_number_number = ('id', 'msisdn-input')
+mobile_id_add_phone_number_from_list = ('id', 'do-automatic-msisdn') # This goes back to the previous step
 
 # Call log
 call_log = ('id', 'calllog-panel')
