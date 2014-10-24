@@ -113,7 +113,7 @@ class Loop(object):
         """ Checks if we have to skip the Wizard, log in, or if we're already at the main screen of Loop
 
             For the first two scenarios, it returns True.
-            If we are alredy inside Loop, it returns False.
+            If we are already inside Loop, it returns False.
         """
         # TODO: switch try-except code -> first check login instead of wizard
         #      see if it works, when the wizard is first
@@ -147,13 +147,12 @@ class Loop(object):
         wizard_steps = self.get_wizard_steps()
 
         current_frame = self.apps.displayed_app.frame
-        x_start = current_frame.size['width']
+        x_start = current_frame.size['width'] // 2
         x_end = x_start // 4
         y_start = current_frame.size['height'] // 2
 
         for i in range(wizard_steps):
-            self.actions.flick(
-                current_frame, x_start, y_start, x_end, y_start, duration=600).perform()
+            self.actions.flick(current_frame, x_start, y_start, x_end, y_start, duration=600).perform()
             time.sleep(1)
 
         self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
@@ -256,7 +255,7 @@ class Loop(object):
         """ Allows Loop to read our contacts
 
         This method checks whether is necessary to allow extra permissions for loop or not ater
-        loggin in wit Firefox accounts
+        loggin in with Firefox accounts
 
         Also, since this is is the last step before connecting to the Loop server, it checks
         that no error has been raised. If that happens, it retries the connection up to 5 times.
@@ -475,3 +474,17 @@ class Loop(object):
         except Exception as e:
             self.UTILS.reporting.debug("Error waiting for button: {}".format(e))
         self.UTILS.iframe.switch_to_frame(*DOM.Loop.frame_locator)
+
+    def initial_test_checks(self):
+        # Make sure Loop is installed
+        result = True
+        if not self.is_installed():
+            self.install()
+        else:
+            self.launch()
+            # If already logged in, logout
+            result = self.wizard_or_login()
+            if not result:
+                self.open_settings()
+                self.logout()
+        return result

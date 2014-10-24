@@ -45,7 +45,7 @@ mobile_id_back = ('id', 'close-button')
 mobile_id_add_phone_number = ('id', 'add-msisdn')
 mobile_id_add_phone_number_prefix = ('id', 'country-codes-select')
 mobile_id_add_phone_number_number = ('id', 'msisdn-input')
-mobile_id_add_phone_number_from_list = ('id', 'do-automatic-msisdn') # This goes back to the previous step
+mobile_id_add_phone_number_from_list = ('id', 'do-automatic-msisdn')  # This goes back to the previous step
 
 # Call log
 call_log = ('id', 'calllog-panel')
@@ -98,4 +98,8 @@ form_confirm_logout = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n
 
 connection_error_msg = ('xpath', "//span[@class='modal-dialog-alert-message' and contains(text(), '{}')]")
 not_a_hello_user_msg = ('xpath', "//p[@id='sharing-reason' and text()='{}']")
-msisdn_input = ('id', 'msisdn-input')
+not_a_user_explanation = ('css selector', '.share-explanation[data-l10n-id=noProblem]')
+share_link_options = ('css selector', '.share-options li')
+share_link_option = ('id', 'share-by-{}')
+share_others_header = ('xpath', '//header[text()="{}"]')
+share_others_options = ('xpath', '//header[text()="{}"]/..//button')

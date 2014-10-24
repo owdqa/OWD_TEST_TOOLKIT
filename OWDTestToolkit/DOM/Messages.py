@@ -17,7 +17,7 @@ service_unavailable_ok = ("xpath", "//*[@data-l10n-id='sendGeneralErrorBtnOk']")
 type_and_carrier_field = ("id", "contact-carrier")
 
 target_numbers_empty = ("id", "to-label")
-target_numbers = ("xpath", "//*[@id='messages-recipients-list']/span")
+target_numbers = ("css selector", "#messages-recipients-list span")
 add_contact_button = ("id", "messages-contact-pick-button")
 cancel_add_contact = ("id", "cancel_activity")
 contact_no_phones_msg = ("xpath", "//form[@id='confirmation-message']//p[text()='{}']".format(_("No phones")))

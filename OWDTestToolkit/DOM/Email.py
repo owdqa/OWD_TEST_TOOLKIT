@@ -24,16 +24,17 @@ manual_setup_activesync_host = ('class name', 'sup-manual-activesync-hostname')
 manual_setup_activesync_user = ('class name', 'sup-manual-activesync-username')
 setup_account_header = ('xpath', '//h1[@data-l10n-id="setup-account-header3"]')
 
+compose_header = ('css selector', '.cmp-compose-header')
 compose_msg_btn = ('class name', 'msg-compose-btn')
-compose_to_from_contacts = ("xpath", "//div[@class='cmp-to-container cmp-addr-container']//span[@class='cmp-peep-name']")
-compose_to_from_contacts_address = ("xpath", "//div[@class='cmp-to-container cmp-addr-container']//span[@class='cmp-peep-address collapsed']") 
+compose_to_from_contacts = ("css selector", "div.cmp-to-container.cmp-addr-container span.cmp-peep-name")
+compose_to_from_contacts_address = ("css selector", "div.cmp-to-container.cmp-addr-container span.cmp-peep-address collapsed")
 compose_to = ('class name', 'cmp-to-text cmp-addr-text')
 compose_cc = ('class name', 'cmp-cc-text cmp-addr-text')
 compose_bcc = ('class name', 'cmp-bcc-text cmp-addr-text')
 compose_subject = ('class name', 'cmp-subject-text')
 
 # Caution: there's >1 of these in the html!
-compose_msg = ('class name', 'cmp-body-text') 
+compose_msg = ('class name', 'cmp-body-text')
 
 reply_btn = ('class name', "msg-reply-btn")
 reply_menu_reply = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-reply"]')
@@ -59,7 +60,7 @@ settings_del_acc_btn = ('class name', 'tng-account-delete')
 settings_del_conf_btn = ('xpath', '//button[@id="account-delete-ok"]')
 settings_add_account_btn = ('class name', 'tng-account-add')
 
-goto_accounts_btn = ('class name', 'fld-accounts-btn')    
+goto_accounts_btn = ('class name', 'fld-accounts-btn')
 accounts_list_names = ('class name', 'fld-account-name')
 
 folder_list_container = ('xpath', '//div[@class="fld-folders-container"]')
@@ -102,7 +103,7 @@ switch_account_panel_one_account = ('class name', 'card-folder-picker card anim-
 switch_account_scroll_outer = ('xpath', '//div[@class="fld-acct-scrollouter"]')
 switch_account_scroll = ('class name', 'fld-acct-header closed')
 switch_account_current_account = ('xpath', '//div[@class="fld-acct-scrollouter"]//a[@class="fld-acct-header closed"]//span[@class="fld-acct-header-account-label"]')
-switch_account_accounts_to_change = ('xpath', '//div[@class="fld-accountlist-container"]//a[@class="fld-account-item"]//span[@class="fld-account-name"]') # This selector does not return the current account
+switch_account_accounts_to_change = ('xpath', '//div[@class="fld-accountlist-container"]//a[@class="fld-account-item"]//span[@class="fld-account-name"]')  # This selector does not return the current account
 
 # Open external link confirmation
 confirmation_browser_cancel = ('id', 'msg-browse-cancel')
