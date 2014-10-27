@@ -489,7 +489,7 @@ class Loop(object):
                 self.logout()
         return result
 
-	def open_address_book(self):
+    def open_address_book(self):
         self.parent.wait_for_element_displayed(*DOM.Loop.call_from_loop)
         open_link = self.marionette.find_element(*DOM.Loop.call_from_loop)
         time.sleep(1)
