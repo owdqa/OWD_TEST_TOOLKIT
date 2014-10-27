@@ -138,7 +138,7 @@ export_export_btn = ("id", "export-action")
 export_contacts = ("id", "exportContacts")
 export_sd_card = ("id", "export-sd-option")
 export_select_all = ("id", "select-all")
-export = ("xpath", "//*[@id='select-action']")
+export = ("xpath", "//button[@id='select-action']")
 export_import_banner = ("id", "statusMsg")
 
 export_sim_card = ("id", "export-sim-option-8934071100275319352")

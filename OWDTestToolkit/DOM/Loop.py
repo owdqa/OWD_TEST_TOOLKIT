@@ -97,6 +97,18 @@ form_confirm_delete = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n
 form_confirm_logout = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="logOut"]')
 
 connection_error_msg = ('xpath', "//span[@class='modal-dialog-alert-message' and contains(text(), '{}')]")
+
+# Share panel
+share_panel = ('id', 'share-panel')
+share_panel_close = ('id', 'share-close-button')
+share_panel_header = ('xpath', '//h1[@data-l10n-id="shareTitle"]')
+share_panel_contact_name = ('id', 'contact-name-to-share')
+share_panel_contact_reason = ('id', 'sharing-reason')
+share_panel_share_link = ('id', 'link-to-share')
+share_panel_sms_share = ('id', 'share-by-sms')
+share_panel_email_share = ('id', 'share-by-email')
+share_panel_others_share = ('id', 'share-by-others')
+
 not_a_hello_user_msg = ('xpath', "//p[@id='sharing-reason' and text()='{}']")
 not_a_user_explanation = ('css selector', '.share-explanation[data-l10n-id=noProblem]')
 share_link_options = ('css selector', '.share-options li')
@@ -104,3 +116,23 @@ share_link_option = ('id', 'share-by-{}')
 share_others_header = ('xpath', '//header[text()="{}"]')
 share_others_options = ('xpath', '//header[text()="{}"]/..//button')
 share_close_btn = ('id', 'share-close-button')
+
+# Call screen
+call_frame  = ('xpath', '//iframe[@class="active" and @name=""]') #TODO: fill it!
+call_screen_contact_details = ('xpath', '//h1[@id="contact-name-details" and text()="{}"]')
+call_screen_counter = ('id', 'counter')
+call_screen_status = ('id', 'call-status-info')
+call_screen_video_container = ('id', 'local-video')
+call_screen_hang_up = ('id', 'hang-up')
+call_screen_answer = ('id', 'answer')
+call_screen_answer_video = ('id', 'answer-video')
+call_screen_mute = ('id', 'call-settings-mute')
+call_screen_speaker = ('id', 'call-settings-speaker')
+call_screen_video_mode = ('id', 'call-settings-video')
+call_screen_resume = ('id', 'resume-button')
+
+# Feedback
+feedback = ('id', 'feedback')
+feedback_skip = ('id', 'skip-feedback-button')
+feedback_rate = ('id', 'rate-feedback-button')
+
