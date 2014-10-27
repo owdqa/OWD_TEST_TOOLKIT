@@ -117,8 +117,8 @@ share_others_header = ('xpath', '//header[text()="{}"]')
 share_others_options = ('xpath', '//header[text()="{}"]/..//button')
 
 # Call screen
-call_frame  = ('xpath', '//iframe[@class="active" and @name=""]')
-call_screen_caller = ('id', 'contact-name-details')
+call_frame  = ('xpath', '//iframe[@class="active" and @name=""]') #TODO: fill it!
+call_screen_contact_details = ('xpath', '//h1[@id="contact-name-details" and text()="{}"]')
 call_screen_counter = ('id', 'counter')
 call_screen_status = ('id', 'call-status-info')
 call_screen_video_container = ('id', 'local-video')
