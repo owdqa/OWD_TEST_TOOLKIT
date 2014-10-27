@@ -115,3 +115,23 @@ share_link_options = ('css selector', '.share-options li')
 share_link_option = ('id', 'share-by-{}')
 share_others_header = ('xpath', '//header[text()="{}"]')
 share_others_options = ('xpath', '//header[text()="{}"]/..//button')
+
+# Call screen
+call_frame  = ('xpath', '//iframe[@class="active" and @name=""]')
+call_screen_caller = ('id', 'contact-name-details')
+call_screen_counter = ('id', 'counter')
+call_screen_status = ('id', 'call-status-info')
+call_screen_video_container = ('id', 'local-video')
+call_screen_hang_up = ('id', 'hang-up')
+call_screen_answer = ('id', 'answer')
+call_screen_answer_video = ('id', 'answer-video')
+call_screen_mute = ('id', 'call-settings-mute')
+call_screen_speaker = ('id', 'call-settings-speaker')
+call_screen_video_mode = ('id', 'call-settings-video')
+call_screen_resume = ('id', 'resume-button')
+
+# Feedback
+feedback = ('id', 'feedback')
+feedback_skip = ('id', 'skip-feedback-button')
+feedback_rate = ('id', 'rate-feedback-button')
+
