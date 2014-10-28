@@ -108,16 +108,15 @@ share_panel_share_link = ('id', 'link-to-share')
 share_panel_sms_share = ('id', 'share-by-sms')
 share_panel_email_share = ('id', 'share-by-email')
 share_panel_others_share = ('id', 'share-by-others')
-
-not_a_hello_user_msg = ('xpath', "//p[@id='sharing-reason' and text()='{}']")
-not_a_user_explanation = ('css selector', '.share-explanation[data-l10n-id=noProblem]')
 share_link_options = ('css selector', '.share-options li')
-share_link_option = ('id', 'share-by-{}')
 share_others_header = ('xpath', '//header[text()="{}"]')
 share_others_options = ('xpath', '//header[text()="{}"]/..//button')
 
+not_a_hello_user_msg = ('xpath', "//p[@id='sharing-reason' and text()='{}']")
+not_a_user_explanation = ('css selector', '.share-explanation[data-l10n-id=noProblem]')
+
 # Call screen
-call_frame  = ('xpath', '//iframe[@class="active" and @name=""]') #TODO: fill it!
+call_frame = ('xpath', '//iframe[@class="active" and @name=""]')  # TODO: fill it!
 call_screen_contact_details = ('xpath', '//h1[@id="contact-name-details" and text()="{}"]')
 call_screen_counter = ('id', 'counter')
 call_screen_status = ('id', 'call-status-info')
@@ -134,4 +133,3 @@ call_screen_resume = ('id', 'resume-button')
 feedback = ('id', 'feedback')
 feedback_skip = ('id', 'skip-feedback-button')
 feedback_rate = ('id', 'rate-feedback-button')
-
