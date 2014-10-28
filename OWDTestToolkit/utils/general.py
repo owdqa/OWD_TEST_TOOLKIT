@@ -35,7 +35,7 @@ class general(object):
             self.parent.reporting.logResult("debug", "<i>(*** The Marionette session was "\
                                             "restarted due to a possible crash. ***)</i>")
         except:
-            self.parent.reporting.logResult('debug',  "Marionette session still running")
+            self.parent.reporting.logResult('debug', "Marionette session still running")
             pass
         self.parent.parent.apps.switch_to_displayed_app()
 
@@ -188,15 +188,15 @@ class general(object):
         orig_frame = self.parent.iframe.currentIframe()
         self.parent.test.TEST(True, "Original frame filtered name: {}".format(orig_frame))
 
-        x = self.parent.element.getElement(p_element_array, p_desc)
+        input_elem = self.parent.element.getElement(p_element_array, p_desc)
 
         #
         # Need to click in the bottom right corner, or the cursor may not be properly located to append.
         #
-        x.tap(x=x.size["width"] - 1, y=x.size["height"] - 1)
+        input_elem.tap(x=input_elem.size["width"] - 1, y=input_elem.size["height"] - 1)
 
         if p_clear:
-            x.clear()
+            input_elem.clear()
 
         if no_keyboard or p_no_keyboard:
             #
@@ -205,7 +205,7 @@ class general(object):
             self.parent.reporting.logResult("info", u"(Sending '{}' to this field without using the keyboard.)".\
                 format(p_str))
 
-            x.send_keys(p_str)
+            input_elem.send_keys(p_str)
 
             #
             # There's a weird 'quirk' in Marionette just now:
@@ -247,17 +247,17 @@ class general(object):
         # Validate that the field now has the value we sent it.
         #
         if p_validate:
-            x = self.marionette.find_element(*p_element_array)
-            y = x.get_attribute("value")
-            self.parent.reporting.debug("*** VALUE of cmp-body-text: [{}]".format(y))
-            if y is None:
-                y = x.text
-                self.parent.reporting.debug("*** No value found. Using TEXT of cmp-body-text: [{}]".format(y))
+            elem = self.marionette.find_element(*p_element_array)
+            value = elem.get_attribute("value")
+            self.parent.reporting.debug("*** VALUE of cmp-body-text: [{}]".format(value))
+            if value is None:
+                value = elem.text
+                self.parent.reporting.debug("*** No value found. Using TEXT of cmp-body-text: [{}]".format(value))
 
             if p_clear:
-                fieldText = y
+                fieldText = value
             else:
-                fieldText = y[-(len(p_str)):]
+                fieldText = value[-(len(p_str)):]
 
             self.parent.test.TEST(p_str == fieldText,
                       "The field contains the correct string ...|{}|- vs. -|{}".format(fieldText, p_str))
@@ -268,8 +268,8 @@ class general(object):
             #
             try:
                 self.parent.parent.wait_for_element_displayed(*DOM.GLOBAL.app_head, timeout=1)
-                x = self.marionette.find_element(*DOM.GLOBAL.app_head)
-                x.tap()
+                app_header = self.marionette.find_element(*DOM.GLOBAL.app_head)
+                app_header.tap()
                 time.sleep(0.5)
             except:
                 pass

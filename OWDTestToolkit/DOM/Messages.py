@@ -31,6 +31,7 @@ attach_button = ('id', 'messages-attach-button')
 message_sending_spinner = ("xpath", "//aside[@class='pack-end'][-1]/progress")
 
 header_back_button = ("id", "messages-back-button")
+header_close_button = ('id', 'messages-close-button')
 
 # This field will allow to retrieve phone numbers and emails in the body of the last SM or MM
 phone_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//span/a[@data-action="dial-link"]')

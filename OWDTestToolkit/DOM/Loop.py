@@ -115,6 +115,7 @@ share_link_options = ('css selector', '.share-options li')
 share_link_option = ('id', 'share-by-{}')
 share_others_header = ('xpath', '//header[text()="{}"]')
 share_others_options = ('xpath', '//header[text()="{}"]/..//button')
+share_close_btn = ('id', 'share-close-button')
 
 # Call screen
 call_frame  = ('xpath', '//iframe[@class="active" and @name=""]') #TODO: fill it!
