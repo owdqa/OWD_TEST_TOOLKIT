@@ -230,7 +230,6 @@ class Loop(object):
         phone_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
         phone_input.send_keys(phone_number_without_prefix)
 
-
         # NOTE: before you virtually kill me, I cannot take this duplicated code into another
         # separated method due to the @reply decorator. Just letting you know :).
         allow_button = self.marionette.find_element(*DOM.Loop.mobile_id_allow_button)
@@ -248,7 +247,6 @@ class Loop(object):
             raise
 
         self.apps.switch_to_displayed_app()
-
 
     @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_ffox_login")
     def allow_permission_ffox_login(self):
@@ -495,3 +493,29 @@ class Loop(object):
         time.sleep(1)
         open_link.tap()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+
+    def change_call_mode(self, mode):
+        _values = {"Audio": "false", "Video": "true"}
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.settings_select_call_mode)
+        self.marionette.find_element(*DOM.Loop.settings_select_call_mode).tap()
+
+        self.marionette.switch_to_frame()
+
+        option = (DOM.GLOBAL.modal_valueSel_option[0], DOM.GLOBAL.modal_valueSel_option[1].format(mode.capitalize()))
+        self.parent.wait_for_element_displayed(*option)
+        self.marionette.find_element(*option).tap()
+
+        # Check the option has been selected before hitting OK button
+        option_selected = (DOM.GLOBAL.modal_valueSel_option_selected[
+                           0], DOM.GLOBAL.modal_valueSel_option_selected[1].format(mode.capitalize()))
+        self.parent.wait_for_condition(
+            lambda m: m.find_element(*option_selected).get_attribute("aria-selected") == "true")
+        self.marionette.find_element(*DOM.GLOBAL.conf_screen_ok_button).tap()
+
+        self.apps.switch_to_displayed_app()
+        
+        # Make sure the option is indeed selected, for that we have to check against the _values var
+        self.parent.wait_for_condition(
+            lambda m: m.find_element(*DOM.Loop.settings_select_call_mode).get_attribute("value") == _values[mode.capitalize()])
+

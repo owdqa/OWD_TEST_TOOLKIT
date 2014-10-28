@@ -8,6 +8,8 @@ modal_alert_ok2 = ("xpath", "//*[@id='modal-dialog-confirm-ok']")
 modal_alert_msg2 = ("xpath", "//*[@id='modal-dialog-confirm-message']")
 modal_valueSel_ok = ('css selector', 'button.value-option-confirm')
 modal_valueSel_list = ("xpath", "//section[@id='value-selector-container']//li")
+modal_valueSel_option = ('xpath', '//section[@id="value-selector-container"]//li//span[text()="{}"]')
+modal_valueSel_option_selected = ('xpath', '//section[@id="value-selector-container"]//li//span[text()="{}"]/ancestor::li')
 # conf_screen_ok_button = ("class name","value-option-confirm affirmative full")
 conf_screen_ok_button = ('xpath', '//button[@class="value-option-confirm affirmative full"]')
 
