@@ -88,7 +88,7 @@ class Loop(object):
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
         
-    def reinstall(self, via=True):
+    def reinstall(self):
         self.uninstall()
         time.sleep(2)
         self.install()
