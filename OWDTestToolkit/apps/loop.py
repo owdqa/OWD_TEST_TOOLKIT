@@ -49,6 +49,7 @@ class Loop(object):
             self.UTILS.test.TEST(False, "Not valid way to install Loop")
 
     def install_via_grunt(self, version="1.1"):
+        self.UTILS.reporting.logResult('info', 'Installing via grunt....')
         script = """ cd {0}
         git checkout {1}
         git fetch && git merge origin/{1}
@@ -67,6 +68,7 @@ class Loop(object):
         self.UTILS.test.TEST(install_ok_msg in result, "Install via grunt is OK")
 
     def install_via_marketplace(self):
+        self.UTILS.reporting.logResult('info', 'Installing via marketplace....')
         # Make sure we install the latest version
         self.update_and_publish()
 
