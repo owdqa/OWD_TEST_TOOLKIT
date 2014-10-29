@@ -25,6 +25,7 @@ class Loop(object):
         self.app_name = "Firefox Hello"
         self.market_url = "https://owd.tid.es/B3lg1r89n/market/appList.html"
         self.persistent_directory = "/data/local/storage/persistent"
+        self.loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_DIR")
 
     def launch(self):
         """
@@ -39,6 +40,33 @@ class Loop(object):
         return self.apps.is_app_installed(self.app_name)
 
     def install(self):
+        via = self.UTILS.general.get_os_variable("GLOBAL_LOOP_VIA")
+        if via == "Grunt":
+            self.install_via_grunt()
+        elif via == "Market":
+            self.install_via_marketplace()
+        else:
+            self.UTILS.test.TEST(False, "Not valid way to install Loop")
+
+    def install_via_grunt(self, version="1.1"):
+        script = """ cd {0}
+        git checkout {1}
+        git fetch && git merge origin/{1}
+        grunt build
+        """.format(self.loop_dir, version)
+
+        result = os.popen(script).read()
+        
+        self.marionette.switch_to_frame()
+        msg = "{} installed".format(self.app_name)
+        installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
+        self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
+        
+        install_ok_msg = "Done, without errors."
+        self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
+        self.UTILS.test.TEST(install_ok_msg in result, "Install via grunt is OK")
+
+    def install_via_marketplace(self):
         # Make sure we install the latest version
         self.update_and_publish()
 
@@ -57,8 +85,8 @@ class Loop(object):
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-
-    def reinstall(self):
+        
+    def reinstall(self, via=True):
         self.uninstall()
         time.sleep(2)
         self.install()
@@ -70,7 +98,6 @@ class Loop(object):
             self.app_name), timeout=20, message="{} is not installed".format(self.app_name))
 
     def update_and_publish(self):
-        self.loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_DIR")
         self.publish_loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_AUX_FILES")
 
         result = os.popen("cd {} && ./publish_app.sh {}".format(self.publish_loop_dir, self.loop_dir)).read()
