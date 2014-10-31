@@ -1,10 +1,10 @@
-from marionette.runtests import startTestRunner
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
 from gaiatest.runtests import GaiaTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
+from datetime import datetime
 import sys
 from gaiatest.version import __version__
 
@@ -30,22 +30,77 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
     def __init__(self, **kwargs):
         BaseMarionetteTestRunner.__init__(self, **kwargs)
         GaiaTestRunnerMixin.__init__(self, **kwargs)
-        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__, **kwargs)
+        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__, html_output=self.testvars['html_output'], **kwargs)
         self.test_handlers = [GaiaTestCase]
 
 
+class FfoxTestRunner():
+    
 # runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
-def ffox_test_runner(args):
-    parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
-    options, tests = parser.parse_args(args)
-    print "Options: {}".format(options)
-    print "Tests: {}".format(tests)
-    parser.verify_usage(options, tests)
+    def __init__(self, args):
+        self.args = args
+        print "ARRRRGSSS: {}".format(self.args)
+        self.runner_class = OWDTestRunner
+        self.runner = None
+        self.total = 0
+        self.skipped = 0
+        self.unexpected_passed = 0
+        self.passed = 0
+        self.automation_failures = 0
+        self.unexpected_failures = 0
+        self.expected_failures = 0
+    
+    def start_test_runner(self, runner_class, options, tests):
+        self.start_time = datetime.utcnow()
+        runner = runner_class(**vars(options))
+        runner.run_tests(tests)
+        self.end_time = datetime.utcnow() 
+        return runner
 
-    print "Version: {}".format(__version__)
-    runner = startTestRunner(OWDTestRunner, options, tests)
-    if runner.failed > 0:
-        sys.exit(10)
+    def process_runner_results(self):
+        for result in self.runner.results:
+            self.passed += len(result.tests_passed)
+            self.skipped += len(result.skipped)
+            self.unexpected_passed += len(result.unexpectedSuccesses)
+            self.automation_failures += len(result.errors)
+            self.unexpected_failures += len(result.failures)
+            self.expected_failures += len(result.expectedFailures)
+            
+        self.total = self.passed + self.skipped + self.unexpected_passed + self.automation_failures + self.unexpected_passed + self.expected_failures
+    
+    def run(self):
+        """
+        Custom runner for OWD initiative
+        It takes as arguments the parameters that gaiatest command would need
+        For example:
+            python ffox_test_runner_py --testvars=<testvars path> --address=localhost:2828 <tests path | test suite path>
+        """
+        
+        
+            
+        parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
+        options, tests = parser.parse_args(self.args)
+#         print "Options: {}".format(options)
+#         print "Tests: {}".format(tests)
+        parser.verify_usage(options, tests)
+    
+#         print "Version: {}".format(__version__)
+        self.runner = self.start_test_runner(self.runner_class, options, tests)
+        self.process_runner_results()
+    #     if runner.failed > 0:
+    #         sys.exit(10)
+        print "###############################################################################################"
+        print "Click here for details\t\t\t\t\t: file://{}".format(self.runner.testvars['html_output'])
+        print
+        print "Start time\t\t\t\t\t\t: {}".format(self.start_time.strftime("%d/%m/%Y %H:%M"))
+        print "End time\t\t\t\t\t\t: {}".format(self.end_time.strftime("%d/%m/%Y %H:%M"))
+        print "Automation failures\t\t\t\t\t: {}".format(self.automation_failures)
+        print "Test cases passed\t\t\t\t\t: {} / {}".format(self.passed, self.total)
+        print "Failed tests\t\t\t\t\t\t: {}".format(self.unexpected_failures)
+        print "Skipped tests\t\t\t\t\t\t: {}".format(self.skipped)
+        print "Expected failures\t\t\t\t\t: {}".format(self.expected_failures)
+        print "###############################################################################################"
+
 
 if __name__ == "__main__":
-    ffox_test_runner(sys.argv[1:])
+    FfoxTestRunner(sys.argv[1:]).run()
