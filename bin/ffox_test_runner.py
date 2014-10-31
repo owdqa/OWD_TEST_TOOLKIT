@@ -58,6 +58,8 @@ class FfoxTestRunner():
         return runner
 
     def process_runner_results(self):
+        # NOTE: since self.test_handlers is GaiaTestCase, the results will be instances of GaiaTestResult which, in the end
+        # inherit from MarionetteTestResult
         for result in self.runner.results:
             self.passed += len(result.tests_passed)
             self.skipped += len(result.skipped)
@@ -68,27 +70,7 @@ class FfoxTestRunner():
             
         self.total = self.passed + self.skipped + self.unexpected_passed + self.automation_failures + self.unexpected_passed + self.expected_failures
     
-    def run(self):
-        """
-        Custom runner for OWD initiative
-        It takes as arguments the parameters that gaiatest command would need
-        For example:
-            python ffox_test_runner_py --testvars=<testvars path> --address=localhost:2828 <tests path | test suite path>
-        """
-        
-        
-            
-        parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
-        options, tests = parser.parse_args(self.args)
-#         print "Options: {}".format(options)
-#         print "Tests: {}".format(tests)
-        parser.verify_usage(options, tests)
-    
-#         print "Version: {}".format(__version__)
-        self.runner = self.start_test_runner(self.runner_class, options, tests)
-        self.process_runner_results()
-    #     if runner.failed > 0:
-    #         sys.exit(10)
+    def display_results(self):
         print "###############################################################################################"
         print "Click here for details\t\t\t\t\t: file://{}".format(self.runner.testvars['html_output'])
         print
@@ -100,7 +82,25 @@ class FfoxTestRunner():
         print "Skipped tests\t\t\t\t\t\t: {}".format(self.skipped)
         print "Expected failures\t\t\t\t\t: {}".format(self.expected_failures)
         print "###############################################################################################"
-
+        
+    def run(self):
+        """
+        Custom runner for OWD initiative
+        It takes as arguments the parameters that gaiatest command would need
+        For example:
+            python ffox_test_runner_py --testvars=<testvars path> --address=localhost:2828 <tests path | test suite path>
+        """
+            
+        parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
+        options, tests = parser.parse_args(self.args)
+#         print "Options: {}".format(options)
+#         print "Tests: {}".format(tests)
+        parser.verify_usage(options, tests)
+    
+#         print "Version: {}".format(__version__)
+        self.runner = self.start_test_runner(self.runner_class, options, tests)
+        self.process_runner_results()
+        self.display_results()
 
 if __name__ == "__main__":
     FfoxTestRunner(sys.argv[1:]).run()
