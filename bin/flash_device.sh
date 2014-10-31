@@ -176,7 +176,8 @@ do
 	sleep 5
 done
 
-sleep 15
+sleep 30
+sudo adb devices
 sudo $cmd_adb start-server
 sudo $cmd_adb forward tcp:2828 tcp:2828
 
