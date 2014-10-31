@@ -125,6 +125,7 @@ class reporting(object):
             self._resultArray.append((self._no_time, "info", self._subnote + msgArr[i]))
 
     def reportResults(self):
+        return
         #
         # Create output files (summary, which is displayed and
         # details, which is not displayed).
@@ -197,7 +198,7 @@ class reporting(object):
                     detail_file.write(pass_str)
 
                 detail_file.write(i[0])  # (Timestamp)
-                #detail_file.write(" " + i[2].encode('ascii', 'ignore') + "\n")
+                # detail_file.write(" " + i[2].encode('ascii', 'ignore') + "\n")
                 detail_file.write(" " + i[2] + "\n")
 
         detail_file.close()

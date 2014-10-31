@@ -8,4 +8,3 @@ marionette = Marionette(host='localhost', port=2828)
 marionette.start_session()
 marionette.switch_to_frame()
 marionette.execute_script("document.getElementById('modal-dialog-prompt-ok').click();")
-
