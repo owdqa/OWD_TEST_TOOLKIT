@@ -1,7 +1,7 @@
 import time
 import datetime
 import codecs
-import logging.config
+import logging
 
 
 class reporting(object):
@@ -15,8 +15,6 @@ class reporting(object):
         self.det_fnam = parent.det_fnam
         self.sum_fnam = parent.sum_fnam
         self.testNum = parent.testNum
-        self.config_file = self.parent.general.get_os_variable("OWD_LOG_CFG")
-        logging.config.fileConfig(self.config_file)
         self.logger = logging.getLogger('OWDTestToolkit')
 
     def logComment(self, p_str):
