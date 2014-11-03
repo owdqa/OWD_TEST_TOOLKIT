@@ -39,7 +39,6 @@ class FfoxTestRunner():
 # runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
     def __init__(self, args):
         self.args = args
-        print "ARRRRGSSS: {}".format(self.args)
         self.runner_class = OWDTestRunner
         self.runner = None
         self.total = 0
@@ -56,22 +55,25 @@ class FfoxTestRunner():
         runner.run_tests(tests)
         self.end_time = datetime.utcnow() 
         return runner
-
+    
+    def update_attr(self, attr_name, attr_value):
+        setattr(self, attr_name, getattr(self, attr_name) + attr_value)
+        
     def process_runner_results(self):
         # NOTE: since self.test_handlers is GaiaTestCase, the results will be instances of GaiaTestResult which, in the end
         # inherit from MarionetteTestResult
+        own_attrs = ['passed', 'skipped', 'unexpected_passed', 'automation_failures', 'unexpected_failures', 'expected_failures']
+        result_attrs = ['tests_passed', 'skipped', 'unexpectedSuccesses', 'errors', 'failures', 'expectedFailures']
+        
         for result in self.runner.results:
-            self.passed += len(result.tests_passed)
-            self.skipped += len(result.skipped)
-            self.unexpected_passed += len(result.unexpectedSuccesses)
-            self.automation_failures += len(result.errors)
-            self.unexpected_failures += len(result.failures)
-            self.expected_failures += len(result.expectedFailures)
+            # We have to use len(), since result is an array of arrays containing the error reason
+            result_values = [len(getattr(result, name)) for name in result_attrs] 
+            map(self.update_attr, own_attrs, result_values)
             
-        self.total = self.passed + self.skipped + self.unexpected_passed + self.automation_failures + self.unexpected_passed + self.expected_failures
-    
+        self.total = sum([getattr(self, own_attr) for own_attr in own_attrs])
+        
     def display_results(self):
-        print "###############################################################################################"
+        print "\n###############################################################################################"
         print "Click here for details\t\t\t\t\t: file://{}".format(self.runner.testvars['html_output'])
         print
         print "Start time\t\t\t\t\t\t: {}".format(self.start_time.strftime("%d/%m/%Y %H:%M"))
@@ -81,7 +83,7 @@ class FfoxTestRunner():
         print "Failed tests\t\t\t\t\t\t: {}".format(self.unexpected_failures)
         print "Skipped tests\t\t\t\t\t\t: {}".format(self.skipped)
         print "Expected failures\t\t\t\t\t: {}".format(self.expected_failures)
-        print "###############################################################################################"
+        print "###############################################################################################\n"
         
     def run(self):
         """
