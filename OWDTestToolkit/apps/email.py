@@ -39,7 +39,7 @@ class Email(object):
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
 
     def createEmailCameraImage(self):
-        self.camera = Camera(self)
+        self.camera = Camera(self.parent)
 
         attach = self.UTILS.element.getElement(DOM.Email.compose_attach_btn, "Attach button")
         attach.tap()
@@ -54,7 +54,7 @@ class Email(object):
         #
         # Take a picture.
         #
-        self.camera.takeAndSelectPicture()
+        self.camera.take_and_select_picture()
 
         self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
 
@@ -88,9 +88,9 @@ class Email(object):
         # NOTE: It does not fill neither the message destinatary nor the message body
         #
 
-        self.gallery = Gallery(self)
-        self.video = Video(self)
-        self.music = Music(self)
+        self.gallery = Gallery(self.parent)
+        self.video = Video(self.parent)
+        self.music = Music(self.parent)
 
         if attached_type == "image":
             #
@@ -99,7 +99,7 @@ class Email(object):
             self.UTILS.general.addFileToDevice('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
 
             self.createEmailImage()
-            self.gallery.clickThumbEmail(0)
+            self.gallery.click_on_thumbnail_at_position_email(0)
 
         elif attached_type == "cameraImage":
             #
@@ -114,7 +114,7 @@ class Email(object):
             self.UTILS.general.addFileToDevice('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
 
             self.createEmailVideo()
-            self.video.clickOnVideoEmail(0)
+            self.video.click_on_video_at_position_email(0)
 
         elif attached_type == "audio":
             #

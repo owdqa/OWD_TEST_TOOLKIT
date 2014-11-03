@@ -40,8 +40,9 @@ class Contacts(object):
         self.marionette.switch_to_frame()
 
         # Choose to get a picture from the Gallery.
-        x = self.UTILS.element.getElement(DOM.Contacts.photo_from_gallery, "Gallery link")
-        x.tap()
+        elem = (DOM.GLOBAL.action_menu_option[0], DOM.GLOBAL.action_menu_option[1].format("Gallery"))
+        gallery_option = self.UTILS.element.getElement(elem, "Gallery link")
+        gallery_option.tap()
 
         # Switch to Gallery iframe.
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
@@ -112,6 +113,7 @@ class Contacts(object):
 
         # Return to the contact list screen.
         back_btn = self.UTILS.element.getElement(DOM.Contacts.details_back_button, "Details 'back' button")
+        time.sleep(1)
         back_btn.tap()
 
         self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
@@ -313,7 +315,7 @@ class Contacts(object):
         export_btn = self.UTILS.element.getElement(DOM.Contacts.export_contacts, "Export button")
         export_btn.tap()
 
-        # Press the Bluetooth.
+        # Press the option
         export_option_btn = self.UTILS.element.getElement(locator, "Export {}".format(msg))
         self.UTILS.test.TEST(export_option_btn.get_attribute(
             "disabled") == "false", "{} button is enabled.".format(msg))
@@ -337,6 +339,19 @@ class Contacts(object):
         Presses the Settings button, then SIM card
         """
         self._export(DOM.Contacts.export_sim_card, "SIM card")
+
+    def export_contacts_to_sim_card_by_position(self, positions):
+        self.select_contacts_by_position(positions)
+        export_button = self.UTILS.element.getElement(DOM.Contacts.export, "Export action button")
+        export_button.tap()
+
+    def select_contacts_by_position(self, positions):
+        """
+            Selects some contacts in "Edition Mode"
+        """
+        contact_list = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "Contacts list")
+        for pos in positions:
+            contact_list[pos].tap()
 
     def get_contact_fields(self, view=False):
         """
@@ -418,7 +433,8 @@ class Contacts(object):
 
             if click_signin:
                 signin_btn = self.UTILS.element.getElement(DOM.Contacts.gmail_signIn_button, "Sign In button")
-                signin_btn.tap()
+                time.sleep(1)
+                self.UTILS.element.simulateClick(signin_btn)
 
                 # Check to see if sigin failed. If it did then stay here.
                 try:
@@ -476,7 +492,7 @@ class Contacts(object):
         If click_signin is set to True then this method will also click
         the Sign in button (defaults to true).
         <br>
-        Returns False if the login failed, "ALLIMPORTED" if all your contacts are already imported else True.
+        Returns False if the login failed, True otherwise.
         """
 
         settings_btn = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")

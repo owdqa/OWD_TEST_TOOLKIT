@@ -10,8 +10,6 @@ view_all_contact_xpath = '//*[@data-order="{}"]'
 view_all_contact_list = ("xpath", "//li[@class='contact-item']")
 view_all_contact_name_xpath = "//li[@class='contact-item']//p[contains(@data-search,'{}')]"
 contact_names = ('css selector', '.contact-item .contact-text')
-view_all_contact_email = ("xpath", "/html/body/section/article/div[2]/div/div/section/section/ol/li/p/strong")
-
 view_all_contact_specific_contact = ('xpath', '//section[@class="group-section"]//li/p[@class="contact-text"]/strong[contains(text(), "{}")]')
 
 
@@ -22,16 +20,19 @@ view_contact_email_field = ("id", "email-or-pick-0")
 view_contact_address = ("xpath", "//li[@id='address-details-template-0']//a[@class='action action-block']/b")
 view_contact_comments = ("id", "note-details-template-0")
 view_contact_tels_xpath = "//*[contains(@id, 'call-or-pick-') and contains(@data-tel, '{}')]"
+view_contact_hello_option = ('css selector', '#webrtc-client-actions button[data-l10n-id={}]')
 dialer_frame = ("data-url", "oncall")
 
 search_field = ("xpath", ".//*[@id='search-start']/input")
 search_contact_input = ("id", "search-contact")
-search_results_list = ("xpath", ".//*[@id='search-list']/li")
+search_contact_result_input = ('id', 'search-contact')
+search_results_list = ("css selector", "#search-list li")
 search_cancel_btn = ('id', 'cancel-search')
 search_no_contacts_found = ("id", "no-result")
 favourites_section = ("id", "contacts-list-favorites")
 favourites_list_xpath = "//ol[@id='contacts-list-favorites']//li[@data-order='{}']"
-favourite_JS = ("xpath", "/html/body/section/article/div[2]/div/section/section/ol/li")
+favourites_search_section = ('id', 'section-group-favorites')
+favourite_by_name = ("xpath", "//section[@id='section-group-favorites']//strong[text()='{}']")
 
 social_network_contacts = ('class name', "icon-social icon-fb")
 settings_button = ('id', 'settings-button')
@@ -59,7 +60,6 @@ confirm_delete_btn = ('xpath', '//*[@id="confirmation-message"]//button[text()="
 done_button = ('id', 'save-button')
 
 add_photo = ("id", "thumbnail-photo")
-photo_from_gallery = ("xpath", "/html/body/div/form[9]/menu/button")
 cancel_photo_source = ("xpath", '//button[@data-action="cancel"]')
 picture_thumbnails = ("xpath", "//*[@id='thumbnails']//div[@class='thumbnail-group-container']//img")
 picture_crop_done_btn = ("id", "crop-done-button")
@@ -138,7 +138,7 @@ export_export_btn = ("id", "export-action")
 export_contacts = ("id", "exportContacts")
 export_sd_card = ("id", "export-sd-option")
 export_select_all = ("id", "select-all")
-export = ("xpath", "//*[@id='select-action']")
+export = ("xpath", "//button[@id='select-action']")
 export_import_banner = ("id", "statusMsg")
 
 export_sim_card = ("id", "export-sim-option-8934071100275319352")

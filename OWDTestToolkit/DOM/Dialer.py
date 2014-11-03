@@ -1,8 +1,7 @@
 frame_locator = ('src', 'dialer')
 frame_locator_calling = ('name', 'call_screen')
 
-message_calleID = ("xpath", "/html/body/article/section[2]/div")
-button_calleID = ('xpath', "/html/body/div/div[5]/form/menu/button")
+message_callerID = ('id', 'message')
 
 option_bar_call_log = ("id", "option-recents")
 option_bar_contacts = ("id", "option-contacts")
@@ -10,7 +9,6 @@ option_bar_keypad = ("id", "option-keypad")
 
 keypad = ("id", "keypad")
 dialer_button_xpath = "//section[@id='keypad']//div[contains(@class,'keypad-key') and @data-value='{}']"
-dialer_button_1 = ("xpath", "/html/body/section/article[3]/div/article/section/div/div")
 phone_number_area = ("id", "fake-phone-number-view")
 # Beware: this number may have a country code prefix on it.
 phone_number = ('id', 'phone-number-view')
@@ -25,6 +23,7 @@ keypad_delete = ("id", "keypad-delete")
 
 add_to_conts_cancel_btn = ("id", "cancel_activity")
 
+suggestion_overlay = ('id', 'suggestion-overlay')
 suggestion_count = ("id", "suggestion-count")
 # When only a single suggestion is displayed, we have a div instead a button
 suggestion_item_single = ('xpath', '//div[@class="js-suggestion-item suggestion-item"]')

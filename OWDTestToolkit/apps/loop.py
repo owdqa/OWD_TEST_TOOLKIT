@@ -4,7 +4,7 @@ from OWDTestToolkit import DOM
 from OWDTestToolkit.apps.browser import Browser
 from marionette import Actions
 from OWDTestToolkit.utils.decorators import retry
-# from tests._mock_data.contacts import MockContact
+# from OWDTestToolkit.utils.contacts import MockContact
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
@@ -25,6 +25,7 @@ class Loop(object):
         self.app_name = "Firefox Hello"
         self.market_url = "https://owd.tid.es/B3lg1r89n/market/appList.html"
         self.persistent_directory = "/data/local/storage/persistent"
+        self.loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_DIR")
 
     def launch(self):
         """
@@ -39,6 +40,35 @@ class Loop(object):
         return self.apps.is_app_installed(self.app_name)
 
     def install(self):
+        via = self.UTILS.general.get_os_variable("GLOBAL_LOOP_VIA")
+        if via == "Grunt":
+            self.install_via_grunt()
+        elif via == "Market":
+            self.install_via_marketplace()
+        else:
+            self.UTILS.test.TEST(False, "Not valid way to install Loop")
+
+    def install_via_grunt(self, version="1.1"):
+        self.UTILS.reporting.logResult('info', 'Installing via grunt....')
+        script = """ cd {0}
+        git checkout {1}
+        git fetch && git merge origin/{1}
+        grunt build
+        """.format(self.loop_dir, version)
+
+        result = os.popen(script).read()
+        
+        self.marionette.switch_to_frame()
+        msg = "{} installed".format(self.app_name)
+        installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
+        self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
+        
+        install_ok_msg = "Done, without errors."
+        self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
+        self.UTILS.test.TEST(install_ok_msg in result, "Install via grunt is OK")
+
+    def install_via_marketplace(self):
+        self.UTILS.reporting.logResult('info', 'Installing via marketplace....')
         # Make sure we install the latest version
         self.update_and_publish()
 
@@ -57,7 +87,7 @@ class Loop(object):
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-
+        
     def reinstall(self):
         self.uninstall()
         time.sleep(2)
@@ -70,7 +100,6 @@ class Loop(object):
             self.app_name), timeout=20, message="{} is not installed".format(self.app_name))
 
     def update_and_publish(self):
-        self.loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_DIR")
         self.publish_loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_AUX_FILES")
 
         result = os.popen("cd {} && ./publish_app.sh {}".format(self.publish_loop_dir, self.loop_dir)).read()
@@ -98,7 +127,7 @@ class Loop(object):
         next_btn.tap()
         self.parent.wait_for_element_not_displayed(*DOM.Loop.ffox_account_login_overlay)
 
-    def _tap_on_firefox_login_button(self):
+    def tap_on_firefox_login_button(self):
         ffox_btn = self.marionette.find_element(*DOM.Loop.wizard_login_ffox_account)
         self.UTILS.element.simulateClick(ffox_btn)
 
@@ -113,7 +142,7 @@ class Loop(object):
         """ Checks if we have to skip the Wizard, log in, or if we're already at the main screen of Loop
 
             For the first two scenarios, it returns True.
-            If we are alredy inside Loop, it returns False.
+            If we are already inside Loop, it returns False.
         """
         # TODO: switch try-except code -> first check login instead of wizard
         #      see if it works, when the wizard is first
@@ -128,9 +157,9 @@ class Loop(object):
                 self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login)
                 return True
             except:
-                header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
+                self.UTILS.reporting.logResult('info', '[wizard_or_login] Loop')
                 try:
-                    self.parent.wait_for_element_displayed(*header)
+                    self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
                     return False
                 except:
                     self.UTILS.test.TEST(False, "Ooops. Something went wrong", True)
@@ -147,22 +176,21 @@ class Loop(object):
         wizard_steps = self.get_wizard_steps()
 
         current_frame = self.apps.displayed_app.frame
-        x_start = current_frame.size['width']
+        x_start = current_frame.size['width'] // 2
         x_end = x_start // 4
         y_start = current_frame.size['height'] // 2
 
         for i in range(wizard_steps):
-            self.actions.flick(
-                current_frame, x_start, y_start, x_end, y_start, duration=600).perform()
+            self.actions.flick(current_frame, x_start, y_start, x_end, y_start, duration=600).perform()
             time.sleep(1)
 
         self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
         self.parent.wait_for_element_displayed(DOM.Loop.wizard_login[0], DOM.Loop.wizard_login[1], timeout=10)
 
-    def firefox_login(self, email, password):
+    def firefox_login(self, email, password, is_wrong=False):
         """ Logs in using Firefox account
         """
-        self._tap_on_firefox_login_button()
+        self.tap_on_firefox_login_button()
 
         self.UTILS.iframe.switchToFrame(*DOM.Loop.ffox_account_frame_locator)
         self.parent.wait_for_element_displayed(
@@ -171,8 +199,9 @@ class Loop(object):
         self._fill_fxa_field(DOM.Loop.ffox_account_login_mail, email)
         self._fill_fxa_field(DOM.Loop.ffox_account_login_pass, password)
 
-        done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
-        done_btn.tap()
+        if not is_wrong:
+            done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
+            done_btn.tap()
 
     @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login(self, option_number=1):
@@ -206,12 +235,54 @@ class Loop(object):
 
         self.apps.switch_to_displayed_app()
 
+    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
+    def phone_login_manually(self, phone_number_without_prefix):
+        """
+        Logs in using mobile id, but instead of using the automatically provided by the app
+        selecting the manual option
+        @phone_number_without_prefix str Phone number to register into Loop
+        NOTE: for the shake of simplicity, we assume the prefix is the spanish one (+34) by default
+        """
+
+        self._tap_on_phone_login_button()
+        self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
+        self.parent.wait_for_element_not_displayed(*DOM.Loop.ffox_account_login_overlay)
+
+        mobile_id_header = ("xpath", DOM.GLOBAL.app_head_specific.format(_("Mobile ID")))
+        self.parent.wait_for_element_displayed(*mobile_id_header)
+
+        # Manually!
+        manually_link = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number)
+        manually_link.tap()
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_add_phone_number_number)
+        phone_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
+        phone_input.send_keys(phone_number_without_prefix)
+
+        # NOTE: before you virtually kill me, I cannot take this duplicated code into another
+        # separated method due to the @reply decorator. Just letting you know :).
+        allow_button = self.marionette.find_element(*DOM.Loop.mobile_id_allow_button)
+        allow_button.tap()
+
+        try:
+            self.parent.wait_for_element_displayed(
+                DOM.Loop.mobile_id_verified_button[0], DOM.Loop.mobile_id_verified_button[1], timeout=30)
+            verified_button = self.marionette.find_element(*DOM.Loop.mobile_id_verified_button)
+            self.UTILS.element.simulateClick(verified_button)
+        except:
+            self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
+                *DOM.Loop.mobile_id_allow_button).get_attribute("class"), timeout=5, message="Button is still sending")
+            # Make @retry do its work
+            raise
+
+        self.apps.switch_to_displayed_app()
+
     @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_ffox_login")
     def allow_permission_ffox_login(self):
         """ Allows Loop to read our contacts
 
         This method checks whether is necessary to allow extra permissions for loop or not ater
-        loggin in wit Firefox accounts
+        loggin in with Firefox accounts
 
         Also, since this is is the last step before connecting to the Loop server, it checks
         that no error has been raised. If that happens, it retries the connection up to 5 times.
@@ -225,8 +296,7 @@ class Loop(object):
             try:
                 self.UTILS.reporting.debug("Now looking for permission Loop main view....")
                 self.apps.switch_to_displayed_app()
-                header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
-                self.parent.wait_for_element_displayed(*header)
+                self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
                 return
             except:
                 self.UTILS.reporting.debug("And Now looking for error....")
@@ -261,8 +331,7 @@ class Loop(object):
         except:
             self.UTILS.reporting.debug("Now looking for permission Loop main view....")
             self.apps.switch_to_displayed_app()
-            header = ('xpath', DOM.GLOBAL.app_head_specific.format("Firefox Hello"))
-            self.parent.wait_for_element_displayed(*header)
+            self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
             return
 
         msg_text = self.marionette.find_element(*DOM.GLOBAL.app_permission_msg).text
@@ -280,13 +349,15 @@ class Loop(object):
         """
 
         self.UTILS.reporting.logResult('info', "Retrying FxA login...")
-        self.parent.wait_for_element_displayed(*DOM.GLOBAL.modal_dialog_alert_ok)
-        ok_btn = self.marionette.find_element(*DOM.GLOBAL.modal_dialog_alert_ok)
-        self.UTILS.element.simulateClick(ok_btn)
-
         self.apps.switch_to_displayed_app()
         time.sleep(2)
-        self._tap_on_firefox_login_button()
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.error_screen_ok)
+        ok_btn = self.marionette.find_element(*DOM.Loop.error_screen_ok)
+        self.UTILS.element.simulateClick(ok_btn)
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login)
+        self.tap_on_firefox_login_button()
 
     def retry_phone_login(self):
         """ Retry phone login if it has failed
@@ -313,7 +384,11 @@ class Loop(object):
 
         It assumes we already are in the Loop Settings panel
         """
-        self.parent.wait_for_element_displayed(*DOM.Loop.settings_logout)
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Loop.settings_logout)
+        except:
+            self.UTILS.reporting.logResult('info', "Already logged out")
+            return
         logout_btn = self.marionette.find_element(*DOM.Loop.settings_logout)
         self.UTILS.element.simulateClick(logout_btn)
 
@@ -415,3 +490,61 @@ class Loop(object):
     def settings_go_back(self):
         self.parent.wait_for_element_displayed(*DOM.Loop.settings_panel_back_btn)
         self.marionette.find_element(*DOM.Loop.settings_panel_back_btn).tap()
+
+    def share_micro_and_camera(self):
+        self.marionette.switch_to_frame()
+        try:
+            self.parent.wait_for_element_displayed(*DOM.GLOBAL.app_permission_btn_yes, timeout=10)
+            allow_btn = self.marionette.find_element(*DOM.GLOBAL.app_permission_btn_yes)
+            self.UTILS.reporting.debug("*** allow_btn: {}".format(allow_btn))
+            self.UTILS.element.simulateClick(allow_btn)
+        except Exception as e:
+            self.UTILS.reporting.debug("Error waiting for button: {}".format(e))
+        self.UTILS.iframe.switch_to_frame(*DOM.Loop.frame_locator)
+
+    def initial_test_checks(self):
+        # Make sure Loop is installed
+        result = True
+        if not self.is_installed():
+            self.install()
+        else:
+            self.launch()
+            # If already logged in, logout
+            result = self.wizard_or_login()
+            if not result:
+                self.open_settings()
+                self.logout()
+        return result
+
+    def open_address_book(self):
+        self.parent.wait_for_element_displayed(*DOM.Loop.call_from_loop)
+        open_link = self.marionette.find_element(*DOM.Loop.call_from_loop)
+        time.sleep(1)
+        open_link.tap()
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+
+    def change_call_mode(self, mode):
+        _values = {"Audio": "false", "Video": "true"}
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.settings_select_call_mode)
+        self.marionette.find_element(*DOM.Loop.settings_select_call_mode).tap()
+
+        self.marionette.switch_to_frame()
+
+        option = (DOM.GLOBAL.modal_valueSel_option[0], DOM.GLOBAL.modal_valueSel_option[1].format(mode.capitalize()))
+        self.parent.wait_for_element_displayed(*option)
+        self.marionette.find_element(*option).tap()
+
+        # Check the option has been selected before hitting OK button
+        option_selected = (DOM.GLOBAL.modal_valueSel_option_selected[
+                           0], DOM.GLOBAL.modal_valueSel_option_selected[1].format(mode.capitalize()))
+        self.parent.wait_for_condition(
+            lambda m: m.find_element(*option_selected).get_attribute("aria-selected") == "true")
+        self.marionette.find_element(*DOM.GLOBAL.conf_screen_ok_button).tap()
+
+        self.apps.switch_to_displayed_app()
+        
+        # Make sure the option is indeed selected, for that we have to check against the _values var
+        self.parent.wait_for_condition(
+            lambda m: m.find_element(*DOM.Loop.settings_select_call_mode).get_attribute("value") == _values[mode.capitalize()])
+

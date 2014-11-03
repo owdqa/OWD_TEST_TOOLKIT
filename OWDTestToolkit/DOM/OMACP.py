@@ -7,7 +7,7 @@ CP_Store_Button = ("xpath", '//form[@id="cp-store-confirm"]//button[@data-l10n-i
 CP_OTA_Message = ("xpath", "//form[@id='cp-finish-confirm']//p/strong[@data-l10n-id='cp-finish-confirm-dialog-message']")
 CP_Finish_Button = ("xpath", '//form[@id="cp-finish-confirm"]//button[@data-l10n-id="finish"]')
 
-CP_Close_Button = ("xpath", "//button[@id='close']")
+CP_Close_Button = ('id', 'close')
 CP_Cancel_Button = ("xpath", '//form[@id="cp-store-confirm"]//button[@data-l10n-id="cancel"]')
-CP_Cancel_Message = ("xpath", "/html/body/form/section/p/strong")
-CP_Quit_Button = ("xpath", "/html/body/form/menu/button")
+CP_Cancel_Message = ("xpath", '//form[@id="cp-quit-app-confirm"]//strong[@data-l10n-id="cp-quit-app-confirm-dialog-message"]')
+CP_Quit_Button = ("xpath", '//form[@id="cp-quit-app-confirm"]//button[@data-l10n-id="quit"]')

@@ -72,9 +72,9 @@ class UTILS(object):
         elapsed = time.time() - self.start_time
         elapsed = round(elapsed, 0)
         elapsed = str(datetime.timedelta(seconds=elapsed))
-        self.reporting.logResult("debug", "Initializing 'UTILS' took {} seconds.".format(elapsed))
+        self.reporting.debug("Initializing 'UTILS' took {} seconds.".format(elapsed))
         current_lang = parent.data_layer.get_setting("language.current").split('-')[0]
-        self.reporting.log_to_file("Current Toolkit language: [{}]".format(current_lang))
+        self.reporting.info("Current Toolkit language: [{}]".format(current_lang))
         try:
             btn = self.marionette.find_element('id', 'charge-warning-ok')
             btn.tap()

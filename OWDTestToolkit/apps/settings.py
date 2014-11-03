@@ -19,13 +19,6 @@ class Settings(object):
         #
         # Launch the app.
         #
-        try:
-            self.marionette.switch_to_frame()
-            self.wait_for_element_displayed(*DOM.GLOBAL.charge_warning)
-            ok_btn = self.UTILS.element.getElement(DOM.GLOBAL.charge_warning_ok_btn, "OK Button")
-            ok_btn.tap()
-        except:
-            pass
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
@@ -33,7 +26,7 @@ class Settings(object):
 
     def wait_for_option_to_be_enabled(self, locator):
         self.parent.wait_for_condition(lambda m: m.find_element(*locator).get_attribute("aria-disabled") is None,
-                                         timeout=30, message="Option to be enabled")
+                                       timeout=30, message="Option to be enabled")
 
     def call_settings(self, sim_card_number=1):
 
@@ -48,7 +41,7 @@ class Settings(object):
         #
         try:
             elem = (DOM.Settings.call_settings_sim_card_number[0],
-                DOM.Settings.call_settings_sim_card_number[1].format(sim_card_number))
+                    DOM.Settings.call_settings_sim_card_number[1].format(sim_card_number))
 
             self.parent.wait_for_element_displayed(elem[0], elem[1], 20)
             sim_card_option = self.marionette.find_element(*elem)
@@ -57,26 +50,7 @@ class Settings(object):
             self.UTILS.reporting.logResult("info", "No double SIM detected. Keep working...")
 
         self.UTILS.element.waitForElements(('xpath',
-            DOM.GLOBAL.app_head_specific.format(_("Call Settings").encode("utf8"))), "Call settings header")
-
-    def callID_verify(self):
-        self.call_settings()
-
-        self.UTILS.reporting.logResult("info", "Call number presses")
-
-        x = self.UTILS.element.getElement(DOM.Settings.call_button, "Call ID button")
-        x.tap()
-        self.UTILS.reporting.logResult("info", "Call ID button presses")
-
-        #Change Frame
-        self.marionette.switch_to_frame()
-
-        #Get option selected
-        x = self.UTILS.element.getElement(DOM.Settings.call_show_number, "Call Option value")
-        y = x.get_attribute("aria-selected")
-
-        self.UTILS.reporting.logResult("info", "Screen shot of the result of tapping call button", y)
-        self.UTILS.test.TEST(y == "true", "Checking Call ID value")
+                                            DOM.GLOBAL.app_head_specific.format(_("Call Settings").encode("utf8"))), "Call settings header")
 
     def three_times_bad_pin2(self, wrong_pin2):
         """Change the PIN2.
@@ -135,7 +109,7 @@ class Settings(object):
         """
         try:
             elem = (DOM.Settings.cellData_sim_card_number[0],
-                DOM.Settings.cellData_sim_card_number[1].format(sim_card_number))
+                    DOM.Settings.cellData_sim_card_number[1].format(sim_card_number))
 
             self.parent.wait_for_element_displayed(elem[0], elem[1], 20)
             return self.marionette.find_element(*elem)
@@ -185,17 +159,17 @@ class Settings(object):
             x.tap()
         elif value == "on_with_r":
             x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_roaming,
-                                      "On with roaming option in Auto Retrieve Select")
+                                              "On with roaming option in Auto Retrieve Select")
             x.tap()
         elif value == "on_without_r":
             x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_no_roaming,
-                                      "On without roaming option in Auto Retrieve Select")
+                                              "On without roaming option in Auto Retrieve Select")
             x.tap()
         else:
             self.UTILS.test.quitTest("FAILED: Incorrect parameter received in configureMMSAutoRetrieve()")
 
         #
-        #Tapping on OK button in auto Retrieve select
+        # Tapping on OK button in auto Retrieve select
         #
         x = self.UTILS.element.getElement(DOM.Settings.ok_btn, "Tapping on OK button in auto Retrieve select")
         x.tap()
@@ -241,7 +215,7 @@ class Settings(object):
         fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
         fdn.tap()
         self.UTILS.element.waitForElements(('xpath',
-            DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").encode("utf8"))), "FDN header")
+                                            DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").encode("utf8"))), "FDN header")
 
     def go_enable_fdn(self, enable):
         status = self.UTILS.element.getElement(DOM.Settings.fdn_status, "FDN status").text
@@ -255,7 +229,7 @@ class Settings(object):
         if do_return:
             return False
 
-        switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "{} FDN".\
+        switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "{} FDN".
                                                format("Enable" if enable else "Disable"))
         switch.tap()
         header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Enable FDN") if enable else _("Disable FDN")))
@@ -317,7 +291,8 @@ class Settings(object):
         auth_list = self.UTILS.element.getElement(DOM.Settings.fdn_auth_numbers, "Authorized numbers")
         auth_list.tap()
 
-        self.parent.wait_for_condition(lambda m: self._is_auth_numbers_menu_tapped(), timeout=30, message="'Authorized numbers' menu tapped")
+        self.parent.wait_for_condition(
+            lambda m: self._is_auth_numbers_menu_tapped(), timeout=30, message="'Authorized numbers' menu tapped")
 
     def _is_auth_numbers_menu_tapped(self):
 
@@ -338,7 +313,7 @@ class Settings(object):
         add_btn = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number, "Add button")
         add_btn.tap()
         self.UTILS.element.waitForElements(('xpath',
-            DOM.GLOBAL.app_head_specific.format(_("Add contact"))), "Add contact header")
+                                            DOM.GLOBAL.app_head_specific.format(_("Add contact"))), "Add contact header")
 
         #
         # Fill contact data
@@ -356,7 +331,7 @@ class Settings(object):
         # PIN2 Confirmation
         #
         self.UTILS.element.waitForElements(('xpath',
-            DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))), "Confirm SIM PIN2 header")
+                                            DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))), "Confirm SIM PIN2 header")
 
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "PIN2 input")
         pin2_input.send_keys(pin2)
@@ -367,8 +342,8 @@ class Settings(object):
         #
         # Check the number has been added to the list
         #
-        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0], 
-            DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
+        elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
+                DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
         self.UTILS.element.waitForElements(elem, "Waiting for contact to be in the list", True, 30)
 
     def fdn_delete_auth_number(self, number, pin2):
@@ -380,7 +355,7 @@ class Settings(object):
         # Tap over the contact
         #
         elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
-            DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
+                DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
 
         try:
             self.parent.wait_for_element_displayed(*elem)
@@ -390,18 +365,19 @@ class Settings(object):
         except:
             self.UTILS.reporting.logResult("info", "Something went wrong deleting the contact from FDN list")
             return
-    
+
         #
         # Choose delete option
         #
-        delete_option = self.UTILS.element.getElement(DOM.Settings.fdn_auth_number_action_delete, "Delete option", is_displayed=True, timeout=20)
+        delete_option = self.UTILS.element.getElement(
+            DOM.Settings.fdn_auth_number_action_delete, "Delete option", is_displayed=True, timeout=20)
         delete_option.tap()
 
         #
         # PIN2 Confirmation
         #
         self.UTILS.element.waitForElements(('xpath',
-            DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))), "Confirm SIM PIN2 header", True, 10)
+                                            DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))), "Confirm SIM PIN2 header", True, 10)
 
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "PIN2 input", True, 10)
         pin2_input.send_keys(pin2)
@@ -414,7 +390,7 @@ class Settings(object):
         # Check the number is no longer present in the list
         #
         elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
-            DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
+                DOM.Settings.fdn_auth_numbers_list_elem[1].format(number))
         self.UTILS.element.waitForNotElements(elem, "Waiting for contact NOT to be in the list", True, 30)
 
     def fdn_delete_all_auth_numbers(self, pin2):
@@ -477,7 +453,7 @@ class Settings(object):
             self.parent.wait_for_element_displayed(DOM.Settings.downloads[0], DOM.Settings.downloads[1], timeout=10)
         except:
             self.UTILS.element.waitForElements(DOM.Settings.downloads_header,
-                                    "Downloads header appears.", True, 10, True)
+                                               "Downloads header appears.", True, 10, True)
             return
 
         downloads_link = self.marionette.find_element(*DOM.Settings.downloads)
@@ -486,7 +462,7 @@ class Settings(object):
         time.sleep(2)
         downloads_link.tap()
         self.UTILS.element.waitForElements(DOM.Settings.downloads_header,
-                                    "Downloads header appears.", True, 20, True)
+                                           "Downloads header appears.", True, 20, True)
 
         # Code commented due to Bug 1042404 - in the meantime, we just wait some time to make
         # sure everything is loaded
@@ -540,16 +516,55 @@ class Settings(object):
         time.sleep(2)
         fxa_link.tap()
 
-    def fxa_log_out(self):
+    def is_fxa_logged_in(self):
         try:
             self.parent.wait_for_element_displayed(*DOM.Settings.fxa_logged_in_screen)
+            return True
         except:
-            self.UTILS.reporting.logResult('info', 'Already logged out')
+            return False
+
+    def fxa_log_out(self):
+        if not self.is_fxa_logged_in():
             return
 
         log_out_btn = self.marionette.find_element(*DOM.Settings.fxa_log_out_btn)
         log_out_btn.tap()
         self.parent.wait_for_element_displayed(*DOM.Settings.fxa_logged_out_screen)
+
+    def fxa_log_in(self, email, password, is_wrong=False):
+        if self.is_fxa_logged_in():
+            return
+
+        log_in_btn = self.marionette.find_element(*DOM.Settings.fxa_log_in_btn)
+        log_in_btn.tap()
+        time.sleep(2)
+
+        self.UTILS.iframe.switchToFrame(*DOM.Loop.ffox_account_frame_locator)
+        self._fill_fxa_field(DOM.Loop.ffox_account_login_mail, email)
+        self._fill_fxa_field(DOM.Loop.ffox_account_login_pass, password)
+
+        if not is_wrong:
+            done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
+            done_btn.tap()
+
+        self.apps.switch_to_displayed_app()
+        self.parent.wait_for_condition(lambda m: email in m.find_element(
+            *DOM.Settings.fxa_logged_in_text).text, timeout=10, message="Fxa login succesfully done.")
+
+    def _fill_fxa_field(self, field_locator, text):
+        """ Auxiliary method to fill "Firefox account login" fields
+        """
+        self.UTILS.reporting.logResult('info', '[firefox_login] Filling fxa field with text: {}'.format(text))
+        self.parent.wait_for_element_displayed(*field_locator)
+        fxa_input = self.marionette.find_element(*field_locator)
+        fxa_input.send_keys(text)
+        time.sleep(2)
+
+        self.parent.wait_for_condition(
+            lambda m: m.find_element(*DOM.Loop.ffox_account_login_next).get_attribute("disabled") != "disabled")
+        next_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_next)
+        next_btn.tap()
+        self.parent.wait_for_element_not_displayed(*DOM.Loop.ffox_account_login_overlay)
 
     def goBack(self):
         #
@@ -652,14 +667,14 @@ class Settings(object):
         x = self.UTILS.element.getElement(DOM.Settings.networkOperator_button, "Network Operator option")
         x.tap()
 
-        time.sleep(2) # wait some time so that the options are populated
+        time.sleep(2)  # wait some time so that the options are populated
 
         x = self.UTILS.element.getElement(DOM.Settings.networkOperator_types, "Network Operator type")
         x.tap()
 
         self.marionette.switch_to_frame()
 
-        network_type_locator = (DOM.Settings.networkOperator_select_type[0], 
+        network_type_locator = (DOM.Settings.networkOperator_select_type[0],
                                 DOM.Settings.networkOperator_select_type[1].format(network_type))
 
         x = self.UTILS.element.getElement(network_type_locator, "Network Operator. Select: {}".format(network_type))
@@ -710,7 +725,8 @@ class Settings(object):
         self.goBack()
 
         if is_dual_sim:
-            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
+            sim_security = self.UTILS.element.getElement(
+                DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
         else:
             sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
 
@@ -789,7 +805,7 @@ class Settings(object):
             current = sim_security_tag.text == _("Enabled")
             self.UTILS.reporting.logResult("info", "Value of current: {}".format(current))
             if enable == current:
-                #click anyway so that we can later check whether the button to change the PIN
+                # click anyway so that we can later check whether the button to change the PIN
                 sim_security.tap()
                 return
 
@@ -841,7 +857,7 @@ class Settings(object):
                     self.UTILS.test.TEST(False, "Something went wrong while activating the PIN", True)
             else:
                 self.UTILS.element.waitForNotElements(DOM.Settings.dual_sim_change_pin_sim1,
-                                              "Change PIN button <b> is not there </b>")
+                                                      "Change PIN button <b> is not there </b>")
         else:
             if enable:
                 #
@@ -855,7 +871,7 @@ class Settings(object):
                     self.UTILS.test.TEST(False, "Something went wrong while activating the PIN", True)
             else:
                 self.UTILS.element.waitForNotElements(DOM.Settings.sim_security_change_pin,
-                                              "Change PIN button <b> is not there </b>")
+                                                      "Change PIN button <b> is not there </b>")
 
     def set_passcode_lock(self, enable=False, code=None):
         """Configure the passcode lock option.
@@ -873,7 +889,8 @@ class Settings(object):
         passcode_lock = self.marionette.find_element(*DOM.Settings.passcode_enable, id=passcode_element.id)
         checked = passcode_lock.get_attribute("checked")
         passcode_enabled = checked is not None and checked == "true"
-        self.UTILS.reporting.debug("Checked: {} ({})     Passcode enabled: {}".format(checked, type(checked), passcode_enabled))
+        self.UTILS.reporting.debug(
+            "Checked: {} ({})     Passcode enabled: {}".format(checked, type(checked), passcode_enabled))
         if passcode_enabled == enable:
             return
 
@@ -937,8 +954,8 @@ class Settings(object):
             wifi_login_user = self.marionette.find_element(*DOM.Settings.wifi_login_user)
             if wifi_login_user.is_displayed():
                 wifi_login_user.send_keys(username)
-                self.UTILS.reporting.logResult("info", "Username '{}' supplied to connect to '{}' wifi.".\
-                                     format(username, wlan_name))
+                self.UTILS.reporting.logResult("info", "Username '{}' supplied to connect to '{}' wifi.".
+                                               format(username, wlan_name))
         except:
             pass
 
@@ -949,8 +966,8 @@ class Settings(object):
             wifi_login_pass = self.marionette.find_element(*DOM.Settings.wifi_login_pass)
             wifi_login_pass.send_keys(passwd)
             time.sleep(1)
-            self.UTILS.reporting.logResult("info", "Password '{}' supplied to connect to '{}' wifi.".\
-                                 format(passwd, wlan_name))
+            self.UTILS.reporting.logResult("info", "Password '{}' supplied to connect to '{}' wifi.".
+                                           format(passwd, wlan_name))
         except:
             pass
 
@@ -965,12 +982,11 @@ class Settings(object):
         # A couple of checks to wait for 'anything' to be Connected (only look for 'present' because it
         # might be off the bottom of the page).
         #
-        self.UTILS.test.TEST(True, "Connected: {}".format(self.wifi_list_isConnected(wlan_name, timeout=10)))
         self.UTILS.test.TEST(self.wifi_list_isConnected(wlan_name, timeout=60),
-                "Wifi '{}' is listed as 'connected' in wifi settings.".format(wlan_name), False)
+                             "Wifi '{}' is listed as 'connected' in wifi settings.".format(wlan_name), False)
 
         self.UTILS.test.TEST(self.parent.data_layer.get_setting("wifi.enabled"),
-            "Wifi connection to '{}' established.".format(wlan_name), True)
+                             "Wifi connection to '{}' established.".format(wlan_name), True)
 
     def wifi_forget(self, quiet=True):
         #
@@ -1011,7 +1027,7 @@ class Settings(object):
             _y = "and has been succesfully" if is_forgotten else "but could not be"
 
             self.UTILS.test.TEST(is_connected and is_forgotten,
-                            "Wifi network '{}' {} connected {} forgotten.".format(wlan, _x, _y))
+                                 "Wifi network '{}' {} connected {} forgotten.".format(wlan, _x, _y))
 
         return is_connected
 
@@ -1033,7 +1049,7 @@ class Settings(object):
         #
         try:
             self.parent.wait_for_element_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
-                                          timeout=timeout)
+                                                 timeout=timeout)
             return True
         except:
             return False
@@ -1044,7 +1060,7 @@ class Settings(object):
         #
         try:
             self.parent.wait_for_element_not_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
-                                              timeout=timeout)
+                                                     timeout=timeout)
             return True
         except:
             return False
@@ -1053,11 +1069,14 @@ class Settings(object):
         #
         # Tap the network name in the list.
         #
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
+
         _wifi_name_element = ("xpath", DOM.Settings.wifi_name_xpath.format(wlan_name))
         self.parent.wait_for_element_displayed(_wifi_name_element[0], _wifi_name_element[1], timeout=10)
         wifi = self.marionette.find_element(*_wifi_name_element)
 
-        wifi.tap()
+        self.UTILS.element.simulateClick(wifi)
         time.sleep(2)
 
     def wifi_switchOn(self):

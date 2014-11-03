@@ -17,7 +17,7 @@ service_unavailable_ok = ("xpath", "//*[@data-l10n-id='sendGeneralErrorBtnOk']")
 type_and_carrier_field = ("id", "contact-carrier")
 
 target_numbers_empty = ("id", "to-label")
-target_numbers = ("xpath", "//*[@id='messages-recipients-list']/span")
+target_numbers = ("css selector", "#messages-recipients-list span")
 add_contact_button = ("id", "messages-contact-pick-button")
 cancel_add_contact = ("id", "cancel_activity")
 contact_no_phones_msg = ("xpath", "//form[@id='confirmation-message']//p[text()='{}']".format(_("No phones")))
@@ -31,6 +31,7 @@ attach_button = ('id', 'messages-attach-button')
 message_sending_spinner = ("xpath", "//aside[@class='pack-end'][-1]/progress")
 
 header_back_button = ("id", "messages-back-button")
+header_close_button = ('id', 'messages-close-button')
 
 # This field will allow to retrieve phone numbers and emails in the body of the last SM or MM
 phone_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//span/a[@data-action="dial-link"]')
@@ -77,8 +78,6 @@ delete_threads_ok_btn = ('xpath', '//button[@class="danger" and @data-l10n-id="d
 delete_messages_btn = ('xpath', "//button[@data-l10n-id='deleteMessages-label']")
 delete_messages_ok_btn = ('id', "messages-delete-button")
 
-message_text = ('xpath', "/html/body/article/section[2]/article/ul/li[{}]/section/div/p/span")
-
 edit_msgs_delete_btn = ("id", "messages-delete-button")
 edit_msgs_header = ("id", "messages-edit-mode")
 edit_msgs_sel_all_btn = ("id", "messages-check-all-button")
@@ -94,7 +93,7 @@ forward_btn_msg_opt = ('css selector', "button[data-l10n-id=forward]")
 cancel_btn_msg_opt = ('css selector', "button[data-l10n-id=forward] ~ button[data-l10n-id=cancel]")
 
 messages_options_btn = ("id", "messages-options-icon")
-addsubject_btn_msg_opt = ('xpath', "/html/body/form/menu/button[1]")
+addsubject_btn_msg_opt = ('xpath', '//form[@data-type="action"]//button[@data-l10n-id="add-subject"]')
 message_convert_notice = ('css selector', "#messages-convert-notice p")
 deletesubject_btn_msg_opt = ("xpath", "//*[@data-l10n-id='remove-subject']")
 cancel_btn_msg = ("xpath", "//body[@role='application']/form/menu/button[@data-l10n-id='cancel']")
@@ -112,11 +111,7 @@ header_send_message_btn = ("xpath", "//form[@class='contact-prompt']//button[@da
 header_create_new_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='createNewContact']")
 header_add_to_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='addToExistingContact']")
 contact_cancel_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='cancel']")
-
 header_send_email_btn = ("xpath", "//button[text()='{}']".format(_("Send email")))
-header_cancel_btn = ("xpath", "//button[text()='{}']".format(_("Cancel")))
-header_cancel_btn_no_send = ("xpath", "/html/body/form/menu/button[4]")
-header_cancel_btn_absolute = ("xpath", "/html/body/form/menu/button[5]")
 
 mms_from_video = ("xpath", "//button[@class='icon' and contains(@style, 'app://video')]")
 mms_from_camera = ("xpath", "//button[@class='icon' and contains(@style, 'app://camera')]")
