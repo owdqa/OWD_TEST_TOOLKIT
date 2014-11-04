@@ -1,5 +1,4 @@
-from marionette import HTMLReportingTestRunnerMixin
-from marionette import BaseMarionetteTestRunner
+from marionette import HTMLReportingTestRunnerMixin, BaseMarionetteTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
@@ -8,8 +7,6 @@ import sys
 import os
 import unittest
 import json
-
-
 from gaiatest.version import __version__
 import logging.config
 
@@ -18,12 +15,16 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
     
                 
     def run_test(self, filepath, expected, oop):
+        """
+        This method is responsible of running a single test.
+        We've overrun it in order to perform some tasks belonging to OWD initiative.
+        """
         #
         # Previous operations
         #
         idx = filepath.rindex('test_')
         # + 5: to skip the "test_" part
-        # - 3: to remove the .py extension
+        # - 3: to remove the .py extension"""
         test_num = filepath[idx + 5:-3]
         sys.stdout.write("{}|{} ".format(test_num, self.descriptions[test_num]))
         
@@ -56,7 +57,8 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             runner = self.textrunnerclass(verbosity=int(self.testvars["verbosity"]),
                                           marionette=self.marionette,
                                           capabilities=self.capabilities)
-            # This will redirect the messages that will go by default to the error output to anohter file
+            
+            # This will redirect the messages that will go by default to the error output to another file
             runner.stream = unittest.runner._WritelnDecorator(open(self.testvars['error_output'], 'a'))
             results = runner.run(suite)
             self.results.append(results)
@@ -76,7 +78,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             if hasattr(results, 'expectedFailures'):
                 self.todo += len(results.expectedFailures)
         
-        # Console messages
+        # Console messages - for each test, we will show the time taken to run it and the result
         sys.stdout.write("({0:.2f}s) ".format(results.time_taken))
         
         if len(results.errors) > 0:
@@ -94,25 +96,38 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             
 
 class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingTestRunnerMixin):
-
+    """
+    OWD runner class
+    This class performs a bunch of tasks which are needed before and after running the test/s
+    """
     textrunnerclass = GaiaTextTestRunner
 
     def __init__(self, **kwargs):
-        # Establish our own logger
+        
         BaseMarionetteTestRunner.__init__(self, **kwargs)
+        
+        # We will redirect BaseMarionetteTestRunner default logger to our own logger.
+        # Logger are not directly instantiated, but created by calling loggin.getLogger.
+        # Multiple calls to getLogger with the same name will point to the same logger 
+        # reference
         config_file = self.testvars['OWD_LOG_CFG']
         logging.config.fileConfig(config_file)
         self.logger = logging.getLogger('OWDTestToolkit')
         
+        # Some initial steps going through!
         self.parse_blocked_tests_file()
         self.parse_descriptions_file()
-        
-        GaiaTestRunnerMixin.__init__(self, **kwargs)
         self.prepare_results()
+        
+        GaiaTestRunnerMixin.__init__(self, **kwargs)  
         HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__, html_output=self.testvars['html_output'], **kwargs)
         self.test_handlers = [GaiaTestCase]
     
     def _parse_file(self, file_name):
+        """ Generic JSON parser.
+            It takes a JSON file as an input and returns a dictionary containing all
+            its properties.
+        """
         the_file = open(file_name)
         data = json.load(the_file)
         the_file.close()
@@ -126,7 +141,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         
     def prepare_results(self):
         """ This methods ensures that the destination results directory is created before launching the 
-        test/s execution. It also creates the html results report file.
+        test/s execution. It also creates (or cleans) the html results report file and the error_output file
         """
         if not os.path.exists(self.testvars['RESULT_DIR']): 
             os.makedirs(self.testvars['RESULT_DIR'])
@@ -155,6 +170,10 @@ class Main():
         self.expected_failures = 0
         
     def start_test_runner(self, runner_class, options, tests):
+        """
+        This method instantiates the class responsible of running the tests and run them.
+        Returns the runner instances itself so that we can access to the results
+        """
         self.start_time = datetime.utcnow()
         runner = runner_class(**vars(options))
         runner.run_tests(tests)
@@ -162,16 +181,23 @@ class Main():
         return runner
     
     def update_attr(self, attr_name, attr_value):
+        """
+        Updates the "attr_name" attribute with the desired "attr_value"
+        """
         setattr(self, attr_name, getattr(self, attr_name) + attr_value)
         
     def process_runner_results(self):
-        # NOTE: since self.test_handlers is GaiaTestCase, the results will be instances of GaiaTestResult which, in the end
-        # inherit from MarionetteTestResult
+        """
+        This method takes the results contained in the instance of runner (it assumes the runner has been run, ofc)
+        and update the class attributes accordingly, so that they can be displayed afterwards.
+        NOTE: since self.test_handlers is GaiaTestCase, the results will be instances of GaiaTestResult which, in the end
+        inherit from MarionetteTestResult
+        """
         own_attrs = ['passed', 'skipped', 'unexpected_passed', 'automation_failures', 'unexpected_failures', 'expected_failures']
         result_attrs = ['tests_passed', 'skipped', 'unexpectedSuccesses', 'errors', 'failures', 'expectedFailures']
         
         for result in self.runner.results:
-#             print "Result: {}".format(result)
+            # print "Result: {}".format(result)
             # We have to use len(), since result is an array of arrays containing the error reason
             result_values = [len(getattr(result, name)) for name in result_attrs] 
             map(self.update_attr, own_attrs, result_values)
@@ -205,12 +231,16 @@ class Main():
         For example:
             python ffox_test_runner_py --testvars=<testvars path> --address=localhost:2828 <tests path | test suite path>
         """
-            
+        
+        # Preprocess
         parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
         options, tests = parser.parse_args(self.args)
         parser.verify_usage(options, tests)
     
+        # Hit the runner
         self.runner = self.start_test_runner(self.runner_class, options, tests)
+        
+        # Show the results via console
         self.process_runner_results()
         self.display_results()
 
