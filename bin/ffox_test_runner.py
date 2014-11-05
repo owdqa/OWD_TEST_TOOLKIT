@@ -10,10 +10,31 @@ import json
 from gaiatest.version import __version__
 import logging.config
 
+
+class DeviceConfig():
+    """
+    This class holds all functionality related to the internal structure of the DuT
+    """
+    def __init__(self):
+        # This map contains the paths where the multimedia files are stored for each
+        # DuT we have worked with
+        self.devices_map = {"full_unagi": "/sdcard", "full_hamachi": "/storage/sdcard1", 
+                            "ZTE_OPENC": "/storage/sdcard1", "msm8610": "/storage/sdcard1", 
+                            "ZTE_OPEN2": "/storage/sdcard1","flame": "/storage/sdcard0", 
+                            "generic": "/sdcard"}
         
+    def get_storage(self):
+        """
+        Returns the multimedia path for the currently DuT connected to the PC
+        """
+        current_dut = os.popen("adb shell grep ro.product.name /system/build.prop").read().split("=")[-1].rstrip()
+        if self.devices_map.has_key(current_dut):
+            return self.devices_map.get(current_dut)
+        else:
+            return self.devices_map.get("generic")
+      
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
-    
-                
+         
     def run_test(self, filepath, expected, oop):
         """
         This method is responsible of running a single test.
@@ -106,6 +127,13 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         
         BaseMarionetteTestRunner.__init__(self, **kwargs)
         
+        # Some initial steps going through!
+        self.parse_blocked_tests_file()
+        self.parse_descriptions_file()
+        device_cfg = DeviceConfig()
+        self.testvars['OWD_DEVICE_SDCARD'] = device_cfg.get_storage() 
+        self.prepare_results()
+        
         # We will redirect BaseMarionetteTestRunner default logger to our own logger.
         # Logger are not directly instantiated, but created by calling loggin.getLogger.
         # Multiple calls to getLogger with the same name will point to the same logger 
@@ -113,11 +141,6 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         config_file = self.testvars['OWD_LOG_CFG']
         logging.config.fileConfig(config_file)
         self.logger = logging.getLogger('OWDTestToolkit')
-        
-        # Some initial steps going through!
-        self.parse_blocked_tests_file()
-        self.parse_descriptions_file()
-        self.prepare_results()
         
         GaiaTestRunnerMixin.__init__(self, **kwargs)  
         HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__, html_output=self.testvars['html_output'], **kwargs)
@@ -145,14 +168,15 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         """
         if not os.path.exists(self.testvars['RESULT_DIR']): 
             os.makedirs(self.testvars['RESULT_DIR'])
-            
-        with open(self.testvars['html_output'], 'w') as f:
-            f.write('')
-            f.close()
         
-        with open(self.testvars['error_output'], 'w') as f:
-            f.write('')
-            f.close()
+        def _initialize_file(file_path):
+            with open(file_path, 'w') as f:
+                f.write('')
+                f.close()
+        
+        files = [self.testvars['html_output'], self.testvars['error_output'], self.testvars["log_path"]]
+        map(_initialize_file, files)
+        
 
 class Main():
     
@@ -229,7 +253,7 @@ class Main():
         Custom runner for OWD initiative
         It takes as arguments the parameters that gaiatest command would need
         For example:
-            python ffox_test_runner_py --testvars=<testvars path> --address=localhost:2828 <tests path | test suite path>
+            python ffox_test_runner.py --testvars=<testvars path> --address=localhost:2828 <tests path | test suite path>
         """
         
         # Preprocess
