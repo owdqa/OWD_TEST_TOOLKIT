@@ -127,7 +127,7 @@ class Email(object):
 
         else:
             # self.UTILS.reporting.logResult("info", "incorrect value received")
-            msg = "FAILED: Incorrect parameter received in createAndSendMMS()"\
+            msg = "FAILED: Incorrect parameter received in create_and_send_mms()"\
                 ". attached_type must being image, video or audio."
             self.UTILS.test.quitTest(msg)
 
