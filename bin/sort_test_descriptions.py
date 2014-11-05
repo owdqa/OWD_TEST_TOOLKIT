@@ -13,7 +13,6 @@ class TestDescriptions():
         self.tests_path = args[1]
         self.descriptions_by_suite = {}
         self.file_descriptions = self._parse_file(self.file_to_parse)
-#         print "file descriptions: {}".format(self.file_descriptions)
     
     def _parse_file(self, file_name):
         """ Generic JSON parser.
@@ -26,6 +25,7 @@ class TestDescriptions():
         return data
     
     def generate_csv_file(self):
+        """TODO"""
         pass
     
     def get_test_descriptions_by_suite(self, sort=True):
@@ -44,7 +44,7 @@ class TestDescriptions():
                             if self.file_descriptions.has_key(test_number):
                                 self.descriptions_by_suite[root].append((test_number, self.file_descriptions[test_number]))
         else:
-            raise Exception
+            raise Exception("The path you provided to scan the tests is not a path. Nice try! :D")
         
         if sort:
             import collections
