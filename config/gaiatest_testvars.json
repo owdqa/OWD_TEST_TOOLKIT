@@ -66,6 +66,7 @@
 "RESULT_DIR": "/tmp/tests/test_123",
 "html_output": "/tmp/tests/results.html",
 "error_output": "/tmp/tests/test_123/error.txt",
+"log_path": "/tmp/tests/tests.log",
 "verbosity":"3",
 "test_descriptions": "../../owd_test_cases/Docs/test_descriptions",
 "blocked_tests": "../../owd_test_cases/Docs/blocked_tests"
