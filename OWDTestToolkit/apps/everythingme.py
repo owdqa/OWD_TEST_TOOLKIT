@@ -38,7 +38,7 @@ class EverythingMe(object):
                 self._relaunch()
             boolOK = True
 
-        self.UTILS.test.TEST(boolOK, "EME Starting up ...")
+        self.UTILS.test.test(boolOK, "EME Starting up ...")
 
     def _relaunch(self):
         #
@@ -62,7 +62,7 @@ class EverythingMe(object):
         self.UTILS.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
         time.sleep(2)
 
-        self.UTILS.test.TEST(app_name == name, "" + app_name + "'is the correct app", True)
+        self.UTILS.test.test(app_name == name, "" + app_name + "'is the correct app", True)
 
         actions = Actions(self.marionette)
         actions.long_press(x, 2).perform()
@@ -105,7 +105,7 @@ class EverythingMe(object):
                 boolOK = True
                 break
 
-        self.UTILS.test.TEST(boolOK, "New group '" + group + "' is now present in the EME groups.")
+        self.UTILS.test.test(boolOK, "New group '" + group + "' is now present in the EME groups.")
         return boolOK
 
     def add_multiple_groups(self, group_array=False):
@@ -192,7 +192,7 @@ class EverythingMe(object):
                     ok = True
                     break
 
-            self.UTILS.test.TEST(ok, "'{}' is now among the groups.".format(name))
+            self.UTILS.test.test(ok, "'{}' is now among the groups.".format(name))
 
     def install_app(self, category, name, expect_btn=True):
         """Try to install an application.
@@ -226,7 +226,7 @@ class EverythingMe(object):
         else:
         # We expect the application is already installed, so find the proper header
             title = self.UTILS.element.getElement(DOM.EME.edit_bookmark_header, "Edit link header")
-            self.UTILS.test.TEST(title, "Title '{}' found".format(title.text))
+            self.UTILS.test.test(title, "Title '{}' found".format(title.text))
         return result
 
     def launch_from_group(self, app_name):
@@ -309,7 +309,7 @@ class EverythingMe(object):
 
             time.sleep(2)
 
-        self.UTILS.test.TEST(ok, "Enabled EDIT mode.")
+        self.UTILS.test.test(ok, "Enabled EDIT mode.")
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "Screenshot of app in EDIT mode:", x)
 
@@ -389,7 +389,7 @@ class EverythingMe(object):
 
             time.sleep(6)
 
-        self.UTILS.test.TEST(ok, "Found '%s' in suggestions." % name)
+        self.UTILS.test.test(ok, "Found '%s' in suggestions." % name)
 
         ok = True
         try:

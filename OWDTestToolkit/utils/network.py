@@ -57,7 +57,7 @@ class network(object):
         elif network_type == "bluetooth":
             return self.parent.data_layer.bluetooth_is_enabled
         else:
-            self.parent.test.TEST(False, 
+            self.parent.test.test(False, 
                 "Incorrect parameter '{}' passed to UTILS.is_network_type_enabled()!".format(network_type), True)
 
     def turnOnDataConn(self):

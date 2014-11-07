@@ -82,7 +82,7 @@ class Messages(object):
         #
         screenshot = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
-        
+
         self.UTILS.reporting.logResult("info", "Cliking on add subject button")
         x = self.UTILS.element.getElement(DOM.Messages.addsubject_btn_msg_opt,
                                           "add subject option button is displayed")
@@ -118,7 +118,7 @@ class Messages(object):
         """
         returnedSMS = self.lastMessageInThisThread()
         returnedSMS_text = self.marionette.find_element(*DOM.Messages.last_message_text, id=returnedSMS.id)
-        self.UTILS.test.TEST((returnedSMS_text and returnedSMS_text.text == expected),
+        self.UTILS.test.test((returnedSMS_text and returnedSMS_text.text == expected),
                              "Expected SMS text = '{}' ({}) (got '{}' ({})).".
                              format(expected, len(expected), returnedSMS_text.text, len(returnedSMS_text.text)))
 
@@ -139,7 +139,7 @@ class Messages(object):
 
         testMsg = "is" if targetIsPresent else "is not"
         testMsg = "\"" + str(target) + "\" " + testMsg + " in the 'To:' field."
-        self.UTILS.test.TEST(boolOK == targetIsPresent, testMsg)
+        self.UTILS.test.test(boolOK == targetIsPresent, testMsg)
         return boolOK
 
     def checkMMSIcon(self, thread_name):
@@ -163,7 +163,7 @@ class Messages(object):
         #
         icon = thread.find_element(*DOM.Messages.mms_icon)
         if icon:
-            self.UTILS.test.TEST(icon is not None, "MMS icon detected for thread [{}]".format(thread_name))
+            self.UTILS.test.test(icon is not None, "MMS icon detected for thread [{}]".format(thread_name))
 
     def checkNumberIsInToField(self, target):
         #
@@ -181,8 +181,8 @@ class Messages(object):
                 boolOK = True
                 break
 
-        self.UTILS.test.TEST(boolOK,
-                             "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
+        self.UTILS.test.test(boolOK,
+            "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
         return boolOK
 
     def checkThreadHeader(self, header):
@@ -195,7 +195,7 @@ class Messages(object):
         if x.get_attribute("data-number") == header:
             boolOK = True
 
-        self.UTILS.test.TEST(boolOK, "\"" + str(header) + "\" is the header in the SMS conversation.")
+        self.UTILS.test.test(boolOK, "\"" + str(header) + "\" is the header in the SMS conversation.")
         return boolOK
 
     def checkThreadHeaderWithNameSurname(self, header):
@@ -209,7 +209,7 @@ class Messages(object):
         if x.text == header:
             boolOK = True
 
-        self.UTILS.test.TEST(boolOK, "\"" + header + "\" is the header in the SMS conversation.")
+        self.UTILS.test.test(boolOK, "\"" + header + "\" is the header in the SMS conversation.")
         return boolOK
 
     def closeThread(self):
@@ -307,7 +307,7 @@ class Messages(object):
             # self.UTILS.reporting.logResult("info", "incorrect value received")
             msg = "FAILED: Incorrect parameter received in createAndSendMMS()"\
                 ". attached_type must being image, video or audio."
-            self.UTILS.test.quitTest(msg)
+            self.UTILS.test.quit_test(msg)
 
     def createAndSendSMS(self, nums, msg):
         #
@@ -566,7 +566,7 @@ class Messages(object):
         #
         header = self.UTILS.element.getElement(DOM.Messages.edit_threads_header, "Edit threads header").text
         expected_title = str(len(target_array)) if len(target_array) else _("Delete messages")
-        self.UTILS.test.TEST(expected_title in header, "Check that all desired threads have been selected")
+        self.UTILS.test.test(expected_title in header, "Check that all desired threads have been selected")
 
     def enterSMSMsg(self, msg, not_keyboard=True):
         #
@@ -586,11 +586,11 @@ class Messages(object):
         # Validate the field.
         #
         x = self.UTILS.element.getElement(DOM.Messages.input_message_area,
-                                          "Input message area (for validation)")
-        self.UTILS.test.TEST(x.text == msg,
-                             "The text in the message area is as expected." +
-                             "|EXPECTED: '" + msg + "'" +
-                             "|ACTUAL  : '" + x.text + "'")
+                                    "Input message area (for validation)")
+        self.UTILS.test.test(x.text == msg,
+                        "The text in the message area is as expected." + \
+                        "|EXPECTED: '" + msg + "'" + \
+                        "|ACTUAL  : '" + x.text + "'")
 
     def addNumbersInToField(self, nums):
         """
@@ -627,7 +627,7 @@ class Messages(object):
                     except:
                         boolKBD = False
 
-                    self.UTILS.test.TEST(
+                    self.UTILS.test.test(
                         boolKBD, "Keyboard is displayed when 'To' field is clicked for the first time")
 
                 self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
@@ -703,7 +703,7 @@ class Messages(object):
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quitTest()
+            self.UTILS.test.quit_test()
 
         self.addNumbersInToField([target_telNum])
 
@@ -732,7 +732,7 @@ class Messages(object):
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quitTest()
+            self.UTILS.test.quit_test()
 
         # Search for the contact and check it's been added
         self.addContactToField(contact_name)
@@ -760,7 +760,7 @@ class Messages(object):
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quitTest()
+            self.UTILS.test.quit_test()
 
         # Add phone numbers
         self.addNumbersInToField([target_telNum])
@@ -873,7 +873,7 @@ class Messages(object):
         x = self.UTILS.element.getElement(DOM.Messages.header_send_message_btn, "'Send message' button")
         x.tap()
 
-    def lastMessageInThisThread(self):
+    def last_message_in_this_thread(self):
         #
         # Returns an object of the last message in the current thread.
         #
@@ -1087,7 +1087,7 @@ class Messages(object):
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
         self.openThread(sender_number)
         message = self.lastMessageInThisThread()
-        self.UTILS.test.TEST(message, "A received message appeared in the thread.", True)
+        self.UTILS.test.test(message, "A received message appeared in the thread.", True)
 
         self.UTILS.reporting.debug("*** attached type: {}".format(attached_type))
         if attached_type == "img":
@@ -1100,7 +1100,7 @@ class Messages(object):
             # self.UTILS.reporting.logResult("info", "incorrect value received")
             msg = "FAILED: Incorrect parameter received in verifyMMSReceived()"\
                 ". Attached_type must be image, video or audio."
-            self.UTILS.test.quitTest(msg)
+            self.UTILS.test.quit_test(msg)
 
         self.UTILS.reporting.debug("*** searching for attachment type")
         last = self.UTILS.element.getElement(elem, "Last message")
@@ -1109,7 +1109,7 @@ class Messages(object):
         self.UTILS.reporting.debug("*** searching for attachment type Result: {}".format(typ))
         if typ != attached_type:
             msg = "Incorrect file type. The file must be {}, but is {} instead".format(attached_type, typ)
-            self.UTILS.test.quitTest(msg)
+            self.UTILS.test.quit_test(msg)
 
     def waitForReceivedMsgInThisThread(self, send_time=None, timeOut=30):
         #
@@ -1145,6 +1145,6 @@ class Messages(object):
             # Nope - sleep then try again.
             time.sleep(pollTime)
 
-        self.UTILS.test.TEST(lastEl,
-                             "Last message in thread is a 'received' message within " + str(timeOut) + " seconds.")
+        self.UTILS.test.test(lastEl,
+                        "Last message in thread is a 'received' message within " + str(timeOut) + " seconds.")
         return lastEl

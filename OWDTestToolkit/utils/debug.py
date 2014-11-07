@@ -14,7 +14,7 @@ class debug(object):
 
     def getStackTrace(self):
         #
-        # Adds the stack trace to the test report (called automatically if UTILS.TEST() fails).
+        # Adds the stack trace to the test report (called automatically if UTILS.test() fails).
         #
 
         _logstr = "STACK TRACE (code path to this point):"
@@ -23,7 +23,7 @@ class debug(object):
 
         for i in _stack:
             if ("OWDTestToolkit" in i[0] or "/test_" in i[0]) and \
-                "quitTest.py" not in i[0] and i[2] != stack()[0][3] and \
+                "quit_test.py" not in i[0] and i[2] != stack()[0][3] and \
                 i[2] != "TEST":
                     _counter = _counter + 1
                     _logstr = _logstr + "|{}. {}: <i>{}</i>".\

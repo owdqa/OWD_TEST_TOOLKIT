@@ -75,7 +75,7 @@ class Camera(object):
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
-        self.UTILS.test.TEST(real_duration in interval, "Duration matches")
+        self.UTILS.test.test(real_duration in interval, "Duration matches")
 
     def _tap_on_capture_button(self):
         capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
@@ -94,7 +94,7 @@ class Camera(object):
         # Record a video and click the thumbnail to play it.
         self._tap_on_capture_button()
 
-        self.UTILS.test.TEST(self.is_video_being_recorded(), "Video recording")
+        self.UTILS.test.test(self.is_video_being_recorded(), "Video recording")
         self.UTILS.element.waitForNotElements(DOM.Camera.open_thumbs,
                                               "Thumbnail appears after recording video", True, 10, False)
 
@@ -138,7 +138,7 @@ class Camera(object):
         # Check the last picture is shown
         count_text = self.UTILS.element.getElement(DOM.Camera.preview_count_text, "Preview count")
         self.UTILS.reporting.logResult('info', "The text is: {}".format(count_text.text))
-        self.UTILS.test.TEST(count_text.text.split(
+        self.UTILS.test.test(count_text.text.split(
             "/")[0] == "1", "Once we open the preview screen, the last picture is shown")
 
     def delete_from_preview(self, confirm=True):

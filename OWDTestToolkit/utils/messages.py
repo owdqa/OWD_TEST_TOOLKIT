@@ -93,7 +93,7 @@ class Messages(object):
     def send_and_check(self, headers, payload, typ):
         response = requests.post(self.url, headers=headers, data=json.dumps(payload))
         result = response.status_code == requests.codes.created
-        self.parent.test.TEST(result, "The {} message could {}be sent. Status code: {}. Body: {}".
+        self.parent.test.test(result, "The {} message could {}be sent. Status code: {}. Body: {}".
                               format(typ, "not " if not result else "", response.status_code, response.text))
         return result
 

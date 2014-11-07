@@ -62,7 +62,7 @@ class Contacts(object):
             except:
                 boolOK = False
 
-            self.UTILS.test.TEST(boolOK, "Can finish cropping the picture and return to Contacts app.")
+            self.UTILS.test.test(boolOK, "Can finish cropping the picture and return to Contacts app.")
 
         # Back to contacts app iframe.
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
@@ -138,7 +138,7 @@ class Contacts(object):
         (found I was doing this rather a lot so it's better in a function).
         """
         test_str = str(element.get_attribute("value"))
-        self.UTILS.test.TEST((test_str == value), name + " = \"" + value + "\" (it was \"" + test_str + "\").")
+        self.UTILS.test.test((test_str == value), name + " = \"" + value + "\" (it was \"" + test_str + "\").")
 
     def check_search_results(self, contact_name, present=True):
         """
@@ -156,7 +156,7 @@ class Contacts(object):
 
         msg = (" is " if present else " is not ") + "displayed in the result list."
 
-        self.UTILS.test.TEST(present == boolContact, "Contact '" + contact_name + "'" + msg)
+        self.UTILS.test.test(present == boolContact, "Contact '" + contact_name + "'" + msg)
 
     def check_view_contact_details(self, contact, check_image=False):
         """
@@ -181,7 +181,7 @@ class Contacts(object):
             except:
                 pass
 
-            self.UTILS.test.TEST(boolOK, "Contact's image contains a picture in contact details screen.")
+            self.UTILS.test.test(boolOK, "Contact's image contains a picture in contact details screen.")
 
         # Correct details are in the contact fields.
         self.verify_field_contents(contact, True)
@@ -317,7 +317,7 @@ class Contacts(object):
 
         # Press the option
         export_option_btn = self.UTILS.element.getElement(locator, "Export {}".format(msg))
-        self.UTILS.test.TEST(export_option_btn.get_attribute(
+        self.UTILS.test.test(export_option_btn.get_attribute(
             "disabled") == "false", "{} button is enabled.".format(msg))
         time.sleep(1)
         export_option_btn.tap()
@@ -886,7 +886,7 @@ class Contacts(object):
         self.UTILS.element.waitForElements(DOM.Contacts.settings_header, "Settings header")
 
     def view_test(self, desc, str1, str2):
-        self.UTILS.test.TEST(str1 in str2, "{} field contains '{}' (it was '{}').".format(desc, str1, str2))
+        self.UTILS.test.test(str1 in str2, "{} field contains '{}' (it was '{}').".format(desc, str1, str2))
 
     def verify_field_contents(self, contact, view=False):
         """
@@ -928,14 +928,14 @@ class Contacts(object):
                 isImage = True
                 try:
                     img = contact.find_element("xpath", "//span[@data-type='img']")
-                    self.UTILS.test.TEST("blob" in img.get_attribute(
+                    self.UTILS.test.test("blob" in img.get_attribute(
                         "data-src"), "Contact image present in 'all contacts' screen.")
                 except:
                     self.UTILS.reporting.logResult(
                         "Cannot find img tag in contact. Contact data: {}".format(contact.text))
                     isImage = False
 
-                self.UTILS.test.TEST(isImage, "An image is present for this contact in all contacts screen.")
+                self.UTILS.test.test(isImage, "An image is present for this contact in all contacts screen.")
 
     def verify_linked(self, contact_name, fb_email):
         """
@@ -946,7 +946,7 @@ class Contacts(object):
         # Check that our contact is now listed as a facebook contact (icon by the name in 'all contacts' screen).
         network_contacts = self.UTILS.element.getElements(
             DOM.Contacts.social_network_contacts, "Social network contacts")
-        self.UTILS.test.TEST(len(network_contacts) > 0, "Contact is listed as a facebook contact after linking.")
+        self.UTILS.test.test(len(network_contacts) > 0, "Contact is listed as a facebook contact after linking.")
 
         # View the details for this contact.
         self.view_contact(contact_name)
@@ -971,11 +971,11 @@ class Contacts(object):
             if i.text == "Unlink contact":
                 unlink = True
 
-        self.UTILS.test.TEST(view_fb_profile, "'View Facebook profile' button is displayed after "
+        self.UTILS.test.test(view_fb_profile, "'View Facebook profile' button is displayed after "
                              "contact linked to fb contact.")
-        self.UTILS.test.TEST(wall_post, "'Wall post' button is displayed after contact linked to fb contact.")
-        self.UTILS.test.TEST(unlink, "'Unlink contact' button is displayed after contact linked to fb contact.")
-        self.UTILS.test.TEST(
+        self.UTILS.test.test(wall_post, "'Wall post' button is displayed after contact linked to fb contact.")
+        self.UTILS.test.test(unlink, "'Unlink contact' button is displayed after contact linked to fb contact.")
+        self.UTILS.test.test(
             linked_email, "Linked facebook email address is displayed after contact linked to fb contact.")
 
     def view_contact(self, contact_name, header_check=True):
@@ -1025,7 +1025,7 @@ class Contacts(object):
 
         if frame == "Dialer":
             details_title = self.UTILS.element.getElement(DOM.Contacts.view_details_title, "View details title")
-            self.UTILS.test.TEST(contact_name in details_title.text, "Name is in the title")
+            self.UTILS.test.test(contact_name in details_title.text, "Name is in the title")
 
     def find_frame(self):
         """

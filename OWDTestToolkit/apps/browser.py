@@ -61,7 +61,7 @@ class Browser(object):
             self.parent.wait_for_element_displayed(*DOM.Browser.tab_tray_tab_list)
             x = self.UTILS.element.getElements(DOM.Browser.tab_tray_tab_list, "Tab list after removal")
             _after_count = len(x)
-            self.UTILS.test.TEST(_after_count < initial_count, "The tab has been removed.")
+            self.UTILS.test.test(_after_count < initial_count, "The tab has been removed.")
         except Exception:
             # If this was the only tab, then we'll be taken away from the tab tray automatically.
             pass
@@ -91,7 +91,7 @@ class Browser(object):
         try:
             _blah = details[tab]
         except Exception:
-            self.UTILS.test.TEST(False, "(failing because an unknown tab name ('{}')\
+            self.UTILS.test.test(False, "(failing because an unknown tab name ('{}')\
              was passed to \"getAwesomeList()\".)".format(tab_name))
             return False
 
@@ -104,7 +104,7 @@ class Browser(object):
 
         x = self.UTILS.element.getElement(details[tab]["tab"], "<b>{}</b> tab".format(tab_name))
         x.tap()
-        self.UTILS.test.TEST(x.get_attribute("class") == "selected", "<b>{}</b> tab is selected".format(tab_name))
+        self.UTILS.test.test(x.get_attribute("class") == "selected", "<b>{}</b> tab is selected".format(tab_name))
 
         x = ""
         try:
@@ -192,10 +192,10 @@ class Browser(object):
         url_value = self.loaded_url()
 
         if url_value:
-            self.UTILS.test.TEST(url in url_value, "Loaded URL matches the desired URL")
+            self.UTILS.test.test(url in url_value, "Loaded URL matches the desired URL")
             return True
         else:
-            self.UTILS.test.TEST(False, "Loaded URL matches the desired URL")
+            self.UTILS.test.test(False, "Loaded URL matches the desired URL")
             return False
 
     def tap_go_button(self, timeout=30):
