@@ -4,6 +4,7 @@ import os
 import re
 import sys
 
+
 class TestDescriptions():
     def __init__(self, args):
         if len(args) != 2:
@@ -32,7 +33,6 @@ class TestDescriptions():
         if os.path.isdir(self.tests_path):
             for root, dirs, files in os.walk(self.tests_path):
                 root = root.split("/")[-1]
-#                 print "Root: {}".format(root)
                 for filename in files:
                     m = re.search('^test_(\d+).py$', filename)
                     if m:
