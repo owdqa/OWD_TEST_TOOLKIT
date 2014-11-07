@@ -18,7 +18,7 @@ class statusbar(object):
         utility_tray = self.system.open_utility_tray()
         # utility_tray.wait_for_notification_container_displayed()
         # Gaiatestcase wait_for_notification_container_displayed not working properly
-        # so we have to manually wait some time in order to make sure the statusbar 
+        # so we have to manually wait some time in order to make sure the statusbar
         # is fully shown
         time.sleep(2)
         utility_tray.clear_all_notifications()
@@ -108,7 +108,7 @@ class statusbar(object):
         # (private) Toggle a button in the statusbar and waits for the item to be enabled/disabled
         # Don't call this directly, it's used by toggleViaStatusBar().
         #
-        
+
         #
         # Open the status bar.
         #
@@ -139,7 +139,7 @@ class statusbar(object):
             boolReturn = self.parent.network.wait_for_network_item_disabled(p_type)
         else:
             boolReturn = self.parent.network.wait_for_network_item_enabled(p_type)
-        
+
         self.hideStatusBar()
         return boolReturn
 
@@ -166,9 +166,9 @@ class statusbar(object):
         #
         self.displayStatusBar()
         time.sleep(1)
-        x = (dom[0], dom[1].format(text))
-        self.parent.parent.wait_for_element_displayed(x[0], x[1], timeout)
-        notif = self.marionette.find_element(x[0], x[1])
+        elem_dom = (dom[0], dom[1].format(text))
+        self.parent.parent.wait_for_element_displayed(elem_dom[0], elem_dom[1], timeout)
+        notif = self.marionette.find_element(elem_dom[0], elem_dom[1])
         notif.tap()
 
         if frame_to_change:

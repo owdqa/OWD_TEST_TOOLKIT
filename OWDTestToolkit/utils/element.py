@@ -47,7 +47,7 @@ class element(object):
         except:
             is_ok = False
 
-        self.parent.test.TEST(is_ok, "Header is \"" + value + "\".")
+        self.parent.test.test(is_ok, "Header is \"" + value + "\".")
         return is_ok
 
     def moveScroller(self, scroller, forward=True):
@@ -173,7 +173,7 @@ class element(object):
         except Exception:
             is_ok = False
 
-        self.parent.test.TEST(is_ok, msg, stop_on_error)
+        self.parent.test.test(is_ok, msg, stop_on_error)
 
         return is_ok
 
@@ -191,7 +191,7 @@ class element(object):
         except:
             is_ok = False
 
-        self.parent.test.TEST(is_ok, msg, stop_on_error)
+        self.parent.test.test(is_ok, msg, stop_on_error)
         return is_ok
 
     def getElementByXpath(self, path):

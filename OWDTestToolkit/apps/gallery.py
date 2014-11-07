@@ -43,7 +43,7 @@ class Gallery(object):
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
-        self.UTILS.test.TEST(real_duration in interval, "Duration matches")
+        self.UTILS.test.test(real_duration in interval, "Duration matches")
 
     def click_on_thumbnail_at_position(self, position, preview=True):
         """
@@ -67,6 +67,7 @@ class Gallery(object):
         self.click_on_thumbnail_at_position(position, preview=False)
 
         time.sleep(2)
+
         crop = self.UTILS.element.getElement(DOM.Gallery.crop_done, "Crop Done")
         crop.tap()
 
@@ -86,9 +87,9 @@ class Gallery(object):
 
     def delete_thumbnails(self, num_array):
         """
-        # Deletes the thumbnails listed in num_array
-        # (following an index starting at number 0)
-        # The list must be numeric, i.e "delete_thumbnails([0,1,2])".
+        Deletes the thumbnails listed in num_array
+        (following an index starting at number 0)
+        The list must be numeric, i.e "delete_thumbnails([0,1,2])".
         """
 
         # Get the amount of thumbnails we currently have.
@@ -105,7 +106,7 @@ class Gallery(object):
             thumbs[position].tap()
 
         selected = self.UTILS.element.getElement(DOM.Gallery.thumbnail_number_selected, "Number selected header")
-        self.UTILS.test.TEST(str(delete_thumbcount) in selected.text, "Right number of thumbs selected")
+        self.UTILS.test.test(str(delete_thumbcount) in selected.text, "Right number of thumbs selected")
 
         trash_btn = self.UTILS.element.getElement(DOM.Gallery.thumbnail_trash_icon, "Trash icon")
         trash_btn.tap()
@@ -115,7 +116,7 @@ class Gallery(object):
 
         if target_thumbcount < 1:
             self.UTILS.element.waitForElements(DOM.Gallery.no_thumbnails_message,
-                                               "Message saying there are no thumbnails", False, 5)
+                                       "Message saying there are no thumbnails", False, 5)
         else:
             # Come out of 'select' mode.
             select_mode_btn = self.UTILS.element.getElement(
@@ -123,7 +124,7 @@ class Gallery(object):
             select_mode_btn.tap()
 
             current_thumbs = self.get_number_of_thumbnails()
-            self.UTILS.test.TEST(current_thumbs == target_thumbcount, "After deleting [{}] pics, we have the expected number: {}".format(
+            self.UTILS.test.test(current_thumbs == target_thumbcount, "After deleting [{}] pics, we have the expected number: {}".format(
                 delete_thumbcount, target_thumbcount))
 
     def get_gallery_items(self):

@@ -23,7 +23,7 @@ view_contact_tels_xpath = "//*[contains(@id, 'call-or-pick-') and contains(@data
 view_contact_hello_option = ('css selector', '#webrtc-client-actions button[data-l10n-id={}]')
 dialer_frame = ("data-url", "oncall")
 
-search_field = ("xpath", ".//*[@id='search-start']/input")
+search_field = ("css selector", "#search-start input")
 search_contact_input = ("id", "search-contact")
 search_contact_result_input = ('id', 'search-contact')
 search_results_list = ("css selector", "#search-list li")

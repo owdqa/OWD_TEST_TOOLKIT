@@ -46,7 +46,7 @@ class Loop(object):
         elif via == "Market":
             self.install_via_marketplace()
         else:
-            self.UTILS.test.TEST(False, "Not valid way to install Loop")
+            self.UTILS.test.test(False, "Not valid way to install Loop")
 
     def install_via_grunt(self, version="1.1"):
         self.UTILS.reporting.logResult('info', 'Installing via grunt....')
@@ -65,7 +65,7 @@ class Loop(object):
         
         install_ok_msg = "Done, without errors."
         self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
-        self.UTILS.test.TEST(install_ok_msg in result, "Install via grunt is OK")
+        self.UTILS.test.test(install_ok_msg in result, "Install via grunt is OK")
 
     def install_via_marketplace(self):
         self.UTILS.reporting.logResult('info', 'Installing via marketplace....')
@@ -105,7 +105,7 @@ class Loop(object):
         result = os.popen("cd {} && ./publish_app.sh {}".format(self.publish_loop_dir, self.loop_dir)).read()
         chops = result.split("\n")
         self.UTILS.reporting.logResult('info', "result: {}".format(chops))
-        self.UTILS.test.TEST("And all done, hopefully." in chops, "The script to publish an app is OK", True)
+        self.UTILS.test.test("And all done, hopefully." in chops, "The script to publish an app is OK", True)
 
     def update_db(self, local_dir):
         loop_dir = os.popen("adb shell ls {} | grep loop".format(self.persistent_directory)).read().rstrip()
@@ -162,7 +162,7 @@ class Loop(object):
                     self.parent.wait_for_element_displayed(*DOM.Loop.app_header)
                     return False
                 except:
-                    self.UTILS.test.TEST(False, "Ooops. Something went wrong", True)
+                    self.UTILS.test.test(False, "Ooops. Something went wrong", True)
 
     def get_wizard_steps(self):
         """ Returns the number of steps of the wizard
@@ -307,7 +307,7 @@ class Loop(object):
                 raise
 
         msg_text = self.marionette.find_element(*DOM.GLOBAL.app_permission_msg).text
-        self.UTILS.test.TEST(self.app_name in msg_text, "Permissions for loop")
+        self.UTILS.test.test(self.app_name in msg_text, "Permissions for loop")
 
         allow_btn = self.marionette.find_element(*DOM.GLOBAL.app_permission_btn_yes)
         self.UTILS.element.simulateClick(allow_btn)
@@ -335,7 +335,7 @@ class Loop(object):
             return
 
         msg_text = self.marionette.find_element(*DOM.GLOBAL.app_permission_msg).text
-        self.UTILS.test.TEST(self.app_name in msg_text, "Permissions for loop")
+        self.UTILS.test.test(self.app_name in msg_text, "Permissions for loop")
 
         allow_btn = self.marionette.find_element(*DOM.GLOBAL.app_permission_btn_yes)
         self.UTILS.element.simulateClick(allow_btn)
@@ -447,7 +447,7 @@ class Loop(object):
         try:
             entry = self.marionette.find_elements(*DOM.Loop.shared_links_entry)[position]
         except:
-            self.UTILS.test.TEST(False, "No entry to delete by position", True)
+            self.UTILS.test.test(False, "No entry to delete by position", True)
 
         is_revoked = self._is_entry_revoked(entry)
         self.actions.long_press(entry, 2).perform()
@@ -461,7 +461,7 @@ class Loop(object):
         try:
             entry = self.marionette.find_elements(*DOM.Loop.shared_links_entry)[position]
         except:
-            self.UTILS.test.TEST(False, "No entry to delete by position", True)
+            self.UTILS.test.test(False, "No entry to delete by position", True)
 
         self.actions.long_press(entry, 2).perform()
         self._select_action("revoke")

@@ -127,9 +127,9 @@ class Email(object):
 
         else:
             # self.UTILS.reporting.logResult("info", "incorrect value received")
-            msg = "FAILED: Incorrect parameter received in createAndSendMMS()"\
+            msg = "FAILED: Incorrect parameter received in create_and_send_mms()"\
                 ". attached_type must being image, video or audio."
-            self.UTILS.test.quitTest(msg)
+            self.UTILS.test.quit_test(msg)
 
     def deleteEmail(self, subject):
         #
@@ -159,7 +159,7 @@ class Email(object):
         time.sleep(2)
 
         x = self.UTILS.element.getElements(DOM.Email.folder_subject_list, "Email messages in this folder")
-        self.UTILS.test.TEST(x[0].text != subject, "Email '" + subject + "' no longer found in this folder.", False)
+        self.UTILS.test.test(x[0].text != subject, "Email '" + subject + "' no longer found in this folder.", False)
 
     def emailIsInFolder(self, subject):
         #
@@ -291,7 +291,7 @@ class Email(object):
         #
 
         myEmail = self.emailIsInFolder(subject)
-        self.UTILS.test.TEST(myEmail != False, "Found email with subject '" + subject + "'.")
+        self.UTILS.test.test(myEmail != False, "Found email with subject '" + subject + "'.")
         if myEmail:
             #
             # We found it - open the email.
@@ -465,7 +465,7 @@ class Email(object):
         # #
         # self.UTILS.reporting.logResult("info", "'From' field: {}".format(from_field))
         # self.UTILS.reporting.logResult("info", "'To' field: {}".format(to_field))
-        # self.UTILS.test.TEST(from_field == to_field, "Checking we are replying correctly")
+        # self.UTILS.test.test(from_field == to_field, "Checking we are replying correctly")
 
         # Write some reply content
         self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False, False)
@@ -499,7 +499,7 @@ class Email(object):
         bubbles_text = [bubble.text for bubble in bubbles]
 
         if sender['username'] in bubbles_text:
-            self.UTILS.test.TEST(False, "Sender ({}) must not appear in the 'To field' when replying".format(sender['username']), True)
+            self.UTILS.test.test(False, "Sender ({}) must not appear in the 'To field' when replying".format(sender['username']), True)
 
         # Write some reply content
         self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False, False)
@@ -711,7 +711,7 @@ class Email(object):
         self.UTILS.general.typeThis(DOM.Email.password, "Password field", passwd, True, True, False)
 
         #
-        # TODO : surround this by a try-except block, calling to quitTest. This has to be done
+        # TODO : surround this by a try-except block, calling to quit_test. This has to be done
         # once we fix the great delay caused by viewAllIframes()
         #
         self.parent.wait_for_element_displayed(*DOM.Email.login_account_info_next_btn, timeout=60)

@@ -44,7 +44,7 @@ class Marketplace(object):
         # Click to install the app.
         #
         app_header = self.UTILS.element.getElement(DOM.Market.app_details_header, "App details header")
-        self.UTILS.test.TEST(app_header.text == app, "Title in app detail is {} (expected: {})".\
+        self.UTILS.test.test(app_header.text == app, "Title in app detail is {} (expected: {})".\
                              format(app_header.text, app))
 
         x = self.UTILS.element.getElement(DOM.Market.install_button, "Install button")

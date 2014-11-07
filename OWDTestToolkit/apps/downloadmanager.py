@@ -20,7 +20,7 @@ class DownloadManager(object):
         Checks a certain button status
         """
         button = self.UTILS.element.getElement(locator, "Getting '{button_type}' button")
-        self.UTILS.test.TEST(button.get_attribute(attribute) == desired_value,
+        self.UTILS.test.test(button.get_attribute(attribute) == desired_value,
                              'Checking "{}" button is "{}={}"'.format(button_type, attribute, desired_value))
         if return_button:
             return button
@@ -42,7 +42,7 @@ class DownloadManager(object):
         self.tap_on_open_option()
 
         unable_msg = self.UTILS.element.getElement(DOM.DownloadManager.download_confirm_h1, "Unable to open msg")
-        self.UTILS.test.TEST(unable_msg.text == _("Unable to open"), "Unable to open msg")
+        self.UTILS.test.test(unable_msg.text == _("Unable to open"), "Unable to open msg")
 
     def _tap_on_confirm_button(self, yes=True, msg="Confirm dialog button"):
         """
@@ -62,7 +62,7 @@ class DownloadManager(object):
         return download_entry.get_attribute("data-state")
 
     def verify_download_status(self, data_url, status):
-        self.UTILS.test.TEST(self.get_download_status(data_url) == status,
+        self.UTILS.test.test(self.get_download_status(data_url) == status,
                              "The download entry {} has the state: {}".format(data_url, status))
 
     def get_download_info(self, data_url):
@@ -94,9 +94,9 @@ class DownloadManager(object):
         if status == "downloading":
             match = re.search(r"(\d)+(.(\d)+)*\s(GB|MB|KB)\sof\s(\d)+(.(\d)+)*\s(GB|MB|KB)",
                               download_info.text)
-            self.UTILS.test.TEST(match is not None, "Verify the the text is of the type: 'X' MB of 'Y' MB")
+            self.UTILS.test.test(match is not None, "Verify the the text is of the type: 'X' MB of 'Y' MB")
         else:
-            self.UTILS.test.TEST(status in download_info.text.lower(), "Verify the the status is: {}".format(status))
+            self.UTILS.test.test(status in download_info.text.lower(), "Verify the the status is: {}".format(status))
 
     def tap_on_open_option(self):
         open_btn = self.UTILS.element.getElement(DOM.DownloadManager.download_file_option_open, "Open option button")
@@ -154,7 +154,7 @@ class DownloadManager(object):
         # Verify no downloads are present
         no_downloads = self.UTILS.element.getElement(
             DOM.DownloadManager.download_empty_list_content, "Getting empty list content")
-        self.UTILS.test.TEST(no_downloads.text == _(
+        self.UTILS.test.test(no_downloads.text == _(
             "No downloads"), "Verifying '{}' message is displayed".format(_("No downloads")))
 
     def delete_download(self, data_url):

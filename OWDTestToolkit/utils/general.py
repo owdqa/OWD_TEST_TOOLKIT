@@ -191,7 +191,7 @@ class general(object):
         # Remember the current frame.
         #
         orig_frame = self.parent.iframe.currentIframe()
-        self.parent.test.TEST(True, "Original frame filtered name: {}".format(orig_frame))
+        self.parent.test.test(True, "Original frame filtered name: {}".format(orig_frame))
 
         input_elem = self.parent.element.getElement(p_element_array, p_desc)
 
@@ -245,7 +245,7 @@ class general(object):
         #
         # Switch back to the frame we were in and get the element again.
         #
-        self.parent.test.TEST(True, "Switching back to original frame {}".format(orig_frame))
+        self.parent.test.test(True, "Switching back to original frame {}".format(orig_frame))
         self.parent.iframe.switchToFrame("src", orig_frame)
 
         #
@@ -264,7 +264,7 @@ class general(object):
             else:
                 fieldText = value[-(len(p_str)):]
 
-            self.parent.test.TEST(p_str == fieldText,
+            self.parent.test.test(p_str == fieldText,
                       "The field contains the correct string ...|{}|- vs. -|{}".format(fieldText, p_str))
 
         if p_remove_keyboard:

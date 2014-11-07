@@ -55,7 +55,7 @@ class Ftu(object):
 
         # Wait a moment, then check data conn is on.
         time.sleep(3)
-        self.UTILS.test.TEST(self.parent.data_layer.get_setting("ril.data.enabled"),
+        self.UTILS.test.test(self.parent.data_layer.get_setting("ril.data.enabled"),
                         "Data connection is enabled after trying to enable it.", True)
 
     def set_language(self, language):
@@ -118,7 +118,7 @@ class Ftu(object):
         tz_buttons[1].click()
         self.UTILS.general.selectFromSystemDialog(city)
 
-        self.UTILS.test.TEST(continent + "/" + city in self.UTILS.element.getElement(DOM.FTU.timezone_title, "Timezone title").text,
+        self.UTILS.test.test(continent + "/" + city in self.UTILS.element.getElement(DOM.FTU.timezone_title, "Timezone title").text,
                         "Locality is set up correctly")
 
     def skipTour(self):
