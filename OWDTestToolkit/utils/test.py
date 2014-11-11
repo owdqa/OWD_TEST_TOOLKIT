@@ -1,12 +1,17 @@
 import os
+from assertions import AssertionManager
 
 
 class test(object):
 
     def __init__(self, parent):
         self.parent = parent
+        self.assertion_manager = AssertionManager()
+        self.assertion_manager.reset()
+        self.passed = self.assertion_manager.passed
+        self.failed = self.assertion_manager.failed
 
-    def quitTest(self, msg=False):
+    def quit_test(self, msg=False):
         #
         # Quit this test suite.
         #
@@ -37,7 +42,7 @@ class test(object):
         #
         os._exit(1)
 
-    def TEST(self, result, msg, stop_on_error=False):
+    def test(self, result, msg, stop_on_error=False):
         #
         # Test that result is true.
         #
@@ -53,8 +58,9 @@ class test(object):
             fnam = self.parent.debug.screenShotOnErr()
             self.parent.reporting.logResult(result, msg, fnam)
             self.parent.debug.getStackTrace()
-
+            self.assertion_manager.inc_failed()
             if stop_on_error:
-                self.quitTest()
+                self.quit_test()
         else:
             self.parent.reporting.logResult(result, msg)
+            self.assertion_manager.inc_passed()

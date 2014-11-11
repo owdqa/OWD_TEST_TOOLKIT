@@ -10,8 +10,7 @@ class reporting(object):
         self.parent = parent
         self._resultArray = result
         self._commentArray = comment
-        self.passed = parent.passed
-        self.failed = parent.failed
+
         self.det_fnam = parent.det_fnam
         self.sum_fnam = parent.sum_fnam
         self.testNum = parent.testNum
@@ -100,13 +99,6 @@ class reporting(object):
 
         self._resultArray.append((self._no_time, "info", " "))  # (blank newline)
         self._resultArray.append((timestamp, p_result, msgMain))  # (the main message)
-
-        if str(p_result).lower() != "info" and str(p_result).lower() != "debug":
-            if p_result:
-                self.passed = self.passed + 1
-                return
-            else:
-                self.failed = self.failed + 1
 
         #
         # Print subnote (only for failed and 'info' messages.

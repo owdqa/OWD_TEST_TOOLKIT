@@ -45,6 +45,7 @@ nosetests.xml
 *.iml
 *~
 *.out
+*.bak
 
 # Eclipse
 .settings
