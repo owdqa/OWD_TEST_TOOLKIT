@@ -116,7 +116,7 @@ class Messages(object):
     def check_last_message_contents(self, expected):
         """Get the last message text and check it against the expected value.
         """
-        returnedSMS = self.lastMessageInThisThread()
+        returnedSMS = self.last_message_in_this_thread()
         returnedSMS_text = self.marionette.find_element(*DOM.Messages.last_message_text, id=returnedSMS.id)
         self.UTILS.test.test((returnedSMS_text and returnedSMS_text.text == expected),
                              "Expected SMS text = '{}' ({}) (got '{}' ({})).".
@@ -692,7 +692,7 @@ class Messages(object):
 
         if msg_type == "sms" or msg_type == "mms":
             self.UTILS.reporting.logResult("info", "Open {} option with longtap on it".format(msg_type))
-            last = self.lastMessageInThisThread()
+            last = self.last_message_in_this_thread()
             body = self.marionette.find_element(*DOM.Messages.last_message_body, id=last.id)
             self._select_forward_option_for(body)
 
@@ -719,7 +719,7 @@ class Messages(object):
         if msg_type == "sms" or msg_type == "mms":
             # Open sms option with longtap on it
             self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
-            sms = self.lastMessageInThisThread()
+            sms = self.last_message_in_this_thread()
             body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
             self._select_forward_option_for(body)
 
@@ -747,7 +747,7 @@ class Messages(object):
         if msg_type == "sms" or msg_type == "mms":
             # Open sms option with longtap on it
             self.UTILS.reporting.logResult("info", "Open sms option with longtap on it")
-            sms = self.lastMessageInThisThread()
+            sms = self.last_message_in_this_thread()
             body = self.marionette.find_element(*DOM.Messages.last_message_body, id=sms.id)
             self._select_forward_option_for(body)
 
@@ -1086,7 +1086,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
         self.openThread(sender_number)
-        message = self.lastMessageInThisThread()
+        message = self.last_message_in_this_thread()
         self.UTILS.test.test(message, "A received message appeared in the thread.", True)
 
         self.UTILS.reporting.debug("*** attached type: {}".format(attached_type))
@@ -1122,7 +1122,7 @@ class Messages(object):
 
         for i in range(pollReps):
             # Get last message in this thread.
-            x = self.lastMessageInThisThread()
+            x = self.last_message_in_this_thread()
 
             if not x:
                 time.sleep(pollTime)
