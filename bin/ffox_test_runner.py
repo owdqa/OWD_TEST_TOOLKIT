@@ -1,5 +1,6 @@
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
+from gaiatest.runtests import GaiaTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
@@ -40,7 +41,6 @@ class Utilities():
         the_file.close()
         return data
 
-
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
     def run_test(self, filepath, expected, oop):
@@ -55,7 +55,13 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         # + 5: to skip the "test_" part
         # - 3: to remove the .py extension"""
         test_num = filepath[idx + 5:-3]
-        sys.stdout.write("{}|{} ".format(test_num, self.descriptions[test_num]))
+        if test_num in self.descriptions:
+            desc_len = int(self.testvars['description_length'])
+            description = self.descriptions[test_num][:desc_len] + "..."
+        else:
+            description = "Description not available..."
+        sys.stdout.write("{}: {} ".format(test_num, description))
+        sys.stdout.flush()
 
         # TODO - erase them when deleting reportResults
         self.testvars['TEST_NUM'] = test_num
@@ -109,20 +115,23 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 self.todo += len(results.expectedFailures)
 
         # Console messages - for each test, we will show the time taken to run it and the result
-        sys.stdout.write("({0:.2f}s) ".format(results.time_taken))
+        sys.stdout.write("({:.2f}s)  ({})".format(results.time_taken, self.get_result_msg(results)))
 
+    def get_result_msg(self, results):
+        result_msg = None
         if len(results.errors) > 0:
-            print " (automation fail)"
+            result_msg = " automation fail"
         elif len(results.failures) > 0:
-            print " (failed)"
+            result_msg = " failed"
         elif len(results.skipped) > 0:
-            print " (skipped)"
+            result_msg = " skipped"
         elif len(results.unexpectedSuccesses) > 0:
-            print " (unblock?)"
+            result_msg = " unblock?"
         elif len(results.expectedFailures) > 0:
-            print " (blocked)"
+            result_msg = " blocked"
         else:
-            print " (passed)"
+            result_msg = " passed"
+        return result_msg
 
 
 class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingTestRunnerMixin):
@@ -151,7 +160,8 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         self.logger = logging.getLogger('OWDTestToolkit')
 
         GaiaTestRunnerMixin.__init__(self, **kwargs)
-        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__, html_output=self.testvars['html_output'], **kwargs)
+        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__,
+                                              html_output=self.testvars['html_output'], **kwargs)
         self.test_handlers = [GaiaTestCase]
 
     def parse_descriptions_file(self):
@@ -161,7 +171,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         self.blocked_tests = Utilities.parse_file(self.testvars['blocked_tests'])
 
     def prepare_results(self):
-        """ This methods ensures that the destination results directory is created before launching the 
+        """ This methods ensures that the destination results directory is created before launching the
         test/s execution. It also creates (or cleans) the html results report file and the error_output file
         """
         if not os.path.exists(self.testvars['RESULT_DIR']):
@@ -213,10 +223,11 @@ class Main():
         """
         This method takes the results contained in the instance of runner (it assumes the runner has been run, ofc)
         and update the class attributes accordingly, so that they can be displayed afterwards.
-        NOTE: since self.test_handlers is GaiaTestCase, the results will be instances of GaiaTestResult which, in the end
-        inherit from MarionetteTestResult
+        NOTE: since self.test_handlers is GaiaTestCase, the results will be instances of GaiaTestResult which, in the
+        end, inherit from MarionetteTestResult
         """
-        own_attrs = ['passed', 'skipped', 'unexpected_passed', 'automation_failures', 'unexpected_failures', 'expected_failures']
+        own_attrs = ['passed', 'skipped', 'unexpected_passed', 'automation_failures', 'unexpected_failures',
+                     'expected_failures']
         result_attrs = ['tests_passed', 'skipped', 'unexpectedSuccesses', 'errors', 'failures', 'expectedFailures']
 
         for result in self.runner.results:
@@ -243,7 +254,8 @@ class Main():
         print "Unexpected failures\t\t\t\t\t: {}".format(self.unexpected_failures)
         print "Skipped tests\t\t\t\t\t\t: {}".format(self.skipped)
         print "Expected failures\t\t\t\t\t: {}".format(self.expected_failures)
-        print "Passes/Total assertions\t\t\t\t\t: {} / {}".format(self.assertion_manager.accum_passed, self.assertion_manager.accum_total)
+        print "Passes/Total assertions\t\t\t\t\t: {} / {}".format(self.assertion_manager.accum_passed,
+                                                                  self.assertion_manager.accum_total)
         print self._console_separator
         print
 
@@ -256,7 +268,8 @@ class Main():
         Custom runner for OWD initiative
         It takes as arguments the parameters that gaiatest command would need
         For example:
-            python ffox_test_runner_py --testvars=<testvars path> --address=localhost:2828 <tests path | test suite path>
+            python ffox_test_runner_py --testvars=<testvars path> --address=localhost:2828 <tests path |\
+            test suite path>
         """
 
         # Preprocess
