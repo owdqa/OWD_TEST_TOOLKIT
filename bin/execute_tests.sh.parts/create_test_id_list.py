@@ -6,7 +6,7 @@ import sys
 def find_test_ids(user_stories):
     """
     Locate the tests corresponding to the given user stories.
-    
+
     If a user story exists as a directory, locate the tests under it.
     Return the list of test ids.
     """

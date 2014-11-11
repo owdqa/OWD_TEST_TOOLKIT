@@ -16,18 +16,18 @@ class test_main(GaiaTestCase):
     # Things that will happen before "test_()" methods are run.
     #
     def setUp(self):
-        
+    
         #
         # (MANDATORY) Classes used by all tests.
         #
         GaiaTestCase.setUp(self)
         self.UTILS      = UTILS(self)
-        
+    
         #
         # Classes particular to this test case.
         #
         self.contacts   = Contacts(self)
-        
+    
         #
         # Set the timeout for element searches.
         #
@@ -38,7 +38,7 @@ class test_main(GaiaTestCase):
         # Get details of our test contact.
         #
         self.Contact_1 = MockContacts().Contact_1
-        
+    
     #
     # Things that will happen after "test_()" methods are run.
     #
@@ -56,12 +56,12 @@ class test_main(GaiaTestCase):
         # Launch contacts app.
         #
         self.contacts.launch()
-        
+    
         #
         # Create new contact.
         #
         self.contacts.createNewContact(self.Contact_1, './tests/resources/contact_face.jpg')
-        
+    
         #
         # TEST: The 'view contact' page shows the correct details for this new contact.
         #

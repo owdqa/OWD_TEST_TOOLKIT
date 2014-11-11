@@ -55,10 +55,10 @@ class Facebook(object):
         # (For some reason this only works if I get all matching elements regardless of visibility,
         # THEN check for visibility. There must be a matching element that never becomes visible.)
         fb_link_list = self.UTILS.element.getElements(DOM.Facebook.link_friends_list, "Facebook 'link friends' list", True, 20)
-        
+    
         screenshot = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
-        
+    
         found = False
         for link in fb_link_list:
             # if link.is_displayed():
