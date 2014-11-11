@@ -113,14 +113,15 @@ class Messages(object):
             x = self.UTILS.element.getElement(DOM.Messages.airplane_warning_ok, "OK button")
             x.tap()
 
-    def check_last_message_contents(self, expected):
+    def check_last_message_contents(self, expected, mms=False):
         """Get the last message text and check it against the expected value.
         """
-        returnedSMS = self.last_message_in_this_thread()
-        returnedSMS_text = self.marionette.find_element(*DOM.Messages.last_message_text, id=returnedSMS.id)
-        self.UTILS.test.test((returnedSMS_text and returnedSMS_text.text == expected),
-                             "Expected SMS text = '{}' ({}) (got '{}' ({})).".
-                             format(expected, len(expected), returnedSMS_text.text, len(returnedSMS_text.text)))
+        msg = self.last_message_in_this_thread()
+        dom = DOM.Messages.last_message_mms_text if mms else DOM.Messages.last_message_text
+        msg_text = self.marionette.find_element(*dom, id=msg.id)
+        self.UTILS.test.test((msg_text and msg_text.text == expected),
+                             "Expected message text = '{}' ({}) (got '{}' ({})).".
+                             format(expected, len(expected), msg_text.text, len(msg_text.text)))
 
     def checkIsInToField(self, target, targetIsPresent=True):
         #
@@ -271,7 +272,7 @@ class Messages(object):
             #
             # Add an image file
             #
-            self.UTILS.general.addFileToDevice('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
+            self.UTILS.general.add_file_to_device('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
 
             self.createMMSImage()
             self.gallery.click_on_thumbnail_at_position_mms(0)
@@ -288,7 +289,7 @@ class Messages(object):
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.addFileToDevice('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
 
             self.createMMSVideo()
             self.video.click_on_video_at_position_mms(0)
@@ -297,7 +298,7 @@ class Messages(object):
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.addFileToDevice('./tests/_resources/AMR.amr', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/AMR.amr', destination='/SD/mus')
 
             self.createMMSMusic()
             self.music.click_on_song_mms()
@@ -1111,40 +1112,39 @@ class Messages(object):
             msg = "Incorrect file type. The file must be {}, but is {} instead".format(attached_type, typ)
             self.UTILS.test.quit_test(msg)
 
-    def wait_for_received_msg_in_this_thread(self, send_time=None, timeOut=30):
-        #
-        # Waits for the last message in this thread to be a 'received' message
-        # and returns the element for this message.
-        #
-        pollTime = 2
-        pollReps = (timeOut / pollTime)
-        lastEl = False
+    def wait_for_message(self, send_time=None, timeout=120):
+        """Wait for a received message in the current thread and return it.
+        """
+        if not send_time:
+            send_time = self.last_sent_message_timestamp()
 
-        for i in range(pollReps):
+        poll_time = 2
+        poll_reps = (timeout / poll_time)
+        result = False
+
+        for i in range(poll_reps):
             # Get last message in this thread.
-            x = self.last_message_in_this_thread()
+            last_msg = self.last_message_in_this_thread()
 
-            if not x:
-                time.sleep(pollTime)
+            if not last_msg:
+                time.sleep(poll_time)
                 continue
 
             # If the send_time timestamp is greater than this message's timestamp,it means the message
             # we expect has not arrived yet, so we have to wait a bit more.
-            if send_time:
-                message_data_time = float(x.get_attribute("data-timestamp")) / 1000
-                fmt = "data-timestamp of last message in thread: {:.3f} send_time: {:.3f} --> {}"
-                self.UTILS.reporting.debug(fmt.format(message_data_time, send_time, send_time > message_data_time))
-                if send_time > message_data_time:
-                    continue
+            message_data_time = float(last_msg.get_attribute("data-timestamp")) / 1000
+            fmt = "data-timestamp of last message in thread: {:.3f} send_time: {:.3f} --> {}"
+            self.UTILS.reporting.debug(fmt.format(message_data_time, send_time, send_time > message_data_time))
+            if send_time > message_data_time:
+                continue
 
             # Is this a received message?
-            if "incoming" in x.get_attribute("class"):
-                lastEl = x
+            if "incoming" in last_msg.get_attribute("class"):
+                result = last_msg
                 break
 
             # Nope - sleep then try again.
-            time.sleep(pollTime)
+            time.sleep(poll_time)
 
-        self.UTILS.test.test(lastEl,
-                        "Last message in thread is a 'received' message within " + str(timeOut) + " seconds.")
-        return lastEl
+        self.UTILS.test.test(result, "Last message in thread 'received' within {} seconds.".format(timeout))
+        return result

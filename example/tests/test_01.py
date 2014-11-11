@@ -63,6 +63,6 @@ class test_main(GaiaTestCase):
         self.contacts.createNewContact(self.Contact_1, './tests/resources/contact_face.jpg')
     
         #
-        # TEST: The 'view contact' page shows the correct details for this new contact.
+        # test: The 'view contact' page shows the correct details for this new contact.
         #
         self.contacts.checkViewContactDetails(self.Contact_1, True)

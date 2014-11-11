@@ -24,7 +24,7 @@ class debug(object):
         for i in _stack:
             if ("OWDTestToolkit" in i[0] or "/test_" in i[0]) and \
                 "quit_test.py" not in i[0] and i[2] != stack()[0][3] and \
-                i[2] != "TEST":
+                i[2] != "test":
                     _counter = _counter + 1
                     _logstr = _logstr + "|{}. {}: <i>{}</i>".\
                               format(_counter, ("<b>" + os.path.basename(i[0]) + "</b>({})".format(i[1])).ljust(40),

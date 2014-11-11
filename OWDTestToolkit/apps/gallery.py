@@ -3,6 +3,7 @@ import time
 import datetime
 from marionette import Actions
 
+
 class Gallery(object):
 
     def __init__(self, parent):
@@ -64,6 +65,7 @@ class Gallery(object):
         @param  int     position            thumbnail to click 
         @param  tuple   frame_to_change     frame to switch once the image has been cropped
         """
+        time.sleep(1)
         self.click_on_thumbnail_at_position(position, preview=False)
 
         time.sleep(2)
