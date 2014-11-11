@@ -70,5 +70,6 @@
 "verbosity":"3",
 "test_descriptions": "Docs/test_descriptions",
 "blocked_tests": "Docs/blocked_tests",
-"description_length": "120"
+"description_length": "120",
+"devices_cfg": "../config/devices_cfg.json"
 }

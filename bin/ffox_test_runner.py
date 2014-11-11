@@ -5,6 +5,7 @@ from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
 from datetime import datetime
+from pyquery import PyQuery as pq
 import sys
 sys.path.insert(1, "../")
 import os
@@ -15,28 +16,30 @@ from OWDTestToolkit.utils.assertions import AssertionManager
 import logging.config
 
 
-class DeviceConfig():
-    """
-    This class holds all functionality related to the internal structure of the DuT
-    """
-    def __init__(self):
-        # This map contains the paths where the multimedia files are stored for each
-        # DuT we have worked with
-        self.devices_map = {"full_unagi": "/sdcard", "full_hamachi": "/storage/sdcard1",
-                            "ZTE_OPENC": "/storage/sdcard1", "msm8610": "/storage/sdcard1",
-                            "ZTE_OPEN2": "/storage/sdcard1", "flame": "/storage/sdcard0",
-                            "generic": "/sdcard"}
+class Utilities():
 
-    def get_storage(self):
+    @staticmethod
+    def get_storage(devices_cfg_file):
         """
         Returns the multimedia path for the currently DuT connected to the PC
         """
         current_dut = os.popen("adb shell grep ro.product.name /system/build.prop").read().split("=")[-1].rstrip()
-        if current_dut in self.devices_map:
-            return self.devices_map.get(current_dut)
+        devices_map = Utilities.parse_file(devices_cfg_file)
+        if current_dut in devices_map:
+            return devices_map.get(current_dut)
         else:
-            return self.devices_map.get("generic")
+            return devices_map.get("generic")
 
+    @staticmethod
+    def parse_file(file_name):
+        """ Generic JSON parser.
+            It takes a JSON file as an input and returns a dictionary containing all
+            its properties.
+        """
+        the_file = open(file_name)
+        data = json.load(the_file)
+        the_file.close()
+        return data
 
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
@@ -85,6 +88,8 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 break
 
         if suite.countTestCases():
+            # Run the test. For that purpose, we have to instantiate the runnerclass, which, in this
+            # this case, is MarionetteTextTestRunner
             runner = self.textrunnerclass(verbosity=int(self.testvars["verbosity"]),
                                           marionette=self.marionette,
                                           capabilities=self.capabilities)
@@ -143,8 +148,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # Some initial steps going through!
         self.parse_blocked_tests_file()
         self.parse_descriptions_file()
-        device_cfg = DeviceConfig()
-        self.testvars['OWD_DEVICE_SDCARD'] = device_cfg.get_storage()
+        self.testvars['OWD_DEVICE_SDCARD'] = Utilities.get_storage(self.testvars['devices_cfg'])
         self.prepare_results()
 
         # We will redirect BaseMarionetteTestRunner default logger to our own logger.
@@ -160,21 +164,11 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
                                               html_output=self.testvars['html_output'], **kwargs)
         self.test_handlers = [GaiaTestCase]
 
-    def _parse_file(self, file_name):
-        """ Generic JSON parser.
-            It takes a JSON file as an input and returns a dictionary containing all
-            its properties.
-        """
-        the_file = open(file_name)
-        data = json.load(the_file)
-        the_file.close()
-        return data
-
     def parse_descriptions_file(self):
-        self.descriptions = self._parse_file(self.testvars['test_descriptions'])
+        self.descriptions = Utilities.parse_file(self.testvars['test_descriptions'])
 
     def parse_blocked_tests_file(self):
-        self.blocked_tests = self._parse_file(self.testvars['blocked_tests'])
+        self.blocked_tests = Utilities.parse_file(self.testvars['blocked_tests'])
 
     def prepare_results(self):
         """ This methods ensures that the destination results directory is created before launching the
@@ -264,6 +258,10 @@ class Main():
                                                                   self.assertion_manager.accum_total)
         print self._console_separator
         print
+
+    def edit_html_results(self):
+        # By convention, Pyquery instantation is assigned to a variable called 'd'
+        d = pq(self.testvars['html_output'])
 
     def run(self):
         """
