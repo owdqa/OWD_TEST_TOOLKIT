@@ -1139,14 +1139,14 @@ class Messages(object):
         typ = parts[0].strip()
         return typ if len(parts) > 1 else ''
 
-    def timeOfLastMessageInThread(self):
+    def time_of_last_message_in_thread(self):
         #
         # Returns the time of the last message in the current thread.
         #
         t = self.UTILS.element.getElement(DOM.Messages.last_message_time, "Last message time")
         return t.text
 
-    def timeOfThread(self, num):
+    def time_of_thread(self, num):
         #
         # Returns the time of a thread.
         #
@@ -1161,7 +1161,7 @@ class Messages(object):
         x = self.marionette.find_element(*DOM.Messages.last_message).get_attribute("data-timestamp")
         return float(x)
 
-    def verifyMMSReceived(self, attached_type, sender_number):
+    def verify_mms_received(self, attached_type, sender_number):
 
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
         self.openThread(sender_number)
@@ -1177,7 +1177,7 @@ class Messages(object):
             elem = DOM.Messages.last_message_attachment_av
         else:
             # self.UTILS.reporting.logResult("info", "incorrect value received")
-            msg = "FAILED: Incorrect parameter received in verifyMMSReceived()"\
+            msg = "FAILED: Incorrect parameter received in verify_mms_received()"\
                 ". Attached_type must be image, video or audio."
             self.UTILS.test.quit_test(msg)
 
@@ -1190,7 +1190,7 @@ class Messages(object):
             msg = "Incorrect file type. The file must be {}, but is {} instead".format(attached_type, typ)
             self.UTILS.test.quit_test(msg)
 
-    def waitForReceivedMsgInThisThread(self, send_time=None, timeOut=30):
+    def wait_for_received_msg_in_this_thread(self, send_time=None, timeOut=30):
         #
         # Waits for the last message in this thread to be a 'received' message
         # and returns the element for this message.

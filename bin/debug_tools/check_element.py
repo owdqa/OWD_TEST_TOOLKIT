@@ -100,10 +100,10 @@ class current_frame():
             x = self.marionette.find_element(*p_el)
             if x:
                 b_present = True
-    
+
                 if x.is_displayed():
                     b_displayed = True
-        
+    
                 if x.is_enabled():
                     b_enabled = True
         except:

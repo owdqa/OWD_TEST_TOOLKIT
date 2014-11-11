@@ -115,7 +115,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 self.todo += len(results.expectedFailures)
 
         # Console messages - for each test, we will show the time taken to run it and the result
-        sys.stdout.write("({:.2f}s)  ({})".format(results.time_taken, self.get_result_msg(results)))
+        sys.stdout.write("({:.2f}s)  ({})\n".format(results.time_taken, self.get_result_msg(results)))
 
     def get_result_msg(self, results):
         result_msg = None

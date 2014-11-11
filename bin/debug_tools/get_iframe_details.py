@@ -52,11 +52,11 @@ class current_frame():
         frame_dets = "<i>(unknown)</i>"
         if len(self._framepath) > 0:
             for i in self._framepath:
-    
+
                 if i == self._framepath[-1]:
                     # We're at the target iframe - record its "src" value.
                     new_src = self.marionette.find_elements("tag name", "iframe")[int(i)].get_attribute("src")
-        
+    
                     if new_src != "" and new_src == self._old_src:
                         # This is an endless loop (some iframes seem to do this) - ignore it and move on.
                         return
@@ -64,7 +64,7 @@ class current_frame():
                     self._old_src   = new_src
                     new_src         = new_src if len(new_src) > 0 else "<i>(nothing)</i>"
                     srcSTR          = "value of 'src'      = \"%s\"" % new_src
-        
+    
                 self.marionette.switch_to_frame(int(i))
 
         self.screenShotOnErr()
@@ -76,17 +76,17 @@ class current_frame():
         x = self.marionette.find_elements("tag name", "iframe")
 
         if len(x) > 0:
-    
-            for i2 in range(0, len(x)):     
+
+            for i2 in range(0, len(x)): 
                 # Add this iframe number to the array.
                 self._framepath.extend(str(i2))
-     
+ 
                 # Process this iframe.
                 self.viewAllIframes()
-     
+ 
                 # Remove this iframe number from the array.
                 del self._framepath[-1]
-    
+
     def _framePathStr(self):
         #
         # Private method to return the iframe path in a 'nice' format.
@@ -96,7 +96,7 @@ class current_frame():
             pathStr = "%s -> %s" % (pathStr, i)
 
         return pathStr + "</b>"
-    
+
 
     def screenShot(self, p_fileSuffix):
         #

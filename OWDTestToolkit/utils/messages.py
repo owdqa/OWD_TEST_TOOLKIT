@@ -18,7 +18,7 @@ class Messages(object):
     def create_incoming_cp(self, phone_number, pin_type, ota_filename, pin_number=None):
         """Create incoming client provisioning message
 
-        Description: This method send an incoming OTA CP notification
+        Description: This methods send an incoming OTA CP notification
         phone_number: phone number used to receive the notification
         pin_type: Specifies the type of PIN specified in the OTAPIN variable.
             Can either be a value of NONE, USERPIN, NETWPIN, or USERNETWPIN.

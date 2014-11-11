@@ -9,12 +9,12 @@ class TestDescriptions():
     def __init__(self, args):
         if len(args) != 2:
             raise Exception("You need to pass as parameters the JSON file containing the descriptions and the path to the tests")
-                
+            
         self.file_to_parse = args[0]
         self.tests_path = args[1]
         self.descriptions_by_suite = {}
         self.file_descriptions = self._parse_file(self.file_to_parse)
-    
+
     def _parse_file(self, file_name):
         """ Generic JSON parser.
             It takes a JSON file as an input and returns a dictionary containing all
@@ -24,11 +24,11 @@ class TestDescriptions():
         data = json.load(the_file)
         the_file.close()
         return data
-    
+
     def generate_csv_file(self):
         """TODO"""
         pass
-    
+
     def get_test_descriptions_by_suite(self, sort=True):
         if os.path.isdir(self.tests_path):
             for root, dirs, files in os.walk(self.tests_path):
@@ -36,7 +36,7 @@ class TestDescriptions():
                 for filename in files:
                     m = re.search('^test_(\d+).py$', filename)
                     if m:
-                        test_number = m.group(1)                       
+                        test_number = m.group(1)                   
                         if not self.descriptions_by_suite.has_key(root):
                             if self.file_descriptions.has_key(test_number):
                                 self.descriptions_by_suite[root] = [(test_number, self.file_descriptions[test_number])]
@@ -45,11 +45,11 @@ class TestDescriptions():
                                 self.descriptions_by_suite[root].append((test_number, self.file_descriptions[test_number]))
         else:
             raise Exception("The path you provided to scan the tests is not a path. Nice try! :D")
-        
+    
         if sort:
             import collections
             self.descriptions_by_suite = collections.OrderedDict(sorted(self.descriptions_by_suite.items(), key=lambda t: t[0])) 
-    
+
     def display(self):
         for key, value in self.descriptions_by_suite.items():
             print "*********** {} ************".format(key)

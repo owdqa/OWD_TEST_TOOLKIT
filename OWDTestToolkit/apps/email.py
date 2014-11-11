@@ -148,7 +148,7 @@ class Email(object):
         delete_btn.tap()
         delete_confirm = self.UTILS.element.getElement(DOM.Email.confirmation_delete_ok, "Confirmation button")
         delete_confirm.tap()
-        
+    
         self.UTILS.element.waitForElements(DOM.Email.deleted_email_notif, "Email deletion notifier")
 
         #
@@ -252,11 +252,11 @@ class Email(object):
                                    "Header for '" + name + "' folder")
 
     def openMailFolder(self, folder_name):
-        
+    
         #
         # Check whether we're already there
         #
-        
+    
         try:
             self.UTILS.reporting.logResult("info", "Checking if it's necessary to open it")
             self.parent.wait_for_element_displayed(*("xpath", DOM.GLOBAL.app_head_specific.format(folder_name)))
@@ -424,25 +424,25 @@ class Email(object):
         except:
             self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
             compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
-            
+        
             screenshot = self.UTILS.debug.screenShotOnErr()
             self.UTILS.reporting.logResult('info', "Screenshot before tapping 'RETRY - Compose msg btn'", screenshot)
-            
+        
             compose_new_msg_btn.tap()
             return False
-    
+
     def reply_msg(self, reply_message):
         #
         # This method replies to a previously received message
         # It assumes we already are viewing that message
         #
-        
+    
         # Get who sent us the email
         from_field = self.UTILS.element.getElement(DOM.Email.open_email_from, "'From' field").text
-        
+    
         reply_btn = self.UTILS.element.getElement(DOM.Email.reply_btn, "Reply message button")
         reply_btn.tap()
-        
+    
         reply_opt = self.UTILS.element.getElement(DOM.Email.reply_menu_reply, "'Reply' option button")
         reply_opt.tap()
 
@@ -454,7 +454,7 @@ class Email(object):
         #
         #  TODO - Finnish the following assertion
         #
-              
+          
         # #
         # # Get the guy we're replying to
         # #
@@ -477,10 +477,10 @@ class Email(object):
         # This method replies to all recipients of a previously received message
         # It assumes we already are viewing that message
         #
-        
+    
         # Get who sent us the email
         from_field = self.UTILS.element.getElement(DOM.Email.open_email_from, "'From' field").text
-        
+    
         reply_btn = self.UTILS.element.getElement(DOM.Email.reply_btn, "Reply message button")
         reply_btn.tap()
 
@@ -511,10 +511,10 @@ class Email(object):
         # This method forward a previously received message to somebody else
         # It assumes we already are viewing that message
         #
-        
+    
         # Get who sent us the email
         from_field = self.UTILS.element.getElement(DOM.Email.open_email_from, "'From' field").text
-        
+    
         reply_btn = self.UTILS.element.getElement(DOM.Email.reply_btn, "Reply message button")
         reply_btn.tap()
 
@@ -558,7 +558,7 @@ class Email(object):
         # it just needs it).
         self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
-        
+    
         # Version 2.1
         #
         # self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
@@ -566,7 +566,7 @@ class Email(object):
         #                                        False)
         # self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
         #                                       False)
-        #                                       
+        #                                   
         x = ('xpath', DOM.GLOBAL.app_head_specific.format(sender_name))
         self.UTILS.element.waitForElements(x, "Previous received message", True, 120)
 
@@ -583,7 +583,7 @@ class Email(object):
         # it just needs it).
         self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
-        
+    
         # Version 2.1
         #
         # self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
@@ -614,7 +614,7 @@ class Email(object):
         #
         self.UTILS.element.waitForNotElements(DOM.Email.compose_sending_spinner, "Sending email spinner", True, 60,
                                               False)
-        
+    
         # Version 2.1
         #
         # self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
@@ -806,7 +806,7 @@ class Email(object):
                 # This way is more secure
                 #
                 current_account_text = self.marionette.execute_script("return arguments[0].innerHTML", script_args=[current_account])
-                
+            
                 self.UTILS.reporting.logResult('info', "Current account: {}".format(current_account_text))
                 self.UTILS.reporting.logResult('info', "Account to switch: {}".format(address))
 
@@ -825,7 +825,7 @@ class Email(object):
 
         except:
             self.UTILS.reporting.logResult("info", "Well, we have at least 2 accounts configured")
-            
+        
             self.UTILS.reporting.logResult("info", "Checking whether exists a scroll containing different accounts")
             self.parent.wait_for_element_displayed(*DOM.Email.switch_account_scroll_outer)
 
