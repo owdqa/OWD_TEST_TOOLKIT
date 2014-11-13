@@ -30,24 +30,13 @@ class UTILS(object):
         self.marionette = parent.marionette
         self.actions = Actions(self.marionette)
 
-        #
         # Globals used for reporting ...
-        #
-        self._resultArray = []
-        self._commentArray = []
         self.errNum = 0
-        self.passed = 0
-        self.failed = 0
         self.start_time = time.time()
-        self.last_timestamp = time.time()
 
-        #
         # Get run details from the OS.
-        #
         self.general = general(self)
-        self.testNum = parent.__module__[5:]
-        self.det_fnam = parent.data_layer.testvars["RESULT_DIR"] + "/" + self.testNum + "_detail"
-        self.sum_fnam = parent.data_layer.testvars["RESULT_DIR"] + "/" + self.testNum + "_summary"
+        self.test_num = parent.__module__[5:]
 
         self.app = app(self)
         self.date_and_time = date_and_time(self)
@@ -57,7 +46,7 @@ class UTILS(object):
         self.iframe = iframe(self)
         self.messages = Messages(self)
         self.network = network(self)
-        self.reporting = reporting(self, self._resultArray, self._commentArray)
+        self.reporting = reporting(self)
         self.statusbar = statusbar(self)
         self.test = test(self)
 
