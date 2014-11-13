@@ -3,12 +3,10 @@ sys.path.insert(1, "../")
 import os
 import unittest
 import logging.config
-import json
 import re
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
-from gaiatest.runtests import GaiaTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
@@ -268,7 +266,7 @@ class Main():
             description_tag = soup.find("p", id='test-description')
             description_tag.string = self.runner.descriptions[test_number]
             duration_tag = soup.find("p", id='duration')
-            duration_tag.string = "{:.2f}".format(result.time_taken)
+            duration_tag.string = "{:.2f} seconds".format(result.time_taken)
             result_tag = soup.find("div", id="result-container")
             test_result = self.runner.get_result_msg(result).strip()
             new_tag = soup.new_tag("p", id="result", **{'class': test_result.replace(" ", "-")})
