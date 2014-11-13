@@ -107,17 +107,40 @@ class reporting(object):
         
     def reportResults(self):
         detail_html_template = """
-        <html><head><title>{0}: Test Detail</title></head>
-        <body>
-        <div class="general-info">
-        <p id="test-number">Test number: <b>{0}<b></p>
-        <div id="test-description-container">Description:<p id="test-description"></p></div>
-        <div id="duration-container">Time taken: <p id="duration"></p></div>
-        <div id="result-container">Result: </div>
-        <div id="comments">Comments <ul id="comments-list"></ul></div>
-        </div>
-        <div id="logs"><ul id="logs-list"></ul></div>
-        </body>
+        <html>
+            <head>
+                <title>{0}: Test Detail</title>
+            </head>
+            <body>
+                <div id="main-title">
+                TEST RESULT
+                </div>
+                <div id="general-info" class="highlighted-box">
+                    <div id="test-number-container">
+                        <span class="label">Test number:</span>
+                        <span id="test-number">{0}</span>
+                    </div>
+                    <div id="test-description-container">
+                        <span class="label">Description:</span>
+                        <span id="test-description"></span>
+                    </div>
+                    <div id="duration-container">
+                        <span class="label">Time taken:</span>
+                        <span id="duration"></span>
+                    </div>
+                    <div id="result-container">
+                        <span class="label">Result:</span>
+                    </div>
+                    <div id="comments">
+                        Comments
+                        <ul id="comments-list"></ul>
+                    </div>
+                </div>
+                <div id="logs" class="highlighted-box">
+                    <div class="logs-title">Logs</div>
+                    <ul id="logs-list"></ul>
+                </div>
+            </body>
         </html>
         """
         soup = BeautifulSoup(detail_html_template.format(self.test_num))
