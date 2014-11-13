@@ -1,4 +1,5 @@
 import sys
+import shutil
 sys.path.insert(1, "../")
 import os
 import unittest
@@ -7,7 +8,6 @@ import re
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
-from gaiatest.runtests import GaiaTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
@@ -20,7 +20,9 @@ from utilities import Utilities
 
 
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
-
+    
+    assertion_manager = AssertionManager()
+    
     def run_test(self, filepath, expected, oop):
         """
         This method is responsible of running a single test.
@@ -191,10 +193,7 @@ class Main():
         self.start_time = datetime.utcnow()
         runner = runner_class(**vars(options))
         runner.prepare_results()
-        runner.prepare_tests(tests)
-        runner.total_tests = len(runner.tests)
-        print "Running {} tests...".format(len(runner.tests))
-        runner.run_tests(runner.tests)
+        runner.run_tests(tests)
         self.end_time = datetime.utcnow()
         return runner
 
@@ -272,19 +271,22 @@ class Main():
             soup = BeautifulSoup(detail_file)
             detail_file.close()
             
-            description_tag = soup.find("p", id='test-description')
+            description_tag = soup.find("span", id='test-description')
             description_tag.string = self.runner.descriptions[test_number]
-            duration_tag = soup.find("p", id='duration')
+            duration_tag = soup.find("span", id='duration')
             duration_tag.string = "{:.2f} seconds".format(result.time_taken)
             result_tag = soup.find("div", id="result-container")
             test_result = self.runner.get_result_msg(result).strip()
-            new_tag = soup.new_tag("p", id="result", **{'class': test_result.replace(" ", "-")})
+            new_tag = soup.new_tag("span", id="result", **{'class': test_result.replace(" ", "-")})
             new_tag.string = test_result
             result_tag.append(new_tag)
             
             detail_file = open(detail_file_path, "w")
             detail_file.write(soup.prettify())
             detail_file.close()
+            
+            # Copy the css file
+            shutil.copy(self.runner.testvars['css_file'], self.runner.testvars['RESULT_DIR'])
             
     def run(self):
         """
