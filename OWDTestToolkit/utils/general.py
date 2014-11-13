@@ -1,5 +1,3 @@
-import sys
-import os
 import json
 import time
 import datetime
@@ -17,7 +15,7 @@ class general(object):
         self.marionette = parent.marionette
         self.keyboard = Keyboard(self.marionette)
 
-    def addFileToDevice(self, file_name, count=1, destination=''):
+    def add_file_to_device(self, file_name, count=1, destination=''):
         #
         # Put a file onto the device (path is relative to the dir
         # you are physically in when running the tests).
@@ -72,7 +70,7 @@ class general(object):
         #
         # Get a variable from the OS.
         #
-        #return os.getenv(name, False)
+        # return os.getenv(name, False)
         try:
             return self.parent.data_layer.testvars[name]
         except:

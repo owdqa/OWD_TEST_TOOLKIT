@@ -1016,7 +1016,7 @@ class Contacts(object):
                                            format(contact_name))
             return
 
-        # TEST: Correct contact name is in the page header.
+        # test: Correct contact name is in the page header.
 
         if header_check:
             self.UTILS.element.headerCheck(contact_name)

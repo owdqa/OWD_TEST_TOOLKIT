@@ -1,46 +1,23 @@
-from marionette import HTMLReportingTestRunnerMixin
-from marionette import BaseMarionetteTestRunner
-from gaiatest.runtests import GaiaTextTestRunner
-from marionette.runner import BaseMarionetteOptions
-from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
-from OWDTestToolkit.utils.assertions import AssertionManager
-from bs4 import BeautifulSoup
-from datetime import datetime
 import sys
 sys.path.insert(1, "../")
 import os
 import unittest
+import logging.config
 import json
 import re
+
+from marionette import HTMLReportingTestRunnerMixin
+from marionette import BaseMarionetteTestRunner
+from gaiatest.runtests import GaiaTestRunner
+from gaiatest.runtests import GaiaTextTestRunner
+from marionette.runner import BaseMarionetteOptions
+from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
+from bs4 import BeautifulSoup
+from datetime import datetime
 from gaiatest.version import __version__
+from OWDTestToolkit.utils.assertions import AssertionManager
+from utilities import Utilities
 
-import logging.config
-
-
-class Utilities():
-
-    @staticmethod
-    def get_storage(devices_cfg_file):
-        """
-        Returns the multimedia path for the currently DuT connected to the PC
-        """
-        current_dut = os.popen("adb shell grep ro.product.name /system/build.prop").read().split("=")[-1].rstrip()
-        devices_map = Utilities.parse_file(devices_cfg_file)
-        if current_dut in devices_map:
-            return devices_map.get(current_dut)
-        else:
-            return devices_map.get("generic")
-
-    @staticmethod
-    def parse_file(file_name):
-        """ Generic JSON parser.
-            It takes a JSON file as an input and returns a dictionary containing all
-            its properties.
-        """
-        the_file = open(file_name)
-        data = json.load(the_file)
-        the_file.close()
-        return data
 
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
@@ -49,9 +26,9 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         This method is responsible of running a single test.
         We've overrun it in order to perform some tasks belonging to OWD initiative.
         """
-        #######################################################################
+        #
         # Previous operations
-        #######################################################################
+        #
         idx = filepath.rindex('test_')
         # + 5: to skip the "test_" part
         # - 3: to remove the .py extension"""
@@ -73,9 +50,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         # TODO - erase them when deleting reportResults
         self.testvars['TEST_NUM'] = test_num
 
-        #######################################################################
-        # Parent method
-        #######################################################################
+        # Parent method -> start
         self.logger.info('TEST-START %s' % os.path.basename(filepath))
 
         testloader = unittest.TestLoader()
@@ -85,12 +60,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         mod_name = os.path.splitext(os.path.split(filepath)[-1])[0]
         for handler in self.test_handlers:
             if handler.match(os.path.basename(filepath)):
-                handler.add_tests_to_suite(mod_name,
-                                           filepath,
-                                           suite,
-                                           testloader,
-                                           self.marionette,
-                                           self.testvars,
+                handler.add_tests_to_suite(mod_name, filepath, suite, testloader, self.marionette, self.testvars,
                                            **self.test_kwargs)
                 break
 
@@ -123,21 +93,22 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
         # Console messages - for each test, we will show the time taken to run it and the result
         sys.stdout.write("({:.2f}s)  ({})\n".format(results.time_taken, self.get_result_msg(results)))
+        results.stream.flush()
 
     def get_result_msg(self, results):
         result_msg = None
         if len(results.errors) > 0:
-            result_msg = " automation fail"
+            result_msg = "automation fail"
         elif len(results.failures) > 0:
-            result_msg = " failed"
+            result_msg = "failed"
         elif len(results.skipped) > 0:
-            result_msg = " skipped"
+            result_msg = "skipped"
         elif len(results.unexpectedSuccesses) > 0:
-            result_msg = " unblock?"
+            result_msg = "unblock?"
         elif len(results.expectedFailures) > 0:
-            result_msg = " blocked"
+            result_msg = "blocked"
         else:
-            result_msg = " passed"
+            result_msg = "passed"
         return result_msg
 
 
@@ -155,11 +126,10 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # Some initial steps going through!
         self.parse_blocked_tests_file()
         self.parse_descriptions_file()
-        self.testvars['OWD_DEVICE_SDCARD'] = Utilities.get_storage(self.testvars['devices_cfg'])
-        self.prepare_results()
+        Utilities.detect_device(kwargs['device_cfg'], self.testvars)
 
         # We will redirect BaseMarionetteTestRunner default logger to our own logger.
-        # Logger are not directly instantiated, but created by calling loggin.getLogger.
+        # Loggers are not directly instantiated, but created by calling loggin.getLogger.
         # Multiple calls to getLogger with the same name will point to the same logger
         # reference
         config_file = self.testvars['OWD_LOG_CFG']
@@ -216,6 +186,7 @@ class Main():
         """
         self.start_time = datetime.utcnow()
         runner = runner_class(**vars(options))
+        runner.prepare_results()
         runner.run_tests(tests)
         self.end_time = datetime.utcnow()
         return runner
@@ -319,6 +290,8 @@ class Main():
 
         # Preprocess
         parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
+        parser.add_option('--device_cfg', action='store', dest='device_cfg',
+                        help='file with the devices specific configuration, such as the location of the SD card')
         options, tests = parser.parse_args(self.args)
         parser.verify_usage(options, tests)
 

@@ -1,9 +1,23 @@
 {
-	"full_unagi": "/sdcard",
-	"full_hamachi": "/storage/sdcard1",
-    "ZTE_OPENC": "/storage/sdcard1",
-    "msm8610": "/storage/sdcard1",
-	"ZTE_OPEN2": "/storage/sdcard1",
-	"flame": "/storage/sdcard0",
-	"generic": "/sdcard"
+    "full_unagi": {
+    	"sdcard": "/sdcard"
+    	},
+    "full_hamachi": {
+    	"sdcard": "/storage/sdcard1"
+    	},
+    "ZTE_OPENC": {
+    	"sdcard": "/storage/sdcard1"
+    	},
+    "msm8610": {
+    	"sdcard": "/storage/sdcard1"
+    	},
+    "ZTE_OPEN2": {
+    	"sdcard": "/storage/sdcard1"
+    	},
+    "flame": {
+    	"sdcard": "/storage/sdcard0"
+    	},
+    "generic": {
+    	"sdcard": "/sdcard"
+    	}
 }

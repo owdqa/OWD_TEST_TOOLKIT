@@ -132,7 +132,7 @@ class current_frame():
 #
 
 # Make sure we're connected to the device.
-os.system(". $HOME/.OWD_TEST_TOOLKIT_LOCATION; $OWD_TEST_TOOLKIT_BIN/connect_device.sh")
+os.system(". $HOME/.OWD_test_TOOLKIT_LOCATION; $OWD_test_TOOLKIT_BIN/connect_device.sh")
 
 # Set up the dir.
 LOGDIR = False

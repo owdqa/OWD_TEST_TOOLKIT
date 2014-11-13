@@ -96,7 +96,7 @@ class Email(object):
             #
             # Add an image file
             #
-            self.UTILS.general.addFileToDevice('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
+            self.UTILS.general.add_file_to_device('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
 
             self.createEmailImage()
             self.gallery.click_on_thumbnail_at_position_email(0)
@@ -111,7 +111,7 @@ class Email(object):
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.addFileToDevice('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
 
             self.createEmailVideo()
             self.video.click_on_video_at_position_email(0)
@@ -120,7 +120,7 @@ class Email(object):
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.addFileToDevice('./tests/_resources/AMR.amr', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/AMR.amr', destination='/SD/mus')
 
             self.createEmailMusic()
             self.music.click_on_song_email()
