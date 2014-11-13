@@ -56,7 +56,7 @@ class Dialer(object):
                 boolOK = True
                 break
 
-        self.UTILS.test.TEST(boolOK, "Succesfully selected contact from list.")
+        self.UTILS.test.test(boolOK, "Succesfully selected contact from list.")
         self.UTILS.element.waitForElements(DOM.Contacts.edit_contact_header, "'Edit contact' header")
 
         # Test for an input field for number_<x> contaiing our number.
@@ -241,7 +241,7 @@ class Dialer(object):
             except:
                 _postcount = 0
 
-            self.UTILS.test.TEST(_postcount == _precount,
+            self.UTILS.test.test(_postcount == _precount,
                                  "{} numbers are left after deletion (there are {}).".format(_precount, _postcount))
 
     def callLog_createContact(self, entry, p_openCallLog=True):
@@ -347,7 +347,7 @@ class Dialer(object):
             x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
             dialer_num = self.marionette.execute_script("return arguments[0].value", script_args=[x])
             self.UTILS.reporting.debug(u"** Dialer_num entered: [{}]".format(dialer_num))
-            self.UTILS.test.TEST(str(p_num) in dialer_num, u"After entering '{}', phone number field contains '{}'.".
+            self.UTILS.test.test(str(p_num) in dialer_num, u"After entering '{}', phone number field contains '{}'.".
                                  format(p_num, dialer_num))
 
             x = self.UTILS.debug.screenShotOnErr()
@@ -441,7 +441,7 @@ class Dialer(object):
             self.parent.wait_for_element_displayed(
                 "xpath", DOM.Dialer.outgoing_call_numberXP.format(incoming_number), timeout=30)
         except:
-            self.UTILS.test.TEST(False, "No incoming call received", True)
+            self.UTILS.test.test(False, "No incoming call received", True)
 
     def resume_hidden_call(self):
         self.marionette.switch_to_frame()

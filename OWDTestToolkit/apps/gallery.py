@@ -43,7 +43,7 @@ class Gallery(object):
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
-        self.UTILS.test.TEST(real_duration in interval, "Duration matches")
+        self.UTILS.test.test(real_duration in interval, "Duration matches")
 
     def click_on_thumbnail_at_position(self, position, preview=True):
         """
@@ -105,7 +105,7 @@ class Gallery(object):
             thumbs[position].tap()
 
         selected = self.UTILS.element.getElement(DOM.Gallery.thumbnail_number_selected, "Number selected header")
-        self.UTILS.test.TEST(str(delete_thumbcount) in selected.text, "Right number of thumbs selected")
+        self.UTILS.test.test(str(delete_thumbcount) in selected.text, "Right number of thumbs selected")
 
         trash_btn = self.UTILS.element.getElement(DOM.Gallery.thumbnail_trash_icon, "Trash icon")
         trash_btn.tap()
@@ -123,7 +123,7 @@ class Gallery(object):
             select_mode_btn.tap()
 
             current_thumbs = self.get_number_of_thumbnails()
-            self.UTILS.test.TEST(current_thumbs == target_thumbcount, "After deleting [{}] pics, we have the expected number: {}".format(
+            self.UTILS.test.test(current_thumbs == target_thumbcount, "After deleting [{}] pics, we have the expected number: {}".format(
                 delete_thumbcount, target_thumbcount))
 
     def get_gallery_items(self):
