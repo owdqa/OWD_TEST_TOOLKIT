@@ -1,5 +1,4 @@
 import time
-import sys
 from OWDTestToolkit import DOM
 from OWDTestToolkit.utils.decorators import retry
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
@@ -714,9 +713,11 @@ class Contacts(object):
         self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "View all contacts header")
 
         # Now check the contact's name is displayed here too.
-        contact_name = ("xpath", DOM.Contacts.view_all_contact_xpath.format(contact['name'].replace(" ", "")))
+        contact_name = ("xpath", DOM.Contacts.view_all_contact_xpath.format(contact['name'].upper().\
+                                                                            replace(" ", "")))
 
-        self.UTILS.element.waitForElements(contact_name, "Contact '" + contact['name'] + "'")
+        self.UTILS.element.waitForElements(contact_name, "Contact '{}'".format(contact['name'].upper().\
+                                                                               replace(" ", "")), timeout=30)
 
     def populate_fields(self, contact):
         """

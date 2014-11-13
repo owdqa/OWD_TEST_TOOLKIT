@@ -20,6 +20,8 @@ from utilities import Utilities
 
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
+    assertion_manager = AssertionManager()
+
     def run_test(self, filepath, expected, oop):
         """
         This method is responsible of running a single test.
@@ -37,7 +39,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             description = self.descriptions[test_num][:desc_len] + "..."
         else:
             description = "Description not available..."
-        sys.stdout.write("{}/{} - {}: {} ".format(1, 1, test_num, description))
+        sys.stdout.write("{}: {:100s} ".format(test_num, description))
         sys.stdout.flush()
 
         # TODO - erase them when deleting reportResults
@@ -46,7 +48,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         self.testvars['SUM_FILE'] = test_num + "_summary"
 
         # Parent method -> start
-        self.logger.info('test-START %s' % os.path.basename(filepath))
+        self.logger.info('test-START {}'.format(os.path.basename(filepath)))
 
         testloader = unittest.TestLoader()
         suite = unittest.TestSuite()
@@ -87,7 +89,10 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 self.todo += len(results.expectedFailures)
 
         # Console messages - for each test, we will show the time taken to run it and the result
-        sys.stdout.write("({:.2f}s)  ({})\n".format(results.time_taken, self.get_result_msg(results)))
+        sys.stdout.write("({:.2f}s)  ({}) (assertions: {}/{})\n".\
+                         format(results.time_taken, self.get_result_msg(results),
+                                OWDMarionetteTestRunner.assertion_manager.get_passed(),
+                                OWDMarionetteTestRunner.assertion_manager.get_total()))
         results.stream.flush()
 
     def get_result_msg(self, results):
@@ -121,7 +126,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # Some initial steps going through!
         self.parse_blocked_tests_file()
         self.parse_descriptions_file()
-        Utilities.detect_device(kwargs['device_cfg'], self.testvars)
+        Utilities.detect_device(self.testvars)
 
         # We will redirect BaseMarionetteTestRunner default logger to our own logger.
         # Loggers are not directly instantiated, but created by calling loggin.getLogger.
@@ -173,6 +178,7 @@ class Main():
         self.unexpected_failures = 0
         self.expected_failures = 0
         self.assertion_manager = AssertionManager()
+        self.assertion_manager.reset()
 
     def start_test_runner(self, runner_class, options, tests):
         """
@@ -182,7 +188,10 @@ class Main():
         self.start_time = datetime.utcnow()
         runner = runner_class(**vars(options))
         runner.prepare_results()
-        runner.run_tests(tests)
+        runner.prepare_tests(tests)
+        runner.total_tests = len(runner.tests)
+        print "Running {} tests...".format(len(runner.tests))
+        runner.run_tests(runner.tests)
         self.end_time = datetime.utcnow()
         return runner
 

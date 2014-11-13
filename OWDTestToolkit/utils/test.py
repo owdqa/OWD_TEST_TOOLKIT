@@ -1,4 +1,3 @@
-import os
 from assertions import AssertionManager
 
 
@@ -7,7 +6,7 @@ class test(object):
     def __init__(self, parent):
         self.parent = parent
         self.assertion_manager = AssertionManager()
-        self.assertion_manager.reset()
+        self.assertion_manager.reset_test()
         self.passed = self.assertion_manager.passed
         self.failed = self.assertion_manager.failed
 
@@ -40,7 +39,7 @@ class test(object):
         # If we don't want an exception to be raised at this point,
         # then we should use os._exit().
         #
-        os._exit(1)
+        # os._exit(1)
 
     def test(self, result, msg, stop_on_error=False):
         #
@@ -59,8 +58,7 @@ class test(object):
             self.parent.reporting.logResult(result, msg, fnam)
             self.parent.debug.getStackTrace()
             self.assertion_manager.inc_failed()
-            if stop_on_error:
-                self.quit_test()
         else:
             self.parent.reporting.logResult(result, msg)
             self.assertion_manager.inc_passed()
+        self.parent.parent.assertTrue(result)

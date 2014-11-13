@@ -32,14 +32,14 @@ class Utilities():
         return data
 
     @staticmethod
-    def detect_device(config_file, testvars):
+    def detect_device(testvars):
         """Customize parameters based on the DuT.
         """
         # Ensure device is connected and ports forwarded properly
         Utilities.connect_device()
 
         current_dut = os.popen("adb shell grep ro.product.name /system/build.prop").read().split("=")[-1].rstrip()
-        devices_map = Utilities.parse_file(config_file)
+        devices_map = Utilities.parse_file(testvars["devices_cfg"])
 
         if not current_dut in devices_map:
             print "No specific section for device [{}] was found. Falling down to [generic] device options.".\
@@ -57,5 +57,6 @@ class Utilities():
     def connect_device():
         """Force connection to device and forward ports, just in case.
         """
-        os.popen("adb devices").read()
-        os.popen("adb forward tcp:2828 tcp:2828").read()
+        os.popen("adb kill-server")
+        os.popen("adb devices")
+        os.popen("adb forward tcp:2828 tcp:2828")
