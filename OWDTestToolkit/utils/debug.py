@@ -14,7 +14,7 @@ class debug(object):
 
     def getStackTrace(self):
         #
-        # Adds the stack trace to the test report (called automatically if UTILS.TEST() fails).
+        # Adds the stack trace to the test report (called automatically if UTILS.test() fails).
         #
 
         _logstr = "STACK TRACE (code path to this point):"

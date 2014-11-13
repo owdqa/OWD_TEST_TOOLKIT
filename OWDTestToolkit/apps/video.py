@@ -33,7 +33,7 @@ class Video(object):
 
         # Note: we give 2 second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
-        self.UTILS.test.TEST(duration_in_secs in interval, "Duration matches")
+        self.UTILS.test.test(duration_in_secs in interval, "Duration matches")
 
     def _convert_str_to_seconds(self, the_string):
         """
@@ -55,7 +55,7 @@ class Video(object):
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
-        self.UTILS.test.TEST(real_duration in interval, "Duration matches")
+        self.UTILS.test.test(real_duration in interval, "Duration matches")
 
     def _click_on_video_external(self, position, frame_to_change):
         """

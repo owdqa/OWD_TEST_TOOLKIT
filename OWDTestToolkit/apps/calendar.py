@@ -77,7 +77,7 @@ class Calendar(object):
         _expected_str = "{} {}, {}".format(_new_now.month_name[:3], _new_now.mday, _new_now.day_name)
 
         x = self.UTILS.element.getElement(DOM.Calendar.current_view_header, "Current view header")
-        self.UTILS.test.TEST(x.text == _expected_str, "Header is '<b>%s</b>' (it was '%s')." % (_expected_str, x.text))
+        self.UTILS.test.test(x.text == _expected_str, "Header is '<b>%s</b>' (it was '%s')." % (_expected_str, x.text))
 
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "Day view screen after moving {} pages: ".format(num), x)
@@ -252,7 +252,7 @@ class Calendar(object):
         expect = "{} {}".format(month_names[month - 1], year)
         actual = self.UTILS.element.getElement(DOM.Calendar.current_view_header, "Header").text
 
-        self.UTILS.test.TEST(expect.lower() in actual.lower(), "Expecting header to contain '{}' (received '{}')"
+        self.UTILS.test.test(expect.lower() in actual.lower(), "Expecting header to contain '{}' (received '{}')"
                         .format(expect, actual))
 
     def moveWeekViewBy(self, num):
@@ -345,12 +345,12 @@ class Calendar(object):
                     boolOK = True
                     break
 
-        self.UTILS.test.TEST(boolOK, "The column for date '<b>{}</b>' displayed.".format(new_now_str))
+        self.UTILS.test.test(boolOK, "The column for date '<b>{}</b>' displayed.".format(new_now_str))
 
         x = self.UTILS.element.getElement(DOM.Calendar.current_view_header, "Current view header")
-        self.UTILS.test.TEST(new_now.month_name in x.text, "'<b>{}</b>' is in header ('{}')."
+        self.UTILS.test.test(new_now.month_name in x.text, "'<b>{}</b>' is in header ('{}')."
                         .format(new_now.month_name, x.text))
-        self.UTILS.test.TEST(str(new_now.year) in x.text, "'<b>{}</b>' is in header ('{}').".format(new_now.year, x.text))
+        self.UTILS.test.test(str(new_now.year) in x.text, "'<b>{}</b>' is in header ('{}').".format(new_now.year, x.text))
 
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "Week view screen after moving {} pages: ".format(num), x)

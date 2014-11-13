@@ -41,10 +41,10 @@ class Clock(object):
 
             if stime == alarm_time and ampm == alarm_ampm:
                 foundBool = True
-                self.UTILS.test.TEST(label == alarm_label, "Alarm description is correct in Clock screen preview.")
+                self.UTILS.test.test(label == alarm_label, "Alarm description is correct in Clock screen preview.")
                 break
 
-        self.UTILS.test.TEST(foundBool, "Alarm preview is found in Clock screen for " + stime + ampm + ".")
+        self.UTILS.test.test(foundBool, "Alarm preview is found in Clock screen for " + stime + ampm + ".")
 
     def checkAlarmRingDetails(self, hour, minute, label):
         #
@@ -85,15 +85,15 @@ class Clock(object):
         stime = str(t_hour) + ":" + str(minute).zfill(2)
 
         x = self.UTILS.element.getElement(DOM.Clock.alarm_alert_time, "Alarm alert time").text
-        self.UTILS.test.TEST(x == stime, "Correct alarm time is shown when alarm is ringing (expected '" +
+        self.UTILS.test.test(x == stime, "Correct alarm time is shown when alarm is ringing (expected '" +
                         stime + "', it was '" + x + "').")
 
         x = self.UTILS.element.getElement(DOM.Clock.alarm_alert_ampm, "Alarm alert AM/PM").text
-        self.UTILS.test.TEST(x == ampm, "Correct AM / PM shown when alarm is ringing (expected '" +
+        self.UTILS.test.test(x == ampm, "Correct AM / PM shown when alarm is ringing (expected '" +
                         ampm + "', it was '" + x + "').")
 
         x = self.UTILS.element.getElement(DOM.Clock.alarm_alert_label, "Alarm alert label").text
-        self.UTILS.test.TEST(x == label, "Correct label shown when alarm is ringing (expected '" +
+        self.UTILS.test.test(x == label, "Correct label shown when alarm is ringing (expected '" +
                         label + "', it was '" + x + "').")
 
         #

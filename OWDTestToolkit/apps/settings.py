@@ -441,8 +441,8 @@ class Settings(object):
 
         is_status_icon = self.UTILS.statusbar.isIconInStatusBar(DOM.Statusbar.hotspot)
 
-        self.UTILS.test.TEST(is_disabled, "Hotspot settings are disabled (because 'hotspot' is not running).")
-        self.UTILS.test.TEST(not is_status_icon, "Hotspot icon is not present in the status bar.")
+        self.UTILS.test.test(is_disabled, "Hotspot settings are disabled (because 'hotspot' is not running).")
+        self.UTILS.test.test(not is_status_icon, "Hotspot icon is not present in the status bar.")
 
     def downloads(self):
         #
@@ -506,8 +506,8 @@ class Settings(object):
 
         is_status_icon = self.UTILS.statusbar.isIconInStatusBar(DOM.Statusbar.hotspot)
 
-        self.UTILS.test.TEST(is_enabled, "Hotspot settings are disabled (because 'hotspot' is now running).")
-        self.UTILS.test.TEST(is_status_icon, "Hotspot icon is present in the status bar.")
+        self.UTILS.test.test(is_enabled, "Hotspot settings are disabled (because 'hotspot' is now running).")
+        self.UTILS.test.test(is_status_icon, "Hotspot icon is present in the status bar.")
 
     def fxa(self):
         self.parent.wait_for_element_displayed(DOM.Settings.fxa[0], DOM.Settings.fxa[1], timeout=20)
@@ -643,7 +643,7 @@ class Settings(object):
         #
         dom_elem = (DOM.Settings.default_apn[0], DOM.Settings.default_apn[1].format(apn))
         x = self.UTILS.element.getElement(dom_elem, "Added APN")
-        self.UTILS.test.TEST(True, "APN {} element: {}".format(apn, x))
+        self.UTILS.test.test(True, "APN {} element: {}".format(apn, x))
         x.tap()
 
         #
@@ -854,7 +854,7 @@ class Settings(object):
                     self.UTILS.element.getElement(DOM.Settings.dual_sim_change_pin_sim1,
                                                   "Change PIN button <b> is there </b>")
                 except:
-                    self.UTILS.test.TEST(False, "Something went wrong while activating the PIN", True)
+                    self.UTILS.test.test(False, "Something went wrong while activating the PIN", True)
             else:
                 self.UTILS.element.waitForNotElements(DOM.Settings.dual_sim_change_pin_sim1,
                                                       "Change PIN button <b> is not there </b>")
@@ -868,7 +868,7 @@ class Settings(object):
                     self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin,
                                                   "Change PIN button <b> is there </b>")
                 except:
-                    self.UTILS.test.TEST(False, "Something went wrong while activating the PIN", True)
+                    self.UTILS.test.test(False, "Something went wrong while activating the PIN", True)
             else:
                 self.UTILS.element.waitForNotElements(DOM.Settings.sim_security_change_pin,
                                                       "Change PIN button <b> is not there </b>")
@@ -982,10 +982,10 @@ class Settings(object):
         # A couple of checks to wait for 'anything' to be Connected (only look for 'present' because it
         # might be off the bottom of the page).
         #
-        self.UTILS.test.TEST(self.wifi_list_isConnected(wlan_name, timeout=60),
+        self.UTILS.test.test(self.wifi_list_isConnected(wlan_name, timeout=60),
                              "Wifi '{}' is listed as 'connected' in wifi settings.".format(wlan_name), False)
 
-        self.UTILS.test.TEST(self.parent.data_layer.get_setting("wifi.enabled"),
+        self.UTILS.test.test(self.parent.data_layer.get_setting("wifi.enabled"),
                              "Wifi connection to '{}' established.".format(wlan_name), True)
 
     def wifi_forget(self, quiet=True):
@@ -1026,7 +1026,7 @@ class Settings(object):
             _x = "was" if is_connected else "was not"
             _y = "and has been succesfully" if is_forgotten else "but could not be"
 
-            self.UTILS.test.TEST(is_connected and is_forgotten,
+            self.UTILS.test.test(is_connected and is_forgotten,
                                  "Wifi network '{}' {} connected {} forgotten.".format(wlan, _x, _y))
 
         return is_connected

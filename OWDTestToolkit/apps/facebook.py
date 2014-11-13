@@ -72,7 +72,7 @@ class Facebook(object):
                 self.marionette.execute_script(""" arguments[0].click(); """, script_args=[parent])
                 break
 
-        self.UTILS.test.TEST(found, "Desired link contact's email address is displayed.")
+        self.UTILS.test.test(found, "Desired link contact's email address is displayed.")
 
         if found:
             self.UTILS.reporting.logComment("Linked FB contact email: " + contact_email + ".")
