@@ -165,10 +165,10 @@ class element(object):
         msg = u"" + msg
         try:
             if is_displayed:
-                msg = u"<b>{}</b> displayed within {} seconds.|{}".format(msg, timeout, elem)
+                msg = u"{} displayed within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_displayed(*elem, timeout=timeout)
             else:
-                msg = u"<b>{}</b> present within {} seconds.|{}".format(msg, timeout, elem)
+                msg = u"{} present within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_present(*elem, timeout=timeout)
         except Exception:
             is_ok = False
@@ -183,10 +183,10 @@ class element(object):
         is_ok = True
         try:
             if is_displayed:
-                msg = "<b>{}</b> no longer displayed within {} seconds.|{}".format(msg, timeout, elem)
+                msg = "{} no longer displayed within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_not_displayed(*elem, timeout=timeout)
             else:
-                msg = "<b>{}</b> no longer present within {} seconds.|{}".format(msg, timeout, elem)
+                msg = "{} no longer present within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_not_present(*elem, timeout=timeout)
         except:
             is_ok = False
