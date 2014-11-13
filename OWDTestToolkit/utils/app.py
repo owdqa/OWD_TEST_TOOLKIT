@@ -298,6 +298,6 @@ class app(object):
             time.sleep(2)
             self.parent.home.touchHomeButton()
 
-            self.parent.test.TEST(not self.isAppInstalled(app_name), "App is uninstalled after deletion.")
+            self.parent.test.test(not self.isAppInstalled(app_name), "App is uninstalled after deletion.")
         else:
             self.parent.reporting.logResult("info", "(No need to uninstall {}.)".format(app_name))

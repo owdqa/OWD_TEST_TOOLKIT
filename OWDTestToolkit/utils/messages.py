@@ -36,7 +36,7 @@ class Messages(object):
         self.parent.reporting.debug("PDU_DATA: [{}]".format(pdu_data))
         if pin_type is "NONE":
             pdu_data = pdu_data[0:4] + "01b6" + pdu_data[pdu_data.index("030b6a"):]
-        self.parent.test.TEST(True, "Sending CP message to {} from file {}".format(phone_number, ota_filename))
+        self.parent.test.test(True, "Sending CP message to {} from file {}".format(phone_number, ota_filename))
 
         data = {"dataCodingScheme": "F5", "protocolId": "00", "pduType": "41", "sourcePort": 9200,
                 "destinationPort": 2948, "pduData": "{}".format(pdu_data)}
@@ -64,11 +64,11 @@ class Messages(object):
         headers = {"api_key": self.api_key, "api_secret": self.api_secret}
         pigeon = pigeonpdu.PigeonPDU()
         pdu_data = pigeon.gsm_encode(message)
-        self.parent.test.TEST(True, "PDU_DATA: {}".format(pdu_data))
+        self.parent.test.test(True, "PDU_DATA: {}".format(pdu_data))
         data = {"dataCodingScheme": "F{}".format(clazz), "protocolId": "00", "pduType": "01", "sourcePort": 9200,
                 "destinationPort": 2948, "pduData": "{}".format(pdu_data)}
         payload = {"to": ["tel:{}".format(phone_number)], "binaryMessage": data}
-        self.parent.test.TEST(True, "Binary message data: {}".format(data))
+        self.parent.test.test(True, "Binary message data: {}".format(data))
         return self.send_and_check(headers, payload, "binary SMS Class {}".format(clazz))
 
     def create_incoming_wap_push(self, phone_number, typ, wap_url, message="", action='signal-medium'):
@@ -83,7 +83,7 @@ class Messages(object):
         headers = {"api_key": self.api_key, "api_secret": self.api_secret}
         pigeon = pigeonpdu.PigeonPDU()
         pdu_data = pigeon.generate_wap_push_pdu(typ, wap_url, message)
-        self.parent.test.TEST(True, "PDU_DATA: {}".format(binascii.hexlify(pdu_data)))
+        self.parent.test.test(True, "PDU_DATA: {}".format(binascii.hexlify(pdu_data)))
         data = {"dataCodingScheme": "F5", "protocolId": "00", "pduType": "41", "sourcePort": 9200,
                 "destinationPort": 2948, "pduData": "{}".format(binascii.hexlify(pdu_data))}
         payload = {"to": ["tel:{}".format(phone_number)], "binaryMessage": data}
@@ -93,7 +93,7 @@ class Messages(object):
     def send_and_check(self, headers, payload, typ):
         response = requests.post(self.url, headers=headers, data=json.dumps(payload))
         result = response.status_code == requests.codes.created
-        self.parent.test.TEST(result, "The {} message could {}be sent. Status code: {}. Body: {}".
+        self.parent.test.test(result, "The {} message could {}be sent. Status code: {}. Body: {}".
                               format(typ, "not " if not result else "", response.status_code, response.text))
         return result
 

@@ -38,7 +38,7 @@ class OMACP(object):
         self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
 
         x = self.UTILS.element.getElement(DOM.OMACP.CP_Cancel_Message, "Cancel Message")
-        self.UTILS.test.TEST(x.text == "The message has not been processed yet, do you really want to quit?",
+        self.UTILS.test.test(x.text == "The message has not been processed yet, do you really want to quit?",
                         "Cancel Message Text")
 
         x = self.UTILS.element.getElement(DOM.OMACP.CP_Quit_Button, "Quit button")
@@ -101,7 +101,7 @@ class OMACP(object):
         x.tap()
 
         x = self.UTILS.element.getElement(DOM.OMACP.CP_OTA_Message, "Message")
-        self.UTILS.test.TEST(x, "Stored OTA message")
+        self.UTILS.test.test(x, "Stored OTA message")
 
         x = self.UTILS.element.getElement(DOM.OMACP.CP_Finish_Button, "Finish button")
         x.tap()
