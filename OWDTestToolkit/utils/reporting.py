@@ -117,6 +117,7 @@ class reporting(object):
                 TEST RESULT
                 </div>
                 <div id="general-info" class="highlighted-box">
+                    <div class="title"> Test info </div>
                     <div id="test-number-container">
                         <span class="label">Test number:</span>
                         <span id="test-number">{0}</span>
@@ -138,7 +139,7 @@ class reporting(object):
                     </div>
                 </div>
                 <div id="logs" class="highlighted-box">
-                    <div class="logs-title">Logs</div>
+                    <div class="title">Logs</div>
                     <ul id="logs-list"></ul>
                 </div>
             </body>

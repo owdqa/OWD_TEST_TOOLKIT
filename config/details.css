@@ -47,6 +47,10 @@ body {
     color: #3A3333;
     text-align: center;
 }
+.title {
+    text-align: center;
+    font-weight: bold;
+}
 
 /* General info container*/
 
@@ -62,10 +66,6 @@ body {
 }
 
 /* Logs container */
-#logs .logs-title {
-    text-align: center;
-    font-weight: bold;
-}
 ul#logs-list{
     list-style-type: none;
 }

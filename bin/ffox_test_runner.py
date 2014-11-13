@@ -42,9 +42,9 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         else:
             description = "Description not available..."
             
-#         if test_num in self.blocked:
-#             description = "[BLOCKED] " + self.blocked[test_num][:desc_len] + "..."
-#             expected = "KNOWN-FAIL"
+        if test_num in self.blocked_tests:
+            description = "[BLOCKED] " + self.blocked_tests[test_num][:desc_len] + "..."
+            expected = "KNOWN-FAIL"
         
         sys.stdout.write("{}: {:100s} ".format(test_num, description))
         sys.stdout.flush()
@@ -266,7 +266,11 @@ class Main():
             # TODO: look if there's another way of getting the test_number
             test_number = re.search('test_(\d+).*$', result.tests.next().test_name).group(1)
             detail_file_path = "{}/{}_detail.html".format(self.runner.testvars['RESULT_DIR'], test_number)
-            detail_file = open(detail_file_path)
+            
+            try:
+                detail_file = open(detail_file_path)
+            except IOError:
+                return 
             
             soup = BeautifulSoup(detail_file)
             detail_file.close()
