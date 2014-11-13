@@ -9,7 +9,7 @@ class debug(object):
     def __init__(self, parent):
         self.parent = parent
         self.errNum = parent.errNum
-        self.testNum = parent.testNum
+        self.test_num = parent.test_num
         self.marionette = parent.marionette
 
     def getStackTrace(self):
@@ -62,7 +62,7 @@ class debug(object):
         # Build the error filename.
         #
         self.errNum = self.errNum + 1
-        fnam = self.testNum + "_" + str(self.errNum)
+        fnam = self.test_num + "_" + str(self.errNum)
 
         #
         # Record the screenshot.
@@ -79,4 +79,4 @@ class debug(object):
         except:
             htmlDump = "(Unable to dump html for this page: possible Marionette issue.)"
 
-        return (htmlDump, screenDump)
+        return [htmlDump, screenDump]
