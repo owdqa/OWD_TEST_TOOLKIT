@@ -39,7 +39,7 @@ class test(object):
         # If we don't want an exception to be raised at this point,
         # then we should use os._exit().
         #
-        os._exit(1)
+        # os._exit(1)
 
     def test(self, result, msg, stop_on_error=False):
         #

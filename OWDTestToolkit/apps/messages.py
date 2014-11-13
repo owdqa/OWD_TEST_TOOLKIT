@@ -242,7 +242,7 @@ class Messages(object):
         except:
             return 0
 
-    def createAndSendMMS(self, attached_type, nums, m_text):
+    def create_and_send_mms(self, attached_type, nums, m_text):
 
         self.gallery = Gallery(self.parent)
         self.video = Video(self.parent)
@@ -274,7 +274,7 @@ class Messages(object):
             #
             self.UTILS.general.add_file_to_device('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
 
-            self.createMMSImage()
+            self.create_mms_image()
             self.gallery.click_on_thumbnail_at_position_mms(0)
 
             self.sendSMS()
@@ -282,7 +282,7 @@ class Messages(object):
             #
             # Add an image file from camera
             #
-            self.createMMSCameraImage()
+            self.create_mms_camera_image()
             time.sleep(3)
             self.sendSMS()
         elif attached_type == "video":
@@ -291,7 +291,7 @@ class Messages(object):
             #
             self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
 
-            self.createMMSVideo()
+            self.create_mms_video()
             self.video.click_on_video_at_position_mms(0)
             self.sendSMS()
         elif attached_type == "audio":
@@ -300,7 +300,7 @@ class Messages(object):
             #
             self.UTILS.general.add_file_to_device('./tests/_resources/AMR.amr', destination='/SD/mus')
 
-            self.createMMSMusic()
+            self.create_mms_music()
             self.music.click_on_song_mms()
 
             self.sendSMS()
@@ -308,9 +308,9 @@ class Messages(object):
             # self.UTILS.reporting.logResult("info", "incorrect value received")
             msg = "FAILED: Incorrect parameter received in createAndSendMMS()"\
                 ". attached_type must being image, video or audio."
-            self.UTILS.test.quit_test(msg)
+            self.UTILS.test.test(False, msg)
 
-    def createAndSendSMS(self, nums, msg):
+    def create_and_send_sms(self, nums, msg):
         #
         # Create and send a new SMS.<br>
         # <b>Note:</b> The nums field must be an array of numbers
@@ -343,7 +343,7 @@ class Messages(object):
         #
         self.sendSMS()
 
-    def createMMSImage(self):
+    def create_mms_image(self):
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
         attach.tap()
@@ -355,7 +355,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
 
-    def createMMSCameraImage(self):
+    def create_mms_camera_image(self):
         self.camera = Camera(self.parent)
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
@@ -375,7 +375,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
-    def createMMSMusic(self):
+    def create_mms_music(self):
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
         attach.tap()
@@ -387,7 +387,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Music.frame_locator)
 
-    def createMMSVideo(self):
+    def create_mms_video(self):
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
         attach.tap()
@@ -399,7 +399,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Video.frame_locator)
 
-    def deleteAllThreads(self):
+    def delete_all_threads(self):
         #
         # Deletes all threads (assumes the messagin app is already open).
         #
@@ -501,7 +501,7 @@ class Messages(object):
                 self.UTILS.reporting.debug("*** Threads selected")
                 self.deleteSelectedThreads()
             else:
-                self.deleteAllThreads()
+                self.delete_all_threads()
 
     def editAndSelectMessages(self, msg_array):
         #
@@ -704,7 +704,7 @@ class Messages(object):
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quit_test()
+            self.UTILS.test.test(False, "Incorrect value received")
 
         self.addNumbersInToField([target_telNum])
 
@@ -733,7 +733,7 @@ class Messages(object):
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quit_test()
+            self.UTILS.test.test(False, "Incorrect value received")
 
         # Search for the contact and check it's been added
         self.addContactToField(contact_name)
@@ -761,7 +761,7 @@ class Messages(object):
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quit_test()
+            self.UTILS.test.test(False, "Incorrect value received")
 
         # Add phone numbers
         self.addNumbersInToField([target_telNum])
@@ -879,7 +879,9 @@ class Messages(object):
         # Returns an object of the last message in the current thread.
         #
         self.parent.wait_for_element_present(*DOM.Messages.last_message, timeout=20)
-        return self.marionette.find_element(*DOM.Messages.last_message)
+        message = self.marionette.find_element(*DOM.Messages.last_message)
+        self.UTILS.element.scroll_into_view(message)
+        return message
 
     def last_sent_message_timestamp(self):
         """Returns the timestamp of the last sent message
@@ -1101,16 +1103,21 @@ class Messages(object):
             # self.UTILS.reporting.logResult("info", "incorrect value received")
             msg = "FAILED: Incorrect parameter received in verify_mms_received()"\
                 ". Attached_type must be image, video or audio."
-            self.UTILS.test.quit_test(msg)
+            self.UTILS.test.test(False, msg)
 
         self.UTILS.reporting.debug("*** searching for attachment type")
-        last = self.UTILS.element.getElement(elem, "Last message")
-        self.UTILS.element.scroll_into_view(last)
-        typ = last.get_attribute("data-attachment-type")
-        self.UTILS.reporting.debug("*** searching for attachment type Result: {}".format(typ))
-        if typ != attached_type:
-            msg = "Incorrect file type. The file must be {}, but is {} instead".format(attached_type, typ)
-            self.UTILS.test.quit_test(msg)
+        # Look for all the attachments, since there can be more than one
+        atts = self.UTILS.element.getElements(elem, "Last message attachments")
+        self.UTILS.element.scroll_into_view(atts[0])
+        found = False
+        for att in atts:
+            typ = att.get_attribute("data-attachment-type")
+            self.UTILS.reporting.debug("*** searching for attachment type Result: {}".format(typ))
+            if typ == attached_type:
+                found = True
+        if not found:
+            msg = "No attachment with type {} was found in the message".format(attached_type)
+            self.UTILS.test.test(False, msg)
 
     def wait_for_message(self, send_time=None, timeout=120):
         """Wait for a received message in the current thread and return it.

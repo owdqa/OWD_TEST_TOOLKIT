@@ -7,12 +7,14 @@ import re
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
+from gaiatest.runtests import GaiaTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
 from bs4 import BeautifulSoup
 from datetime import datetime
 from gaiatest.version import __version__
+
 from OWDTestToolkit.utils.assertions import AssertionManager
 from utilities import Utilities
 
@@ -42,7 +44,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 #             description = "[BLOCKED] " + self.blocked[test_num][:desc_len] + "..."
 #             expected = "KNOWN-FAIL"
         
-        sys.stdout.write("{}: {} ".format(test_num, description))
+        sys.stdout.write("{}: {:100s} ".format(test_num, description))
         sys.stdout.flush()
 
         # TODO - erase them when deleting reportResults
@@ -90,7 +92,10 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 self.todo += len(results.expectedFailures)
 
         # Console messages - for each test, we will show the time taken to run it and the result
-        sys.stdout.write("({:.2f}s)  ({})\n".format(results.time_taken, self.get_result_msg(results)))
+        sys.stdout.write("({:.2f}s)  ({}) (assertions: {}/{})\n".\
+                         format(results.time_taken, self.get_result_msg(results),
+                                OWDMarionetteTestRunner.assertion_manager.get_passed(),
+                                OWDMarionetteTestRunner.assertion_manager.get_total()))
         results.stream.flush()
 
     def get_result_msg(self, results):
@@ -124,7 +129,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # Some initial steps going through!
         self.parse_blocked_tests_file()
         self.parse_descriptions_file()
-        Utilities.detect_device(kwargs['device_cfg'], self.testvars)
+        Utilities.detect_device(self.testvars)
 
         # We will redirect BaseMarionetteTestRunner default logger to our own logger.
         # Loggers are not directly instantiated, but created by calling loggin.getLogger.
@@ -176,6 +181,7 @@ class Main():
         self.unexpected_failures = 0
         self.expected_failures = 0
         self.assertion_manager = AssertionManager()
+        self.assertion_manager.reset()
 
     def start_test_runner(self, runner_class, options, tests):
         """
@@ -185,7 +191,10 @@ class Main():
         self.start_time = datetime.utcnow()
         runner = runner_class(**vars(options))
         runner.prepare_results()
-        runner.run_tests(tests)
+        runner.prepare_tests(tests)
+        runner.total_tests = len(runner.tests)
+        print "Running {} tests...".format(len(runner.tests))
+        runner.run_tests(runner.tests)
         self.end_time = datetime.utcnow()
         return runner
 
@@ -288,9 +297,12 @@ class Main():
 
         # Preprocess
         parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
+
         parser.add_option('--device_cfg', action='store', dest='device_cfg',
                         help='file with the devices specific configuration, such as the location of the SD card')
+
         options, tests = parser.parse_args(self.args)
+
         parser.verify_usage(options, tests)
 
         # Hit the runner
