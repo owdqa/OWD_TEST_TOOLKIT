@@ -110,6 +110,7 @@ class reporting(object):
         <html>
             <head>
                 <title>{0}: Test Detail</title>
+                <link rel="stylesheet" type="text/css" href="details.css">
             </head>
             <body>
                 <div id="main-title">

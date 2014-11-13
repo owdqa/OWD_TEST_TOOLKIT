@@ -26,7 +26,7 @@
 "GLOBAL_LONG_WAIT_TIME": "36",
 "GLOBAL_SHORT_WAIT_TIME": "18",
 "GLOBAL_USBLT_WAIT_TIME": "72",
-"OWD_XREF_FILE": "/home/develenv/projects/owd_test_cases/Docs/xref_tests_table.txt",
+"OWD_XREF_FILE": "/home/alberto/OWD/owd_test_cases/Docs/xref_tests_table.txt",
 "OWD_USE_2ND_CHANCE": "Y",
 "T19180_FB_LINK_EMAIL_ADDRESS": "roytesterton.2@gmail.com",
 "T19180_FB_PASSWORD": "test123x",
