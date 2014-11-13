@@ -37,7 +37,7 @@ class test(object):
         #
         os._exit(1)
 
-    def TEST(self, result, msg, stop_on_error=False):
+    def test(self, result, msg, stop_on_error=False):
         #
         # Test that result is true.
         #
