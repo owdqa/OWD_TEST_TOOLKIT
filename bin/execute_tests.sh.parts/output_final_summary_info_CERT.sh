@@ -3,7 +3,7 @@
 # (for CERT device)
 #
 export DEVICE_cert="cert_device"
-export BRANCH_cert="v2.0"
+export BRANCH_cert="v2.1"
 export DEVICE_BUILDNAME_cert="cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
 
 
