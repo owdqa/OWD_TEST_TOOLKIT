@@ -1,18 +1,19 @@
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
-from gaiatest.runtests import GaiaTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
+from OWDTestToolkit.utils.assertions import AssertionManager
+from bs4 import BeautifulSoup
 from datetime import datetime
-from pyquery import PyQuery as pq
 import sys
 sys.path.insert(1, "../")
 import os
 import unittest
 import json
+import re
 from gaiatest.version import __version__
-from OWDTestToolkit.utils.assertions import AssertionManager
+
 import logging.config
 
 
@@ -48,27 +49,33 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         This method is responsible of running a single test.
         We've overrun it in order to perform some tasks belonging to OWD initiative.
         """
-        #
+        #######################################################################
         # Previous operations
-        #
+        #######################################################################
         idx = filepath.rindex('test_')
         # + 5: to skip the "test_" part
         # - 3: to remove the .py extension"""
         test_num = filepath[idx + 5:-3]
+        
+        desc_len = int(self.testvars['description_length'])    
         if test_num in self.descriptions:
-            desc_len = int(self.testvars['description_length'])
             description = self.descriptions[test_num][:desc_len] + "..."
         else:
             description = "Description not available..."
+            
+#         if test_num in self.blocked:
+#             description = "[BLOCKED] " + self.blocked[test_num][:desc_len] + "..."
+#             expected = "KNOWN-FAIL"
+        
         sys.stdout.write("{}: {} ".format(test_num, description))
         sys.stdout.flush()
 
         # TODO - erase them when deleting reportResults
         self.testvars['TEST_NUM'] = test_num
-        self.testvars['DET_FILE'] = test_num + "_detail"
-        self.testvars['SUM_FILE'] = test_num + "_summary"
 
-        # Parent method -> start
+        #######################################################################
+        # Parent method
+        #######################################################################
         self.logger.info('TEST-START %s' % os.path.basename(filepath))
 
         testloader = unittest.TestLoader()
@@ -235,7 +242,7 @@ class Main():
             result_values = [len(getattr(result, name)) for name in result_attrs]
             map(self.update_attr, own_attrs, result_values)
 
-        self.total = sum([getattr(self, own_attr) for own_attr in own_attrs])
+        self.total = len(self.runner.results)
 
     @property
     def _console_separator(self):
@@ -260,9 +267,47 @@ class Main():
         print
 
     def edit_html_results(self):
-        # By convention, Pyquery instantation is assigned to a variable called 'd'
-        d = pq(self.testvars['html_output'])
-
+        results_file = open(self.runner.testvars['html_output'])
+        soup = BeautifulSoup(results_file)
+        results_file.close()
+    
+        test_nums = [re.search('^test_(\d+).*$', testname.string.strip()).group(1) for testname in soup.find_all("td", class_="col-class")]
+        col_links = soup.find_all("td", class_="col-links")
+        i = 0
+        for link in col_links:
+            detail_tag = soup.new_tag("a", href="details/{}_detail.html".format(test_nums[i]), class_="details", target="_blank")
+            detail_tag.string = "Details"
+            link.append(detail_tag)
+            i += 1
+        
+        results_file = open(self.runner.testvars['html_output'], 'w')
+        results_file.write(soup.prettify("utf-8"))
+        results_file.close()
+        
+    def edit_test_details(self):
+        for result in self.runner.results:
+            # TODO: look if there's another way of getting the test_number
+            test_number = re.search('test_(\d+).*$', result.tests.next().test_name).group(1)
+            detail_file_path = "{}/{}_detail.html".format(self.runner.testvars['RESULT_DIR'], test_number)
+            detail_file = open(detail_file_path)
+            
+            soup = BeautifulSoup(detail_file)
+            detail_file.close()
+            
+            description_tag = soup.find("p", id='test-description')
+            description_tag.string = self.runner.descriptions[test_number]
+            duration_tag = soup.find("p", id='duration')
+            duration_tag.string = "{:.2f}".format(result.time_taken)
+            result_tag = soup.find("div", id="result-container")
+            test_result = self.runner.get_result_msg(result).strip()
+            new_tag = soup.new_tag("p", id="result", **{'class': test_result.replace(" ", "-")})
+            new_tag.string = test_result
+            result_tag.append(new_tag)
+            
+            detail_file = open(detail_file_path, "w")
+            detail_file.write(soup.prettify())
+            detail_file.close()
+            
     def run(self):
         """
         Custom runner for OWD initiative
@@ -280,8 +325,10 @@ class Main():
         # Hit the runner
         self.runner = self.start_test_runner(self.runner_class, options, tests)
 
-        # Show the results via console
+        # Show the results via console and prepare the details
         self.process_runner_results()
+        self.edit_html_results()
+        self.edit_test_details()
         self.display_results()
 
 if __name__ == "__main__":
