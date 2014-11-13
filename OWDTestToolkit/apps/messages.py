@@ -119,7 +119,7 @@ class Messages(object):
         returnedSMS = self.last_message_in_this_thread()
         dom = DOM.Messages.last_message_mms_text if mms else DOM.Messages.last_message_text
         returnedSMS_text = self.marionette.find_element(*dom, id=returnedSMS.id)
-        self.UTILS.test.TEST((returnedSMS_text and returnedSMS_text.text == expected),
+        self.UTILS.test.test((returnedSMS_text and returnedSMS_text.text == expected),
                              "Expected SMS text = '{}' ({}) (got '{}' ({})).".
                              format(expected, len(expected), returnedSMS_text.text, len(returnedSMS_text.text)))
 
@@ -140,7 +140,7 @@ class Messages(object):
 
         testMsg = "is" if targetIsPresent else "is not"
         testMsg = "\"" + str(target) + "\" " + testMsg + " in the 'To:' field."
-        self.UTILS.test.TEST(boolOK == targetIsPresent, testMsg)
+        self.UTILS.test.test(boolOK == targetIsPresent, testMsg)
         return boolOK
 
     def checkMMSIcon(self, thread_name):
@@ -164,7 +164,7 @@ class Messages(object):
         #
         icon = thread.find_element(*DOM.Messages.mms_icon)
         if icon:
-            self.UTILS.test.TEST(icon is not None, "MMS icon detected for thread [{}]".format(thread_name))
+            self.UTILS.test.test(icon is not None, "MMS icon detected for thread [{}]".format(thread_name))
 
     def checkNumberIsInToField(self, target):
         #
@@ -182,7 +182,7 @@ class Messages(object):
                 boolOK = True
                 break
 
-        self.UTILS.test.TEST(boolOK,
+        self.UTILS.test.test(boolOK,
                              "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
         return boolOK
 
@@ -196,7 +196,7 @@ class Messages(object):
         if x.get_attribute("data-number") == header:
             boolOK = True
 
-        self.UTILS.test.TEST(boolOK, "\"" + str(header) + "\" is the header in the SMS conversation.")
+        self.UTILS.test.test(boolOK, "\"" + str(header) + "\" is the header in the SMS conversation.")
         return boolOK
 
     def checkThreadHeaderWithNameSurname(self, header):
@@ -210,7 +210,7 @@ class Messages(object):
         if x.text == header:
             boolOK = True
 
-        self.UTILS.test.TEST(boolOK, "\"" + header + "\" is the header in the SMS conversation.")
+        self.UTILS.test.test(boolOK, "\"" + header + "\" is the header in the SMS conversation.")
         return boolOK
 
     def closeThread(self):
@@ -564,7 +564,7 @@ class Messages(object):
         #
         header = self.UTILS.element.getElement(DOM.Messages.edit_threads_header, "Edit threads header").text
         expected_title = str(len(target_array)) if len(target_array) else _("Delete messages")
-        self.UTILS.test.TEST(expected_title in header, "Check that all desired threads have been selected")
+        self.UTILS.test.test(expected_title in header, "Check that all desired threads have been selected")
 
     def enterSMSMsg(self, msg, not_keyboard=True):
         #
@@ -585,7 +585,7 @@ class Messages(object):
         #
         x = self.UTILS.element.getElement(DOM.Messages.input_message_area,
                                           "Input message area (for validation)")
-        self.UTILS.test.TEST(x.text == msg,
+        self.UTILS.test.test(x.text == msg,
                              "The text in the message area is as expected." +
                              "|EXPECTED: '" + msg + "'" +
                              "|ACTUAL  : '" + x.text + "'")
@@ -625,7 +625,7 @@ class Messages(object):
                     except:
                         boolKBD = False
 
-                    self.UTILS.test.TEST(
+                    self.UTILS.test.test(
                         boolKBD, "Keyboard is displayed when 'To' field is clicked for the first time")
 
                 self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
@@ -1085,7 +1085,7 @@ class Messages(object):
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
         self.openThread(sender_number)
         message = self.last_message_in_this_thread()
-        self.UTILS.test.TEST(message, "A received message appeared in the thread.", True)
+        self.UTILS.test.test(message, "A received message appeared in the thread.", True)
 
         self.UTILS.reporting.debug("*** attached type: {}".format(attached_type))
         if attached_type == "img":
@@ -1148,5 +1148,5 @@ class Messages(object):
             # Nope - sleep then try again.
             time.sleep(poll_time)
 
-        self.UTILS.test.TEST(result, "Last message in thread 'received' within {} seconds.".format(timeout))
+        self.UTILS.test.test(result, "Last message in thread 'received' within {} seconds.".format(timeout))
         return result
