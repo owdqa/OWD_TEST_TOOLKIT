@@ -63,13 +63,13 @@
 "NOWSMS_PASS": "qa",
 "GLOBAL_FXA_USER": "owdqa@hotmail.es",
 "GLOBAL_FXA_PASS": "12345678",
-"RESULT_DIR": "/tmp/tests/test_123",
+"RESULT_DIR": "/tmp/tests/details",
 "html_output": "/tmp/tests/results.html",
-"error_output": "/tmp/tests/test_123/error.txt",
+"error_output": "/tmp/tests/error.txt",
 "log_path": "/tmp/tests/tests.log",
 "verbosity":"3",
-"test_descriptions": "Docs/test_descriptions",
-"blocked_tests": "Docs/blocked_tests",
+"test_descriptions": "Docs/test_descriptions.json",
+"blocked_tests": "Docs/blocked_tests.json",
 "description_length": "120",
-"devices_cfg": "../config/devices_cfg.json"
+"devices_cfg": "../OWD_TEST_TOOLKIT/config/devices_cfg.json"
 }
