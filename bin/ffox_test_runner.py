@@ -35,7 +35,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         # + 5: to skip the "test_" part
         # - 3: to remove the .py extension"""
         test_num = filepath[idx + 5:-3]
-
+        
         desc_len = int(self.testvars['description_length'])
         if test_num in self.descriptions:
             description = self.descriptions[test_num][:desc_len] + "..."
@@ -251,7 +251,7 @@ class Main():
         soup = BeautifulSoup(results_file)
         results_file.close()
 
-        test_nums = [re.search('^test_(\d+).*$', testname.string.strip()).group(1)
+        test_nums = [re.search('^test_(.*).*$', testname.string.strip()).group(1)
                      for testname in soup.find_all("td", class_="col-class")]
         col_links = soup.find_all("td", class_="col-links")
         i = 0
@@ -269,7 +269,7 @@ class Main():
     def edit_test_details(self):
         for result in self.runner.results:
             # TODO: look if there's another way of getting the test_number
-            test_number = re.search('test_(\d+).*$', result.tests.next().test_name).group(1)
+            test_number = re.search('test_(.*).*$', result.tests.next().test_name).group(1)
             detail_file_path = "{}/{}_detail.html".format(self.runner.testvars['RESULT_DIR'], test_number)
 
             try:
