@@ -1,9 +1,12 @@
 import json
 import os
-
+import re
 
 class Utilities():
-
+    @staticmethod
+    def get_test_id(string):
+        return re.search('^test_(\w+)', string).group(1)
+    
     @staticmethod
     def parse_file(file_name):
         """ Generic JSON parser.
