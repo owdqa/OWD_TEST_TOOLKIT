@@ -1,23 +1,8 @@
 import json
 import os
-import subprocess
 
 
 class Utilities():
-
-    #===========================================================================
-    # @staticmethod
-    # def get_storage(devices_cfg_file):
-    #    """
-    #    Returns the multimedia path for the currently DuT connected to the PC
-    #    """
-    #    current_dut = os.popen("adb shell grep ro.product.name /system/build.prop").read().split("=")[-1].rstrip()
-    #    devices_map = Utilities.parse_file(devices_cfg_file)
-    #    if current_dut in devices_map:
-    #        return devices_map.get(current_dut)
-    #    else:
-    #        return devices_map.get("generic")
-    #===========================================================================
 
     @staticmethod
     def parse_file(file_name):
@@ -39,7 +24,8 @@ class Utilities():
         Utilities.connect_device()
 
         current_dut = os.popen("adb shell grep ro.product.name /system/build.prop").read().split("=")[-1].rstrip()
-        devices_map = Utilities.parse_file(testvars["devices_cfg"])
+        devices_path = "{}/{}".format(testvars['toolkit_location'], testvars['toolkit_cfg']['devices_cfg'])
+        devices_map = Utilities.parse_file(devices_path)
 
         if not current_dut in devices_map:
             print "No specific section for device [{}] was found. Falling down to [generic] device options.".\

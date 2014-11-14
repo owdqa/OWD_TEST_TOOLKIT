@@ -20,9 +20,9 @@ from utilities import Utilities
 
 
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
-    
+
     assertion_manager = AssertionManager()
-    
+
     def run_test(self, filepath, expected, oop):
         """
         This method is responsible of running a single test.
@@ -35,18 +35,18 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         # + 5: to skip the "test_" part
         # - 3: to remove the .py extension"""
         test_num = filepath[idx + 5:-3]
-        
-        desc_len = int(self.testvars['description_length'])    
+
+        desc_len = int(self.testvars['description_length'])
         if test_num in self.descriptions:
             description = self.descriptions[test_num][:desc_len] + "..."
         else:
             description = "Description not available..."
-            
+
         if test_num in self.blocked_tests:
             description = "[BLOCKED] " + self.blocked_tests[test_num][:desc_len] + "..."
             expected = "fail"
-        
-        sys.stdout.write("{}: {:100s} ".format(test_num, description))
+
+        sys.stdout.write("{}: {:120s} ".format(test_num, description))
         sys.stdout.flush()
 
         # TODO - erase them when deleting reportResults
@@ -94,7 +94,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 self.todo += len(results.expectedFailures)
 
         # Console messages - for each test, we will show the time taken to run it and the result
-        sys.stdout.write("({:.2f}s)  ({}) (assertions: {}/{})\n".\
+        sys.stdout.write("({:.2f}s)  {:20s} (assertions: {}/{})\n".\
                          format(results.time_taken, self.get_result_msg(results),
                                 OWDMarionetteTestRunner.assertion_manager.get_passed(),
                                 OWDMarionetteTestRunner.assertion_manager.get_total()))
@@ -103,17 +103,17 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
     def get_result_msg(self, results):
         result_msg = None
         if len(results.errors) > 0:
-            result_msg = "automation fail"
+            result_msg = "(automation fail)"
         elif len(results.failures) > 0:
-            result_msg = "failed"
+            result_msg = "(failed)"
         elif len(results.skipped) > 0:
-            result_msg = "skipped"
+            result_msg = "(skipped)"
         elif len(results.unexpectedSuccesses) > 0:
-            result_msg = "unblock?"
+            result_msg = "(unblock?)"
         elif len(results.expectedFailures) > 0:
-            result_msg = "blocked"
+            result_msg = "(blocked)"
         else:
-            result_msg = "passed"
+            result_msg = "(passed)"
         return result_msg
 
 
@@ -131,16 +131,10 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # Some initial steps going through!
         self.parse_blocked_tests_file()
         self.parse_descriptions_file()
-        self.prepare_results()
+        # Store the toolkit location to infer the location of some files relative to it, such as
+        # the devices config or the css template
+        self.testvars['toolkit_location'] = kwargs['toolkit_location']
         Utilities.detect_device(self.testvars)
-
-        # We will redirect BaseMarionetteTestRunner default logger to our own logger.
-        # Loggers are not directly instantiated, but created by calling loggin.getLogger.
-        # Multiple calls to getLogger with the same name will point to the same logger
-        # reference
-        config_file = self.testvars['OWD_LOG_CFG']
-        logging.config.fileConfig(config_file)
-        self.logger = logging.getLogger('OWDTestToolkit')
 
         GaiaTestRunnerMixin.__init__(self, **kwargs)
         HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__,
@@ -162,8 +156,15 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
 
         def _initialize_file(file_path):
             with open(file_path, 'w') as f:
-                f.write('')
                 f.close()
+
+        # We will redirect BaseMarionetteTestRunner default logger to our own logger.
+        # Loggers are not directly instantiated, but created by calling loggin.getLogger.
+        # Multiple calls to getLogger with the same name will point to the same logger
+        # reference
+        config_file = self.testvars['OWD_LOG_CFG']
+        logging.config.fileConfig(config_file)
+        self.logger = logging.getLogger('OWDTestToolkit')
 
         files = [self.testvars['html_output'], self.testvars['error_output'], self.testvars["log_path"]]
         map(_initialize_file, files)
@@ -193,6 +194,7 @@ class Main():
         """
         self.start_time = datetime.utcnow()
         runner = runner_class(**vars(options))
+        runner.prepare_results()
         runner.run_tests(tests)
         self.end_time = datetime.utcnow()
         return runner
@@ -248,34 +250,36 @@ class Main():
         results_file = open(self.runner.testvars['html_output'])
         soup = BeautifulSoup(results_file)
         results_file.close()
-    
-        test_nums = [re.search('^test_(\d+).*$', testname.string.strip()).group(1) for testname in soup.find_all("td", class_="col-class")]
+
+        test_nums = [re.search('^test_(\d+).*$', testname.string.strip()).group(1)
+                     for testname in soup.find_all("td", class_="col-class")]
         col_links = soup.find_all("td", class_="col-links")
         i = 0
         for link in col_links:
-            detail_tag = soup.new_tag("a", href="details/{}_detail.html".format(test_nums[i]), class_="details", target="_blank")
+            detail_tag = soup.new_tag("a", href="details/{}_detail.html".format(test_nums[i]),
+                                      class_="details", target="_blank")
             detail_tag.string = "Details"
             link.append(detail_tag)
             i += 1
-        
+
         results_file = open(self.runner.testvars['html_output'], 'w')
         results_file.write(soup.prettify("utf-8"))
         results_file.close()
-        
+
     def edit_test_details(self):
         for result in self.runner.results:
             # TODO: look if there's another way of getting the test_number
             test_number = re.search('test_(\d+).*$', result.tests.next().test_name).group(1)
             detail_file_path = "{}/{}_detail.html".format(self.runner.testvars['RESULT_DIR'], test_number)
-            
+
             try:
                 detail_file = open(detail_file_path)
             except IOError:
-                return 
-            
+                return
+
             soup = BeautifulSoup(detail_file)
             detail_file.close()
-            
+
             description_tag = soup.find("span", id='test-description')
             description_tag.string = self.runner.descriptions[test_number]
             duration_tag = soup.find("span", id='duration')
@@ -285,14 +289,16 @@ class Main():
             new_tag = soup.new_tag("span", id="result", **{'class': test_result.replace(" ", "-")})
             new_tag.string = test_result
             result_tag.append(new_tag)
-            
+
             detail_file = open(detail_file_path, "w")
             detail_file.write(soup.prettify())
             detail_file.close()
-            
+
             # Copy the css file
-            shutil.copy(self.runner.testvars['css_file'], self.runner.testvars['RESULT_DIR'])
-            
+            css_path = "{}/{}".format(self.runner.testvars['toolkit_location'],
+                                      self.runner.testvars['toolkit_cfg']['css_file'])
+            shutil.copy(css_path, self.runner.testvars['RESULT_DIR'])
+
     def run(self):
         """
         Custom runner for OWD initiative
@@ -304,13 +310,11 @@ class Main():
 
         # Preprocess
         parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
-
-        parser.add_option('--device_cfg', action='store', dest='device_cfg',
-                        help='file with the devices specific configuration, such as the location of the SD card')
-
-        options, tests = parser.parse_args(self.args)
-
+        options, tests = parser.parse_args(self.args[1:])
         parser.verify_usage(options, tests)
+
+        location = self.parse_toolkit_location(self.args)
+        options.toolkit_location = location
 
         # Hit the runner
         self.runner = self.start_test_runner(self.runner_class, options, tests)
@@ -321,5 +325,10 @@ class Main():
         self.edit_test_details()
         self.display_results()
 
+    def parse_toolkit_location(self, args):
+        path = args[0]
+        index = path.find('/bin/ffox_test_runner.py')
+        return path[:index]
+
 if __name__ == "__main__":
-    Main(sys.argv[1:]).run()
+    Main(sys.argv).run()
