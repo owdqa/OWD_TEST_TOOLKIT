@@ -44,7 +44,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             
         if test_num in self.blocked_tests:
             description = "[BLOCKED] " + self.blocked_tests[test_num][:desc_len] + "..."
-            expected = "KNOWN-FAIL"
+            expected = "fail"
         
         sys.stdout.write("{}: {:100s} ".format(test_num, description))
         sys.stdout.flush()
@@ -131,6 +131,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # Some initial steps going through!
         self.parse_blocked_tests_file()
         self.parse_descriptions_file()
+        self.prepare_results()
         Utilities.detect_device(self.testvars)
 
         # We will redirect BaseMarionetteTestRunner default logger to our own logger.
@@ -192,7 +193,6 @@ class Main():
         """
         self.start_time = datetime.utcnow()
         runner = runner_class(**vars(options))
-        runner.prepare_results()
         runner.run_tests(tests)
         self.end_time = datetime.utcnow()
         return runner
@@ -236,6 +236,7 @@ class Main():
         print "Automation failures\t\t\t\t\t: {}".format(self.automation_failures)
         print "Test cases passed\t\t\t\t\t: {} / {}".format(self.passed, self.total)
         print "Unexpected failures\t\t\t\t\t: {}".format(self.unexpected_failures)
+        print "Unexpected passes\t\t\t\t\t: {}".format(self.unexpected_passed)
         print "Skipped tests\t\t\t\t\t\t: {}".format(self.skipped)
         print "Expected failures\t\t\t\t\t: {}".format(self.expected_failures)
         print "Passes/Total assertions\t\t\t\t\t: {} / {}".format(self.assertion_manager.accum_passed,
