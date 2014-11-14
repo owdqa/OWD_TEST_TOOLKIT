@@ -49,8 +49,8 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         sys.stdout.write("{}: {:120s} ".format(test_num, description))
         sys.stdout.flush()
 
-        # TODO - erase them when deleting reportResults
-        self.testvars['TEST_NUM'] = test_num
+#         # TODO - erase them when deleting reportResults
+#         self.testvars['TEST_NUM'] = test_num
 
         # Parent method -> start
         self.logger.info('TEST-START %s' % os.path.basename(filepath))
@@ -245,13 +245,20 @@ class Main():
                                                                   self.assertion_manager.accum_total)
         print self._console_separator
         print
+        sys.stdout.write("TESTS FAILED: ")
+        for result in self.runner.results:
+            failures = result.failures + result.errors
+            for failure in failures:
+                sys.stdout.write("{} ".format(Utilities.get_test_id(result.getInfo(failure))))
+        sys.stdout.flush()
+        print
 
     def edit_html_results(self):
         results_file = open(self.runner.testvars['html_output'])
         soup = BeautifulSoup(results_file)
         results_file.close()
 
-        test_nums = [re.search('^test_(.*).*$', testname.string.strip()).group(1)
+        test_nums = [Utilities.get_test_id(testname.string.strip())
                      for testname in soup.find_all("td", class_="col-class")]
         col_links = soup.find_all("td", class_="col-links")
         i = 0
@@ -269,7 +276,7 @@ class Main():
     def edit_test_details(self):
         for result in self.runner.results:
             # TODO: look if there's another way of getting the test_number
-            test_number = re.search('test_(.*).*$', result.tests.next().test_name).group(1)
+            test_number = Utilities.get_test_id(result.tests.next().test_name)
             detail_file_path = "{}/{}_detail.html".format(self.runner.testvars['RESULT_DIR'], test_number)
 
             try:
