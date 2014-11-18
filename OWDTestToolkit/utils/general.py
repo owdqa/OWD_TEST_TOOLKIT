@@ -207,18 +207,6 @@ class general(object):
 
             input_elem.send_keys(p_str)
 
-            #
-            # There's a weird 'quirk' in Marionette just now:
-            # if you send_keys() an underscore ("_") then the
-            # screen is locked. No idea who thought that was a
-            # good idea, but it seems it's here to stay, so unlock()
-            # if necessary.
-            #
-            if "_" in p_str:
-                self.parent.parent.device.unlock()
-                self.marionette.switch_to_frame()
-                self.parent.iframe.switchToFrame("src", orig_frame)
-
         else:
             #
             # Tap the element to get the keyboard to popup.
