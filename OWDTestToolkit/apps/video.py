@@ -63,7 +63,9 @@ class Video(object):
         @param  int     position            thumbnail to click 
         @param  tuple   frame_to_change     frame to switch once the image has been cropped
         """
-        all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails_thumbs, "Videos")
+        self.parent.wait_for_element_displayed(*DOM.Video.thumbnails_thumbs)
+        time.sleep(3)
+        all_videos = self.marionette.find_elements(*DOM.Video.thumbnails_thumbs)
         my_video = all_videos[position]
         my_video.tap()
 
