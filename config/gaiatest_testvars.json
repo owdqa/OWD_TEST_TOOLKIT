@@ -75,5 +75,6 @@
 	"test_descriptions": "Docs/test_descriptions.json",
 	"blocked_tests": "Docs/blocked_tests.json",
 	"description_length": "100",
-	"smsc_number": "+34609090909"
+	"smsc_number": "+34609090909",
+	"test_retries": 2
 }

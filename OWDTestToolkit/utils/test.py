@@ -1,4 +1,3 @@
-import os
 from assertions import AssertionManager
 
 
@@ -7,7 +6,7 @@ class test(object):
     def __init__(self, parent):
         self.parent = parent
         self.assertion_manager = AssertionManager()
-        self.assertion_manager.reset()
+        self.assertion_manager.reset_test()
         self.passed = self.assertion_manager.passed
         self.failed = self.assertion_manager.failed
 
@@ -33,13 +32,6 @@ class test(object):
         # Report the results.
         #
         self.parent.reporting.reportResults()
-
-        #
-        # By definition, sys.exit() raises a ExitValue exception.
-        # If we don't want an exception to be raised at this point,
-        # then we should use os._exit().
-        #
-        # os._exit(1)
 
     def test(self, result, msg, stop_on_error=False):
         #

@@ -76,7 +76,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
             # This will redirect the messages that will go by default to the error output to another file
             runner.stream = unittest.runner._WritelnDecorator(open(self.testvars['error_output'], 'a'))
-            while attempt < 2:
+            while attempt < self.testvars["test_retries"]:
                 results = runner.run(suite)
                 if len(results.errors) + len(results.failures) > 0:
                     attempt += 1
@@ -100,11 +100,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             if hasattr(results, 'expectedFailures'):
                 self.todo += len(results.expectedFailures)
 
-        # Console messages - for each test, we will show the time taken to run it and the result
-        sys.stdout.write("({:.2f}s)  {:20s} (assertions: {}/{})\n".\
-                         format(results.time_taken, self.get_result_msg(results),
-                                OWDMarionetteTestRunner.assertion_manager.get_passed(),
-                                OWDMarionetteTestRunner.assertion_manager.get_total()))
+        self.show_results(results)
         results.stream.flush()
 
     def get_result_msg(self, results):
@@ -122,6 +118,21 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         else:
             result_msg = "(passed)"
         return result_msg
+
+    def show_results(self, results):
+        # Console messages - for each test, we will show the time taken to run it and the result
+        hours = int(results.time_taken / 3600)
+        hours_str = "{:02}:".format(hours)
+        mins = int((results.time_taken - hours * 3600) / 60)
+        mins_str = "{:02}:".format(mins)
+        seconds = results.time_taken - (hours * 3600) - (mins * 60)
+        seconds_str = "{:02.2f}s".format(seconds)
+        time_string = "{}{}{}".format(hours_str if hours else "", \
+                                      mins_str if mins else "", seconds_str)
+        sys.stdout.write("({})  {:20s} (assertions: {}/{})\n".\
+                         format(time_string, self.get_result_msg(results),
+                                OWDMarionetteTestRunner.assertion_manager.get_passed(),
+                                OWDMarionetteTestRunner.assertion_manager.get_total()))
 
 
 class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingTestRunnerMixin):
