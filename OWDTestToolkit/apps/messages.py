@@ -886,6 +886,11 @@ class Messages(object):
         send_time = self.marionette.find_element(*DOM.Messages.last_sent_message).get_attribute("data-timestamp")
         return float(send_time) / 1000
 
+    def last_sent_message(self):
+        """Returns the last sent message
+        """
+        return self.marionette.find_element(*DOM.Messages.last_sent_message)
+
     def open_attached_file(self, frame_to_change):
         elem = DOM.Messages.last_message_attachment_av
         last = self.UTILS.element.getElement(elem, "Last message attachment")
