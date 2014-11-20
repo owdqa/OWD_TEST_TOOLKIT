@@ -20,7 +20,7 @@ class general(object):
         # Put a file onto the device (path is relative to the dir
         # you are physically in when running the tests).
         #
-        self.parent.device.push_file(file_name, count, '{}/{}'.format(self.get_config_variable("OWD_DEVICE_SDCARD", False),
+        self.parent.device.push_file(file_name, count, '{}/{}'.format(self.get_config_variable("OWD_DEVICE_SDCARD"),
                                                                       destination))
 
     def checkMarionetteOK(self):
@@ -181,7 +181,7 @@ class general(object):
         # then regardless of what you send to this method, it will never
         # use the keyboard.
         #
-        no_keyboard = self.parent.general.get_config_variable("NO_KEYBOARD", False)
+        no_keyboard = self.parent.general.get_config_variable("NO_KEYBOARD")
 
         #
         # Remember the current frame.
@@ -268,7 +268,7 @@ class general(object):
         # remove file from sdcard
         #
         destination = destination_prefix + file_name
-        file_to_remove = '{}/{}'.format(self.get_config_variable("OWD_DEVICE_SDCARD", False), destination)
+        file_to_remove = '{}/{}'.format(self.get_config_variable("OWD_DEVICE_SDCARD"), destination)
         self.parent.device.manager.removeFile(file_to_remove)
 
     def restart(self):
