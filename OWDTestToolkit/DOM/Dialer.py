@@ -28,15 +28,15 @@ suggestion_count = ("id", "suggestion-count")
 # When only a single suggestion is displayed, we have a div instead a button
 suggestion_item_single = ('xpath', '//div[@class="js-suggestion-item suggestion-item"]')
 suggestion_item = ('xpath', '//button[@class="js-suggestion-item suggestion-item si--action-menu"]')
-suggestion_item_name = ('xpath', '//button[@class="js-suggestion-item suggestion-item si--action-menu"]//div[@class="js-name si__name ellipsis"]') 
+suggestion_item_name = ('xpath', '//button[@class="js-suggestion-item suggestion-item si--action-menu"]//div[@class="js-name si__name ellipsis"]')
 suggestion_list = ('id', 'suggestion-list')
 suggestion_list_cancel = ("id", "suggestion-overlay-cancel")
 
 outgoing_call_locator = ("xpath", '//*[@id="calls"]//section[contains(@class, "outgoing")]')
-outgoing_call_number = ("xpath", '//*[@id="calls"]//section[contains(@class, "outgoing")]//div[contains(@class, "numberWrapper")]/div[contains(@class, "number font-light")]') #Note: maybe + prefix.
-outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '{}')]" #Note: maybe + prefix.
+outgoing_call_number = ("xpath", '//*[@id="calls"]//section[contains(@class, "outgoing")]//div[contains(@class, "numberWrapper")]/div[contains(@class, "number font-light")]')  # Note: maybe + prefix.
+outgoing_call_numberXP = "//*[contains(@class, 'number font-light') and contains(text(), '{}')]"  # Note: maybe + prefix.
 hangup_bar_locator = ('id', 'callbar-hang-up')
-answer_callButton = ("xpath", "//*[@id='callbar-answer']")
+answer_callButton = ("id", 'callbar-answer')
 
 call_log_btn = ("id", "option-recents")
 call_log_filter = ("id", "call-log-filter")
@@ -50,6 +50,8 @@ call_log_edit_delete = ("id", "delete-button")
 call_log_no_calls_msg = ("id", "no-result-message")
 call_log_delete_btn = ("id", "delete-button")
 call_log_confirm_delete = ('xpath', '//form[@id="confirmation-message"]/menu/button[@class="danger"]')
+call_log_missed = ('id', 'missed-filter')
+call_log_missed_number_xpath = '//a[contains(@id, "{}")]//aside[contains(@class, "icon-missed")]'
 
 call_log_numtap_send_msg = ("id", "send-sms-menuitem")
 call_log_numtap_create_new = ("id", "create-new-contact-menuitem")
@@ -64,3 +66,5 @@ number_busy_windows_ok_button = ("xpath", "//form[@id='confirmation-message']/me
 
 imei_header = ('xpath', '//h1[text()="IMEI"]')
 imei_contents = ('css selector', '#mmi-screen #mmi-container #message')
+
+mmi_send_btn = ('id', 'send')

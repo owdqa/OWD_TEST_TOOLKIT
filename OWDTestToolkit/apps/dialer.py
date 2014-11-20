@@ -93,15 +93,15 @@ class Dialer(object):
 
         self._complete_addNumberToContact(dialer_num, p_name)
 
-    def callLog_addToContact(self, phone_number, contact_name, p_openCallLog=True, cancel_process=False):
+    def callLog_addToContact(self, phone_number, contact_name, p_open_call_log=True, cancel_process=False):
         #
         # Adds this number in the call log to an existing contact
         # (and returns you to the call log).
-        # If p_openCallLog is set to False it will assume you are
+        # If p_open_call_log is set to False it will assume you are
         # already in the call log.
         #
-        if p_openCallLog:
-            self.openCallLog()
+        if p_open_call_log:
+            self.open_call_log()
 
         self.callLog_long_tap(phone_number)
         time.sleep(1)
@@ -134,7 +134,7 @@ class Dialer(object):
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
         except:
-            self.openCallLog()
+            self.open_call_log()
 
         entry = self.UTILS.element.getElement(("xpath", DOM.Dialer.call_log_number_xpath.format(p_num)),
                                           "The call log for number {}".format(p_num))
@@ -158,7 +158,7 @@ class Dialer(object):
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
         except:
-            self.openCallLog()
+            self.open_call_log()
 
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_no_calls_msg, timeout=1)
@@ -193,7 +193,7 @@ class Dialer(object):
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
         except:
-            self.openCallLog()
+            self.open_call_log()
 
         boolLIST = True
         try:
@@ -244,15 +244,15 @@ class Dialer(object):
             self.UTILS.test.test(_postcount == _precount,
                                  "{} numbers are left after deletion (there are {}).".format(_precount, _postcount))
 
-    def callLog_createContact(self, entry, p_openCallLog=True):
+    def callLog_createContact(self, entry, p_open_call_log=True):
         #
         # Creates a new contact from the call log (only
         # as far as the contacts app opening).
-        # If p_openCallLog is set to False it will assume you are
+        # If p_open_call_log is set to False it will assume you are
         # already in the call log.
         #
-        if p_openCallLog:
-            self.openCallLog()
+        if p_open_call_log:
+            self.open_call_log()
 
         self.callLog_long_tap(entry)
         self.callLog_long_tap_select_action(DOM.Dialer.call_log_numtap_create_new, "Create new contact button")
@@ -301,7 +301,7 @@ class Dialer(object):
         # (done by manipulating the device time).
         # Leaves you in the call log.
         #
-        #x = self.UTILS.date_and_time.getDateTimeFromEpochSecs(time.time())
+        # x = self.UTILS.date_and_time.getDateTimeFromEpochSecs(time.time())
 
         today = datetime.datetime.today()
         for i in range(entries_number):
@@ -357,16 +357,23 @@ class Dialer(object):
         #
         # Deletes a single number from the dialer
         #
-        delete = self.UTILS.element.getElement(DOM.Dialer.keypad_delete, "Delete keypad")
-        delete.tap()
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Dialer.keypad_delete)
+            delete = self.marionette.find_element(*DOM.Dialer.keypad_delete)
+            delete.tap()
+        except:
+            return
 
     def clear_dialer_all(self):
         #
         # Clears all dialer input area
         #
-        delete = self.UTILS.element.getElement(DOM.Dialer.keypad_delete, "Delete keypad")
-        # self.actions = Actions(self.marionette)
-        self.actions.long_press(delete, 3).perform()
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Dialer.keypad_delete)
+            delete = self.marionette.find_element(*DOM.Dialer.keypad_delete)
+            self.actions.long_press(delete, 3).perform()
+        except:
+            return
 
     def answer(self):
         self.marionette.switch_to_frame()
@@ -426,7 +433,7 @@ class Dialer(object):
 
         self.apps.switch_to_displayed_app()
 
-    def openCallLog(self):
+    def open_call_log(self):
         #
         # Opens the call log.
         #

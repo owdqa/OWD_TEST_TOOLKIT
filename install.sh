@@ -4,10 +4,10 @@
 export OWD_TEST_TOOLKIT_DIR=$(pwd)
 cat >  $HOME/.OWD_TEST_TOOLKIT_LOCATION << EOF
 export OWD_TEST_TOOLKIT_DIR=$OWD_TEST_TOOLKIT_DIR
-export OWD_TEST_TOOLKIT_BIN=$OWD_TEST_TOOLKIT_DIR/bin
+export OWD_TEST_TOOLKIT_BIN=$OWD_TEST_TOOLKIT_DIR/scripts
 export OWD_TEST_TOOLKIT_CONFIG=$OWD_TEST_TOOLKIT_DIR/config
 export GAIATEST_PATH=$HOME/gaia/tests/python/gaia-ui-tests/gaiatest
-export PATH=$PATH:/usr/android-sdk/platform-tools/adb:$OWD_TEST_TOOLKIT_DIR/bin
+export PATH=$PATH:/usr/android-sdk/platform-tools/adb:$OWD_TEST_TOOLKIT_DIR/scripts
 EOF
 
 

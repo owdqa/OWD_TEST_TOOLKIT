@@ -189,7 +189,7 @@ class general(object):
         # Remember the current frame.
         #
         orig_frame = self.parent.iframe.currentIframe()
-        self.parent.test.test(True, "Original frame filtered name: {}".format(orig_frame))
+        self.parent.reporting.debug("Original frame filtered name: {}".format(orig_frame))
 
         input_elem = self.parent.element.getElement(p_element_array, p_desc)
 
@@ -243,8 +243,10 @@ class general(object):
         #
         # Switch back to the frame we were in and get the element again.
         #
-        self.parent.test.test(True, "Switching back to original frame {}".format(orig_frame))
+        self.parent.reporting.debug("Switching back to original frame {}".format(orig_frame))
+        self.parent.debug.screenShot('contacts1')
         self.parent.iframe.switchToFrame("src", orig_frame)
+        self.parent.debug.screenShot('contacts2')
 
         #
         # Validate that the field now has the value we sent it.

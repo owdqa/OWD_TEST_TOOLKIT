@@ -120,7 +120,7 @@ class Messages(object):
         dom = DOM.Messages.last_message_mms_text if mms else DOM.Messages.last_message_text
         msg_text = self.marionette.find_element(*dom, id=msg.id)
         self.UTILS.test.test((msg_text and msg_text.text == expected),
-                             "Expected message text = '{}' ({}) (got '{}' ({})).".
+                             u"Expected message text = '{}' ({}) (got '{}' ({})).".
                              format(expected, len(expected), msg_text.text, len(msg_text.text)))
 
     def checkIsInToField(self, target, targetIsPresent=True):
@@ -1153,5 +1153,6 @@ class Messages(object):
             # Nope - sleep then try again.
             time.sleep(poll_time)
 
-        self.UTILS.test.test(result, "Last message in thread 'received' within {} seconds.".format(timeout))
+        self.UTILS.test.test(result, "Last message in thread 'received' within {} seconds.".\
+                             format(timeout))
         return result

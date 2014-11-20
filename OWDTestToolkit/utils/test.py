@@ -55,7 +55,10 @@ class test(object):
 
         details = False
         processed_msg = msg.split("|")
-        if not result:
+        if result:
+            self.parent.reporting.logResult(result, processed_msg[0])
+            self.assertion_manager.inc_passed()
+        else:
             details = self.parent.debug.screenShotOnErr()
             # This has to be processed here due to the new behavior of reportResults
             if len(processed_msg) > 1:
@@ -64,8 +67,5 @@ class test(object):
             else:
                 self.parent.reporting.logResult(result, msg, details)
             self.assertion_manager.inc_failed()
-        else:
-            self.parent.reporting.logResult(result, processed_msg[0])
-            self.assertion_manager.inc_passed()
-            
+
         self.parent.parent.assertTrue(result)
