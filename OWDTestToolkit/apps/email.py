@@ -389,7 +389,7 @@ class Email(object):
         #
         self.launch()
 
-    def send_new_email(self, p_target, p_subject, p_message):
+    def send_new_email(self, p_target, p_subject, p_message, attach=False, attached_type=None):
         #
         # Compose and send a new email.
         #
@@ -412,9 +412,11 @@ class Email(object):
             self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", p_target, True, False)
         self.UTILS.general.typeThis(DOM.Email.compose_subject, "'Subject' field", p_subject, True, False)
         self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", p_message, True, False, False)
-
+        
+        if attach:
+            self.attach_file(attached_type)
+            
         self.sendTheMessage()
-
 
     def _is_composed_btn_tapped(self):
 
