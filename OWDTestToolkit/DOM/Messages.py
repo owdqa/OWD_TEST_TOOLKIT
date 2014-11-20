@@ -137,8 +137,10 @@ discard_msg_btn = ('xpath', '//button[@data-l10n-id="discard-message"]')
 cancel_save_msg = ('xpath', '//button[@data-l10n-id="cancel"]')
 
 button_download_attachment = ('xpath', '//button[@data-l10n-id="download-attachment"]')
+button_downloading_attachment = ('xpath', '//button[@data-l10n-id="downloading-attachment"]')
 mms_attachment_names = ('css selector', '.attachment-container .file-name')
 mms_attachment_sizes = ('css selector', '.attachment-container .size-indicator')
+mms_resize_msg = ('id', 'messages-resize-notice')
 mms_max_length_msg = ('id', 'messages-max-length-notice')
 
 fdn_blocked_title = ('css selector', '[data-l10n-id=fdnBlocked2Title]')

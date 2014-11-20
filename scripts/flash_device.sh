@@ -50,7 +50,9 @@ fi
 # Get the latest build file.
 #
 cd $TARGET_DIR
-REL_FILE=$(ls -lrt | grep -vi "^total" | egrep "${DEVICE}.*\.${TYPE}\.${VERSION}" | tail -1 | awk '{print $NF}')
+#REL_FILE=$(ls -lrt | grep -vi "^total" | egrep "${DEVICE}.*\.${TYPE}\.${VERSION}" | tail -1 | awk '{print $NF}')
+# Add "AutomatizationVersion flag"
+REL_FILE=$(ls -lrt | grep -vi "^total" | egrep "${DEVICE}.*\.${TYPE}\.${VERSION}\.AutomatizationVersion" | tail -1 | awk '{print $NF}')
 if [ ! "$REL_FILE" ]
 then
     printf "\n*** WARNING: NO BUILD FILES FOUND IN $TARGET_DIR! ***\n\n"

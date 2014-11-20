@@ -43,7 +43,7 @@ class debug(object):
         #
         # Take a screenshot.
         #
-        outFile = self.parent.general.get_os_variable('RESULT_DIR') + "/" + p_fileSuffix + ".png"
+        outFile = self.parent.general.get_config_variable('RESULT_DIR') + "/" + p_fileSuffix + ".png"
 
         try:
             screenshot = self.marionette.screenshot()
@@ -72,7 +72,7 @@ class debug(object):
         #
         # Dump the current page's html source too.
         #
-        htmlDump = self.parent.general.get_os_variable('RESULT_DIR') + "/" + fnam + ".html"
+        htmlDump = self.parent.general.get_config_variable('RESULT_DIR') + "/" + fnam + ".html"
 
         try:
             self.savePageHTML(htmlDump)

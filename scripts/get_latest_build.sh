@@ -86,7 +86,8 @@ then
 		#
 		# Get the name of the newest release (which is at the top of the list).
 		#
-		REL_FILE=$(egrep -i "${DEVICE}.*\.${TYPE}\.${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
+		#REL_FILE=$(egrep -i "${DEVICE}.*\.${TYPE}\.${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
+		REL_FILE=$(egrep -i "${DEVICE}.*\.${TYPE}\.${VERSION}\.AutomatizationVersion" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
 		
 		#
 		# Download the release file (takes about 15-20 mins on free network).
@@ -110,7 +111,8 @@ else
 	#
 	# Get the name of the newest 'eng' release (which is at the top of the list).
 	#
-	REL_FILE=$(egrep -i "${DEVICE}.*\.${TYPE}\.${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
+	#REL_FILE=$(egrep -i "${DEVICE}.*\.${TYPE}\.${VERSION}" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
+	REL_FILE=$(egrep -i "${DEVICE}.*\.${TYPE}\.${VERSION}\.AutomatizationVersion" $LIST_FILE | head -1 | sed -e "s/.*href=\"//" | sed -e "s/\".*$//")
 fi
 
 #

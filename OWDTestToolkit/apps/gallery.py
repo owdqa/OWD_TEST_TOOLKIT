@@ -51,9 +51,11 @@ class Gallery(object):
         Clicks on a thumbnail at a certain position from the gallery.
         @param  boolean     preview     specifies whether we have to check for the preview screen or not 
         """
-        thumb_list = self.UTILS.element.getElements(DOM.Gallery.thumbnail_items, "Thumbnail list")
+        self.parent.wait_for_element_displayed(*DOM.Gallery.thumbnail_items)
+        thumb_list = self.marionette.find_elements(*DOM.Gallery.thumbnail_items)
         time.sleep(1)
-        thumb_list[position].tap()
+        thumb = thumb_list[position]
+        thumb.tap()
 
         self.UTILS.element.waitForNotElements(DOM.Gallery.thumbnail_items, "Thumbnail list", True, 10)
         if preview:

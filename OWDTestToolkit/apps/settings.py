@@ -166,7 +166,7 @@ class Settings(object):
                                               "On without roaming option in Auto Retrieve Select")
             x.tap()
         else:
-            self.UTILS.test.quit_test("FAILED: Incorrect parameter received in configureMMSAutoRetrieve()")
+            self.UTILS.test.test(False, "FAILED: Incorrect parameter received in configureMMSAutoRetrieve()")
 
         #
         # Tapping on OK button in auto Retrieve select
@@ -643,7 +643,7 @@ class Settings(object):
         #
         dom_elem = (DOM.Settings.default_apn[0], DOM.Settings.default_apn[1].format(apn))
         x = self.UTILS.element.getElement(dom_elem, "Added APN")
-        self.UTILS.test.test(True, "APN {} element: {}".format(apn, x))
+        self.UTILS.test.TEST(True, "APN {} element: {}".format(apn, x))
         x.tap()
 
         #
@@ -857,7 +857,7 @@ class Settings(object):
                     self.UTILS.test.test(False, "Something went wrong while activating the PIN", True)
             else:
                 self.UTILS.element.waitForNotElements(DOM.Settings.dual_sim_change_pin_sim1,
-                                              "Change PIN button <b> is not there </b>")
+                                                      "Change PIN button <b> is not there </b>")
         else:
             if enable:
                 #
@@ -871,7 +871,7 @@ class Settings(object):
                     self.UTILS.test.test(False, "Something went wrong while activating the PIN", True)
             else:
                 self.UTILS.element.waitForNotElements(DOM.Settings.sim_security_change_pin,
-                                              "Change PIN button <b> is not there </b>")
+                                                      "Change PIN button <b> is not there </b>")
 
     def set_passcode_lock(self, enable=False, code=None):
         """Configure the passcode lock option.
@@ -1050,7 +1050,7 @@ class Settings(object):
         #
         try:
             self.parent.wait_for_element_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
-                                          timeout=timeout)
+                                                 timeout=timeout)
             return True
         except:
             return False
@@ -1061,7 +1061,7 @@ class Settings(object):
         #
         try:
             self.parent.wait_for_element_not_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
-                                              timeout=timeout)
+                                                     timeout=timeout)
             return True
         except:
             return False

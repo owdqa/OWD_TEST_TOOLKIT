@@ -126,7 +126,7 @@ class Dialer(object):
         #
         # Get own number.
         #
-        own_num = self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM")
+        own_num = self.UTILS.general.get_config_variable("GLOBAL_TARGET_SMS_NUM")
 
         #
         # Calls a number from the call log.

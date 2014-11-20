@@ -16,7 +16,7 @@ class reporting(object):
         self.logger = logging.getLogger('OWDTestToolkit')
 
     def _gov(self):
-        return self.parent.general.get_os_variable
+        return self.parent.general.get_config_variable
 
     def log_to_file(self, message, level='info'):
         if level in ('critical', 'error', 'warn', 'info', 'debug'):

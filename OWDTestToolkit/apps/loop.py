@@ -25,7 +25,7 @@ class Loop(object):
         self.app_name = "Firefox Hello"
         self.market_url = "https://owd.tid.es/B3lg1r89n/market/appList.html"
         self.persistent_directory = "/data/local/storage/persistent"
-        self.loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_DIR")
+        self.loop_dir = self.UTILS.general.get_config_variable("GLOBAL_LOOP_DIR")
 
     def launch(self):
         """
@@ -40,7 +40,7 @@ class Loop(object):
         return self.apps.is_app_installed(self.app_name)
 
     def install(self):
-        via = self.UTILS.general.get_os_variable("GLOBAL_LOOP_VIA")
+        via = self.UTILS.general.get_config_variable("GLOBAL_LOOP_VIA")
         if via == "Grunt":
             self.install_via_grunt()
         elif via == "Market":
@@ -100,7 +100,7 @@ class Loop(object):
             self.app_name), timeout=20, message="{} is not installed".format(self.app_name))
 
     def update_and_publish(self):
-        self.publish_loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_AUX_FILES")
+        self.publish_loop_dir = self.UTILS.general.get_config_variable("GLOBAL_LOOP_AUX_FILES")
 
         result = os.popen("cd {} && ./publish_app.sh {}".format(self.publish_loop_dir, self.loop_dir)).read()
         chops = result.split("\n")

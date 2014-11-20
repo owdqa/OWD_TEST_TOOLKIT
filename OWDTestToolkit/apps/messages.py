@@ -276,15 +276,12 @@ class Messages(object):
 
             self.create_mms_image()
             self.gallery.click_on_thumbnail_at_position_mms(0)
-
-            self.sendSMS()
         elif attached_type == "cameraImage":
             #
             # Add an image file from camera
             #
             self.create_mms_camera_image()
             time.sleep(3)
-            self.sendSMS()
         elif attached_type == "video":
             #
             # Load an video file into the device.
@@ -293,7 +290,6 @@ class Messages(object):
 
             self.create_mms_video()
             self.video.click_on_video_at_position_mms(0)
-            self.sendSMS()
         elif attached_type == "audio":
             #
             # Load an video file into the device.
@@ -302,13 +298,14 @@ class Messages(object):
 
             self.create_mms_music()
             self.music.click_on_song_mms()
-
-            self.sendSMS()
         else:
             # self.UTILS.reporting.logResult("info", "incorrect value received")
-            msg = "FAILED: Incorrect parameter received in createAndSendMMS()"\
+            msg = "FAILED: Incorrect parameter received in create_and_send_mms()"\
                 ". attached_type must being image, video or audio."
             self.UTILS.test.test(False, msg)
+
+        self.sendSMS()
+        return self.last_sent_message_timestamp()
 
     def create_and_send_sms(self, nums, msg):
         #
@@ -991,7 +988,7 @@ class Messages(object):
 
         # (Give the spinner time to appear.)
         time.sleep(2)
-        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 240)
+        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 120)
 
         #
         # Check if we received the 'service unavailable' message.
