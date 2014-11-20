@@ -23,7 +23,7 @@ class Gallery(object):
         self.UTILS.element.waitForNotElements(DOM.Gallery.loading_bar, "Loading bar", True, 10)
         return self.app
 
-    def _convert_str_to_seconds(self, the_string):
+    def convert_str_to_seconds(self, the_string):
         """
         Converts a str of the form "aa:bb" into seconds
         """
@@ -39,7 +39,7 @@ class Gallery(object):
         # Play the video and get total duration
         self.play_current_video()
         video_length = self.UTILS.element.getElement(DOM.Gallery.preview_current_video_duration, "Video length")
-        real_duration = self._convert_str_to_seconds(video_length.text)
+        real_duration = self.convert_str_to_seconds(video_length.text)
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
