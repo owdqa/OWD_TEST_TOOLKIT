@@ -260,7 +260,7 @@ class Dialer(object):
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.element.waitForElements(DOM.Contacts.add_contact_header, "'Add contact' header")
 
-    def callThisNumber(self):
+    def call_this_number(self):
         #
         # Calls the current number.
         #
@@ -273,9 +273,22 @@ class Dialer(object):
         self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call locator", True, 5)
 
     def call_this_number_and_hangup(self, delay):
-        self.callThisNumber()
+        self.call_this_number()
         time.sleep(delay)
         self.hangUp()
+
+    def get_and_accept_fdn_warning(self, phone_number):
+        # Check warning message
+        self.UTILS.element.waitForElements(DOM.Settings.fdn_warning_header, "Waiting for FDN warning header", True, 10)
+        self.UTILS.element.waitForElements(DOM.Settings.fdn_warning_body, "Waiting for FDN warning body")
+        body = self.marionette.find_element(*DOM.Settings.fdn_warning_body)
+        self.UTILS.reporting.log_to_file("body.text: {}   msg: {}".format(body.text, DOM.Dialer.fdn_warning_msg.\
+                                                                          format(phone_number)))
+        self.UTILS.test.test(body.text == DOM.Dialer.fdn_warning_msg.format(phone_number),
+                             "Correct FDN warning message")
+
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.fdn_warning_ok, "OK button")
+        ok_btn.tap()
 
     def createContactFromThisNum(self):
         #
@@ -324,34 +337,33 @@ class Dialer(object):
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.phone_number, timeout=1)
         except:
-            x = self.UTILS.element.getElement(DOM.Dialer.option_bar_keypad, "Keypad option selector")
-            x.tap()
+            keypad_selector = self.UTILS.element.getElement(DOM.Dialer.option_bar_keypad, "Keypad option selector")
+            keypad_selector.tap()
             self.UTILS.element.waitForElements(DOM.Dialer.phone_number, "Phone number area")
 
         for i in str(p_num):
 
             if i == "+":
-                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialer_button_xpath.format(0)),
+                plus_symbol = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialer_button_xpath.format(0)),
                                                   "keypad symbol '+'")
-                # self.actions = Actions(self.marionette)
-                self.actions.long_press(x, 2).perform()
+                self.actions.long_press(plus_symbol, 2).perform()
             else:
-                x = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialer_button_xpath.format(i)),
+                number_symbol = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialer_button_xpath.format(i)),
                                                   "keypad number {}".format(i))
-                x.tap()
+                number_symbol.tap()
 
         #
         # Verify that the number field contains the expected number.
         #
         if validate:
-            x = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
-            dialer_num = self.marionette.execute_script("return arguments[0].value", script_args=[x])
+            number_field = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
+            dialer_num = self.marionette.execute_script("return arguments[0].value", script_args=[number_field])
             self.UTILS.reporting.debug(u"** Dialer_num entered: [{}]".format(dialer_num))
             self.UTILS.test.test(str(p_num) in dialer_num, u"After entering '{}', phone number field contains '{}'.".
                                  format(p_num, dialer_num))
 
-            x = self.UTILS.debug.screenShotOnErr()
-            self.UTILS.reporting.logResult("info", "Screenshot at enterNumber method [validate]:", x)
+            screenshot = self.UTILS.debug.screenShotOnErr()
+            self.UTILS.reporting.logResult("info", "Screenshot at enterNumber method [validate]:", screenshot)
 
     def clear_dialer(self):
         #

@@ -1,3 +1,6 @@
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
 frame_locator = ('src', 'dialer')
 frame_locator_calling = ('name', 'call_screen')
 
@@ -61,10 +64,11 @@ call_log_numtap_cancel = ("id", "cancel-action-menu")
 call_log_contact_name_iframe = ("id", "iframe-contacts")
 call_log_number_cont_highlight = "//button[contains(@id, 'call-or-pick') and @class='activity icon icon-call remark' and contains(@data-tel, '{}')]"
 
-call_busy_button_ok = ("xpath", '//form[@id="confirmation-message"]/menu/button[@class="full"]')
-number_busy_windows_ok_button = ("xpath", "//form[@id='confirmation-message']/menu/button[@class='full']")
+call_busy_button_ok = ("css selector", "#confirmation-message menu button.full")
 
 imei_header = ('xpath', '//h1[text()="IMEI"]')
 imei_contents = ('css selector', '#mmi-screen #mmi-container #message')
 
 mmi_send_btn = ('id', 'send')
+
+fdn_warning_msg = _('FDN (Fixed Dialing Numbers) is activated and the following number is not in your FDN list: {}')

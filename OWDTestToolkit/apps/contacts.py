@@ -803,12 +803,17 @@ class Contacts(object):
         """
         Select the result of a search
         """
-
         results = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Search results list")
         for result in results:
             if contact_name in result.text:
                 result.tap()
                 break
+
+    def call_current_contact(self):
+        """Call the contact being shown after selecting from contact list or search results.
+        """
+        call_btn = self.UTILS.element.getElement(DOM.Contacts.view_contact_tel_field, "Contact number button")
+        call_btn.tap()
 
     def select_search_result_several_phones(self, contact_name, number):
         """

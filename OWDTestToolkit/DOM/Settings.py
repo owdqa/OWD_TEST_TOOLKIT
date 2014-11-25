@@ -183,3 +183,15 @@ fxa_logged_in_screen = ('id', 'fxa-logged-in')
 fxa_log_out_btn = ('id', 'fxa-logout')
 fxa_log_in_btn = ('id', 'fxa-login')
 fxa_logged_in_text = ('id', 'fxa-logged-in-text')
+
+# Languages
+language_item = ('id', 'menuItem-languageAndRegion')
+language_selector = ('css selector', '#languages select[name="language.current"]')
+language_option_xpath = '//section[@id="value-selector-container"]//span[contains(text(), "{}")]'
+language_option_ok_btn = ('css selector', '#select-options-buttons button.affirmative[data-l10n-id="ok"]')
+
+# Information
+device_info_item = ('id', 'menuItem-deviceInfo')
+device_more_info = ('css selector', '#about button[data-l10n-id=more-info]')
+reset_phone_button = ('id', 'reset-phone')
+confirm_reset_btn = ('id', 'confirm-reset-phone')

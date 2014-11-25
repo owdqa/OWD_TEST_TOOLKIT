@@ -137,10 +137,7 @@ class date_and_time(object):
         #
         if hour >= 12:
             t_ampm = "PM"
-            if hour > 12:
-                t_hour = hour - 12
-            else:
-                t_hour = hour
+            t_hour = hour - 12 if hour > 12 else hour
         else:
             t_hour = hour
             t_ampm = "AM"

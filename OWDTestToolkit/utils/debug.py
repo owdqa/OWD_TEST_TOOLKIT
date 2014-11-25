@@ -32,7 +32,7 @@ class debug(object):
 
         self.parent.reporting.logResult("debug", _logstr)
 
-    def savePageHTML(self, p_outfile):
+    def save_page_html(self, p_outfile):
         #
         # Save the HTML of the current page to the specified file.
         #
@@ -75,7 +75,7 @@ class debug(object):
         htmlDump = self.parent.general.get_config_variable('RESULT_DIR') + "/" + fnam + ".html"
 
         try:
-            self.savePageHTML(htmlDump)
+            self.save_page_html(htmlDump)
         except:
             htmlDump = "(Unable to dump html for this page: possible Marionette issue.)"
 

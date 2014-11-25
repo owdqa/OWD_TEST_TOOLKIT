@@ -125,7 +125,7 @@ class Settings(object):
         if sim_card_option:
             self.goBack()
 
-    def configureMMSAutoRetrieve(self, value):
+    def configure_mms_auto_retrieve(self, value):
         #
         # Launch messages app.
         #
@@ -166,7 +166,7 @@ class Settings(object):
                                               "On without roaming option in Auto Retrieve Select")
             x.tap()
         else:
-            self.UTILS.test.test(False, "FAILED: Incorrect parameter received in configureMMSAutoRetrieve()")
+            self.UTILS.test.test(False, "FAILED: Incorrect parameter received in configure_mms_auto_retrieve()")
 
         #
         # Tapping on OK button in auto Retrieve select
@@ -214,8 +214,8 @@ class Settings(object):
     def open_fdn(self):
         fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
         fdn.tap()
-        self.UTILS.element.waitForElements(('xpath',
-                                            DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").encode("utf8"))), "FDN header")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").\
+                                                        encode("utf8"))), "FDN header")
 
     def go_enable_fdn(self, enable):
         status = self.UTILS.element.getElement(DOM.Settings.fdn_status, "FDN status").text
@@ -1118,3 +1118,34 @@ class Settings(object):
         self.UTILS.general.typeThis(DOM.Settings.wifi_login_pass, "Password for the WLAN", wifi_pass)
         ok_btn = self.UTILS.element.getElement(DOM.Settings.wifi_login_ok_btn, "WLAN login OK button")
         ok_btn.tap()
+
+    def select_language(self, lang="English (US)"):
+        """Enter the language menu and select the given language from the selectable.
+        """
+        lang_item = self.UTILS.element.getElement(DOM.Settings.language_item, "Language menu")
+        lang_item.tap()
+
+        selector = self.UTILS.element.getElement(DOM.Settings.language_selector, "Language selector")
+        selector.tap()
+
+        # switch to the root frame, since the selectable menu appears on top, not under Settings
+        self.marionette.switch_to_frame()
+        option = self.UTILS.element.getElement(DOM.Settings.language_option_xpath.format(lang))
+        option.tap()
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.language_option_ok_btn)
+        ok_btn.tap()
+        # switch back to the Settings application
+        self.UTILS.iframe.switch_to_frame(*DOM.Settings.frame_locator)
+        self.goBack()
+
+    def reset_phone(self):
+        """Open the Information menu and reset the device.
+        """
+        device_item = self.UTILS.element.getElement(DOM.Settings.device_info_item, "Device information menu")
+        device_item.tap()
+
+        more_info = self.UTILS.element.getElement(DOM.Settings.device_more_info, "More information menu")
+        more_info.tap()
+
+        reset_btn = self.UTILS.element.getElement(DOM.Settings.reset_phone_button, "Reset phone button")
+        reset_btn.tap()

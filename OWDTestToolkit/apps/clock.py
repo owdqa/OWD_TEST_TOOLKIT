@@ -18,33 +18,29 @@ class Clock(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
+                                              self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def checkAlarmPreview(self, hour, minute, ampm, label, repeat):
-        #
-        # Verify the alarm details in the clock screen.
-        #
-
-        #
-        # Put the time in a format we can compare easily with.
-        #
-        stime = str(hour) + ":" + str(minute).zfill(2)
+    def check_alarm_preview(self, hour, minute, ampm, label, repeat):
+        """Verify the alarm is set in the clock screen.
+        """
+        time_str = "{}:{:02d} {}".format(hour, int(minute), ampm)
 
         alarms = self.UTILS.element.getElements(DOM.Clock.alarm_preview_alarms, "Alarm preview list")
 
-        foundBool = False
+        found = False
         for alarm in alarms:
             alarm_time = alarm.find_element(*DOM.Clock.alarm_preview_time).text
             alarm_ampm = alarm.find_element(*DOM.Clock.alarm_preview_ampm).text
             alarm_label = alarm.find_element(*DOM.Clock.alarm_preview_label).text
 
-            if stime == alarm_time and ampm == alarm_ampm:
-                foundBool = True
+            if time_str == alarm_time and ampm == alarm_ampm:
+                found = True
                 self.UTILS.test.test(label == alarm_label, "Alarm description is correct in Clock screen preview.")
                 break
 
-        self.UTILS.test.test(foundBool, "Alarm preview is found in Clock screen for " + stime + ampm + ".")
+        self.UTILS.test.test(found, "Alarm preview is found in Clock screen for " + time_str + ".")
 
     def checkAlarmRingDetails(self, hour, minute, label):
         #
@@ -115,123 +111,105 @@ class Clock(object):
             boolOK = False
         return boolOK
 
-    def createAlarm(self, hour, minute, label, repeat="Never", sound="Classic Buzz", snooze="5 minutes"):
-        #
-        # Create a new alarm.
-        #
+    def create_alarm(self, hour, minute, label, repeat="Never", sound="Classic Buzz", snooze="5 minutes"):
+        """Create a new alarm to the given time, with the given parameters.
+        """
+        new_alarm_btn = self.UTILS.element.getElement(DOM.Clock.new_alarm_btn, "New alarm button")
+        new_alarm_btn.tap()
 
-        #
-        # Click the new alarm button.
-        #
-        x = self.UTILS.element.getElement(DOM.Clock.new_alarm_btn, "New alarm button")
-        x.tap()
-
-        #
-        # Just set the time in the element for now (the UI isn't working for Marionette atm).
-        #
-        x = self.UTILS.element.getElement(("xpath", "//button[@id='time-menu']"), "Time button")
-
-        x = self.UTILS.element.getElement(DOM.Clock.time_button, "Time button")
-        x.tap()
-
-        myIframe = self.UTILS.iframe.currentIframe()
-        self.marionette.switch_to_frame()
+        time_button = self.marionette.find_element(*DOM.Clock.time_button)
+        time_button.tap()
 
         #
         # Sort the time out into 12 hour format.
         #
-        x = self.UTILS.date_and_time.switch_24_12(hour)
-        t_hour = x[0]
-        ampm = x[1]
+        time_12h = self.UTILS.date_and_time.switch_24_12(int(hour))
+        t_hour = time_12h[0]
+        ampm = time_12h[1]
 
-        self.UTILS.reporting.logComment("Creating new alarm for " + str(t_hour) + ":" + str(minute).zfill(2) + " " + ampm)
+        self.UTILS.reporting.logComment("Creating new alarm for {:02}:{:02} {}".format(t_hour, int(minute), ampm))
 
+        self.marionette.switch_to_frame()
+        time.sleep(3)
         scroller_hours = self.UTILS.element.getElement(
             (DOM.Clock.time_scroller[0], DOM.Clock.time_scroller[1].format("hours")), "Scroller for 'hours'")
 
         scroller_minutes = self.UTILS.element.getElement(
             (DOM.Clock.time_scroller[0], DOM.Clock.time_scroller[1].format("minutes")), "Scroller for 'minutes'")
 
-        self.UTILS.reporting.logResult("info", "H: {}, M: {}".format(scroller_hours.text, scroller_minutes.text))
-        return
-
-        #
         # Set the hour.
-        #
-        self.UTILS.element.setScrollerVal(scroller_hours, t_hour)
+        self.UTILS.element.set_scroller_val(scroller_hours, t_hour)
 
-        #
         # Set the minutes.
-        #
-        self.UTILS.element.setScrollerVal(scroller_minutes, minute)
+        self.UTILS.element.set_scroller_val(scroller_minutes, minute)
 
-        #
         # Set the AM / PM.
-        #
         scroller = self.UTILS.element.getElement(DOM.Clock.time_scroller_ampm, "AM/PM picker")
-        currVal = scroller.find_element(*DOM.GLOBAL.scroller_curr_val).text
+        curr_val = scroller.find_element(*DOM.GLOBAL.scroller_curr_val).text
 
-        if ampm != currVal:
-            if currVal == "AM":
-                self.UTILS.element.moveScroller(scroller)
+        if ampm != curr_val:
+            if curr_val == "AM":
+                self.UTILS.element.move_scroller(scroller)
             else:
-                self.UTILS.element.moveScroller(scroller)
+                self.UTILS.element.move_scroller(scroller)
 
-        #
         # Click the OK button and return to the calling frame.
-        #
-        x = self.UTILS.element.getElement(DOM.Clock.time_picker_ok, "OK button")
-        x.tap()
-        self.UTILS.iframe.switch_to_frame("src", myIframe)
+        ok_btn = self.UTILS.element.getElement(DOM.Clock.time_picker_ok, "OK button")
+        ok_btn.tap()
+        self.UTILS.iframe.switch_to_frame(*DOM.Clock.frame_locator)
 
-        #
         # Set the label.
-        #
-        x = self.UTILS.element.getElement(DOM.Clock.alarm_label, "Alarm label field")
-        x.clear()
-        x.send_keys(label)
+        alarm_label = self.UTILS.element.getElement(DOM.Clock.alarm_label, "Alarm label field")
+        alarm_label.clear()
+        alarm_label.send_keys(label)
+        from marionette.keys import Keys
+        alarm_label.send_keys(Keys.ENTER)
 
-        #
-        # TODO: Set the repeat, sound and snooze.
-        #
+        # Set the repeat, sound and snooze values
+        if isinstance(repeat, list):
+            repeat_sel = self.UTILS.element.getElement(DOM.Clock.edit_alarm_repeat_menu, "Repeat menu")
+            repeat_sel.tap()
+            self.marionette.switch_to_frame()
+            for day in repeat:
+                day_elem = self.UTILS.element.getElementByXpath(DOM.Clock.edit_alarm_selector_xpath.format(day))
+                day_elem.tap()
+            ok_btn = self.UTILS.element.getElement(DOM.Clock.edit_alarm_repeat_ok, "OK Button")
+            ok_btn.tap()
 
-        #
+        self.UTILS.iframe.switch_to_frame(*DOM.Clock.frame_locator)
+        sound_sel = self.UTILS.element.getElement(DOM.Clock.edit_alarm_sound_menu, "Sound menu")
+        sound_sel.tap()
+        self.marionette.switch_to_frame()
+        sound_elem = self.UTILS.element.getElementByXpath(DOM.Clock.edit_alarm_selector_xpath.format(sound))
+        sound_elem.tap()
+        ok_btn = self.UTILS.element.getElement(DOM.Clock.edit_alarm_repeat_ok, "OK Button")
+        ok_btn.tap()
+
+        self.UTILS.iframe.switch_to_frame(*DOM.Clock.frame_locator)
+        snooze_sel = self.UTILS.element.getElement(DOM.Clock.edit_alarm_snooze_menu, "Snooze selector")
+        snooze_sel.tap()
+        self.marionette.switch_to_frame()
+        snooze_elem = self.UTILS.element.getElementByXpath(DOM.Clock.edit_alarm_selector_xpath.format(snooze))
+        snooze_elem.tap()
+        ok_btn = self.UTILS.element.getElement(DOM.Clock.edit_alarm_repeat_ok, "OK Button")
+        ok_btn.tap()
+
         # Save the alarm.
-        #
-        x = self.UTILS.element.getElement(DOM.Clock.alarm_done, "Done button")
-        x.tap()
+        self.UTILS.iframe.switch_to_frame(*DOM.Clock.frame_locator)
+        done_btn = self.UTILS.element.getElement(DOM.Clock.alarm_done, "Done button")
+        done_btn.tap()
 
-        #
         # Check the alarm details are displayed in the clock screen.
-        #
-        self.checkAlarmPreview(t_hour, minute, ampm, label, repeat)
+        self.check_alarm_preview(t_hour, minute, ampm, label, repeat)
 
-    def deleteAllAlarms(self):
-        #
-        # Deletes all current alarms.
-        #
-
-        #
-        # "self.parent.data_layer.delete_all_alarms()" isn't workng at the moment, so...
-        #
-        while True:
-            try:
-                self.parent.wait_for_element_present(*DOM.Clock.alarm_preview_alarms, timeout=3)
-                x = self.marionette.find_elements(*DOM.Clock.alarm_preview_alarms)
-            except:
-                #
-                # No alarms returned, so just move on...
-                #
-                break
-            if len(x) <= 0:
-                break
-
-            #
-            # Some alarms - delete the first one (we need to reload the
-            # list each time because it changes everytime we delete
-            # an alarm).
-            #
-            x[0].tap()
-            x = self.UTILS.element.getElement(DOM.Clock.alarm_delete_button, "Alarm delete button")
-            x.tap()
+    def delete_all_alarms(self):
+        """Delete all current alarms.
+        """
+        alarms = self.marionette.find_elements(*DOM.Clock.alarm_preview_alarms)
+        while alarms and len(alarms) > 0:
+            alarm = alarms[0]
+            self.UTILS.element.simulateClick(alarm)
+            delete_btn = self.UTILS.element.getElement(DOM.Clock.alarm_delete_button, "Alarm delete button")
+            delete_btn.tap()
             time.sleep(1)
+            alarms = self.marionette.find_elements(*DOM.Clock.alarm_preview_alarms)
