@@ -31,7 +31,7 @@ TARGET_DIR=$HOME/Downloads/device_flash_files
 #
 # Make sure nothing else is running first.
 #
-$OWD_TEST_TOOLKIT_BIN/wait_for_no_other_test_run.sh $$
+#$OWD_TEST_TOOLKIT_BIN/wait_for_no_other_test_run.sh $$
 
 
 # By default, get the build file too (just pass any parameter as $3 and it'll skip this).

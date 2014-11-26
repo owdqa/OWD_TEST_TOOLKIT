@@ -28,9 +28,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         This method is responsible of running a single test.
         We've overrun it in order to perform some tasks belonging to OWD initiative.
         """
-        #
-        # Previous operations
-        #
+        # Extract the test identifier
         idx = filepath.rindex('test_')
         # + 5: to skip the "test_" part
         # - 3: to remove the .py extension"""
@@ -46,7 +44,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             description = "[BLOCKED] " + self.blocked_tests[test_num][:desc_len] + "..."
             expected = "fail"
 
-        sys.stdout.write(u"{}: {:100s} ".format(test_num, description))
+        sys.stdout.write(u"{}: {:103s} ".format(test_num, description))
         sys.stdout.flush()
 
         # TODO - erase them when deleting reportResults
