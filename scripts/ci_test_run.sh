@@ -23,5 +23,5 @@ export TEST_TYPE=${3:-"REGRESSION"}
 #cd $owd_test_cases_DIR
 cd $OWD_TEST_TOOLKIT_DIR/../owd_test_cases
 
-sudo python ../../OWD_TEST_TOOLKIT/scripts/ffox_test_runner.py --testvars=../../OWD_TEST_TOOLKIT/config/gaiatest_testvars.json --address=localhost:2828 tests/$TEST_TYPE
+sudo python ../OWD_TEST_TOOLKIT/scripts/ffox_test_runner.py --testvars=../OWD_TEST_TOOLKIT/config/gaiatest_testvars.json --address=localhost:2828 tests/$TEST_TYPE
 
