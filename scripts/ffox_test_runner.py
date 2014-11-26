@@ -82,8 +82,8 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             while attempt < self.testvars["test_retries"]:
                 results = runner.run(suite)
                 total_time += results.time_taken
+                attempt += 1
                 if len(results.errors) + len(results.failures) > 0:
-                    attempt += 1
                     suite._tests[0].restart = True
                     # If we have to reattempt, just substract the number of assertions to keep the results
                     # accurate

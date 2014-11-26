@@ -993,7 +993,7 @@ class Messages(object):
 
         # (Give the spinner time to appear.)
         time.sleep(2)
-        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 120)
+        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 180)
 
         #
         # Check if we received the 'service unavailable' message.
