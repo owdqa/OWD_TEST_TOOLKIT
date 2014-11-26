@@ -76,8 +76,12 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
             # This will redirect the messages that will go by default to the error output to another file
             runner.stream = unittest.runner._WritelnDecorator(open(self.testvars['error_output'], 'a'))
+
+            # Temporary variable to store the total time used by all test retries, not only the last one.
+            total_time = 0
             while attempt < self.testvars["test_retries"]:
                 results = runner.run(suite)
+                total_time += results.time_taken
                 if len(results.errors) + len(results.failures) > 0:
                     attempt += 1
                     suite._tests[0].restart = True
@@ -90,6 +94,11 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                                                                 self.assertion_manager.get_failed())
                 else:
                     break
+
+            # Store the total time in the results, for the report
+            results.time_taken = total_time
+            # Store the total number of attempts done for this test, for the report
+            results.attempts = attempt
             self.results.append(results)
 
             self.failed += len(results.failures) + len(results.errors)
@@ -138,8 +147,9 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         hundreds_str = ".{:02d}s".format(hundreds)
         time_string = "{}{}{}{}".format(hours_str if hours else "", \
                                       mins_str if mins else "", seconds_str, hundreds_str)
-        sys.stdout.write("({})  {:20s} (assertions: {}/{})\n".\
-                         format(time_string, self.get_result_msg(results),
+        sys.stdout.write("({}) {} {:20s} (assertions: {}/{})\n".\
+                         format(time_string, "(x{})".format(results.attempts) if results.attempts > 1 else "",
+                                self.get_result_msg(results),
                                 OWDMarionetteTestRunner.assertion_manager.get_passed(),
                                 OWDMarionetteTestRunner.assertion_manager.get_total()))
 

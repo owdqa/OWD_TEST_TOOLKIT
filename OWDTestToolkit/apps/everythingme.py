@@ -64,8 +64,7 @@ class EverythingMe(object):
 
         self.UTILS.test.test(app_name == name, "" + app_name + "'is the correct app", True)
 
-        actions = Actions(self.marionette)
-        actions.long_press(x, 2).perform()
+        self.actions.long_press(x, 2).perform()
 
         x = self.UTILS.element.getElement(DOM.EME.add_to_home_screen_btn, "Add app to homescreen button")
         x.tap()
@@ -292,8 +291,7 @@ class EverythingMe(object):
         #
         ok = False
         x = self.marionette.find_element('xpath', DOM.Home.app_icon_xpath.format(group_array[0]))
-        actions = Actions(self.marionette)
-        actions.press(x).wait(3).release()
+        self.actions.press(x).wait(3).release()
         try:
             actions.perform()
         except:
