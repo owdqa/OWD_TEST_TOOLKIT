@@ -145,9 +145,9 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         seconds_str = "{:02d}".format(seconds)
         hundreds = int((results.time_taken - int(results.time_taken)) * 100)
         hundreds_str = ".{:02d}s".format(hundreds)
-        time_string = "{}{}{}{}".format(hours_str if hours else "", \
+        time_string = "{:3s}{:3s}{}{}".format(hours_str if hours else "", \
                                       mins_str if mins else "", seconds_str, hundreds_str)
-        sys.stdout.write("({}) {} {:20s} (assertions: {}/{})\n".\
+        sys.stdout.write("{} {:4s} {:20s} (assertions: {}/{})\n".\
                          format(time_string, "(x{})".format(results.attempts) if results.attempts > 1 else "",
                                 self.get_result_msg(results),
                                 OWDMarionetteTestRunner.assertion_manager.get_passed(),
