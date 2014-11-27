@@ -56,7 +56,8 @@ $OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
 
 
 #
-# Install me.
+# Checkout is already made in script from CI (prepare_and_run.sh),
+# but it is necesary to maintain (repeat) here, in case of direct installation into local machine
 #
 printf "\n\n<b>Completing install of OWD_TEST_TOOLKIT...</b>" | tee -a $LOGFILE
 printf "\n<b>=========================================</b>\n" | tee -a $LOGFILE
