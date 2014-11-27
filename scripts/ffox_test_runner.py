@@ -260,7 +260,10 @@ class Main():
 
     @property
     def _console_separator(self):
-        columns = int(os.popen('stty size', 'r').read().split()[-1])
+        try:
+            columns = int(os.popen('stty size', 'r').read().split()[-1])
+        except Exception:
+            columns = 120
         return "#" * columns
 
     def display_results(self):

@@ -77,5 +77,8 @@
 	"blocked_tests": "Docs/blocked_tests.json",
 	"description_length": "100",
 	"smsc_number": "+34609090909",
-	"test_retries": 2
+	"test_retries": 2,
+	"GLOBAL_LOOP_VIA": "Grunt",
+    "GLOBAL_LOOP_DIR": "/home/develenv/projects/firefoxos-loop-client",
+    "GLOBAL_LOOP_AUX_FILES": "/home/develenv/projects/owd_test_cases/tests/LOOP/aux_files"
 }
