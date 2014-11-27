@@ -4,8 +4,8 @@
 #
 cd $OWD_TEST_TOOLKIT_DIR
 
-./install.sh $BRANCH >/dev/null 2>&1
-
+#./install.sh $BRANCH >/dev/null 2>&1
+$OWD_TEST_TOOLKIT_DIR/install.sh $BRANCH >/dev/null 2>&1
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
