@@ -24,3 +24,5 @@ cd owd_test_cases
 printf "\n<b>Switching to branch $INTEGRATION$BRANCH of owd_test_cases ...</b>\n\n" >> $LOGFILE
 git checkout $INTEGRATION$BRANCH  >> $LOGFILE 2>&1
 printf "\n<b>Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".</b>\n\n" >> $LOGFILE
+
+cd $OWD_TEST_TOOLKIT_DIR/..
