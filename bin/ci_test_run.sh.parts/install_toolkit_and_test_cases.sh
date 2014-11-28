@@ -4,6 +4,9 @@
 #
 cd $OWD_TEST_TOOLKIT_DIR
 
+# Log file for 'everything'.
+export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%H%M%Y%m%d).log"}
+
 ./install.sh $BRANCH >/dev/null 2>&1
 
 
