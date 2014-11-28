@@ -3,9 +3,9 @@
 # are still in the parent directory).
 #
 cd $OWD_TEST_TOOLKIT_DIR
-
+read -p "Press [Enter] to continue..."
 #./install.sh $BRANCH >/dev/null 2>&1
-$OWD_TEST_TOOLKIT_DIR/install.sh $BRANCH >/dev/null 2>&1
+$OWD_TEST_TOOLKIT_DIR/install.sh $BRANCH >> $LOGFILE 2>&1
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
