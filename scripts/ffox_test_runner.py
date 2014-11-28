@@ -44,14 +44,13 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             description = "[BLOCKED] " + self.blocked_tests[test_num][:desc_len] + "..."
             expected = "fail"
 
+        self.logger.info('TEST-START {}'.format(os.path.basename(filepath)))
+
         sys.stdout.write(u"{}: {:103s} ".format(test_num, description))
         sys.stdout.flush()
 
         # TODO - erase them when deleting reportResults
         self.testvars['TEST_NUM'] = test_num
-
-        # Parent method -> start
-        self.logger.info('TEST-START %s' % os.path.basename(filepath))
 
         testloader = unittest.TestLoader()
         suite = unittest.TestSuite()
