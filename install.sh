@@ -78,6 +78,12 @@ then
     sudo rm -rf OWDTestToolkit OWD_TEST_TOOLKIT*egg* 2>/dev/null
 fi
 
+# If there is a testvars file under $HOME, overwrite the one in the repository
+if [ -f $HOME/gaiatest_testvars.json ]
+then
+    cp $HOME/gaiatest_testvars.json $OWD_TEST_TOOLKIT_DIR/config/gaiatest_testvars.json
+fi
+
 cd $OWD_TEST_TOOLKIT_DIR
 sudo python setup.py clean --all >> $LOGFILE 2>&1
 sudo python setup.py install >> $LOGFILE 2>&1
