@@ -13,9 +13,6 @@ EOF
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
-# Log file for 'everything'.
-export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%H%M%Y%m%d).log"}
-
 export BRANCH=${1:"v2.0"}
 
 #

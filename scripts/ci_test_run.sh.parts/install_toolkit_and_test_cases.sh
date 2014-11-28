@@ -1,10 +1,13 @@
+#!/bin/bash
 #
 # Install the toolkit and dependencies (assume we've just cloned it and 
 # are still in the parent directory).
 #
 cd $OWD_TEST_TOOLKIT_DIR
-read -p "Press [Enter] to continue..."
-#./install.sh $BRANCH >/dev/null 2>&1
+# Log file for 'everything'.
+
+export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%H%M%Y%m%d).log"}
+
 $OWD_TEST_TOOLKIT_DIR/install.sh $BRANCH >> $LOGFILE 2>&1
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
