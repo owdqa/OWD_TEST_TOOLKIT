@@ -3,7 +3,6 @@
 # Install the toolkit and dependencies (assume we've just cloned it and 
 # are still in the parent directory).
 #
-export OWD_TEST_TOOLKIT_DIR=$(pwd)/../..
 cd $OWD_TEST_TOOLKIT_DIR
 # Log file for 'everything'.
 
