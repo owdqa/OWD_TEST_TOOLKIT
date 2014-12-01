@@ -13,6 +13,7 @@ EOF
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 export BRANCH=${1:"v2.0"}
+[ "$BRANCH" = "1.0.1" ] && export BRANCH="v1.0.1"
 
 #
 # CHECK DEPENDENCIES ...
