@@ -10,29 +10,6 @@ class test(object):
         self.passed = self.assertion_manager.passed
         self.failed = self.assertion_manager.failed
 
-    def quit_test(self, msg=False):
-        #
-        # Quit this test suite.
-        #
-        self.parent.reporting.log_to_file("Quit test due to fatal error", level='error')
-        if not msg:
-            msg = "CANNOT CONTINUE PAST THIS ERROR - ABORTING THIS test CASE!"
-        else:
-            msg = msg
-
-        self.parent.reporting.logResult(False, msg)
-
-        #
-        # Collect info on every iframe for debugging ...
-        #
-        self.parent.reporting.logResult("info", "<b style='color: #62E3C5'>Starting frame dump...</b>")
-        self.parent.iframe.view_all_iframes()
-
-        #
-        # Report the results.
-        #
-        self.parent.reporting.reportResults()
-
     def test(self, result, msg, stop_on_error=False):
         #
         # Test that result is true.

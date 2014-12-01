@@ -9,8 +9,6 @@ export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%Y%m%d%H%M).log"}
 
 . $OWD_TEST_TOOLKIT_DIR/install.sh $BRANCH >> $LOGFILE 2>&1
 
-. $HOME/.OWD_TEST_TOOLKIT_LOCATION
-
 #
 # Re-install the test cases too.
 #

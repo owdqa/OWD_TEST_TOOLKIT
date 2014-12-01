@@ -572,9 +572,9 @@ class Settings(object):
         # there's sometimes more than one match for this icon DOM reference).
         #
         time.sleep(0.5)
-        x = self.UTILS.element.getElements(DOM.Settings.back_button, "Back buttons", False)
+        back_btns = self.UTILS.element.getElements(DOM.Settings.back_button, "Back buttons", False)
         ok = False
-        for i in x:
+        for i in back_btns:
             try:
                 i.tap()
                 ok = True
@@ -594,8 +594,8 @@ class Settings(object):
         # Go to Sound menu.
         #
         self.launch()
-        x = self.UTILS.element.getElement(DOM.Settings.sound, "Sound setting link")
-        x.tap()
+        sound_menu = self.UTILS.element.getElement(DOM.Settings.sound, "Sound setting link")
+        sound_menu.tap()
 
     def hotSpot(self):
         """
@@ -607,8 +607,8 @@ class Settings(object):
         self.UTILS.reporting.debug("*** Found hotspot menu: {}".format(hotspot_elem))
         self.UTILS.element.scroll_into_view(hotspot_elem)
 
-        x = self.UTILS.element.getElement(DOM.Settings.hotspot, "'Internet sharing' (hotspot) link")
-        x.tap()
+        hotspot_menu = self.UTILS.element.getElement(DOM.Settings.hotspot, "'Internet sharing' (hotspot) link")
+        hotspot_menu.tap()
 
         self.UTILS.element.waitForElements(DOM.Settings.hotspot_header, "Hotspot header appears.", True, 20, False)
 
@@ -617,18 +617,18 @@ class Settings(object):
         # Open cellular and data settings.
         #
         self.cellular_and_data()
-        x = self.UTILS.element.getElement(DOM.Settings.celldata_DataSettings, "Data settings link")
-        self.UTILS.element.scroll_into_view(x)
-        x.tap()
+        data_menu = self.UTILS.element.getElement(DOM.Settings.celldata_DataSettings, "Data settings link")
+        self.UTILS.element.scroll_into_view(data_menu)
+        data_menu.tap()
 
     def open_msg_settings(self):
         #
         # Open cellular and data settings.
         #
         self.cellular_and_data()
-        x = self.UTILS.element.getElement(DOM.Settings.celldata_MsgSettings, "Message settings link")
-        self.UTILS.element.scroll_into_view(x)
-        x.tap()
+        msg_menu = self.UTILS.element.getElement(DOM.Settings.celldata_MsgSettings, "Message settings link")
+        self.UTILS.element.scroll_into_view(msg_menu)
+        msg_menu.tap()
 
     def selectDefaultAPN(self, apn, open_settings=True):
 
@@ -642,15 +642,15 @@ class Settings(object):
         # Tap on the added APN
         #
         dom_elem = (DOM.Settings.default_apn[0], DOM.Settings.default_apn[1].format(apn))
-        x = self.UTILS.element.getElement(dom_elem, "Added APN")
-        self.UTILS.test.TEST(True, "APN {} element: {}".format(apn, x))
-        x.tap()
+        apn_elem = self.UTILS.element.getElement(dom_elem, "Added APN")
+        self.UTILS.reporting.debug("APN {} element: {}".format(apn, apn_elem))
+        apn_elem.tap()
 
         #
         # Tap the ok button to save the changes
         #
-        x = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
-        x.tap()
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
+        ok_btn.tap()
         self.goBack()
         sim_card_option = self.get_multi_sim()
         if sim_card_option:

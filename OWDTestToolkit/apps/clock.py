@@ -68,7 +68,6 @@ class Clock(object):
             msg = "Cannot find the iframe containing the clock! ('" + \
                   DOM.Clock.alarm_alert_iframe[0] + "' contains '" + \
                   DOM.Clock.alarm_alert_iframe[1] + "')."
-            self.UTILS.test.quit_test(msg)
 
         #
         # Sort the time out into 12 hour format.

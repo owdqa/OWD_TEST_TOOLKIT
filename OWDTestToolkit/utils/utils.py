@@ -1,4 +1,3 @@
-import sys
 import time
 import datetime
 from marionette import Actions

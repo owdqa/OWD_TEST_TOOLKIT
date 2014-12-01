@@ -12,11 +12,9 @@ class reporting(object):
         self.comment_array = []
         self.init_time = time.time()
         self.test_num = self.parent.parent.__module__[5:]
-        self.detail_file = "{}/{}_detail.html".format(self._gov()('RESULT_DIR'), self.test_num)
+        self.detail_file = "{}/{}_detail.html".format(self.parent.general.get_config_variable('RESULT_DIR'),
+                                                      self.test_num)
         self.logger = logging.getLogger('OWDTestToolkit')
-
-    def _gov(self):
-        return self.parent.general.get_config_variable
 
     def log_to_file(self, message, level='info'):
         if level in ('critical', 'error', 'warn', 'info', 'debug'):

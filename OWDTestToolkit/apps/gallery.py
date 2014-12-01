@@ -49,7 +49,7 @@ class Gallery(object):
     def click_on_thumbnail_at_position(self, position, preview=True):
         """
         Clicks on a thumbnail at a certain position from the gallery.
-        @param  boolean     preview     specifies whether we have to check for the preview screen or not 
+        @param  boolean     preview     specifies whether we have to check for the preview screen or not
         """
         self.parent.wait_for_element_displayed(*DOM.Gallery.thumbnail_items)
         thumb_list = self.marionette.find_elements(*DOM.Gallery.thumbnail_items)
@@ -64,7 +64,7 @@ class Gallery(object):
     def _click_on_thumb_external(self, position, frame_to_change):
         """
         Private method which handles image selection and image cropping
-        @param  int     position            thumbnail to click 
+        @param  int     position            thumbnail to click
         @param  tuple   frame_to_change     frame to switch once the image has been cropped
         """
         time.sleep(1)
@@ -83,7 +83,7 @@ class Gallery(object):
         """
         self._click_on_thumb_external(position, DOM.Messages.frame_locator)
 
-    def click_on_thumbnail_at_position_email(self, num):
+    def click_on_thumbnail_at_position_email(self, position):
         """
         Clicks a thumbnail from the gallery in order to attach it to an email
         """
@@ -128,8 +128,9 @@ class Gallery(object):
             select_mode_btn.tap()
 
             current_thumbs = self.get_number_of_thumbnails()
-            self.UTILS.test.test(current_thumbs == target_thumbcount, "After deleting [{}] pics, we have the expected number: {}".format(
-                delete_thumbcount, target_thumbcount))
+            self.UTILS.test.test(current_thumbs == target_thumbcount,
+                                 "After deleting [{}] pics, we have the expected number: {}".\
+                                 format(delete_thumbcount, target_thumbcount))
 
     def get_gallery_items(self):
         """

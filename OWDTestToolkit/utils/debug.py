@@ -1,6 +1,3 @@
-import traceback
-from inspect import stack
-import os
 import base64
 
 
@@ -11,26 +8,6 @@ class debug(object):
         self.errNum = parent.errNum
         self.test_num = parent.test_num
         self.marionette = parent.marionette
-
-    def getStackTrace(self):
-        #
-        # Adds the stack trace to the test report (called automatically if UTILS.test() fails).
-        #
-
-        _logstr = "STACK TRACE (code path to this point):"
-        _stack = traceback.extract_stack()
-        _counter = 0
-
-        for i in _stack:
-            if ("OWDTestToolkit" in i[0] or "/test_" in i[0]) and \
-                "quit_test.py" not in i[0] and i[2] != stack()[0][3] and \
-                i[2] != "test":
-                    _counter = _counter + 1
-                    _logstr = _logstr + "|{}. {}: <i>{}</i>".\
-                              format(_counter, ("<b>" + os.path.basename(i[0]) + "</b>({})".format(i[1])).ljust(40),
-                                     i[3])
-
-        self.parent.reporting.logResult("debug", _logstr)
 
     def save_page_html(self, p_outfile):
         #
