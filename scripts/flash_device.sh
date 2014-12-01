@@ -31,7 +31,7 @@ TARGET_DIR=$HOME/Downloads/device_flash_files
 #
 # Make sure nothing else is running first.
 #
-$OWD_TEST_TOOLKIT_BIN/wait_for_no_other_test_run.sh $$
+#$OWD_TEST_TOOLKIT_BIN/wait_for_no_other_test_run.sh $$
 
 
 # By default, get the build file too (just pass any parameter as $3 and it'll skip this).
@@ -51,8 +51,8 @@ fi
 #
 cd $TARGET_DIR
 #REL_FILE=$(ls -lrt | grep -vi "^total" | egrep "${DEVICE}.*\.${TYPE}\.${VERSION}" | tail -1 | awk '{print $NF}')
-# Add "AutomatizationVersion flag"
-REL_FILE=$(ls -lrt | grep -vi "^total" | egrep "${DEVICE}.*\.${TYPE}\.${VERSION}\.AutomatizationVersion" | tail -1 | awk '{print $NF}')
+# Add "AutomationVersion flag"
+REL_FILE=$(ls -lrt | grep -vi "^total" | egrep "${DEVICE}.*\.${TYPE}\.${VERSION}\.AutomationVersion" | tail -1 | awk '{print $NF}')
 if [ ! "$REL_FILE" ]
 then
     printf "\n*** WARNING: NO BUILD FILES FOUND IN $TARGET_DIR! ***\n\n"

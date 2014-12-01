@@ -169,7 +169,6 @@ class Calendar(object):
         self.setView("month")
         self.setView("today")
 
-        self.actions = Actions(self.marionette)
         now_secs = time.time()
         now_diff = int(now_secs) + (86400 * numDays)
         now_today = self.UTILS.date_and_time.getDateTimeFromEpochSecs(now_secs)

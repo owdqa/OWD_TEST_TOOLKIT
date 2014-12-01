@@ -9,11 +9,11 @@ class Messages(object):
 
     def __init__(self, parent):
         self.parent = parent
-        self.api_key = parent.general.get_os_variable("PIGEON_API_KEY")
-        self.api_secret = parent.general.get_os_variable("PIGEON_API_SECRET")
-        self.url = parent.general.get_os_variable("PIGEON_URL")
-        self.nowsms_user = parent.general.get_os_variable("NOWSMS_USER")
-        self.nowsms_pass = parent.general.get_os_variable("NOWSMS_PASS")
+        self.api_key = parent.general.get_config_variable("PIGEON_API_KEY")
+        self.api_secret = parent.general.get_config_variable("PIGEON_API_SECRET")
+        self.url = parent.general.get_config_variable("PIGEON_URL")
+        self.nowsms_user = parent.general.get_config_variable("NOWSMS_USER")
+        self.nowsms_pass = parent.general.get_config_variable("NOWSMS_PASS")
 
     def create_incoming_cp(self, phone_number, pin_type, ota_filename, pin_number=None):
         """Create incoming client provisioning message
@@ -30,13 +30,13 @@ class Messages(object):
                    "content-type": "application/x-www-form-urlencoded"}
 
         pigeon = pigeonpdu.PigeonPDU()
-        user_data = pigeon.getXMLPushUserdata(ota_filename, pin_number)
+        user_data = pigeon.getXMLPushUserdata(ota_filename, pin_number, pin_type)
         pdu_data = binascii.hexlify(user_data)
         # If no security is used, we must extract that part from the PDU.
         self.parent.reporting.debug("PDU_DATA: [{}]".format(pdu_data))
         if pin_type is "NONE":
             pdu_data = pdu_data[0:4] + "01b6" + pdu_data[pdu_data.index("030b6a"):]
-        self.parent.test.test(True, "Sending CP message to {} from file {}".format(phone_number, ota_filename))
+        self.parent.reporting.debug("Sending CP message to {} from file {}".format(phone_number, ota_filename))
 
         data = {"dataCodingScheme": "F5", "protocolId": "00", "pduType": "41", "sourcePort": 9200,
                 "destinationPort": 2948, "pduData": "{}".format(pdu_data)}
@@ -64,11 +64,11 @@ class Messages(object):
         headers = {"api_key": self.api_key, "api_secret": self.api_secret}
         pigeon = pigeonpdu.PigeonPDU()
         pdu_data = pigeon.gsm_encode(message)
-        self.parent.test.test(True, "PDU_DATA: {}".format(pdu_data))
+        self.parent.reporting.debug("PDU_DATA: {}".format(pdu_data))
         data = {"dataCodingScheme": "F{}".format(clazz), "protocolId": "00", "pduType": "01", "sourcePort": 9200,
                 "destinationPort": 2948, "pduData": "{}".format(pdu_data)}
         payload = {"to": ["tel:{}".format(phone_number)], "binaryMessage": data}
-        self.parent.test.test(True, "Binary message data: {}".format(data))
+        self.parent.reporting.debug("Binary message data: {}".format(data))
         return self.send_and_check(headers, payload, "binary SMS Class {}".format(clazz))
 
     def create_incoming_wap_push(self, phone_number, typ, wap_url, message="", action='signal-medium'):
@@ -83,7 +83,7 @@ class Messages(object):
         headers = {"api_key": self.api_key, "api_secret": self.api_secret}
         pigeon = pigeonpdu.PigeonPDU()
         pdu_data = pigeon.generate_wap_push_pdu(typ, wap_url, message)
-        self.parent.test.test(True, "PDU_DATA: {}".format(binascii.hexlify(pdu_data)))
+        self.parent.reporting.debug("PDU_DATA: {}".format(binascii.hexlify(pdu_data)))
         data = {"dataCodingScheme": "F5", "protocolId": "00", "pduType": "41", "sourcePort": 9200,
                 "destinationPort": 2948, "pduData": "{}".format(binascii.hexlify(pdu_data))}
         payload = {"to": ["tel:{}".format(phone_number)], "binaryMessage": data}

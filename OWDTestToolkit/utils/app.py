@@ -104,6 +104,7 @@ class app(object):
             icons = self.marionette.find_elements(*DOM.Home.apps)
             self.parent.reporting.debug("*** Found {} Applications".format(len(icons)))
             self.parent.element.scroll_into_view(app_icon)
+            time.sleep(1)
             self.parent.reporting.logResult("debug", "icon displayed: {}".format(app_icon.is_displayed()))
             if app_icon.is_displayed():
                 return app_icon

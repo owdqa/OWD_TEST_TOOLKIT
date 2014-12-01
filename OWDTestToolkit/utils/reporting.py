@@ -1,33 +1,20 @@
+from bs4 import BeautifulSoup
 import time
 import datetime
-import codecs
-import logging.config
+import logging
 
 
 class reporting(object):
 
-    def __init__(self, parent, result, comment):
+    def __init__(self, parent):
         self.parent = parent
-        self._resultArray = result
-        self._commentArray = comment
-        self.passed = parent.passed
-        self.failed = parent.failed
-        self.det_fnam = parent.det_fnam
-        self.sum_fnam = parent.sum_fnam
-        self.testNum = parent.testNum
-        self.config_file = self.parent.general.get_os_variable("OWD_LOG_CFG")
-        logging.config.fileConfig(self.config_file)
+        self.result_array = []
+        self.comment_array = []
+        self.init_time = time.time()
+        self.test_num = self.parent.parent.__module__[5:]
+        self.detail_file = "{}/{}_detail.html".format(self.parent.general.get_config_variable('RESULT_DIR'),
+                                                      self.test_num)
         self.logger = logging.getLogger('OWDTestToolkit')
-
-    def logComment(self, p_str):
-        #
-        # Add a comment to the comment array.
-        #
-        self._commentArray.append(p_str)
-        self.logger.info("Adding comment: {}".format(p_str))
-
-    _subnote = "|__ "
-    _no_time = "         "
 
     def log_to_file(self, message, level='info'):
         if level in ('critical', 'error', 'warn', 'info', 'debug'):
@@ -51,154 +38,124 @@ class reporting(object):
     def debug(self, message):
         self.logger.debug(message)
 
-    def logResult(self, p_result, p_msg, p_fnam=False):
+    def logComment(self, comment):
         #
-        # Add a test result to the result array.
-        # Everything after the first "|" is a 'note' line for this message
-        # (will be put on a separate line with _subnote prefixed).
+        # Add a comment to the comment array.
         #
-        self.logger.info(u"Logging result: [{}] with message [{}]. p_fnam: {}".format(p_result, p_msg, p_fnam))
-        if str(p_result).lower() == "info":
-            timestamp = self._no_time
-        elif str(p_result).lower() == "debug":
-            timestamp = self._no_time
-            p_msg = '<span style="color:c5c5c5;font-style:italic"><b>DEBUG NOTE:</b> ' + p_msg
-        else:
-            #
-            # Set up timestamp and mark this as pass or fail.
-            #
-            time_now = time.time() - self.parent.last_timestamp
-            time_now = round(time_now, 0)
-            time_now = "[" + str(datetime.timedelta(seconds=time_now)) + "]"
+        self.comment_array.append(comment)
+        self.logger.info("Adding comment: {}".format(comment))
 
-            self.last_timestamp = time.time()
+    def _get_timestamp(self):
+        time_now = round(time.time() - self.init_time, 0)
+        time_now = str(datetime.timedelta(seconds=time_now))
+        return "[{}]".format(time_now)
 
-            _color = "#ff0000" if not p_result else "#00aa00"
-            span_tag = '<span style="color:' + _color + '">'
-            timestamp = span_tag + time_now + "</span>"
+    def logResult(self, msg_type, msg, details=False):
+        self.logger.info(u"Logging result: [{}] with message [{}]. p_fnam: {}".format(msg_type, msg, details))
+        log = {'msg_type': str(msg_type),
+               'timestamp': self._get_timestamp(),
+               'msg': "DEBUG NOTE: " + msg if msg_type is 'debug' else msg,
+               }
+        if details:
+            log['details'] = details
 
-        # If we have filename details then add them to the message as note lines.
-        if p_fnam:
-            if len(p_fnam) == 2:
-                p_msg = p_msg + "|current screenshot  = " + p_fnam[1]
-                p_msg = p_msg + "|current html source = " + p_fnam[0]
-            else:
-                p_msg = p_msg + "|" + p_fnam
+        self.result_array.append(log)
 
-        p_msg = p_msg + "</span>"
+    def _extract_html_from_log(self, soup, parent_node, log):
+            def _fill_detail(outer_class, inner_tag_type, content):
+                outer_tag = soup.new_tag('div', **{'class': outer_class})
+                inner_tag = soup.new_tag(inner_tag_type, href=content, target="_blank") if inner_tag_type == "a" else\
+                            soup.new_tag(inner_tag_type)
+                inner_tag.string = "Link to {}".format(outer_class) if inner_tag_type == "a" else content
+                outer_tag.append(inner_tag)
+                return outer_tag
 
-        #
-        # The double brackets is intentional (add a 2 part
-        # array: true/false/info + message).
-        #
-        msgArr = p_msg.split("|")
+            new_log_tag = soup.new_tag("li", **{'class': 'log {}'.format(log['msg_type'])})
 
-        msgMain = msgArr[0]
-        if str(p_result).lower() != "info" and str(p_result).lower() != "debug":
-            #
-            # This is a 'test' item so make it bold.
-            #
-            msgMain = span_tag + msgMain + "</span>"
+            timestamp_tag = soup.new_tag('span', **{'class': 'timestamp'})
+            timestamp_tag.string = log['timestamp']
+            new_log_tag.append(timestamp_tag)
 
-        self._resultArray.append((self._no_time, "info", " "))  # (blank newline)
-        self._resultArray.append((timestamp, p_result, msgMain))  # (the main message)
+            msg_tag = soup.new_tag('span', **{'class': 'message'})
+            msg_tag.string = log['msg']
+            new_log_tag.append(msg_tag)
 
-        if str(p_result).lower() != "info" and str(p_result).lower() != "debug":
-            if p_result:
-                self.passed = self.passed + 1
-                return
-            else:
-                self.failed = self.failed + 1
+            if 'details' in log:
+                details = log['details']
+                details_tag = soup.new_tag('div', **{'class': 'details'})
 
-        #
-        # Print subnote (only for failed and 'info' messages.
-        #
-        self._printSubNote(msgArr)
+                # Different scenarios here:
+                #    a) 3 elements: DOM_locator, screenshot, html_dump
+                #    b) 2 elements: screenshot, html_dump
+                #    c) 1 element: just a detail
 
-    def _printSubNote(self, msgArr):
-        #
-        # <i>Private</i> function for reporting. Used by the
-        # 'utils' method 'logResult()' - do not call this
-        # manually.
-        #
-        for i in range(1, len(msgArr)):  # (any 'notes' for this message)
-            self._resultArray.append((self._no_time, "info", self._subnote + msgArr[i]))
+                if len(details) == 3:
+                    details_tag.append(_fill_detail('locator', 'p', details[2]))
+                    details_tag.append(_fill_detail('screenshot', 'a', details[1]))
+                    details_tag.append(_fill_detail('html-dump', 'a', details[0]))
+                elif len(details) == 2:
+                    details_tag.append(_fill_detail('screenshot', 'a', details[1]))
+                    details_tag.append(_fill_detail('html-dump', 'a', details[0]))
+                elif len(details) == 1:
+                    details_tag.append(_fill_detail('detail', 'p', details[0]))
+
+                new_log_tag.append(details_tag)
+
+            return new_log_tag
 
     def reportResults(self):
-        #
-        # Create output files (summary, which is displayed and
-        # details, which is not displayed).
-        #
-        # NOTE: "XXDESCXX" is a marker that 'run_all_tests.sh' switches
-        #       to the correct test description.
-        #
-        pass_str = "passed"
-        fail_str = "FAILED"
-        pass_span = "<span style='color:#00aa00'>"
-        fail_span = "<span style='color:#ff0000'>"
-        test_time = time.time() - self.parent.start_time
-        test_time = round(test_time, 0)
-        test_time = str(datetime.timedelta(seconds=test_time))
+        detail_html_template = """
+        <html>
+            <head>
+                <title>{0}: Test Detail</title>
+                <link rel="stylesheet" type="text/css" href="details.css">
+            </head>
+            <body>
+                <div id="main-title">
+                TEST RESULT
+                </div>
+                <div id="general-info" class="highlighted-box">
+                    <div class="title"> Test info </div>
+                    <div id="test-number-container">
+                        <span class="label">Test number:</span>
+                        <span id="test-number">{0}</span>
+                    </div>
+                    <div id="test-description-container">
+                        <span class="label">Description:</span>
+                        <span id="test-description"></span>
+                    </div>
+                    <div id="duration-container">
+                        <span class="label">Time taken:</span>
+                        <span id="duration"></span>
+                    </div>
+                    <div id="result-container">
+                        <span class="label">Result:</span>
+                    </div>
+                    <div id="comments">
+                        Comments
+                        <ul id="comments-list"></ul>
+                    </div>
+                </div>
+                <div id="logs" class="highlighted-box">
+                    <div class="title">Logs</div>
+                    <ul id="logs-list"></ul>
+                </div>
+            </body>
+        </html>
+        """
+        soup = BeautifulSoup(detail_html_template.format(self.test_num))
 
-        detail_file = codecs.open(self.det_fnam, "w", encoding='utf-8')
-        sum_file = codecs.open(self.sum_fnam, "w", encoding='utf-8')
+        comments = soup.find("ul", id="comments-list")
+        for comment in self.comment_array:
+            new_comment_tag = soup.new_tag("li", **{"class": "comment"})
+            new_comment_tag.string = comment
+            comments.append(new_comment_tag)
 
-        detail_file.write("<span style=\"font-size:14px\">")
-        detail_file.write("<b>Test case</b>      : <b>{}</b>\n".format(self.testNum))
-        detail_file.write("<b>Test desc</b>      : XXDESCXX\n")
+        logs = soup.find("ul", id="logs-list")
 
-        detail_file.write("<b>Time taken</b>     : {} (not including restarting device etc...)\n".format(test_time))
+        for result in self.result_array:
+            logs.append(self._extract_html_from_log(soup, logs, result))
 
-        boolStart = False
-        for i in self._commentArray:
-            if not boolStart:
-                boolStart = True
-                detail_file.write("<b>Comments</b>       : {}\n".format(i))
-            else:
-                detail_file.write("               : {}\n".format(i))
-
-        if self.failed == 0:
-            res_str = pass_str
-            res_span = pass_span
-        else:
-            res_str = fail_str
-            res_span = fail_span
-
-        #
-        # Get total number of tests performed.
-        #
-        total_tests = self.passed + self.failed
-
-        #
-        # Return summary information to stdout.
-        #
-        sum_file.write("{}\t{}\t{}".format(self.passed, self.failed, total_tests))
-
-        #
-        # Update details file.
-        #
-        detail_file.write("<b>Asserts passed</b> : {}\n".format(self.passed))
-        detail_file.write("<b>Asserts failed</b> : {}\n".format(self.failed))
-        detail_file.write("<b>Asserts result</b> : <b>{}{}</span></b>\n".format(res_span, res_str))
-        detail_file.write("</span>")
-        detail_file.write("\n")
-
-        x = len(self._resultArray)
-        if x > 0:
-            for i in self._resultArray:
-                try:
-                    if i[1]:
-                        detail_file.write(" " * (len(fail_str) + 2))
-                    else:
-                        detail_file.write("<span style=\"font-weight:bold;color:#ff0000\">*" + fail_str + "*</span>")
-                    detail_file.write(" ")
-                except:
-                    # Sometimes a pass means that item [1] is an object!
-                    detail_file.write(pass_str)
-
-                detail_file.write(i[0])  # (Timestamp)
-                #detail_file.write(" " + i[2].encode('ascii', 'ignore') + "\n")
-                detail_file.write(" " + i[2] + "\n")
-
-        detail_file.close()
-        sum_file.close()
+        the_file = open(self.detail_file, 'w')
+        the_file.write(soup.prettify(encoding="utf8"))
+        the_file.close()

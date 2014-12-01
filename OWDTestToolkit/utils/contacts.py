@@ -27,7 +27,7 @@ class MockContact(dict):
         # Set default values
         curr_time = repr(time.time()).replace('.', '')
         self['givenName'] = 'OWD{}'.format(curr_time)
-        self['familyName'] = 'TEST'
+        self['familyName'] = 'test'
         self['name'] = '{} {}'.format(self['givenName'], self['familyName'])
         self['email'] = {
             'type': 'Personal',

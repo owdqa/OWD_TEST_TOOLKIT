@@ -72,8 +72,8 @@ class date_and_time(object):
         # Set the phone's time (using gaia data_layer instead of the UI).
         # <b>NOTE:</b> Also sets the timezone (continent and city).
         #
-        _continent = continent if continent else self.parent.general.get_os_variable("GLOBAL_YOUR_CONTINENT")
-        _city = city if city else self.parent.general.get_os_variable("GLOBAL_YOUR_CITY")
+        _continent = continent if continent else self.parent.general.get_config_variable("GLOBAL_YOUR_CONTINENT")
+        _city = city if city else self.parent.general.get_config_variable("GLOBAL_YOUR_CITY")
 
         self.parent.reporting.logResult("info", "(Setting timezone and time based on {} / {}.)".format(_continent, _city))
 
@@ -137,10 +137,7 @@ class date_and_time(object):
         #
         if hour >= 12:
             t_ampm = "PM"
-            if hour > 12:
-                t_hour = hour - 12
-            else:
-                t_hour = hour
+            t_hour = hour - 12 if hour > 12 else hour
         else:
             t_hour = hour
             t_ampm = "AM"

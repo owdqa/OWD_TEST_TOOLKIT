@@ -8,6 +8,7 @@ class element(object):
     def __init__(self, parent):
         self.parent = parent
         self.marionette = parent.marionette
+        self.actions = Actions(self.marionette)
 
     def getElement(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
         #
@@ -50,64 +51,33 @@ class element(object):
         self.parent.test.test(is_ok, "Header is \"" + value + "\".")
         return is_ok
 
-    def moveScroller(self, scroller, forward=True):
-        #
-        # Move the scroller back one item.
-        #
-        x = self._calcScrollerStep(scroller)
-
+    def move_scroller(self, scroller, forward=True):
+        """Move the scroller one item forward or backwards.
+        """
         x_pos = scroller.size['width'] / 2
         y_start = scroller.size['height'] / 2
 
-        if forward:
-            y_end = y_start * x
-        else:
-            y_end = y_start / x
-
-        self.actions.flick(scroller, x_pos, y_start, x_pos, y_end, 270)
+        y_end = -scroller.size['height'] if forward else scroller.size['height']
+        self.actions.flick(scroller, x_pos, y_start, x_pos, y_end, 100)
         self.actions.perform()
 
-        time.sleep(0.5)
-
-    def _calcScrollerStep(self, scroller):
-        #
-        # Calculates how big the step should be when 'flick'ing a scroller (based on the
-        # number of elements in the scroller).
-        # The idea is to make each step increment the scroller by 1 element.
-        #
-        x = float(len(scroller.find_elements("class name", "picker-unit")))
-
-        #
-        # This is a little formula I worked out - seems to work, but I've only
-        # tested it on the scrollers on my Ungai.
-        #
-        x = 1 - ((1 / ((x / 100) * 0.8)) / 100)
-
-        return x
-
-    def setScrollerVal(self, scroller_elem, number):
+    def set_scroller_val(self, scroller_elem, number):
         #
         # Set the numeric value of a scroller (only works with numbers right now).
         #
+        current_value = int(scroller_elem.find_element(*DOM.GLOBAL.scroller_curr_val).text)
 
-        #
-        # Get the current setting for this scroller.
-        #
-        currVal = scroller_elem.find_element(*DOM.GLOBAL.scroller_curr_val).text
-
-        #
         # Now flick the scroller as many times as required
-        # (the current value might be padded with 0's so check for that match too).
-        #
-        while str(number) != currVal and str(number).zfill(2) != currVal:
+        n = int(number)
+        while n != current_value:
             # Do we need to go forwards or backwards?
-            if number > int(currVal):
-                self.moveScroller(scroller_elem, True)
-            if number < int(currVal):
-                self.moveScroller(scroller_elem, False)
+            if n > int(current_value):
+                self.move_scroller(scroller_elem, True)
+            if n < int(current_value):
+                self.move_scroller(scroller_elem, False)
 
-            # Get the new 'currVal'.
-            currVal = scroller_elem.find_element(*DOM.GLOBAL.scroller_curr_val).text
+            # Get the new 'current_value'.
+            current_value = int(scroller_elem.find_element(*DOM.GLOBAL.scroller_curr_val).text)
 
     #
     # From gaiatest Clock -> regions -> alarm.py
@@ -117,7 +87,7 @@ class element(object):
         current_element = self.marionette.find_element(*self._current_element(*locator))
         next_element = self.marionette.find_element(*self._next_element(*locator))
 
-        #TODO: update this with more accurate Actions
+        # TODO: update this with more accurate Actions
         action = Actions(self.marionette)
         action.press(next_element)
         action.move(current_element)
@@ -129,7 +99,7 @@ class element(object):
         current_element = self.marionette.find_element(*self._current_element(*locator))
         next_element = self.marionette.find_element(*self._next_element(*locator))
 
-        #TODO: update this with more accurate Actions
+        # TODO: update this with more accurate Actions
         action = Actions(self.marionette)
         action.press(current_element)
         action.move(next_element)
@@ -137,10 +107,12 @@ class element(object):
         action.perform()
 
     def _current_element(self, method, target):
-        return (method, '{}.picker-unit.active'.format(target))
+        self.parent.reporting.debug("*** Finding current element for target {}".format(target))
+        return (method, '{}.picker-unit.selected'.format(target))
 
     def _next_element(self, method, target):
-        return (method, '{}.picker-unit.active + div'.format(target))
+        self.parent.reporting.debug("*** Finding next element for target {}".format(target))
+        return (method, '{}.picker-unit.selected + div'.format(target))
 
     def simulateClick(self, element):
         self.marionette.execute_script("""
@@ -165,10 +137,10 @@ class element(object):
         msg = u"" + msg
         try:
             if is_displayed:
-                msg = u"<b>{}</b> displayed within {} seconds.|{}".format(msg, timeout, elem)
+                msg = u"{} displayed within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_displayed(*elem, timeout=timeout)
             else:
-                msg = u"<b>{}</b> present within {} seconds.|{}".format(msg, timeout, elem)
+                msg = u"{} present within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_present(*elem, timeout=timeout)
         except Exception:
             is_ok = False
@@ -183,10 +155,10 @@ class element(object):
         is_ok = True
         try:
             if is_displayed:
-                msg = "<b>{}</b> no longer displayed within {} seconds.|{}".format(msg, timeout, elem)
+                msg = "{} no longer displayed within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_not_displayed(*elem, timeout=timeout)
             else:
-                msg = "<b>{}</b> no longer present within {} seconds.|{}".format(msg, timeout, elem)
+                msg = "{} no longer present within {} seconds.|{}".format(msg, timeout, elem)
                 self.parent.parent.wait_for_element_not_present(*elem, timeout=timeout)
         except:
             is_ok = False
