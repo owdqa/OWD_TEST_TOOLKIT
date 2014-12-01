@@ -5,7 +5,11 @@
 cd $OWD_TEST_TOOLKIT_DIR
 
 # Log file for 'everything'.
-export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%Y%m%d%H%M).log"}
+
+if [ -z "$LOGFILE" ]
+then
+    export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%Y%m%d%H%M).log"}
+fi
 
 . $OWD_TEST_TOOLKIT_DIR/install.sh $BRANCH >> $LOGFILE 2>&1
 
@@ -18,7 +22,6 @@ cd $OWD_TEST_TOOLKIT_DIR/..
 rm -rf owd_test_cases 2>/dev/null
 
 git clone https://github.com/owdqa/owd_test_cases.git >> $LOGFILE 2>&1
-#cd $owd_test_cases_DIR
 cd owd_test_cases
 
 printf "\n<b>Switching to branch $INTEGRATION$BRANCH of owd_test_cases ...</b>\n\n" >> $LOGFILE

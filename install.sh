@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$OWD_TEST_TOOLKIT_DIR" ]
+then
+    export OWD_TEST_TOOLKIT_DIR=$PWD
+fi
+
 # Create file containing the required vars...
 cat >  $HOME/.OWD_TEST_TOOLKIT_LOCATION << EOF
 export OWD_TEST_TOOLKIT_DIR=$OWD_TEST_TOOLKIT_DIR
@@ -8,7 +13,6 @@ export OWD_TEST_TOOLKIT_CONFIG=$OWD_TEST_TOOLKIT_DIR/config
 export GAIATEST_PATH=$HOME/gaia/tests/python/gaia-ui-tests/gaiatest
 export PATH=$PATH:/usr/android-sdk/platform-tools/adb:$OWD_TEST_TOOLKIT_DIR/scripts
 EOF
-
 
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
@@ -85,6 +89,10 @@ then
 fi
 
 cd $OWD_TEST_TOOLKIT_DIR
+if [ -z "$LOGFILE" ]
+then
+    export LOGFILE=${LOGFILE:-"/tmp/owd_setup_$(date +%Y%m%d%H%M).log"}
+fi
 sudo python setup.py clean --all >> $LOGFILE 2>&1
 sudo python setup.py install >> $LOGFILE 2>&1
 
