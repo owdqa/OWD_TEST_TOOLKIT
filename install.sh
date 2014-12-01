@@ -6,18 +6,13 @@ then
 fi
 
 # Create file containing the required vars...
-cat >  $HOME/.OWD_TEST_TOOLKIT_LOCATION << EOF
 export OWD_TEST_TOOLKIT_DIR=$OWD_TEST_TOOLKIT_DIR
 export OWD_TEST_TOOLKIT_BIN=$OWD_TEST_TOOLKIT_DIR/scripts
 export OWD_TEST_TOOLKIT_CONFIG=$OWD_TEST_TOOLKIT_DIR/config
 export GAIATEST_PATH=$HOME/gaia/tests/python/gaia-ui-tests/gaiatest
 export PATH=$PATH:/usr/android-sdk/platform-tools/adb:$OWD_TEST_TOOLKIT_DIR/scripts
-EOF
-
-. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 export BRANCH=${1:"v2.0"}
-[ "$BRANCH" = "1.0.1" ] && export BRANCH="v1.0.1"
 
 #
 # CHECK DEPENDENCIES ...
@@ -47,12 +42,10 @@ then
 fi
 
 
-
 #
 # Install gaiatest and marionette.
 #
 $OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
-
 
 
 #
@@ -68,16 +61,9 @@ printf "\n<b>Now using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".</b>
 printf "\n<b>Installing OWD_TEST_TOOLKIT...</b>\n\n" | tee -a $LOGFILE
 install_dir=$(dirname $(sudo python setup.py install --dry-run | grep Writing | awk '{print $2}'))
 	
-if [ ! "$install_dir" ]
-then
-	# Couldn't find it for some reason - try getting the marionette folder.
-	install_dir=$($MYPATH/get_python_dist_path marionette)
-fi
-
 if [ "$install_dir" ]
 then
     # Deleting as root, so be paranoid about where you are!!
-    cd /tmp
     cd $install_dir
     sudo rm -rf OWDTestToolkit OWD_TEST_TOOLKIT*egg* 2>/dev/null
 fi
