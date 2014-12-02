@@ -104,7 +104,8 @@ class reporting(object):
             return new_log_tag
 
     def reportResults(self):
-        detail_html_template = open(self.parent.data_layer["toolkit_cfg"]["html_template"])
+        detail_html_template = open("{}/{}".format(self.parent.data_layer.testvars['toolkit_location'],
+                                      self.parent.data_layer.testvars['toolkit_cfg']['results_template']))
         soup = BeautifulSoup(detail_html_template)
         detail_html_template.close()
         
@@ -113,11 +114,15 @@ class reporting(object):
         test_number = soup.find("span", id="test-number")
         test_number.string = self.test_num
 
-        comments = soup.find("ul", id="comments-list")
-        for comment in self.comment_array:
-            new_comment_tag = soup.new_tag("li", **{"class": "comment"})
-            new_comment_tag.string = comment
-            comments.append(new_comment_tag)
+        if len(self.comment_array) > 0:
+            comments_title = soup.find("span", id="comments-title")
+            comments_title.string = "Comments"
+            
+            comment_list = soup.find("ul", id="comments-list")
+            for comment in self.comment_array:
+                new_comment_tag = soup.new_tag("li", **{"class": "comment"})
+                new_comment_tag.string = comment
+                comment_list.append(new_comment_tag)
 
         logs = soup.find("ul", id="logs-list")
 
