@@ -4,7 +4,8 @@
     "wifi": { "ssid": "OWDBOE", "keyManagement": "WPA-PSK", "psk": "owdtest2" },
     "toolkit_cfg": {
         "devices_cfg": "config/devices_cfg.json",
-        "css_file": "config/details.css"
+        "css_file": "config/details.css",
+        "results_template": "config/results_template.html"
     },
     "lockscreen.locked": false,
     "GLOBAL_TARGET_SMS_NUM": "+34620989652",
