@@ -17,6 +17,7 @@ from gaiatest.version import __version__
 
 from OWDTestToolkit.utils.assertions import AssertionManager
 from utilities import Utilities
+from csv_writer import CsvWriter
 
 
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
@@ -204,7 +205,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         map(_initialize_file, files)
 
 
-class Main():
+class Main(object):
 
 # runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
     def __init__(self, args):
@@ -369,6 +370,38 @@ class Main():
         self.edit_html_results()
         self.edit_test_details()
         self.display_results()
+        self.generate_csv_reports()
+
+    def generate_csv_reports(self):
+        fieldnames = ['START_TIME', 'DATE', 'TEST_SUITE', 'TEST_CASES_PASSED', 'FAILURES', 'AUTOMATION_FAILURES', \
+                      'UNEX_PASSES', 'KNOWN_BUGS', 'EX_PASSES', 'IGNORED', 'UNWRITTEN', 'PERCENT_FAILED', 'DEVICE', \
+                      'VERSION', 'BUILD', 'TEST_DETAILS']
+        passes = self.passed + self.unexpected_passed
+        failures = self.expected_failures + self.unexpected_failures + self.automation_failures
+        totals = passes + failures
+        error_rate = failures * 100 / totals
+        device = os.getenv("DEVICE", "flame")
+        branch = os.getenv("BRANCH", "v2.0")
+        buildname = os.getenv("DEVICE_BUILDNAME", "")
+        path = os.getenv("HTML_FILEDIR", "")
+        index = -1
+        filedir = ""
+        if self.runner.testvars["ON_CI_SERVER"]:
+            index = path.find("owd_tests/")
+            filedir = path[index + 10:]
+        else:
+            filedir = self.runner.testvars["RESULT_DIR"]
+        values = [self.start_time.strftime("%d/%m/%Y %H:%M"), self.end_time.strftime("%d/%m/%Y %H:%M"), \
+                  "{}_{}".format('test', '123'), "{:4d} / {:-4d}".format(passes, totals), \
+                  str(self.unexpected_failures), \
+                  str(self.automation_failures), str(self.unexpected_passed), str(self.expected_failures), \
+                  str(self.passed), str(self.skipped), "0", \
+                  "{:.2f}".format(error_rate), device, branch, buildname, filedir]
+        weekly_file = '/tmp/tests/details/total_csv_file.csv'
+        daily_file = '/tmp/tests/details/device_branch_daily_csv_file.csv'
+        csv_writer = CsvWriter(device, branch)
+        csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), weekly_file, False)
+        csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), daily_file)
 
     def parse_toolkit_location(self, args):
         path = args[0]
