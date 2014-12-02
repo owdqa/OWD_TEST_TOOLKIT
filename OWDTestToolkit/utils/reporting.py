@@ -104,46 +104,14 @@ class reporting(object):
             return new_log_tag
 
     def reportResults(self):
-        detail_html_template = """
-        <html>
-            <head>
-                <title>{0}: Test Detail</title>
-                <link rel="stylesheet" type="text/css" href="details.css">
-            </head>
-            <body>
-                <div id="main-title">
-                TEST RESULT
-                </div>
-                <div id="general-info" class="highlighted-box">
-                    <div class="title"> Test info </div>
-                    <div id="test-number-container">
-                        <span class="label">Test number:</span>
-                        <span id="test-number">{0}</span>
-                    </div>
-                    <div id="test-description-container">
-                        <span class="label">Description:</span>
-                        <span id="test-description"></span>
-                    </div>
-                    <div id="duration-container">
-                        <span class="label">Time taken:</span>
-                        <span id="duration"></span>
-                    </div>
-                    <div id="result-container">
-                        <span class="label">Result:</span>
-                    </div>
-                    <div id="comments">
-                        Comments
-                        <ul id="comments-list"></ul>
-                    </div>
-                </div>
-                <div id="logs" class="highlighted-box">
-                    <div class="title">Logs</div>
-                    <ul id="logs-list"></ul>
-                </div>
-            </body>
-        </html>
-        """
-        soup = BeautifulSoup(detail_html_template.format(self.test_num))
+        detail_html_template = open(self.parent.data_layer["toolkit_cfg"]["html_template"])
+        soup = BeautifulSoup(detail_html_template)
+        detail_html_template.close()
+        
+        soup.title.string = "{} {}".format(self.test_num, soup.title.string)
+        
+        test_number = soup.find("span", id="test-number")
+        test_number.string = self.test_num
 
         comments = soup.find("ul", id="comments-list")
         for comment in self.comment_array:
