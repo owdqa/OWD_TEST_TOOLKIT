@@ -312,7 +312,7 @@ class Main(object):
         This method edits each of the detail files created during the test/suite execution
         and adds some information (result, time taken...) which could only be know a posteriori.
         """
-        
+
         for result in self.runner.results:
             # TODO: look if there's another way of getting the test_number
             test_number = re.search('test_(\w*).*$', result.tests.next().test_name).group(1)
@@ -382,11 +382,13 @@ class Main(object):
         error_rate = failures * 100 / totals
         device = os.getenv("DEVICE", "flame")
         branch = os.getenv("BRANCH", "v2.0")
-        buildname = os.getenv("DEVICE_BUILDNAME", "")
+        buildname_var = os.getenv("DEVICE_BUILDNAME", "")
+        index = buildname_var.find(".Gecko")
+        buildname = buildname_var[:index]
         path = os.getenv("HTML_FILEDIR", "")
         index = -1
         filedir = ""
-        if self.runner.testvars["ON_CI_SERVER"]:
+        if os.getenv("ON_CI_SERVER"):
             index = path.find("owd_tests/")
             filedir = path[index + 10:]
         else:
@@ -397,8 +399,8 @@ class Main(object):
                   str(self.automation_failures), str(self.unexpected_passed), str(self.expected_failures), \
                   str(self.passed), str(self.skipped), "0", \
                   "{:.2f}".format(error_rate), device, branch, buildname, filedir]
-        weekly_file = '/tmp/tests/details/total_csv_file.csv'
-        daily_file = '/tmp/tests/details/device_branch_daily_csv_file.csv'
+        weekly_file = '/var/www/html/owd_tests/total_csv_file.csv'
+        daily_file = '/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW.csv'.format(device, branch)
         csv_writer = CsvWriter(device, branch)
         csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), weekly_file, False)
         csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), daily_file)
