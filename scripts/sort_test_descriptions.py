@@ -9,7 +9,7 @@ class TestDescriptions():
     def __init__(self, args):
         if len(args) != 2:
             raise Exception("You need to pass as parameters the JSON file containing the descriptions and the path to the tests")
-            
+
         self.file_to_parse = args[0]
         self.tests_path = args[1]
         self.descriptions_by_suite = {}
@@ -36,7 +36,7 @@ class TestDescriptions():
                 for filename in files:
                     m = re.search('^test_(\d+).py$', filename)
                     if m:
-                        test_number = m.group(1)                   
+                        test_number = m.group(1)
                         if not self.descriptions_by_suite.has_key(root):
                             if self.file_descriptions.has_key(test_number):
                                 self.descriptions_by_suite[root] = [(test_number, self.file_descriptions[test_number])]
@@ -45,10 +45,10 @@ class TestDescriptions():
                                 self.descriptions_by_suite[root].append((test_number, self.file_descriptions[test_number]))
         else:
             raise Exception("The path you provided to scan the tests is not a path. Nice try! :D")
-    
+
         if sort:
             import collections
-            self.descriptions_by_suite = collections.OrderedDict(sorted(self.descriptions_by_suite.items(), key=lambda t: t[0])) 
+            self.descriptions_by_suite = collections.OrderedDict(sorted(self.descriptions_by_suite.items(), key=lambda t: t[0]))
 
     def display(self):
         for key, value in self.descriptions_by_suite.items():
