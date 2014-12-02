@@ -380,12 +380,12 @@ class Main(object):
         failures = self.expected_failures + self.unexpected_failures + self.automation_failures
         totals = passes + failures
         error_rate = failures * 100 / totals
-        device = os.getenv("DEVICE", "flame")
-        branch = os.getenv("BRANCH", "v2.0")
-        buildname_var = os.getenv("DEVICE_BUILDNAME", "")
+        device = os.getenv("DEVICE")
+        branch = os.getenv("BRANCH")
+        buildname_var = os.getenv("DEVICE_BUILDNAME")
         index = buildname_var.find(".Gecko")
         buildname = buildname_var[:index]
-        path = os.getenv("HTML_FILEDIR", "")
+        path = os.getenv("HTML_FILEDIR")
         index = -1
         filedir = ""
         if os.getenv("ON_CI_SERVER"):
