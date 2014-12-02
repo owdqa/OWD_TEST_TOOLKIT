@@ -284,11 +284,14 @@ class Main():
         print
 
     def edit_html_results(self):
+        """
+        Edits general result html file adding for each test run, a link to its detail file
+        """
         results_file = open(self.runner.testvars['html_output'])
         soup = BeautifulSoup(results_file)
         results_file.close()
 
-        test_nums = [re.search('^test_(.*).*$', testname.string.strip()).group(1)
+        test_nums = [re.search('test_(\w*).*$', testname.string.strip()).group(1)
                      for testname in soup.find_all("td", class_="col-class")]
         col_links = soup.find_all("td", class_="col-links")
         i = 0
@@ -304,9 +307,14 @@ class Main():
         results_file.close()
 
     def edit_test_details(self):
+        """
+        This method edits each of the detail files created during the test/suite execution
+        and adds some information (result, time taken...) which could only be know a posteriori.
+        """
+        
         for result in self.runner.results:
             # TODO: look if there's another way of getting the test_number
-            test_number = re.search('test_(.*).*$', result.tests.next().test_name).group(1)
+            test_number = re.search('test_(\w*).*$', result.tests.next().test_name).group(1)
             detail_file_path = "{}/{}_detail.html".format(self.runner.testvars['RESULT_DIR'], test_number)
 
             try:
@@ -322,8 +330,8 @@ class Main():
             duration_tag = soup.find("span", id='duration')
             duration_tag.string = "{:.2f} seconds".format(result.time_taken)
             result_tag = soup.find("div", id="result-container")
-            test_result = self.runner.get_result_msg(result).strip()
-            new_tag = soup.new_tag("span", id="result", **{'class': test_result.replace(" ", "-")})
+            test_result = re.search("^\((.*)\).*$", self.runner.get_result_msg(result).strip()).group(1)
+            new_tag = soup.new_tag("span", id="result", **{'class': test_result})
             new_tag.string = test_result
             result_tag.append(new_tag)
 
