@@ -382,7 +382,9 @@ class Main(object):
         error_rate = failures * 100 / totals
         device = os.getenv("DEVICE")
         branch = os.getenv("BRANCH")
+        print "Device: {}   Branch: {}".format(device, branch)
         buildname_var = os.getenv("DEVICE_BUILDNAME")
+        print "Device buildname: {}".format(buildname_var)
         index = buildname_var.find(".Gecko")
         buildname = buildname_var[:index]
         path = os.getenv("HTML_FILEDIR")
