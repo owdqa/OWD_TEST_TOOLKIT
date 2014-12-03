@@ -17,5 +17,5 @@ export TEST_TYPE=${3:-"REGRESSION"}
 
 cd $OWD_TEST_TOOLKIT_DIR/../owd_test_cases
 
-sudo DEVICE=$DEVICE BRANCH=$BRANCH DEVICE_BUILDNAME=$DEVICE_BUILDNAME python $OWD_TEST_TOOLKIT_DIR/scripts/ffox_test_runner.py --testvars=$OWD_TEST_TOOLKIT_DIR/config/gaiatest_testvars.json --address=localhost:2828 tests/$TEST_TYPE
+sudo DEVICE=$DEVICE BRANCH=$BRANCH DEVICE_BUILDNAME=$DEVICE_BUILDNAME ON_CI_SERVER=$ON_CI_SERVER python $OWD_TEST_TOOLKIT_DIR/scripts/ffox_test_runner.py --testvars=$OWD_TEST_TOOLKIT_DIR/config/gaiatest_testvars.json --address=localhost:2828 tests/$TEST_TYPE
 
