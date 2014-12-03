@@ -108,16 +108,16 @@ class reporting(object):
                                       self.parent.data_layer.testvars['toolkit_cfg']['results_template']))
         soup = BeautifulSoup(detail_html_template)
         detail_html_template.close()
-        
+
         soup.title.string = "{} {}".format(self.test_num, soup.title.string)
-        
+
         test_number = soup.find("span", id="test-number")
         test_number.string = self.test_num
 
         if len(self.comment_array) > 0:
             comments_title = soup.find("span", id="comments-title")
             comments_title.string = "Comments"
-            
+
             comment_list = soup.find("ul", id="comments-list")
             for comment in self.comment_array:
                 new_comment_tag = soup.new_tag("li", **{"class": "comment"})
