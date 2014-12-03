@@ -69,6 +69,7 @@
     "NOWSMS_PASS": "qa",
     "GLOBAL_FXA_USER": "owdqa@hotmail.es",
     "GLOBAL_FXA_PASS": "12345678",
+    "webdir": "http://ci-owd-deven-01/owd_tests",
     "RESULT_DIR": "/tmp/tests/details",
     "html_output": "/tmp/tests/results.html",
     "error_output": "/tmp/tests/error.txt",

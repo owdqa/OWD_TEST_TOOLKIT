@@ -227,11 +227,11 @@ class Main(object):
         This method instantiates the class responsible of running the tests and run them.
         Returns the runner instances itself so that we can access to the results
         """
-        self.start_time = datetime.utcnow()
+        self.start_time = datetime.now()
         runner = runner_class(**vars(options))
         runner.prepare_results()
         runner.run_tests(tests)
-        self.end_time = datetime.utcnow()
+        self.end_time = datetime.now()
         return runner
 
     def update_attr(self, attr_name, attr_value):
@@ -382,18 +382,19 @@ class Main(object):
         error_rate = failures * 100 / totals
         device = os.getenv("DEVICE")
         branch = os.getenv("BRANCH")
+        run_id = os.getenv("RUN_ID")
         buildname_var = os.getenv("DEVICE_BUILDNAME")
         print "Device: {}   Branch: {}   Device buildname: {}".format(device, branch, buildname_var)
         index = buildname_var.find(".Gecko")
         buildname = buildname_var[:index]
-        path = os.getenv("HTML_FILEDIR")
         index = -1
         filedir = ""
+        html_webdir = self.runner.testvars["webdir"] + "/{}/{}/{}".format(device, branch, run_id)
         if os.getenv("ON_CI_SERVER"):
-            index = path.find("owd_tests/")
-            filedir = path[index + 10:]
+            index = html_webdir.find("owd_tests/")
+            filedir = html_webdir[index + 10:]
         else:
-            filedir = self.runner.testvars["RESULT_DIR"]
+            filedir = self.runner.testvars["html_output"]
         values = [self.start_time.strftime("%d/%m/%Y %H:%M"), self.end_time.strftime("%d/%m/%Y %H:%M"), \
                   "{}_{}".format('test', '123'), "{:4d} / {:-4d}".format(passes, totals), \
                   str(self.unexpected_failures), \
