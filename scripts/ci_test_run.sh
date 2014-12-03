@@ -9,9 +9,9 @@ export DEVICE=${1:-"flame"}
 export BRANCH=${2:-"v2.0"}
 export TEST_TYPE=${3:-"REGRESSION"}
 
-. $OWD_TEST_TOOLKIT_BIN/$0.parts/set_up_parameters.sh
+. $0.parts/set_up_parameters.sh
 
-. $OWD_TEST_TOOLKIT_BIN/$0.parts/install_toolkit_and_test_cases.sh
+. $0.parts/install_toolkit_and_test_cases.sh
 
 . $OWD_TEST_TOOLKIT_BIN/$0.parts/flash_device.sh
 
