@@ -391,12 +391,12 @@ class Main(object):
         filedir = ""
         html_webdir = self.runner.testvars["webdir"] + "/{}/{}/{}".format(device, branch, run_id)
         if os.getenv("ON_CI_SERVER"):
-            index = html_webdir.find("owd_tests/")
+            index = html_webdir.find("owd_tests")
             filedir = html_webdir[index + 10:]
         else:
             filedir = self.runner.testvars["html_output"]
         values = [self.start_time.strftime("%d/%m/%Y %H:%M"), self.end_time.strftime("%d/%m/%Y %H:%M"), \
-                  "{}_{}".format('test', '123'), "{:4d} / {:-4d}".format(passes, totals), \
+                  run_id, "{:4d} / {:-4d}".format(passes, totals), \
                   str(self.unexpected_failures), \
                   str(self.automation_failures), str(self.unexpected_passed), str(self.expected_failures), \
                   str(self.passed), str(self.skipped), "0", \
