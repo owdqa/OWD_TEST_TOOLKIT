@@ -13,7 +13,7 @@ export TEST_TYPE=${3:-"REGRESSION"}
 
 . $0.parts/install_toolkit_and_test_cases.sh
 
-. $OWD_TEST_TOOLKIT_BIN/$0.parts/flash_device.sh
+. $OWD_TEST_TOOLKIT_BIN/ci_test_run.sh.parts/flash_device.sh
 
 cd $OWD_TEST_TOOLKIT_DIR/../owd_test_cases
 
