@@ -13,6 +13,7 @@ export TEST_TYPE=${3:-"REGRESSION"}
 
 . $0.parts/install_toolkit_and_test_cases.sh
 
+printf "PWD: $PWD" | tee -a $LOGFILE
 . $0.parts/flash_device.sh
 
 cd $OWD_TEST_TOOLKIT_DIR/../owd_test_cases
