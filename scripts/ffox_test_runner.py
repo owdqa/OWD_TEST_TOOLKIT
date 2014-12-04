@@ -5,6 +5,7 @@ import os
 import unittest
 import logging.config
 import re
+import subprocess
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
@@ -17,7 +18,6 @@ from gaiatest.version import __version__
 
 from OWDTestToolkit.utils.assertions import AssertionManager
 from utilities import Utilities
-from csv_writer import CsvWriter
 
 
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
@@ -183,11 +183,20 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         self.blocked_tests = Utilities.parse_file(self.testvars['blocked_tests'])
 
     def prepare_results(self):
-        """ This methods ensures that the destination results directory is created before launching the
+        """This methods ensures that the destination results directory is created before launching the
         test/s execution. It also creates (or cleans) the html results report file and the error_output file
         """
+        # If we are in the CI server, use the RUN_ID variable to create the results directory
+        is_ci_server = os.getenv("ON_CI_SERVER")
+        result_dir = self.testvars["RESULT_DIR"]
+        run_id = os.getenv("RUN_ID")
+        if is_ci_server:
+            self.testvars["RESULT_DIR"] = result_dir[:result_dir.rfind('/')] + run_id
+
         if not os.path.exists(self.testvars['RESULT_DIR']):
             os.makedirs(self.testvars['RESULT_DIR'])
+        else:
+            os.remove(self.testvars['RESULT_DIR'] + '/*')
 
         def _initialize_file(file_path):
             with open(file_path, 'w') as f:
@@ -205,7 +214,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         map(_initialize_file, files)
 
 
-class Main(object):
+class TestRunner(object):
 
 # runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
     def __init__(self, args):
@@ -225,7 +234,7 @@ class Main(object):
     def start_test_runner(self, runner_class, options, tests):
         """
         This method instantiates the class responsible of running the tests and run them.
-        Returns the runner instances itself so that we can access to the results
+        Returns the runner instances itself so that we can access to the results.
         """
         self.start_time = datetime.now()
         runner = runner_class(**vars(options))
@@ -261,7 +270,7 @@ class Main(object):
     @property
     def _console_separator(self):
         try:
-            columns = int(os.popen('stty size', 'r').read().split()[-1])
+            columns = int(subprocess.check_output(['stty', 'size']).replace('\n', '').split()[1])
         except Exception:
             columns = 120
         return "#" * columns
@@ -370,42 +379,8 @@ class Main(object):
         self.edit_html_results()
         self.edit_test_details()
         self.display_results()
-        self.generate_csv_reports()
-
-    def generate_csv_reports(self):
-        fieldnames = ['START_TIME', 'DATE', 'TEST_SUITE', 'TEST_CASES_PASSED', 'FAILURES', 'AUTOMATION_FAILURES', \
-                      'UNEX_PASSES', 'KNOWN_BUGS', 'EX_PASSES', 'IGNORED', 'UNWRITTEN', 'PERCENT_FAILED', 'DEVICE', \
-                      'VERSION', 'BUILD', 'TEST_DETAILS']
-        passes = self.passed + self.unexpected_passed
-        failures = self.expected_failures + self.unexpected_failures + self.automation_failures
-        totals = passes + failures
-        error_rate = failures * 100 / totals
-        device = os.getenv("DEVICE")
-        branch = os.getenv("BRANCH")
-        run_id = os.getenv("RUN_ID")
-        buildname_var = os.getenv("DEVICE_BUILDNAME")
-        print "Device: {}   Branch: {}   Device buildname: {}".format(device, branch, buildname_var)
-        index = buildname_var.find(".Gecko")
-        buildname = buildname_var[:index]
-        index = -1
-        filedir = ""
-        html_webdir = self.runner.testvars["webdir"] + "/{}/{}/{}".format(device, branch, run_id)
-        if os.getenv("ON_CI_SERVER"):
-            index = html_webdir.find("owd_tests")
-            filedir = html_webdir[index + 10:]
-        else:
-            filedir = self.runner.testvars["html_output"]
-        values = [self.start_time.strftime("%d/%m/%Y %H:%M"), self.end_time.strftime("%d/%m/%Y %H:%M"), \
-                  run_id, "{:4d} / {:-4d}".format(passes, totals), \
-                  str(self.unexpected_failures), \
-                  str(self.automation_failures), str(self.unexpected_passed), str(self.expected_failures), \
-                  str(self.passed), str(self.skipped), "0", \
-                  "{:.2f}".format(error_rate), device, branch, buildname, filedir]
-        weekly_file = '/var/www/html/owd_tests/total_csv_file.csv'
-        daily_file = '/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW.csv'.format(device, branch)
-        csv_writer = CsvWriter(device, branch)
-        csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), weekly_file, False)
-        csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), daily_file)
+        # Generate CSV report, if needed
+        Utilities.generate_csv_reports()
 
     def parse_toolkit_location(self, args):
         path = args[0]
@@ -413,4 +388,4 @@ class Main(object):
         return path[:index]
 
 if __name__ == "__main__":
-    Main(sys.argv).run()
+    TestRunner(sys.argv).run()

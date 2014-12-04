@@ -11,7 +11,6 @@
     "GLOBAL_TARGET_SMS_NUM": "+34620989652",
     "TARGET_MMS_NUM": "+620989652",
     "GLOBAL_TARGET_SMS_NUM_SHORT": "800177",
-    "CORPORATE_SIM": true,
     "GLOBAL_PIN": "0810",
     "GLOBAL_LOCK_CODE": "1234",
     "GLOBAL_PUK": "68014531",
@@ -82,5 +81,11 @@
     "test_retries": 2,
     "GLOBAL_LOOP_VIA": "Grunt",
     "GLOBAL_LOOP_DIR": "/home/develenv/projects/firefoxos-loop-client",
-    "GLOBAL_LOOP_AUX_FILES": "/home/develenv/projects/owd_test_cases/tests/LOOP/aux_files"
+    "GLOBAL_LOOP_AUX_FILES": "/home/develenv/projects/owd_test_cases/tests/LOOP/aux_files",
+    "weekly_csv_file": "/var/www/html/owd_tests/total_csv_file.csv",
+    "daily_csv_file": "/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW.csv",
+    "weekly_csv_cert_file": "/var/www/html/owd_tests/total_csv_file_CERT.csv",
+    "device_cert": "cert_device",
+    "branch_cert": "v2.0",
+    "buildname_cert": "cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
 }
