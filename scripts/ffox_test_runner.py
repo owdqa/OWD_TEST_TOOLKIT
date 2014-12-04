@@ -380,7 +380,7 @@ class TestRunner(object):
         self.edit_test_details()
         self.display_results()
         # Generate CSV report, if needed
-        Utilities.generate_csv_reports()
+        Utilities.generate_csv_reports(self)
 
     def parse_toolkit_location(self, args):
         path = args[0]
