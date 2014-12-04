@@ -1,5 +1,6 @@
 import json
 import os
+from csv_writer import CsvWriter
 
 
 class Utilities():
@@ -46,3 +47,50 @@ class Utilities():
         os.popen("adb kill-server")
         os.popen("adb devices")
         os.popen("adb forward tcp:2828 tcp:2828")
+
+    @staticmethod
+    def generate_csv_reports(test_runner, is_cert=False):
+        """Generate CSV reports with the results of the test.
+
+        Generate an entry in the weekly CSV report and another one in the daily CSV report
+        if required. If is_cert is True, it will use different values for device, branch
+        and buildname than the ones detected automatically.
+        """
+        is_ci_server = os.getenv("ON_CI_SERVER")
+        # Provide a default value so that call to find works even if the variable does not exist
+        is_by_test_suite = os.getenv("RUN_ID", "").find("testing_by_TEST_SUITE")
+        if (not is_ci_server or is_by_test_suite != -1) and not is_certification:
+            return
+        fieldnames = ['START_TIME', 'DATE', 'TEST_SUITE', 'TEST_CASES_PASSED', 'FAILURES', 'AUTOMATION_FAILURES', \
+                      'UNEX_PASSES', 'KNOWN_BUGS', 'EX_PASSES', 'IGNORED', 'UNWRITTEN', 'PERCENT_FAILED', 'DEVICE', \
+                      'VERSION', 'BUILD', 'TEST_DETAILS']
+        passes = test_runner.passed + test_runner.unexpected_passed
+        failures = test_runner.expected_failures + test_runner.unexpected_failures + test_runner.automation_failures
+        totals = passes + failures
+        error_rate = float(failures * 100) / totals
+        device = os.getenv("DEVICE") if not is_cert else test_runner.runner.testvars["device_cert"]
+        branch = os.getenv("BRANCH") if not is_cert else test_runner.runner.testvars["branch_cert"]
+        run_id = os.getenv("RUN_ID")
+        buildname_var = os.getenv("DEVICE_BUILDNAME") if not is_cert else test_runner.runner.testvars["buildname_cert"]
+        print "Device: {}   Branch: {}   Device buildname: {}".format(device, branch, buildname_var)
+        index = buildname_var.find(".Gecko")
+        buildname = buildname_var[:index]
+        index = -1
+        filedir = ""
+        html_webdir = test_runner.runner.testvars["webdir"] + "/{}/{}/{}".format(device, branch, run_id)
+        if os.getenv("ON_CI_SERVER"):
+            index = html_webdir.find("owd_tests")
+            filedir = html_webdir[index + 9:]
+        else:
+            filedir = test_runner.runner.testvars["html_output"]
+        values = [test_runner.start_time.strftime("%d/%m/%Y %H:%M"), test_runner.end_time.strftime("%d/%m/%Y %H:%M"), \
+                  run_id, "{} / {}".format(passes, totals), \
+                  str(test_runner.unexpected_failures), \
+                  str(test_runner.automation_failures), str(test_runner.unexpected_passed), \
+                  str(test_runner.expected_failures), str(test_runner.passed), str(test_runner.skipped), "0", \
+                  "{:.2f}".format(error_rate), device, branch, buildname, filedir]
+        weekly_file = '/var/www/html/owd_tests/total_csv_file.csv'
+        daily_file = '/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW.csv'.format(device, branch)
+        csv_writer = CsvWriter(device, branch)
+        csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), weekly_file, False)
+        csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), daily_file)
