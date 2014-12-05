@@ -78,7 +78,7 @@ class Utilities():
         buildname = buildname_var[:index]
         index = -1
         filedir = ""
-        html_webdir = test_runner.runner.testvars["webdir"] + "/{}/{}/{}".format(device, branch, run_id)
+        html_webdir = test_runner.runner.testvars['output']["webdir"] + "/{}/{}/{}".format(device, branch, run_id)
         if os.getenv("ON_CI_SERVER"):
             index = html_webdir.find("owd_tests")
             filedir = html_webdir[index + 9:]
