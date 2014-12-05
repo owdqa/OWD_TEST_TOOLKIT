@@ -8,7 +8,7 @@
 export MYPATH=$(dirname $0)
 export CURRPATH=$(pwd)
 
-export BRANCH=${1:-"v2.0"}
+export BRANCH=${1:-"master"}
 LOGFILE=${LOGFILE:-/tmp/gaiatest_setup.log}
 
 printf "\n\n<b>Installing gaiatest (for $BRANCH) and Marionette ...</b>" | tee -a $LOGFILE
