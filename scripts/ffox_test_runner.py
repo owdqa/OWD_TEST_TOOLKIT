@@ -10,10 +10,13 @@ from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
+from marionette.wait import Wait
+from marionette import expected
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
 from bs4 import BeautifulSoup
 from datetime import datetime
 from gaiatest.version import __version__
+from mozlog import structured
 
 from OWDTestToolkit.utils.assertions import AssertionManager
 from utilities import Utilities
@@ -59,21 +62,23 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         mod_name = os.path.splitext(os.path.split(filepath)[-1])[0]
         for handler in self.test_handlers:
             if handler.match(os.path.basename(filepath)):
-                handler.add_tests_to_suite(mod_name, filepath, suite, testloader, self.marionette, self.testvars,
+                handler.add_tests_to_suite(mod_name,
+                                           filepath,
+                                           suite,
+                                           testloader,
+                                           self.marionette,
+                                           self.testvars,
                                            **self.test_kwargs)
                 break
-
+      
         attempt = 0
         if suite.countTestCases():
-            # Run the test. For that purpose, we have to instantiate the runnerclass, which, in this
-            # this case, is MarionetteTextTestRunner
-            runner = self.textrunnerclass(verbosity=int(self.testvars["verbosity"]),
+            runner = self.textrunnerclass(logger=self.logger,
                                           marionette=self.marionette,
                                           capabilities=self.capabilities)
-
             # This will redirect the messages that will go by default to the error output to another file
             runner.stream = unittest.runner._WritelnDecorator(open(self.testvars['error_output'], 'a'))
-
+ 
             # Temporary variable to store the total time used by all test retries, not only the last one.
             total_time = 0
             while attempt < self.testvars["test_retries"]:
@@ -81,7 +86,6 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 total_time += results.time_taken
                 attempt += 1
                 if len(results.errors) + len(results.failures) > 0:
-                    suite._tests[0].restart = True
                     # If we have to reattempt, just substract the number of assertions to keep the results
                     # accurate
                     if attempt < self.testvars["test_retries"]:
@@ -89,15 +93,19 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                                                                 self.assertion_manager.get_passed())
                         self.assertion_manager.set_accum_failed(self.assertion_manager.get_accum_failed() -
                                                                 self.assertion_manager.get_failed())
+                        # Restart the phone
+#                         os.popen("adb shell stop b2g")
+#                         os.popen("adb shell start b2g")
+#                         os.popen("sleep 30")
                 else:
                     break
-
+ 
             # Store the total time in the results, for the report
             results.time_taken = total_time
             # Store the total number of attempts done for this test, for the report
             results.attempts = attempt
             self.results.append(results)
-
+ 
             self.failed += len(results.failures) + len(results.errors)
             if hasattr(results, 'skipped'):
                 self.skipped += len(results.skipped)
@@ -112,7 +120,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                     self.failures.append((results.getInfo(failure), 'TEST-UNEXPECTED-PASS'))
             if hasattr(results, 'expectedFailures'):
                 self.todo += len(results.expectedFailures)
-
+ 
         self.show_results(results)
         results.stream.flush()
 
@@ -151,7 +159,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                                 OWDMarionetteTestRunner.assertion_manager.get_total()))
 
 
-class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingTestRunnerMixin):
+class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin,HTMLReportingTestRunnerMixin):
     """
     OWD runner class
     This class performs a bunch of tasks which are needed before and after running the test/s
@@ -159,7 +167,6 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
     textrunnerclass = GaiaTextTestRunner
 
     def __init__(self, **kwargs):
-
         BaseMarionetteTestRunner.__init__(self, **kwargs)
 
         # Some initial steps going through!
@@ -192,16 +199,22 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
             with open(file_path, 'w') as f:
                 f.close()
 
-        # We will redirect BaseMarionetteTestRunner default logger to our own logger.
-        # Loggers are not directly instantiated, but created by calling loggin.getLogger.
-        # Multiple calls to getLogger with the same name will point to the same logger
-        # reference
-        config_file = self.testvars['OWD_LOG_CFG']
-        logging.config.fileConfig(config_file)
-        self.logger = logging.getLogger('OWDTestToolkit')
-
-        files = [self.testvars['html_output'], self.testvars['error_output'], self.testvars["log_path"]]
+        files = [self.testvars['html_output'], self.testvars['error_output']]
         map(_initialize_file, files)
+    
+    def start_httpd(self, need_external_ip):
+        super(OWDTestRunner, self).start_httpd(need_external_ip)
+        self.httpd.urlhandlers.append({
+            'method': 'GET',
+            'path': '.*\.webapp',
+            'function': self.webapp_handler})
+
+    def webapp_handler(self, request):
+        with open(os.path.join(self.server_root, request.path[1:]), 'r') as f:
+            data = f.read()
+        return (200, {
+            'Content-type': 'application/x-web-app-manifest+json',
+            'Content-Length': len(data)}, data)
 
 
 class Main():
@@ -355,8 +368,17 @@ class Main():
 
         # Preprocess
         parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
+        structured.commandline.add_logging_group(parser)
         options, tests = parser.parse_args(self.args[1:])
         parser.verify_usage(options, tests)
+        
+        logger = structured.commandline.setup_logging(options.logger_name, options) #{"mach": open("/tmp/tests/tests.log", "a")})
+        options.logger = logger
+        
+        # Remove default stdout logger from mozilla logger
+        to_delete = filter(lambda h: h.stream.name == '<stdout>', logger.handlers)
+        for d in to_delete:
+            logger.remove_handler(d)
 
         location = self.parse_toolkit_location(self.args)
         options.toolkit_location = location
