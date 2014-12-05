@@ -12,7 +12,7 @@ class reporting(object):
         self.comment_array = []
         self.init_time = time.time()
         self.test_num = self.parent.parent.__module__[5:]
-        self.detail_file = "{}/{}_detail.html".format(self.parent.general.get_config_variable('RESULT_DIR'),
+        self.detail_file = "{}/{}_detail.html".format(self.parent.general.get_config_variable('result_dir', 'output'),
                                                       self.test_num)
         self.logger = logging.getLogger('OWDTestToolkit')
 
@@ -104,7 +104,7 @@ class reporting(object):
             return new_log_tag
 
     def reportResults(self):
-        detail_html_template = open("{}/{}".format(self.parent.data_layer.testvars['toolkit_location'],
+        detail_html_template = open("{}/{}".format(self.parent.data_layer.testvars['toolkit_cfg']['toolkit_location'],
                                       self.parent.data_layer.testvars['toolkit_cfg']['results_template']))
         soup = BeautifulSoup(detail_html_template)
         detail_html_template.close()

@@ -15,9 +15,9 @@ class test_main(GaiaTestCase):
         #
         # Get own number and incoming
         #
-        self.phone_number = self.UTILS.general.get_config_variable("GLOBAL_TARGET_SMS_NUM")
-        self.call_number = self.UTILS.general.get_config_variable("TARGET_CALL_NUMBER")
-        self.incoming_number = self.UTILS.general.get_config_variable("GLOBAL_NUM_FOR_INCOMING_CALL")
+        self.phone_number = self.UTILS.general.get_config_variable("phone_number", "custom")
+        self.call_number = self.UTILS.general.get_config_variable("target_call_number", "common")
+        self.incoming_number = self.UTILS.general.get_config_variable("incoming_call_number", "common")
         self.UTILS.statusbar.clearAllStatusBarNotifs()
 
     def tearDown(self):

@@ -66,11 +66,14 @@ class general(object):
         now = datetime.datetime.now()
         return now.strftime("%Y/%m/%d %H:%M:%S.%f")
 
-    def get_config_variable(self, name):
+    def get_config_variable(self, name, group=None):
         """Get a configuration variable.
         """
         try:
-            return self.parent.data_layer.testvars[name]
+            if group:
+                return self.parent.data_layer.testvars[group][name]
+            else:
+                return self.parent.data_layer.testvars[name]
         except:
             return False
 

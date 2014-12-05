@@ -25,7 +25,8 @@ class Utilities():
         Utilities.connect_device()
 
         current_dut = os.popen("adb shell grep ro.product.name /system/build.prop").read().split("=")[-1].rstrip()
-        devices_path = "{}/{}".format(testvars['toolkit_location'], testvars['toolkit_cfg']['devices_cfg'])
+        devices_path = "{}/{}".format(testvars['toolkit_cfg']['toolkit_location'],
+                                      testvars['toolkit_cfg']['devices_cfg'])
         devices_map = Utilities.parse_file(devices_path)
 
         if not current_dut in devices_map:
@@ -59,7 +60,7 @@ class Utilities():
         is_ci_server = os.getenv("ON_CI_SERVER")
         # Provide a default value so that call to find works even if the variable does not exist
         is_by_test_suite = os.getenv("RUN_ID", "").find("testing_by_TEST_SUITE")
-        if (not is_ci_server or is_by_test_suite != -1) and not is_certification:
+        if (not is_ci_server or is_by_test_suite != -1) and not is_cert:
             return
         fieldnames = ['START_TIME', 'DATE', 'TEST_SUITE', 'TEST_CASES_PASSED', 'FAILURES', 'AUTOMATION_FAILURES', \
                       'UNEX_PASSES', 'KNOWN_BUGS', 'EX_PASSES', 'IGNORED', 'UNWRITTEN', 'PERCENT_FAILED', 'DEVICE', \
@@ -82,7 +83,7 @@ class Utilities():
             index = html_webdir.find("owd_tests")
             filedir = html_webdir[index + 9:]
         else:
-            filedir = test_runner.runner.testvars["html_output"]
+            filedir = test_runner.runner.testvars['output']["html_output"]
         values = [test_runner.start_time.strftime("%d/%m/%Y %H:%M"), test_runner.end_time.strftime("%d/%m/%Y %H:%M"), \
                   run_id, "{} / {}".format(passes, totals), \
                   str(test_runner.unexpected_failures), \
