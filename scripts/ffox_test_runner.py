@@ -336,7 +336,12 @@ class TestRunner(object):
             detail_file.close()
 
             description_tag = soup.find("span", id='test-description')
-            description_tag.string = self.runner.descriptions[test_number]
+            
+            if test_number in self.runner.descriptions:
+                description_tag.string = self.runner.descriptions[test_number]
+            else:
+                description_tag.string = "Description not available..."
+                
             duration_tag = soup.find("span", id='duration')
             duration_tag.string = "{:.2f} seconds".format(result.time_taken)
             result_tag = soup.find("div", id="result-container")
