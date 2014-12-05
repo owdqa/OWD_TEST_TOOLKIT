@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import time
 from gaiatest import GaiaTestCase
 from marionette import By
@@ -26,8 +26,7 @@ class test_main(GaiaTestCase):
         self.gallery = Gallery(self)
         self.browser = Browser(self)
 
-        self.phone_number = self.UTILS.general.get_os_variable("GLOBAL_TARGET_SMS_NUM")
-        self.target_mms_number = self.UTILS.general.get_os_variable("TARGET_MMS_NUM")
+        self.phone_number = self.UTILS.general.get_config_variable("phone_number", "custom")
         self.UTILS.reporting.logComment("Sending mms to telephone number " + self.phone_number)
         self.data_layer.connect_to_cell_data()
 

@@ -35,7 +35,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         # - 3: to remove the .py extension"""
         test_num = filepath[idx + 5:-3]
 
-        desc_len = int(self.testvars['description_length'])
+        desc_len = int(self.testvars['general']['description_length'])
         if test_num in self.descriptions:
             description = self.descriptions[test_num][:desc_len] + "..."
         else:
@@ -68,16 +68,16 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         if suite.countTestCases():
             # Run the test. For that purpose, we have to instantiate the runnerclass, which, in this
             # this case, is MarionetteTextTestRunner
-            runner = self.textrunnerclass(verbosity=int(self.testvars["verbosity"]),
+            runner = self.textrunnerclass(verbosity=int(self.testvars['output']["verbosity"]),
                                           marionette=self.marionette,
                                           capabilities=self.capabilities)
 
             # This will redirect the messages that will go by default to the error output to another file
-            runner.stream = unittest.runner._WritelnDecorator(open(self.testvars['error_output'], 'a'))
+            runner.stream = unittest.runner._WritelnDecorator(open(self.testvars['output']['error_output'], 'a'))
 
             # Temporary variable to store the total time used by all test retries, not only the last one.
             total_time = 0
-            while attempt < self.testvars["test_retries"]:
+            while attempt < self.testvars['general']["test_retries"]:
                 results = runner.run(suite)
                 total_time += results.time_taken
                 attempt += 1
@@ -85,7 +85,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                     suite._tests[0].restart = True
                     # If we have to reattempt, just substract the number of assertions to keep the results
                     # accurate
-                    if attempt < self.testvars["test_retries"]:
+                    if attempt < self.testvars['general']["test_retries"]:
                         self.assertion_manager.set_accum_passed(self.assertion_manager.get_accum_passed() -
                                                                 self.assertion_manager.get_passed())
                         self.assertion_manager.set_accum_failed(self.assertion_manager.get_accum_failed() -
@@ -168,19 +168,19 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         self.parse_descriptions_file()
         # Store the toolkit location to infer the location of some files relative to it, such as
         # the devices config or the css template
-        self.testvars['toolkit_location'] = kwargs['toolkit_location']
+        self.testvars['toolkit_cfg']['toolkit_location'] = kwargs['toolkit_location']
         Utilities.detect_device(self.testvars)
 
         GaiaTestRunnerMixin.__init__(self, **kwargs)
         HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__,
-                                              html_output=self.testvars['html_output'], **kwargs)
+                                              html_output=self.testvars['output']['html_output'], **kwargs)
         self.test_handlers = [GaiaTestCase]
 
     def parse_descriptions_file(self):
-        self.descriptions = Utilities.parse_file(self.testvars['test_descriptions'])
+        self.descriptions = Utilities.parse_file(self.testvars['general']['test_descriptions'])
 
     def parse_blocked_tests_file(self):
-        self.blocked_tests = Utilities.parse_file(self.testvars['blocked_tests'])
+        self.blocked_tests = Utilities.parse_file(self.testvars['general']['blocked_tests'])
 
     def prepare_results(self):
         """This methods ensures that the destination results directory is created before launching the
@@ -188,15 +188,18 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         """
         # If we are in the CI server, use the RUN_ID variable to create the results directory
         is_ci_server = os.getenv("ON_CI_SERVER")
-        result_dir = self.testvars["RESULT_DIR"]
+        result_dir = self.testvars['output']["result_dir"]
         run_id = os.getenv("RUN_ID")
         if is_ci_server:
-            self.testvars["RESULT_DIR"] = result_dir[:result_dir.rfind('/')] + run_id
+            self.testvars['output']["result_dir"] = result_dir[:result_dir.rfind('/')] + run_id
 
-        if not os.path.exists(self.testvars['RESULT_DIR']):
-            os.makedirs(self.testvars['RESULT_DIR'])
+        if not os.path.exists(self.testvars['output']['result_dir']):
+            os.makedirs(self.testvars['output']['result_dir'])
         else:
-            os.remove(self.testvars['RESULT_DIR'] + '/*')
+            try:
+                os.remove(self.testvars['output']['result_dir'] + '/*')
+            except:
+                pass
 
         def _initialize_file(file_path):
             with open(file_path, 'w') as f:
@@ -206,11 +209,12 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # Loggers are not directly instantiated, but created by calling loggin.getLogger.
         # Multiple calls to getLogger with the same name will point to the same logger
         # reference
-        config_file = self.testvars['OWD_LOG_CFG']
+        config_file = self.testvars['output']['log_cfg']
         logging.config.fileConfig(config_file)
         self.logger = logging.getLogger('OWDTestToolkit')
 
-        files = [self.testvars['html_output'], self.testvars['error_output'], self.testvars["log_path"]]
+        files = [self.testvars['output']['html_output'], self.testvars['output']['error_output'],
+                 self.testvars['output']["log_path"]]
         map(_initialize_file, files)
 
 
@@ -278,7 +282,7 @@ class TestRunner(object):
     def display_results(self):
         print
         print self._console_separator
-        print "Click here for details\t\t\t\t\t: file://{}".format(self.runner.testvars['html_output'])
+        print "Click here for details\t\t\t\t\t: file://{}".format(self.runner.testvars['output']['html_output'])
         print
         print "Start time\t\t\t\t\t\t: {}".format(self.start_time.strftime("%d/%m/%Y %H:%M"))
         print "End time\t\t\t\t\t\t: {}".format(self.end_time.strftime("%d/%m/%Y %H:%M"))
@@ -297,7 +301,7 @@ class TestRunner(object):
         """
         Edits general result html file adding for each test run, a link to its detail file
         """
-        results_file = open(self.runner.testvars['html_output'])
+        results_file = open(self.runner.testvars['output']['html_output'])
         soup = BeautifulSoup(results_file)
         results_file.close()
 
@@ -312,7 +316,7 @@ class TestRunner(object):
             link.append(detail_tag)
             i += 1
 
-        results_file = open(self.runner.testvars['html_output'], 'w')
+        results_file = open(self.runner.testvars['output']['html_output'], 'w')
         results_file.write(soup.prettify("utf-8"))
         results_file.close()
 
@@ -325,7 +329,7 @@ class TestRunner(object):
         for result in self.runner.results:
             # TODO: look if there's another way of getting the test_number
             test_number = re.search('test_(\w*).*$', result.tests.next().test_name).group(1)
-            detail_file_path = "{}/{}_detail.html".format(self.runner.testvars['RESULT_DIR'], test_number)
+            detail_file_path = "{}/{}_detail.html".format(self.runner.testvars['output']['result_dir'], test_number)
 
             try:
                 detail_file = open(detail_file_path)
@@ -355,9 +359,9 @@ class TestRunner(object):
             detail_file.close()
 
             # Copy the css file
-            css_path = "{}/{}".format(self.runner.testvars['toolkit_location'],
+            css_path = "{}/{}".format(self.runner.testvars['toolkit_cfg']['toolkit_location'],
                                       self.runner.testvars['toolkit_cfg']['css_file'])
-            shutil.copy(css_path, self.runner.testvars['RESULT_DIR'])
+            shutil.copy(css_path, self.runner.testvars['output']['result_dir'])
 
     def run(self):
         """

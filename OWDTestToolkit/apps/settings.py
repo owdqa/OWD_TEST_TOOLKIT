@@ -49,8 +49,8 @@ class Settings(object):
         except:
             self.UTILS.reporting.logResult("info", "No double SIM detected. Keep working...")
 
-        self.UTILS.element.waitForElements(('xpath',
-                                            DOM.GLOBAL.app_head_specific.format(_("Call Settings").encode("utf8"))), "Call settings header")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.\
+                                            format(_("Call Settings").encode("utf8"))), "Call settings header")
 
     def three_times_bad_pin2(self, wrong_pin2):
         """Change the PIN2.
@@ -312,8 +312,8 @@ class Settings(object):
         #
         add_btn = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number, "Add button")
         add_btn.tap()
-        self.UTILS.element.waitForElements(('xpath',
-                                            DOM.GLOBAL.app_head_specific.format(_("Add contact"))), "Add contact header")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Add contact"))),
+                                           "Add contact header")
 
         #
         # Fill contact data
@@ -330,8 +330,8 @@ class Settings(object):
         #
         # PIN2 Confirmation
         #
-        self.UTILS.element.waitForElements(('xpath',
-                                            DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))), "Confirm SIM PIN2 header")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))),
+                                           "Confirm SIM PIN2 header")
 
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "PIN2 input")
         pin2_input.send_keys(pin2)
@@ -376,8 +376,8 @@ class Settings(object):
         #
         # PIN2 Confirmation
         #
-        self.UTILS.element.waitForElements(('xpath',
-                                            DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))), "Confirm SIM PIN2 header", True, 10)
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))),
+                                           "Confirm SIM PIN2 header", True, 10)
 
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "PIN2 input", True, 10)
         pin2_input.send_keys(pin2)
@@ -928,67 +928,6 @@ class Settings(object):
 
         self.UTILS.element.waitForElements(DOM.Settings.wifi_header, "Wifi header appears.", True, 20, False)
 
-    def wifi_connect(self, wlan_name, username, passwd):
-        #
-        # Connects to the wifi specified in the parameters using the Settings app.
-        # Launches Settings if it's not already running.
-        #
-
-        #
-        # Are we in the settings app?
-        #
-        self.wifi()
-
-        self.wifi_switchOn()
-
-        self.wifi_list_tapName(wlan_name)
-
-        if self.wifi_forget():
-            self.wifi_list_tapName(wlan_name)
-
-        try:
-            #
-            # Asked for username.
-            #
-            self.parent.wait_for_element_displayed(*DOM.Settings.wifi_login_user, timeout=3)
-            wifi_login_user = self.marionette.find_element(*DOM.Settings.wifi_login_user)
-            if wifi_login_user.is_displayed():
-                wifi_login_user.send_keys(username)
-                self.UTILS.reporting.logResult("info", "Username '{}' supplied to connect to '{}' wifi.".
-                                               format(username, wlan_name))
-        except:
-            pass
-
-        try:
-            #
-            # Asked for password.
-            #
-            wifi_login_pass = self.marionette.find_element(*DOM.Settings.wifi_login_pass)
-            wifi_login_pass.send_keys(passwd)
-            time.sleep(1)
-            self.UTILS.reporting.logResult("info", "Password '{}' supplied to connect to '{}' wifi.".
-                                           format(passwd, wlan_name))
-        except:
-            pass
-
-        try:
-            wifi_login_ok = self.marionette.find_element(*DOM.Settings.wifi_login_ok_btn)
-            wifi_login_ok.tap()
-            self.UTILS.reporting.logResult("info", "Ok button pressed.")
-        except:
-            pass
-
-        #
-        # A couple of checks to wait for 'anything' to be Connected (only look for 'present' because it
-        # might be off the bottom of the page).
-        #
-        self.UTILS.test.test(True, "Connected: {}".format(self.wifi_list_isConnected(wlan_name, timeout=10)))
-        self.UTILS.test.test(self.wifi_list_isConnected(wlan_name, timeout=60),
-                             "Wifi '{}' is listed as 'connected' in wifi settings.".format(wlan_name), False)
-
-        self.UTILS.test.test(self.parent.data_layer.get_setting("wifi.enabled"),
-                             "Wifi connection to '{}' established.".format(wlan_name), True)
-
     def wifi_forget(self, quiet=True):
         #
         # Forget the wifi (assumes you have clicked the wifi name).<br>
@@ -1115,7 +1054,8 @@ class Settings(object):
         #
         self.wifi_switchOn()
         self.wifi_list_tapName(wifi_name)
-        self.UTILS.general.typeThis(DOM.Settings.wifi_login_pass, "Password for the WLAN", wifi_pass)
+        self.UTILS.general.typeThis(DOM.Settings.wifi_login_pass, "Password for the WLAN", wifi_pass,
+                                    p_no_keyboard=True)
         ok_btn = self.UTILS.element.getElement(DOM.Settings.wifi_login_ok_btn, "WLAN login OK button")
         ok_btn.tap()
 

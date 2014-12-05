@@ -9,11 +9,11 @@ class Messages(object):
 
     def __init__(self, parent):
         self.parent = parent
-        self.api_key = parent.general.get_config_variable("PIGEON_API_KEY")
-        self.api_secret = parent.general.get_config_variable("PIGEON_API_SECRET")
-        self.url = parent.general.get_config_variable("PIGEON_URL")
-        self.nowsms_user = parent.general.get_config_variable("NOWSMS_USER")
-        self.nowsms_pass = parent.general.get_config_variable("NOWSMS_PASS")
+        self.api_key = parent.general.get_config_variable("pigeon_api_key", "custom")
+        self.api_secret = parent.general.get_config_variable("pigeon_api_secret", "custom")
+        self.url = parent.general.get_config_variable("pigeon_url", "common")
+        self.nowsms_user = parent.general.get_config_variable("nowsms_user", "common")
+        self.nowsms_pass = parent.general.get_config_variable("nowsms_pass", "common")
 
     def create_incoming_cp(self, phone_number, pin_type, ota_filename, pin_number=None):
         """Create incoming client provisioning message
