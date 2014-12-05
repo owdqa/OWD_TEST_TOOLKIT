@@ -75,9 +75,9 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         if suite.countTestCases():
             runner = self.textrunnerclass(logger=self.logger,
                                           marionette=self.marionette,
-                                          capabilities=self.capabilities)
-            # This will redirect the messages that will go by default to the error output to another file
-            runner.stream = unittest.runner._WritelnDecorator(open(self.testvars['error_output'], 'a'))
+                                          capabilities=self.capabilities,
+                                          logcat_stdout=self.logcat_stdout,
+                                          result_callbacks=self.result_callbacks)
  
             # Temporary variable to store the total time used by all test retries, not only the last one.
             total_time = 0
