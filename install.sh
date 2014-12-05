@@ -12,7 +12,7 @@ export OWD_TEST_TOOLKIT_CONFIG=$OWD_TEST_TOOLKIT_DIR/config
 export GAIATEST_PATH=$HOME/gaia/tests/python/gaia-ui-tests/gaiatest
 export PATH=$PATH:/usr/android-sdk/platform-tools/adb:$OWD_TEST_TOOLKIT_DIR/scripts
 
-export BRANCH=${1:"v2.0"}
+export BRANCH=${1:"master"}
 
 #
 # CHECK DEPENDENCIES ...
@@ -45,6 +45,7 @@ fi
 #
 # Install gaiatest and marionette.
 #
+echo $BRANCH
 $OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
 
 
