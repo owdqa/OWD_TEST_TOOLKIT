@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 from csv_writer import CsvWriter
 
 
@@ -78,12 +79,13 @@ class Utilities():
         buildname = buildname_var[:index]
         index = -1
         filedir = ""
-        html_webdir = test_runner.runner.testvars['output']["webdir"] + "/{}/{}/{}".format(device, branch, run_id)
-        if os.getenv("ON_CI_SERVER"):
+        html_webdir = test_runner.runner.testvars['output']['webdir'] + "/{}/{}/{}".format(device, branch, run_id)
+        on_ci_server = os.getenv("ON_CI_SERVER")
+        if on_ci_server:
             index = html_webdir.find("owd_tests")
             filedir = html_webdir[index + 9:]
         else:
-            filedir = test_runner.runner.testvars['output']["html_output"]
+            filedir = test_runner.runner.testvars['output']['html_output']
         values = [test_runner.start_time.strftime("%d/%m/%Y %H:%M"), test_runner.end_time.strftime("%d/%m/%Y %H:%M"), \
                   run_id, "{} / {}".format(passes, totals), \
                   str(test_runner.unexpected_failures), \
@@ -95,3 +97,24 @@ class Utilities():
         csv_writer = CsvWriter(device, branch)
         csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), weekly_file, False)
         csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), daily_file)
+        if on_ci_server:
+            Utilities.persist_result_files(test_runner.runner.testvars, device, branch, run_id, filedir)
+
+    @staticmethod
+    def persist_result_files(testvars, device, branch, suite, dstdir):
+        """Move the result files to their persistent location.
+
+        Result and error files are stored in a temporary location while the suite
+        is running. In order to preserve them from being deleted or overwritten between
+        executions, they must be moved to a permanent location, given by the device, branch
+        and suite names.
+        """
+        # Move the results file, changing also its name to index
+        result_file = testvars['output']['html_output']
+        shutil.move(result_file, dstdir + '/index.html')
+
+        # Move the errors file to the same location
+        shutil.move(testvars['output']['error_output'], dstdir)
+
+        # Move the details directory to dstdir
+        shutil.move(testvars['output']['result_dir'], dstdir)
