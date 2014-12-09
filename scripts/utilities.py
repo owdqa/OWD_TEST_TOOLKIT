@@ -110,14 +110,13 @@ class Utilities():
         and suite names.
         """
         dstdir = '{}/{}/{}/{}'.format(testvars['output']['persistent_dir'], device, branch, suite)
+
+        # Move the details directory to dstdir
+        shutil.move(testvars['output']['result_dir'], dstdir)
+
         # Move the results file, changing also its name to index
         result_file = testvars['output']['html_output']
-        if not os.path.exists(dstdir):
-            os.makedirs(dstdir)
         shutil.move(result_file, dstdir + '/index.html')
 
         # Move the errors file to the same location
         shutil.move(testvars['output']['error_output'], dstdir)
-
-        # Move the details directory to dstdir
-        shutil.move(testvars['output']['result_dir'], dstdir)
