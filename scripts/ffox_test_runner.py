@@ -323,7 +323,7 @@ class TestRunner(object):
     def edit_test_details(self):
         """
         This method edits each of the detail files created during the test/suite execution
-        and adds some information (result, time taken...) which could only be know a posteriori.
+        and adds some information (result, time taken...) which could only be known a posteriori.
         """
 
         for result in self.runner.results:
