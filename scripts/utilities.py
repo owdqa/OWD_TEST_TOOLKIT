@@ -112,6 +112,8 @@ class Utilities():
         dstdir = '{}/{}/{}/{}'.format(testvars['output']['persistent_dir'], device, branch, suite)
         # Move the results file, changing also its name to index
         result_file = testvars['output']['html_output']
+        if not os.path.exists(dstdir):
+            os.makedirs(dstdir)
         shutil.move(result_file, dstdir + '/index.html')
 
         # Move the errors file to the same location
