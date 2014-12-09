@@ -2,15 +2,13 @@ import sys
 import shutil
 sys.path.insert(1, "../")
 import os
-import unittest
-import logging.config
 import re
+import random
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
-from marionette.wait import Wait
 from marionette import expected
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
 from bs4 import BeautifulSoup
@@ -26,7 +24,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
     assertion_manager = AssertionManager()
 
-    def run_test(self, filepath, expected, oop):
+    def _show_test_info(self, filepath):
         """
         This method is responsible of running a single test.
         We've overrun it in order to perform some tasks belonging to OWD initiative.
@@ -51,41 +49,23 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
         sys.stdout.write(u"{}: {:103s} ".format(test_num, description))
         sys.stdout.flush()
-
-        # TODO - erase them when deleting reportResults
-        self.testvars['TEST_NUM'] = test_num
-
-        testloader = unittest.TestLoader()
-        suite = unittest.TestSuite()
-        self.test_kwargs['expected'] = expected
-        self.test_kwargs['oop'] = oop
-        mod_name = os.path.splitext(os.path.split(filepath)[-1])[0]
-        for handler in self.test_handlers:
-            if handler.match(os.path.basename(filepath)):
-                handler.add_tests_to_suite(mod_name,
-                                           filepath,
-                                           suite,
-                                           testloader,
-                                           self.marionette,
-                                           self.testvars,
-                                           **self.test_kwargs)
-                break
-      
-        attempt = 0
-        if suite.countTestCases():
-            runner = self.textrunnerclass(logger=self.logger,
-                                          marionette=self.marionette,
-                                          capabilities=self.capabilities,
-                                          logcat_stdout=self.logcat_stdout,
-                                          result_callbacks=self.result_callbacks)
- 
-            # Temporary variable to store the total time used by all test retries, not only the last one.
+    
+    def run_test_set(self, tests):
+        if self.shuffle:
+            random.seed(self.shuffle_seed)
+            random.shuffle(tests)
+        
+        for test in tests:
+            attempt = 0
             total_time = 0
+            self._show_test_info(test['filepath'])
             while attempt < self.testvars["test_retries"]:
-                results = runner.run(suite)
-                total_time += results.time_taken
+                self.run_test(test['filepath'], test['expected'], test['test_container'])
+                result = self.results[-1]
+                total_time += result.time_taken
+                # Be careful, now self.results is a list of GaiaTestResult
                 attempt += 1
-                if len(results.errors) + len(results.failures) > 0:
+                if len(result.errors) + len(result.failures) > 0:
                     # If we have to reattempt, just substract the number of assertions to keep the results
                     # accurate
                     if attempt < self.testvars["test_retries"]:
@@ -93,37 +73,26 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                                                                 self.assertion_manager.get_passed())
                         self.assertion_manager.set_accum_failed(self.assertion_manager.get_accum_failed() -
                                                                 self.assertion_manager.get_failed())
+                        # Remove this result from results list, because now we call run_test() twice and we'll
+                        # get as many results as retries we've configured, and we're only interested in the last one
+                        self.results.pop(-1)
                         # Restart the phone
 #                         os.popen("adb shell stop b2g")
 #                         os.popen("adb shell start b2g")
 #                         os.popen("sleep 30")
                 else:
                     break
- 
-            # Store the total time in the results, for the report
-            results.time_taken = total_time
-            # Store the total number of attempts done for this test, for the report
-            results.attempts = attempt
-            self.results.append(results)
- 
-            self.failed += len(results.failures) + len(results.errors)
-            if hasattr(results, 'skipped'):
-                self.skipped += len(results.skipped)
-                self.todo += len(results.skipped)
-            self.passed += results.passed
-            for failure in results.failures + results.errors:
-                self.failures.append((results.getInfo(failure), failure.output, 'TEST-UNEXPECTED-FAIL'))
-            if hasattr(results, 'unexpectedSuccesses'):
-                self.failed += len(results.unexpectedSuccesses)
-                self.unexpected_successes += len(results.unexpectedSuccesses)
-                for failure in results.unexpectedSuccesses:
-                    self.failures.append((results.getInfo(failure), 'TEST-UNEXPECTED-PASS'))
-            if hasattr(results, 'expectedFailures'):
-                self.todo += len(results.expectedFailures)
- 
-        self.show_results(results)
-        results.stream.flush()
-
+                
+                if self.marionette.check_for_crash():
+                    break
+                
+                # Store the total time in the results, for the report
+                result.time_taken = total_time
+                # Store the total number of attempts done for this test, for the report
+                result.attempts = attempt
+            self.show_results(result)
+            result.stream.flush()
+    
     def get_result_msg(self, results):
         result_msg = None
         if len(results.errors) > 0:
