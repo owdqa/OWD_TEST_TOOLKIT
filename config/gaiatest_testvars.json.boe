@@ -76,6 +76,7 @@
 		"html_output": "/tmp/tests/results.html",
 		"error_output": "/tmp/tests/error.txt",
 		"log_path": "/tmp/tests/tests.log",
+		"persistent_dir": "/var/www/html/owd_tests",
 		"verbosity": "3"
 	},
 	"loop": {

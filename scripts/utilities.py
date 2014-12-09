@@ -101,7 +101,7 @@ class Utilities():
             Utilities.persist_result_files(test_runner.runner.testvars, device, branch, run_id, filedir)
 
     @staticmethod
-    def persist_result_files(testvars, device, branch, suite, dstdir):
+    def persist_result_files(testvars, device, branch, suite):
         """Move the result files to their persistent location.
 
         Result and error files are stored in a temporary location while the suite
@@ -109,6 +109,7 @@ class Utilities():
         executions, they must be moved to a permanent location, given by the device, branch
         and suite names.
         """
+        dstdir = '{}/{}/{}/{}'.format(testvars['output']['persistent_dir'], device, branch, suite)
         # Move the results file, changing also its name to index
         result_file = testvars['output']['html_output']
         shutil.move(result_file, dstdir + '/index.html')
