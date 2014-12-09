@@ -74,7 +74,7 @@ class Utilities():
         branch = os.getenv("BRANCH") if not is_cert else test_runner.runner.testvars["branch_cert"]
         run_id = os.getenv("RUN_ID")
         buildname_var = os.getenv("DEVICE_BUILDNAME") if not is_cert else test_runner.runner.testvars["buildname_cert"]
-        print "Device: {}   Branch: {}   Device buildname: {}".format(device, branch, buildname_var)
+        print "Device: {}   Branch: {}  Run id: {}  Device buildname: {}".format(device, branch, run_id, buildname_var)
         index = buildname_var.find(".Gecko")
         buildname = buildname_var[:index]
         index = -1
