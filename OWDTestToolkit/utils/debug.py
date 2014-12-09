@@ -26,7 +26,9 @@ class debug(object):
             screenshot = self.marionette.screenshot()
             with open(outFile, 'w') as f:
                 f.write(base64.decodestring(screenshot))
-            return outFile
+            
+            # We have to return the relative path, so that the report does not depend on the RESULTS_DIR
+            return outFile[outFile.rindex(self.parent.general.get_config_variable('RESULT_DIR').split("/")[-1]):] 
         except:
             return "(Unable to capture screenshot: possible Marionette issue.)"
 
@@ -56,4 +58,4 @@ class debug(object):
         except:
             htmlDump = "(Unable to dump html for this page: possible Marionette issue.)"
 
-        return [htmlDump, screenDump]
+        return [htmlDump[htmlDump.rindex(self.parent.general.get_config_variable('RESULT_DIR').split("/")[-1]):], screenDump]
