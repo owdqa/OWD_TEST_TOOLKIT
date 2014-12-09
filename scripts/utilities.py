@@ -98,7 +98,7 @@ class Utilities():
         csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), weekly_file, False)
         csv_writer.create_report(fieldnames, dict(zip(fieldnames, values)), daily_file)
         if on_ci_server:
-            Utilities.persist_result_files(test_runner.runner.testvars, device, branch, run_id, filedir)
+            Utilities.persist_result_files(test_runner.runner.testvars, device, branch, run_id)
 
     @staticmethod
     def persist_result_files(testvars, device, branch, suite):
