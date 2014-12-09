@@ -112,7 +112,7 @@ class Utilities():
         dstdir = '{}/{}/{}/{}'.format(testvars['output']['persistent_dir'], device, branch, suite)
 
         # Move the details directory to dstdir
-        shutil.move(testvars['output']['result_dir'], dstdir)
+        shutil.move(testvars['output']['result_dir'], dstdir + '/details')
 
         # Move the results file, changing also its name to index
         result_file = testvars['output']['html_output']
