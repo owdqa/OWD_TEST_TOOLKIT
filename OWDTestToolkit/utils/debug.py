@@ -28,7 +28,7 @@ class debug(object):
                 f.write(base64.decodestring(screenshot))
 
             # We have to return the relative path, so that the report does not depend on the RESULTS_DIR
-            return outFile[outFile.rindex(self.parent.general.get_config_variable('result_dir', 'output').split("/")[-1]):]
+            return p_fileSuffix + ".png"
         except:
             return "(Unable to capture screenshot: possible Marionette issue.)"
 
@@ -59,4 +59,4 @@ class debug(object):
             htmlDump = "(Unable to dump html for this page: possible Marionette issue.)"
 
         result_dir = self.parent.general.get_config_variable('result_dir', 'output')
-        return [htmlDump[htmlDump.rindex(result_dir.split("/")[-1]):], screenDump]
+        return [fnam + ".html", screenDump]
