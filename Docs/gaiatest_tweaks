@@ -1,5 +1,0 @@
-1. gaia_test.py: Stop it reloading on each setUp().
-
-2. gaia_test.py: def resource(self, filename):
-        #return os.path.abspath(os.path.join(os.path.dirname(__file__), 'resources', filename))
-        return os.path.abspath(os.path.join('tests/resources', filename)) 
