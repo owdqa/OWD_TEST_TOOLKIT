@@ -212,11 +212,11 @@ class Main():
         This method instantiates the class responsible of running the tests and run them.
         Returns the runner instances itself so that we can access to the results
         """
-        self.start_time = datetime.utcnow()
+        self.start_time = datetime.now()
         runner = runner_class(**vars(options))
         runner.prepare_results()
         runner.run_tests(tests)
-        self.end_time = datetime.utcnow()
+        self.end_time = datetime.now()
         return runner
 
     def update_attr(self, attr_name, attr_value):
