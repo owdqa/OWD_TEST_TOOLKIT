@@ -1,9 +1,9 @@
 import time
+from marionette import Actions
 from OWDTestToolkit import DOM
 
 
 class Browser(object):
-
     """Object representing the Browser application.
     """
 
@@ -13,6 +13,7 @@ class Browser(object):
         self.parent = parent
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
+        self.actions = Actions(self.marionette)
 
     def launch(self):
         """
@@ -349,3 +350,43 @@ class Browser(object):
         # Verify that the bookmark is correctly created
         elem = (DOM.Browser.bookmark_item[0], DOM.Browser.bookmark_item[1].format(url_value))
         self.UTILS.element.waitForElements(elem, "Bookmark just added", timeout=10)
+
+    def delete_bookmark(self, url=None, title=None):
+        """Delete a bookmark by title or by URL.
+
+        One of the url or title parameters must be given for a bookmark to be deleted.
+        If none of them is present, the function will return.
+        If both of them are present, url is used.
+        """
+        if title is None and url is None:
+            self.UTILS.reporting.debug("No url nor title were provided, so no bookmark is to be deleted")
+            return
+
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.frame_locator)
+
+        # Tap in the address bar to get tabs menu
+        url_input = self.UTILS.element.getElement(DOM.Browser.url_input, "URL input")
+        url_input.tap()
+
+        # Open the bookmarks tab
+        bookmarks_tab = self.UTILS.element.getElement(DOM.Browser.awesome_bookmarks_tab, "Bookmarks tab")
+        bookmarks_tab.tap()
+
+        # Locate the bookmark by url or by title
+        bookmark = None
+        if url is not None:
+            self.UTILS.reporting.debug("** Looking for bookmark with url [{}]".format(url))
+            bookmark = self.UTILS.element.getElementByXpath(DOM.Browser.bookmark_item[1].format(url))
+        else:
+            self.UTILS.reporting.debug("** Looking for bookmark with title [{}]".format(title))
+            bookmark = self.UTILS.element.getElementByXpath(DOM.Browser.bookmark_by_title[1].format(title))
+
+        # No bookmark found. Log condition and return.
+        if not bookmark:
+            self.UTILS.reporting.debug("No bookmark was found for url [{}] and title [{}]".format(url, title))
+            return
+
+        # Perform a long press over the bookmark, to let the unbookmark menu appear
+        self.actions.long_press(bookmark, 2).perform()
+        unbookmark = self.UTILS.element.getElement(DOM.Browser.bookmark_remove_btn, "Unbookmark button")
+        unbookmark.tap()

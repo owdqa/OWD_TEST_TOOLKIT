@@ -34,8 +34,8 @@ header_back_button = ("id", "messages-back-button")
 header_close_button = ('id', 'messages-close-button')
 
 # This field will allow to retrieve phone numbers and emails in the body of the last SM or MM
-phone_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//span/a[@data-action="dial-link"]')
-email_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//span/a[@data-action="email-link"]')
+phone_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//a[@data-action="dial-link"]')
+email_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//a[@data-action="email-link"]')
 
 threads = ("css selector", "p.name")
 threads_list = ('css selector', '#threads-container li')
@@ -137,5 +137,11 @@ discard_msg_btn = ('xpath', '//button[@data-l10n-id="discard-message"]')
 cancel_save_msg = ('xpath', '//button[@data-l10n-id="cancel"]')
 
 button_download_attachment = ('xpath', '//button[@data-l10n-id="download-attachment"]')
+button_downloading_attachment = ('xpath', '//button[@data-l10n-id="downloading-attachment"]')
 mms_attachment_names = ('css selector', '.attachment-container .file-name')
 mms_attachment_sizes = ('css selector', '.attachment-container .size-indicator')
+mms_resize_msg = ('id', 'messages-resize-notice')
+mms_max_length_msg = ('id', 'messages-max-length-notice')
+
+fdn_blocked_title = ('css selector', '[data-l10n-id=fdnBlocked2Title]')
+fdn_blocked_btn_ok = ('css selector', '[data-l10n-id=fdnBlocked2BtnOk]')

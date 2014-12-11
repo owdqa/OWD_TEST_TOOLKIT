@@ -35,6 +35,8 @@ player_toolbar_next = ('id', 'seek-forward')
 player_toolbar_play = ('id', 'play')
 player_back = ('id', 'close')
 player_options = ('id', 'options')
+player_video_controls = ('id', 'videoControls')
+elapsed_time = ('id', 'elapsed-text')
 
 # Other (attachments)
 done_button = ("id", 'picker-done')

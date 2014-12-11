@@ -25,7 +25,7 @@ class Loop(object):
         self.app_name = "Firefox Hello"
         self.market_url = "https://owd.tid.es/B3lg1r89n/market/appList.html"
         self.persistent_directory = "/data/local/storage/persistent"
-        self.loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_DIR")
+        self.loop_dir = self.UTILS.general.get_config_variable("install_dir", "loop")
 
     def launch(self):
         """
@@ -40,7 +40,7 @@ class Loop(object):
         return self.apps.is_app_installed(self.app_name)
 
     def install(self):
-        via = self.UTILS.general.get_os_variable("GLOBAL_LOOP_VIA")
+        via = self.UTILS.general.get_config_variable("install_via", "loop")
         if via == "Grunt":
             self.install_via_grunt()
         elif via == "Market":
@@ -57,12 +57,12 @@ class Loop(object):
         """.format(self.loop_dir, version)
 
         result = os.popen(script).read()
-        
+    
         self.marionette.switch_to_frame()
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-        
+    
         install_ok_msg = "Done, without errors."
         self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
         self.UTILS.test.test(install_ok_msg in result, "Install via grunt is OK")
@@ -87,7 +87,7 @@ class Loop(object):
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-        
+    
     def reinstall(self):
         self.uninstall()
         time.sleep(2)
@@ -100,7 +100,7 @@ class Loop(object):
             self.app_name), timeout=20, message="{} is not installed".format(self.app_name))
 
     def update_and_publish(self):
-        self.publish_loop_dir = self.UTILS.general.get_os_variable("GLOBAL_LOOP_AUX_FILES")
+        self.publish_loop_dir = self.UTILS.general.get_config_variable("aux_files", "loop")
 
         result = os.popen("cd {} && ./publish_app.sh {}".format(self.publish_loop_dir, self.loop_dir)).read()
         chops = result.split("\n")
@@ -543,7 +543,7 @@ class Loop(object):
         self.marionette.find_element(*DOM.GLOBAL.conf_screen_ok_button).tap()
 
         self.apps.switch_to_displayed_app()
-        
+    
         # Make sure the option is indeed selected, for that we have to check against the _values var
         self.parent.wait_for_condition(
             lambda m: m.find_element(*DOM.Loop.settings_select_call_mode).get_attribute("value") == _values[mode.capitalize()])

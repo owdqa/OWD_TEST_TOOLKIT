@@ -96,7 +96,7 @@ class iframe(object):
         self.marionette.switch_to_frame()
         the_frame = self.marionette.find_element(*('css selector', 'iframe.active'))
         self.marionette.switch_to_frame(the_frame)
-        
+
     def switchToFrame(self, attrib, value, quit_on_error=True, via_root_frame=True, test=True):
         #
         # Switch to the iframe containing the attribute value <b>value</b>.<br>
@@ -175,7 +175,7 @@ class iframe(object):
         if has_switched:
             dump = self.parent.debug.screenShotOnErr()
             self.parent.reporting.logResult(
-                "info",  "Iframe details for frame with path: {}".format(frame_src if frame_src else "root"), dump)
+                "info", "Iframe details for frame with path: {}".format(frame_src if frame_src else "root"), dump)
 
             frames = self.marionette.find_elements('tag name', 'iframe')
 

@@ -1,41 +1,14 @@
-import os
+from assertions import AssertionManager
 
 
 class test(object):
 
     def __init__(self, parent):
         self.parent = parent
-
-    def quitTest(self, msg=False):
-        #
-        # Quit this test suite.
-        #
-        self.parent.reporting.log_to_file("Quit test due to fatal error", level='error')
-        if not msg:
-            msg = "CANNOT CONTINUE PAST THIS ERROR - ABORTING THIS TEST CASE!"
-        else:
-            msg = msg
-
-        self.parent.reporting.logResult("info", " ")
-        self.parent.reporting.logResult(False, msg)
-
-        #
-        # Collect info on every iframe for debugging ...
-        #
-        self.parent.reporting.logResult("info", "<b style='color: #62E3C5'>Starting frame dump...</b>")
-        self.parent.iframe.view_all_iframes()
-
-        #
-        # Report the results.
-        #
-        self.parent.reporting.reportResults()
-
-        #
-        # By definition, sys.exit() raises a ExitValue exception.
-        # If we don't want an exception to be raised at this point,
-        # then we should use os._exit().
-        #
-        os._exit(1)
+        self.assertion_manager = AssertionManager()
+        self.assertion_manager.reset_test()
+        self.passed = self.assertion_manager.passed
+        self.failed = self.assertion_manager.failed
 
     def test(self, result, msg, stop_on_error=False):
         #
@@ -48,13 +21,20 @@ class test(object):
         #
         self.parent.reporting.log_to_file(u"Testing with {} and message: {}. stop_on_error: {}".\
                                           format(result, msg, stop_on_error))
-        fnam = False
-        if not result:
-            fnam = self.parent.debug.screenShotOnErr()
-            self.parent.reporting.logResult(result, msg, fnam)
-            self.parent.debug.getStackTrace()
 
-            if stop_on_error:
-                self.quitTest()
+        details = False
+        processed_msg = msg.split("|")
+        if result:
+            self.parent.reporting.logResult(result, processed_msg[0])
+            self.assertion_manager.inc_passed()
         else:
-            self.parent.reporting.logResult(result, msg)
+            details = self.parent.debug.screenShotOnErr()
+            # This has to be processed here due to the new behavior of reportResults
+            if len(processed_msg) > 1:
+                details.extend(processed_msg[1:])
+                self.parent.reporting.logResult(result, processed_msg[0], details)
+            else:
+                self.parent.reporting.logResult(result, msg, details)
+            self.assertion_manager.inc_failed()
+
+        self.parent.parent.assertTrue(result)

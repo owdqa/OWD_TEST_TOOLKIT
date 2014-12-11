@@ -12,7 +12,6 @@ view_all_contact_name_xpath = "//li[@class='contact-item']//p[contains(@data-sea
 contact_names = ('css selector', '.contact-item .contact-text')
 view_all_contact_specific_contact = ('xpath', '//section[@class="group-section"]//li/p[@class="contact-text"]/strong[contains(text(), "{}")]')
 
-
 view_details_title = ('id', 'contact-name-title')
 view_contact_image = ("id", "cover-img")
 view_contact_tel_field = ("id", "call-or-pick-0")

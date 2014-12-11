@@ -116,12 +116,12 @@ class Messages(object):
     def check_last_message_contents(self, expected, mms=False):
         """Get the last message text and check it against the expected value.
         """
-        returnedSMS = self.last_message_in_this_thread()
+        msg = self.last_message_in_this_thread()
         dom = DOM.Messages.last_message_mms_text if mms else DOM.Messages.last_message_text
-        returnedSMS_text = self.marionette.find_element(*dom, id=returnedSMS.id)
-        self.UTILS.test.test((returnedSMS_text and returnedSMS_text.text == expected),
-                             "Expected SMS text = '{}' ({}) (got '{}' ({})).".
-                             format(expected, len(expected), returnedSMS_text.text, len(returnedSMS_text.text)))
+        msg_text = self.marionette.find_element(*dom, id=msg.id)
+        self.UTILS.test.test((msg_text and msg_text.text == expected),
+                             u"Expected message text = '{}' ({}) (got '{}' ({})).".
+                             format(expected, len(expected), msg_text.text, len(msg_text.text)))
 
     def checkIsInToField(self, target, targetIsPresent=True):
         #
@@ -183,7 +183,7 @@ class Messages(object):
                 break
 
         self.UTILS.test.test(boolOK,
-                             "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
+            "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
         return boolOK
 
     def checkThreadHeader(self, header):
@@ -272,42 +272,42 @@ class Messages(object):
             #
             # Add an image file
             #
-            self.UTILS.general.addFileToDevice('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
+            self.UTILS.general.add_file_to_device('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
 
-            self.createMMSImage()
+            self.create_mms_image()
             self.gallery.click_on_thumbnail_at_position_mms(0)
         elif attached_type == "cameraImage":
             #
             # Add an image file from camera
             #
-            self.createMMSCameraImage()
+            self.create_mms_camera_image()
             time.sleep(3)
         elif attached_type == "video":
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.addFileToDevice('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
 
-            self.createMMSVideo()
+            self.create_mms_video()
             self.video.click_on_video_at_position_mms(0)
         elif attached_type == "audio":
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.addFileToDevice('./tests/_resources/AMR.amr', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/AMR.amr', destination='/SD/mus')
 
-            self.createMMSMusic()
+            self.create_mms_music()
             self.music.click_on_song_mms()
         else:
             # self.UTILS.reporting.logResult("info", "incorrect value received")
             msg = "FAILED: Incorrect parameter received in create_and_send_mms()"\
                 ". attached_type must being image, video or audio."
-            self.UTILS.test.quitTest(msg)
+            self.UTILS.test.test(False, msg)
 
         self.sendSMS()
         return self.last_sent_message_timestamp()
 
-    def createAndSendSMS(self, nums, msg):
+    def create_and_send_sms(self, nums, msg):
         #
         # Create and send a new SMS.<br>
         # <b>Note:</b> The nums field must be an array of numbers
@@ -340,7 +340,7 @@ class Messages(object):
         #
         self.sendSMS()
 
-    def createMMSImage(self):
+    def create_mms_image(self):
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
         attach.tap()
@@ -352,7 +352,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Gallery.frame_locator)
 
-    def createMMSCameraImage(self):
+    def create_mms_camera_image(self):
         self.camera = Camera(self.parent)
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
@@ -372,7 +372,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
 
-    def createMMSMusic(self):
+    def create_mms_music(self):
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
         attach.tap()
@@ -384,7 +384,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Music.frame_locator)
 
-    def createMMSVideo(self):
+    def create_mms_video(self):
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
         attach.tap()
@@ -396,7 +396,7 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Video.frame_locator)
 
-    def deleteAllThreads(self):
+    def delete_all_threads(self):
         #
         # Deletes all threads (assumes the messagin app is already open).
         #
@@ -498,7 +498,7 @@ class Messages(object):
                 self.UTILS.reporting.debug("*** Threads selected")
                 self.deleteSelectedThreads()
             else:
-                self.deleteAllThreads()
+                self.delete_all_threads()
 
     def editAndSelectMessages(self, msg_array):
         #
@@ -584,11 +584,11 @@ class Messages(object):
         # Validate the field.
         #
         x = self.UTILS.element.getElement(DOM.Messages.input_message_area,
-                                          "Input message area (for validation)")
+                                    "Input message area (for validation)")
         self.UTILS.test.test(x.text == msg,
-                             "The text in the message area is as expected." +
-                             "|EXPECTED: '" + msg + "'" +
-                             "|ACTUAL  : '" + x.text + "'")
+                        "The text in the message area is as expected." + \
+                        "|EXPECTED: '" + msg + "'" + \
+                        "|ACTUAL  : '" + x.text + "'")
 
     def addNumbersInToField(self, nums):
         """
@@ -701,7 +701,7 @@ class Messages(object):
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quitTest()
+            self.UTILS.test.test(False, "Incorrect value received")
 
         self.addNumbersInToField([target_telNum])
 
@@ -730,7 +730,7 @@ class Messages(object):
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quitTest()
+            self.UTILS.test.test(False, "Incorrect value received")
 
         # Search for the contact and check it's been added
         self.addContactToField(contact_name)
@@ -758,7 +758,7 @@ class Messages(object):
 
         else:
             self.UTILS.reporting.logResult("info", "incorrect value received")
-            self.UTILS.test.quitTest()
+            self.UTILS.test.test(False, "Incorrect value received")
 
         # Add phone numbers
         self.addNumbersInToField([target_telNum])
@@ -876,13 +876,20 @@ class Messages(object):
         # Returns an object of the last message in the current thread.
         #
         self.parent.wait_for_element_present(*DOM.Messages.last_message, timeout=20)
-        return self.marionette.find_element(*DOM.Messages.last_message)
+        message = self.marionette.find_element(*DOM.Messages.last_message)
+        self.UTILS.element.scroll_into_view(message)
+        return message
 
     def last_sent_message_timestamp(self):
         """Returns the timestamp of the last sent message
         """
         send_time = self.marionette.find_element(*DOM.Messages.last_sent_message).get_attribute("data-timestamp")
         return float(send_time) / 1000
+
+    def last_sent_message(self):
+        """Returns the last sent message
+        """
+        return self.marionette.find_element(*DOM.Messages.last_sent_message)
 
     def open_attached_file(self, frame_to_change):
         elem = DOM.Messages.last_message_attachment_av
@@ -986,7 +993,7 @@ class Messages(object):
 
         # (Give the spinner time to appear.)
         time.sleep(2)
-        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 120)
+        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 180)
 
         #
         # Check if we received the 'service unavailable' message.
@@ -1058,14 +1065,14 @@ class Messages(object):
         typ = parts[0].strip()
         return typ if len(parts) > 1 else ''
 
-    def timeOfLastMessageInThread(self):
+    def time_of_last_message_in_thread(self):
         #
         # Returns the time of the last message in the current thread.
         #
         t = self.UTILS.element.getElement(DOM.Messages.last_message_time, "Last message time")
         return t.text
 
-    def timeOfThread(self, num):
+    def time_of_thread(self, num):
         #
         # Returns the time of a thread.
         #
@@ -1098,7 +1105,7 @@ class Messages(object):
             # self.UTILS.reporting.logResult("info", "incorrect value received")
             msg = "FAILED: Incorrect parameter received in verify_mms_received()"\
                 ". Attached_type must be image, video or audio."
-            self.UTILS.test.quitTest(msg)
+            self.UTILS.test.test(False, msg)
 
         self.UTILS.reporting.debug("*** searching for attachment type")
         # Look for all the attachments, since there can be more than one
@@ -1112,7 +1119,7 @@ class Messages(object):
                 found = True
         if not found:
             msg = "No attachment with type {} was found in the message".format(attached_type)
-            self.UTILS.test.quitTest(msg)
+            self.UTILS.test.test(False, msg)
 
     def wait_for_message(self, send_time=None, timeout=120):
         """Wait for a received message in the current thread and return it.
@@ -1148,5 +1155,6 @@ class Messages(object):
             # Nope - sleep then try again.
             time.sleep(poll_time)
 
-        self.UTILS.test.test(result, "Last message in thread 'received' within {} seconds.".format(timeout))
+        self.UTILS.test.test(result, "Last message in thread 'received' within {} seconds.".\
+                             format(timeout))
         return result

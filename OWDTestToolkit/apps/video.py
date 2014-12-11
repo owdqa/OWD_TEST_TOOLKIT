@@ -29,13 +29,13 @@ class Video(object):
         thumb = self.UTILS.element.getElements(DOM.Video.thumbnails_thumbs, "thumbnails")[position]
 
         duration_text = thumb.find_element(*DOM.Video.thumbnail_duration).text.strip()
-        duration_in_secs = self._convert_str_to_seconds(duration_text)
+        duration_in_secs = self.convert_str_to_seconds(duration_text)
 
         # Note: we give 2 second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
         self.UTILS.test.test(duration_in_secs in interval, "Duration matches")
 
-    def _convert_str_to_seconds(self, the_string):
+    def convert_str_to_seconds(self, the_string):
         """
         Converts a str of the form "aa:bb" into seconds
         """
@@ -51,7 +51,7 @@ class Video(object):
         # Play the video and get total duration
         self.play_video(position)
         video_length = self.UTILS.element.getElement(DOM.Video.player_time_slider_duration, "Video length")
-        real_duration = self._convert_str_to_seconds(video_length.text)
+        real_duration = self.convert_str_to_seconds(video_length.text)
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
@@ -63,7 +63,9 @@ class Video(object):
         @param  int     position            thumbnail to click 
         @param  tuple   frame_to_change     frame to switch once the image has been cropped
         """
-        all_videos = self.UTILS.element.getElements(DOM.Video.thumbnails_thumbs, "Videos")
+        self.parent.wait_for_element_displayed(*DOM.Video.thumbnails_thumbs)
+        time.sleep(3)
+        all_videos = self.marionette.find_elements(*DOM.Video.thumbnails_thumbs)
         my_video = all_videos[position]
         my_video.tap()
 
@@ -100,12 +102,12 @@ class Video(object):
         self.UTILS.element.waitForElements(DOM.Video.player_video_loaded, "Loaded video", True, 20, False)
 
     def is_video_playing(self):
-        return "paused" in self.marionette.find_element(*DOM.Video.player_toolbar_play).get_attribute('class')
+        return not "paused" in self.marionette.find_element(*DOM.Video.player_toolbar_play).get_attribute('class')
 
     def show_controls(self):
         self.parent.wait_for_element_displayed(*DOM.Video.player_video)
         self.marionette.find_element(*DOM.Video.player_video).tap()
-        self.parent.wait_for_element_displayed(*DOM.Video.video_controls)
+        self.parent.wait_for_element_displayed(*DOM.Video.player_video_controls)
 
     @retry(5, 1)
     def is_this_video_being_played(self, video_name):
@@ -116,3 +118,7 @@ class Video(object):
             return True
         else:
             raise
+    
+    def tap_on_play_button(self):
+        self.parent.wait_for_element_displayed(*DOM.Video.player_toolbar_play)
+        self.marionette.find_element(*DOM.Video.player_toolbar_play).tap()

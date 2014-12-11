@@ -1,5 +1,4 @@
 import time
-import sys
 from OWDTestToolkit import DOM
 from OWDTestToolkit.utils.decorators import retry
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
@@ -714,9 +713,11 @@ class Contacts(object):
         self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "View all contacts header")
 
         # Now check the contact's name is displayed here too.
-        contact_name = ("xpath", DOM.Contacts.view_all_contact_xpath.format(contact['name'].replace(" ", "")))
+        contact_name = ("xpath", DOM.Contacts.view_all_contact_xpath.format(contact['name'].upper().\
+                                                                            replace(" ", "")))
 
-        self.UTILS.element.waitForElements(contact_name, "Contact '" + contact['name'] + "'")
+        self.UTILS.element.waitForElements(contact_name, "Contact '{}'".format(contact['name'].upper().\
+                                                                               replace(" ", "")), timeout=30)
 
     def populate_fields(self, contact):
         """
@@ -802,12 +803,17 @@ class Contacts(object):
         """
         Select the result of a search
         """
-
         results = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Search results list")
         for result in results:
             if contact_name in result.text:
                 result.tap()
                 break
+
+    def call_current_contact(self):
+        """Call the contact being shown after selecting from contact list or search results.
+        """
+        call_btn = self.UTILS.element.getElement(DOM.Contacts.view_contact_tel_field, "Contact number button")
+        call_btn.tap()
 
     def select_search_result_several_phones(self, contact_name, number):
         """
@@ -1016,7 +1022,7 @@ class Contacts(object):
                                            format(contact_name))
             return
 
-        # TEST: Correct contact name is in the page header.
+        # test: Correct contact name is in the page header.
 
         if header_check:
             self.UTILS.element.headerCheck(contact_name)

@@ -34,9 +34,9 @@ tab_tray_tab_panels = ("xpath", "//div[@id='tab-panels']//li/a")
 tab_tray_tab_list = ("xpath", "//div[@id='tabs-list']//li/a")
 tab_tray_tab_list_curr = ("xpath", "//div[@id='tabs-list']//li[@class='current']/a")
 
-tab_tray_tab_item_close = ("xpath", "//button[@class='close']") # Use these with :
-tab_tray_tab_item_image = ("tag name", "div")                   #   x = getElement(...tab_tray_tab_list)[0]
-tab_tray_tab_item_title = ("tag name", "span")                  #   y = x.find_element(<these>)
+tab_tray_tab_item_close = ("xpath", "//button[@class='close']")
+tab_tray_tab_item_image = ("tag name", "div")
+tab_tray_tab_item_title = ("tag name", "span")
 
 settings_button = ("id", "settings-button")
 settings_header = ("xpath", "//header[@id='settings-header']")
@@ -47,7 +47,9 @@ page_problem = ("xpath", "//*[text()='{}']".format(_("Problemloadingpage")))
 
 bookmarkmenu_button = ("id", "bookmark-button")
 bookmark_button = ('id', 'bookmark-menu-add')
+bookmark_remove_btn = ('id', 'bookmark-menu-remove')
 bookmarks_tab = ('id', 'bookmarks-tab')
+bookmark_by_title = ('xpath', '//section[@id="bookmarks"]//li//h5[contains(text(), "{}")]')
 bookmark_item = ("xpath", '//section[@id="bookmarks"]//a[@href="{}"]')
 
 embarrasing_tag = ('xpath', '//h3[@data-l10n-id="this-is-embarrassing"]')

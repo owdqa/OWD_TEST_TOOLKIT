@@ -3,6 +3,7 @@ import time
 import datetime
 from marionette import Actions
 
+
 class Gallery(object):
 
     def __init__(self, parent):
@@ -23,7 +24,7 @@ class Gallery(object):
         self.UTILS.element.waitForNotElements(DOM.Gallery.loading_bar, "Loading bar", True, 10)
         return self.app
 
-    def _convert_str_to_seconds(self, the_string):
+    def convert_str_to_seconds(self, the_string):
         """
         Converts a str of the form "aa:bb" into seconds
         """
@@ -39,7 +40,7 @@ class Gallery(object):
         # Play the video and get total duration
         self.play_current_video()
         video_length = self.UTILS.element.getElement(DOM.Gallery.preview_current_video_duration, "Video length")
-        real_duration = self._convert_str_to_seconds(video_length.text)
+        real_duration = self.convert_str_to_seconds(video_length.text)
 
         # Note: we give 1 second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
@@ -48,11 +49,13 @@ class Gallery(object):
     def click_on_thumbnail_at_position(self, position, preview=True):
         """
         Clicks on a thumbnail at a certain position from the gallery.
-        @param  boolean     preview     specifies whether we have to check for the preview screen or not 
+        @param  boolean     preview     specifies whether we have to check for the preview screen or not
         """
-        thumb_list = self.UTILS.element.getElements(DOM.Gallery.thumbnail_items, "Thumbnail list")
+        self.parent.wait_for_element_displayed(*DOM.Gallery.thumbnail_items)
+        thumb_list = self.marionette.find_elements(*DOM.Gallery.thumbnail_items)
         time.sleep(1)
-        thumb_list[position].tap()
+        thumb = thumb_list[position]
+        thumb.tap()
 
         self.UTILS.element.waitForNotElements(DOM.Gallery.thumbnail_items, "Thumbnail list", True, 10)
         if preview:
@@ -61,12 +64,14 @@ class Gallery(object):
     def _click_on_thumb_external(self, position, frame_to_change):
         """
         Private method which handles image selection and image cropping
-        @param  int     position            thumbnail to click 
+        @param  int     position            thumbnail to click
         @param  tuple   frame_to_change     frame to switch once the image has been cropped
         """
+        time.sleep(1)
         self.click_on_thumbnail_at_position(position, preview=False)
 
         time.sleep(2)
+
         crop = self.UTILS.element.getElement(DOM.Gallery.crop_done, "Crop Done")
         crop.tap()
 
@@ -78,7 +83,7 @@ class Gallery(object):
         """
         self._click_on_thumb_external(position, DOM.Messages.frame_locator)
 
-    def click_on_thumbnail_at_position_email(self, num):
+    def click_on_thumbnail_at_position_email(self, position):
         """
         Clicks a thumbnail from the gallery in order to attach it to an email
         """
@@ -86,9 +91,9 @@ class Gallery(object):
 
     def delete_thumbnails(self, num_array):
         """
-        # Deletes the thumbnails listed in num_array
-        # (following an index starting at number 0)
-        # The list must be numeric, i.e "delete_thumbnails([0,1,2])".
+        Deletes the thumbnails listed in num_array
+        (following an index starting at number 0)
+        The list must be numeric, i.e "delete_thumbnails([0,1,2])".
         """
 
         # Get the amount of thumbnails we currently have.
@@ -115,7 +120,7 @@ class Gallery(object):
 
         if target_thumbcount < 1:
             self.UTILS.element.waitForElements(DOM.Gallery.no_thumbnails_message,
-                                               "Message saying there are no thumbnails", False, 5)
+                                       "Message saying there are no thumbnails", False, 5)
         else:
             # Come out of 'select' mode.
             select_mode_btn = self.UTILS.element.getElement(
@@ -123,8 +128,9 @@ class Gallery(object):
             select_mode_btn.tap()
 
             current_thumbs = self.get_number_of_thumbnails()
-            self.UTILS.test.test(current_thumbs == target_thumbcount, "After deleting [{}] pics, we have the expected number: {}".format(
-                delete_thumbcount, target_thumbcount))
+            self.UTILS.test.test(current_thumbs == target_thumbcount,
+                                 "After deleting [{}] pics, we have the expected number: {}".\
+                                 format(delete_thumbcount, target_thumbcount))
 
     def get_gallery_items(self):
         """

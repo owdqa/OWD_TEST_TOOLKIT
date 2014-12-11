@@ -60,17 +60,11 @@ class Marketplace(object):
 
         yes_button = self.UTILS.element.getElement(DOM.Market.confirm_install_button, "Confirm install button")
         yes_button.tap()
-
-        self.UTILS.element.waitForNotElements(DOM.Market.confirm_install_button, "Confirm install button")
-
-        #
-        # Wait for the download statusbar to finish.
-        #
-        self.UTILS.statusbar.displayStatusBar()
-        x = ("xpath", "//div[text()='{} {}']".format(_("Downloading"), app))
-        self.UTILS.element.waitForElements(x, "Download status bar")
-        self.UTILS.element.waitForNotElements(x, "Download status bar", True, 180, False)
-        self.UTILS.statusbar.hideStatusBar()
+        
+        self.marionette.switch_to_frame()
+        msg = "{} installed".format(app)
+        installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
+        self.UTILS.element.waitForElements(installed_app_msg, msg, timeout=30)
         return True
 
     def search_for_app(self, app):

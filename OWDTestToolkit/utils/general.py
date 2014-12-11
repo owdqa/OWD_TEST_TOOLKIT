@@ -1,5 +1,3 @@
-import sys
-import os
 import json
 import time
 import datetime
@@ -17,12 +15,13 @@ class general(object):
         self.marionette = parent.marionette
         self.keyboard = Keyboard(self.marionette)
 
-    def addFileToDevice(self, file_name, count=1, destination=''):
+    def add_file_to_device(self, file_name, count=1, destination=''):
         #
         # Put a file onto the device (path is relative to the dir
         # you are physically in when running the tests).
         #
-        self.parent.device.push_file(file_name, count, '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination))
+        self.parent.device.push_file(file_name, count, '{}/{}'.format(self.get_config_variable("OWD_DEVICE_SDCARD"),
+                                                                      destination))
 
     def checkMarionetteOK(self):
         #
@@ -67,11 +66,16 @@ class general(object):
         now = datetime.datetime.now()
         return now.strftime("%Y/%m/%d %H:%M:%S.%f")
 
-    def get_os_variable(self, name, validate=True):
-        #
-        # Get a variable from the OS.
-        #
-        return os.getenv(name, False)
+    def get_config_variable(self, name, group=None):
+        """Get a configuration variable.
+        """
+        try:
+            if group:
+                return self.parent.data_layer.testvars[group][name]
+            else:
+                return self.parent.data_layer.testvars[name]
+        except:
+            return False
 
     def insertContact(self, contact):
         self.marionette.switch_to_frame()
@@ -180,13 +184,13 @@ class general(object):
         # then regardless of what you send to this method, it will never
         # use the keyboard.
         #
-        no_keyboard = self.parent.general.get_os_variable("NO_KEYBOARD", False)
+        no_keyboard = self.parent.general.get_config_variable("NO_KEYBOARD")
 
         #
         # Remember the current frame.
         #
         orig_frame = self.parent.iframe.currentIframe()
-        self.parent.test.test(True, "Original frame filtered name: {}".format(orig_frame))
+        self.parent.reporting.debug("Original frame filtered name: {}".format(orig_frame))
 
         input_elem = self.parent.element.getElement(p_element_array, p_desc)
 
@@ -206,18 +210,6 @@ class general(object):
                 format(p_str))
 
             input_elem.send_keys(p_str)
-
-            #
-            # There's a weird 'quirk' in Marionette just now:
-            # if you send_keys() an underscore ("_") then the
-            # screen is locked. No idea who thought that was a
-            # good idea, but it seems it's here to stay, so unlock()
-            # if necessary.
-            #
-            if "_" in p_str:
-                self.parent.parent.device.unlock()
-                self.marionette.switch_to_frame()
-                self.parent.iframe.switchToFrame("src", orig_frame)
 
         else:
             #
@@ -240,7 +232,7 @@ class general(object):
         #
         # Switch back to the frame we were in and get the element again.
         #
-        self.parent.test.test(True, "Switching back to original frame {}".format(orig_frame))
+        self.parent.reporting.debug("Switching back to original frame {}".format(orig_frame))
         self.parent.iframe.switchToFrame("src", orig_frame)
 
         #
@@ -279,7 +271,7 @@ class general(object):
         # remove file from sdcard
         #
         destination = destination_prefix + file_name
-        file_to_remove = '{}/{}'.format(os.environ["OWD_DEVICE_SDCARD"], destination)
+        file_to_remove = '{}/{}'.format(self.get_config_variable("OWD_DEVICE_SDCARD"), destination)
         self.parent.device.manager.removeFile(file_to_remove)
 
     def restart(self):
