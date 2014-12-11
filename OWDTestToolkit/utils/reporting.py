@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import time
 import datetime
 import logging
-
+import re
 
 class reporting(object):
 
@@ -77,7 +77,25 @@ class reporting(object):
             new_log_tag.append(timestamp_tag)
 
             msg_tag = soup.new_tag('span', **{'class': 'message'})
-            msg_tag.string = log['msg']
+            
+            results = re.search("^(.*)(<[b|i]>)(.*)</\w>(.*)", log['msg'])
+            if results: # If match, this will always have 4 groups
+                if results.group(2) == '<b>':
+                    msg_rich_tag = soup.new_tag('span', **{'class': 'bold'})
+                    msg_rich_tag.string = results.group(3)
+                elif results.group(2) == '<i>':
+                    msg_rich_tag = soup.new_tag('span', **{'class': 'italic'})
+                    msg_rich_tag.string = results.group(3)
+                else:
+                    msg_rich_tag = soup.new_tag('span')
+                    msg_rich_tag.string = results.group(3)
+                    
+                msg_tag.append(results.group(1))
+                msg_tag.append(msg_rich_tag)
+                msg_tag.append(soup.new_string(results.group(4)))
+            else:
+                msg_tag.string = log['msg']
+
             new_log_tag.append(msg_tag)
 
             if 'details' in log:
