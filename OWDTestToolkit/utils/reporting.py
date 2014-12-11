@@ -14,6 +14,9 @@ class reporting(object):
         self.test_num = self.parent.parent.__module__[5:]
         self.detail_file = "{}/{}_detail.html".format(self.parent.general.get_config_variable('result_dir', 'output'),
                                                       self.test_num)
+        
+        config_file = self.parent.general.get_config_variable('log_cfg', 'output')
+        logging.config.fileConfig(config_file)
         self.logger = logging.getLogger('OWDTestToolkit')
 
     def log_to_file(self, message, level='info'):
