@@ -52,6 +52,20 @@ body {
     font-weight: bold;
 }
 
+.bold {
+	font-weight: bold;
+}
+
+.italic {
+	font-size: 14px;
+    font-style: italic;
+}
+
+.debug {
+    font-style: italic;
+    font-size: 15px;
+    color: #11745B;
+}
 /* General info container*/
 
 #general-info .label {
