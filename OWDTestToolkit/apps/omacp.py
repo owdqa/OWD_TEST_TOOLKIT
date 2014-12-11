@@ -20,70 +20,48 @@ class OMACP(object):
                                               " app - loading overlay")
         return self.app
 
-    def acceptNETWPINMessage(self):
+    def accept_netwpin_message(self):
         #
         # Click on the Accept button
         #
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_Accept_Button, "Accept button")
-        x.tap()
+        accept_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Accept_Button, "Accept button")
+        accept_btn.tap()
 
-    def cancelNETWPINMessage(self):
+    def cancel_netwpin_message(self):
         #
         # Click on the Close button
         #
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_Close_Button, "Close button")
-        x.tap()
+        close_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Close_Button, "Close button")
+        close_btn.tap()
 
         screenshot = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
 
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_Cancel_Message, "Cancel Message")
-        self.UTILS.test.test(x.text == "The message has not been processed yet, do you really want to quit?",
+        cancel_msg = self.UTILS.element.getElement(DOM.OMACP.CP_Cancel_Message, "Cancel Message")
+        self.UTILS.test.test(cancel_msg.text == "The message has not been processed yet, do you really want to quit?",
                         "Cancel Message Text")
 
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_Quit_Button, "Quit button")
-        x.tap()
+        quit_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Quit_Button, "Quit button")
+        quit_btn.tap()
 
-    def cancelOMACPStorage(self, CP_PinNumber):
+    def cancel_omacp_storage(self, pin):
         #
         # Introduce the PIN number, then click on the Accept button
         #
         self.UTILS.iframe.switchToFrame(*DOM.OMACP.frame_locator)
-        self.UTILS.general.typeThis(DOM.OMACP.CP_Windows_Pin, "PIN field", CP_PinNumber, p_no_keyboard=False,
+        self.UTILS.general.typeThis(DOM.OMACP.CP_Windows_Pin, "PIN field", pin, p_no_keyboard=False,
                             p_validate=False, p_clear=False, p_enter=True)
 
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_Accept_Button, "Accept button")
-        x.tap()
+        accept_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Accept_Button, "Accept button")
+        accept_btn.tap()
 
         #
         # Click on Cancel button and finish
         #
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_Cancel_Button, "Cancel button")
-        x.tap()
+        cancel_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Cancel_Button, "Cancel button")
+        cancel_btn.tap()
 
-    def clickOMACPNotification(self, p_num):
-        #
-        # Click new sms in the home page status bar notificaiton.
-        #
-        self.UTILS.reporting.logResult("info", "Clicking statusbar notification of new CP from " + p_num + " ...")
-
-        #
-        # Switch to the 'home' frame to click the notifier.
-        #
-        self.marionette.switch_to_frame()
-        self.UTILS.statusbar.displayStatusBar()
-        x = (DOM.Messages.statusbar_new_sms[0], DOM.Messages.statusbar_new_sms[1].format(p_num))
-        x = self.UTILS.element.getElement(x, "Statusbar notification for " + p_num)
-        x.tap()
-
-        #
-        # Switch back to the messaging app.
-        #
-        time.sleep(2)
-
-        self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
-
-    def storeOMACPSettings(self, pin):
+    def store_omacp_settings(self, pin):
         #
         # Introduce the PIN number, then click on the Accept button
         #
@@ -91,18 +69,18 @@ class OMACP(object):
         self.UTILS.general.typeThis(DOM.OMACP.CP_Windows_Pin, "PIN field", pin, p_no_keyboard=True,
                             p_validate=False, p_clear=False, p_enter=True)
 
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_Accept_Button, "Accept button")
-        x.tap()
+        accept_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Accept_Button, "Accept button")
+        accept_btn.tap()
 
         #
         # Click on Store button and finish
         #
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_Store_Button, "Store button")
-        x.tap()
+        store_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Store_Button, "Store button")
+        store_btn.tap()
 
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_OTA_Message, "Message")
-        self.UTILS.test.test(x, "Stored OTA message")
+        msg = self.UTILS.element.getElement(DOM.OMACP.CP_OTA_Message, "Message")
+        self.UTILS.test.test(msg, "Stored OTA message")
 
-        x = self.UTILS.element.getElement(DOM.OMACP.CP_Finish_Button, "Finish button")
-        x.tap()
+        finish_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Finish_Button, "Finish button")
+        finish_btn.tap()
         time.sleep(3)
