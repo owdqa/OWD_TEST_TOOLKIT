@@ -190,7 +190,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin,HTMLReportingTe
             'Content-Length': len(data)}, data)
 
 
-class TestRunner():
+class TestRunner(object):
 
 # runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
     def __init__(self, args):
