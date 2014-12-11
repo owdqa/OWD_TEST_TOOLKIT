@@ -57,7 +57,6 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             attempt = 0
             total_time = 0
             self._show_test_info(test['filepath'])
-            print "Test going thruuuu: {}".format(test)
             while attempt < self.testvars['general']['test_retries']:
                 self.run_test(test['filepath'], test['expected'], test['oop'])
                 result = self.results[-1]
