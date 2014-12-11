@@ -78,7 +78,7 @@ class reporting(object):
 
             msg_tag = soup.new_tag('span', **{'class': 'message'})
             
-            results = re.search("^(.*)(<[b|i]>)(.*)</\w>(.*)", log['msg'])
+            results = re.search("^(.*)(<\w+>)(.*)</\w+>(.*)", log['msg'])
             if results: # If match, this will always have 4 groups
                 if results.group(2) == '<b>':
                     msg_rich_tag = soup.new_tag('span', **{'class': 'bold'})
