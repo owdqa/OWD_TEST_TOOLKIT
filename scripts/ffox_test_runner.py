@@ -2,19 +2,19 @@ import sys
 import shutil
 sys.path.insert(1, "../")
 import os
-import unittest
-import logging.config
 import re
-import subprocess
+import random
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
+from marionette import expected
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
 from bs4 import BeautifulSoup
 from datetime import datetime
 from gaiatest.version import __version__
+from mozlog import structured
 
 from OWDTestToolkit.utils.assertions import AssertionManager
 from utilities import Utilities
@@ -24,7 +24,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
     assertion_manager = AssertionManager()
 
-    def run_test(self, filepath, expected, oop):
+    def _show_test_info(self, filepath):
         """
         This method is responsible of running a single test.
         We've overrun it in order to perform some tasks belonging to OWD initiative.
@@ -45,78 +45,59 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             description = "[BLOCKED] " + self.blocked_tests[test_num][:desc_len] + "..."
             expected = "fail"
 
-        self.logger.info('TEST-START {}'.format(os.path.basename(filepath)))
-
         sys.stdout.write(u"{}: {:103s} ".format(test_num, description))
         sys.stdout.flush()
-
-        # TODO - erase them when deleting reportResults
-        self.testvars['TEST_NUM'] = test_num
-
-        testloader = unittest.TestLoader()
-        suite = unittest.TestSuite()
-        self.test_kwargs['expected'] = expected
-        self.test_kwargs['oop'] = oop
-        mod_name = os.path.splitext(os.path.split(filepath)[-1])[0]
-        for handler in self.test_handlers:
-            if handler.match(os.path.basename(filepath)):
-                handler.add_tests_to_suite(mod_name, filepath, suite, testloader, self.marionette, self.testvars,
-                                           **self.test_kwargs)
-                break
-
-        attempt = 0
-        if suite.countTestCases():
-            # Run the test. For that purpose, we have to instantiate the runnerclass, which, in this
-            # this case, is MarionetteTextTestRunner
-            runner = self.textrunnerclass(verbosity=int(self.testvars['output']["verbosity"]),
-                                          marionette=self.marionette,
-                                          capabilities=self.capabilities)
-
-            # This will redirect the messages that will go by default to the error output to another file
-            runner.stream = unittest.runner._WritelnDecorator(open(self.testvars['output']['error_output'], 'a'))
-
-            # Temporary variable to store the total time used by all test retries, not only the last one.
+    
+    def run_test_set(self, tests):
+        if self.shuffle:
+            random.seed(self.shuffle_seed)
+            random.shuffle(tests)
+        
+        for test in tests:
+            attempt = 0
             total_time = 0
-            while attempt < self.testvars['general']["test_retries"]:
-                results = runner.run(suite)
-                total_time += results.time_taken
+            self._show_test_info(test['filepath'])
+            print "Test going thruuuu: {}".format(test)
+            while attempt < self.testvars['general']['test_retries']:
+                self.run_test(test['filepath'], test['expected'], test['oop'])
+                result = self.results[-1]
+                total_time += result.time_taken
+                # Be careful, now self.results is a list of GaiaTestResult
                 attempt += 1
-                if len(results.errors) + len(results.failures) > 0:
-                    suite._tests[0].restart = True
+                if len(result.errors) + len(result.failures) > 0:
                     # If we have to reattempt, just substract the number of assertions to keep the results
                     # accurate
                     if attempt < self.testvars['general']["test_retries"]:
+                        print "Restarting device!!!!"
                         self.assertion_manager.set_accum_passed(self.assertion_manager.get_accum_passed() -
                                                                 self.assertion_manager.get_passed())
                         self.assertion_manager.set_accum_failed(self.assertion_manager.get_accum_failed() -
                                                                 self.assertion_manager.get_failed())
+                        # Remove this result from results list, because now we call run_test() twice and we'll
+                        # get as many results as retries we've configured, and we're only interested in the last one
+                        self.results.pop(-1)
+                        
+                        # Tell the suite that we have to restart the device for next test (the retry)
+                        self.test_kwargs['restart'] = True
                 else:
                     break
-
-            # Store the total time in the results, for the report
-            results.time_taken = total_time
-            # Store the total number of attempts done for this test, for the report
-            results.attempts = attempt
-            self.results.append(results)
-
-            self.failed += len(results.failures) + len(results.errors)
-            if hasattr(results, 'skipped'):
-                self.skipped += len(results.skipped)
-                self.todo += len(results.skipped)
-            self.passed += results.passed
-            for failure in results.failures + results.errors:
-                self.failures.append((results.getInfo(failure), failure.output, 'TEST-UNEXPECTED-FAIL'))
-            if hasattr(results, 'unexpectedSuccesses'):
-                self.failed += len(results.unexpectedSuccesses)
-                self.unexpected_successes += len(results.unexpectedSuccesses)
-                for failure in results.unexpectedSuccesses:
-                    self.failures.append((results.getInfo(failure), 'TEST-UNEXPECTED-PASS'))
-            if hasattr(results, 'expectedFailures'):
-                self.todo += len(results.expectedFailures)
-
-        self.show_results(results)
-        results.stream.flush()
-
+                
+                if self.marionette.check_for_crash():
+                    break
+                
+                # Store the total time in the results, for the report
+                result.time_taken = total_time
+                # Store the total number of attempts done for this test, for the report
+                result.attempts = attempt
+            
+            # Reset restart (if needed) for the upcoming test
+            try:
+                self.test_kwargs.pop('restart')
+            except KeyError:
+                pass
+            self.show_results(result)
+            result.stream.flush()
+    
     def get_result_msg(self, results):
         result_msg = None
         if len(results.errors) > 0:
@@ -152,7 +133,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                                 OWDMarionetteTestRunner.assertion_manager.get_total()))
 
 
-class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingTestRunnerMixin):
+class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin,HTMLReportingTestRunnerMixin):
     """
     OWD runner class
     This class performs a bunch of tasks which are needed before and after running the test/s
@@ -160,7 +141,6 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
     textrunnerclass = GaiaTextTestRunner
 
     def __init__(self, **kwargs):
-
         BaseMarionetteTestRunner.__init__(self, **kwargs)
 
         # Some initial steps going through!
@@ -183,42 +163,35 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         self.blocked_tests = Utilities.parse_file(self.testvars['general']['blocked_tests'])
 
     def prepare_results(self):
-        """This methods ensures that the destination results directory is created before launching the
+        """ This methods ensures that the destination results directory is created before launching the
         test/s execution. It also creates (or cleans) the html results report file and the error_output file
         """
-        # If we are in the CI server, use the RUN_ID variable to create the results directory
-        is_ci_server = os.getenv("ON_CI_SERVER")
-        result_dir = self.testvars['output']["result_dir"]
-        run_id = os.getenv("RUN_ID")
-        if is_ci_server:
-            self.testvars['output']["result_dir"] = result_dir[:result_dir.rfind('/')] + run_id
-
         if not os.path.exists(self.testvars['output']['result_dir']):
             os.makedirs(self.testvars['output']['result_dir'])
-        else:
-            try:
-                os.remove(self.testvars['output']['result_dir'] + '/*')
-            except:
-                pass
 
         def _initialize_file(file_path):
             with open(file_path, 'w') as f:
                 f.close()
 
-        # We will redirect BaseMarionetteTestRunner default logger to our own logger.
-        # Loggers are not directly instantiated, but created by calling loggin.getLogger.
-        # Multiple calls to getLogger with the same name will point to the same logger
-        # reference
-        config_file = self.testvars['output']['log_cfg']
-        logging.config.fileConfig(config_file)
-        self.logger = logging.getLogger('OWDTestToolkit')
-
-        files = [self.testvars['output']['html_output'], self.testvars['output']['error_output'],
-                 self.testvars['output']["log_path"]]
+        files = [self.testvars['output']['html_output'], self.testvars['output']['error_output']]
         map(_initialize_file, files)
+    
+    def start_httpd(self, need_external_ip):
+        super(OWDTestRunner, self).start_httpd(need_external_ip)
+        self.httpd.urlhandlers.append({
+            'method': 'GET',
+            'path': '.*\.webapp',
+            'function': self.webapp_handler})
+
+    def webapp_handler(self, request):
+        with open(os.path.join(self.server_root, request.path[1:]), 'r') as f:
+            data = f.read()
+        return (200, {
+            'Content-type': 'application/x-web-app-manifest+json',
+            'Content-Length': len(data)}, data)
 
 
-class TestRunner(object):
+class Main():
 
 # runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
     def __init__(self, args):
@@ -238,13 +211,13 @@ class TestRunner(object):
     def start_test_runner(self, runner_class, options, tests):
         """
         This method instantiates the class responsible of running the tests and run them.
-        Returns the runner instances itself so that we can access to the results.
+        Returns the runner instances itself so that we can access to the results
         """
-        self.start_time = datetime.now()
+        self.start_time = datetime.utcnow()
         runner = runner_class(**vars(options))
         runner.prepare_results()
         runner.run_tests(tests)
-        self.end_time = datetime.now()
+        self.end_time = datetime.utcnow()
         return runner
 
     def update_attr(self, attr_name, attr_value):
@@ -274,7 +247,7 @@ class TestRunner(object):
     @property
     def _console_separator(self):
         try:
-            columns = int(subprocess.check_output(['stty', 'size']).replace('\n', '').split()[1])
+            columns = int(os.popen('stty size', 'r').read().split()[-1])
         except Exception:
             columns = 120
         return "#" * columns
@@ -323,9 +296,9 @@ class TestRunner(object):
     def edit_test_details(self):
         """
         This method edits each of the detail files created during the test/suite execution
-        and adds some information (result, time taken...) which could only be known a posteriori.
+        and adds some information (result, time taken...) which could only be know a posteriori.
         """
-
+        
         for result in self.runner.results:
             # TODO: look if there's another way of getting the test_number
             test_number = re.search('test_(\w*).*$', result.tests.next().test_name).group(1)
@@ -340,12 +313,7 @@ class TestRunner(object):
             detail_file.close()
 
             description_tag = soup.find("span", id='test-description')
-            
-            if test_number in self.runner.descriptions:
-                description_tag.string = self.runner.descriptions[test_number]
-            else:
-                description_tag.string = "Description not available..."
-                
+            description_tag.string = self.runner.descriptions[test_number]
             duration_tag = soup.find("span", id='duration')
             duration_tag.string = "{:.2f} seconds".format(result.time_taken)
             result_tag = soup.find("div", id="result-container")
@@ -374,8 +342,17 @@ class TestRunner(object):
 
         # Preprocess
         parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
+        structured.commandline.add_logging_group(parser)
         options, tests = parser.parse_args(self.args[1:])
         parser.verify_usage(options, tests)
+        
+        logger = structured.commandline.setup_logging(options.logger_name, options) #{"mach": open("/tmp/tests/tests.log", "a")})
+        options.logger = logger
+        
+        # Remove default stdout logger from mozilla logger
+        to_delete = filter(lambda h: h.stream.name == '<stdout>', logger.handlers)
+        for d in to_delete:
+            logger.remove_handler(d)
 
         location = self.parse_toolkit_location(self.args)
         options.toolkit_location = location
@@ -388,8 +365,6 @@ class TestRunner(object):
         self.edit_html_results()
         self.edit_test_details()
         self.display_results()
-        # Generate CSV report, if needed
-        Utilities.generate_csv_reports(self)
 
     def parse_toolkit_location(self, args):
         path = args[0]
@@ -397,4 +372,4 @@ class TestRunner(object):
         return path[:index]
 
 if __name__ == "__main__":
-    TestRunner(sys.argv).run()
+    Main(sys.argv).run()
