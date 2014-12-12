@@ -61,13 +61,14 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 self.run_test(test['filepath'], test['expected'], test['oop'])
                 result = self.results[-1]
                 total_time += result.time_taken
-                # Be careful, now self.results is a list of GaiaTestResult
                 attempt += 1
+                result.attempts = attempt
+                # Be careful, now self.results is a list of GaiaTestResult
                 if len(result.errors) + len(result.failures) > 0:
                     # If we have to reattempt, just substract the number of assertions to keep the results
                     # accurate
                     if attempt < self.testvars['general']["test_retries"]:
-                        print "Restarting device!!!!"
+#                         print "Restarting device!!!!"
                         self.assertion_manager.set_accum_passed(self.assertion_manager.get_accum_passed() -
                                                                 self.assertion_manager.get_passed())
                         self.assertion_manager.set_accum_failed(self.assertion_manager.get_accum_failed() -
@@ -79,16 +80,16 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                         # Tell the suite that we have to restart the device for next test (the retry)
                         self.test_kwargs['restart'] = True
                 else:
+                    # Store the total time in the results, for the report
+                    result.time_taken = total_time
+                    # Store the total number of attempts done for this test, for the report
+                    result.attempts = attempt
                     break
                 
                 if self.marionette.check_for_crash():
                     break
-                
-                # Store the total time in the results, for the report
-                result.time_taken = total_time
-                # Store the total number of attempts done for this test, for the report
-                result.attempts = attempt
             
+            result.time_taken = total_time
             # Reset restart (if needed) for the upcoming test
             try:
                 self.test_kwargs.pop('restart')
