@@ -3,6 +3,8 @@ import time
 import datetime
 import logging
 import re
+from mozlog.structured import get_default_logger
+
 
 class reporting(object):
 
@@ -15,38 +17,39 @@ class reporting(object):
         self.detail_file = "{}/{}_detail.html".format(self.parent.general.get_config_variable('result_dir', 'output'),
                                                       self.test_num)
         
-        config_file = self.parent.general.get_config_variable('log_cfg', 'output')
-        logging.config.fileConfig(config_file)
-        self.logger = logging.getLogger('OWDTestToolkit')
+        # config_file = self.parent.general.get_config_variable('log_cfg', 'output')
+        # logging.config.fileConfig(config_file)
+        # logging.setLoggerClass(logging.Logger)
+        self.custom_logger = get_default_logger()
 
     def log_to_file(self, message, level='info'):
         if level in ('critical', 'error', 'warn', 'info', 'debug'):
-            f = self.logger.__getattribute__(level)
+            f = self.custom_logger.__getattribute__(level)
             f(message)
         else:
-            self.logger.info(message)
+            self.custom_logger.info(message)
 
     def critical(self, message):
-        self.logger.critical(message)
+        self.custom_logger.critical(message)
 
     def error(self, message):
-        self.logger.error(message)
+        self.custom_logger.error(message)
 
     def warn(self, message):
-        self.logger.warn(message)
+        self.custom_logger.warn(message)
 
     def info(self, message):
-        self.logger.info(message)
+        self.custom_logger.info(message)
 
     def debug(self, message):
-        self.logger.debug(message)
+        self.custom_logger.debug(message)
 
     def logComment(self, comment):
         #
         # Add a comment to the comment array.
         #
         self.comment_array.append(comment)
-        self.logger.info("Adding comment: {}".format(comment))
+        self.custom_logger.info("Adding comment: {}".format(comment))
 
     def _get_timestamp(self):
         time_now = round(time.time() - self.init_time, 0)
@@ -54,7 +57,7 @@ class reporting(object):
         return "[{}]".format(time_now)
 
     def logResult(self, msg_type, msg, details=False):
-        self.logger.info(u"Logging result: [{}] with message [{}]. p_fnam: {}".format(msg_type, msg, details))
+        self.custom_logger.info(u"Logging result: [{}] with message [{}]. p_fnam: {}".format(msg_type, msg, details))
         log = {'msg_type': str(msg_type),
                'timestamp': self._get_timestamp(),
                'msg': "DEBUG NOTE: " + msg if msg_type is 'debug' else msg,
