@@ -47,12 +47,12 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
         sys.stdout.write(u"{}: {:103s} ".format(test_num, description))
         sys.stdout.flush()
-    
+
     def run_test_set(self, tests):
         if self.shuffle:
             random.seed(self.shuffle_seed)
             random.shuffle(tests)
-        
+
         for test in tests:
             attempt = 0
             total_time = 0
@@ -75,15 +75,15 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                         # Remove this result from results list, because now we call run_test() twice and we'll
                         # get as many results as retries we've configured, and we're only interested in the last one
                         self.results.pop(-1)
-                        
+
                         # Tell the suite that we have to restart the device for next test (the retry)
                         self.test_kwargs['restart'] = True
                 else:
                     break
-                
+
                 if self.marionette.check_for_crash():
                     break
-            
+
             result.time_taken = total_time
             # Reset restart (if needed) for the upcoming test
             try:
@@ -92,7 +92,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 pass
             self.show_results(result)
             result.stream.flush()
-    
+
     def get_result_msg(self, results):
         result_msg = None
         if len(results.errors) > 0:
@@ -128,7 +128,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                                 OWDMarionetteTestRunner.assertion_manager.get_total()))
 
 
-class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin,HTMLReportingTestRunnerMixin):
+class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingTestRunnerMixin):
     """
     OWD runner class
     This class performs a bunch of tasks which are needed before and after running the test/s
@@ -170,7 +170,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin,HTMLReportingTe
 
         files = [self.testvars['output']['html_output'], self.testvars['output']['error_output']]
         map(_initialize_file, files)
-    
+
     def start_httpd(self, need_external_ip):
         super(OWDTestRunner, self).start_httpd(need_external_ip)
         self.httpd.urlhandlers.append({
@@ -293,7 +293,7 @@ class TestRunner(object):
         This method edits each of the detail files created during the test/suite execution
         and adds some information (result, time taken...) which could only be know a posteriori.
         """
-        
+
         for result in self.runner.results:
             # TODO: look if there's another way of getting the test_number
             test_number = re.search('test_(\w*).*$', result.tests.next().test_name).group(1)
@@ -332,7 +332,7 @@ class TestRunner(object):
         It takes as arguments the parameters that gaiatest command would need
         For example:
             python ffox_test_runner_py --testvars=<testvars path> --address=localhost:2828 <tests path |\
-            test suite path> --log-tbpl=<path-to-log-file>
+            test suite path>
         """
 
         # Preprocess
@@ -340,10 +340,10 @@ class TestRunner(object):
         structured.commandline.add_logging_group(parser)
         options, tests = parser.parse_args(self.args[1:])
         parser.verify_usage(options, tests)
-        
-        logger = structured.commandline.setup_logging(options.logger_name, options)#, {"tbpl": open("/tmp/tests/tests.log", "a")})
+
+        logger = structured.commandline.setup_logging(options.logger_name, options)  #, {"tbpl": open("/tmp/tests/tests.log", "a")})
         options.logger = logger
-        
+
         # Remove default stdout logger from mozilla logger
         to_delete = filter(lambda h: h.stream.name == '<stdout>', logger.handlers)
         for d in to_delete:

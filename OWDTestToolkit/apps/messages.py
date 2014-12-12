@@ -384,6 +384,12 @@ class Messages(object):
 
         self.UTILS.iframe.switchToFrame(*DOM.Music.frame_locator)
 
+    def go_back(self):
+        """Press back button in messages thread
+        """
+        # TODO: remove tap with coordinates after Bug 1061698 is fixed
+        self.UTILS.element.getElement(DOM.Messages.header_link_locator, "Back button").tap(25, 25)
+
     def create_mms_video(self):
 
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
