@@ -68,6 +68,7 @@ last_message_text_nested = ('xpath', '//div[@class="message-content"]//p')
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')
 messages_from_num = "//*[contains(@id, '{}')]"
+header_link_locator = ('id', 'messages-header')
 message_header = ("id", "messages-header-text")
 received_messages = ('xpath', "//li[@class='bubble'][a[@class='received']]")
 

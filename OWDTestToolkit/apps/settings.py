@@ -920,11 +920,10 @@ class Settings(object):
             btn.tap()
 
     def wifi(self):
-        #
-        # Open wifi settings.
-        #
-        x = self.UTILS.element.getElement(DOM.Settings.wifi, "Wifi settings link")
-        x.tap()
+        """Open wifi settings menu
+        """
+        settings_menu = self.UTILS.element.getElement(DOM.Settings.wifi, "Wifi settings link")
+        settings_menu.tap()
 
         self.UTILS.element.waitForElements(DOM.Settings.wifi_header, "Wifi header appears.", True, 20, False)
 
@@ -1053,10 +1052,11 @@ class Settings(object):
         # Connect to the wifi.
         #
         self.wifi_switchOn()
+        time.sleep(2)
         self.wifi_list_tapName(wifi_name)
         self.UTILS.general.typeThis(DOM.Settings.wifi_login_pass, "Password for the WLAN", wifi_pass,
                                     p_no_keyboard=True)
-        ok_btn = self.UTILS.element.getElement(DOM.Settings.wifi_login_ok_btn, "WLAN login OK button")
+        ok_btn = self.marionette.find_element(*DOM.Settings.wifi_login_ok_btn)
         ok_btn.tap()
 
     def select_language(self, lang="English (US)"):
