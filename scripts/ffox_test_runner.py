@@ -80,10 +80,6 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                         # Tell the suite that we have to restart the device for next test (the retry)
                         self.test_kwargs['restart'] = True
                 else:
-                    # Store the total time in the results, for the report
-                    result.time_taken = total_time
-                    # Store the total number of attempts done for this test, for the report
-                    result.attempts = attempt
                     break
                 
                 if self.marionette.check_for_crash():
