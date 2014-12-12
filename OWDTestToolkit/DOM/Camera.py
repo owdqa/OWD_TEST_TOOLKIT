@@ -21,18 +21,18 @@ settings_grid = ('xpath', '//div[@class="settings_items"]//li[contains(@class, "
 settings_grid_value = ('xpath', '//div[@class="settings_items"]//li[contains(@class, "setting grid")]//h5[@class="setting_value"]')
 
 # Camera controls
-controls_pane = ('xpath', '//div[contains(@class, "controls")]')
-capture_button = ('class name', 'capture-button')
-switch_source = ('xpath', '//div[contains(@class, "mode-switch")]')
-open_thumbs = ('css selector', '.controls-left > [name=thumbnail]')
+controls_pane = ('css selector', '.controls')
+capture_button = ('css selector', '.capture-button')
+switch_source = ('css selector', '.test-switch')
+open_thumbs = ('css selector', '.test-thumbnail')
 
 # Preview section
 preview = ('class name', 'preview-gallery')
-preview_header = ('xpath', '//div[contains(@class, "preview-menu")]//header')
-preview_back = ('xpath', '//div[contains(@class, "preview-menu")]//header//button[@name="back"]')
-preview_share = ('xpath', '//div[contains(@class, "preview-menu")]//header//button[@name="share"]')
-preview_options = ('xpath', '//div[contains(@class, "preview-menu")]//header//button[@name="options"]')
-preview_count_text = ('xpath', '//div[contains(@class, "preview-menu")]//div[contains(@class, "count-text")]')
+preview_header = ('xpath', '//div[contains(@class, "preview-menu")]//gaia-header')
+preview_back = ('xpath', '//div[contains(@class, "preview-menu")]//gaia-header//button[@name="back"]')
+preview_share = ('xpath', '//div[contains(@class, "preview-menu")]//gaia-header//button[@name="share"]')
+preview_options = ('xpath', '//div[contains(@class, "preview-menu")]//gaia-header//button[@name="options"]')
+preview_count_text = ('xpath', '//div[contains(@class, "preview-gallery")]//div[contains(@class, "count-text")]')
 
 preview_container = ('xpath', '//div[@class="preview-gallery"]//div[contains(@class, "frame-container")]')
 preview_container_video = ('xpath', '//div[@class="preview-gallery"]//div[contains(@class, "frame-container")]//img[@class="videoPoster"]')
