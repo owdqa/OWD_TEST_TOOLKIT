@@ -68,7 +68,6 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                     # If we have to reattempt, just substract the number of assertions to keep the results
                     # accurate
                     if attempt < self.testvars['general']["test_retries"]:
-#                         print "Restarting device!!!!"
                         self.assertion_manager.set_accum_passed(self.assertion_manager.get_accum_passed() -
                                                                 self.assertion_manager.get_passed())
                         self.assertion_manager.set_accum_failed(self.assertion_manager.get_accum_failed() -
