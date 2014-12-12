@@ -332,7 +332,7 @@ class TestRunner(object):
         It takes as arguments the parameters that gaiatest command would need
         For example:
             python ffox_test_runner_py --testvars=<testvars path> --address=localhost:2828 <tests path |\
-            test suite path>
+            test suite path> --log-tbpl=<path-to-log-file>
         """
 
         # Preprocess
@@ -341,7 +341,7 @@ class TestRunner(object):
         options, tests = parser.parse_args(self.args[1:])
         parser.verify_usage(options, tests)
         
-        logger = structured.commandline.setup_logging(options.logger_name, options) #{"mach": open("/tmp/tests/tests.log", "a")})
+        logger = structured.commandline.setup_logging(options.logger_name, options)#, {"tbpl": open("/tmp/tests/tests.log", "a")})
         options.logger = logger
         
         # Remove default stdout logger from mozilla logger
