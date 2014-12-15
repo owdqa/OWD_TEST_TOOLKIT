@@ -99,7 +99,7 @@ class Camera(object):
  
         # Record for video_length seconds. Looks like it always takes one second more
         # Wait for duration
-        timer_text = "00:%02d" % video_length
+        timer_text = '00:{:02d}'.format(video_length)
         self.parent.wait_for_condition(lambda m: m.find_element(
             *DOM.Camera.recording_timer).text >= timer_text, timeout=video_length + 10)
         
