@@ -1,6 +1,5 @@
 import sys
 import shutil
-sys.path.insert(1, "../")
 import os
 import re
 import random
@@ -341,7 +340,13 @@ class TestRunner(object):
         options, tests = parser.parse_args(self.args[1:])
         parser.verify_usage(options, tests)
 
-        logger = structured.commandline.setup_logging(options.logger_name, options)  #, {"tbpl": open("/tmp/tests/tests.log", "a")})
+        # Traverse the tbpl logs option list and create directories if required
+        for f in options.log_tbpl:
+            d = f[:f.rfind('/')]
+            if not os.path.exists(d):
+                os.makedirs(d)
+
+        logger = structured.commandline.setup_logging(options.logger_name, options)  # , {"tbpl": open("/tmp/tests/tests.log", "a")})
         options.logger = logger
 
         # Remove default stdout logger from mozilla logger

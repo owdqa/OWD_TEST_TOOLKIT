@@ -2,6 +2,8 @@ import functools
 import sys
 import importlib
 import time
+from datetime import datetime
+import inspect
 
 
 def retry(num_retries, delay=2, context=None, aux_func_name=None):
@@ -72,3 +74,21 @@ def retry(num_retries, delay=2, context=None, aux_func_name=None):
                 time.sleep(delay)
         return func_with_retries
     return retry_any_function
+
+
+def timestamped_log(func):
+    """Decorator to add a timestamp at the beginning of a log line.
+
+    Assumes there is a message attribute, which is the log to be shown, and
+    that will be manipulated to prefix with the timestamp.
+    """
+    @functools.wraps(func)
+    def log_func(self, message):
+        msg = message
+        d = datetime.now().strftime('%Y-%m-%d %H:%M:%S,') + \
+            '{:03d}'.format(datetime.now().microsecond / 1000)
+        (frame, filename, line_number, function_name, lines, index) = inspect.getouterframes(inspect.currentframe())[2]
+        caller = '{}::{}:{}'.format(filename[filename.rfind('/') + 1:], function_name, line_number)
+        msg = '{} - {} - {} - {}'.format(d, caller, func.__name__.upper(), msg)
+        func(self, msg)
+    return log_func
