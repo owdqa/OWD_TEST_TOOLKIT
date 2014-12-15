@@ -25,11 +25,11 @@ preview_toolbar_share = ('id', 'fullscreen-share-button-tiny')
 preview_toolbar_info = ('id', 'fullscreen-info-button-tiny')
 preview_toolbar_delete = ('id', 'fullscreen-delete-button-tiny')
 
-preview_current_image = ('xpath', '//div[@class="frame" and contains(@style, "0px")]//div[@class="image-view"]')
-preview_current_video = ('xpath', '//div[@class="frame" and contains(@style, "0px")]//img[@class="videoPoster"]')
-preview_current_video_play = ('xpath', '//div[@class="frame" and contains(@style, "0px")]//button[@class="videoPlayerPlayButton"]')
-preview_current_video_pause = ('xpath', '//div[@class="frame" and contains(@style, "0px")]//button[@class="videoPlayerPauseButton"]')
-preview_current_video_duration = ('xpath', '//div[@class="frame" and contains(@style, "0px")]//span[@class="videoPlayerDurationText"]')
+preview_current_image = ('css selector', 'div.frame.current div.image-view')
+preview_current_video = ('css selector', 'div.frame.current img.videoPoster')
+preview_current_video_play = ('css selector', 'div.frame.current button.videoPlayerPlayButton')
+preview_current_video_pause = ('css selector', 'div.frame.current button.videoPlayerPauseButton')
+preview_current_video_duration = ('css selector', 'div.frame.current span.videoPlayerDurationText')
 
 # Others
 no_thumbnails_message = ("xpath", "//h1[@id='overlay-title' and text()='{}']".format(_("No photos or videos")))

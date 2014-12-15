@@ -1,7 +1,7 @@
 import time
 import datetime
 from OWDTestToolkit import DOM
-
+from marionette import Actions
 
 class Camera(object):
 
@@ -11,6 +11,7 @@ class Camera(object):
         self.parent = parent
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
+        self.actions = Actions(self.marionette)
 
     def launch(self):
         self.app = self.apps.launch(self.__class__.__name__)
@@ -20,13 +21,13 @@ class Camera(object):
         return self.app
 
     def _wait_for_camera_ready(self):
-        self.parent.wait_for_condition(lambda m: "enabled" in m.find_element(
-            *DOM.Camera.controls_pane).get_attribute("class"), timeout=10, message="Camera ready")
+        self.parent.wait_for_condition(lambda m: m.find_element(
+            *DOM.Camera.controls_pane).get_attribute('data-enabled') == 'true', timeout=10, message="Camera ready")
 
     def is_video_being_recorded(self):
         try:
-            self.parent.wait_for_condition(lambda m: "recording" in m.find_element(
-                *DOM.Camera.controls_pane).get_attribute("class"), timeout=10, message="Video recording")
+            self.parent.wait_for_condition(lambda m: m.find_element(
+                *DOM.Camera.controls_pane).get_attribute('data-recording') == 'true', timeout=10, message="Video recording")
             return True
         except:
             return False
@@ -95,14 +96,16 @@ class Camera(object):
         self._tap_on_capture_button()
 
         self.UTILS.test.test(self.is_video_being_recorded(), "Video recording")
-        self.UTILS.element.waitForNotElements(DOM.Camera.open_thumbs,
-                                              "Thumbnail appears after recording video", True, 10, False)
-
+ 
         # Record for video_length seconds. Looks like it always takes one second more
-        time.sleep(video_length)
+        # Wait for duration
+        timer_text = '00:{:02d}'.format(video_length)
+        self.parent.wait_for_condition(lambda m: m.find_element(
+            *DOM.Camera.recording_timer).text >= timer_text, timeout=video_length + 10)
+        
         # Stop recording
         self._tap_on_capture_button()
-
+ 
         self.UTILS.element.waitForNotElements(DOM.Camera.recording_timer, "Video timer", True, 10, False)
         self.UTILS.element.waitForElements(DOM.Camera.open_thumbs,
                                            "Thumbnail appears after recording video", True, 10, False)
@@ -112,7 +115,7 @@ class Camera(object):
         Switch between still shot and video.
         """
         switch_btn = self.UTILS.element.getElement(DOM.Camera.switch_source, "Source switcher")
-        switch_btn.tap()
+        self.actions.press(switch_btn).move_by_offset(0, 0).release().perform()
         self._wait_for_camera_ready()
 
     def take_picture(self):
