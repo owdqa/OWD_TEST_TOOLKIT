@@ -616,14 +616,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>deleteEmail</td>
+        <td align=center>delete_email</td>
         <td align=left>p_subject</td>
         <td align=left>Deletes the first message in this folder with this subject line.</td>
     </tr>
 
 
     <tr>
-        <td align=center>emailIsInFolder</td>
+        <td align=center>email_is_in_folder</td>
         <td align=left>p_subject</td>
         <td align=left>Verify an email is in this folder with the expected subject.</td>
     </tr>
@@ -637,7 +637,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>sendTheMessage</td>
+        <td align=center>send_the_email</td>
         <td align=left></td>
         <td align=left>Hits the 'Send' button to send the message (handles  waiting for the correct elements etc...).</td>
     </tr>
@@ -658,7 +658,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>switchAccount</td>
+        <td align=center>switch_account</td>
         <td align=left>p_address</td>
         <td align=left>Add a new account.</td>
     </tr>
@@ -672,14 +672,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>setupAccount</td>
+        <td align=center>setup_account</td>
         <td align=left>p_user<br>p_email<br>p_pass</td>
         <td align=left>Set up a new email account in the email app and login.</td>
     </tr>
 
 
     <tr>
-        <td align=center>openMsg</td>
+        <td align=center>open_msg</td>
         <td align=left>p_subject</td>
         <td align=left>Opens a specific email in the current folder  (assumes we're already in the folder we want).</td>
     </tr>
