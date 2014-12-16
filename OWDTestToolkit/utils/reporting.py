@@ -1,9 +1,9 @@
 from bs4 import BeautifulSoup
 import time
 import datetime
-import logging
 import re
 from mozlog.structured import get_default_logger
+from .decorators import timestamped_log
 
 
 class reporting(object):
@@ -16,31 +16,35 @@ class reporting(object):
         self.test_num = self.parent.parent.__module__[5:]
         self.detail_file = "{}/{}_detail.html".format(self.parent.general.get_config_variable('result_dir', 'output'),
                                                       self.test_num)
-        
+
         # config_file = self.parent.general.get_config_variable('log_cfg', 'output')
         # logging.config.fileConfig(config_file)
-        # logging.setLoggerClass(logging.Logger)
         self.custom_logger = get_default_logger()
 
     def log_to_file(self, message, level='info'):
         if level in ('critical', 'error', 'warn', 'info', 'debug'):
-            f = self.custom_logger.__getattribute__(level)
+            f = self.__getattribute__(level)
             f(message)
         else:
             self.custom_logger.info(message)
 
+    @timestamped_log
     def critical(self, message):
         self.custom_logger.critical(message)
 
+    @timestamped_log
     def error(self, message):
         self.custom_logger.error(message)
 
+    @timestamped_log
     def warn(self, message):
         self.custom_logger.warn(message)
 
+    @timestamped_log
     def info(self, message):
         self.custom_logger.info(message)
 
+    @timestamped_log
     def debug(self, message):
         self.custom_logger.debug(message)
 
@@ -49,7 +53,7 @@ class reporting(object):
         # Add a comment to the comment array.
         #
         self.comment_array.append(comment)
-        self.custom_logger.info("Adding comment: {}".format(comment))
+        self.info("Adding comment: {}".format(comment))
 
     def _get_timestamp(self):
         time_now = round(time.time() - self.init_time, 0)
@@ -57,7 +61,7 @@ class reporting(object):
         return "[{}]".format(time_now)
 
     def logResult(self, msg_type, msg, details=False):
-        self.custom_logger.info(u"Logging result: [{}] with message [{}]. p_fnam: {}".format(msg_type, msg, details))
+        self.info(u"Logging result: [{}] with message [{}]. p_fnam: {}".format(msg_type, msg, details))
         log = {'msg_type': str(msg_type),
                'timestamp': self._get_timestamp(),
                'msg': "DEBUG NOTE: " + msg if msg_type is 'debug' else msg,
@@ -83,9 +87,9 @@ class reporting(object):
             new_log_tag.append(timestamp_tag)
 
             msg_tag = soup.new_tag('span', **{'class': 'message'})
-            
+
             results = re.search("^(.*)(<\w+>)(.*)</\w+>(.*)", log['msg'])
-            if results: # If match, this will always have 4 groups
+            if results:  # If match, this will always have 4 groups
                 if results.group(2) == '<b>':
                     msg_rich_tag = soup.new_tag('span', **{'class': 'bold'})
                     msg_rich_tag.string = results.group(3)
@@ -95,7 +99,7 @@ class reporting(object):
                 else:
                     msg_rich_tag = soup.new_tag('span')
                     msg_rich_tag.string = results.group(3)
-                    
+
                 msg_tag.append(results.group(1))
                 msg_tag.append(msg_rich_tag)
                 msg_tag.append(soup.new_string(results.group(4)))
