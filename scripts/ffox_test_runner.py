@@ -140,11 +140,10 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # Some initial steps going through!
         self.parse_blocked_tests_file()
         self.parse_descriptions_file()
+        
         # Store the toolkit location to infer the location of some files relative to it, such as
         # the devices config or the css template
         self.testvars['toolkit_cfg']['toolkit_location'] = kwargs['toolkit_location']
-        Utilities.detect_device(self.testvars)
-
         GaiaTestRunnerMixin.__init__(self, **kwargs)
         HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__,
                                               html_output=self.testvars['output']['html_output'], **kwargs)
