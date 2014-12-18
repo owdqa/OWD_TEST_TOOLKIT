@@ -1,25 +1,31 @@
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
-
+# General stuff
 frame_locator = ("src", "email")
+folder_name = ('css selector', 'span.msg-list-header-folder-name')
+sup_header = ('xpath', '//h1[text()="{}"]'.format(_("New Account")))
+email_accounts_list = ('class name', 'tng-account-item-label list-text')
+
+# Setup account
 username = ('class name', 'sup-info-name')
 email_addr = ('class name', 'sup-info-email')
 password = ('class name', 'sup-info-password')
-login_account_info_next_btn = ('xpath', '//section[@data-type="setup_account_info"]//button[contains(@class, "sup-info-next-btn")]')
+login_account_info_next_btn = ('css selector', 'section[data-type="setup_account_info"] button.sup-info-next-btn')
 login_account_prefs_next_btn = ('css selector', '.card-setup-account-prefs button.sup-info-next-btn')
-login_cont_to_email_btn = ("xpath", "//button[text()='{}']".format(_("Continue to Mail")))
-sup_header = ('xpath', '//h1[text()="{}"]'.format(_("New Account")))
-sup_next_btn = ('class name', 'sup-info-next-btn')
-email_accounts_list = ('class name', 'tng-account-item-label list-text')
+login_account_passwd_next_btn = ('css selector', 'section[data-type="setup_account_password"] button.sup-info-next-btn')
+login_cont_to_email_btn =('class name', 'sup-show-mail-btn sup-form-btn recommend')
+email_label_for_passwd = ('css selector', 'span.sup-email-display ')
 
+
+# Manual setup locators
 manual_setup = ('class name', 'sup-manual-config-btn')
 manual_setup_next = ('class name', 'sup-manual-next-btn')
 manual_setup_sup_header = ('xpath', '//h1[@data-l10n-id="setup-manual-config-header"]')
 manual_setup_account_type = ('xpath', '//select[@class="mail-select sup-manual-account-type"]')
-manual_setup_account_options = ('xpath', '//form[@id="select-option-popup"]')
-manual_setup_account_option = ('xpath', '//form[@id="select-option-popup"]//li[@role="option"]//span[text()="{}"]')
-manual_setup_account_type_ok = ('xpath', '//form[@id="select-option-popup"]//menu[@id="select-options-buttons"]/button[@data-type="ok"]')
+manual_setup_account_options = ('css selector', 'form[data-type=value-selector]')
+manual_setup_account_option = ('xpath', '//form[@data-type="value-selector"]//li[@role="option"]//span[text()="{}"]')
+manual_setup_account_type_ok = ('css selector', 'form[data-type=value-selector] button[data-type=ok]')
 manual_setup_activesync_host = ('class name', 'sup-manual-activesync-hostname')
 manual_setup_activesync_user = ('class name', 'sup-manual-activesync-username')
 setup_account_header = ('xpath', '//h1[@data-l10n-id="setup-account-header3"]')
@@ -27,7 +33,7 @@ setup_account_header = ('xpath', '//h1[@data-l10n-id="setup-account-header3"]')
 compose_header = ('css selector', '.cmp-compose-header')
 compose_msg_btn = ('class name', 'msg-compose-btn')
 compose_to_from_contacts = ("css selector", "div.cmp-to-container.cmp-addr-container span.cmp-peep-name")
-compose_to_from_contacts_address = ("css selector", "div.cmp-to-container.cmp-addr-container span.cmp-peep-address collapsed")
+compose_to_from_contacts_address = ("css selector", "div.cmp-to-container.cmp-addr-container span.cmp-peep-address")
 compose_to = ('class name', 'cmp-to-text cmp-addr-text')
 compose_cc = ('class name', 'cmp-cc-text cmp-addr-text')
 compose_bcc = ('class name', 'cmp-bcc-text cmp-addr-text')
@@ -65,13 +71,15 @@ accounts_list_names = ('class name', 'fld-account-name')
 
 folder_list_container = ('xpath', '//div[@class="fld-folders-container"]')
 folderList_header = ('class name', 'fld-folders-header-account-label')
-folderList_name_xpath = '//span[@class="fld-folder-name" and text()="{}"]'
+folder_name_xpath = '//span[@class="fld-folder-name" and text()="{}"]'
+email_entry = ('css selector', '#cardContainer .msg-header-item:not([data-index="-1"])')
 
+message_list_locator = ('css selector', '.card-message-list')
 folder_message_container = ('class name', 'msg-messages-container')
 folder_message_list = ('class name', 'msg-header-item')
 folder_headers_list = ('class name', 'msg-header-author-and-date')
 folder_subject_list = ('class name', 'msg-header-subject')
-folder_refresh_button = ("class name", "icon msg-refresh-btn")
+folder_refresh_button = ("css selector", ".msg-refresh-btn")
 folder_sync_spinner = ("xpath", "//span[@data-l10n-id='messages-syncing']")
 
 msg_list_new_mail_notification = ("class name", "msg-list-topbar")
@@ -87,7 +95,7 @@ open_email_body_link = ("css selector", "a.moz-external-link")
 # NOTE: complex, but there's > 1 of these so you have to be this specific!
 delete_this_email_btn = ('xpath', '//div[@class="card-message-reader card center"]//button[@class="icon msg-delete-btn"]')
 # NOTE: Nightmare - you need to getElements(this, desc, False) and loop through the list, there's > 1 of everything here!!
-deleted_email_notif = ("xpath", "//section[contains(@class, 'banner customized')]//p[text()='{}']".format(_("1 message deleted")))
+deleted_email_notif = ("xpath", "//section[contains(@class, 'toaster')]//p[@class='toaster-text' and text()='{}']".format(_("1 message deleted")))
 
 confirm_ok = ("xpath", '//form[@class="confirm-dialog-form"]//button[@data-l10n-id="dialog-button-ok"]')
 email_not_setup_ok = ('xpath', '//button[@class="confirm-dialog-ok recommend"]')
@@ -111,3 +119,10 @@ confirmation_browser_ok = ('id', 'msg-browse-ok')
 
 confirmation_delete_cancel = ('id', 'msg-delete-cancel')
 confirmation_delete_ok = ('id', 'msg-delete-ok')
+
+# Gmail Account
+gmail_iframe_locator = ('css selector', "iframe.sup-oauth2-browser[src *= 'google']")
+gmail_email_locator = ('id', 'Email')
+gmail_password_locator = ('id', 'Passwd')
+gmail_sign_in_locator = ('id', 'signIn')
+gmail_approve_access_locator = ('css selector', '#submit_approve_access.goog-buttonset-action')
