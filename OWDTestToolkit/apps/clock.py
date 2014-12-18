@@ -42,16 +42,13 @@ class Clock(object):
         self.UTILS.test.test(found, "Alarm preview is found in Clock screen for " + time_str + ".")
 
     def checkAlarmRingDetails(self, hour, minute, label):
-
-        # Check details of alarm when it rings.
-        # NOTE: the status bar alarm is always 'visible', so you have to manually
-        #       wait until the alarm is expected to have started before calling this!
-
         """
+        Check details of alarm when it rings.
+        NOTE: the status bar alarm is always 'visible', so you have to manually
+        wait until the alarm is expected to have started before calling this!
 
-                # The alarm screen appears in a different frame to the clock.
+        The alarm screen appears in a different frame to the clock.
         Try to access this frame a few times to give the alarm time to appear.
-
         """
         self.marionette.switch_to_frame()
 
