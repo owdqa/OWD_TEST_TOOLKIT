@@ -88,7 +88,6 @@ class Camera(object):
         Record a video.
         video_length is the number of seconds to record for.
         """
-
         # Switch to video.
         self.switch_source()
 

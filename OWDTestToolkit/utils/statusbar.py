@@ -24,31 +24,29 @@ class statusbar(object):
         utility_tray.clear_all_notifications()
 
     def displayStatusBar(self):
-        #
-        # Displays the status / notification bar in the home screen.
-        #
-        # The only reliable way I have to do this at the moment is via JS
-        # (tapping it only worked sometimes).
-        #
+        """
+        Displays the status / notification bar in the home screen.
+        The only reliable way I have to do this at the moment is via JS
+        (tapping it only worked sometimes).
+        """
         self.marionette.switch_to_frame()
         self.marionette.execute_script("window.wrappedJSObject.UtilityTray.show()")
         time.sleep(0.5)
 
     def hideStatusBar(self):
-        #
-        # Displays the status / notification bar in the home screen.
-        #
-        # The only reliable way I have to do this at the moment is via JS
-        # (tapping it only worked sometimes).
-        #
+        """
+        Displays the status / notification bar in the home screen.
+        The only reliable way I have to do this at the moment is via JS
+        (tapping it only worked sometimes).
+        """
         self.marionette.switch_to_frame()
         self.marionette.execute_script("window.wrappedJSObject.UtilityTray.hide()")
 
     def isIconInStatusBar(self, p_dom):
-        #
-        # Check an icon is in the statusbar, then return to the
-        # given frame (doesn't wait, just expects it to be there).
-        #
+        """
+        Check an icon is in the statusbar, then return to the
+        given frame (doesn't wait, just expects it to be there).
+        """
         orig_iframe = self.parent.iframe.currentIframe()
         self.marionette.switch_to_frame()
 
@@ -65,10 +63,10 @@ class statusbar(object):
         return found
 
     def openSettingFromStatusbar(self):
-        #
-        # As it says on the tin - opens the settings
-        # app via the statusbar.
-        #
+        """
+        As it says on the tin - opens the settings
+        app via the statusbar.
+        """
         self.displayStatusBar()
         x = self.parent.element.getElement(DOM.Statusbar.settings_button, "Settings button")
         x.tap()
@@ -79,16 +77,10 @@ class statusbar(object):
         self.parent.iframe.switchToFrame(*DOM.Settings.frame_locator)
 
     def toggleViaStatusBar(self, p_type):
-        #
-        # Uses the statusbar to toggle items on or off.<br>
-        # <b>NOTE:</b> Doesn't care if it's toggling items ON or OFF. It just toggles!
-        # <br><br>
-        # Accepted 'types' are:<br>
-        # <b>data</b><br>
-        # <b>wifi</b><br>
-        # <b>airplane</b><br>
-        # <b>bluetooth</b>
-        #
+        """
+        Uses the statusbar to toggle items on or off. Just toggles.
+        Accepted 'types' are: data, wifi, airplane, bluetooth
+        """
         self.parent.reporting.logResult("info", "Toggling " + p_type + " mode via statusbar ...")
 
         # Toggle (and wait)
@@ -104,25 +96,22 @@ class statusbar(object):
         return self._toggle_and_wait(locator, p_type)
 
     def _toggle_and_wait(self, locator, p_type):
-        #
-        # (private) Toggle a button in the statusbar and waits for the item to be enabled/disabled
-        # Don't call this directly, it's used by toggleViaStatusBar().
-        #
+        """
+        (private) Toggle a button in the statusbar and waits for the item to be enabled/disabled
+        Don't call this directly, it's used by toggleViaStatusBar().
+        """
 
-        #
         # Open the status bar.
-        #
         self.displayStatusBar()
         boolWasEnabled = self.parent.network.is_network_type_enabled(p_type)
 
 
         toggle_icon = self.parent.element.getElement(locator, "Toggle {} icon".format(p_type))
         toggle_icon.tap()
-
-        #
-        # Sometimes, when we activate data connection, the devices goes till settings and
-        # show a confirmation screen. We have to accept it.
-        #
+        """
+        Sometimes, when we activate data connection, the devices goes till settings and
+        show a confirmation screen. We have to accept it.
+        """
         success = self.parent.iframe.switchToFrame(DOM.Settings.frame_locator[0], DOM.Settings.frame_locator[1],
                                          quit_on_error=True, via_root_frame=True, test=False)
         if success:
@@ -144,9 +133,8 @@ class statusbar(object):
         return boolReturn
 
     def waitForStatusBarNew(self, p_dom=DOM.Statusbar.status_bar_new, p_displayed=True, p_timeOut=20):
-        #
+
         # Waits for a new notification in the status bar (20s timeout by default).
-        #
         orig_iframe = self.parent.iframe.currentIframe()
         self.marionette.switch_to_frame()
 
@@ -159,11 +147,11 @@ class statusbar(object):
         return x
 
     def click_on_notification(self, dom, text, frame_to_change=None, timeout=30):
-        #
-        # Clicks on a certain notification looking for the given text in the
-        # given DOM element (title or detail) for the specified timeout.
-        # If frame_to_change is not None, frame will be set to its value.
-        #
+        """
+        Clicks on a certain notification looking for the given text in the
+        given DOM element (title or detail) for the specified timeout.
+        If frame_to_change is not None, frame will be set to its value.
+        """
         self.displayStatusBar()
         time.sleep(1)
         elem_dom = (dom[0], dom[1].format(text))
@@ -186,9 +174,9 @@ class statusbar(object):
 
     @retry(5, 10)
     def wait_for_notification_toaster_title(self, text, frame_to_change=None, notif_text=None, timeout=30):
-        #
-        # Waits for a new popup notification which contains a certain title
-        #
+        """
+        Waits for a new popup notification which contains a certain title
+        """
         self.marionette.switch_to_frame()
 
         dom = (DOM.Statusbar.notification_toaster_title[0], DOM.Statusbar.notification_toaster_title[1].format(text))
@@ -204,9 +192,9 @@ class statusbar(object):
 
     @retry(5, 10)
     def wait_for_notification_toaster_detail(self, text, frame_to_change=None, notif_text=None, timeout=30):
-        #
-        # Waits for a new popup notification which contains a certain body
-        #
+        """
+        Waits for a new popup notification which contains a certain body
+        """
         self.marionette.switch_to_frame()
 
         dom = (DOM.Statusbar.notification_toaster_detail[0], DOM.Statusbar.notification_toaster_detail[1].format(text))
@@ -222,9 +210,9 @@ class statusbar(object):
 
     def wait_for_notification_toaster_with_titles(self, titles, dom=DOM.Statusbar.notification_toaster_title,
                                                   frame_to_change=None, timeout=30):
-        #
-        # Waits for a new toaster notification whose title is one of the texts in the titles list.
-        #
+        """
+        Waits for a new toaster notification whose title is one of the texts in the titles list.
+        """
         self.marionette.switch_to_frame()
 
         exception = None
