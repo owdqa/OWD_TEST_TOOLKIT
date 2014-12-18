@@ -99,17 +99,17 @@ class Email(object):
         self.music = Music(self.parent)
 
         if attached_type == "image":
-            self.UTILS.general.add_file_to_device('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
+            self.UTILS.general.add_file_to_device('./tests/_resources/80x60.jpg')
             self.create_email_image()
             self.gallery.click_on_thumbnail_at_position_email(0)
         elif attached_type == "cameraImage":
             self.create_email_camera_image()
         elif attached_type == "video":
-            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4')
             self.create_email_video()
             self.video.click_on_video_at_position_email(0)
         elif attached_type == "audio":
-            self.UTILS.general.add_file_to_device('./tests/_resources/AMR.amr', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/AMR.amr')
             self.create_email_music()
             self.music.click_on_song_email()
         else:
@@ -190,8 +190,6 @@ class Email(object):
         send_btn = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
         send_btn.tap()
 
-        # Wait for inbox to re-appear (give it a BIG wait time because sometimes
-        # it just needs it).
         self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
         self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
                                               False)
@@ -204,8 +202,8 @@ class Email(object):
         """
         self.UTILS.reporting.logResult("info", "Getting 'compose message button'")
 
-        self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
-        compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
+        compose_new_msg_btn = self.UTILS.element.getElement(DOM.Email.compose_msg_btn, "Compose button")
+        time.sleep(1)
         compose_new_msg_btn.tap()
 
         # Put items in the corresponsing fields.
@@ -213,18 +211,15 @@ class Email(object):
         to_field = self.marionette.find_element(*DOM.Email.compose_to)
         if type(p_target) is list:
             for addr in p_target:
-                # TODO - remove references to typeThis when we've check send_keys works
                 to_field.send_keys(addr)
                 to_field.send_keys(" ")
-                # self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", addr, True, False, True, False)
-                # self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", " ", True, False, True, False)
         else:
             to_field.send_keys(p_target)
 
+        time.sleep(1)
         self.marionette.find_element(*DOM.Email.compose_subject).send_keys(p_subject)
+        time.sleep(1)
         self.marionette.find_element(*DOM.Email.compose_msg).send_keys(p_message)
-        # self.UTILS.general.typeThis(DOM.Email.compose_subject, "'Subject' field", p_subject, True, False)
-        # self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", p_message, True, False, False)
         if attach:
             self.attach_file(attached_type)
 
@@ -245,21 +240,14 @@ class Email(object):
         reply_opt = self.UTILS.element.getElement(DOM.Email.reply_menu_reply, "'Reply' option button")
         reply_opt.tap()
 
-        # Wait for 'compose message' header.
-        self.parent.wait_for_element_displayed(*DOM.Email.compose_header, timeout=30)
-
-        # TODO - Finish the following assertion
         # Get the guy we're replying to
-        to_field = self.UTILS.element.getElement(
-            DOM.Email.compose_to_from_contacts_address, "[Reply] 'To' field", False).text
+        to_field = self.UTILS.element.getElement(DOM.Email.compose_to_from_contacts, "[Reply] 'To' field")
+        to_field = to_field.text
 
         # Check we're actually replying to the guy who sent us the email
-        self.UTILS.reporting.logResult("info", "'From' field: {}".format(from_field))
-        self.UTILS.reporting.logResult("info", "'To' field: {}".format(to_field))
-        self.UTILS.test.test(from_field == to_field, "Checking we are replying correctly")
+        self.UTILS.test.test(to_field in from_field, "Checking we are replying correctly")
 
         # Write some reply content
-        # self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False, False)
         self.marionette.find_element(*DOM.Email.compose_msg).send_keys(reply_message)
         self.reply_the_email(from_field.split("@")[0])
 
@@ -292,7 +280,6 @@ class Email(object):
                 False, "Sender ({}) must not appear in the 'To field' when replying".format(sender['username']), True)
 
         # Write some reply content
-        # self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False, False)
         self.marionette.find_element(*DOM.Email.compose_msg).send_keys(reply_message)
         self.reply_the_email(from_field.split("@")[0])
 
@@ -320,21 +307,15 @@ class Email(object):
         to_field = self.marionette.find_element(*DOM.Email.compose_to)
         if type(p_target) is list:
             for addr in p_target:
-                # TODO - remove references to typeThis when we've check send_keys works
                 to_field.send_keys(addr)
                 to_field.send_keys(" ")
-                # self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", addr, True, False, True, False)
-                # self.UTILS.general.typeThis(DOM.Email.compose_to, "'To' field", " ", True, False, True, False)
         else:
             to_field.send_keys(p_target)
 
         # Write some reply content
-        # self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", fwd_message, True, True, False, False)
         self.marionette.find_element(*DOM.Email.compose_msg).send_keys(fwd_message)
-
         if attach:
             self.attach_file(attached_type)
-
         self.reply_the_email(from_field.split("@")[0])
 
     def reply_the_email(self, sender_name):
@@ -364,14 +345,12 @@ class Email(object):
         """
         Set up a new ActiveSync account manually
         """
-
         if not self.no_existing_account(email):
             return
 
         # (At this point we are now in the 'New account' screen by one path or another.)
         self.marionette.find_element(*DOM.Email.username).send_keys(user)
         self.marionette.find_element(*DOM.Email.email_addr).send_keys(email)
-        self.marionette.find_element(*DOM.Email.password).send_keys(passwd)
 
         # Now tap on Manual setUp
         manual_setup = self.UTILS.element.getElement(DOM.Email.manual_setup, "Manual setup button")
@@ -398,11 +377,15 @@ class Email(object):
         ok_btn.tap()
 
         # Going back to Email frame
-        self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
+        self.apps.switch_to_displayed_app()
 
-        #  Finish setting things up
+        # Finish setting things up
+        self.marionette.find_element(*DOM.Email.password).send_keys(passwd)
+        time.sleep(1)
         self.marionette.find_element(*DOM.Email.manual_setup_activesync_host).send_keys(hostname)
+        time.sleep(1)
         self.marionette.find_element(*DOM.Email.manual_setup_activesync_user).send_keys(user)
+        time.sleep(1)
 
         manual_next_btn = self.UTILS.element.getElement(
             DOM.Email.manual_setup_next, "Manual Setup 'Next' button", True, 60)
