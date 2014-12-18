@@ -11,8 +11,9 @@ class element(object):
         self.actions = Actions(self.marionette)
 
     def getElement(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
-        #
-        # Returns an element, or False it it's not found.<br>
+        """
+        Returns an element, or False it it's not found
+        """
         x = self.getElements(elem, msg, is_displayed, timeout, stop_on_error)
         if x:
             # We're expecting ONE element back (it has different methods if it's one).
@@ -21,8 +22,9 @@ class element(object):
             return False
 
     def getElements(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
-        #
-        # Returns a list of matching elements, or False if none are found.<br>
+        """
+        Returns a list of matching elements, or False if none are found
+        """
         boolEl = self.waitForElements(elem, msg, is_displayed, timeout, stop_on_error)
 
         if boolEl:
@@ -62,8 +64,9 @@ class element(object):
         self.actions.perform()
 
     def set_scroller_val(self, scroller_elem, number):
-
-        # Set the numeric value of a scroller (only works with numbers right now).
+        """
+        Set the numeric value of a scroller (only works with numbers right now).
+        """
         current_value = int(scroller_elem.find_element(*DOM.GLOBAL.scroller_curr_val).text)
 
         # Now flick the scroller as many times as required
@@ -128,8 +131,9 @@ class element(object):
         """, script_args=[element])
 
     def waitForElements(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
-        #
-        # Waits for an element to be displayed and captures the error if not.<br>
+        """
+        Waits for an element to be displayed and captures the error if not
+        """
         is_ok = True
         msg = u"" + msg
         try:
@@ -147,8 +151,9 @@ class element(object):
         return is_ok
 
     def waitForNotElements(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
-        #
-        # Waits for an element to be displayed and captures the error if not.<br>
+        """
+        Waits for an element to be displayed and captures the error if not
+        """
         is_ok = True
         try:
             if is_displayed:
@@ -164,22 +169,25 @@ class element(object):
         return is_ok
 
     def getElementByXpath(self, path):
-
-        # Use this function when normal getElement did not work
+        """
+        Use this function when normal getElement did not work
+        """
         return self.marionette.execute_script("""
             return document.evaluate(arguments[0], document, null, 9, null).singleNodeValue;
         """, script_args=[path])
 
     def getParent(self, element):
-
-        # Gets the element's parent. Can be called recursively
+        """
+        Gets the element's parent. Can be called recursively
+        """
         return self.marionette.execute_script("""
             return arguments[0].parentNode;
         """, script_args=[element])
 
     def getChildren(self, element):
-
-        # Gets the element's children
+        """
+        Gets the element's children
+        """
         return self.marionette.execute_script("""
             return arguments[0].children;
         """, script_args=[element])
@@ -190,8 +198,9 @@ class element(object):
         """, script_args=[context, css_selector])
 
     def get_css_value(self, element, css_property):
-
-        # Gets the value of a certain css property.
+        """
+        Gets the value of a certain css property.
+        """
         return self.marionette.execute_script("""
             function getStyle (el, styleProp) {
                 if (el.currentStyle)

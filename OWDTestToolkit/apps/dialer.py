@@ -21,8 +21,10 @@ class Dialer(object):
         self.actions = Actions(self.marionette)
 
     def launch(self):
-
-        # Launch the app (it's called a different name to the everyone knows it as, so hardcode it!).
+        """
+        Launch the app 
+        It's called a different name (Phone) to the everyone knows it as, so hardcode it!
+        """
         self.app = self.apps.launch("Phone")
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
@@ -37,11 +39,11 @@ class Dialer(object):
         cancel_icon.tap()
 
     def _complete_addNumberToContact(self, p_num, p_name):
-        #
-        # PRIVATE function - finishes the process of adding a number to an existing contact
-        # (used bu addThisNumberToContact() etc...).<br>
-        # Handles switching frames etc... and finishes with you back in the dialer.
-        #
+        """
+        Finishes the process of adding a number to an existing contact
+        (used bu addThisNumberToContact() etc...).<br>
+        Handles switching frames etc... and finishes with you back in the dialer.
+        """
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.element.waitForElements(
             ("xpath", "//h1[text()='{}']".format(_("Contacts"))), "'Select contact' header")
@@ -119,9 +121,7 @@ class Dialer(object):
 
     def callLog_call(self, p_num):
 
-        # Get own number.
         own_num = self.UTILS.general.get_config_variable("phone_number", "custom")
-
         # Calls a number from the call log.
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
@@ -144,8 +144,9 @@ class Dialer(object):
                                                "Outgoing call found with number matching {}".format(p_num))
 
     def callLog_clearAll(self):
-
-        # Wipes all entries from the call log.
+        """
+        Wipes all entries from the call log.
+        """
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.call_log_filter, timeout=1)
         except:
@@ -296,12 +297,11 @@ class Dialer(object):
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
     def createMultipleCallLogEntries(self, phone_number, entries_number):
-        #
-        # Put a number in the call log multiple times
-        # (done by manipulating the device time).
-        # Leaves you in the call log.
-        #
-        # x = self.UTILS.date_and_time.getDateTimeFromEpochSecs(time.time())
+        """
+        Put a number in the call log multiple times
+        (done by manipulating the device time).
+        Leaves you in the call log.
+        """
 
         today = datetime.datetime.today()
         for i in range(entries_number):
@@ -318,8 +318,9 @@ class Dialer(object):
             self.launch()
 
     def enterNumber(self, p_num, validate=True):
-
-        # Enters a number into the dialer using the keypad.
+        """
+        Enters a number into the dialer using the keypad.
+        """
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.phone_number, timeout=1)
         except:
@@ -350,8 +351,9 @@ class Dialer(object):
             self.UTILS.reporting.logResult("info", "Screenshot at enterNumber method [validate]:", screenshot)
 
     def clear_dialer(self):
-
-        # Deletes a single number from the dialer
+        """
+        Deletes a single number from the dialer
+        """
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.keypad_delete)
             delete = self.marionette.find_element(*DOM.Dialer.keypad_delete)
@@ -360,8 +362,9 @@ class Dialer(object):
             return
 
     def clear_dialer_all(self):
-
-        # Clears all dialer input area
+        """
+        Clears all dialer input area
+        """
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.keypad_delete)
             delete = self.marionette.find_element(*DOM.Dialer.keypad_delete)
@@ -401,8 +404,9 @@ class Dialer(object):
                 pass
 
     def hangUp(self):
-
-        # Hangs up (assuming we're in the 'calling' frame).
+        """
+        Hangs up (assuming we're in the 'calling' frame).
+        """
         try:
             self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=10)
         except:
@@ -427,8 +431,9 @@ class Dialer(object):
         self.apps.switch_to_displayed_app()
 
     def open_call_log(self):
-
-        # Opens the call log.
+        """
+        Opens the call log.
+        """
         x = self.UTILS.element.getElement(DOM.Dialer.option_bar_call_log, "Call log button")
         x.tap()
 

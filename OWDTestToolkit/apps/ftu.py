@@ -12,36 +12,38 @@ class Ftu(object):
         self.UTILS = parent.UTILS
 
     def launch(self):
-
-        # Launch the app.
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def end_tour(self):
-
-        # Click to end the Tour.
+        """
+        Click to end the Tour.
+        """
         x = self.UTILS.element.getElement(DOM.FTU.tour_finished_btn, "Finish tour button")
         x.tap()
         time.sleep(1)
 
     def next_screen(self):
-
-        # Click to the next screen (works until you get to the tour).
+        """
+        Click to the next screen (works until you get to the tour).
+        """
         x = self.UTILS.element.getElement(DOM.FTU.next_button, "Next button")
         x.tap()
         time.sleep(0.5)
 
     def next_tour_screen(self):
-
-        # Click to next page of the Tour.
+        """
+        Click to next page of the Tour.
+        """
         x = self.UTILS.element.getElement(DOM.FTU.tour_next_btn, "Tour 'next' button")
         x.tap()
         time.sleep(1)
 
     def set_data_conn_enabled(self):
-
-        # Enable data.
+        """
+        Enable data.
+        """
         self.UTILS.element.waitForElements(DOM.FTU.section_cell_data, "Cellular data connection section")
 
         # (the switch has an "id", but if you use that it never becomes 'visible'!)
@@ -54,8 +56,9 @@ class Ftu(object):
                         "Data connection is enabled after trying to enable it.", True)
 
     def set_language(self, language):
-        #
-        # Set the language (assume we're in the language screen).
+                """
+        Set the language (assume we're in the language screen).
+        """
         time.sleep(1)
         x = self.UTILS.element.getElements(DOM.FTU.language_list, "Language list", True, 20, False)
 
@@ -67,8 +70,9 @@ class Ftu(object):
         return False
 
     def set_network(self, wlan_name, username, passwd):
-
-        # Join a wifi network.
+        """
+        Join a wifi network.
+        """
         time.sleep(5)
         x = self.UTILS.element.getElements(DOM.FTU.wifi_networks_list, "Wifi network list")
         x.tap()
@@ -91,8 +95,9 @@ class Ftu(object):
             pass
 
     def set_timezone(self, continent, city):
-
-        # Set the timezone.
+        """
+        Set the timezone.
+        """
         self.UTILS.element.waitForElements(DOM.FTU.timezone, "Timezone area")
 
         # Continent.
@@ -111,15 +116,17 @@ class Ftu(object):
                         "Locality is set up correctly")
 
     def skipTour(self):
-
-        # Click to skip the Tour.
+        """
+        Click to skip the Tour.
+        """
         x = self.UTILS.element.getElement(DOM.FTU.tour_skip_btn, "Skip tour button")
         x.tap()
         time.sleep(1)
 
     def startTour(self):
-
-        # Click to start the Tour.
+        """
+        Click to start the Tour.
+        """
         x = self.UTILS.element.getElement(DOM.FTU.tour_start_btn, "Start tour button")
         x.tap()
         time.sleep(0.5)

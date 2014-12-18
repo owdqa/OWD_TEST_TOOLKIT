@@ -15,9 +15,6 @@ class Marketplace(object):
         self.UTILS = p_parent.UTILS
 
     def launch(self):
-
-        # Launch the app.
-        # WARNING: Marketplace is in a weird place - you need to use "Marketplace Dev"!!
         self.UTILS.reporting.logResult("info", "About to launch the marketplace app from the dev server. "\
                        "If it's \"not found\" then either try again later, "\
                        "or contact #marketplace mozilla irc channel.")
@@ -29,8 +26,9 @@ class Marketplace(object):
         return self.app
 
     def install_app(self, app, author):
-
-        # Install an app.
+        """
+        Install an app.
+        """
         self.search_for_app(app)
 
         if not self.select_search_result_app(app, author):
@@ -51,7 +49,6 @@ class Marketplace(object):
 
         # Confirm the installation of the app.
         self.marionette.switch_to_frame()
-
         yes_button = self.UTILS.element.getElement(DOM.Market.confirm_install_button, "Confirm install button")
         yes_button.tap()
         
@@ -62,8 +59,9 @@ class Marketplace(object):
         return True
 
     def search_for_app(self, app):
-
-        # Search for an app in the market.
+        """
+        Search for an app in the market.
+        """
         self.UTILS.iframe.switchToFrame(*DOM.Market.frame_locator, via_root_frame=False)
         self.UTILS.reporting.debug("*** Searching {}".format(app))
         search_field = self.UTILS.element.getElement(DOM.Market.search_query, "Search field", timeout=30)

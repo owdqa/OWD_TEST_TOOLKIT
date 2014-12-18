@@ -12,8 +12,6 @@ class Facebook(object):
         self.UTILS = parent.UTILS
 
     def launch(self):
-
-        # Launch the app.
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
@@ -35,11 +33,11 @@ class Facebook(object):
         import_all = self.UTILS.element.getElement(DOM.Facebook.friends_import, "Import button")
         self.UTILS.element.simulateClick(import_all)
 
-        # Switch back to the contacts frame.
-        #
-        # (The 'importing ..' splash screen that appears confuses the frame switch
-        # so the simplest thing is to just wait for a long time to make sure it's
-        # gone.)
+        """Switch back to the contacts frame.
+        The 'importing ..' splash screen that appears confuses the frame switch
+        so the simplest thing is to just wait for a long time to make sure it's
+        gone.
+        """
         time.sleep(5)
         self.marionette.switch_to_frame()
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)

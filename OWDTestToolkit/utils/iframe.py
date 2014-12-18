@@ -94,12 +94,12 @@ class iframe(object):
         self.marionette.switch_to_frame(the_frame)
 
     def switchToFrame(self, attrib, value, quit_on_error=True, via_root_frame=True, test=True):
-        #
-        # Switch to the iframe containing the attribute value <b>value</b>.<br>
-        # For example: ("src", "contacts") or ("src", "sms") etc...<br><br>
-        # NOTE: You *usually* need to do this via the 'root' frame (almost all iframes
-        # are contained in the root-level frame).
-        #
+        """
+        Switch to the iframe containing the attribute value <b>value</b>.<br>
+        For example: ("src", "contacts") or ("src", "sms") etc...<br><br>
+        NOTE: You *usually* need to do this via the 'root' frame (almost all iframes
+        are contained in the root-level frame).
+        """
         if via_root_frame:
             self.parent.reporting.logResult("debug", "(Switching to root-level iframe.)")
             self.parent.general.checkMarionetteOK()
@@ -157,8 +157,6 @@ class iframe(object):
                                   quit_on_error)
 
     def view_all_iframes(self, frame_src=None):
-
-        # Base case
         has_switched = self._do_the_switch(frame_src)
 
         if has_switched == "skip":
@@ -191,7 +189,6 @@ class iframe(object):
                     self.view_all_iframes(src)
 
     def _do_the_switch(self, frame_src):
-
         # ignore_list: costcontrol -> unnecessary, keyboard -> breaks marioette
         ignore_list = ("costcontrol", "keyboard")
         if frame_src:

@@ -12,22 +12,16 @@ class OMACP(object):
         self.UTILS = p_parent.UTILS
 
     def launch(self):
-
-        # Launch the app.
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ +
                                               " app - loading overlay")
         return self.app
 
     def accept_netwpin_message(self):
-
-        # Click on the Accept button
         accept_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Accept_Button, "Accept button")
         accept_btn.tap()
 
     def cancel_netwpin_message(self):
-
-        # Click on the Close button
         close_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Close_Button, "Close button")
         close_btn.tap()
 
@@ -42,8 +36,9 @@ class OMACP(object):
         quit_btn.tap()
 
     def cancel_omacp_storage(self, pin):
-
-        # Introduce the PIN number, then click on the Accept button
+        """
+        Introduce the PIN number, then click on the Accept button
+        """
         self.UTILS.iframe.switchToFrame(*DOM.OMACP.frame_locator)
         self.UTILS.general.typeThis(DOM.OMACP.CP_Windows_Pin, "PIN field", pin, p_no_keyboard=False,
                             p_validate=False, p_clear=False, p_enter=True)
@@ -56,8 +51,9 @@ class OMACP(object):
         cancel_btn.tap()
 
     def store_omacp_settings(self, pin):
-
-        # Introduce the PIN number, then click on the Accept button
+        """
+        Introduce the PIN number, then click on the Accept button
+        """
         self.UTILS.iframe.switchToFrame(*DOM.OMACP.frame_locator)
         self.UTILS.general.typeThis(DOM.OMACP.CP_Windows_Pin, "PIN field", pin, p_no_keyboard=True,
                             p_validate=False, p_clear=False, p_enter=True)

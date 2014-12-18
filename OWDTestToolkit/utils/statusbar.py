@@ -24,21 +24,21 @@ class statusbar(object):
         utility_tray.clear_all_notifications()
 
     def displayStatusBar(self):
-
-        # Displays the status / notification bar in the home screen.
-        # The only reliable way I have to do this at the moment is via JS
-        # (tapping it only worked sometimes).
-        #
+        """
+        Displays the status / notification bar in the home screen.
+        The only reliable way I have to do this at the moment is via JS
+        (tapping it only worked sometimes).
+        """
         self.marionette.switch_to_frame()
         self.marionette.execute_script("window.wrappedJSObject.UtilityTray.show()")
         time.sleep(0.5)
 
     def hideStatusBar(self):
-
-        # Displays the status / notification bar in the home screen.
-        # The only reliable way I have to do this at the moment is via JS
-        # (tapping it only worked sometimes).
-        #
+        """
+        Displays the status / notification bar in the home screen.
+        The only reliable way I have to do this at the moment is via JS
+        (tapping it only worked sometimes).
+        """
         self.marionette.switch_to_frame()
         self.marionette.execute_script("window.wrappedJSObject.UtilityTray.hide()")
 
@@ -174,8 +174,9 @@ class statusbar(object):
 
     @retry(5, 10)
     def wait_for_notification_toaster_title(self, text, frame_to_change=None, notif_text=None, timeout=30):
-
-        # Waits for a new popup notification which contains a certain title
+        """
+        Waits for a new popup notification which contains a certain title
+        """
         self.marionette.switch_to_frame()
 
         dom = (DOM.Statusbar.notification_toaster_title[0], DOM.Statusbar.notification_toaster_title[1].format(text))
@@ -191,8 +192,9 @@ class statusbar(object):
 
     @retry(5, 10)
     def wait_for_notification_toaster_detail(self, text, frame_to_change=None, notif_text=None, timeout=30):
-
-        # Waits for a new popup notification which contains a certain body
+        """
+        Waits for a new popup notification which contains a certain body
+        """
         self.marionette.switch_to_frame()
 
         dom = (DOM.Statusbar.notification_toaster_detail[0], DOM.Statusbar.notification_toaster_detail[1].format(text))
@@ -208,8 +210,9 @@ class statusbar(object):
 
     def wait_for_notification_toaster_with_titles(self, titles, dom=DOM.Statusbar.notification_toaster_title,
                                                   frame_to_change=None, timeout=30):
-
-        # Waits for a new toaster notification whose title is one of the texts in the titles list.
+        """
+        Waits for a new toaster notification whose title is one of the texts in the titles list.
+        """
         self.marionette.switch_to_frame()
 
         exception = None

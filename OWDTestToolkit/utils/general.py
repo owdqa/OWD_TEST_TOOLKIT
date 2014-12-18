@@ -95,8 +95,9 @@ class general(object):
             return False
 
     def selectFromSystemDialog(self, p_str):
-
-        # Selects an item from a system select box (such as country / timezone etc...).
+        """
+        Selects an item from a system select box (such as country / timezone etc...).
+        """
 
         # Remember the current frame then switch to the system level one.
         orig_iframe = self.parent.iframe.currentIframe()
@@ -138,8 +139,9 @@ class general(object):
             return False
 
     def setupDataConn(self):
-
-        # Set the phone's details for data conn (apn etc...).
+        """
+        Set the phone's details for data conn (apn etc...).
+        """
         apn = "telefonica.es"
         conn_id = "telefonica"
         passwd = "telefonica"
@@ -157,8 +159,9 @@ class general(object):
         self.parent.reporting.logResult("info", "Done.")
 
     def set_item(self, item, value):
-
-        # Just a quick function to report issues setting this.
+        """
+        Just a quick function to report issues setting this.
+        """
         try:
             self.parent.data_layer.set_setting(item, value)
         except:

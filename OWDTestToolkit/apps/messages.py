@@ -25,16 +25,12 @@ class Messages(object):
 
     @retry(5)
     def launch(self):
-
-        # Launch the app.
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def cancelSettings(self):
-
-        # Press options button
         self.UTILS.reporting.logResult("info", "Cliking on messages options button")
         x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
                                           "Messages option button is displayed")
@@ -46,8 +42,6 @@ class Messages(object):
         cancelBtn.tap()
 
     def deleteSubject(self, subject):
-
-        # Press options button
         self.UTILS.reporting.logResult("info", "Cliking on messages options button")
         x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
                                           "Messages option button is displayed")
@@ -60,8 +54,6 @@ class Messages(object):
         x.tap()
 
     def addSubject(self, subject):
-
-        # Press options button
         self.UTILS.reporting.logResult("info", "Cliking on messages options button")
         x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
                                           "Messages option button is displayed")
@@ -171,8 +163,9 @@ class Messages(object):
         return boolOK
 
     def checkThreadHeader(self, header):
-
-        # Verifies if a string is contained in the header
+        """
+        Verifies if a string is contained in the header
+        """
         x = self.UTILS.element.getElement(DOM.Messages.message_header, "Header")
 
         boolOK = False
@@ -183,8 +176,9 @@ class Messages(object):
         return boolOK
 
     def checkThreadHeaderWithNameSurname(self, header):
-
-        # Verifies if a string is contained in the header
+        """
+        Verifies if a string is contained in the header
+        """
         x = self.UTILS.element.getElement(DOM.Messages.message_header, "Header")
 
         boolOK = False
@@ -215,8 +209,9 @@ class Messages(object):
             return 0
 
     def countNumberOfThreads(self):
-
-        # Count all threads (assumes the messagin app is already open).
+        """
+        Count all threads (assumes the messagin app is already open).
+        """
         try:
             return len(self.UTILS.element.getElements(DOM.Messages.threads_list, "Threads"))
         except:
@@ -228,42 +223,28 @@ class Messages(object):
         self.video = Video(self.parent)
         self.music = Music(self.parent)
 
-        # Launch messages app.
         self.launch()
-
-        # Create a new SMS
         self.startNewSMS()
-
-        # Insert the phone number in the To field
         self.addNumbersInToField(nums)
-
-        # Create MMS.
         self.enterSMSMsg(m_text)
 
         if attached_type == "image":
-
             # Add an image file
             self.UTILS.general.add_file_to_device('./tests/_resources/80x60.jpg')
-
             self.create_mms_image()
             self.gallery.click_on_thumbnail_at_position_mms(0)
         elif attached_type == "cameraImage":
-
             # Add an image file from camera
             self.create_mms_camera_image()
             time.sleep(3)
         elif attached_type == "video":
-
             # Load an video file into the device.
             self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4')
-
             self.create_mms_video()
             self.video.click_on_video_at_position_mms(0)
         elif attached_type == "audio":
-
             # Load an video file into the device.
             self.UTILS.general.add_file_to_device('./tests/_resources/AMR.amr')
-
             self.create_mms_music()
             self.music.click_on_song_mms()
         else:
@@ -282,11 +263,7 @@ class Messages(object):
         or contact names.
         """
         self.startNewSMS()
-
-        # Enter the numbers.
         self.addNumbersInToField(nums)
-
-        # Enter the message.
         self.enterSMSMsg(msg)
 
         # The header should now say how many recipients.
@@ -300,12 +277,10 @@ class Messages(object):
         self.sendSMS()
 
     def create_mms_image(self):
-
         attach = self.UTILS.element.getElement(DOM.Messages.attach_button, "Attach button")
         attach.tap()
 
         self.marionette.switch_to_frame()
-
         gallery = self.UTILS.element.getElement(DOM.Messages.mms_from_gallery, "From gallery")
         gallery.tap()
 
@@ -318,7 +293,6 @@ class Messages(object):
         attach.tap()
 
         self.marionette.switch_to_frame()
-
         camera = self.UTILS.element.getElement(DOM.Messages.mms_from_camera, "From Camera")
         camera.tap()
 
@@ -335,7 +309,6 @@ class Messages(object):
         attach.tap()
 
         self.marionette.switch_to_frame()
-
         music = self.UTILS.element.getElement(DOM.Messages.mms_from_music, "From music")
         music.tap()
 
@@ -360,8 +333,9 @@ class Messages(object):
         self.UTILS.iframe.switchToFrame(*DOM.Video.frame_locator)
 
     def delete_all_threads(self):
-
-        # Deletes all threads (assumes the messagin app is already open).
+        """
+        Deletes all threads (assumes the messagin app is already open).
+        """
         try:
             self.parent.wait_for_element_displayed(*DOM.Messages.no_threads_message, timeout=2)
             x = self.marionette.find_element(*DOM.Messages.no_threads_message)
@@ -535,12 +509,13 @@ class Messages(object):
         n = 0
 
         for num in nums:
-            # Even though we don't use the keyboard for putting the number in,
-            # we need it for the ENTER button (which allows us to put more than
-            # one number in).
-            #
-            # So check that the keyboard appears when we tap the "TO" field if we have
-            # more than one number.
+            """
+            Even though we don't use the keyboard for putting the number in,
+            we need it for the ENTER button (which allows us to put more than
+            one number in).
+            So check that the keyboard appears when we tap the "TO" field if we have
+            more than one number.
+            """
             if len(nums) > 1:
                 self.UTILS.reporting.logResult("info", "Checking the keyboard appears when I tap the 'To' field ...")
                 to_field = self.UTILS.element.getElement(DOM.Messages.target_numbers_empty, "Target number field")
@@ -799,8 +774,9 @@ class Messages(object):
         x.tap()
 
     def last_message_in_this_thread(self):
-
-        # Returns an object of the last message in the current thread.
+        """
+        Returns an object of the last message in the current thread.
+        """
         self.parent.wait_for_element_present(*DOM.Messages.last_message, timeout=20)
         message = self.marionette.find_element(*DOM.Messages.last_message)
         self.UTILS.element.scroll_into_view(message)
@@ -844,15 +820,17 @@ class Messages(object):
             self.UTILS.reporting.logResult("info", msg, x)
 
     def readLastSMSInThread(self):
-
-        # Read last message in the current thread.
+        """
+        Read last message in the current thread.
+        """
         received_message = self.UTILS.element.getElements(DOM.Messages.received_messages,
                                                           "Received messages")[-1]
         return str(received_message.text)
 
     def readNewSMS(self, fromNum):
-
-        # Read and return the value of the new message received from number.
+        """
+        Read and return the value of the new message received from number.
+        """
         x = self.UTILS.element.getElement(("xpath", DOM.Messages.messages_from_num.format(fromNum)),
                                           "Message from '" + fromNum + "'")
         x.tap()
@@ -898,14 +876,16 @@ class Messages(object):
         return False
 
     def selectAddContactButton(self):
-
-        # Taps the 'add contact' button
+        """
+        Taps the 'add contact' button
+        """
         add_btn = self.UTILS.element.getElement(DOM.Messages.add_contact_button, "Add contact button")
         add_btn.tap()
 
     def sendSMS(self):
-
-        # Just presses the 'send' button (assumes everything else is done).
+        """
+        Just presses the 'send' button (assumes everything else is done).
+        """
         sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send sms button")
         sendBtn.tap()
 
@@ -943,22 +923,25 @@ class Messages(object):
         return parts[0].strip()
 
     def threadEditModeOFF(self):
-
-        # Turns off Edit mode while in the SMS threads screen.
+        """
+        Turns off Edit mode while in the SMS threads screen.
+        """
         x = self.UTILS.element.getElement(DOM.Messages.cancel_edit_threads, "Cancel button")
         x.tap()
         self.UTILS.element.waitForElements(DOM.Messages.edit_threads_button, "Edit button")
 
     def threadEditModeON(self):
-
-        # Turns on Edit mode while in the SMS threads screen.
+        """
+        Turns on Edit mode while in the SMS threads screen.
+        """
         x = self.UTILS.element.getElement(DOM.Messages.edit_threads_button, "Edit button")
         self.UTILS.element.simulateClick(x)
         self.UTILS.element.waitForElements(DOM.Messages.cancel_edit_threads, "Cancel button")
 
     def threadExists(self, num):
-
-        # Verifies that a thread exists for this number (returns True or False).
+        """
+        Verifies that a thread exists for this number (returns True or False).
+        """
         boolOK = False
         try:
             self.parent.wait_for_element_present("xpath", DOM.Messages.thread_selector_xpath.format(num), 1)
@@ -969,29 +952,33 @@ class Messages(object):
         return boolOK
 
     def threadType(self):
-
-        # Returns the 'type' being used by this thread.
+        """
+        Returns the 'type' being used by this thread.
+        """
         x = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field, "Type and carrier information")
         parts = x.text.split("|")
         typ = parts[0].strip()
         return typ if len(parts) > 1 else ''
 
     def time_of_last_message_in_thread(self):
-
-        # Returns the time of the last message in the current thread.
+        """
+        Returns the time of the last message in the current thread.
+        """
         t = self.UTILS.element.getElement(DOM.Messages.last_message_time, "Last message time")
         return t.text
 
     def time_of_thread(self, num):
-
-        # Returns the time of a thread.
+        """
+        Returns the time of a thread.
+        """
         x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_timestamp_xpath.format(num)),
                                           "Thread time", True, 5, False)
         return x.text
 
     def thread_timestamp(self, num):
-
-        # Returns the timestamp of a thread
+        """
+        Returns the timestamp of a thread
+        """
         x = self.marionette.find_element(*DOM.Messages.last_message).get_attribute("data-timestamp")
         return float(x)
 

@@ -14,8 +14,6 @@ class EverythingMe(object):
         self.actions = Actions(self.marionette)
 
     def launch(self):
-
-        # Launch the app.
         self.apps.kill_all()
 
         # If EME has already been launched, then the DOM has changed.
@@ -51,8 +49,9 @@ class EverythingMe(object):
         x.tap()
 
     def add_app_to_homescreen(self, name):
-
-        # Pick an app from the apps listed in this group.
+        """
+        Pick an app from the apps listed in this group.
+        """
         x = self.UTILS.element.getElementByXpath(DOM.EME.app_to_install.format(name))
         app_name = x.text
         self.UTILS.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
@@ -69,8 +68,9 @@ class EverythingMe(object):
         return True
 
     def add_group(self, group):
-
-        # Adds a group to EME (assumes you're already in the EME group screen).
+        """
+        Adds a group to EME (assumes you're already in the EME group screen).
+        """
         self.UTILS.reporting.logResult("info", "(Adding group '" + group + "'.)")
 
         # Click the 'More' icon.
@@ -204,8 +204,9 @@ class EverythingMe(object):
         return result
 
     def launch_from_group(self, app_name):
-
-        # Function to launch an app directly from an EME group.
+        """
+        Function to launch an app directly from an EME group.
+        """
         x = self.UTILS.element.getElement(("xpath", "//li[@data-name='{}']".format(app_name)),
                                   "Icon for app '{}'".format(app_name), False)
         try:
@@ -224,8 +225,9 @@ class EverythingMe(object):
         self.UTILS.reporting.logResult("info", "Screenshot of app running:", x)
 
     def pick_group(self, name):
-
-        # Pick a group from the main icons.
+        """
+        Pick a group from the main icons.
+        """
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "<b>Choosing group '{}' from here ...</b>".format(name), x)
 

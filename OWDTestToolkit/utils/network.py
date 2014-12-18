@@ -9,8 +9,9 @@ class network(object):
         self.marionette = parent.marionette
 
     def disableAllNetworkSettings(self):
-
-        # Turns off all network settings (wifi, dataconn, bluetooth and airplane mode).
+        """
+        Turns off all network settings (wifi, dataconn, bluetooth and airplane mode).
+        """
         if self.parent.data_layer.get_setting('ril.radio.disabled'):
             self.parent.data_layer.set_setting('ril.radio.disabled', False)
 
@@ -41,11 +42,7 @@ class network(object):
     def is_network_type_enabled(self, network_type):
         """
         Returns True or False.<br><br>
-        Accepted 'types' are:<br>
-        <b>data</b><br>
-        <b>wifi</b><br>
-        <b>airplane</b><br>
-        <i>bluetooth (**NOT WORKING CURRENTLY!!**)</i>
+        Accepted 'types' are: data, wifi, airplane, bluetooth
         """
         if network_type == "data":
             return self.parent.data_layer.is_cell_data_enabled

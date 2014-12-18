@@ -16,8 +16,6 @@ class Settings(object):
         self.UTILS = parent.UTILS
 
     def launch(self):
-
-        # Launch the app.
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
@@ -78,8 +76,9 @@ class Settings(object):
         ok_btn.tap()
 
     def cellular_and_data(self, sim_card_number=1):
-
-        # Open cellular and data settings.
+        """
+        Open cellular and data settings.
+        """
 
         self.wait_for_option_to_be_enabled(DOM.Settings.data_connectivity)
 
@@ -121,8 +120,6 @@ class Settings(object):
             self.goBack()
 
     def configure_mms_auto_retrieve(self, value):
-
-        # Launch messages app.
         self.launch()
 
         # Tap on Messaging Settings button
@@ -162,7 +159,6 @@ class Settings(object):
         self.goBack()
 
     def createCustomAPN(self, apn, identifier, pwd):
-
         # Open Data Settings
         self.open_data_settings()
 
@@ -283,8 +279,9 @@ class Settings(object):
             return False
 
     def fdn_add_auth_number(self, name, number, pin2):
-
-        # Add a contact to the list of authorized numbers
+        """
+        Add a contact to the list of authorized numbers
+        """
         add_btn = self.UTILS.element.getElement(DOM.Settings.fdn_add_auth_number, "Add button")
         add_btn.tap()
         self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Add contact"))),
@@ -316,10 +313,10 @@ class Settings(object):
         self.UTILS.element.waitForElements(elem, "Waiting for contact to be in the list", True, 30)
 
     def fdn_delete_auth_number(self, number, pin2):
-        #
-        # This method deletes a contact from the authorized numbers list
-        # It must be called once the list has been displayed
-
+        """
+        This method deletes a contact from the authorized numbers list
+        It must be called once the list has been displayed
+        """
 
         # Tap over the contact
         elem = (DOM.Settings.fdn_auth_numbers_list_elem[0],
@@ -370,8 +367,9 @@ class Settings(object):
             time.sleep(2)
 
     def disable_hotSpot(self):
-
-        # Disable hotspot (internet sharing) - assumes Settings app is already open.
+        """
+        Disable hotspot (internet sharing) - assumes Settings app is already open.
+        """
         self.UTILS.reporting.logResult("info", "<u>Disabling hotspot ...</u>")
 
         # Is it already disabled?
@@ -402,9 +400,10 @@ class Settings(object):
         self.UTILS.test.test(not is_status_icon, "Hotspot icon is not present in the status bar.")
 
     def downloads(self):
-
-        # Open downloads.
-        # sometimes after checking the notification, downloads list is already opened
+        """
+        Open downloads.
+        sometimes after checking the notification, downloads list is already opened
+        """
         try:
             self.parent.wait_for_element_displayed(DOM.Settings.downloads[0], DOM.Settings.downloads[1], timeout=10)
         except:
@@ -429,8 +428,9 @@ class Settings(object):
         time.sleep(5)
 
     def enable_hotSpot(self):
-
-        # Enable hotspot (internet sharing) - assumes Settings app is already open.
+        """
+        Enable hotspot (internet sharing) - assumes Settings app is already open.
+        """
         self.UTILS.reporting.logResult("info", "<u>Enabling hotspot ...</u>")
 
         # Is it already enabled?
@@ -541,8 +541,9 @@ class Settings(object):
         return True
 
     def goSound(self):
-
-        # Go to Sound menu.
+        """
+        Go to Sound menu.
+        """
         self.launch()
         sound_menu = self.UTILS.element.getElement(DOM.Settings.sound, "Sound setting link")
         sound_menu.tap()
@@ -563,24 +564,27 @@ class Settings(object):
         self.UTILS.element.waitForElements(DOM.Settings.hotspot_header, "Hotspot header appears.", True, 20, False)
 
     def open_data_settings(self):
-
-        # Open cellular and data settings.
+        """
+        Open cellular and data settings.
+        """
         self.cellular_and_data()
         data_menu = self.UTILS.element.getElement(DOM.Settings.celldata_DataSettings, "Data settings link")
         self.UTILS.element.scroll_into_view(data_menu)
         data_menu.tap()
 
     def open_msg_settings(self):
-
-        # Open cellular and data settings.
+        """
+        Open cellular and data settings.
+        """
         self.cellular_and_data()
         msg_menu = self.UTILS.element.getElement(DOM.Settings.celldata_MsgSettings, "Message settings link")
         self.UTILS.element.scroll_into_view(msg_menu)
         msg_menu.tap()
 
     def selectDefaultAPN(self, apn, open_settings=True):
-
-        # Open Data Settings
+        """
+        Open Data Settings
+        """
         if open_settings:
             self.open_data_settings()
 
@@ -599,8 +603,9 @@ class Settings(object):
             self.goBack()
 
     def setAlarmVolume(self, volume):
-
-        # Set the volume for alarms.
+        """
+        Set the volume for alarms.
+        """
         self.parent.data_layer.set_setting('audio.volume.alarm', volume)
 
     def setNetworkOperator(self, network_type):
@@ -627,8 +632,9 @@ class Settings(object):
         self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
 
     def setRingerAndNotifsVolume(self, volume):
-
-        # Set the volume for ringer and notifications.
+        """
+        Set the volume for ringer and notifications.
+        """
         self.parent.data_layer.set_setting('audio.volume.notification', volume)
 
     def setTimeToNow(self):
@@ -654,10 +660,9 @@ class Settings(object):
         self.marionette.switch_to_frame()
 
     def change_sim_pin(self, old_pin, new_pin, confirm_pin):
-
-        # This method changes the current PIN code to a new one
-        #
-
+        """
+        This method changes the current PIN code to a new one
+        """
         is_dual_sim = self.UTILS.general.is_device_dual_sim()
 
         self.enable_sim_security(True, old_pin)
@@ -686,8 +691,9 @@ class Settings(object):
         done_btn.tap()
 
     def enable_sim_security(self, enable, pin, is_dual_sim=None):
-
-        # This method sets the SIM security configuration.
+        """
+        This method sets the SIM security configuration.
+        """
         self.UTILS.reporting.logResult("info", "Enabling SIM security" if enable else "Disabling SIM Security")
 
         if is_dual_sim is None:
@@ -900,8 +906,9 @@ class Settings(object):
         return is_connected
 
     def _checkDisconnected(self, wlan):
-
-        # Private function to wait until this wifi network is no longer marked as "Connected".
+        """
+        Private function to wait until this wifi network is no longer marked as "Connected".
+        """
         x = self.marionette.find_elements(*DOM.Settings.wifi_available_networks)
         for i in x:
             if i.find_element("tag name", "a").text == wlan:
@@ -911,8 +918,9 @@ class Settings(object):
                     return False
 
     def wifi_list_isConnected(self, wlan_name, timeout=30):
-
-        # Verify the expected network is listed as connected in 'available networks'.
+        """
+        Verify the expected network is listed as connected in 'available networks'.
+        """
         try:
             self.parent.wait_for_element_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
                                                  timeout=timeout)
@@ -921,8 +929,9 @@ class Settings(object):
             return False
 
     def wifi_list_isNotConnected(self, wlan_name, timeout=30):
-
-        # Verify the expected network is listed as connected in 'available networks'.
+        """
+        Verify the expected network is listed as connected in 'available networks'.
+        """
         try:
             self.parent.wait_for_element_not_present("xpath", DOM.Settings.wifi_list_connected_xp.format(wlan_name),
                                                      timeout=timeout)
@@ -931,8 +940,9 @@ class Settings(object):
             return False
 
     def wifi_list_tapName(self, wlan_name):
-
-        # Tap the network name in the list.
+        """
+        Tap the network name in the list.
+        """
         screenshot = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
 
@@ -944,8 +954,9 @@ class Settings(object):
         time.sleep(2)
 
     def wifi_switchOn(self):
-
-        # Click slider to turn wifi on.
+        """
+        Click slider to turn wifi on.
+        """
         if not self.parent.data_layer.get_setting("wifi.enabled"):
             wifi_switch = self.UTILS.element.getElement(DOM.Settings.wifi_enabled, "Enable wifi switch")
             wifi_switch.tap()
@@ -956,8 +967,9 @@ class Settings(object):
         time.sleep(3)
 
     def wifi_switchOff(self):
-
-        # Click slider to turn wifi on.
+        """
+        Click slider to turn wifi on.
+        """
         if self.parent.data_layer.get_setting("wifi.enabled"):
             wifi_switch = self.UTILS.element.getElement(DOM.Settings.wifi_enabled, "Disable wifi switch")
             wifi_switch.tap()
@@ -969,8 +981,9 @@ class Settings(object):
 
     @retry(10)
     def connect_to_wifi(self, wifi_name, wifi_pass):
-
-        # Connect to the wifi.
+        """
+        Connect to the wifi.
+        """
         self.wifi_switchOn()
         time.sleep(2)
         self.wifi_list_tapName(wifi_name)

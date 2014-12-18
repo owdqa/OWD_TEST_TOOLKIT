@@ -11,13 +11,13 @@ class test(object):
         self.failed = self.assertion_manager.failed
 
     def test(self, result, msg, stop_on_error=False):
-
-        # Test that result is true.
-        # One advantage of this over the standard 'assert's is that
-        # this continues past a failure if stop_on_error is False.
-        # However, it also takes a screenshot and dumps the html source
-        # if result is False.
-        #
+        """
+        Test that result is true.
+        One advantage of this over the standard 'assert's is that
+        this continues past a failure if stop_on_error is False.
+        However, it also takes a screenshot and dumps the html source
+        if result is False.
+        """
         self.parent.reporting.log_to_file(u"Testing with {} and message: {}. stop_on_error: {}".\
                                           format(result, msg, stop_on_error))
 

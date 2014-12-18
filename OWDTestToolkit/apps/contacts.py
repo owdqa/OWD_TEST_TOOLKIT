@@ -15,9 +15,6 @@ class Contacts(object):
         self.UTILS = parent.UTILS
 
     def launch(self):
-        """
-        Launch the app.
-        """
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(
             DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
@@ -51,7 +48,6 @@ class Contacts(object):
         thumbnails = self.UTILS.element.getElements(DOM.Contacts.picture_thumbnails, "Thumbnails for pictures")
         if thumbnails:
             thumbnails[num].tap()
-
             time.sleep(1)
             # Tap 'crop done' button.
             boolOK = True
@@ -95,7 +91,6 @@ class Contacts(object):
         Change a value for a contact (assumes we're looking at the 'all contacts' screen
         currently).
         """
-
         # View our contact.
         self.view_contact(contact_name)
 
@@ -410,9 +405,11 @@ class Contacts(object):
         time.sleep(1)
         import_gmail_btn.tap()
 
-        # Sometimes the device remembers your login from before (even if the device is
-        # reset and all data cleared), so check for that.
-        # self.switch_to_gmail_login_frame()
+        """
+        Sometimes the device remembers your login from before (even if the device is
+        reset and all data cleared), so check for that.
+        self.switch_to_gmail_login_frame()
+        """
         self.UTILS.iframe.switch_to_frame("data-url", "google")
         try:
             time.sleep(2)
@@ -545,9 +542,11 @@ class Contacts(object):
             try:
                 self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
 
-                # Send the login information (sometimes the username isn't required, just the password).
-                # I 'know' that the password field will appear though, so use that element to get the
-                # timing right.
+                """
+                Send the login information (sometimes the username isn't required, just the password).
+                I 'know' that the password field will appear though, so use that element to get the
+                timing right.
+                """
                 self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_password, timeout=30)
                 try:
                     self.parent.wait_for_element_displayed(*DOM.Contacts.hotmail_username, timeout=2)
@@ -586,7 +585,6 @@ class Contacts(object):
         """
 
         fav_button = element or self.UTILS.element.getElement(DOM.Contacts.favourite_button, "Favourite toggle button")
-
         classes = fav_button.get_attribute("class").split()
         try:
             classes.index("on")
@@ -874,12 +872,10 @@ class Contacts(object):
     def tapLinkContact(self):
         """
         Press the 'Link contact' button in the view contact details screen.
+        NOTE: there is more than one button with this ID, so make sure we use the right one!
+        (One of them isn't visible, so we need to check for visibility this way or the
+        'invisible' one will cause 'getElements()' to fail the test).
         """
-
-        # NOTE: there is more than one button with this ID, so make sure we use the right one!
-        # (One of them isn't visible, so we need to check for visibility this way or the
-        # 'invisible' one will cause 'getElements()' to fail the test).
-        time.sleep(2)
         links = self.UTILS.element.getElements(DOM.Contacts.link_button, "Link contact button", False)
         for link in links:
             if link.is_displayed():
@@ -960,11 +956,12 @@ class Contacts(object):
         # View the details for this contact.
         self.view_contact(contact_name)
 
-        # TODO: change this when test 26918 is finally unblocked
-        # Check the expected elements are now visible.
-        #
-        # I'm having serious problems finding buttons based on 'text' directly, so here's
-        # the 'brute-force' method ...
+        """
+        TODO: change this when test 26918 is finally unblocked
+        Check the expected elements are now visible.
+        I'm having serious problems finding buttons based on 'text' directly, so here's
+        the 'brute-force' method
+        """
         view_fb_profile = False
         wall_post = False
         linked_email = False
@@ -1064,8 +1061,9 @@ class Contacts(object):
         return "Unknown"
 
     def try_frame(self, dom):
-
-        # Private function to return an object for the many types of 'return iframes'.
+        """
+        Private function to return an object for the many types of 'return iframes'.
+        """
         try:
             iframe = ("xpath", "//iframe[contains(@{},'{}')]".format(dom[0], dom[1]))
             self.parent.wait_for_element_present(*iframe, timeout=2)

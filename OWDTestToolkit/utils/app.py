@@ -9,8 +9,9 @@ class app(object):
         self.marionette = parent.marionette
 
     def _getAppFrame(self, p_name):
-
-        # Private function that returns the frame_locator for an app by name.
+        """
+        Private function that returns the frame_locator for an app by name.
+        """
         if p_name == "Browser":
             app_frame = DOM.Browser.frame_locator
         elif p_name == "Calculator":
@@ -108,8 +109,9 @@ class app(object):
         return False
 
     def isAppInstalled(self, app_name):
-
-        # Return whether an app is present on the homescreen (i.e. 'installed').
+        """
+        Return whether an app is present on the homescreen (i.e. 'installed').
+        """
         self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
 
         x = ('xpath', DOM.Home.app_icon_xpath.format(app_name))
@@ -122,8 +124,9 @@ class app(object):
             return False
 
     def _GaiaApp(self, origin, name, frame, src):
-
-        # Private function to return a 'GaiaApp' object to use in UTILS.killApp() calls.
+        """
+        Private function to return a 'GaiaApp' object to use in UTILS.killApp() calls.
+        """
         class GaiaApp(object):
             def __init__(self, origin, name, frame, src):
                 self.frame = frame
@@ -138,8 +141,9 @@ class app(object):
         return GaiaApp(origin, name, frame, src)
 
     def killApp(self, app_name):
-
-        # Kills the app specified by app_name.
+        """
+        Kills the app specified by app_name.
+        """
 
         # Because these app aren't consistently named, or may be 'guessed'
         # incorrectly ...
@@ -165,8 +169,9 @@ class app(object):
         self.parent.apps.kill(myApp)
 
     def launchAppViaHomescreen(self, app_name):
-
-        # Launch an app via the homescreen.
+        """
+        Launch an app via the homescreen.
+        """
         ok = False
         app_icon = self.findAppIcon(app_name)
         if app_icon:
@@ -176,8 +181,9 @@ class app(object):
         return ok
 
     def moveAppFromDock(self, app_name):
-
-        # Moves the app 'app_name' from the dock to the homescreen.
+        """
+        Moves the app 'app_name' from the dock to the homescreen.
+        """
         self.parent.home.goHome()
         self.parent.home.scrollHomescreenRight()
         x = self.parent.element.getElements(DOM.Home.docked_apps, "Dock apps")
@@ -230,8 +236,9 @@ class app(object):
             return False
 
     def switchToApp(self, app_name):
-
-        # Switches to the app (or launches it if it's not open).
+        """
+        Switches to the app (or launches it if it's not open).
+        """
 
         # Because these app aren't consistently named, or may be 'guessed'
         # incorrectly ...
@@ -264,8 +271,9 @@ class app(object):
                 pass
 
     def uninstallApp(self, app_name):
-
-        # Remove an app using the UI.
+        """
+        Remove an app using the UI.
+        """
         self.parent.reporting.logResult("info", "Making sure app <b>{}</b> is uninstalled.".format(app_name))
         myApp = self.findAppIcon(app_name)
         if myApp:

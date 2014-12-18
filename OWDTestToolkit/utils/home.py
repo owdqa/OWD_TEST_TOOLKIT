@@ -11,8 +11,9 @@ class home(object):
         self.homescreen = Homescreen(self.marionette)
 
     def goHome(self):
-
-        # Return to the home screen.
+        """
+        Return to the home screen.
+        """
 
         # (Sometimes the home button needs to be tapped twice, i.e. if you're
         # in a results screen of EME.)

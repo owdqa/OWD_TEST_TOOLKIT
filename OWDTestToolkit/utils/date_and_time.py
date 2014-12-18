@@ -11,33 +11,28 @@ class date_and_time(object):
         self.marionette = parent.marionette
 
     def getDateTimeFromEpochSecs(self, seconds_since_epoch):
-        #
-        # Returns struct containing date and time strings
-        # converted from 'seconds since epoch'
-        # (for 'today' you would use: "getDateTimeFromEpochSecs(int(time.time()))").<br>
-        # The result array elements are as follows:<br>
-        # <pre>
-        # Attribute   Field            Values<br>
-        # day_name    Day              "Monday" to "Friday"<br>
-        # month_name  Day              "january" to "December"<br>
-        # mday     Day                 1 to 31<br>
-        # year     4-digit year        2008 etc...<br>
-        # mon      Month               1 to 12<br>
-        # mday     Day                 1 to 31<br>
-        # hour     Hour                0 to 23<br>
-        # min      Minute              0 to 59<br>
-        # sec      Second              0 to 61 (60 or 61 are leap-seconds)<br>
-        # wday     Day of Week         0 to 6 (0 is Monday)<br>
-        # yday     Day of year         1 to 366 (Julian day)<br>
-        # isdst    Daylight savings    -1, 0, 1, -1 means library determines DST<br>
-        # </pre>
-        # <br>
-        # Example:<br>
-        # <pre>
-        # _today = self.UTILS.date_and_time.getDateTimeFromEpochSecs( int(time.time()) )<br>
-        # self.UTILS.reporting.logResults("info", "Day: %s" % _today.day_name)<br>
-        # <pre>
-        #
+        """
+        Returns struct containing date and time strings
+        converted from 'seconds since epoch'
+        (for 'today' you would use: "getDateTimeFromEpochSecs(int(time.time()))").
+        The result array elements are as follows:
+        Attribute   Field            Values
+        day_name    Day              "Monday" to "Friday"
+        month_name  Day              "january" to "December"
+        mday     Day                 1 to 31
+        year     4-digit year        2008 etc...
+        mon      Month               1 to 12
+        mday     Day                 1 to 31
+        hour     Hour                0 to 23
+        min      Minute              0 to 59
+        sec      Second              0 to 61 (60 or 61 are leap-seconds)
+        wday     Day of Week         0 to 6 (0 is Monday)
+        yday     Day of year         1 to 366 (Julian day)
+        isdst    Daylight savings    -1, 0, 1, -1 means library determines DST
+        Example:
+        _today = self.UTILS.date_and_time.getDateTimeFromEpochSecs( int(time.time()) 
+        self.UTILS.reporting.logResults("info", "Day: %s" % _today.day_name
+        """
         value = time.localtime(seconds_since_epoch)
 
         x = datetime.date(value.tm_year, value.tm_mon, value.tm_mday)
@@ -81,31 +76,27 @@ class date_and_time(object):
         self.parent.data_layer.set_time(time.time() * 1000)
 
     def setTimeToSpecific(self, p_year="NOW", p_month="NOW", p_day="NOW", p_hour="NOW", p_minute="NOW"):
-        #
-        # Sets the device time to a specific time (always today) based on the parameters:<br>
-        # <pre>
-        # <b>p_year   :</b> <i>YYYY</i>, i.e. "2013"<br>
-        # <b>p_month  :</b> <i>mm</i>, i.e. "1" -> "12"<br>
-        # <b>p_day    :</b> <i>dd</i>, i.e. "1" -> "31"<br>
-        # <b>p_hour   :</b> <i>HH</i>, i.e. "0" -> "23"<br>
-        # <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>
-        # </pre><br>
-        # All parameters will default to 'now'.<br>
-        # Returns a 'dateTime' object for the new date and time:
-        # <pre>
-        # Attribute   Field            Values<br>
-        # tm_mday     Day                 1 to 31<br>
-        # tm_year     4-digit year        2008 etc...<br>
-        # tm_mon      Month               1 to 12<br>
-        # tm_mday     Day                 1 to 31<br>
-        # tm_hour     Hour                0 to 23<br>
-        # tm_min      Minute              0 to 59<br>
-        # tm_sec      Second              0 to 61 (60 or 61 are leap-seconds)<br>
-        # tm_wday     Day of Week         0 to 6 (0 is Monday)<br>
-        # tm_yday     Day of year         1 to 366 (Julian day)<br>
-        # tm_isdst    Daylight savings    -1, 0, 1, -1 means library determines DST<br>
-        # </pre>
-        #
+        """
+        Sets the device time to a specific time (always today) based on the parameters:
+        p_year   : YYYY, i.e. "2013"
+        p_month  : mm, i.e. "1" -> "12"
+        p_day    : dd, i.e. "1" -> "31"
+        p_hour   : HH, i.e. "0" -> "23"
+        p_minute : MM, i.e. "0" -> "59"
+        All parameters will default to 'now'.
+        Returns a 'dateTime' object for the new date and time:
+        Attribute   Field            Values
+        tm_mday     Day                 1 to 31
+        tm_year     4-digit year        2008 etc...
+        tm_mon      Month               1 to 12
+        tm_mday     Day                 1 to 31
+        tm_hour     Hour                0 to 23
+        tm_min      Minute              0 to 59
+        tm_sec      Second              0 to 61 (60 or 61 are leap-seconds)
+        tm_wday     Day of Week         0 to 6 (0 is Monday)
+        tm_yday     Day of year         1 to 366 (Julian day)
+        tm_isdst    Daylight savings    -1, 0, 1, -1 means library determines DST
+        """
         _now_epoch_secs = time.time()
         _now = self.getDateTimeFromEpochSecs(_now_epoch_secs)
 

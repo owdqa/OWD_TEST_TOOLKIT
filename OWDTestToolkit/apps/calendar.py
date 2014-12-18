@@ -14,8 +14,6 @@ class Calendar(object):
         self.actions = Actions(self.marionette)
 
     def launch(self):
-
-        # Launch the app.
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
@@ -44,7 +42,6 @@ class Calendar(object):
 
         # Now move to the desired screen.
         for i in range(numMoves):
-
             # Flick the screen to move it (tricky to find the element we can flick!).
             _el = self.marionette.find_elements(*DOM.Calendar.dview_events)
 
@@ -76,12 +73,11 @@ class Calendar(object):
         self.UTILS.reporting.logResult("info", "Day view screen after moving {} pages: ".format(num), x)
 
     def getEventPreview(self, p_view, p_hour24, p_title, p_location=False):
-
-        # Return object for an event in month / week or day view.
-
-        # The tag identifiers aren't consistent, so set them here.
-        # <type>: (<event preview identifier>, <event title identifier>)
-        #
+        """
+        Return object for an event in month / week or day view.
+        The tag identifiers aren't consistent, so set them here.
+        <type>: (<event preview identifier>, <event title identifier>)
+        """
         event_view = {
             "month": (DOM.Calendar.view_events_block_m % p_hour24, DOM.Calendar.view_events_title_month),
             "week": (DOM.Calendar.view_events_block_w % p_hour24, DOM.Calendar.view_events_title_week),
@@ -89,11 +85,11 @@ class Calendar(object):
         }
 
         viewStr = event_view[p_view]
-
-        # Switch to the desired view.
-        # For the life of me I can't get 'wait_for_element' ... to work in day view, so I'm
-        # just waiting a few seconds then checking with .is_displayed() instead.
-        #
+        """
+        Switch to the desired view.
+        For the life of me I can't get 'wait_for_element' ... to work in day view, so I'm
+        just waiting a few seconds then checking with .is_displayed() instead.
+        """
         self.setView(p_view)
         time.sleep(2)
 
@@ -192,7 +188,6 @@ class Calendar(object):
         year = now.tm_year
 
         for i in range(numMoves):
-
             # Flick the display to show the date we're aiming for.
             el = self.marionette.find_elements(*DOM.Calendar.mview_first_row_for_flick)[el_num]
             self.actions.flick(el, 0, 0, x2, 0).perform()
@@ -280,11 +275,11 @@ class Calendar(object):
             days_offset = days_offset + len(displayed_days)
 
         time.sleep(0.3)
-
-        # Work out what the display should now be:
-        # 1. Today + days_offset should be displayed.
-        # 2. Header should be month + year, now + days_offset should be in active days.
-        #
+        """
+        Work out what the display should now be:
+        1. Today + days_offset should be displayed.
+        2. Header should be month + year, now + days_offset should be in active days.
+        """
         if num < 0:
             new_epoch = now_epoch - (days_offset * 24 * 60 * 60)
         else:
@@ -314,8 +309,9 @@ class Calendar(object):
         self.UTILS.reporting.logResult("info", "Week view screen after moving {} pages: ".format(num), x)
 
     def setView(self, typ):
-
-        # Set to view typ (today / day / week / month).
+        """
+        Set to view typ (today / day / week / month).
+        """
         x = self.UTILS.element.getElement((DOM.Calendar.view_type[0], DOM.Calendar.view_type[1] % typ.lower()),
                                   "'" + typ + "' view type selector")
         x.tap()
