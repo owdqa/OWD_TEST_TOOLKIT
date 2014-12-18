@@ -62,7 +62,7 @@ class Music(object):
                 pass
 
     def get_total_songs(self):
-
+        
         # Make sure we're in the mix tab (the left)
         try:
             self.UTILS.reporting.logResult("info", "Try to get the Mix Tab")
