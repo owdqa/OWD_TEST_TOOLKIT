@@ -266,13 +266,11 @@ class general(object):
             except:
                 pass
 
-    def remove_file(self, file_name, destination_prefix):
-        #
-        # remove file from sdcard
-        #
-        destination = destination_prefix + file_name
-        file_to_remove = '{}/{}'.format(self.get_config_variable("OWD_DEVICE_SDCARD"), destination)
-        self.parent.device.manager.removeFile(file_to_remove)
+    def remove_files(self):
+        """
+        Removes all files from the sdcard
+        """
+        self.parent.device.file_manager.remove(self.parent.device.storage_path)
 
     def restart(self):
         self.parent.reporting.logResult('info', 'Restarting the device...')
