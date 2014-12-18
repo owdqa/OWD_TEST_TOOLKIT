@@ -56,7 +56,7 @@ class Ftu(object):
                         "Data connection is enabled after trying to enable it.", True)
 
     def set_language(self, language):
-                """
+        """
         Set the language (assume we're in the language screen).
         """
         time.sleep(1)
