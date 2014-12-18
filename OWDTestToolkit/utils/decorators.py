@@ -81,14 +81,16 @@ def timestamped_log(func):
 
     Assumes there is a message attribute, which is the log to be shown, and
     that will be manipulated to prefix with the timestamp.
+    IMPORTANT: This decorator is ONLY for binding functions, where the first
+    argument is always self.
     """
     @functools.wraps(func)
-    def log_func(self, message):
-        msg = message
+    def log_func(*args, **kwargs):
+        msg = args[1]
         d = datetime.now().strftime('%Y-%m-%d %H:%M:%S,') + \
             '{:03d}'.format(datetime.now().microsecond / 1000)
         (frame, filename, line_number, function_name, lines, index) = inspect.getouterframes(inspect.currentframe())[2]
         caller = '{}::{}:{}'.format(filename[filename.rfind('/') + 1:], function_name, line_number)
         msg = '{} - {} - {} - {}'.format(d, caller, func.__name__.upper(), msg)
-        func(self, msg)
+        func(args[0], msg)
     return log_func

@@ -246,7 +246,7 @@ class Contacts(object):
     def edit_contact(self, name, contact):
         """
         Replace the details of one contact with another via the edit screen.
-        <br><br>
+
         <b>p_contact_curr_json_obj</b> and <b>contact</b> must
         be objects in the same format as the one in
         ./example/tests/mock_data/contacts.py (however, only needs the
@@ -268,8 +268,8 @@ class Contacts(object):
         update_btn.tap()
 
         # Return to the contact list screen.
-        back_btn = self.UTILS.element.getElement(DOM.Contacts.details_back_button, "Details 'back' button")
-        back_btn.tap()
+        back_btn = self.UTILS.element.getElement(DOM.Contacts.details_view_header, "Details 'back' button")
+        back_btn.tap(25, 25)
 
         self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
 
@@ -366,6 +366,10 @@ class Contacts(object):
                 'address': self.UTILS.element.getElement(DOM.Contacts.view_contact_address, "Address field", True, 5, False),
             }
         else:
+            # Locate and press the 'Add Address' button
+            add_btn = self.UTILS.element.getElement(DOM.Contacts.add_address_button, "Add Address button")
+            self.UTILS.element.scroll_into_view(add_btn)
+            add_btn.tap()
             return {
                 'givenName': self.UTILS.element.getElement(DOM.Contacts.given_name_field, "Given name field", True, 5, False),
                 'familyName': self.UTILS.element.getElement(DOM.Contacts.family_name_field, "Family name field", True, 5, False),
@@ -815,9 +819,13 @@ class Contacts(object):
         call_btn = self.UTILS.element.getElement(DOM.Contacts.view_contact_tel_field, "Contact number button")
         call_btn.tap()
 
-    def select_search_result_several_phones(self, contact_name, number):
+    def select_search_result_several_phones(self, contact_name, number, cancel=False):
         """
-        Select the result of a search
+        Select the result of a search.
+
+        Select the contact with the given name from the search results, and then,
+        select the given number.
+        If cancel is True, the number is not selected, and the Cancel button is pressed instead.
         """
         results = self.UTILS.element.getElements(DOM.Contacts.search_results_list, "Search results list", True, 10)
         for result in results:
@@ -825,16 +833,17 @@ class Contacts(object):
                 result.tap()
                 break
 
-        # Then select the phone number, nothing if number is 0
-        self.marionette.switch_to_frame()
-        ok = self.UTILS.element.getElement(DOM.GLOBAL.conf_screen_ok_button, "OK button")
-        if number == 0:
-            ok.tap()
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+        btn = None
+        if cancel:
+            btn = self.UTILS.element.getElement((DOM.Contacts.select_recipient_btn[0],
+                                             DOM.Contacts.select_recipient_btn[1].format("Cancel")),
+                                             "Cancel Select number button")
         else:
-            xpath = ('xpath', '//span[contains(text(),"' + str(number) + '")]')
-            self.UTILS.reporting.logComment("Using xpath " + str(xpath))
-            num = self.UTILS.element.getElement(xpath, "Number to select")
-            num.tap()
+            btn = self.UTILS.element.getElement((DOM.Contacts.select_recipient_btn[0],
+                                             DOM.Contacts.select_recipient_btn[1].format(number + " ")),
+                                             "Select number button")
+        btn.tap()
 
     def start_create_new_contact(self):
         """
@@ -1072,3 +1081,9 @@ class Contacts(object):
             return True
         except:
             return False
+
+    def go_back(self):
+        """Press back button in the contacts list scren
+        """
+        # TODO: remove tap with coordinates after Bug 1061698 is fixed
+        self.UTILS.element.getElement(DOM.Contacts.search_contact_header, "Back button").tap(25, 25)
