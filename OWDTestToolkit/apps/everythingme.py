@@ -14,14 +14,9 @@ class EverythingMe(object):
         self.actions = Actions(self.marionette)
 
     def launch(self):
-        #
-        # Launch the app.
-        #
         self.apps.kill_all()
 
-        #
         # If EME has already been launched, then the DOM has changed.
-        #
         self.UTILS.reporting.logResult("info", "Launching Everything ME.")
         boolOK = False
         try:
@@ -41,12 +36,12 @@ class EverythingMe(object):
         self.UTILS.test.test(boolOK, "EME Starting up ...")
 
     def _relaunch(self):
-        #
-        # Private function to re-launch.
-        # This gets complicated:
-        # 1. el.tap() and el.click() only work *sometimes*, so use the keyboard to relaunch.
-        # 2. Sometimes the messges app randomly launches instead of evme!
-        #
+        """
+        Private function to re-launch.
+        This gets complicated:
+        1. el.tap() and el.click() only work *sometimes*, so use the keyboard to relaunch.
+        2. Sometimes the messges app randomly launches instead of evme!
+        """
         x = self.marionette.find_element(*DOM.EME.search_field)
         x.send_keys("waking up evme")
 
@@ -54,9 +49,9 @@ class EverythingMe(object):
         x.tap()
 
     def add_app_to_homescreen(self, name):
-        #
-        # Pick an app from the apps listed in this group.
-        #
+        """
+        Pick an app from the apps listed in this group.
+        """
         x = self.UTILS.element.getElementByXpath(DOM.EME.app_to_install.format(name))
         app_name = x.text
         self.UTILS.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
@@ -73,30 +68,22 @@ class EverythingMe(object):
         return True
 
     def add_group(self, group):
-        #
-        # Adds a group to EME (assumes you're already in the EME group screen).
-        #
+        """
+        Adds a group to EME (assumes you're already in the EME group screen).
+        """
         self.UTILS.reporting.logResult("info", "(Adding group '" + group + "'.)")
 
-        #
         # Click the 'More' icon.
-        #
         x = self.UTILS.element.getElement(DOM.EME.add_group_button, "'More' icon")
         x.tap()
 
-        #
         # Wait for the 'loading' spinner to go away (can take a while!).
-        #
         self.UTILS.element.waitForNotElements(DOM.EME.loading_groups_message, "'Loading' message", True, 120)
 
-        #
         # Chose an item from the groups list...
-        #
         self.UTILS.general.selectFromSystemDialog(group)
 
-        #
         # Verify the new group is in the groups list.
-        #
         x = self.UTILS.element.getElements(DOM.EME.groups, "Groups")
         boolOK = False
         for i in x:
@@ -108,18 +95,16 @@ class EverythingMe(object):
         return boolOK
 
     def add_multiple_groups(self, group_array=False):
-        #
-        # Adds multiple groups based on an array of numbers (defaults to all available groups).
-        # <br><br>
-        # For example: add_multiple_groups([0,1,2,3,8,11]) ... or just: add_multiple_groups()
-        #
+        """
+        Adds multiple groups based on an array of numbers (defaults to all available groups).
+        <br><br>
+        For example: add_multiple_groups([0,1,2,3,8,11]) ... or just: add_multiple_groups()
+        """
         x = self.UTILS.element.getElement(DOM.EME.add_group_button, "'More' icon")
         x.tap()
         self.UTILS.element.waitForNotElements(DOM.EME.loading_groups_message, "'Loading' message", True, 120)
 
-        #
         # Switch to group selector (in top level iframe).
-        #
         self.marionette.switch_to_frame()
 
         # for checking later
@@ -132,9 +117,7 @@ class EverythingMe(object):
                 self.actions.press(elements[i]).move(elements[i - 1]).wait(0.5).release().perform()
                 elements = self.marionette.find_elements(*DOM.GLOBAL.modal_valueSel_list)
 
-            #
             # Only select it if it's the list, or there is no list.
-            #
             select_elements = False
             if group_array:
                 if len(group_array) == len(list_names):
@@ -152,15 +135,11 @@ class EverythingMe(object):
                 list_names.append(tmp_name)
                 elements[i].tap()
 
-                #
                 # Sometimes the first tap does nothing for some reason.
-                #
                 if not elements[i].get_attribute("aria-checked"):
                     elements[i].tap()
 
-        #
         # Click the OK button.
-        #
         x = self.UTILS.element.getElement(DOM.GLOBAL.modal_valueSel_ok, "OK button")
         try:
             # Sometimes it's one, sometimes the other ...
@@ -171,9 +150,7 @@ class EverythingMe(object):
 
         time.sleep(1)
 
-        #
         # Checkk all the items we expect are now loaded in evme.
-        #
         self.UTILS.iframe.switchToFrame(*DOM.Home.frame_locator)
         time.sleep(5)
         for name in list_names:
@@ -206,9 +183,7 @@ class EverythingMe(object):
         self.UTILS.iframe.switchToFrame(*DOM.EME.frame_locator)
         app_name = self.UTILS.element.getElementByXpath(DOM.EME.app_to_install.format(name)).text
 
-        #
         # Add the app to the homescreen.
-        #
         self.add_app_to_homescreen(app_name)
 
         self.UTILS.iframe.switchToFrame(*DOM.EME.bookmark_frame_locator)
@@ -229,17 +204,16 @@ class EverythingMe(object):
         return result
 
     def launch_from_group(self, app_name):
-        #
-        # Function to launch an app directly from an EME group.
-        #
+        """
+        Function to launch an app directly from an EME group.
+        """
         x = self.UTILS.element.getElement(("xpath", "//li[@data-name='{}']".format(app_name)),
                                   "Icon for app '{}'".format(app_name), False)
         try:
             x.tap()
         except:
-            #
+
             # App is not visible, so I need to move it into view first.
-            #
             _id = x.get_attribute("_id")
             self.marionette.execute_script("document.getElementById('{}').scrollIntoView();".format(_id))
             x.tap()
@@ -251,9 +225,9 @@ class EverythingMe(object):
         self.UTILS.reporting.logResult("info", "Screenshot of app running:", x)
 
     def pick_group(self, name):
-        #
-        # Pick a group from the main icons.
-        #
+        """
+        Pick a group from the main icons.
+        """
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "<b>Choosing group '{}' from here ...</b>".format(name), x)
 
@@ -277,18 +251,16 @@ class EverythingMe(object):
         return ok
 
     def remove_groups(self, group_array):
-        #
-        # Removes groups from the EME group page.<br>
-        # <b>group_array</p> is an array of group names (default = all groups).<br>
-        # <br>
-        # For example: <i> remove_groups(["Games","Local"])
-        #
-
-        #
-        # Put the groups into edit mode.
-        # Sometimes this takes a while to happen, so increase the length
-        # of time you press the icon until it works!
-        #
+        """
+        Removes groups from the EME group page.
+        group_array is an array of group names (default = all groups)
+        For example: remove_groups(["Games","Local"])
+        """
+        """
+        Put the groups into edit mode.
+        Sometimes this takes a while to happen, so increase the length
+        of time you press the icon until it works!
+        """
         ok = False
         x = self.marionette.find_element('xpath', DOM.Home.app_icon_xpath.format(group_array[0]))
         self.actions.press(x).wait(3).release()
@@ -311,9 +283,7 @@ class EverythingMe(object):
         x = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult("info", "Screenshot of app in EDIT mode:", x)
 
-        #
         # Remove all groups in the array.
-        #
         removed = 0
         group_cnt = len(group_array)
 
@@ -321,9 +291,8 @@ class EverythingMe(object):
         self.UTILS.reporting.logResult("info", "Removing groups: {}".format(group_array))
 
         for group_specified in group_array:
-            #
+
             # Remove it.
-            #
             self.marionette.find_element('xpath', DOM.Home.app_icon_xpath.format(group_specified))
             y = self.UTILS.element.getElement(("xpath", DOM.Home.app_delete_icon_xpath.format(group_specified)),
                                       "Delete button", False, 5, True)
@@ -337,27 +306,23 @@ class EverythingMe(object):
             if removed == group_cnt:
                 break
 
-        #
         # Turn off edit mode.
-        #
         self.UTILS.reporting.logResult("info", "Disabling edit mode ...")
         self.UTILS.home.touchHomeButton()
 
     def search_for_app(self, name):
-        #
-        # Uses the search field to find the app (waits for the
-        # result to appear etc...).<br>
-        # Returns the element for the icon (or False if it's not found).
-        #
+        """
+        Uses the search field to find the app (waits for the
+        result to appear etc...).<br>
+        Returns the element for the icon (or False if it's not found).
+        """
         x = self.UTILS.element.getElement(DOM.EME.search_field, "Search field")
         x.clear()
         x.send_keys(name)
         x.click()
         time.sleep(5)
 
-        #
         # Can take a few seconds to appear, so try a few times (about 1 min).
-        #
         for retry in range(10):
             x = self.UTILS.debug.screenShotOnErr()
             self.UTILS.reporting.logResult("debug", "Looking for '{}' - attempt {} ...".format(name, retry), x)

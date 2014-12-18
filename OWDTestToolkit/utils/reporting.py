@@ -49,9 +49,8 @@ class reporting(object):
         self.custom_logger.debug(message)
 
     def logComment(self, comment):
-        #
+
         # Add a comment to the comment array.
-        #
         self.comment_array.append(comment)
         self.info("Adding comment: {}".format(comment))
 

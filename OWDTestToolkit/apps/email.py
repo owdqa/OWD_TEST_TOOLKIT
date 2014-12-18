@@ -457,9 +457,8 @@ class Email(object):
             self.marionette.find_element(*DOM.Email.setup_account_header)
             return True
         except:
-            #
+
             #  If exception raised --> other account has been alread set up
-            #
             self.UTILS.reporting.logResult("info", "It is necessary to switch to another email account.")
 
             if self.switch_account(email):
@@ -486,11 +485,10 @@ class Email(object):
             try:
                 self.parent.wait_for_element_present(*DOM.Email.switch_account_current_account)
                 current_account = self.marionette.find_element(*DOM.Email.switch_account_current_account)
-
-                #
-                # Since the element is not displayed, sometimes we cannot access to the text using .text
-                # This way is more secure
-                #
+                """
+                Since the element is not displayed, sometimes we cannot access to the text using .text
+                This way is more secure
+                """
                 current_account_text = self.marionette.execute_script(
                     "return arguments[0].innerHTML", script_args=[current_account])
 

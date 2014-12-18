@@ -16,7 +16,6 @@
 		"open_wifi_name": ""
 	},
 	"toolkit_cfg": {
-		"devices_cfg": "config/devices_cfg.json",
 		"css_file": "config/details.css",
 		"results_template": "config/results_template.html"
 	},

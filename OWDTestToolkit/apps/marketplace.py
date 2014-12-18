@@ -15,10 +15,6 @@ class Marketplace(object):
         self.UTILS = p_parent.UTILS
 
     def launch(self):
-        #
-        # Launch the app.
-        #
-        # WARNING: Marketplace is in a weird place - you need to use "Marketplace Dev"!!
         self.UTILS.reporting.logResult("info", "About to launch the marketplace app from the dev server. "\
                        "If it's \"not found\" then either try again later, "\
                        "or contact #marketplace mozilla irc channel.")
@@ -30,9 +26,9 @@ class Marketplace(object):
         return self.app
 
     def install_app(self, app, author):
-        #
-        # Install an app.
-        #
+        """
+        Install an app.
+        """
         self.search_for_app(app)
 
         if not self.select_search_result_app(app, author):
@@ -40,9 +36,7 @@ class Marketplace(object):
                                    author + "' is found in the market.")
             return False
 
-        #
         # Click to install the app.
-        #
         app_header = self.UTILS.element.getElement(DOM.Market.app_details_header, "App details header")
         self.UTILS.test.test(app_header.text == app, "Title in app detail is {} (expected: {})".\
                              format(app_header.text, app))
@@ -53,11 +47,8 @@ class Marketplace(object):
         x.click()
         x.tap()
 
-        #
         # Confirm the installation of the app.
-        #
         self.marionette.switch_to_frame()
-
         yes_button = self.UTILS.element.getElement(DOM.Market.confirm_install_button, "Confirm install button")
         yes_button.tap()
         
@@ -68,9 +59,9 @@ class Marketplace(object):
         return True
 
     def search_for_app(self, app):
-        #
-        # Search for an app in the market.
-        #
+        """
+        Search for an app in the market.
+        """
         self.UTILS.iframe.switchToFrame(*DOM.Market.frame_locator, via_root_frame=False)
         self.UTILS.reporting.debug("*** Searching {}".format(app))
         search_field = self.UTILS.element.getElement(DOM.Market.search_query, "Search field", timeout=30)
@@ -78,10 +69,10 @@ class Marketplace(object):
         search_field.send_keys(app + Keys.RETURN)
 
     def select_search_result_app(self, app, author):
-        #
-        # Select the application we want from the list returned by
-        # search_for_app().
-        #
+        """
+        Select the application we want from the list returned by
+        search_for_app().
+        """
         self.UTILS.element.waitForElements(DOM.Market.search_results_area, "Search results area")
         results = self.UTILS.element.getElements(DOM.Market.search_results, "Search results")
 
