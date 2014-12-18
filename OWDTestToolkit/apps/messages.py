@@ -218,8 +218,7 @@ class Messages(object):
         # Closes the current thread (returns you to the
         # 'thread list' SMS screen).
         #
-        x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
-        x.tap()
+        self.go_back()
         self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Messages"))),
                                            "Messages main header")
 
@@ -313,7 +312,6 @@ class Messages(object):
         # <b>Note:</b> The nums field must be an array of numbers
         # or contact names.
         #
-
         self.startNewSMS()
 
         #
@@ -439,32 +437,29 @@ class Messages(object):
             #
             # Go into messages Settings..
             #
-            x = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
-            x.tap()
+            edit_btn = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
+            edit_btn.tap()
 
-            #
-            # Go into message edit mode..
-            #
-            x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Edit button")
-            x.tap()
+            delete_btn = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Delete button")
+            delete_btn.tap()
 
             #
             # Press select all button.
             #
-            x = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn, "'Select all' button")
-            x.tap()
+            select_all_btn = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn, "'Select all' button")
+            select_all_btn.tap()
 
         self.deleteSelectedMessages()
 
     def deleteSelectedMessages(self):
         self.UTILS.reporting.debug("*** Tapping top Delete button")
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "Delete button")
-        x.tap()
+        delete_btn = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "Delete button")
+        delete_btn.tap()
         time.sleep(2)
 
         self.UTILS.reporting.debug("*** Tap Delete messages confirmation button")
-        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete messages confirmation button")
-        x.tap()
+        confirm_btn = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete messages confirmation button")
+        confirm_btn.tap()
         time.sleep(2)
 
     def deleteSelectedThreads(self):
@@ -512,35 +507,20 @@ class Messages(object):
         # the messages listed in msg_array.<br>
         # msg_array is an array of numbers.
         #
-
-        #
-        # Go into messages Settings..
-        #
-        self.UTILS.reporting.debug("*** Tap Edit button")
-        x = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
-        x.tap()
+        edit_btn = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
+        edit_btn.tap()
         time.sleep(2)
 
         #
         # Go into message edit mode..
         #
-        self.UTILS.reporting.debug("*** Tap Delete messages button")
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Delete messages button")
-        x.tap()
+        select_btn = self.UTILS.element.getElement(DOM.Messages.edit_msgs_select_btn, "Select messages button")
+        select_btn.tap()
         time.sleep(2)
 
-        #
-        # Check the messages (for some reason, just doing x[i].click() doesn't
-        # work for element zero, so I had to do this 'longhanded' version!).
-        #
         messages = self.UTILS.element.getElements(DOM.Messages.message_list, "Messages")
-        selected = 0
-        for msg in messages:
-            if selected in msg_array:
-                self.UTILS.reporting.debug("Selecting message {} ...".format(selected))
-                msg.tap()
-                time.sleep(2)
-            selected += 1
+        for msg in msg_array:
+            messages[msg].tap()
 
     def editAndSelectThreads(self, target_array):
         #
@@ -555,15 +535,18 @@ class Messages(object):
         #
         self.threadEditModeON()
 
-        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
-        x.tap()
+        select_btn = self.UTILS.element.getElement(DOM.Messages.edit_msgs_select_threads_btn, "Select threads button")
+        select_btn.tap()
+
+        if len(target_array) == 0:
+            return
 
         for i in target_array:
             self.UTILS.reporting.debug("selecting thread for [{}]".format(i))
-            x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_selector_xpath.format(i)),
+            thread = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_selector_xpath.format(i)),
                                               "Thread checkbox for '{}'".format(i))
-            self.UTILS.reporting.debug("Trying to tap in element {}".format(x))
-            x.tap()
+            self.UTILS.reporting.debug("Trying to tap in element {}".format(thread))
+            thread.tap()
 
         #
         # Finally check that all desired threads have been selected

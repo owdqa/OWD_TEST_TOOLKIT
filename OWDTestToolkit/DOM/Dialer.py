@@ -19,8 +19,8 @@ phone_number = ('id', 'phone-number-view')
 contacts_sub_iframe = ("id", "iframe-contacts")
 
 add_to_contacts_button = ("id", "keypad-callbar-add-contact")
-create_new_contact_btn = ("id", "create-new-contact-menuitem")
-add_to_existing_contact_btn = ("id", "add-to-existing-contact-menuitem")
+create_new_contact_btn = ("css selector", "button[data-l10n-id=createNewContact]")
+add_to_existing_contact_btn = ("css selector", "button[data-l10n-id=addToExistingContact]")
 call_number_button = ("id", "keypad-callbar-call-action")
 keypad_delete = ("id", "keypad-delete")
 

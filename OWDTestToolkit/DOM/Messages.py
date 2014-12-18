@@ -34,74 +34,76 @@ header_back_button = ("id", "messages-back-button")
 header_close_button = ('id', 'messages-close-button')
 
 # This field will allow to retrieve phone numbers and emails in the body of the last SM or MM
-phone_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//a[@data-action="dial-link"]')
-email_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//a[@data-action="email-link"]')
+phone_info_in_msg = ('css selector', '#messages-container li:last-child a[data-action=dial-link]')
+email_info_in_msg = ('css selector', '#messages-container li:last-child a[data-action=email-link]')
 
 threads = ("css selector", "p.name")
 threads_list = ('css selector', '#threads-container li')
 
 threads_list_element = ('xpath', '//article[@id="threads-container"]/div/ul/li/a/p')
 
-thread_target_names = ('xpath', '//article[@id="threads-container"]//li//p[@class="name"]')
+thread_target_names = ('css selector', '#threads-container li p.name')
 thread_selector_xpath = "//*[@id='threads-container']//li//a/p[contains(text(),'{}')]/../.."
 thread_selector_checked = ('xpath', "//*[@id='threads-container']//li//a/p[contains(text(),'{}')]/../../label/input")
 thread_timestamp_xpath = thread_selector_xpath + "/..//time"
 no_threads_message = ("id", "no-result-message")
 edit_threads_button = ("id", "threads-options-icon")
 cancel_edit_threads = ("css selector", "button[data-l10n-id='settings'] + button[data-l10n-id='cancel']")
-check_all_threads_btn = ("id", "threads-check-all-button")
-check_all_messages_btn = ("id", "messages-check-all-button")
-delete_threads_button = ("css selector", "button[data-l10n-id='deleteMessages-label']")
+check_all_threads_btn = ("id", "threads-check-uncheck-all-button")
+check_all_messages_btn = ("id", "messages-check-uncheck-all-button")
+delete_threads_button = ("id", "threads-delete-button")
 
-message_list = ('xpath', '//div[@id="messages-container"]//li')
+message_list = ('css selector', '#messages-container li')
 message_timestamps = ("xpath", "//div[@id='messages-container']/div[@class='messages-date-group'][last()]/header")
-last_message = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]')
-message_body_xpath = '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-body"]'
-last_message_body = ('xpath', message_body_xpath)
-last_message_time = ('xpath', message_body_xpath + '/time')
+last_message = ('css selector', '#messages-container div:last-child li:last-child')
+message_body_selector = '#messages-container div:last-child li:last-child div.message-content'
+last_message_body = ('css selector', message_body_selector)
+last_message_time = ('css selector', message_body_selector + ' time')
 last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
-last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p')
-last_message_mms_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span')
+last_message_text = ('css selector', '#messages-container div:last-child li:last-child div.message-content p')
+last_message_mms_text = ('css selector', '#messages-container div:last-child li:last-child div.message-content p span')
 # Use this with a find_element over the result of getting last_message
-last_message_text_nested = ('xpath', '//div[@class="message-content"]//p')
+last_message_text_nested = ('css selector', 'div.message-content p')
 
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')
 messages_from_num = "//*[contains(@id, '{}')]"
 header_link_locator = ('id', 'messages-header')
 message_header = ("id", "messages-header-text")
-received_messages = ('xpath', "//li[@class='bubble'][a[@class='received']]")
+received_messages = ('css selector', 'li.bubble a.received')
 
-edit_messages_icon = ('xpath', "//section[@id='thread-messages']//span[@class='icon icon-options']")
+edit_messages_icon = ('id', "messages-options-icon")
 edit_threads_header = ('id', 'threads-edit-mode')
 threads_delete_button = ('id', 'threads-delete-button')
-delete_threads_ok_btn = ('xpath', '//button[@class="danger" and @data-l10n-id="delete"]')
-delete_messages_btn = ('xpath', "//button[@data-l10n-id='deleteMessages-label']")
+delete_threads_ok_btn = ('css selector', 'button.danger[data-l10n-id=delete]')
+delete_messages_btn = ('css selector', 'button[data-l10n-id=deleteMessages-label]')
 delete_messages_ok_btn = ('id', "messages-delete-button")
 
+edit_msgs_select_btn = ('css selector', 'button[data-l10n-id=selectMessages-label]')
+edit_msgs_select_threads_btn = ('css selector', 'button[data-l10n-id=selectThreads-label]')
 edit_msgs_delete_btn = ("id", "messages-delete-button")
 edit_msgs_header = ("id", "messages-edit-mode")
 edit_msgs_sel_all_btn = ("id", "messages-check-all-button")
 
-airplane_warning_message = ("xpath", "//p/*[contains(text(),'Airplane')]")
+airplane_warning_message = ("xpath", "//p/*[contains(text(), 'Airplane')]")
 airplane_warning_ok = ("xpath", "//button[text()='{}']".format(_("OK")))
 
-received_sms = ('xpath', "//li[@class='message sms received incoming']/section/div/p")
-received_mms = ('xpath', "//li[@class='message mms received incoming']/section/div/p")
+received_sms = ('css selector', "li.message.sms.received.incoming section div p")
+received_mms = ('css selector', "li.message.mms.received.incoming section div p")
 received_mms_subject = ('css selector', ".message.mms.received.incoming.has-subject div.message-body")
 
 forward_btn_msg_opt = ('css selector', "button[data-l10n-id=forward]")
 cancel_btn_msg_opt = ('css selector', "button[data-l10n-id=forward] ~ button[data-l10n-id=cancel]")
 
 messages_options_btn = ("id", "messages-options-icon")
-addsubject_btn_msg_opt = ('xpath', '//form[@data-type="action"]//button[@data-l10n-id="add-subject"]')
+addsubject_btn_msg_opt = ('css selector', 'form[data-type=action] button[data-l10n-id=add-subject]')
 message_convert_notice = ('css selector', "#messages-convert-notice p")
-deletesubject_btn_msg_opt = ("xpath", "//*[@data-l10n-id='remove-subject']")
-cancel_btn_msg = ("xpath", "//body[@role='application']/form/menu/button[@data-l10n-id='cancel']")
+deletesubject_btn_msg_opt = ("css selector", "[data-l10n-id=remove-subject]")
+cancel_btn_msg = ("css selector", "body[role=application] menu button[data-l10n-id=cancel]")
 target_subject = ("id", "messages-subject-input")
 
-attach_preview_img_type = ("xpath", "//*[@class='attachment-container preview']")
-attach_preview_video_audio_type = ("xpath", "//*[@class='attachment-container nopreview']")
+attach_preview_img_type = ("css selector", ".attachment-container.preview")
+attach_preview_video_audio_type = ("css selector", ".attachment-container.nopreview")
 last_message_attachment_img = ('xpath', '//*[@id="messages-container"]//li[last()]//div[@class="attachment-container preview"]')
 last_message_attachment_av = ('xpath', '//*[@id="messages-container"]//li[last()]//div[@class="attachment-container nopreview"]')
 # Use this selector, after having used either last_message_attachment_img, last_message_attachment_av
@@ -122,23 +124,23 @@ mms_cancel_button = ("css selector", "button.icon + button[data-l10n-id=cancel]"
 
 mms_icon = ("css selector", "span.mms-icon")
 
-attached_opt_view = ("xpath", "//*[@data-l10n-id='view-attachment-image']")
-attached_opt_remove = ("xpath", "//*[@data-l10n-id='remove-attachment-image']")
-attached_opt_replace = ("xpath", "//*[@data-l10n-id='replace-attachment-image']")
+attached_opt_view = ("css selector", "[data-l10n-id=view-attachment-image]")
+attached_opt_remove = ("css selector", "[data-l10n-id=remove-attachment-image]")
+attached_opt_replace = ("css selector", "[data-l10n-id=replace-attachment-image]")
 
 message_expected_content = ('xpath', "//div[@class='message-content']//p/span[text()='{}']")
 
-wap_push_message_link = ('xpath', "//*[@id='si-sl-screen']//a[@data-action='url-link']")
+wap_push_message_link = ('css selector', "#si-sl-screen a[data-action=url-link]")
 
 sms_class_0_ok_btn = ('css selector', 'button.modal-dialog-alert-ok.confirm.affirmative')
-send_email_failed = ('xpath', '//span[@class="modal-dialog-alert-message"]')
+send_email_failed = ('css selector', 'span.modal-dialog-alert-message')
 
-save_as_draft_btn = ('xpath', '//button[@data-l10n-id="save-as-draft"]')
-discard_msg_btn = ('xpath', '//button[@data-l10n-id="discard-message"]')
-cancel_save_msg = ('xpath', '//button[@data-l10n-id="cancel"]')
+save_as_draft_btn = ('css selector', 'button[data-l10n-id=save-as-draft]')
+discard_msg_btn = ('css selector', 'button[data-l10n-id=discard-message]')
+cancel_save_msg = ('css selector', 'button[data-l10n-id=cancel]')
 
-button_download_attachment = ('xpath', '//button[@data-l10n-id="download-attachment"]')
-button_downloading_attachment = ('xpath', '//button[@data-l10n-id="downloading-attachment"]')
+button_download_attachment = ('css selector', 'button[data-l10n-id=download-attachment]')
+button_downloading_attachment = ('css selector', 'button[data-l10n-id=downloading-attachment]')
 mms_attachment_names = ('css selector', '.attachment-container .file-name')
 mms_attachment_sizes = ('css selector', '.attachment-container .size-indicator')
 mms_resize_msg = ('id', 'messages-resize-notice')
