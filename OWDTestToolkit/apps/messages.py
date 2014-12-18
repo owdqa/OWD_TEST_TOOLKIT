@@ -507,10 +507,6 @@ class Messages(object):
         # the messages listed in msg_array.<br>
         # msg_array is an array of numbers.
         #
-
-        #
-        # Go into messages Settings..
-        #
         edit_btn = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
         edit_btn.tap()
         time.sleep(2)
@@ -518,28 +514,13 @@ class Messages(object):
         #
         # Go into message edit mode..
         #
-        self.UTILS.reporting.debug("*** Tap Select messages button")
         select_btn = self.UTILS.element.getElement(DOM.Messages.edit_msgs_select_btn, "Select messages button")
         select_btn.tap()
         time.sleep(2)
 
-        #
-        # Check the messages (for some reason, just doing x[i].click() doesn't
-        # work for element zero, so I had to do this 'longhanded' version!).
-        #
         messages = self.UTILS.element.getElements(DOM.Messages.message_list, "Messages")
         for msg in msg_array:
             messages[msg].tap()
-
-        #=======================================================================
-        # selected = 0
-        # for msg in messages:
-        #    if selected in msg_array:
-        #        self.UTILS.reporting.debug("Selecting message {} ...".format(selected))
-        #        msg.tap()
-        #        time.sleep(2)
-        #    selected += 1
-        #=======================================================================
 
     def editAndSelectThreads(self, target_array):
         #
