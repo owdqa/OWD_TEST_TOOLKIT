@@ -271,7 +271,7 @@ class Messages(object):
             #
             # Add an image file
             #
-            self.UTILS.general.add_file_to_device('./tests/_resources/80x60.jpg', destination='DCIM/100MZLLA')
+            self.UTILS.general.add_file_to_device('./tests/_resources/80x60.jpg')
 
             self.create_mms_image()
             self.gallery.click_on_thumbnail_at_position_mms(0)
@@ -285,7 +285,7 @@ class Messages(object):
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4')
 
             self.create_mms_video()
             self.video.click_on_video_at_position_mms(0)
@@ -293,7 +293,7 @@ class Messages(object):
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.add_file_to_device('./tests/_resources/AMR.amr', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/AMR.amr')
 
             self.create_mms_music()
             self.music.click_on_song_mms()
