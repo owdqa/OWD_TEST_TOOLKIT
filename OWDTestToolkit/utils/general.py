@@ -215,7 +215,8 @@ class general(object):
             #
             # Tap the element to get the keyboard to popup.
             #
-            self.parent.reporting.logResult("info", "(Sending '{}' to this field using the keyboard.)".format(p_str))
+            self.parent.reporting.logResult("info", u"(Sending '{}' to this field using the keyboard.)".\
+                                            format(p_str))
 
             #
             # Type the string.

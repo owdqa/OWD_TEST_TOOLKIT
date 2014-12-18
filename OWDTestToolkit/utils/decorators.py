@@ -91,6 +91,6 @@ def timestamped_log(func):
             '{:03d}'.format(datetime.now().microsecond / 1000)
         (frame, filename, line_number, function_name, lines, index) = inspect.getouterframes(inspect.currentframe())[2]
         caller = '{}::{}:{}'.format(filename[filename.rfind('/') + 1:], function_name, line_number)
-        msg = '{} - {} - {} - {}'.format(d, caller, func.__name__.upper(), msg)
+        msg = u'{} - {} - {} - {}'.format(d, caller, func.__name__.upper(), msg)
         func(args[0], msg)
     return log_func

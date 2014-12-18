@@ -59,7 +59,7 @@ last_message = ('css selector', '#messages-container div:last-child li:last-chil
 message_body_selector = '#messages-container div:last-child li:last-child div.message-content'
 last_message_body = ('css selector', message_body_selector)
 last_message_time = ('css selector', message_body_selector + ' time')
-last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
+last_sent_message = ('xpath', "//li[contains(@class, 'outgoing')][last()]")
 last_message_text = ('css selector', '#messages-container div:last-child li:last-child div.message-content p')
 last_message_mms_text = ('css selector', '#messages-container div:last-child li:last-child div.message-content p span')
 # Use this with a find_element over the result of getting last_message
