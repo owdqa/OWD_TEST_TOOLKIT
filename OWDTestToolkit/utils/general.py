@@ -1,11 +1,12 @@
 import json
 import time
 import datetime
-from OWDTestToolkit import DOM
-from OWDTestToolkit.utils.decorators import retry
 from gaiatest.apps.keyboard.app import Keyboard
 from gaiatest import GaiaData
 from gaiatest import GaiaApps
+from OWDTestToolkit import DOM
+from OWDTestToolkit.utils.decorators import retry
+from OWDTestToolkit.utils.contacts import MockContact
 
 
 class general(object):
@@ -201,7 +202,8 @@ class general(object):
         else:
 
             # Tap the element to get the keyboard to popup.
-            self.parent.reporting.logResult("info", "(Sending '{}' to this field using the keyboard.)".format(p_str))
+            self.parent.reporting.logResult("info", u"(Sending '{}' to this field using the keyboard.)".\
+                                            format(p_str))
 
             # Type the string.
             self.keyboard.send(p_str)
@@ -270,20 +272,20 @@ class general(object):
         self.parent.data_layer.connect_to_cell_data()
         self.parent.reporting.debug("    Connected: {}".format(self.parent.data_layer.is_cell_data_connected))
 
-    # TODO: Uncomment this method when we finally move MockContact to this repository
-    # def insert_some_mock_contacts(self, number_of_contacts):
-    #     contact_given = "Test"
-    #     contact_family = map(str, range(1, number_of_contacts + 1))
-    #     contact_name = ["{} {}".format(contact_given, contact_family[i])
-    #                          for i in range(number_of_contacts)]
+    def insert_some_mock_contacts(self, number_of_contacts):
+        """Insert the given number of contacts in the device."""
+        contact_given = "Test"
+        contact_family = map(str, range(1, number_of_contacts + 1))
+        contact_name = ["{} {}".format(contact_given, contact_family[i])
+                             for i in range(number_of_contacts)]
 
-    #     contact_numbers = [str(i)*12 for i in range(1, number_of_contacts + 1)]
+        contact_numbers = [str(i) * 12 for i in range(1, number_of_contacts + 1)]
 
-    #     test_contacts = [MockContact(name=contact_name[i], givenName=contact_given,
-    #                                       familyName=contact_family[i],
-    #                                       tel={'type': 'Mobile', 'value': contact_numbers[i]})
-    #                           for i in range(number_of_contacts)]
-    #     map(insertContact, test_contacts)
+        test_contacts = [MockContact(name=contact_name[i], givenName=contact_given,
+                                          familyName=contact_family[i],
+                                          tel={'type': 'Mobile', 'value': contact_numbers[i]})
+                              for i in range(number_of_contacts)]
+        map(self.insertContact, test_contacts)
 
     def show_all_settings(self):
         self.parent.reporting.debug("** Device current settings: {}".format(self.parent.data_layer.all_settings))

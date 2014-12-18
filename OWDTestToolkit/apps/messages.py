@@ -492,12 +492,10 @@ class Messages(object):
                                     p_validate=False)  # it's the text() of this field, not the value.
 
         # Validate the field.
-        x = self.UTILS.element.getElement(DOM.Messages.input_message_area,
+        input_area = self.UTILS.element.getElement(DOM.Messages.input_message_area,
                                     "Input message area (for validation)")
-        self.UTILS.test.test(x.text == msg,
-                        "The text in the message area is as expected." + \
-                        "|EXPECTED: '" + msg + "'" + \
-                        "|ACTUAL  : '" + x.text + "'")
+        self.UTILS.test.test(input_area.text == msg,
+                             u"The text in the message area is {}. Expected: {}".format(input_area.text, msg))
 
     def addNumbersInToField(self, nums):
         """
