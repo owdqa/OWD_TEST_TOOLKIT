@@ -14,9 +14,8 @@ class Music(object):
         self.UTILS = parent.UTILS
 
     def launch(self):
-        #
+
         # Launch the app.
-        #
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ +
                                               " app - loading overlay")
@@ -60,15 +59,13 @@ class Music(object):
                     song.tap()
                     break
             except:
-                #
+
                 # Song not found, so keep looping
-                #
                 pass
 
     def get_total_songs(self):
-        #
+
         # Make sure we're in the mix tab (the left)
-        #
         try:
             self.UTILS.reporting.logResult("info", "Try to get the Mix Tab")
             self.parent.wait_for_element_displayed(*DOM.Music.mix_tab)

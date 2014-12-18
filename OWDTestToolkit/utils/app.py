@@ -9,9 +9,8 @@ class app(object):
         self.marionette = parent.marionette
 
     def _getAppFrame(self, p_name):
-        #
+
         # Private function that returns the frame_locator for an app by name.
-        #
         if p_name == "Browser":
             app_frame = DOM.Browser.frame_locator
         elif p_name == "Calculator":
@@ -49,25 +48,21 @@ class app(object):
         return app_frame
 
     def addAppToDock(self, app_name):
-        #
-        # Adds <i>app_name</i> to the homescreen dock if possible
-        # (if the dock already the maximum number of apps in it a message
-        # will be added to the details log and the function will return False).
-        #
+        """
+        Adds <i>app_name</i> to the homescreen dock if possible
+        (if the dock already the maximum number of apps in it a message
+        will be added to the details log and the function will return False).
+        """
         _app_icon = self.findAppIcon(app_name)
 
         if not _app_icon:
             self.parent.reporting.logResult("info", "Cannot find icon for app '{}'.".format(app_name))
             return False
 
-        #
         # Put screen into edit mode.
-        #
         self.parent.actions.press(_app_icon).wait(2).release().perform()
 
-        #
         # Move it to the dock.
-        #
         _docked_apps = self.parent.element.getElements(DOM.Home.docked_apps, "Docked apps (before adding app)")
         _count_before = len(_docked_apps)
 
@@ -96,9 +91,8 @@ class app(object):
         self.parent.home.goHome()
 
         try:
-            #
+
             # If this works, then the icon is visible at the moment.
-            #
             self.parent.reporting.debug("*** Looking for application icon {}".format(app_name))
             app_icon = self.marionette.find_element('xpath', DOM.Home.app_name_xpath.format(app_name))
             icons = self.marionette.find_elements(*DOM.Home.apps)
@@ -114,9 +108,8 @@ class app(object):
         return False
 
     def isAppInstalled(self, app_name):
-        #
+
         # Return whether an app is present on the homescreen (i.e. 'installed').
-        #
         self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
 
         x = ('xpath', DOM.Home.app_icon_xpath.format(app_name))
@@ -129,9 +122,8 @@ class app(object):
             return False
 
     def _GaiaApp(self, origin, name, frame, src):
-        #
+
         # Private function to return a 'GaiaApp' object to use in UTILS.killApp() calls.
-        #
         class GaiaApp(object):
             def __init__(self, origin, name, frame, src):
                 self.frame = frame
@@ -146,9 +138,8 @@ class app(object):
         return GaiaApp(origin, name, frame, src)
 
     def killApp(self, app_name):
-        #
+
         # Kills the app specified by app_name.
-        #
 
         # Because these app aren't consistently named, or may be 'guessed'
         # incorrectly ...
@@ -174,9 +165,8 @@ class app(object):
         self.parent.apps.kill(myApp)
 
     def launchAppViaHomescreen(self, app_name):
-        #
+
         # Launch an app via the homescreen.
-        #
         ok = False
         app_icon = self.findAppIcon(app_name)
         if app_icon:
@@ -186,9 +176,8 @@ class app(object):
         return ok
 
     def moveAppFromDock(self, app_name):
-        #
+
         # Moves the app 'app_name' from the dock to the homescreen.
-        #
         self.parent.home.goHome()
         self.parent.home.scrollHomescreenRight()
         x = self.parent.element.getElements(DOM.Home.docked_apps, "Dock apps")
@@ -205,9 +194,7 @@ class app(object):
             self.parent.reporting.logResult("info", "App '{}' was not found in the dock.".format(app_name))
             return False
 
-        #
         # Check the app is not in the dock.
-        #
         self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
 
         try:
@@ -221,16 +208,14 @@ class app(object):
         except:
             pass
 
-        #
         # Check the app has not been removed.
-        #
         return self.findAppIcon(app_name)
 
     def setPermission(self, app_name, item, value, quiet=False):
-        #
-        # Just a container function to catch any issues when using gaiatest's
-        # 'set_permission()' function.
-        #
+        """
+        Just a container function to catch any issues when using gaiatest's
+        'set_permission()' function.
+        """
         try:
             self.parent.apps.set_permission(app_name, item, value)
 
@@ -245,9 +230,8 @@ class app(object):
             return False
 
     def switchToApp(self, app_name):
-        #
+
         # Switches to the app (or launches it if it's not open).
-        #
 
         # Because these app aren't consistently named, or may be 'guessed'
         # incorrectly ...
@@ -268,9 +252,8 @@ class app(object):
                            format(app_name))
             self.parent.iframe.switchToFrame(*app_frame)
         except:
-            #
+
             # The app isn't open yet, so try to launch it.
-            #
             try:
                 self.parent.reporting.logResult("info", "(Looks like app '{}' is not currently running, so I'll launch it.)".\
                                format(app_name))
@@ -281,9 +264,8 @@ class app(object):
                 pass
 
     def uninstallApp(self, app_name):
-        #
+
         # Remove an app using the UI.
-        #
         self.parent.reporting.logResult("info", "Making sure app <b>{}</b> is uninstalled.".format(app_name))
         myApp = self.findAppIcon(app_name)
         if myApp:

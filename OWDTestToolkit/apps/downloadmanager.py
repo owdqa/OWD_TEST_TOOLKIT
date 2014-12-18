@@ -182,10 +182,10 @@ class DownloadManager(object):
         self.UTILS.element.waitForNotElements(entry_locator, "Download item from downloads list", timeout=5)
 
     def download_file(self, file_name):
-        #
-        # Start the file download
-        # TODO - This works for our test page. Try to generalize a lil' bit
-        #
+        """
+        Start the file download
+        TODO - This works for our test page. Try to generalize a lil' bit
+        """
 
         link = self.UTILS.element.getElement(('css selector', 'a[href="{}"]'.format(file_name)),
                                              'The file [{}] to download'.format(file_name), True, 10)
@@ -196,9 +196,7 @@ class DownloadManager(object):
         Checks whether the file is downloading in the downloads list
         """
 
-        #
         # Sometimes it takes too long to load the list
-        #
         self.parent.wait_for_element_displayed(DOM.DownloadManager.download_list[0],
                                                DOM.DownloadManager.download_list[1], 60)
         return self.get_download_status(data_url) == "downloading"

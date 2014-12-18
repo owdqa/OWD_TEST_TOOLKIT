@@ -51,10 +51,10 @@ class date_and_time(object):
                  value.tm_wday, value.tm_yday, value.tm_isdst, day_name, month_name)
 
     def getEpochSecsFromDateTime(self, date_time):
-        #
-        # Converts a date-time struct into epoch seconds. If date_time is the object returned
-        # from getDateTimeFromEpochSecs() then it will handle that too.
-        #
+        """
+        Converts a date-time struct into epoch seconds. If date_time is the object returned
+        from getDateTimeFromEpochSecs() then it will handle that too.
+        """
         x = date_time
 
         result = False
@@ -68,10 +68,10 @@ class date_and_time(object):
         return result
 
     def setTimeToNow(self, continent=False, city=False):
-        #
-        # Set the phone's time (using gaia data_layer instead of the UI).
-        # <b>NOTE:</b> Also sets the timezone (continent and city).
-        #
+        """
+        Set the phone's time (using gaia data_layer instead of the UI).
+        <b>NOTE:</b> Also sets the timezone (continent and city).
+        """
         _continent = continent if continent else self.parent.general.get_config_variable("region", "common")
         _city = city if city else self.parent.general.get_config_variable("city", "common")
 
@@ -131,10 +131,10 @@ class date_and_time(object):
         return _dateTime
 
     def switch_24_12(self, hour):
-        #
-        # Switches a 24-hour number to 12-hour format.
-        # Returns array: ["hour" (12 hour format), "ampm"] based on a 24hour "hour".
-        #
+        """
+        Switches a 24-hour number to 12-hour format.
+        Returns array: ["hour" (12 hour format), "ampm"] based on a 24hour "hour".
+        """
         if hour >= 12:
             t_ampm = "PM"
             t_hour = hour - 12 if hour > 12 else hour
@@ -145,11 +145,11 @@ class date_and_time(object):
         return (t_hour, t_ampm)
 
     def waitForDeviceTimeToBe(self, p_year="NOW", p_month="NOW", p_day="NOW", p_hour="NOW", p_minute="NOW"):
-        #
-        # Waits until the clock in the homescreen shows the date and time
-        # represented by the parameters.<br>
-        # All parameters are numeric, 24-hour and default to 'now'.
-        #
+        """
+        Waits until the clock in the homescreen shows the date and time
+        represented by the parameters.<br>
+        All parameters are numeric, 24-hour and default to 'now'.
+        """
         _now_epoch_secs = time.time()
         _now = self.getDateTimeFromEpochSecs(_now_epoch_secs)
 
@@ -164,9 +164,7 @@ class date_and_time(object):
         if p_minute == "NOW":
             p_minute = _now.min
 
-        #
         # Wait for device date and time to match (1 minute timeout).
-        #
         time_match = False
         for i in range(30):
             x = self.marionette.execute_script("""
@@ -196,10 +194,10 @@ class date_and_time(object):
                                _devtime[0], _devtime[1], _devtime[2], int(_devtime[3]), int(_devtime[4])))
 
     def waitForDisplayedTimeToBe(self, date_time):
-        #
-        # Waits for the homescreen to display the desired
-        # date and time (takes a 'datetime' object).
-        #
+        """
+        Waits for the homescreen to display the desired
+        date and time (takes a 'datetime' object).
+        """
 
         # Get day name and month name.
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -218,11 +216,10 @@ class date_and_time(object):
         _time_str = "{}:{:02d}".format(_hh, date_time.tm_min)
         _ampm_str = _ampm
         _date_str = "{}, {} {}".format(_day_name, _month_name, date_time.tm_mday)
-
-        #
-        # Now switch to the homescreen and wait for the elements to match the
-        # desired date and time.
-        #
+        """
+        Now switch to the homescreen and wait for the elements to match the
+        desired date and time.
+        """
         myFrame = self.currentIframe()
         self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
 
@@ -235,7 +232,6 @@ class date_and_time(object):
                                     "Day name is '{}'".format(_date_str), True, 60, False)
 
         if myFrame != '':
-            #
+
             # Switch back to the frame we started in.
-            #
             self.parent.iframe.switchToFrame("src", myFrame)

@@ -10,16 +10,14 @@ class debug(object):
         self.marionette = parent.marionette
 
     def save_page_html(self, p_outfile):
-        #
+
         # Save the HTML of the current page to the specified file.
-        #
         f = open(p_outfile, 'w')
         f.write(self.marionette.page_source.encode('ascii', 'ignore'))
 
     def screenShot(self, p_fileSuffix):
-        #
+
         # Take a screenshot.
-        #
         outFile = self.parent.general.get_config_variable('result_dir', 'output') + "/" + p_fileSuffix + ".png"
 
         try:
@@ -33,24 +31,17 @@ class debug(object):
             return "(Unable to capture screenshot: possible Marionette issue.)"
 
     def screenShotOnErr(self):
-        #
-        # Take a screenshot on error (increments the file number).
-        #
 
-        #
+        # Take a screenshot on error (increments the file number).
+
         # Build the error filename.
-        #
         self.errNum = self.errNum + 1
         fnam = self.test_num + "_" + str(self.errNum)
 
-        #
         # Record the screenshot.
-        #
         screenDump = self.screenShot(fnam)
 
-        #
         # Dump the current page's html source too.
-        #
         htmlDump = self.parent.general.get_config_variable('result_dir', 'output') + "/" + fnam + ".html"
 
         try:

@@ -16,11 +16,10 @@ from test import test
 
 
 class UTILS(object):
-
-    #
-    # When you create your instance of this class, include the
-    # "self" object so we can access the calling class' objects.
-    #
+    """
+    When you create your instance of this class, include the
+    "self" object so we can access the calling class' objects.
+    """
     def __init__(self, parent):
         self.parent = parent
         self.device = parent.device

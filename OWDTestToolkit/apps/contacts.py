@@ -126,9 +126,7 @@ class Contacts(object):
         """
         self.press_edit_contact_button()
 
-        #
         # Correct details are in the contact fields.
-        #
         self.verify_field_contents(contact)
 
     def check_match(self, element, value, name):
@@ -168,9 +166,8 @@ class Contacts(object):
         # Go to the view details screen for this contact.
         self.view_contact(contact['name'])
         if check_image:
-            #
+
             # Verify that an image is displayed.
-            #
             boolOK = False
             try:
                 self.parent.wait_for_element_displayed(*DOM.Contacts.view_contact_image, timeout=1)
@@ -567,9 +564,7 @@ class Contacts(object):
                     signin_btn = self.UTILS.element.getElement(DOM.Contacts.hotmail_signIn_button, "Sign In button")
                     self.UTILS.element.simulateClick(signin_btn)
 
-                    #
                     # Check to see if sign in failed. If it did then return False.
-                    #
                     try:
                         self.marionette.switch_to_frame()
                         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
@@ -733,11 +728,10 @@ class Contacts(object):
         """
 
         contFields = self.get_contact_fields()
-
-        #
-        # Put the contact details into each of the fields (this method
-        # clears each field first).
-        #
+        """
+        Put the contact details into each of the fields (this method
+        clears each field first).
+        """
         self.replace_str(contFields['givenName'], contact["givenName"])
         self.replace_str(contFields['familyName'], contact["familyName"])
         self.replace_str(contFields['tel'], contact["tel"]["value"])
@@ -1070,9 +1064,8 @@ class Contacts(object):
         return "Unknown"
 
     def try_frame(self, dom):
-        #
+
         # Private function to return an object for the many types of 'return iframes'.
-        #
         try:
             iframe = ("xpath", "//iframe[contains(@{},'{}')]".format(dom[0], dom[1]))
             self.parent.wait_for_element_present(*iframe, timeout=2)

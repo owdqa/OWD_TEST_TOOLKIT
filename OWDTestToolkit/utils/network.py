@@ -9,9 +9,8 @@ class network(object):
         self.marionette = parent.marionette
 
     def disableAllNetworkSettings(self):
-        #
+
         # Turns off all network settings (wifi, dataconn, bluetooth and airplane mode).
-        #
         if self.parent.data_layer.get_setting('ril.radio.disabled'):
             self.parent.data_layer.set_setting('ril.radio.disabled', False)
 
@@ -40,14 +39,14 @@ class network(object):
                 self.parent.reporting.logResult(False, "Disabled wifi")
 
     def is_network_type_enabled(self, network_type):
-        #
-        # Returns True or False.<br><br>
-        # Accepted 'types' are:<br>
-        # <b>data</b><br>
-        # <b>wifi</b><br>
-        # <b>airplane</b><br>
-        # <i>bluetooth (**NOT WORKING CURRENTLY!!**)</i>
-        #
+        """
+        Returns True or False.<br><br>
+        Accepted 'types' are:<br>
+        <b>data</b><br>
+        <b>wifi</b><br>
+        <b>airplane</b><br>
+        <i>bluetooth (**NOT WORKING CURRENTLY!!**)</i>
+        """
         if network_type == "data":
             return self.parent.data_layer.is_cell_data_enabled
         elif network_type == "wifi":
@@ -80,59 +79,44 @@ class network(object):
                 network_type), timeout=30, message="Checking network item is disabled")
 
     def wait_for_network_item_disabled(self, network_type):
-        #
-        # Waits for network 'item' to be disabled.
-        # <br><br>
-        # Accepted 'types' are:<br>
-        # <b>data</b><br>
-        # <b>wifi</b><br>
-        # <b>airplane</b><br>
-        # <b>bluetooth</b>
-        #
+        """
+        Waits for network 'item' to be disabled.
+        Accepted 'types' are: data, wifi, airplane, bluetooth
+        """
         self._wait_for_item(network_type, False)
 
     def wait_for_network_item_enabled(self, network_type, retries=30):
-        #
-        # Waits for network 'item' to be enabled.
-        # <br><br>
-        # Accepted 'types' are:<br>
-        # <b>data</b><br>
-        # <b>wifi</b><br>
-        # <b>airplane</b><br>
-        # <b>bluetooth</b>
-        #
+        """
+        Waits for network 'item' to be enabled.
+        Accepted 'types' are: data, wifi, airplane, bluetooth
+        """
         self._wait_for_item(network_type, True)
 
     def waitForNoNetworkActivity(self, p_timeout=10):
-        #
-        # Waits for the network activity icon in the status bar to dissappear.<br>
-        # <b>NOTE:</b> Leaves you in the root iframe and returns True or False.
-        #
+        """
+        Waits for the network activity icon in the status bar to dissappear.<br>
+        <b>NOTE:</b> Leaves you in the root iframe and returns True or False.
+        """
         self.parent.general.checkMarionetteOK()
         self.marionette.switch_to_frame()
-
-        #
-        # The network activity icon sometimes 'comes and goes', so make sure it's
-        # not displayed for at least 5 seconds before reporting it as 'gone'.
-        #
+        """
+        The network activity icon sometimes 'comes and goes', so make sure it's
+        not displayed for at least 5 seconds before reporting it as 'gone'.
+        """
         for i in range(10):
             try:
                 self.parent.parent.wait_for_element_not_displayed(*DOM.Statusbar.network_activity, timeout=p_timeout)
                 try:
                     self.parent.parent.wait_for_element_displayed(*DOM.Statusbar.network_activity, timeout=5)
-                    #
+
                     # It came back again - this isn't 'gone.
-                    #
                 except:
-                    #
+
                     # It didn't reappear in 5 seconds: it's gone.
-                    #
                     time.sleep(1)
                     return True
             except:
                 time.sleep(0.5)
 
-        #
         # If you get here then it never went away.
-        #
         return False

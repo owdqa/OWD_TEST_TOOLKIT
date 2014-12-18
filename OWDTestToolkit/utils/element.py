@@ -32,10 +32,10 @@ class element(object):
             return False
 
     def headerCheck(self, value):
-        #
-        # Returns the header that matches a string.
-        # NOTE: ALL headers in this iframe return true for ".is_displayed()"!
-        #
+        """
+        Returns the header that matches a string.
+        NOTE: ALL headers in this iframe return true for ".is_displayed()"!
+        """
         is_ok = False
         try:
             self.parent.parent.wait_for_element_present(*DOM.GLOBAL.app_head, timeout=1)
@@ -62,9 +62,8 @@ class element(object):
         self.actions.perform()
 
     def set_scroller_val(self, scroller_elem, number):
-        #
+
         # Set the numeric value of a scroller (only works with numbers right now).
-        #
         current_value = int(scroller_elem.find_element(*DOM.GLOBAL.scroller_curr_val).text)
 
         # Now flick the scroller as many times as required
@@ -79,9 +78,7 @@ class element(object):
             # Get the new 'current_value'.
             current_value = int(scroller_elem.find_element(*DOM.GLOBAL.scroller_curr_val).text)
 
-    #
     # From gaiatest Clock -> regions -> alarm.py
-    #
     def _flick_menu_up(self, locator):
         self.parent.parent.wait_for_element_displayed(*self._current_element(*locator), timeout=2)
         current_element = self.marionette.find_element(*self._current_element(*locator))
@@ -167,25 +164,22 @@ class element(object):
         return is_ok
 
     def getElementByXpath(self, path):
-        #
+
         # Use this function when normal getElement did not work
-        #
         return self.marionette.execute_script("""
             return document.evaluate(arguments[0], document, null, 9, null).singleNodeValue;
         """, script_args=[path])
 
     def getParent(self, element):
-        #
+
         # Gets the element's parent. Can be called recursively
-        #
         return self.marionette.execute_script("""
             return arguments[0].parentNode;
         """, script_args=[element])
 
     def getChildren(self, element):
-        #
+
         # Gets the element's children
-        #
         return self.marionette.execute_script("""
             return arguments[0].children;
         """, script_args=[element])
@@ -196,9 +190,8 @@ class element(object):
         """, script_args=[context, css_selector])
 
     def get_css_value(self, element, css_property):
-        #
+
         # Gets the value of a certain css property.
-        #
         return self.marionette.execute_script("""
             function getStyle (el, styleProp) {
                 if (el.currentStyle)
@@ -212,10 +205,10 @@ class element(object):
         """, script_args=[element, css_property])
 
     def is_ellipsis_active(self, element):
-        #
-        # Checks whether a certain element is really ellipsed when its content
-        # overflows its width
-        #
+        """
+        Checks whether a certain element is really ellipsed when its content
+        overflows its width
+        """
         return self.marionette.execute_script("""
             function isEllipsisActive(element) {
                 return (element.offsetWidth < element.scrollWidth);

@@ -14,29 +14,27 @@ class Calendar(object):
         self.actions = Actions(self.marionette)
 
     def launch(self):
-        #
+
         # Launch the app.
-        #
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def moveDayViewBy(self, num):
-        #
-        # Switches to week view, then moves 'p_num' weeks in the future or past (if the p_num is
-        # positive or negative) relative to today.
-        #
+        """
+        Switches to week view, then moves 'p_num' weeks in the future or past (if the p_num is
+        positive or negative) relative to today.
+        """
         self.UTILS.reporting.logResult("info", "<b>Adjusting day view by {} screens ...</b>".format(num))
         self.setView("day")
         self.setView("today")
 
         if num == 0:
             return
-
-        #
-        # Set the y-coordinate offset, depending on which
-        # direction we need to flick the display.
-        #
+        """
+        Set the y-coordinate offset, depending on which
+        direction we need to flick the display.
+        """
         numMoves = num
         if numMoves > 0:
             _moveEl = 1
@@ -44,13 +42,10 @@ class Calendar(object):
             _moveEl = 2
             numMoves = numMoves * -1
 
-        #
         # Now move to the desired screen.
-        #
         for i in range(numMoves):
-            #
+
             # Flick the screen to move it (tricky to find the element we can flick!).
-            #
             _el = self.marionette.find_elements(*DOM.Calendar.dview_events)
 
             _num = 0
@@ -69,9 +64,7 @@ class Calendar(object):
 
         time.sleep(0.3)
 
-        #
         # Check this is the expected day.
-        #
         _new_epoch = int(time.time()) + (num * 24 * 60 * 60)
         _new_now = self.UTILS.date_and_time.getDateTimeFromEpochSecs(_new_epoch)
         _expected_str = "{} {}, {}".format(_new_now.month_name[:3], _new_now.mday, _new_now.day_name)
@@ -83,13 +76,10 @@ class Calendar(object):
         self.UTILS.reporting.logResult("info", "Day view screen after moving {} pages: ".format(num), x)
 
     def getEventPreview(self, p_view, p_hour24, p_title, p_location=False):
-        #
-        # Return object for an event in month / week or day view.
-        #
 
-        #
+        # Return object for an event in month / week or day view.
+
         # The tag identifiers aren't consistent, so set them here.
-        #
         # <type>: (<event preview identifier>, <event title identifier>)
         #
         event_view = {
@@ -100,18 +90,14 @@ class Calendar(object):
 
         viewStr = event_view[p_view]
 
-        #
         # Switch to the desired view.
-        #
         # For the life of me I can't get 'wait_for_element' ... to work in day view, so I'm
         # just waiting a few seconds then checking with .is_displayed() instead.
         #
         self.setView(p_view)
         time.sleep(2)
 
-        #
         # Start by getting the parent element objects, which could contain event details.
-        #
         event_objects = self.UTILS.element.getElements(('xpath', viewStr[0]), "'" + p_view + "' event details list",
                                                False, 20, False)
         if not event_objects:
@@ -124,20 +110,10 @@ class Calendar(object):
             if p_title in event_object.text:
                 return event_object
 
-        #
         # If we get to here we failed to return the element we're after.
-        #
         return False
 
     def createEvent(self):
-        #
-        # Create a new event - use 'False' in the following fields if you want to leave them at default:
-        #
-        #   start date,
-        #   end date,
-        #   location,
-        #   notes
-        #
         x = self.UTILS.element.getElement(DOM.Calendar.add_event_btn, "Add event button")
         x.tap()
 
@@ -158,14 +134,14 @@ class Calendar(object):
         self.marionette.execute_script("document.getElementById('start-date-locale').click()")
 
     def changeDay(self, numDays, viewType):
-        #
-        # Changes the calendar day to a different day relative to 'today' - <b>uses the
-        # month view to do this, then switches back to whichever
-        # view you want (month, week, day)</b>.<br>
-        # <b>numDays</b> is a number (can be negative to go back, i.e. -5,-2,1,3,5 etc...).<br>
-        # <b>viewType</b> is the calendar view to return to (today / day / week / month)<br>
-        # Returns a modified DateTime object from <i>UTILS.getDateTimeFromEpochSecs()</i>.
-        #
+        """
+        Changes the calendar day to a different day relative to 'today' - <b>uses the
+        month view to do this, then switches back to whichever
+        view you want (month, week, day)</b>.<br>
+        <b>numDays</b> is a number (can be negative to go back, i.e. -5,-2,1,3,5 etc...).<br>
+        <b>viewType</b> is the calendar view to return to (today / day / week / month)<br>
+        Returns a modified DateTime object from <i>UTILS.getDateTimeFromEpochSecs()</i>.
+        """
         self.setView("month")
         self.setView("today")
 
@@ -174,9 +150,7 @@ class Calendar(object):
         now_today = self.UTILS.date_and_time.getDateTimeFromEpochSecs(now_secs)
         new_today = self.UTILS.date_and_time.getDateTimeFromEpochSecs(now_diff)
 
-        #
         # Switch to month view and tap this day, then switch back to our view.
-        #
         if now_today.mon != new_today.mon:
             x = new_today.mon - now_today.mon
             self.moveMonthViewBy(x)
@@ -189,21 +163,20 @@ class Calendar(object):
         return new_today
 
     def moveMonthViewBy(self, num):
-        #
-        # Switches to month view, then moves 'num' months in the future or past (if the num is
-        # positive or negative) relative to today.
-        #
+        """
+        Switches to month view, then moves 'num' months in the future or past (if the num is
+        positive or negative) relative to today.
+        """
         self.UTILS.reporting.logResult("info", "<b>Adjusting month view by {} months ...</b>".format(num))
         self.setView("month")
         self.setView("today")
 
         if num == 0:
             return
-
-        #
-        # Set the y-coordinate offset, depending on which
-        # direction we need to flick the display.
-        #
+        """
+        Set the y-coordinate offset, depending on which
+        direction we need to flick the display.
+        """
         numMoves = num
         x2 = 0
         if numMoves > 0:
@@ -219,15 +192,12 @@ class Calendar(object):
         year = now.tm_year
 
         for i in range(numMoves):
-            #
+
             # Flick the display to show the date we're aiming for.
-            #
             el = self.marionette.find_elements(*DOM.Calendar.mview_first_row_for_flick)[el_num]
             self.actions.flick(el, 0, 0, x2, 0).perform()
 
-            #
             # Increment the month and year so we keep track of what's expected.
-            #
             if num < 0:
                 month = month - 1
             else:
@@ -242,9 +212,7 @@ class Calendar(object):
 
         time.sleep(0.3)
 
-        #
         # Work out what the header should now be.
-        #
         month_names = ["January", "February", "March", "April", "May", "June",
                         "July", "August", "September", "October", "November", "December"]
 
@@ -255,21 +223,20 @@ class Calendar(object):
                         .format(expect, actual))
 
     def moveWeekViewBy(self, num):
-        #
-        # Switches to week view, then moves 'num' weeks in the future or past (if the num is
-        # positive or negative) relative to today.
-        #
+        """
+        Switches to week view, then moves 'num' weeks in the future or past (if the num is
+        positive or negative) relative to today.
+        """
         self.UTILS.reporting.logResult("info", "<b>Adjusting week view by {} screens ...</b>".format(num))
         self.setView("week")
         self.setView("today")
 
         if num == 0:
             return
-
-        #
-        # Set the y-coordinate offset, depending on which
-        # direction we need to flick the display.
-        #
+        """
+        Set the y-coordinate offset, depending on which
+        direction we need to flick the display.
+        """
         numMoves = num
         x2 = 0
         if numMoves > 0:
@@ -279,11 +246,10 @@ class Calendar(object):
             el = 0
             x2 = 500
             numMoves = numMoves * -1
-
-        #
-        # Keep track of how many days we're adjusting the display by (so we can check
-        # we're looking at the correct display at the end).
-        #
+        """
+        Keep track of how many days we're adjusting the display by (so we can check
+        we're looking at the correct display at the end).
+        """
         days_offset = 0
         now_epoch = int(time.time())
         now = self.UTILS.date_and_time.getDateTimeFromEpochSecs(now_epoch)
@@ -303,26 +269,19 @@ class Calendar(object):
         else:
             days_offset = len(displayed_days) - startpos - 2
 
-        #
         # Now move to the desired screen.
-        #
         for i in range(numMoves):
-            #
+
             # Flick the screen to move it.
-            #
             self.actions.flick(displayed_days[el], 0, 0, x2, 0).perform()
 
-            #
             # Get the count of days we're adjusting (so we can check later).
-            #
             displayed_days = self.UTILS.element.getElements(DOM.Calendar.wview_active_days, "Active days")
             days_offset = days_offset + len(displayed_days)
 
         time.sleep(0.3)
 
-        #
         # Work out what the display should now be:
-        #
         # 1. Today + days_offset should be displayed.
         # 2. Header should be month + year, now + days_offset should be in active days.
         #
@@ -355,9 +314,8 @@ class Calendar(object):
         self.UTILS.reporting.logResult("info", "Week view screen after moving {} pages: ".format(num), x)
 
     def setView(self, typ):
-        #
+
         # Set to view typ (today / day / week / month).
-        #
         x = self.UTILS.element.getElement((DOM.Calendar.view_type[0], DOM.Calendar.view_type[1] % typ.lower()),
                                   "'" + typ + "' view type selector")
         x.tap()

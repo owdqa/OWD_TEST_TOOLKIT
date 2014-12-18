@@ -14,9 +14,8 @@ class Clock(object):
         self.actions = Actions(self.marionette)
 
     def launch(self):
-        #
+
         # Launch the app.
-        #
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
@@ -43,17 +42,17 @@ class Clock(object):
         self.UTILS.test.test(found, "Alarm preview is found in Clock screen for " + time_str + ".")
 
     def checkAlarmRingDetails(self, hour, minute, label):
-        #
+
         # Check details of alarm when it rings.
-        #
         # NOTE: the status bar alarm is always 'visible', so you have to manually
         #       wait until the alarm is expected to have started before calling this!
-        #
 
-        #
-        # The alarm screen appears in a different frame to the clock.
-        # Try to access this frame a few times to give the alarm time to appear.
-        #
+        """
+
+                # The alarm screen appears in a different frame to the clock.
+        Try to access this frame a few times to give the alarm time to appear.
+
+        """
         self.marionette.switch_to_frame()
 
         retries = 40
@@ -69,9 +68,7 @@ class Clock(object):
                   DOM.Clock.alarm_alert_iframe[0] + "' contains '" + \
                   DOM.Clock.alarm_alert_iframe[1] + "')."
 
-        #
         # Sort the time out into 12 hour format.
-        #
         x = self.UTILS.date_and_time.switch_24_12(hour)
         t_hour = x[0]
         ampm = x[1]
@@ -91,17 +88,15 @@ class Clock(object):
         self.UTILS.test.test(x == label, "Correct label shown when alarm is ringing (expected '" +
                         label + "', it was '" + x + "').")
 
-        #
         # Stop the alarm.
-        #
         x = self.UTILS.element.getElement(DOM.Clock.alarm_alert_close, "Close alert button")
         x.tap()
 
     def checkStatusbarIcon(self):
-        #
-        # Check for the little alarm bell icon in the statusbar of the
-        # homescreen.
-        #
+        """
+        Check for the little alarm bell icon in the statusbar of the
+        homescreen.
+        """
         self.marionette.switch_to_frame()
         boolOK = True
         try:
@@ -119,9 +114,7 @@ class Clock(object):
         time_button = self.marionette.find_element(*DOM.Clock.time_button)
         time_button.tap()
 
-        #
         # Sort the time out into 12 hour format.
-        #
         time_12h = self.UTILS.date_and_time.switch_24_12(int(hour))
         t_hour = time_12h[0]
         ampm = time_12h[1]
