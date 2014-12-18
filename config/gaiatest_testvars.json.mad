@@ -1,12 +1,12 @@
 {
 	"acknowledged_risks": true,
 	"skip_warning": true,
-    "general": {
+	"general": {
 		"lockscreen.locked": false,
 		"test_descriptions": "Docs/test_descriptions.json",
 		"blocked_tests": "Docs/blocked_tests.json",
 		"description_length": "100",
-	    "test_retries": 2
+		"test_retries": 2
 	},
 	"wifi": {
 		"ssid": "OWDTEST",
@@ -18,7 +18,7 @@
 	"toolkit_cfg": {
 		"devices_cfg": "config/devices_cfg.json",
 		"css_file": "config/details.css",
-        "results_template": "config/results_template.html"
+		"results_template": "config/results_template.html"
 	},
 	"common": {
 		"long_wait_time": "36",
@@ -31,10 +31,10 @@
 		"gmail_2_email": "roytesterton.2@gmail.com",
 		"gmail_2_pass": "test123x",
 		"gmail_2_user": "roytesterton.2",
-        "gmail_3_email": "roytesterton.3@gmail.com",
-        "gmail_3_pass": "test123x",
-        "gmail_3_user": "roytesterton.3",
-        "hotmail_1_user": "roytesterton.1",
+		"gmail_3_email": "roytesterton.3@gmail.com",
+		"gmail_3_pass": "test123x",
+		"gmail_3_user": "roytesterton.3",
+		"hotmail_1_user": "roytesterton.1",
 		"hotmail_1_email": "roytesterton.1@hotmail.co.uk",
 		"hotmail_1_pass": "owdqa1234",
 		"hotmail_2_user": "roytesterton.2",
@@ -73,7 +73,7 @@
 	},
 	"output": {
 		"log_cfg": "tests/logger.cfg",
-	    "webdir": "http://ci-owd-deven-01/owd_tests",
+		"webdir": "http://ci-owd-deven-01/owd_tests",
 		"result_dir": "/tmp/tests/details",
 		"html_output": "/tmp/tests/results.html",
 		"error_output": "/tmp/tests/error.txt",
@@ -82,19 +82,19 @@
 		"verbosity": "3"
 	},
 	"loop": {
-	    "install_via": "Grunt",
-	    "install_dir": "/home/develenv/projects/firefoxos-loop-client",
-	    "aux_files": "/home/develenv/projects/owd_test_cases/tests/LOOP/aux_files"
+		"install_via": "Grunt",
+		"install_dir": "/home/develenv/projects/firefoxos-loop-client",
+		"aux_files": "/home/develenv/projects/owd_test_cases/tests/LOOP/aux_files"
 	},
 	"csv": {
-	    "weekly_csv_file": "/var/www/html/owd_tests/total_csv_file.csv",
-	    "daily_csv_file": "/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW.csv",
-	    "weekly_csv_cert_file": "/var/www/html/owd_tests/total_csv_file_CERT.csv",
-	    "daily_csv_cert_file": "/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW_CERT.csv"
+		"weekly_csv_file": "/var/www/html/owd_tests/total_csv_file.csv",
+		"daily_csv_file": "/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW.csv",
+		"weekly_csv_cert_file": "/var/www/html/owd_tests/total_csv_file_CERT.csv",
+		"daily_csv_cert_file": "/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW_CERT.csv"
 	},
 	"cert": {
-	    "device_cert": "cert_device",
-	    "branch_cert": "v2.0",
-	    "buildname_cert": "cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
+		"device_cert": "cert_device",
+		"branch_cert": "v2.0",
+		"buildname_cert": "cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
 	}
 }
