@@ -126,9 +126,6 @@ hotspot_settings = ("css selector", "#hotspot-settings-section button[data-l10n-
 msg_settings = ("id", "menuItem-messagingSettings")
 auto_retrieve_select_btn = ("name", "ril.mms.retrieval_mode")
 
-auto_retrieve_off = _("Off")
-auto_retrieve_on_roaming = _("On with roaming")
-auto_retrieve_on_no_roaming = _("On without roaming")
 auto_retrieve_select = ("xpath", "//section[@class='value-selector-container']//span[text()='{}']")
 
 auto_retrieve_selected_item = ("css selector", ".value-selector-container li[aria-selected=true]")

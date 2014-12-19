@@ -139,11 +139,11 @@ class Settings(object):
         # Selecting the specific option using the received parameter
         auto_retrieve_option = None
         if value == "off":
-            auto_retrieve_option = DOM.Settings.auto_retrieve_off
+            auto_retrieve_option = _("Off")
         elif value == "on_with_r":
-            auto_retrieve_option = DOM.Settings.auto_retrieve_on_roaming
+            auto_retrieve_option = _("On with roaming")
         elif value == "on_without_r":
-            auto_retrieve_option = DOM.Settings.auto_retrieve_on_no_roaming
+            auto_retrieve_option = _("On without roaming")
         else:
             self.UTILS.test.test(False, "FAILED: Incorrect parameter received in configure_mms_auto_retrieve()")
 

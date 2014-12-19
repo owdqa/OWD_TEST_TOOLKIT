@@ -885,12 +885,7 @@ class Messages(object):
         """
         Just presses the 'send' button (assumes everything else is done).
         """
-        #=======================================================================
-        # self.parent.wait_for_condition(lambda m: not \
-        #                               self.marionette.find_element(*DOM.Messages.send_message_button).\
-        #                               get_attribute("disabled"),
-        #                               timeout=10, message="Send button disabled")
-        #=======================================================================
+        self.parent.wait_for_condition(lambda m: m.find_element(*DOM.Messages.send_message_button).is_enabled())
         send_btn = self.marionette.find_element(*DOM.Messages.send_message_button)
         send_btn.tap()
 
