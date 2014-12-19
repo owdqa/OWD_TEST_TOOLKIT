@@ -123,14 +123,13 @@ hotspot_switch = ("css selector", "#hotspot span[data-l10n-id=wifi-hotspot]")
 hotspot_switch_input = ("css selector", "#hotspot input[name='tethering.wifi.enabled']")
 hotspot_settings = ("css selector", "#hotspot-settings-section button[data-l10n-id=hotspotSettings]")
 
-msg_settings = ("css selector", "[data-l10n-id='messagingSettings']")
+msg_settings = ("id", "menuItem-messagingSettings")
 auto_retrieve_select_btn = ("name", "ril.mms.retrieval_mode")
 
-auto_retrieve_select_off = ("xpath", "//section[@id='value-selector-container']/ol/li[1]")
-auto_retrieve_select_roaming = ("xpath", "//section[@id='value-selector-container']/ol/li[2]")
-auto_retrieve_select_no_roaming = ("xpath", "//section[@id='value-selector-container']/ol/li[3]")
+auto_retrieve_select = ("xpath", "//section[@class='value-selector-container']//span[text()='{}']")
 
-auto_retrieve_selected_item = ("xpath", "//section[@id='value-selector-container']/ol/li[@aria-selected='true']")
+auto_retrieve_selected_item = ("css selector", ".value-selector-container li[aria-selected=true]")
+auto_retrieve_ok_btn = ('css selector', 'button.value-option-confirm.affirmative.full[data-l10n-id=ok]')
 
 ok_btn = ("xpath", "//menu[@id='select-options-buttons']/button")
 delivery_report = ("xpath", "//*[@data-l10n-id='message-delivery-reports']")

@@ -123,40 +123,42 @@ class Settings(object):
         self.launch()
 
         # Tap on Messaging Settings button
-        self.parent.wait_for_element_displayed(*DOM.Settings.msg_settings, timeout=10)
-        x = self.UTILS.element.getElement(DOM.Settings.msg_settings, "Messaging Settings button")
-        self.UTILS.element.simulateClick(x)
+        time.sleep(2)
+        settings_btn = self.UTILS.element.getElement(DOM.Settings.msg_settings, "Messaging Settings button")
+        self.UTILS.element.simulateClick(settings_btn)
 
+        time.sleep(2)
         # Tap on Auto Retrieve Select
-        x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_btn, "Auto Retrieve Select")
-        x.tap()
+        auto_retr_btn = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_btn, "Auto Retrieve Select")
+        auto_retr_btn.tap()
 
         # Changing to top level frame
         time.sleep(2)
         self.marionette.switch_to_frame()
 
-        # Selecting the specific option using que received parameter
+        # Selecting the specific option using the received parameter
+        auto_retrieve_option = None
         if value == "off":
-            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_off,
-                                              "Off option in Auto Retrieve Select")
-            x.tap()
+            auto_retrieve_option = _("Off")
         elif value == "on_with_r":
-            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_roaming,
-                                              "On with roaming option in Auto Retrieve Select")
-            x.tap()
+            auto_retrieve_option = _("On with roaming")
         elif value == "on_without_r":
-            x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_no_roaming,
-                                              "On without roaming option in Auto Retrieve Select")
-            x.tap()
+            auto_retrieve_option = _("On without roaming")
         else:
             self.UTILS.test.test(False, "FAILED: Incorrect parameter received in configure_mms_auto_retrieve()")
 
+        self.UTILS.reporting.debug("Auto retrieve option selected: {}".format(auto_retrieve_option))
+        dom = (DOM.Settings.auto_retrieve_select[0], DOM.Settings.auto_retrieve_select[1].format(auto_retrieve_option))
+        select_btn = self.UTILS.element.getElement(dom, "Auto retrieve option")
+        select_btn.tap()
+
         # Tapping on OK button in auto Retrieve select
-        x = self.UTILS.element.getElement(DOM.Settings.ok_btn, "Tapping on OK button in auto Retrieve select")
-        x.tap()
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_ok_btn,
+                                               "Tapping on OK button in auto Retrieve select")
+        ok_btn.tap()
 
         self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
-        self.goBack()
+        self.marionette.find_element('css selector', 'gaia-header[action=back]').tap(25, 25)
 
     def createCustomAPN(self, apn, identifier, pwd):
         # Open Data Settings
@@ -519,26 +521,27 @@ class Settings(object):
 
     def goBack(self):
         """
-        Tap the back icon (gets a bit complicated sometimes, because
-        there's sometimes more than one match for this icon DOM reference).
+        Tap the back icon.
         """
-        time.sleep(0.5)
-        back_btns = self.UTILS.element.getElements(DOM.Settings.back_button, "Back buttons", False)
-        ok = False
-        for i in back_btns:
-            try:
-                i.tap()
-                ok = True
-                break
-            except:
-                pass
-
-        if not ok:
-            self.UTILS.reporting.logResult(False, "Tap the 'back' icon to return to the parent screen.")
-            return False
-
-        time.sleep(1)
-        return True
+#        time.sleep(0.5)
+#        back_btns = self.UTILS.element.getElements(DOM.Settings.back_button, "Back buttons", False)
+#        ok = False
+#        for i in back_btns:
+#            try:
+#                i.tap()
+#                ok = True
+#                break
+#            except:
+#                pass
+#
+#        if not ok:
+#            self.UTILS.reporting.logResult(False, "Tap the 'back' icon to return to the parent screen.")
+#            return False
+#
+#        time.sleep(1)
+#        return True
+        # TODO: remove tap with coordinates after Bug 1061698 is fixed
+        self.marionette.find_element('css selector', 'gaia-header[action=back]').tap(25, 25)
 
     def goSound(self):
         """
