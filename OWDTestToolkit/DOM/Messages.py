@@ -99,7 +99,7 @@ messages_options_btn = ("id", "messages-options-icon")
 addsubject_btn_msg_opt = ('css selector', 'form[data-type=action] button[data-l10n-id=add-subject]')
 message_convert_notice = ('css selector', "#messages-convert-notice p")
 deletesubject_btn_msg_opt = ("css selector", "[data-l10n-id=remove-subject]")
-cancel_btn_msg = ("css selector", "body[role=application] menu button[data-l10n-id=cancel]")
+cancel_btn_msg = ("css selector", "header[data-l10n-id=message] + menu button[data-l10n-id=cancel]")
 target_subject = ("id", "messages-subject-input")
 
 attach_preview_img_type = ("css selector", ".attachment-container.preview")

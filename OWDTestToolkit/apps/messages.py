@@ -32,9 +32,9 @@ class Messages(object):
 
     def cancelSettings(self):
         self.UTILS.reporting.logResult("info", "Cliking on messages options button")
-        x = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
+        options_btn = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
                                           "Messages option button is displayed")
-        x.tap()
+        options_btn.tap()
 
         # Press cancel button
         cancelBtn = self.UTILS.element.getElement(DOM.Messages.cancel_btn_msg,
@@ -253,6 +253,7 @@ class Messages(object):
                 ". attached_type must being image, video or audio."
             self.UTILS.test.test(False, msg)
 
+        time.sleep(2)
         self.sendSMS()
         return self.last_sent_message_timestamp()
 
@@ -371,8 +372,8 @@ class Messages(object):
             edit_btn = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
             edit_btn.tap()
 
-            delete_btn = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Delete button")
-            delete_btn.tap()
+            select_btn = self.UTILS.element.getElement(DOM.Messages.edit_msgs_select_btn, "Select button")
+            select_btn.tap()
 
             # Press select all button.
             select_all_btn = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn, "'Select all' button")
@@ -884,8 +885,14 @@ class Messages(object):
         """
         Just presses the 'send' button (assumes everything else is done).
         """
-        sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send sms button")
-        sendBtn.tap()
+        #=======================================================================
+        # self.parent.wait_for_condition(lambda m: not \
+        #                               self.marionette.find_element(*DOM.Messages.send_message_button).\
+        #                               get_attribute("disabled"),
+        #                               timeout=10, message="Send button disabled")
+        #=======================================================================
+        send_btn = self.marionette.find_element(*DOM.Messages.send_message_button)
+        send_btn.tap()
 
         # (Give the spinner time to appear.)
         time.sleep(2)
@@ -894,9 +901,9 @@ class Messages(object):
         # Check if we received the 'service unavailable' message.
         try:
             self.parent.wait_for_element_displayed(*DOM.Messages.service_unavailable_msg, timeout=2)
-            x = self.UTILS.debug.screenShotOnErr()
+            screenshot = self.UTILS.debug.screenShotOnErr()
             msg = "'Service unavailable' message detected - unable to send sms!"
-            self.UTILS.reporting.logResult("info", msg, x)
+            self.UTILS.reporting.logResult("info", msg, screenshot)
             return False
         except:
             pass
