@@ -19,13 +19,14 @@ class Dialer(object):
         self.marionette = p_parent.marionette
         self.UTILS = p_parent.UTILS
         self.actions = Actions(self.marionette)
+        self.app_name = "Phone"
 
     def launch(self):
         """
         Launch the app 
         It's called a different name (Phone) to the everyone knows it as, so hardcode it!
         """
-        self.app = self.apps.launch("Phone")
+        self.app = self.apps.launch(self.app_name)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
@@ -34,9 +35,7 @@ class Dialer(object):
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.element.waitForElements(
             ("xpath", "//h1[text()='{}']".format(_("Contacts"))), "'Select contact' header")
-
-        cancel_icon = self.UTILS.element.getElement(DOM.Dialer.add_to_conts_cancel_btn, "Cancel icon")
-        cancel_icon.tap()
+        self.UTILS.element.getElement(DOM.Dialer.contact_list_header, "Header").tap(25, 25)
 
     def _complete_addNumberToContact(self, p_num, p_name):
         """
@@ -89,6 +88,22 @@ class Dialer(object):
 
         self._complete_addNumberToContact(dialer_num, p_name)
 
+    def callLog_createContact(self, entry, p_open_call_log=True):
+        """
+        Creates a new contact from the call log (only
+        as far as the contacts app opening).
+        If p_open_call_log is set to False it will assume you are
+        already in the call log.
+        """
+        if p_open_call_log:
+            self.open_call_log()
+
+        self.callLog_long_tap(entry)
+        self.callLog_long_tap_select_action(DOM.Dialer.call_log_numtap_create_new, "Create new contact button", call_info=True)
+
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+        self.UTILS.element.waitForElements(DOM.Contacts.add_contact_header, "'Add contact' header")
+
     def callLog_addToContact(self, phone_number, contact_name, p_open_call_log=True, cancel_process=False):
         """
         Adds this number in the call log to an existing contact
@@ -103,7 +118,7 @@ class Dialer(object):
         self.callLog_long_tap(phone_number)
         time.sleep(1)
         self.callLog_long_tap_select_action(
-            DOM.Dialer.call_log_numtap_add_to_existing, "Add to existing contact button")
+            DOM.Dialer.call_log_numtap_add_to_existing, "Add to existing contact button", call_info=True)
 
         if cancel_process:
             self._cancel_addNumberToContact()
@@ -115,7 +130,11 @@ class Dialer(object):
                                               "The call log for number {}".format(phone_number))
         self.actions.long_press(entry, 3).perform()
 
-    def callLog_long_tap_select_action(self, locator, msg="Option chosen"):
+    def callLog_long_tap_select_action(self, locator, msg="Option chosen", call_info=True):
+        if call_info:
+            call_info = self.UTILS.element.getElement(DOM.Dialer.call_log_numtap_call_info, "Call information button")
+            call_info.tap()
+
         option = self.UTILS.element.getElement(locator, msg, True, 10)
         option.tap()
 
@@ -235,22 +254,6 @@ class Dialer(object):
             self.UTILS.test.test(_postcount == _precount,
                                  "{} numbers are left after deletion (there are {}).".format(_precount, _postcount))
 
-    def callLog_createContact(self, entry, p_open_call_log=True):
-        """
-        Creates a new contact from the call log (only
-        as far as the contacts app opening).
-        If p_open_call_log is set to False it will assume you are
-        already in the call log.
-        """
-        if p_open_call_log:
-            self.open_call_log()
-
-        self.callLog_long_tap(entry)
-        self.callLog_long_tap_select_action(DOM.Dialer.call_log_numtap_create_new, "Create new contact button")
-
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.element.waitForElements(DOM.Contacts.add_contact_header, "'Add contact' header")
-
     def call_this_number(self):
 
         # Calls the current number.
@@ -317,7 +320,7 @@ class Dialer(object):
             time.sleep(2)
             self.launch()
 
-    def enterNumber(self, p_num, validate=True):
+    def enterNumber(self, number, validate=True):
         """
         Enters a number into the dialer using the keypad.
         """
@@ -328,7 +331,7 @@ class Dialer(object):
             keypad_selector.tap()
             self.UTILS.element.waitForElements(DOM.Dialer.phone_number, "Phone number area")
 
-        for i in str(p_num):
+        for i in str(number):
 
             if i == "+":
                 plus_symbol = self.UTILS.element.getElement(("xpath", DOM.Dialer.dialer_button_xpath.format(0)),
@@ -341,14 +344,9 @@ class Dialer(object):
 
         # Verify that the number field contains the expected number.
         if validate:
-            number_field = self.UTILS.element.getElement(DOM.Dialer.phone_number, "Phone number field", False)
-            dialer_num = self.marionette.execute_script("return arguments[0].value", script_args=[number_field])
-            self.UTILS.reporting.debug(u"** Dialer_num entered: [{}]".format(dialer_num))
-            self.UTILS.test.test(str(p_num) in dialer_num, u"After entering '{}', phone number field contains '{}'.".
-                                 format(p_num, dialer_num))
-
-            screenshot = self.UTILS.debug.screenShotOnErr()
-            self.UTILS.reporting.logResult("info", "Screenshot at enterNumber method [validate]:", screenshot)
+            dialed_num = self.marionette.execute_script("return window.wrappedJSObject.KeypadManager._phoneNumber")
+            self.UTILS.reporting.debug(u"** Dialer_num entered: [{}]".format(dialed_num))
+            self.UTILS.test.test(str(number) in dialed_num, u"Dialed number matches the original number".format(number, dialed_num))
 
     def clear_dialer(self):
         """
@@ -407,28 +405,18 @@ class Dialer(object):
         """
         Hangs up (assuming we're in the 'calling' frame).
         """
+
+        self.marionette.switch_to_frame()
         try:
-            self.parent.wait_for_element_displayed(*DOM.Dialer.hangup_bar_locator, timeout=10)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.frame_locator_calling)
+            self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
+            self.marionette.find_element(*DOM.Dialer.hangup_bar_locator).tap()
+            self.apps.switch_to_displayed_app()
         except:
-            # The call may already be terminated, so don't throw an error if
-            # the hangup bar isn't there.
-            self.apps.switch_to_displayed_app()  # go back to dialer
+            self.apps.switch_to_displayed_app()
             self.parent.wait_for_element_displayed(*DOM.Dialer.call_busy_button_ok, timeout=5)
             ok_btn = self.marionette.find_element(*DOM.Dialer.call_busy_button_ok)
             ok_btn.tap()
-            return
-
-        hangup = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
-        if hangup:
-            hangup.tap()
-        else:
-            try:
-                self.parent.data_layer.kill_active_call()
-            except:
-                self.UTILS.reporting.logResult("info", "Exception when killing active call via data_layer")
-                pass
-
-        self.apps.switch_to_displayed_app()
 
     def open_call_log(self):
         """
