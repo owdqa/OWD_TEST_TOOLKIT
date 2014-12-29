@@ -60,7 +60,7 @@ app_permissions_header = ('xpath', GLOBAL.app_head_specific.format(_('App permis
 wifi = ('id', 'menuItem-wifi')
 wifi_header = ('xpath', GLOBAL.app_head_specific.format('Wi-Fi'))
 wifi_enabled = ('css selector', '.wifi-enabled label')
-wifi_available_networks = ('css selector', "#wifi-availableNetworks aside.pack-end.wifi-icon")
+wifi_available_networks = ('css selector', ".wifi-availableNetworks aside.pack-end.wifi-icon")
 wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
 wifi_name_xpath = '//ul[@class="wifi-availableNetworks"]//span[text()="{}"]'
 wifi_connected = ('xpath', '//small[text()="{}"]'.format(_("Connected")))
@@ -78,10 +78,10 @@ wifi_details_signal = ("css selector", "span[data-l10n-id=signalStrength] + span
 wifi_details_ipaddress = ("css selector", "span[data-l10n-id=ipAddress] + span")
 wifi_details_linkspeed = ("css selector", "span[data-l10n-id=linkSpeed] + span")
 
-wifi_advanced_btn = ("css selector", "button.manageNetworks")
-wifi_advanced_mac = ("css selector", "small[data-name=deviceinfo.mac]")
-wifi_advanced_knownNets = ("css selector", "#wifi-knownNetworks li")
-wifi_advanced_joinHidden = ("id", "joinHidden")
+wifi_advanced_manage = ("css selector", "button.manageNetworks")
+wifi_advanced_mac = ("css selector", "small[data-name=deviceinfo\.mac]")
+wifi_advanced_knownNets = ("css selector", "#wifi-manageNetworks ul.wifi-knownNetworks li")
+wifi_advanced_joinHidden = ("css selector", "button.joinHidden")
 wifi_advanced_forgetBtn = ("id", "confirm-option")
 wifi_advanced_cancelBtn = ("css selector", "button[data-l10n-id=cancel]")
 
@@ -120,7 +120,7 @@ sound_alarm_vol = ('name', 'audio.volume.alarm')
 hotspot = ("id", "menuItem-internetSharing")
 hotspot_header = ('xpath', GLOBAL.app_head_specific.format(_('Internet sharing')))
 hotspot_switch = ("css selector", "#hotspot span[data-l10n-id=wifi-hotspot]")
-hotspot_switch_input = ("css selector", "#hotspot input[name='tethering.wifi.enabled']")
+hotspot_switch_input = ('xpath', '//section[@id="hotspot"]//input[@id="tethering-wifi-enabled"]/..')
 hotspot_settings = ("css selector", "#hotspot-settings-section button[data-l10n-id=hotspotSettings]")
 
 msg_settings = ("id", "menuItem-messagingSettings")
