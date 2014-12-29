@@ -368,39 +368,6 @@ class Settings(object):
             self.fdn_delete_auth_number(number, pin2)
             time.sleep(2)
 
-    def disable_hotSpot(self):
-        """
-        Disable hotspot (internet sharing) - assumes Settings app is already open.
-        """
-        self.UTILS.reporting.logResult("info", "<u>Disabling hotspot ...</u>")
-
-        # Is it already disabled?
-        x = self.UTILS.element.getElement(DOM.Settings.hotspot_settings, "Hotspot settings")
-        if x.get_attribute("disabled") == "false":
-            self.UTILS.reporting.logResult("info", "Hotspot is already disabled.")
-            return True
-
-        x = self.UTILS.element.getElement(DOM.Settings.hotspot_switch, "Hotspot switch")
-        x.tap()
-        time.sleep(1)
-
-        # Wait for the hotspot to begin.
-        is_disabled = False
-        retry = 10
-        for i in range(retry):
-            x = self.marionette.find_element(*DOM.Settings.hotspot_settings)
-            # FJCS: disabled == "false" to disable?
-            if x.get_attribute("disabled") == "false":
-                # It's done.
-                is_disabled = True
-                break
-            time.sleep(0.5)
-
-        is_status_icon = self.UTILS.statusbar.isIconInStatusBar(DOM.Statusbar.hotspot)
-
-        self.UTILS.test.test(is_disabled, "Hotspot settings are disabled (because 'hotspot' is not running).")
-        self.UTILS.test.test(not is_status_icon, "Hotspot icon is not present in the status bar.")
-
     def downloads(self):
         """
         Open downloads.
@@ -429,6 +396,30 @@ class Settings(object):
         #     self.parent.wait_for_element_displayed(*DOM.DownloadManager.download_list_elems)
         time.sleep(5)
 
+    def disable_hotSpot(self):
+        """
+        Disable hotspot (internet sharing) - assumes Settings app is already open.
+        """
+        self.UTILS.reporting.logResult("info", "<u>Disabling hotspot ...</u>")
+
+        # Is it already disabled?
+        hotspot_settings = self.UTILS.element.getElement(DOM.Settings.hotspot_settings, "Hotspot settings")
+        if not hotspot_settings.is_enabled():
+            self.UTILS.reporting.logResult("info", "Hotspot is already disabled.")
+            return True
+
+        switch = self.UTILS.element.getElement(DOM.Settings.hotspot_switch, "Hotspot switch")
+        switch.tap()
+        time.sleep(1)
+
+        self.parent.wait_for_condition(lambda m: not m.find_element(*DOM.Settings.hotspot_settings).is_enabled())
+        is_disabled = not self.marionette.find_element(*DOM.Settings.hotspot_settings).is_enabled()
+
+        is_status_icon = self.parent.wait_for_element_not_present(*DOM.Statusbar.hotspot)
+
+        self.UTILS.test.test(is_disabled, "Hotspot settings are disabled (because 'hotspot' is not running).")
+        self.UTILS.test.test(not is_status_icon, "Hotspot icon is not present in the status bar.")
+
     def enable_hotSpot(self):
         """
         Enable hotspot (internet sharing) - assumes Settings app is already open.
@@ -436,28 +427,23 @@ class Settings(object):
         self.UTILS.reporting.logResult("info", "<u>Enabling hotspot ...</u>")
 
         # Is it already enabled?
-        x = self.UTILS.element.getElement(DOM.Settings.hotspot_settings, "Hotspot settings")
+        hotspot_settings = self.UTILS.element.getElement(DOM.Settings.hotspot_settings, "Hotspot settings")
         # FJCS: disabled == "true" to enable?
-        if x.get_attribute("disabled") == "true":
+        if hotspot_settings.is_enabled():
             self.UTILS.reporting.logResult("info", "Hotspot is already enabled.")
             return True
 
-        x = self.UTILS.element.getElement(DOM.Settings.hotspot_switch, "Hotspot switch")
-        x.tap()
+        switch = self.UTILS.element.getElement(DOM.Settings.hotspot_switch, "Hotspot switch")
+        time.sleep(1)
+        switch.tap()
         time.sleep(1)
 
-        # Wait for the hotspot to begin.
-        is_enabled = False
-        retry = 10
-        for i in range(retry):
-            x = self.marionette.find_element(*DOM.Settings.hotspot_settings)
-            if x.get_attribute("disabled") == "true":
-                # It's done.
-                is_enabled = True
-                break
-            time.sleep(0.5)
+        self.parent.wait_for_condition(lambda m: m.find_element(*DOM.Settings.hotspot_settings).is_enabled())
+        is_enabled = self.marionette.find_element(*DOM.Settings.hotspot_settings).is_enabled()
 
-        is_status_icon = self.UTILS.statusbar.isIconInStatusBar(DOM.Statusbar.hotspot)
+        self.marionette.switch_to_frame()
+        is_status_icon = self.marionette.find_element(*DOM.Statusbar.hotspot)
+        self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
 
         self.UTILS.test.test(is_enabled, "Hotspot settings are disabled (because 'hotspot' is now running).")
         self.UTILS.test.test(is_status_icon, "Hotspot icon is present in the status bar.")
@@ -562,7 +548,8 @@ class Settings(object):
         self.UTILS.element.scroll_into_view(hotspot_elem)
 
         hotspot_menu = self.UTILS.element.getElement(DOM.Settings.hotspot, "'Internet sharing' (hotspot) link")
-        hotspot_menu.tap()
+        time.sleep(1)
+        self.UTILS.element.simulateClick(hotspot_menu)
 
         self.UTILS.element.waitForElements(DOM.Settings.hotspot_header, "Hotspot header appears.", True, 20, False)
 
@@ -862,6 +849,7 @@ class Settings(object):
     def wifi(self):
         """Open wifi settings menu
         """
+        time.sleep(1)
         settings_menu = self.UTILS.element.getElement(DOM.Settings.wifi, "Wifi settings link")
         settings_menu.tap()
 

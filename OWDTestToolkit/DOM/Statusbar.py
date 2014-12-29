@@ -8,7 +8,7 @@ dataConn = ('xpath', '//div[@id="statusbar-connections"]//div[contains(@class, "
 bluetooth = ('id', 'statusbar-bluetooth')
 airplane = ('id', 'statusbar-flight-mode')
 signal_connected = ('xpath', '//div[@id="statusbar-connections"]//div[contains(@class, "statusbar-signal") and contains(@aria-label, "{}")]'.format(_("bars")))
-hotspot = ("id", "statusbar-tethering")
+hotspot = ("css selector", "#statusbar-minimized #statusbar-tethering")
 network_activity = ("id", "statusbar-network-activity")
 downloads = ("id", "statusbar-system-downloads")
 

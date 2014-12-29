@@ -73,12 +73,12 @@ wifi_login_ok_btn = ('css selector', '#wifi-auth button[type=submit] span[data-l
 
 wifi_details_header = ("css selector", "#wifi-status h1")
 wifi_details_forget_btn = ("xpath", ".//button//span[text()='{}']".format(_('Forget')))
-wifi_details_security = ("xpath", "//a[@data-l10n-id='security']/span")
-wifi_details_signal = ("xpath", "//a[@data-l10n-id='signalStrength']/span")
-wifi_details_ipaddress = ("xpath", "//a[@data-l10n-id='ipAddress']/span")
-wifi_details_linkspeed = ("xpath", "//a[@data-l10n-id='linkSpeed']/span")
+wifi_details_security = ("css selector", "span[data-l10n-id=security] + span")
+wifi_details_signal = ("css selector", "span[data-l10n-id=signalStrength] + span")
+wifi_details_ipaddress = ("css selector", "span[data-l10n-id=ipAddress] + span")
+wifi_details_linkspeed = ("css selector", "span[data-l10n-id=linkSpeed] + span")
 
-wifi_advanced_btn = ("id", "manageNetworks")
+wifi_advanced_btn = ("css selector", "button.manageNetworks")
 wifi_advanced_mac = ("css selector", "small[data-name=deviceinfo.mac]")
 wifi_advanced_knownNets = ("css selector", "#wifi-knownNetworks li")
 wifi_advanced_joinHidden = ("id", "joinHidden")
