@@ -114,7 +114,7 @@ class app(object):
         """
         self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
 
-        x = ('xpath', DOM.Home.app_icon_xpath.format(app_name))
+        x = ('xpath', DOM.Home.app_icon_css_selector.format(app_name))
         try:
             self.marionette.find_element(*x)
             self.parent.reporting.logResult("info", "App <b>{}</b> is currently installed.".format(app_name))
@@ -283,11 +283,13 @@ class app(object):
             delete_button = self.parent.element.getElement(delete_btn, "Delete button", False, 30, True)
             delete_button.tap()
 
+            self.marionette.switch_to_frame()
             delete = self.parent.element.getElement(DOM.Home.app_confirm_delete, "Confirm app delete button")
             delete.tap()
 
             time.sleep(2)
-            self.parent.home.touchHomeButton()
+            self.parent.apps.kill_all()
+            time.sleep(2)
 
             self.parent.test.test(not self.isAppInstalled(app_name), "App is uninstalled after deletion.")
         else:
