@@ -947,44 +947,6 @@ class Contacts(object):
         button = self.UTILS.element.getElement(DOM.Contacts.link_button, "Link contact button")
         linked = button.get_attribute("data-fb_is_linked")
         self.UTILS.test.test(linked == "true", "Contact is linked: {}".format(linked))
-#===============================================================================
-#
-#        # Check that our contact is now listed as a facebook contact (icon by the name in 'all contacts' screen).
-#        network_contacts = self.UTILS.element.getElements(
-#            DOM.Contacts.social_network_contacts, "Social network contacts")
-#        self.UTILS.test.test(len(network_contacts) > 0, "Contact is listed as a facebook contact after linking.")
-#
-#        # View the details for this contact.
-#        self.view_contact(contact_name)
-#
-#        """
-#        TODO: change this when test 26918 is finally unblocked
-#        Check the expected elements are now visible.
-#        I'm having serious problems finding buttons based on 'text' directly, so here's
-#        the 'brute-force' method
-#        """
-#        view_fb_profile = False
-#        wall_post = False
-#        linked_email = False
-#        unlink = False
-#        x = self.UTILS.element.getElements(("tag name", "button"), "All buttons on this page")
-#        for i in x:
-#            if i.text == "View Facebook profile":
-#                view_fb_profile = True
-#            if i.text == "Wall post":
-#                wall_post = True
-#            if i.text == fb_email:
-#                linked_email = True
-#            if i.text == "Unlink contact":
-#                unlink = True
-#
-#        self.UTILS.test.test(view_fb_profile, "'View Facebook profile' button is displayed after "
-#                             "contact linked to fb contact.")
-#        self.UTILS.test.test(wall_post, "'Wall post' button is displayed after contact linked to fb contact.")
-#        self.UTILS.test.test(unlink, "'Unlink contact' button is displayed after contact linked to fb contact.")
-#        self.UTILS.test.test(
-#            linked_email, "Linked facebook email address is displayed after contact linked to fb contact.")
-#===============================================================================
 
     def view_contact(self, contact_name, header_check=True):
         """
