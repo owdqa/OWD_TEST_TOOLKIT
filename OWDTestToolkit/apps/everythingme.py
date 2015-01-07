@@ -61,7 +61,7 @@ class EverythingMe(object):
 
         self.actions.long_press(x, 2).perform()
 
-        x = self.UTILS.element.getElement(DOM.EME.add_to_home_screen_btn, "Add app to homescreen button")
+        x = self.UTILS.element.getElement(DOM.EME.add_to_homescreen_btn, "Add app to homescreen button")
         x.tap()
         time.sleep(2)
 
@@ -192,9 +192,8 @@ class EverythingMe(object):
         result = False
         # We expect the application to be installed, so find the Add to Home Screen button and tap it
         if expect_btn:
-            url = self.UTILS.element.getElement(DOM.EME.bookmark_url, "Bookmark_url").get_attribute("value")
-            self.UTILS.reporting.debug("Application '{}' URL: {}".format(app_name, url))
-            add_btn = self.UTILS.element.getElement(DOM.EME.add_bookmark_btn, "Add bookmark to Home Screen Button")
+            add_btn = self.UTILS.element.getElement(DOM.EME.add_to_homescreen_done_btn,
+                                                    "Add bookmark to Home Screen Button")
             add_btn.tap()
             result = True
         else:
@@ -228,14 +227,15 @@ class EverythingMe(object):
         """
         Pick a group from the main icons.
         """
-        x = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult("info", "<b>Choosing group '{}' from here ...</b>".format(name), x)
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult("info", "<b>Choosing group '{}' from here ...</b>".format(name), screenshot)
 
         ok = False
 
-        x = self.marionette.find_element('xpath', DOM.Home.app_icon_xpath.format(name))
-        self.UTILS.reporting.logResult("debug", "icon displayed: {}".format(x.is_displayed()))
-        x.tap()
+        self.UTILS.reporting.info("searching for element: {}".format(DOM.Home.app_icon_css_selector.format(name)))
+        icon = self.marionette.find_element('css selector', DOM.Home.app_icon_css_selector.format(name))
+        self.UTILS.reporting.logResult("debug", "icon displayed: {}".format(icon.is_displayed()))
+        icon.tap()
 
         try:
             self.UTILS.iframe.switchToFrame(*DOM.EME.frame_locator)
@@ -244,9 +244,9 @@ class EverythingMe(object):
             ok = True
         except Exception as e:
             self.UTILS.reporting.debug("*** Error getting apps not installed: {}".format(e))
-            x = self.UTILS.debug.screenShotOnErr()
+            screenshot = self.UTILS.debug.screenShotOnErr()
             self.UTILS.reporting.logResult("info", "(<b>NOTE:</b>Apps for group {} were not displayed.)|{}|{}".\
-                                 format(name, x[0], x[1]))
+                                 format(name, screenshot[0], screenshot[1]))
 
         return ok
 
@@ -262,7 +262,7 @@ class EverythingMe(object):
         of time you press the icon until it works!
         """
         ok = False
-        x = self.marionette.find_element('xpath', DOM.Home.app_icon_xpath.format(group_array[0]))
+        x = self.marionette.find_element('xpath', DOM.Home.app_icon_css_selector.format(group_array[0]))
         self.actions.press(x).wait(3).release()
         try:
             actions.perform()
@@ -293,7 +293,7 @@ class EverythingMe(object):
         for group_specified in group_array:
 
             # Remove it.
-            self.marionette.find_element('xpath', DOM.Home.app_icon_xpath.format(group_specified))
+            self.marionette.find_element('xpath', DOM.Home.app_icon_css_selector.format(group_specified))
             y = self.UTILS.element.getElement(("xpath", DOM.Home.app_delete_icon_xpath.format(group_specified)),
                                       "Delete button", False, 5, True)
             y.tap()

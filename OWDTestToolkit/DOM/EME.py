@@ -21,6 +21,7 @@ search_result_icon_xpath = "//li[@data-name='{}']"
 search_result_area = ("id", "evmeApps")
 app_installed_banner = ("id", "evmeBanner")
 
+launched_menu_button = ('css selector', 'div[aria-hidden=false] .controls .menu-button')
 launched_activity_bar = ("id", "wrapper-activity-indicator")  # (in the top level frame)
 launched_display_button_bar = ("id", "handler")
 footer_navigation_bar = ('css selector', 'footer.navigation')
@@ -30,9 +31,15 @@ launched_button_reload = ("css selector", ".reload-button")
 launched_button_bookmark = ("css selector", ".bookmark-button")
 launched_button_close = ("css selector", ".close-button")
 
-launched_add_to_homescreen = ("xpath", "//*[@id='modal-dialog-select-one']//button")
+launched_button_new_window = ('css selector', 'button[data-id=new-window]')
+launched_button_show_windows = ('css selector', 'button[data-id=show-windows]')
+launched_add_to_homescreen = ("css selector", "button[data-id=add-to-homescreen]")
+launched_button_share = ('css selector', 'button[data-id=share]')
+launched_button_cancel = ('id', 'ctx-cancel-button')
+
 add_to_home_screen_frame = ("src", "homescreen.gaiamobile.org/save-bookmark")
-add_to_home_screen_btn = ("id", "bookmark-cloudapp")  # in add_to_home_screen_frame
+add_to_homescreen_btn = ("id", "bookmark-cloudapp")  # in add_to_home_screen_frame
+add_to_homescreen_done_btn = ('id', 'done-button')
 add_to_top_of_collection_btn = ("id", "pin-cloudapp")
 add_bookmark_btn = ('id', 'add-button')
 
