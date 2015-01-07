@@ -45,36 +45,9 @@ class Facebook(object):
         return friend_count
 
     def link_contact(self, contact_email):
-        """
-        After clicking the link contact button, use this to click on a contact.
-        """
-
-        # (For some reason this only works if I get all matching elements regardless of visibility,
-        # THEN check for visibility. There must be a matching element that never becomes visible.)
-        fb_link_list = self.UTILS.element.getElements(DOM.Facebook.link_friends_list, "Facebook 'link friends' list", True, 20)
-    
-        screenshot = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
-    
-        found = False
-        for link in fb_link_list:
-            # if link.is_displayed():
-            # Keep the name and email details for this contact.
-            this_contact = link.find_elements("css selector", "p")[1]
-            if this_contact.text == contact_email:
-                found = True
-                parent = self.UTILS.element.getParent(link)
-                self.UTILS.reporting.logResult('info', "Trying to tap the li")
-                # self.UTILS.element.simulateClick(parent)
-                self.marionette.execute_script(""" arguments[0].click(); """, script_args=[parent])
-                break
-
-        self.UTILS.test.test(found, "Desired link contact's email address is displayed.")
-
-        if found:
-            self.UTILS.reporting.logComment("Linked FB contact email: " + contact_email + ".")
-
-        # Switch back and wait for contact details page to re-appear.
+        contact = self.UTILS.element.getElement(('xpath', DOM.Facebook.friend_link_path.format(contact_email)),
+                                                "Searching contact")
+        self.UTILS.element.simulateClick(contact)
         time.sleep(2)
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
 
