@@ -864,7 +864,9 @@ class Contacts(object):
         finding the facebook app launched via contacts app.
         """
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame, via_root_frame=False)
+        # self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame, via_root_frame=False)
+        frame = self.marionette.find_element(*DOM.Contacts.settings_fb_frame)
+        self.marionette.switch_to_frame(frame)
 
         # Wait for the fb page to start.
         self.UTILS.element.waitForElements(DOM.Facebook.friends_header, "Facebook friends header")
@@ -876,13 +878,9 @@ class Contacts(object):
         (One of them isn't visible, so we need to check for visibility this way or the
         'invisible' one will cause 'getElements()' to fail the test).
         """
-        links = self.UTILS.element.getElements(DOM.Contacts.link_button, "Link contact button", False)
-        for link in links:
-            if link.is_displayed():
-                link.tap()
-                break
-
+        self.UTILS.element.getElement(DOM.Contacts.link_button, "Link contact button").tap()
         self.switch_to_facebook()
+        time.sleep(5)
 
     def tapSettingsButton(self):
         settings_btn = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
@@ -944,45 +942,11 @@ class Contacts(object):
 
     def verify_linked(self, contact_name, fb_email):
         """
-        Verifies that this contact is linked
-        (assumes we're in the 'all contacts' screen).
+        Verifies that this contact is linked with a facebook account
         """
-
-        # Check that our contact is now listed as a facebook contact (icon by the name in 'all contacts' screen).
-        network_contacts = self.UTILS.element.getElements(
-            DOM.Contacts.social_network_contacts, "Social network contacts")
-        self.UTILS.test.test(len(network_contacts) > 0, "Contact is listed as a facebook contact after linking.")
-
-        # View the details for this contact.
-        self.view_contact(contact_name)
-
-        """
-        TODO: change this when test 26918 is finally unblocked
-        Check the expected elements are now visible.
-        I'm having serious problems finding buttons based on 'text' directly, so here's
-        the 'brute-force' method
-        """
-        view_fb_profile = False
-        wall_post = False
-        linked_email = False
-        unlink = False
-        x = self.UTILS.element.getElements(("tag name", "button"), "All buttons on this page")
-        for i in x:
-            if i.text == "View Facebook profile":
-                view_fb_profile = True
-            if i.text == "Wall post":
-                wall_post = True
-            if i.text == fb_email:
-                linked_email = True
-            if i.text == "Unlink contact":
-                unlink = True
-
-        self.UTILS.test.test(view_fb_profile, "'View Facebook profile' button is displayed after "
-                             "contact linked to fb contact.")
-        self.UTILS.test.test(wall_post, "'Wall post' button is displayed after contact linked to fb contact.")
-        self.UTILS.test.test(unlink, "'Unlink contact' button is displayed after contact linked to fb contact.")
-        self.UTILS.test.test(
-            linked_email, "Linked facebook email address is displayed after contact linked to fb contact.")
+        button = self.UTILS.element.getElement(DOM.Contacts.link_button, "Link contact button")
+        linked = button.get_attribute("data-fb_is_linked")
+        self.UTILS.test.test(linked == "true", "Contact is linked: {}".format(linked))
 
     def view_contact(self, contact_name, header_check=True):
         """

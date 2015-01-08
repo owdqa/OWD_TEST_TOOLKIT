@@ -86,7 +86,7 @@ comment_field = ('id', 'note_0')
 sms_button = ('id', 'send-sms-button-0')
 sms_button_specific_id = 'send-sms-button-{}'
 email_button_spec_id = 'email-or-pick-{}'
-link_button = ('id', "link_button")  # WARNING: >1 element has this id!
+link_button = ('css selector', "#contact-detail-inner #link_button")
 
 #
 # Importing from gmail / hotmail etc...
