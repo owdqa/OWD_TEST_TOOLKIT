@@ -105,7 +105,6 @@ class statusbar(object):
         self.displayStatusBar()
         boolWasEnabled = self.parent.network.is_network_type_enabled(p_type)
 
-
         toggle_icon = self.parent.element.getElement(locator, "Toggle {} icon".format(p_type))
         toggle_icon.tap()
         """
