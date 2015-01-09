@@ -71,6 +71,8 @@ class iframe(object):
         frame = None
         for f in frames:
             attr_value = f.get_attribute(attr)
+            if attr_value is None:
+                continue
             if value in attr_value and (value == attr_value) == exact:
                 if is_displayed:
                     if f.is_displayed():
@@ -153,7 +155,7 @@ class iframe(object):
             x = self.marionette.find_elements(*_frameDef)
 
         if test:
-            self.parent.test.test(is_ok, "<i>(Sucessfully switched to iframe where '{}' contains '{}'.)</i>".format(attrib, value),
+            self.parent.test.test(is_ok, "Sucessfully switched to iframe where '{}' contains '{}'".format(attrib, value),
                                   quit_on_error)
 
     def view_all_iframes(self, frame_src=None):

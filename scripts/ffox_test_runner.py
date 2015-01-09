@@ -42,10 +42,14 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
         if test_num in self.blocked_tests:
             description = "[BLOCKED] " + self.blocked_tests[test_num][:desc_len] + "..."
-            expected = "fail"
+            expected = 'fail'
+        else:
+            expected = 'pass'
 
         sys.stdout.write(u"{}: {:103s} ".format(test_num, description))
         sys.stdout.flush()
+        
+        return expected
 
     def run_test_set(self, tests):
         if self.shuffle:
@@ -55,9 +59,9 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         for test in tests:
             attempt = 0
             total_time = 0
-            self._show_test_info(test['filepath'])
+            expected = self._show_test_info(test['filepath'])
             while attempt < self.testvars['general']['test_retries']:
-                self.run_test(test['filepath'], test['expected'], test['oop'])
+                self.run_test(test['filepath'], expected, test['oop'])
                 result = self.results[-1]
                 total_time += result.time_taken
                 attempt += 1
@@ -200,6 +204,7 @@ class TestRunner(object):
         self.expected_failures = 0
         self.assertion_manager = AssertionManager()
         self.assertion_manager.reset()
+        self.failed_tests = []
 
     def start_test_runner(self, runner_class, options, tests):
         """
@@ -234,6 +239,10 @@ class TestRunner(object):
             # We have to use len(), since result is an array of arrays containing the error reason
             result_values = [len(getattr(result, name)) for name in result_attrs]
             map(self.update_attr, own_attrs, result_values)
+            
+            if len(result.errors) > 0 or len(result.failures) > 0:
+                test_name = re.search('test_(\w*).*$', result.tests.next().test_name).group(1)
+                self.failed_tests.append(test_name)
 
         self.total = len(self.runner.results)
 
@@ -262,6 +271,9 @@ class TestRunner(object):
                                                                   self.assertion_manager.accum_total)
         print self._console_separator
         print
+        
+        if len(self.failed_tests) > 0:
+            print "Failed tests: {}".format(", ".join(self.failed_tests))
 
     def edit_html_results(self):
         """

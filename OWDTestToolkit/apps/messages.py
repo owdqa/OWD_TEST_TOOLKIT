@@ -483,20 +483,16 @@ class Messages(object):
         Create and send a message (assumes we are in a new 'create new message'
         screen with the destination number filled in already).
         """
-        time.sleep(1)  # Trying to remove an intermittent issue.
-        self.UTILS.general.typeThis(DOM.Messages.input_message_area,
-                                    "Input message area",
-                                    msg,
-                                    p_no_keyboard=not_keyboard,
-                                    p_clear=False,
-                                    p_enter=False,
-                                    p_validate=False)  # it's the text() of this field, not the value.
+        self.parent.wait_for_element_displayed(*DOM.Messages.input_message_area)
+        input_area = self.marionette.find_element(*DOM.Messages.input_message_area)
+        input_area.tap()
+        input_area.send_keys(msg)
 
         # Validate the field.
-        input_area = self.UTILS.element.getElement(DOM.Messages.input_message_area,
-                                    "Input message area (for validation)")
+        # Get the element again in order to avoid StaleElementException
+        input_area = self.marionette.find_element(*DOM.Messages.input_message_area)
         self.UTILS.test.test(input_area.text == msg,
-                             u"The text in the message area is {}. Expected: {}".format(input_area.text, msg))
+                             u'The text in the message area is "{}". Expected: "{}"'.format(input_area.text, msg))
 
     def addNumbersInToField(self, nums):
         """

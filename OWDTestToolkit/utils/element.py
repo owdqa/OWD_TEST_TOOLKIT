@@ -130,6 +130,24 @@ class element(object):
             arguments[0].dispatchEvent(event);
         """, script_args=[element])
 
+    def simulateClickAtPos(self, element, posX, posY):
+        self.parent.reporting.logResult('info', 'Simulating click....')
+        self.marionette.execute_script("""
+            /**
+            * Helper method to simulate clicks on iFrames which is not currently
+            *  working in the Marionette JS Runner.
+            * @param {Marionette.Element} element The element to simulate the click on.
+            **/
+
+            var event = document.createEvent('MouseEvents');
+            event.initMouseEvent(
+            'click', true, true, window, 0,
+            0, 0, arguments[1], arguments[2], false, false,
+            false, false, 0, null
+            );
+            arguments[0].dispatchEvent(event);
+        """, script_args=[element, posX, posY])
+
     def waitForElements(self, elem, msg, is_displayed=True, timeout=5, stop_on_error=True):
         """
         Waits for an element to be displayed and captures the error if not
