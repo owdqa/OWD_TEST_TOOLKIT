@@ -84,9 +84,9 @@ class iframe(object):
         result = self.marionette.switch_to_frame(frame)
         if test:
             if exact:
-                msg = '<i>(Successfully switched to iframe whose {} attribute <b>is</b>: "{}".)</i>'.format(attr, value)
+                msg = '<i>(Successfully switched to iframe whose "{}" attribute <b>is</b>: "{}".)</i>'.format(attr, value)
             else:
-                msg = '<i>(Successfully switched to iframe whose {} attribute <b>contains</b>: "{}".)</i>'.format(attr, value)
+                msg = '<i>(Successfully switched to iframe whose "{}" attribute <b>contains</b>: "{}".)</i>'.format(attr, value)
 
             self.parent.test.test(result, msg, True)
 
@@ -155,7 +155,7 @@ class iframe(object):
             x = self.marionette.find_elements(*_frameDef)
 
         if test:
-            self.parent.test.test(is_ok, "Sucessfully switched to iframe where '{}' contains '{}'".format(attrib, value),
+            self.parent.test.test(is_ok, "Successfully switched to iframe where '{}' contains '{}'".format(attrib, value),
                                   quit_on_error)
 
     def view_all_iframes(self, frame_src=None):
