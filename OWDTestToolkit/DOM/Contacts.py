@@ -53,7 +53,7 @@ favourite_button = ('id', 'toggle-favorite')
 favourite_marker = ('id', 'favorite-star')
 details_back_button = ('id', 'details-back')
 
-reset_field_xpath = "//div[@id='{}']//button[@class='img-delete-button']"
+reset_field_css = "#id='{}' button.img-delete-button"
 edit_image = ("id", "thumbnail-action")
 edit_contact_header = ('xpath', GLOBAL.app_head_specific.format(_('Edit contact')))
 edit_update_button = ('id', 'save-button')

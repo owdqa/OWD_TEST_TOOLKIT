@@ -935,7 +935,6 @@ class Contacts(object):
         <b>view</b> selects whether this is the 'view contact' screen or not (defaults to False -> edit screen).
         """
         contact_fields = self.get_contact_fields(view)
-        self.UTILS.reporting.logResult('info', 'Contact fields: '.format(contact_fields))
         if view:
             self.view_test("Name", contact['name'], contact_fields['name'].text)
             self.view_test("Telephone", contact['tel']['value'], contact_fields['tel'].text)
