@@ -65,6 +65,8 @@ shared_links_entry_revoked = ('xpath', '//div[@id="urls-section-entries"]//li//p
 shared_links_entry_revoked_nested = ('xpath', '//p[@data-revoked="true"]')
 shared_links_entry_available = ('xpath', '//div[@id="urls-section-entries"]//li//p[@data-revoked="false"]')
 
+conversation_call = ('css selector', '#conversation-detail button.call')
+
 # Call log - footer
 call_from_loop = ('id', 'call-from-loop')
 
