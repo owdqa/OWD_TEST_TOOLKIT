@@ -84,9 +84,9 @@ class iframe(object):
         result = self.marionette.switch_to_frame(frame)
         if test:
             if exact:
-                msg = '<i>(Sucessfully switched to iframe whose src attribute <b>is</b>: "{}".)</i>'.format(value)
+                msg = '<i>(Successfully switched to iframe whose src attribute <b>is</b>: "{}".)</i>'.format(value)
             else:
-                msg = '<i>(Sucessfully switched to iframe whose src attribute <b>contains</b>: "{}".)</i>'.format(value)
+                msg = '<i>(Successfully switched to iframe whose src attribute <b>contains</b>: "{}".)</i>'.format(value)
 
             self.parent.test.test(result, msg, True)
 
