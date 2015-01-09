@@ -191,10 +191,8 @@ class Email(object):
         send_btn.tap()
 
         self.UTILS.element.waitForElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60)
-        self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60,
-                                              False)
-        self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120,
-                                           False)
+        self.UTILS.element.waitForNotElements(DOM.Email.toaster_sending_mail, "Sending email toaster", True, 60, False)
+        self.UTILS.element.waitForElements(DOM.Email.toaster_sent_mail, "Email sent toaster", True, 120, False)
 
     def send_new_email(self, p_target, p_subject, p_message, attach=False, attached_type=None):
         """
@@ -336,7 +334,8 @@ class Email(object):
         self.wait_for_folder(_("Inbox"))
 
     def send_the_email_and_switch_frame(self, header, frame_locator):
-        self._send_and_wait()
+        send_btn = self.UTILS.element.getElement(DOM.Email.compose_send_btn, "Send button")
+        send_btn.tap()
         app_header = ('xpath', DOM.GLOBAL.app_head_specific.format(header))
         self.UTILS.iframe.switchToFrame(*frame_locator)
         self.UTILS.element.waitForElements(app_header, header, True, 120)

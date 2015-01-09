@@ -13,6 +13,33 @@ class Contacts(object):
         self.parent = parent
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
+        
+        self._view_fields = { 
+            'name': DOM.Contacts.view_details_title,
+            'tel': DOM.Contacts.view_contact_tel_field,
+            'email': DOM.Contacts.view_contact_email_field,
+            'address': DOM.Contacts.view_contact_address
+        }
+
+        self._edit_fields = {
+            'givenName': DOM.Contacts.given_name_field,
+            'familyName': DOM.Contacts.family_name_field,
+            'tel': DOM.Contacts.phone_field,
+            'email': DOM.Contacts.email_field,
+            'street': DOM.Contacts.street_field,
+            'zip': DOM.Contacts.zip_code_field,
+            'city': DOM.Contacts.city_field,
+            'country':DOM.Contacts.country_field 
+        }
+
+        self._add_edit_field_btn = {
+            'tel': DOM.Contacts.add_phone_button,
+            'email': DOM.Contacts.add_email_button,
+            'street': DOM.Contacts.add_address_button,
+            'zip': DOM.Contacts.add_address_button,
+            'city': DOM.Contacts.add_address_button,
+            'country': DOM.Contacts.add_address_button
+        }
 
     def launch(self):
         self.app = self.apps.launch(self.__class__.__name__)
@@ -20,6 +47,12 @@ class Contacts(object):
             DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
+    def go_back_from_contact_details(self):
+        # TODO: Change this when ShadowDOM marionette bug fixed (Bug 1061698)
+        header = self.UTILS.element.getElement(DOM.Contacts.details_view_header, "View contact header")
+        time.sleep(1)
+        header.tap(25, 25)
+        
     def add_gallery_image_to_contact(self, num):
         """
         Adds an image for this contact from the gallery
@@ -97,19 +130,17 @@ class Contacts(object):
         # Press the edit button.
         self.press_edit_contact_button()
 
-        # Change the name to "aaaaabbbbbccccaaaa"
-        contFields = self.get_contact_fields()
-        self.replace_str(contFields[field], value)
+        contact_fields = self.get_contact_fields()
+        self.UTILS.reporting.logResult('info', 'Contact fields: '.format(contact_fields))
+
+        self.replace_str(contact_fields[field], value)
 
         # Save the changes
         update_btn = self.UTILS.element.getElement(DOM.Contacts.edit_update_button, "Edit 'update' button")
         update_btn.tap()
 
         # Return to the contact list screen.
-        back_btn = self.UTILS.element.getElement(DOM.Contacts.details_back_button, "Details 'back' button")
-        time.sleep(1)
-        back_btn.tap()
-
+        self.go_back_from_contact_details()
         self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
 
     def check_edit_contact_details(self, contact):
@@ -248,7 +279,7 @@ class Contacts(object):
         # Go to the view details screen for this contact.
         self.view_contact(name)
 
-        edit_btn = self.UTILS.element.getElement(DOM.Contacts.edit_details_button, "Edit details button")
+        edit_btn = self.UTILS.element.getElement(DOM.Contacts.edit_details_button, "Edit details button", timeout=10)
         edit_btn.tap()
         self.UTILS.element.waitForElements(DOM.Contacts.edit_contact_header, "'Edit contacts' screen header")
 
@@ -260,9 +291,7 @@ class Contacts(object):
         update_btn.tap()
 
         # Return to the contact list screen.
-        back_btn = self.UTILS.element.getElement(DOM.Contacts.details_view_header, "Details 'back' button")
-        back_btn.tap(25, 25)
-
+        self.go_back_from_contact_details()
         self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
 
     def enable_FB_import(self):
@@ -343,35 +372,6 @@ class Contacts(object):
         contact_list = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "Contacts list")
         for pos in positions:
             contact_list[pos].tap()
-
-    def get_contact_fields(self, view=False):
-        """
-        Return 3-d array of contact details.
-        if view is set, it will use the DOM specs for the view screen. Otherwise
-        it will assume you are in the edit screen.
-        """
-        if view:
-            return {
-                'name': self.UTILS.element.getElement(DOM.Contacts.view_details_title, "Name in title field", True, 5, False),
-                'tel': self.UTILS.element.getElement(DOM.Contacts.view_contact_tel_field, "Phone number field", True, 5, False),
-                'email': self.UTILS.element.getElement(DOM.Contacts.view_contact_email_field, "Email field", True, 5, False),
-                'address': self.UTILS.element.getElement(DOM.Contacts.view_contact_address, "Address field", True, 5, False),
-            }
-        else:
-            # Locate and press the 'Add Address' button
-            add_btn = self.UTILS.element.getElement(DOM.Contacts.add_address_button, "Add Address button")
-            self.UTILS.element.scroll_into_view(add_btn)
-            add_btn.tap()
-            return {
-                'givenName': self.UTILS.element.getElement(DOM.Contacts.given_name_field, "Given name field", True, 5, False),
-                'familyName': self.UTILS.element.getElement(DOM.Contacts.family_name_field, "Family name field", True, 5, False),
-                'tel': self.UTILS.element.getElement(DOM.Contacts.phone_field, "Phone number field", True, 5, False),
-                'email': self.UTILS.element.getElement(DOM.Contacts.email_field, "Email field", True, 5, False),
-                'street': self.UTILS.element.getElement(DOM.Contacts.street_field, "Street field", True, 5, False),
-                'zip': self.UTILS.element.getElement(DOM.Contacts.zip_code_field, "Zip code field", True, 5, False),
-                'city': self.UTILS.element.getElement(DOM.Contacts.city_field, "City field", True, 5, False),
-                'country': self.UTILS.element.getElement(DOM.Contacts.country_field, "Country field", True, 5, False),
-            }
 
     @retry(5, 5)
     def switch_to_gmail_login_frame(self):
@@ -716,6 +716,39 @@ class Contacts(object):
         self.UTILS.element.waitForElements(contact_name, "Contact '{}'".format(contact['name'].upper().\
                                                                                replace(" ", "")), timeout=30)
 
+    def get_view_fields(self):
+        fields = {}
+        for k, v in self._view_fields.items():
+            try:
+                fields[k] = self.marionette.find_element(*v)
+            except:
+                self.UTILS.reporting.debug("** No field found for key: {}".format(k))
+        return fields
+
+    def get_edit_fields(self):
+        fields = {}
+        for k, v in self._edit_fields.items():
+            try:
+                fields[k] = self.marionette.find_element(*v)
+            except:
+                # Try to tap on add new {field} button
+                add_new_field_btn = self.marionette.find_element(*self._add_edit_field_btn[k])
+                add_new_field_btn.tap()
+                fields[k] = self.marionette.find_element(*v)
+        return fields
+        
+    def get_contact_fields(self, view=False):
+        """
+        Return 3-d array of contact details.
+        if view is set, it will use the DOM specs for the view screen. Otherwise
+        it will assume you are in the edit screen.
+        """
+
+        if view:
+            return self.get_view_fields()
+        else:
+            return self.get_edit_fields()
+
     def populate_fields(self, contact):
         """
         Put the contact details into the fields (assumes you are in the correct
@@ -725,27 +758,27 @@ class Contacts(object):
         one in ./example/tests/mock_data/contacts.py.
         """
 
-        contFields = self.get_contact_fields()
+        contact_fields = self.get_contact_fields()
+        self.UTILS.reporting.logResult('info', 'Contact fields: '.format(contact_fields))
+        
         """
         Put the contact details into each of the fields (this method
         clears each field first).
         """
-        self.replace_str(contFields['givenName'], contact["givenName"])
-        self.replace_str(contFields['familyName'], contact["familyName"])
-        self.replace_str(contFields['tel'], contact["tel"]["value"])
-        self.replace_str(contFields['email'], contact["email"]["value"])
-        self.replace_str(contFields['street'], contact["addr"]["streetAddress"])
-        self.replace_str(contFields['zip'], contact["addr"]["postalCode"])
-        self.replace_str(contFields['city'], contact["addr"]["locality"])
-        self.replace_str(contFields['country'], contact["addr"]["countryName"])
+        self.replace_str(contact_fields['givenName'], contact["givenName"])
+        self.replace_str(contact_fields['familyName'], contact["familyName"])
+        self.replace_str(contact_fields['tel'], contact["tel"]["value"])
+        self.replace_str(contact_fields['email'], contact["email"]["value"])
+        self.replace_str(contact_fields['street'], contact["addr"]["streetAddress"])
+        self.replace_str(contact_fields['zip'], contact["addr"]["postalCode"])
+        self.replace_str(contact_fields['city'], contact["addr"]["locality"])
+        self.replace_str(contact_fields['country'], contact["addr"]["countryName"])
 
     def press_cancel_edit_button(self):
-        """
-        Presses the Edit contact button when vieweing a contact.
-        """
-        edit_cancel_button = self.UTILS.element.getElement(DOM.Contacts.edit_cancel_button, "Cancel edit button")
-        edit_cancel_button.tap()
-        self.UTILS.element.waitForElements(DOM.Contacts.view_details_title, "'View contact details' title")
+        # TODO: Change this when ShadowDOM marionette bug fixed (Bug 1061698)
+        header = self.UTILS.element.getElement(DOM.Contacts.contact_form_header, "Edit contact header")
+        time.sleep(1)
+        header.tap(25, 25)
 
     def press_delete_contact_button(self):
         """
@@ -895,31 +928,28 @@ class Contacts(object):
         """
         Verify the contents of the contact fields in this screen (assumes
         you are in the correct screen since this could be view or edit).
-        <br><br>
         <b>contact</b> must be an object in the same format as the
         one in ./example/tests/mock_data/contacts.py.<br>
         <b>view</b> selects whether this is the 'view contact' screen or not (defaults to False -> edit screen).
         """
-        contFields = self.get_contact_fields(view)
-
+        contact_fields = self.get_contact_fields(view)
         if view:
-            self.view_test("Name", contact['name'], contFields['name'].text)
-            self.view_test("Telephone", contact['tel']['value'], contFields['tel'].text)
-            self.view_test("Email", contact['email']['value'], contFields['email'].text)
-            self.view_test("Street", contact['addr']['streetAddress'], contFields['address'].text)
-            self.view_test("Post code", contact['addr']['postalCode'], contFields['address'].text)
-            self.view_test("Locality", contact['addr']['locality'], contFields['address'].text)
-            self.view_test("Country", contact['addr']['countryName'], contFields['address'].text)
-
+            self.view_test("Name", contact['name'], contact_fields['name'].text)
+            self.view_test("Telephone", contact['tel']['value'], contact_fields['tel'].text)
+            self.view_test("Email", contact['email']['value'], contact_fields['email'].text)
+            self.view_test("Street", contact['addr']['streetAddress'], contact_fields['address'].text)
+            self.view_test("Post code", contact['addr']['postalCode'], contact_fields['address'].text)
+            self.view_test("Locality", contact['addr']['locality'], contact_fields['address'].text)
+            self.view_test("Country", contact['addr']['countryName'], contact_fields['address'].text)
         else:
-            self.check_match(contFields['givenName'], contact['givenName'], "Given name")
-            self.check_match(contFields['familyName'], contact['familyName'], "Family name")
-            self.check_match(contFields['tel'], contact['tel']['value'], "Telephone")
-            self.check_match(contFields['email'], contact['email']['value'], "Email")
-            self.check_match(contFields['street'], contact['addr']['streetAddress'], "Street")
-            self.check_match(contFields['zip'], contact['addr']['postalCode'], "Zip")
-            self.check_match(contFields['city'], contact['addr']['locality'], "City")
-            self.check_match(contFields['country'], contact['addr']['countryName'], "Country")
+            self.check_match(contact_fields['givenName'], contact['givenName'], "Given name")
+            self.check_match(contact_fields['familyName'], contact['familyName'], "Family name")
+            self.check_match(contact_fields['tel'], contact['tel']['value'], "Telephone")
+            self.check_match(contact_fields['email'], contact['email']['value'], "Email")
+            self.check_match(contact_fields['street'], contact['addr']['streetAddress'], "Street")
+            self.check_match(contact_fields['zip'], contact['addr']['postalCode'], "Zip")
+            self.check_match(contact_fields['city'], contact['addr']['locality'], "City")
+            self.check_match(contact_fields['country'], contact['addr']['countryName'], "Country")
 
     def verify_image_in_all_contacts(self, contact_name):
         """
@@ -959,83 +989,18 @@ class Contacts(object):
         Because this can be called from several applications (contacts, dialer, sms ...), finding
         the right iframe can be tricky, which is why "self.find_frame()" is here.
         """
-        self._orig = self.UTILS.iframe.currentIframe()
 
-        self.find_frame()
+        self.UTILS.reporting.logResult('info', 'Trying to view contact: {}'.format(contact_name))
+        contact_name_strong = contact_name.split(" ")[0]
+        contact_locator = (DOM.Contacts.view_all_contact_specific_contact[0],
+                            DOM.Contacts.view_all_contact_specific_contact[1].format(contact_name_strong))
 
-        all_contacts = self.UTILS.element.getElements(
-            DOM.Contacts.view_all_contact_list, "All contacts list", False, 10)
-
-        self.UTILS.reporting.logResult("info", u"{} contacts listed.".format(len(all_contacts)))
-        found = False
-        for i in range(len(all_contacts)):
-            self.UTILS.reporting.logResult("info", u"'{}'".format(all_contacts[i].text))
-            if contact_name.lower() in all_contacts[i].text.lower():
-                found = True
-                self.UTILS.reporting.logResult(
-                    "info", u"Contact '{}' found in all contacts - selecting this contact ...".format(contact_name))
-                self.marionette.execute_script("document.getElementsByClassName('contact-item')[{}].click()".format(i))
-                break
-
-            self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator, quit_on_error=False)
-            all_contacts = self.UTILS.element.getElements(
-                DOM.Contacts.view_all_contact_list, "All contacts list", False)
-
-        if not found:
-            self.UTILS.reporting.logResult("info", u"FYI: Contact '{}' was <b>not</b> found in the contacts list.".
-                                           format(contact_name))
-            return
-
-        # test: Correct contact name is in the page header.
+        the_contact = self.UTILS.element.getElement(contact_locator, "Contact with name: {}".format(contact_name))
+        the_contact.tap()
 
         if header_check:
-            self.UTILS.element.headerCheck(contact_name)
-
-        frame = self.find_frame()
-
-        if frame == "Dialer":
-            details_title = self.UTILS.element.getElement(DOM.Contacts.view_details_title, "View details title")
-            self.UTILS.test.test(contact_name in details_title.text, "Name is in the title")
-
-    def find_frame(self):
-        """
-        Private method to cater for the fact that *SOMETIMES* the
-        frame is different if coming from Dialer.
-        """
-        self.marionette.switch_to_frame()
-        x = self.try_frame(DOM.Dialer.frame_locator)
-        if x:
-            x = self.try_frame(DOM.Dialer.call_log_contact_name_iframe)
-            if x:
-                self.UTILS.reporting.logResult("info", "<i>Switched to dialer -> contacts iframe.)</i>")
-                return "Dialer"
-
-        self.marionette.switch_to_frame()
-        x = self.try_frame(DOM.Contacts.frame_locator)
-        if x:
-            return "Contacts"
-
-        self.marionette.switch_to_frame()
-        x = self.try_frame(DOM.Messages.frame_locator)
-        if x:
-            return "Messages"
-
-        self.marionette.switch_to_frame()
-        x = self.try_frame(["src", self._orig])
-        return "Unknown"
-
-    def try_frame(self, dom):
-        """
-        Private function to return an object for the many types of 'return iframes'.
-        """
-        try:
-            iframe = ("xpath", "//iframe[contains(@{},'{}')]".format(dom[0], dom[1]))
-            self.parent.wait_for_element_present(*iframe, timeout=2)
-            x = self.marionette.find_element(*iframe)
-            self.marionette.switch_to_frame(x)
-            return True
-        except:
-            return False
+            header = self.UTILS.element.getElement(DOM.Contacts.details_view_header, "View contact header")
+            self.UTILS.test.test(header.text == contact_name, "Contact details for contact {}".format(contact_name))
 
     def go_back(self):
         """Press back button in the contacts list scren

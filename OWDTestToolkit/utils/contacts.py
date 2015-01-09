@@ -25,8 +25,8 @@ class MockContact(dict):
         super(MockContact, self).__init__(self, **kwargs)
 
         # Set default values
-        curr_time = repr(time.time()).replace('.', '')
-        self['givenName'] = 'OWD{0:.10}'.format(curr_time)
+        curr_time = repr(time.time()).replace('.', '')[-10:]
+        self['givenName'] = 'OWD{}'.format(curr_time)
         self['familyName'] = 'test'
         self['name'] = '{} {}'.format(self['givenName'], self['familyName'])
         self['email'] = {

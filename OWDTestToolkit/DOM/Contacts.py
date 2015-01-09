@@ -7,7 +7,8 @@ _ = I18nSetup(I18nSetup).setup()
 frame_locator = ("src", "contacts")
 view_all_header = ('xpath', GLOBAL.app_head_specific.format(_('Contacts')))
 view_all_contact_xpath = '//*[@data-order="{}"]'
-view_all_contact_list = ("xpath", "//li[@class='contact-item']")
+#Sometimes there's a hidden data-group called 'ice', we must skip it
+view_all_contact_list = ('css selector', 'li.contact-item:not([data-group=ice])')
 view_all_contact_name_xpath = "//li[@class='contact-item']//p[contains(@data-search,'{}')]"
 contact_names = ('css selector', '.contact-item .contact-text')
 view_all_contact_specific_contact = ('xpath', '//section[@class="group-section"]//li/p[@class="contact-text"]/strong[contains(text(), "{}")]')
@@ -52,7 +53,7 @@ favourite_button = ('id', 'toggle-favorite')
 favourite_marker = ('id', 'favorite-star')
 details_back_button = ('id', 'details-back')
 
-reset_field_xpath = ".//*[@id='{}']//button[@id='img-delete-button']"
+reset_field_css = "#id='{}' button.img-delete-button"
 edit_image = ("id", "thumbnail-action")
 edit_contact_header = ('xpath', GLOBAL.app_head_specific.format(_('Edit contact')))
 edit_update_button = ('id', 'save-button')
@@ -73,6 +74,7 @@ family_name_field = ('id', 'familyName')
 family_name_reset_icon = ("xpath", ".//*[@id='contact-form']//p[input[@id='familyName']]//button")
 email_address_list = ("xpath", "//ul[@id='details-list']/li")
 email_field = ('id', "email_0")
+add_phone_button = ('id', 'add-new-phone')
 add_email_button = ("id", "add-new-email")
 add_address_button = ('id', 'add-new-address')
 email_fields = ("xpath", "//input[@type='email']")
@@ -92,7 +94,6 @@ link_button = ('css selector', "#contact-detail-inner #link_button")
 # Importing from gmail / hotmail etc...
 #
 import_all_imported_msg = ("xpath", "//*[@id='friends-msg' and contains(text(), 'your friends are imported')]")
-import_cancel_login = ("xpath", '//button[@class="kill popup-close"]')
 import_close_icon = ("id", "import-close")
 import_throbber = ("id", "popup-throbber")
 import_num_of_conts = ("id", "friends-msg")
@@ -105,7 +106,7 @@ import_conts_xp = "//span[@id='groups-list']//li[@class='block-item' and contain
 
 import_contacts = ('xpath', '//button[@data-l10n-id="importContactsButton"]')
 # import_contacts = ("id", "importContacts")
-import_contacts_header = ("xpath", GLOBAL.app_head_specific.format(_('Import Contacts')))
+import_contacts_header = ("id", 'import-settings-header')
 import_contacts_back = ("id", "import-settings-back")
 
 gmail_button = ("css selector", "button.icon-gmail[data-l10n-id=importGmail]")
@@ -127,6 +128,7 @@ hotmail_login_extra_msg = ("id", "idDiv_FSI_HeaderInfo")
 hotmail_login_error_msg = ("id", "idTd_Tile_ErrorMsg_Login")
 hotmail_import_frame = ("src", "live")  # It's in the contacts iframe.
 hotmail_import_frame2 = ("data-url", "live")  # It's in the contacts iframe.
+hotmail_header = ("css selector", '#header')
 
 import_sim_btn = ('css selector', '#import-options button.icon-sim')
 reading_sim_card = ('xpath', '//h1[@id="progress-title" and contains(text(), "{}")]'.\
