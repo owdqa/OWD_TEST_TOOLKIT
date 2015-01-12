@@ -64,7 +64,7 @@ class Browser(object):
         self.parent.wait_for_condition(lambda m: not self.is_page_loading(), timeout=timeout)
 
     def switch_to_content(self):
-        web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
+        web_frames = self.marionette.find_elements(*DOM.Browser.frame_locator)
         for web_frame in web_frames:
             if web_frame.is_displayed():
                 self.marionette.switch_to_frame(web_frame)
@@ -88,7 +88,7 @@ class Browser(object):
         """
         Returns the url of the currently loaded web page.
         """
-        web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
+        web_frames = self.marionette.find_elements(*DOM.Browser.frame_locator)
         for web_frame in web_frames:
             if web_frame.is_displayed():
                 return web_frame.get_attribute("src")
@@ -141,7 +141,7 @@ class Browser(object):
         as well, in case there are more frames for the same url.
         Returns True if the switch was successful. False otherwise.
         """
-        web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
+        web_frames = self.marionette.find_elements(*DOM.Browser.frame_locator)
         result = False
         for web_frame in web_frames:
             if url in web_frame.get_attribute("src") and web_frame.is_displayed():

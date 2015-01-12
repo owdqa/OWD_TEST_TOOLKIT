@@ -1,8 +1,8 @@
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
-
-frame_locator = ('src', 'browser')
+frame_locator = ("css selector", "iframe.browser:not(.hidden)")
+current_browser_window = ('css selector', 'div#windows div[data-manifest-name=Browser][aria-hidden=false]')
 browser_app = ('css selector', 'div.browser.active')
 browser_page_frame = ('mozbrowser', "")
 url_input = ('css selector', 'div.appWindow.active[data-manifest-name=Browser] .urlbar .title')
@@ -19,12 +19,17 @@ awesome_top_sites_links = ("xpath", "//*[@id='top-sites']//li/a")
 awesome_bookmarks_links = ("xpath", "//*[@id='bookmarks']//li/a")
 awesome_history_links = ("xpath", "//*[@id='history']//li/a")
 
-search_result_links = ("xpath", "//div[@id='search']//a")
+search_result_links = ("css selector", "div#search-results .apps")
+
+search_new_window = ('css selector', 'button[data-id=new-window]')
+search_show_windows = ('css selector', 'button[data-id=show-windows]')
+search_add_to_homescreen = ('css selector', 'button[data-id=add-to-homescreen]')
+search_share = ('css selector', 'button[data-id=share]')
+search_cancel = ('id', 'ctx-cancel-button')
 
 settings_button = ("id", "settings-button")
 settings_header = ("xpath", "//header[@id='settings-header']")
 
-website_frame = ("css selector", "iframe.browser:not(.hidden)")
 page_title = ('xpath', ".//*[@id='results']/ul//h5[text()='{}']".format(_("Problemloadingpage")))
 page_problem = ("xpath", "//*[text()='{}']".format(_("Problemloadingpage")))
 
