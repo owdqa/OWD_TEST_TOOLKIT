@@ -43,7 +43,7 @@ class Browser(object):
         self.keyboard.tap_enter()
 
         self.marionette.switch_to_frame()
-        self.parent.wait_for_condition(lambda m: m.find_element(*DOM.Browser.browser_app).get_attribute("loading-state") == "false", timeout=timeout)
+        self.wait_for_page_to_load()
         self.switch_to_content()
 
         # If the site is trusted, check for the warning and get rid of it.
@@ -57,11 +57,9 @@ class Browser(object):
             except:
                 pass
 
-    def is_page_loading(self):
-        "loading" in self.marionette.find_element(*DOM.Browser.browser_app).get_attribute('class')
-
     def wait_for_page_to_load(self, timeout=30):
-        self.parent.wait_for_condition(lambda m: not self.is_page_loading(), timeout=timeout)
+        self.parent.wait_for_condition(lambda m: m.find_element(
+            *DOM.Browser.browser_app).get_attribute("loading-state") == "false", timeout=timeout)
 
     def switch_to_content(self):
         web_frames = self.marionette.find_elements(*DOM.Browser.website_frame)
@@ -80,10 +78,6 @@ class Browser(object):
 
         self.marionette.switch_to_frame(app_frame)
 
-    ################################################################################
-    ################################################################################
-    ################################################################################
-
     def loaded_url(self):
         """
         Returns the url of the currently loaded web page.
@@ -92,6 +86,11 @@ class Browser(object):
         for web_frame in web_frames:
             if web_frame.is_displayed():
                 return web_frame.get_attribute("src")
+                
+    ################################################################################
+    ################################################################################
+    ################################################################################
+
 
     def tap_go_button(self, timeout=30):
         self.marionette.find_element(*DOM.Browser.url_go_button).tap()
