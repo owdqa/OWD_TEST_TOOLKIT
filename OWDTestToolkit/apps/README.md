@@ -1239,21 +1239,21 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>goSound</td>
+        <td align=center>go_sound</td>
         <td align=left></td>
         <td align=left>Go to Sound menu.</td>
     </tr>
 
 
     <tr>
-        <td align=center>setRingerAndNotifsVolume</td>
+        <td align=center>set_ringer_and_notifs_volume</td>
         <td align=left>p_vol</td>
         <td align=left>Set the volume for ringer and notifications.</td>
     </tr>
 
 
     <tr>
-        <td align=center>setTimeToNow</td>
+        <td align=center>set_time_to_now</td>
         <td align=left></td>
         <td align=left>Set date and time to 'now'.<br>  WARNING: DOES NOT WORK YET!!! ...<br>  1. Marionette.flick() not working here.<br>  2. Cannot figure out how to tell what the current value is (no 'active' setting here),</td>
     </tr>
@@ -1267,7 +1267,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>setAlarmVolume</td>
+        <td align=center>set_alarm_volume</td>
         <td align=left>p_vol</td>
         <td align=left>Set the volume for alarms.</td>
     </tr>
@@ -1281,21 +1281,21 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>wifi_list_isNotConnected</td>
+        <td align=center>wifi_list_is_cot_connected</td>
         <td align=left>p_name<br>p_timeOut=30</td>
         <td align=left>Verify the expected network is listed as connected in 'available networks'.</td>
     </tr>
 
 
     <tr>
-        <td align=center>enable_hotSpot</td>
+        <td align=center>enable_hotspot</td>
         <td align=left></td>
         <td align=left>Enable hotspot (internet sharing) - asusmes Settings app is already open.</td>
     </tr>
 
 
     <tr>
-        <td align=center>wifi_list_tapName</td>
+        <td align=center>wifi_list_tap_name</td>
         <td align=left>p_wifi_name</td>
         <td align=left>Tap the network name in the list.</td>
     </tr>
@@ -1309,21 +1309,21 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>wifi_list_isConnected</td>
+        <td align=center>wifi_list_is_connected</td>
         <td align=left>p_name<br>p_timeOut=30</td>
         <td align=left>Verify the expected network is listed as connected in 'available networks'.</td>
     </tr>
 
 
     <tr>
-        <td align=center>disable_hotSpot</td>
+        <td align=center>disable_hotspot</td>
         <td align=left></td>
         <td align=left>Enable hotspot (internet sharing) - asusmes Settings app is already open.</td>
     </tr>
 
 
     <tr>
-        <td align=center>wifi_switchOn</td>
+        <td align=center>wifi_switch_on</td>
         <td align=left></td>
         <td align=left>Click slider to turn wifi on.</td>
     </tr>

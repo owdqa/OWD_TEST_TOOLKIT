@@ -341,7 +341,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
-        <td align=center>setTimeToNow</td>
+        <td align=center>set_time_to_now</td>
         <td align=left>p_continent=False<br>p_city=False</td>
         <td align=left>Set the phone's time (using gaia data_layer instead of the UI).  <b>NOTE:</b> Also sets the timezone (continent and city).</td>
     </tr>
