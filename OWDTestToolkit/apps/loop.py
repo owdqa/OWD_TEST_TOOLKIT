@@ -57,12 +57,12 @@ class Loop(object):
         """.format(self.loop_dir, version)
 
         result = os.popen(script).read()
-    
+
         self.marionette.switch_to_frame()
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-    
+
         install_ok_msg = "Done, without errors."
         self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
         self.UTILS.test.test(install_ok_msg in result, "Install via grunt is OK")
@@ -87,7 +87,7 @@ class Loop(object):
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-    
+
     def reinstall(self):
         self.uninstall()
         time.sleep(2)
@@ -203,7 +203,19 @@ class Loop(object):
             done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
             done_btn.tap()
 
-    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
+    def phone_login_auto(self, phone_number, option_number=1):
+        """Wrapper to log in using phone number, either the already selected or entering it manually"""
+        try:
+            self.UTILS.reporting.info("Trying phone login using Mobile ID")
+            self.phone_login()
+        except:
+            self.UTILS.reporting.info("Mobile ID login failed, falling back to manual")
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
+            self.marionette.find_element('id', 'header').tap(25, 25)
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
+            self.phone_login_manually(phone_number)
+
+    @retry(3, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login(self, option_number=1):
         """ Logs in using mobile id
         """
@@ -235,7 +247,7 @@ class Loop(object):
 
         self.apps.switch_to_displayed_app()
 
-    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
+    @retry(3, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login_manually(self, phone_number_without_prefix):
         """
         Logs in using mobile id, but instead of using the automatically provided by the app
@@ -543,7 +555,7 @@ class Loop(object):
         self.marionette.find_element(*DOM.GLOBAL.conf_screen_ok_button).tap()
 
         self.apps.switch_to_displayed_app()
-    
+
         # Make sure the option is indeed selected, for that we have to check against the _values var
         self.parent.wait_for_condition(
             lambda m: m.find_element(*DOM.Loop.settings_select_call_mode).get_attribute("value") == _values[mode.capitalize()])
