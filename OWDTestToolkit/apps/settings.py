@@ -553,10 +553,6 @@ class Settings(object):
         time.sleep(1)
         hotspot_elem.tap()
         time.sleep(1)
-        self.UTILS.reporting.info("*** Looking for hotspot input switch")
-        self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
-        self.marionette.find_element(*DOM.Settings.hotspot_switch_input).tap()
-        time.sleep(1)
 
     def open_data_settings(self):
         """

@@ -82,15 +82,11 @@ class Browser(object):
         """
         Returns the url of the currently loaded web page.
         """
-        web_frames = self.marionette.find_elements(*DOM.Browser.frame_locator)
-        for web_frame in web_frames:
-            if web_frame.is_displayed():
-                return web_frame.get_attribute("src")
-                
-    ################################################################################
-    ################################################################################
-    ################################################################################
+        return self.marionette.find_element(*DOM.Browser.frame_locator).get_attribute("src")
 
+    ################################################################################
+    ################################################################################
+    ################################################################################
 
     def tap_go_button(self, timeout=30):
         self.marionette.find_element(*DOM.Browser.url_go_button).tap()
