@@ -14,6 +14,8 @@ thumbnail_trash_confirm = ("id", "confirm-ok")
 thumbnail_trash_cancel = ("id", "confirm-cancel")
 thumbnail_camera_button = ("id", "thumbnails-camera-button")
 
+current_image_pic = ('css selector', '#frame > div.image-view')
+
 # Preview screen
 preview = ('id', 'fullscreen-view')
 preview_back = ('id', 'fullscreen-back-button-tiny')

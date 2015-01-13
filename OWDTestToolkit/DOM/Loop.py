@@ -108,12 +108,12 @@ share_panel_share_link = ('id', 'link-to-share')
 share_panel_sms_share = ('id', 'share-by-sms')
 share_panel_email_share = ('id', 'share-by-email')
 share_panel_others_share = ('id', 'share-by-others')
-share_link_options = ('css selector', '.share-options li')
+# share_link_options = ('css selector', '.share-options li')
 share_others_header = ('xpath', '//header[text()="{}"]')
 share_others_options = ('xpath', '//header[text()="{}"]/..//button')
 
 not_a_hello_user_msg = ('xpath', "//p[@id='sharing-reason' and text()='{}']")
-not_a_user_explanation = ('css selector', '.share-explanation[data-l10n-id=noProblem]')
+not_a_user_explanation = ('xpath', '//p[contains(text(), "not a Firefox Hello user")]')
 
 # Call screen
 call_frame = ('xpath', '//iframe[@class="active" and @name=""]')  # TODO: fill it!
@@ -133,3 +133,10 @@ call_screen_resume = ('id', 'resume-button')
 feedback = ('id', 'feedback')
 feedback_skip = ('id', 'skip-feedback-button')
 feedback_rate = ('id', 'rate-feedback-button')
+
+# Rooms
+share_link_menu = ('css selector', 'menu[data-items="3"]')
+share_link_options = ('css selector', 'menu[data-items="3"] button')
+new_room_btn = ('css selector', 'button[data-l10n-id=newRoom]')
+share_cancel_btn = ('css selector', 'button[data-l10n-id=cancel]')
+share_btn_with_content = ('xpath', 'button[text()="{}"]')

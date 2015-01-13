@@ -90,7 +90,7 @@ airplane_warning_ok = ("xpath", "//button[text()='{}']".format(_("OK")))
 
 received_sms = ('css selector', "li.message.sms.received.incoming section div p")
 received_mms = ('css selector', "li.message.mms.received.incoming section div p")
-received_mms_subject = ('css selector', ".message.mms.received.incoming.has-subject div.message-body")
+received_mms_subject = ('css selector', ".message.mms.received.incoming.has-subject .message-subject")
 
 forward_btn_msg_opt = ('css selector', "button[data-l10n-id=forward]")
 cancel_btn_msg_opt = ('css selector', "button[data-l10n-id=forward] ~ button[data-l10n-id=cancel]")
