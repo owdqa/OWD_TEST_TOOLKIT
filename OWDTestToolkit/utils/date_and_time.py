@@ -62,7 +62,7 @@ class date_and_time(object):
 
         return result
 
-    def setTimeToNow(self, continent=False, city=False):
+    def set_time_to_now(self, continent=False, city=False):
         """
         Set the phone's time (using gaia data_layer instead of the UI).
         <b>NOTE:</b> Also sets the timezone (continent and city).

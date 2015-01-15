@@ -46,7 +46,7 @@
 ./debug/screenShotOnErr.py:    def screenShotOnErr(self):
 ./debug/savePageHTML.py:    def savePageHTML(self, p_outfile):
 ./general/typeThis.py:    def typeThis(self, p_element_array, p_desc, p_str, p_no_keyboard=False, p_clear=True, p_enter=True, p_validate=True, p_remove_keyboard=True):        
-./general/setTimeToNow.py:    def setTimeToNow(self, p_continent=False, p_city=False):
+./general/set_time_to_now.py:    def set_time_to_now(self, p_continent=False, p_city=False):
 ./general/get_os_variable.py:    def get_os_variable(self, p_name, p_validate=True):
 ./general/clearGeolocPermission.py:    def clearGeolocPermission(self, p_allow=False):
 ./general/addFileToDevice.py:    def addFileToDevice(self, p_file, count=1, destination=''):

@@ -17,23 +17,44 @@ class Settings(object):
         self.UTILS = parent.UTILS
         self.actions = Actions(self.marionette)
 
-
     def launch(self):
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
+    def go_back(self):
+        """
+        Tap the back icon.
+        """
+        # TODO: remove tap with coordinates after Bug 1061698 is fixed
+        headers = self.marionette.find_elements('css selector', 'gaia-header[action=back]')
+        for header in headers:
+            if header.is_displayed():
+                header.tap(25, 25)
+                break
+        time.sleep(2)
+
+    def go_sound(self):
+        """
+        Go to Sound menu.
+        """
+        self.launch()
+        sound_menu = self.UTILS.element.getElement(DOM.Settings.sound, "Sound setting link")
+        sound_menu.tap()
+
     def wait_for_option_to_be_enabled(self, locator):
         self.parent.wait_for_condition(lambda m: m.find_element(*locator).get_attribute("aria-disabled") is None,
                                        timeout=30, message="Option to be enabled")
 
     def call_settings(self, sim_card_number=1):
-
+        """
+        Open call settings
+        """
         self.wait_for_option_to_be_enabled(DOM.Settings.call_settings_option)
 
-        x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
-        self.UTILS.element.simulateClick(x)
+        call_settings_btn = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
+        self.UTILS.element.simulateClick(call_settings_btn)
         """
         In case the device supports dual sim, we have to select one before
         entering the call_settings menu.
@@ -48,60 +69,143 @@ class Settings(object):
         except:
             self.UTILS.reporting.logResult("info", "No double SIM detected. Keep working...")
 
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.\
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.
                                             format(_("Call Settings").encode("utf8"))), "Call settings header")
 
-    def three_times_bad_pin2(self, wrong_pin2):
-        """Change the PIN2.
-
-        Enter a wrong PIN2 three consecutive times. After that, the PUK2 is requested,
-        and also a new PIN2 value is entered twice.
-        """
-        for i in range(3):
-            self.fdn_type_pin2(wrong_pin2)
-
-    def restore_pin2(self, good_pin2, puk2):
-        """Restore PIN2 using PUK2.
-
-        After PIN2 has been entered wrongly three times, the PUK2 is required to unlock the SIM.
-        """
-        # SIM locked, enter PUK2 and new PIN2 twice
-        puk2_input = self.UTILS.element.getElement(DOM.Settings.fdn_enter_puk2_input, "PUK2 input")
-        puk2_input.send_keys(puk2)
-
-        new_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_puk2_pin2_input, "New PIN2 input")
-        new_pin2_input.send_keys(good_pin2)
-
-        confirm_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_confirm_pin2_input, "Confirm PIN2 input")
-        confirm_pin2_input.send_keys(good_pin2)
-
-        ok_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "OK button")
-        ok_btn.tap()
-
-    def cellular_and_data(self, sim_card_number=1):
+    def cellular_and_data(self):
         """
         Open cellular and data settings.
         """
-
         self.wait_for_option_to_be_enabled(DOM.Settings.data_connectivity)
 
         # Once it is enabled, click on it
         self.parent.wait_for_element_displayed(*DOM.Settings.cellData)
         link = self.marionette.find_element(*DOM.Settings.cellData)
         link.tap()
-        """
-        In case the device supports dual sim, we have to select one before
-        entering the call_settings menu.
-        """
-        sim_card_option = self.get_multi_sim(sim_card_number)
-        if sim_card_option:
-            sim_card_option.tap()
 
         self.UTILS.element.waitForElements(DOM.Settings.celldata_header, "Celldata header", True, 20, False)
 
-    def get_multi_sim(self, sim_card_number=1):
-        """Try to find the element for selecting between multiple SIMs.
+    def open_sim_settings(self, sim_card_number=1):
+        """
+        Open cellular and data settings.
+        """
+        # In case the device supports dual sim, we have to select one before entering the call_settings menu.
+        sim_card_option = self.get_multi_sim(sim_card_number)
+        if sim_card_option:
+            sim_card_option.tap()
+        self.parent.wait_for_element_displayed(*DOM.Settings.sim_settings_header)
 
+    def open_apn_settings(self):
+        apn_settings_option = self.UTILS.element.getElement(
+            DOM.Settings.cellData_apn_settings, "Network Operator option")
+        apn_settings_option.tap()
+        self.parent.wait_for_element_displayed(*DOM.Settings.apn_settings_header)
+
+    def open_network_operator_menu(self):
+        network_operator_option = self.UTILS.element.getElement(
+            DOM.Settings.networkOperator_button, "Network Operator option")
+        network_operator_option.tap()
+        self.parent.wait_for_element_displayed(*DOM.Settings.networkOperator_header)
+
+    def open_data_settings(self, sim_card_number=1):
+        self.open_apn_settings()
+        data_menu = self.UTILS.element.getElement(DOM.Settings.celldata_DataSettings, "Data settings link")
+        data_menu.tap()
+
+    def open_msg_settings(self, sim_card_number=1):
+        self.open_apn_settings()
+        msg_menu = self.UTILS.element.getElement(DOM.Settings.celldata_MsgSettings, "Message settings link")
+        msg_menu.tap()
+
+    def select_default_apn(self, apn):
+        """
+        Makes a certain apn default
+        """
+        # Tap on the added APN
+        dom_elem = (DOM.Settings.apn_item_by_name[0], DOM.Settings.apn_item_by_name[1].format(apn))
+        apn_elem = self.UTILS.element.getElement(dom_elem, "APN to make default")
+
+        radio_button = self.get_radio_button_for_label(apn_elem)
+        self.UTILS.element.simulateClick(radio_button)
+
+    def get_label_for_radio_button(self, da_input):
+        return self.UTILS.element.getParent(self.UTILS.element.getParent(da_input)).find_element(*('css selector', 'label.name span'))
+
+    def get_radio_button_for_label(self, label_elem):
+        return self.UTILS.element.getParent(self.UTILS.element.getParent(label_elem)).find_element(*('css selector', 'input[type=radio]'))
+
+    def is_apn_selected(self, apn):
+        # Tap on the added APN
+        dom_elem = (DOM.Settings.apn_item_by_name[0], DOM.Settings.apn_item_by_name[1].format(apn))
+        apn_elem = self.UTILS.element.getElement(dom_elem, "APN to make default")
+
+        radio_button = self.get_radio_button_for_label(apn_elem)
+        return radio_button.is_selected()
+
+    def check_apn_content(self, apn_name, apn_user, apn_pwd):
+        def _test_apn_data(locator, info):
+            self.parent.wait_for_element_displayed(*locator)
+            input_value = self.marionette.find_element(*locator).get_attribute("value")
+            self.UTILS.test.test(input_value == info, "'Info' field contains expected value: {}".format(input_value))
+
+        locators = [DOM.Settings.celldata_data_apn, DOM.Settings.celldata_apn_user, DOM.Settings.celldata_apn_passwd]
+        expected_data = [apn_name, apn_user, apn_pwd]
+        map(_test_apn_data, locators, expected_data)
+
+    def tap_on_apn(self, apn_name):
+        apn = (DOM.Settings.apn_item_by_name[0], DOM.Settings.apn_item_by_name[1].format(apn_name))
+        apn_elem = self.UTILS.element.getElement(apn, "Got the apn to tap on")
+        apn_elem.tap()
+        self.UTILS.element.waitForElements(DOM.Settings.apn_editor_header, "APN Editor header")
+
+    def get_apn_data(self):
+        """
+        Gets the data (so far, name, user and passwd) of the already selected APN
+        """
+        def _get_value(locator):
+            return self.marionette.find_element(*locator).get_attribute("value")
+
+        locators = [DOM.Settings.celldata_data_apn, DOM.Settings.celldata_apn_user, DOM.Settings.celldata_apn_passwd]
+        return map(_get_value, locators)
+
+    def set_network_operator(self, network_type):
+        self.open_network_operator_menu()
+
+        time.sleep(2)
+        network_type_select = self.UTILS.element.getElement(
+            DOM.Settings.networkOperator_types, "Network Operator type")
+        network_type_select.tap()
+
+        self.marionette.switch_to_frame()
+
+        network_type_locator = (DOM.Settings.networkOperator_select_type[0],
+                                DOM.Settings.networkOperator_select_type[1].format(network_type))
+
+        option = self.UTILS.element.getElement(
+            network_type_locator, "Network Operator. Select: {}".format(network_type))
+        option.tap()
+
+        select_ok_btn = self.UTILS.element.getElement(
+            DOM.Settings.networkOperator_OK_btn, "Network Operator. Click on OK button")
+        select_ok_btn.tap()
+        self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
+
+    def confirm_data_conn(self):
+        self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
+        try:
+            self.UTILS.reporting.logResult("info", "Waiting for data switch-on confirmation")
+            self.parent.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON)
+            data_on_btn = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
+            data_on_btn.tap()
+            self.UTILS.reporting.logResult("info", "Data connection: confirmed")
+            self.UTILS.reporting.log_to_file("*** Data connection confirmed")
+        except Exception as e:
+            self.UTILS.reporting.log_to_file("*** Exception: {}".format(e))
+            self.UTILS.reporting.logResult("info", "No data connection confirmation")
+
+    def get_multi_sim(self, sim_card_number=1):
+        """
+        Try to find the element for selecting between multiple SIMs.
         Return the element for the selected SIM number, if found. None otherwise.
         """
         try:
@@ -120,11 +224,9 @@ class Settings(object):
         time.sleep(2)
         sim_card_option = self.get_multi_sim()
         if sim_card_option:
-            self.goBack()
+            self.go_back()
 
     def configure_mms_auto_retrieve(self, value):
-        self.launch()
-
         # Tap on Messaging Settings button
         time.sleep(2)
         settings_btn = self.UTILS.element.getElement(DOM.Settings.msg_settings, "Messaging Settings button")
@@ -163,37 +265,34 @@ class Settings(object):
         self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
         self.marionette.find_element('css selector', 'gaia-header[action=back]').tap(25, 25)
 
-    def createCustomAPN(self, apn, identifier, pwd):
-        # Open Data Settings
-        self.open_data_settings()
-
-        # Select custom settings
-        x = self.UTILS.element.getElement(DOM.Settings.custom_settings_apn, "Custom settings button")
-        x.tap()
-
+    def create_custom_apn(self, apn, identifier, pwd, sim_card_number=1):
         # We do not want suggestions or auto-correction for the APN values, so, just disable them
         self.data_layer.set_setting('keyboard.wordsuggestion', False)
         self.data_layer.set_setting('keyboard.autocorrect', False)
 
-        # Enter the data
-        self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        def _fill_apn_data(locator, info):
+            self.parent.wait_for_element_displayed(*locator)
+            input_field = self.marionette.find_element(*locator)
+            input_field.send_keys(info)
 
-        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        # Select custom settings
+        add_new_apn = self.UTILS.element.getElement(DOM.Settings.add_new_apn, "Add new APN button")
+        add_new_apn.tap()
 
-        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        locators = [DOM.Settings.celldata_data_apn, DOM.Settings.celldata_apn_user, DOM.Settings.celldata_apn_passwd]
+        data = [apn, identifier, pwd]
+        map(_fill_apn_data, locators, data)
 
         # Tap the ok button to save the changes
-        x = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
-        x.tap()
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.apn_ok_button, "Ok button")
+        time.sleep(1)
+        ok_btn.tap()
 
     def open_fdn(self):
         fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
         fdn.tap()
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").\
-                                                        encode("utf8"))), "FDN header")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").
+                                                                                         encode("utf8"))), "FDN header")
 
     def go_enable_fdn(self, enable):
         status = self.UTILS.element.getElement(DOM.Settings.fdn_status, "FDN status").text
@@ -228,19 +327,6 @@ class Settings(object):
         if result:
             self.three_times_bad_pin2(wrong_pin2)
             self.restore_pin2(good_pin2, puk2)
-
-    def confirm_data_conn(self):
-        self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
-        try:
-            self.UTILS.reporting.logResult("info", "Waiting for data switch-on confirmation")
-            self.parent.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON)
-            x = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
-            x.tap()
-            self.UTILS.reporting.logResult("info", "Data connection: confirmed")
-            self.UTILS.reporting.log_to_file("*** Data connection confirmed")
-        except Exception as e:
-            self.UTILS.reporting.log_to_file("*** Exception: {}".format(e))
-            self.UTILS.reporting.logResult("info", "No data connection confirmation")
 
     def reset_pin2(self, old_pin2, new_pin2):
         self.call_settings()
@@ -371,6 +457,33 @@ class Settings(object):
             self.fdn_delete_auth_number(number, pin2)
             time.sleep(2)
 
+    def three_times_bad_pin2(self, wrong_pin2):
+        """Change the PIN2.
+
+        Enter a wrong PIN2 three consecutive times. After that, the PUK2 is requested,
+        and also a new PIN2 value is entered twice.
+        """
+        for i in range(3):
+            self.fdn_type_pin2(wrong_pin2)
+
+    def restore_pin2(self, good_pin2, puk2):
+        """Restore PIN2 using PUK2.
+
+        After PIN2 has been entered wrongly three times, the PUK2 is required to unlock the SIM.
+        """
+        # SIM locked, enter PUK2 and new PIN2 twice
+        puk2_input = self.UTILS.element.getElement(DOM.Settings.fdn_enter_puk2_input, "PUK2 input")
+        puk2_input.send_keys(puk2)
+
+        new_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_puk2_pin2_input, "New PIN2 input")
+        new_pin2_input.send_keys(good_pin2)
+
+        confirm_pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_confirm_pin2_input, "Confirm PIN2 input")
+        confirm_pin2_input.send_keys(good_pin2)
+
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_done, "OK button")
+        ok_btn.tap()
+
     def downloads(self):
         """
         Open downloads.
@@ -399,7 +512,21 @@ class Settings(object):
         #     self.parent.wait_for_element_displayed(*DOM.DownloadManager.download_list_elems)
         time.sleep(5)
 
-    def disable_hotSpot(self):
+    def hotspot(self):
+        """
+        Open 'Internet sharing' settings (also known as 'hotspot').
+        """
+        self.UTILS.reporting.info("*** Looking for hotspot: {}".format(DOM.Settings.hotspot))
+        self.parent.wait_for_element_displayed(*DOM.Settings.hotspot, timeout=30)
+        hotspot_elem = self.marionette.find_element(*DOM.Settings.hotspot)
+        self.UTILS.reporting.info("*** Found hotspot menu: {}".format(hotspot_elem))
+        time.sleep(1)
+        self.UTILS.element.scroll_into_view(hotspot_elem)
+        time.sleep(1)
+        hotspot_elem.tap()
+        time.sleep(1)
+
+    def disable_hotspot(self):
         """
         Disable hotspot (internet sharing) - assumes Settings app is already open.
         """
@@ -423,7 +550,7 @@ class Settings(object):
         self.UTILS.test.test(is_disabled, "Hotspot settings are disabled (because 'hotspot' is not running).")
         self.UTILS.test.test(not is_status_icon, "Hotspot icon is not present in the status bar.")
 
-    def enable_hotSpot(self):
+    def enable_hotspot(self):
         """
         Enable hotspot (internet sharing) - assumes Settings app is already open.
         """
@@ -508,127 +635,19 @@ class Settings(object):
         next_btn.tap()
         self.parent.wait_for_element_not_displayed(*DOM.Loop.ffox_account_login_overlay)
 
-    def goBack(self):
-        """
-        Tap the back icon.
-        """
-#        time.sleep(0.5)
-#        back_btns = self.UTILS.element.getElements(DOM.Settings.back_button, "Back buttons", False)
-#        ok = False
-#        for i in back_btns:
-#            try:
-#                i.tap()
-#                ok = True
-#                break
-#            except:
-#                pass
-#
-#        if not ok:
-#            self.UTILS.reporting.logResult(False, "Tap the 'back' icon to return to the parent screen.")
-#            return False
-#
-#        time.sleep(1)
-#        return True
-        # TODO: remove tap with coordinates after Bug 1061698 is fixed
-        self.marionette.find_element('css selector', 'gaia-header[action=back]').tap(25, 25)
-
-    def goSound(self):
-        """
-        Go to Sound menu.
-        """
-        self.launch()
-        sound_menu = self.UTILS.element.getElement(DOM.Settings.sound, "Sound setting link")
-        sound_menu.tap()
-
-    def hotSpot(self):
-        """
-        Open 'Internet sharing' settings (also known as 'hotspot').
-        """
-        self.UTILS.reporting.info("*** Looking for hotspot: {}".format(DOM.Settings.hotspot))
-        self.parent.wait_for_element_displayed(*DOM.Settings.hotspot, timeout=30)
-        hotspot_elem = self.marionette.find_element(*DOM.Settings.hotspot)
-        self.UTILS.reporting.info("*** Found hotspot menu: {}".format(hotspot_elem))
-        time.sleep(1)
-        self.UTILS.element.scroll_into_view(hotspot_elem)
-        time.sleep(1)
-        hotspot_elem.tap()
-        time.sleep(1)
-
-    def open_data_settings(self):
-        """
-        Open cellular and data settings.
-        """
-        self.cellular_and_data()
-        data_menu = self.UTILS.element.getElement(DOM.Settings.celldata_DataSettings, "Data settings link")
-        self.UTILS.element.scroll_into_view(data_menu)
-        data_menu.tap()
-
-    def open_msg_settings(self):
-        """
-        Open cellular and data settings.
-        """
-        self.cellular_and_data()
-        msg_menu = self.UTILS.element.getElement(DOM.Settings.celldata_MsgSettings, "Message settings link")
-        self.UTILS.element.scroll_into_view(msg_menu)
-        msg_menu.tap()
-
-    def selectDefaultAPN(self, apn, open_settings=True):
-        """
-        Open Data Settings
-        """
-        if open_settings:
-            self.open_data_settings()
-
-        # Tap on the added APN
-        dom_elem = (DOM.Settings.default_apn[0], DOM.Settings.default_apn[1].format(apn))
-        apn_elem = self.UTILS.element.getElement(dom_elem, "Added APN")
-        self.UTILS.reporting.debug("APN {} element: {}".format(apn, apn_elem))
-        apn_elem.tap()
-
-        # Tap the ok button to save the changes
-        ok_btn = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
-        ok_btn.tap()
-        self.goBack()
-        sim_card_option = self.get_multi_sim()
-        if sim_card_option:
-            self.goBack()
-
-    def setAlarmVolume(self, volume):
+    def set_alarm_volume(self, volume):
         """
         Set the volume for alarms.
         """
         self.parent.data_layer.set_setting('audio.volume.alarm', volume)
 
-    def setNetworkOperator(self, network_type):
-
-        x = self.UTILS.element.getElement(DOM.Settings.networkOperator_button, "Network Operator option")
-        x.tap()
-
-        time.sleep(2)  # wait some time so that the options are populated
-
-        x = self.UTILS.element.getElement(DOM.Settings.networkOperator_types, "Network Operator type")
-        x.tap()
-
-        self.marionette.switch_to_frame()
-
-        network_type_locator = (DOM.Settings.networkOperator_select_type[0],
-                                DOM.Settings.networkOperator_select_type[1].format(network_type))
-
-        x = self.UTILS.element.getElement(network_type_locator, "Network Operator. Select: {}".format(network_type))
-        x.tap()
-
-        x = self.UTILS.element.getElement(DOM.Settings.networkOperator_OK_btn, "Network Operator. Click on OK button")
-        x.tap()
-
-        self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
-
-    def setRingerAndNotifsVolume(self, volume):
+    def set_ringer_and_notifs_volume(self, volume):
         """
         Set the volume for ringer and notifications.
         """
         self.parent.data_layer.set_setting('audio.volume.notification', volume)
 
-    def setTimeToNow(self):
+    def set_time_to_now(self):
         """
         Set date and time to 'now'.<br>
         TODO: Verify this
@@ -639,12 +658,12 @@ class Settings(object):
         return
         self.launch()
 
-        x = ("id", "menuItem-dateAndTime")
-        el = self.UTILS.element.getElement(x, "Date & Time setting")
+        date_and_time_link = ("id", "menuItem-dateAndTime")
+        el = self.UTILS.element.getElement(date_and_time_link, "Date & Time setting")
         el.tap()
 
-        x = ("id", "clock-date")
-        el = self.UTILS.element.getElement(x, "Date setting")
+        clock_date = ("id", "clock-date")
+        el = self.UTILS.element.getElement(clock_date, "Date setting")
         el.tap()
 
         time.sleep(2)
@@ -657,7 +676,7 @@ class Settings(object):
         is_dual_sim = self.UTILS.general.is_device_dual_sim()
 
         self.enable_sim_security(True, old_pin)
-        self.goBack()
+        self.go_back()
 
         if is_dual_sim:
             sim_security = self.UTILS.element.getElement(
@@ -837,7 +856,7 @@ class Settings(object):
             passcode_btn_create = self.UTILS.element.getElement(DOM.Settings.passcode_btn_create, "Button Create")
             passcode_btn_create.tap()
         # Return to the main settings menu
-        self.goBack()
+        self.go_back()
 
     def enter_unlock_code(self, code):
         """Enter the unlock code via the keyboard.
@@ -852,6 +871,7 @@ class Settings(object):
         """
         time.sleep(1)
         settings_menu = self.UTILS.element.getElement(DOM.Settings.wifi, "Wifi settings link")
+        time.sleep(1)
         settings_menu.tap()
 
         self.UTILS.element.waitForElements(DOM.Settings.wifi_header, "Wifi header appears.", True, 20, False)
@@ -877,8 +897,8 @@ class Settings(object):
             'Forget' it (so we can reconnect as-per test) and tap the wifi name again.
             """
             self.parent.wait_for_element_displayed(*DOM.Settings.wifi_details_forget_btn, timeout=3)
-            x = self.marionette.find_element(*DOM.Settings.wifi_details_forget_btn)
-            x.tap()
+            wifi_forget_btn = self.marionette.find_element(*DOM.Settings.wifi_details_forget_btn)
+            wifi_forget_btn.tap()
             is_connected = True
 
             # Takes a few seconds to disconnect, so check a few times.
@@ -889,27 +909,27 @@ class Settings(object):
             pass
 
         if not quiet:
-            _x = "was" if is_connected else "was not"
-            _y = "and has been succesfully" if is_forgotten else "but could not be"
+            _msg_1 = "was" if is_connected else "was not"
+            _msg_2 = "and has been succesfully" if is_forgotten else "but could not be"
 
             self.UTILS.test.test(is_connected and is_forgotten,
-                                 "Wifi network '{}' {} connected {} forgotten.".format(wlan, _x, _y))
+                                 "Wifi network '{}' {} connected {} forgotten.".format(wlan, _msg_1, _msg_2))
 
         return is_connected
 
-    def _checkDisconnected(self, wlan):
+    def _check_disconnected(self, wlan):
         """
         Private function to wait until this wifi network is no longer marked as "Connected".
         """
-        x = self.marionette.find_elements(*DOM.Settings.wifi_available_networks)
-        for i in x:
-            if i.find_element("tag name", "a").text == wlan:
-                if i.find_element("tag name", "small").text != "Connected":
+        available_networks = self.marionette.find_elements(*DOM.Settings.wifi_available_networks)
+        for network in available_networks:
+            if network.find_element("tag name", "a").text == wlan:
+                if network.find_element("tag name", "small").text != "Connected":
                     return True
                 else:
                     return False
 
-    def wifi_list_isConnected(self, wlan_name, timeout=30):
+    def wifi_list_is_connected(self, wlan_name, timeout=30):
         """
         Verify the expected network is listed as connected in 'available networks'.
         """
@@ -920,7 +940,7 @@ class Settings(object):
         except:
             return False
 
-    def wifi_list_isNotConnected(self, wlan_name, timeout=30):
+    def wifi_list_is_not_connected(self, wlan_name, timeout=30):
         """
         Verify the expected network is listed as connected in 'available networks'.
         """
@@ -931,7 +951,7 @@ class Settings(object):
         except:
             return False
 
-    def wifi_list_tapName(self, wlan_name):
+    def wifi_list_tap_name(self, wlan_name):
         """
         Tap the network name in the list.
         """
@@ -944,7 +964,7 @@ class Settings(object):
         wifi.tap()
         time.sleep(2)
 
-    def wifi_switchOn(self):
+    def wifi_switch_on(self):
         """
         Click slider to turn wifi on.
         """
@@ -957,7 +977,7 @@ class Settings(object):
         """
         time.sleep(3)
 
-    def wifi_switchOff(self):
+    def wifi_switch_off(self):
         """
         Click slider to turn wifi on.
         """
@@ -975,9 +995,9 @@ class Settings(object):
         """
         Connect to the wifi.
         """
-        self.wifi_switchOn()
+        self.wifi_switch_on()
         time.sleep(2)
-        self.wifi_list_tapName(wifi_name)
+        self.wifi_list_tap_name(wifi_name)
         self.UTILS.general.typeThis(DOM.Settings.wifi_login_pass, "Password for the WLAN", wifi_pass,
                                     p_no_keyboard=True)
         ok_btn = self.marionette.find_element(*DOM.Settings.wifi_login_ok_btn)
@@ -1000,7 +1020,7 @@ class Settings(object):
         ok_btn.tap()
         # switch back to the Settings application
         self.UTILS.iframe.switch_to_frame(*DOM.Settings.frame_locator)
-        self.goBack()
+        self.go_back()
 
     def reset_phone(self):
         """Open the Information menu and reset the device.
