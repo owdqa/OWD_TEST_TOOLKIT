@@ -412,7 +412,8 @@ class Dialer(object):
             self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
             self.marionette.find_element(*DOM.Dialer.hangup_bar_locator).tap()
             self.apps.switch_to_displayed_app()
-        except:
+        except Exception, e:
+            self.UTILS.reporting.logResult('info', 'Exception is coming: {}'.format(e))
             self.apps.switch_to_displayed_app()
             self.parent.wait_for_element_displayed(*DOM.Dialer.call_busy_button_ok, timeout=5)
             ok_btn = self.marionette.find_element(*DOM.Dialer.call_busy_button_ok)

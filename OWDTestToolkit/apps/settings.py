@@ -28,7 +28,12 @@ class Settings(object):
         Tap the back icon.
         """
         # TODO: remove tap with coordinates after Bug 1061698 is fixed
-        self.marionette.find_element('css selector', 'gaia-header[action=back]').tap(25, 25)
+        headers = self.marionette.find_elements('css selector', 'gaia-header[action=back]')
+        for header in headers:
+            if header.is_displayed():
+                header.tap(25, 25)
+                break
+        time.sleep(2)
 
     def go_sound(self):
         """
@@ -43,7 +48,9 @@ class Settings(object):
                                        timeout=30, message="Option to be enabled")
 
     def call_settings(self, sim_card_number=1):
-
+        """
+        Open call settings
+        """
         self.wait_for_option_to_be_enabled(DOM.Settings.call_settings_option)
 
         x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
@@ -69,7 +76,6 @@ class Settings(object):
         """
         Open cellular and data settings.
         """
-
         self.wait_for_option_to_be_enabled(DOM.Settings.data_connectivity)
 
         # Once it is enabled, click on it
@@ -83,15 +89,11 @@ class Settings(object):
         """
         Open cellular and data settings.
         """
-        self.cellular_and_data()
-
-        """
-        In case the device supports dual sim, we have to select one before
-        entering the call_settings menu.
-        """
+        # In case the device supports dual sim, we have to select one before entering the call_settings menu.
         sim_card_option = self.get_multi_sim(sim_card_number)
         if sim_card_option:
             sim_card_option.tap()
+        self.parent.wait_for_element_displayed(*DOM.Settings.sim_settings_header)
 
     def open_apn_settings(self):
         apn_settings_option = self.UTILS.element.getElement(
@@ -115,32 +117,64 @@ class Settings(object):
         msg_menu = self.UTILS.element.getElement(DOM.Settings.celldata_MsgSettings, "Message settings link")
         msg_menu.tap()
 
-    def select_default_apn(self, apn, open_settings=True):
+    def select_default_apn(self, apn):
         """
-        Open Data Settings
+        Makes a certain apn default
         """
-        if open_settings:
-            self.open_data_settings()
-
         # Tap on the added APN
-        dom_elem = (DOM.Settings.default_apn[0], DOM.Settings.default_apn[1].format(apn))
-        apn_elem = self.UTILS.element.getElement(dom_elem, "Added APN")
-        self.UTILS.reporting.debug("APN {} element: {}".format(apn, apn_elem))
-        apn_elem.tap()
+        dom_elem = (DOM.Settings.apn_item_by_name[0], DOM.Settings.apn_item_by_name[1].format(apn))
+        apn_elem = self.UTILS.element.getElement(dom_elem, "APN to make default")
 
-        # Tap the ok button to save the changes
-        ok_btn = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
-        ok_btn.tap()
-        self.go_back()
-        sim_card_option = self.get_multi_sim()
-        if sim_card_option:
-            self.go_back()
+        radio_button = self.get_radio_button_for_label(apn_elem)
+        self.UTILS.element.simulateClick(radio_button)
+
+    def get_label_for_radio_button(self, da_input):
+        return self.UTILS.element.getParent(self.UTILS.element.getParent(da_input)).find_element(*('css selector', 'label.name span'))
+
+    def get_radio_button_for_label(self, label_elem):
+        return self.UTILS.element.getParent(self.UTILS.element.getParent(label_elem)).find_element(*('css selector', 'input[type=radio]'))
+
+    def is_apn_selected(self, apn):
+        # Tap on the added APN
+        dom_elem = (DOM.Settings.apn_item_by_name[0], DOM.Settings.apn_item_by_name[1].format(apn))
+        apn_elem = self.UTILS.element.getElement(dom_elem, "APN to make default")
+
+        radio_button = self.get_radio_button_for_label(apn_elem)
+        return radio_button.is_selected()
+
+    def check_apn_content(self, apn_name, apn_user, apn_pwd):
+        def _test_apn_data(locator, info):
+            self.parent.wait_for_element_displayed(*locator)
+            input_value = self.marionette.find_element(*locator).get_attribute("value")
+            self.UTILS.test.test(input_value == info, "'Info' field contains expected value: {}".format(input_value))
+
+        locators = [DOM.Settings.celldata_data_apn, DOM.Settings.celldata_apn_user, DOM.Settings.celldata_apn_passwd]
+        expected_data = [apn_name, apn_user, apn_pwd]
+        map(_test_apn_data, locators, expected_data)
+
+    def tap_on_apn(self, apn_name):
+        apn = (DOM.Settings.apn_item_by_name[0], DOM.Settings.apn_item_by_name[1].format(apn_name))
+        apn_elem = self.UTILS.element.getElement(apn, "Got the apn to tap on")
+        apn_elem.tap()
+        self.UTILS.element.waitForElements(DOM.Settings.apn_editor_header, "APN Editor header")
+
+    def get_apn_data(self):
+        """
+        Gets the data (so far, name, user and passwd) of the already selected APN
+        """
+        def _get_value(locator):
+            return self.marionette.find_element(*locator).get_attribute("value")
+
+        locators = [DOM.Settings.celldata_data_apn, DOM.Settings.celldata_apn_user, DOM.Settings.celldata_apn_passwd]
+        return map(_get_value, locators)
 
     def set_network_operator(self, network_type):
         self.open_network_operator_menu()
 
-        network_type = self.UTILS.element.getElement(DOM.Settings.networkOperator_types, "Network Operator type")
-        network_type.tap()
+        time.sleep(2)
+        network_type_select = self.UTILS.element.getElement(
+            DOM.Settings.networkOperator_types, "Network Operator type")
+        network_type_select.tap()
 
         self.marionette.switch_to_frame()
 
@@ -232,30 +266,27 @@ class Settings(object):
         self.marionette.find_element('css selector', 'gaia-header[action=back]').tap(25, 25)
 
     def create_custom_apn(self, apn, identifier, pwd, sim_card_number=1):
-        # Open Data Settings
-        self.open_data_settings()
-
-        # Select custom settings
-        x = self.UTILS.element.getElement(DOM.Settings.custom_settings_apn, "Custom settings button")
-        x.tap()
-
         # We do not want suggestions or auto-correction for the APN values, so, just disable them
         self.data_layer.set_setting('keyboard.wordsuggestion', False)
         self.data_layer.set_setting('keyboard.autocorrect', False)
 
-        # Enter the data
-        self.UTILS.general.typeThis(DOM.Settings.celldata_data_apn, "APN", apn,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        def _fill_apn_data(locator, info):
+            self.parent.wait_for_element_displayed(*locator)
+            input_field = self.marionette.find_element(*locator)
+            input_field.send_keys(info)
 
-        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_user, "APN", identifier,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        # Select custom settings
+        add_new_apn = self.UTILS.element.getElement(DOM.Settings.add_new_apn, "Add new APN button")
+        add_new_apn.tap()
 
-        self.UTILS.general.typeThis(DOM.Settings.celldata_apn_passwd, "APN", pwd,
-                                    p_no_keyboard=False, p_validate=False, p_clear=True, p_enter=True)
+        locators = [DOM.Settings.celldata_data_apn, DOM.Settings.celldata_apn_user, DOM.Settings.celldata_apn_passwd]
+        data = [apn, identifier, pwd]
+        map(_fill_apn_data, locators, data)
 
         # Tap the ok button to save the changes
-        x = self.UTILS.element.getElement(DOM.Settings.celldata_ok_button, "Ok button")
-        x.tap()
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.apn_ok_button, "Ok button")
+        time.sleep(1)
+        ok_btn.tap()
 
     def open_fdn(self):
         fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
@@ -840,6 +871,7 @@ class Settings(object):
         """
         time.sleep(1)
         settings_menu = self.UTILS.element.getElement(DOM.Settings.wifi, "Wifi settings link")
+        time.sleep(1)
         settings_menu.tap()
 
         self.UTILS.element.waitForElements(DOM.Settings.wifi_header, "Wifi header appears.", True, 20, False)
