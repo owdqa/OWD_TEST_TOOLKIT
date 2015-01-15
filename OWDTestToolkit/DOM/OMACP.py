@@ -1,11 +1,11 @@
-frame_locator = ('src', 'app: wappush')
+frame_locator = ('src', 'app://wappush')
 
 CP_Windows_Pin = ("css selector", 'input[data-l10n-id=cp-pin]')
 CP_Accept_Button = ("css selector", 'button#accept')
 CP_Store_Button = ("css selector", 'form#cp-store-confirm button[data-l10n-id=store]')
 
 CP_OTA_Message = ("css selector", "form#cp-finish-confirm p > strong[data-l10n-id='cp-finish-confirm-dialog-message']")
-CP_Finish_Button = ("css selector", 'form#cp-finish-confirm button[data-l10n-id=finish')
+CP_Finish_Button = ("css selector", 'form#cp-finish-confirm button[data-l10n-id=finish]')
 
 CP_Close_Button = ('id', 'close')
 CP_Cancel_Button = ("css selector", 'form#cp-store-confirm button[data-l10n-id="cancel"]')
