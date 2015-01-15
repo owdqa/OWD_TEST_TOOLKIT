@@ -53,8 +53,8 @@ class Settings(object):
         """
         self.wait_for_option_to_be_enabled(DOM.Settings.call_settings_option)
 
-        x = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
-        self.UTILS.element.simulateClick(x)
+        call_settings_btn = self.UTILS.element.getElement(DOM.Settings.call_settings, "Call settings button")
+        self.UTILS.element.simulateClick(call_settings_btn)
         """
         In case the device supports dual sim, we have to select one before
         entering the call_settings menu.
@@ -195,8 +195,8 @@ class Settings(object):
         try:
             self.UTILS.reporting.logResult("info", "Waiting for data switch-on confirmation")
             self.parent.wait_for_element_displayed(*DOM.Settings.celldata_DataConn_ON)
-            x = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
-            x.tap()
+            data_on_btn = self.marionette.find_element(*DOM.Settings.celldata_DataConn_ON)
+            data_on_btn.tap()
             self.UTILS.reporting.logResult("info", "Data connection: confirmed")
             self.UTILS.reporting.log_to_file("*** Data connection confirmed")
         except Exception as e:
@@ -658,12 +658,12 @@ class Settings(object):
         return
         self.launch()
 
-        x = ("id", "menuItem-dateAndTime")
-        el = self.UTILS.element.getElement(x, "Date & Time setting")
+        date_and_time_link = ("id", "menuItem-dateAndTime")
+        el = self.UTILS.element.getElement(date_and_time_link, "Date & Time setting")
         el.tap()
 
-        x = ("id", "clock-date")
-        el = self.UTILS.element.getElement(x, "Date setting")
+        clock_date = ("id", "clock-date")
+        el = self.UTILS.element.getElement(clock_date, "Date setting")
         el.tap()
 
         time.sleep(2)
@@ -897,8 +897,8 @@ class Settings(object):
             'Forget' it (so we can reconnect as-per test) and tap the wifi name again.
             """
             self.parent.wait_for_element_displayed(*DOM.Settings.wifi_details_forget_btn, timeout=3)
-            x = self.marionette.find_element(*DOM.Settings.wifi_details_forget_btn)
-            x.tap()
+            wifi_forget_btn = self.marionette.find_element(*DOM.Settings.wifi_details_forget_btn)
+            wifi_forget_btn.tap()
             is_connected = True
 
             # Takes a few seconds to disconnect, so check a few times.
@@ -909,11 +909,11 @@ class Settings(object):
             pass
 
         if not quiet:
-            _x = "was" if is_connected else "was not"
-            _y = "and has been succesfully" if is_forgotten else "but could not be"
+            _msg_1 = "was" if is_connected else "was not"
+            _msg_2 = "and has been succesfully" if is_forgotten else "but could not be"
 
             self.UTILS.test.test(is_connected and is_forgotten,
-                                 "Wifi network '{}' {} connected {} forgotten.".format(wlan, _x, _y))
+                                 "Wifi network '{}' {} connected {} forgotten.".format(wlan, _msg_1, _msg_2))
 
         return is_connected
 
@@ -921,10 +921,10 @@ class Settings(object):
         """
         Private function to wait until this wifi network is no longer marked as "Connected".
         """
-        x = self.marionette.find_elements(*DOM.Settings.wifi_available_networks)
-        for i in x:
-            if i.find_element("tag name", "a").text == wlan:
-                if i.find_element("tag name", "small").text != "Connected":
+        available_networks = self.marionette.find_elements(*DOM.Settings.wifi_available_networks)
+        for network in available_networks:
+            if network.find_element("tag name", "a").text == wlan:
+                if network.find_element("tag name", "small").text != "Connected":
                     return True
                 else:
                     return False
