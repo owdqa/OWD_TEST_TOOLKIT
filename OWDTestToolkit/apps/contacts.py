@@ -13,8 +13,8 @@ class Contacts(object):
         self.parent = parent
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
-        
-        self._view_fields = { 
+
+        self._view_fields = {
             'name': DOM.Contacts.view_details_title,
             'tel': DOM.Contacts.view_contact_tel_field,
             'email': DOM.Contacts.view_contact_email_field,
@@ -29,7 +29,7 @@ class Contacts(object):
             'street': DOM.Contacts.street_field,
             'zip': DOM.Contacts.zip_code_field,
             'city': DOM.Contacts.city_field,
-            'country':DOM.Contacts.country_field 
+            'country': DOM.Contacts.country_field
         }
 
         self._add_edit_field_btn = {
@@ -52,7 +52,7 @@ class Contacts(object):
         header = self.UTILS.element.getElement(DOM.Contacts.details_view_header, "View contact header")
         time.sleep(1)
         header.tap(25, 25)
-        
+
     def add_gallery_image_to_contact(self, num):
         """
         Adds an image for this contact from the gallery
@@ -736,7 +736,7 @@ class Contacts(object):
                 add_new_field_btn.tap()
                 fields[k] = self.marionette.find_element(*v)
         return fields
-        
+
     def get_contact_fields(self, view=False):
         """
         Return 3-d array of contact details.
@@ -760,7 +760,7 @@ class Contacts(object):
 
         contact_fields = self.get_contact_fields()
         self.UTILS.reporting.logResult('info', 'Contact fields: '.format(contact_fields))
-        
+
         """
         Put the contact details into each of the fields (this method
         clears each field first).
@@ -989,13 +989,12 @@ class Contacts(object):
         Because this can be called from several applications (contacts, dialer, sms ...), finding
         the right iframe can be tricky, which is why "self.find_frame()" is here.
         """
-
         self.UTILS.reporting.logResult('info', 'Trying to view contact: {}'.format(contact_name))
         contact_name_strong = contact_name.split(" ")[0]
         contact_locator = (DOM.Contacts.view_all_contact_specific_contact[0],
                             DOM.Contacts.view_all_contact_specific_contact[1].format(contact_name_strong))
 
-        the_contact = self.UTILS.element.getElement(contact_locator, "Contact with name: {}".format(contact_name))
+        the_contact = self.UTILS.element.getElement(contact_locator, "Contact with name: {} {}".format(contact_locator, contact_name))
         the_contact.tap()
 
         if header_check:
