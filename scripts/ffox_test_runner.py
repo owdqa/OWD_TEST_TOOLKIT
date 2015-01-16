@@ -48,7 +48,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
         sys.stdout.write(u"{}: {:103s} ".format(test_num, description))
         sys.stdout.flush()
-        
+
         return expected
 
     def run_test_set(self, tests):
@@ -71,10 +71,10 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                     # If we have to reattempt, just substract the number of assertions to keep the results
                     # accurate
                     if attempt < self.testvars['general']["test_retries"]:
-                        self.assertion_manager.set_accum_passed(self.assertion_manager.get_accum_passed() -
-                                                                self.assertion_manager.get_passed())
-                        self.assertion_manager.set_accum_failed(self.assertion_manager.get_accum_failed() -
-                                                                self.assertion_manager.get_failed())
+                        self.assertion_manager.set_accum_passed(self.assertion_manager.accum_passed -
+                                                                self.assertion_manager.passed)
+                        self.assertion_manager.set_accum_failed(self.assertion_manager.accum_failed -
+                                                                self.assertion_manager.failed)
                         # Remove this result from results list, because now we call run_test() twice and we'll
                         # get as many results as retries we've configured, and we're only interested in the last one
                         self.results.pop(-1)
@@ -127,8 +127,8 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         sys.stdout.write("{} {:4s} {:20s} (assertions: {}/{})\n".\
                          format(time_string, "(x{})".format(results.attempts) if results.attempts > 1 else "",
                                 self.get_result_msg(results),
-                                OWDMarionetteTestRunner.assertion_manager.get_passed(),
-                                OWDMarionetteTestRunner.assertion_manager.get_total()))
+                                OWDMarionetteTestRunner.assertion_manager.passed,
+                                OWDMarionetteTestRunner.assertion_manager.total))
 
 
 class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingTestRunnerMixin):
@@ -144,7 +144,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # Some initial steps going through!
         self.parse_blocked_tests_file()
         self.parse_descriptions_file()
-        
+
         # Store the toolkit location to infer the location of some files relative to it, such as
         # the devices config or the css template
         self.testvars['toolkit_cfg']['toolkit_location'] = kwargs['toolkit_location']
@@ -203,7 +203,6 @@ class TestRunner(object):
         self.unexpected_failures = 0
         self.expected_failures = 0
         self.assertion_manager = AssertionManager()
-        self.assertion_manager.reset()
         self.failed_tests = []
 
     def start_test_runner(self, runner_class, options, tests):
@@ -239,7 +238,7 @@ class TestRunner(object):
             # We have to use len(), since result is an array of arrays containing the error reason
             result_values = [len(getattr(result, name)) for name in result_attrs]
             map(self.update_attr, own_attrs, result_values)
-            
+
             if len(result.errors) > 0 or len(result.failures) > 0:
                 test_name = re.search('test_(\w*).*$', result.tests.next().test_name).group(1)
                 self.failed_tests.append(test_name)
@@ -271,7 +270,7 @@ class TestRunner(object):
                                                                   self.assertion_manager.accum_total)
         print self._console_separator
         print
-        
+
         if len(self.failed_tests) > 0:
             print "Failed tests: {}".format(", ".join(self.failed_tests))
 
@@ -318,12 +317,12 @@ class TestRunner(object):
             detail_file.close()
 
             description_tag = soup.find("span", id='test-description')
-            
+
             if test_number in self.runner.descriptions:
                 description_tag.string = self.runner.descriptions[test_number]
             else:
                 description_tag.string = "Description not available..."
-                
+
             duration_tag = soup.find("span", id='duration')
             duration_tag.string = "{:.2f} seconds".format(result.time_taken)
             result_tag = soup.find("div", id="result-container")
@@ -362,7 +361,7 @@ class TestRunner(object):
             if not os.path.exists(d):
                 os.makedirs(d)
 
-        logger = structured.commandline.setup_logging(options.logger_name, options)  # , {"tbpl": open("/tmp/tests/tests.log", "a")})
+        logger = structured.commandline.setup_logging(options.logger_name, options)
         options.logger = logger
 
         # Remove default stdout logger from mozilla logger

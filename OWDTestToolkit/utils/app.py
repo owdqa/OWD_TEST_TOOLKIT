@@ -265,7 +265,8 @@ class app(object):
                 self.parent.reporting.logResult("info", "(Looks like app '{}' is not currently running, so I'll launch it.)".\
                                format(app_name))
                 self.parent.apps.launch(app_name)
-                self.parent.element.waitForNotElements(DOM.GLOBAL.loading_overlay, "{} app loading 'overlay'".format(app_name))
+                self.parent.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
+                                                       "{} app loading 'overlay'".format(app_name))
                 self.parent.iframe.switchToFrame(*app_frame)
             except:
                 pass
@@ -274,7 +275,7 @@ class app(object):
         """
         Remove an app using the UI.
         """
-        self.parent.reporting.logResult("info", "Making sure app <b>{}</b> is uninstalled.".format(app_name))
+        self.parent.reporting.logResult("info", u"Making sure app <b>{}</b> is uninstalled.".format(app_name))
         myApp = self.findAppIcon(app_name)
         if myApp:
             self.parent.element.scroll_into_view(myApp)
@@ -293,4 +294,4 @@ class app(object):
 
             self.parent.test.test(not self.isAppInstalled(app_name), "App is uninstalled after deletion.")
         else:
-            self.parent.reporting.logResult("info", "(No need to uninstall {}.)".format(app_name))
+            self.parent.reporting.logResult("info", u"(No need to uninstall {}.)".format(app_name))

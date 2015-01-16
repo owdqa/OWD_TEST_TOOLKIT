@@ -111,7 +111,7 @@ class Dialer(object):
         If p_open_call_log is set to False it will assume you are
         already in the call log.
         """
-        
+
         if p_open_call_log:
             self.open_call_log()
 
@@ -431,12 +431,13 @@ class Dialer(object):
         try:
             self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
             self.parent.wait_for_element_displayed(
-                "xpath", DOM.Dialer.outgoing_call_numberXP.format(incoming_number), timeout=30)
+                "xpath", DOM.Dialer.outgoing_call_numberXP.format(incoming_number), timeout=60)
         except:
             self.UTILS.test.test(False, "No incoming call received", True)
 
     def resume_hidden_call(self):
         self.marionette.switch_to_frame()
-        attention = self.marionette.find_element("id", "attention-screen")
+        self.UTILS.statusbar.displayStatusBar()
+        attention = self.marionette.find_element('id', 'attention-window-notifications-container')
         attention.tap()
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
