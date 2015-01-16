@@ -676,6 +676,7 @@ class Settings(object):
         is_dual_sim = self.UTILS.general.is_device_dual_sim()
 
         self.enable_sim_security(True, old_pin)
+        time.sleep(1)
         self.go_back()
 
         if is_dual_sim:
