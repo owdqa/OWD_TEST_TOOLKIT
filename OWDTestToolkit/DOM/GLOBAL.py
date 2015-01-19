@@ -1,3 +1,6 @@
+from OWDTestToolkit.utils.i18nsetup import I18nSetup
+_ = I18nSetup(I18nSetup).setup()
+
 loading_overlay = ('id', 'loading-overlay')
 app_head_specific = "//h1[text()='{}']"
 app_head = ('tag name', "h1")
@@ -64,3 +67,6 @@ frame_containing = ("xpath", "//iframe[contains({},'{}')]")
 
 # Battery
 battery_icon = ('id', 'statusbar-battery')
+
+# Generic buttons
+ok_button = ("xpath", "//button[text()='{}']".format(_("OK")))
