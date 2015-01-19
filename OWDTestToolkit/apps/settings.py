@@ -93,7 +93,6 @@ class Settings(object):
         sim_card_option = self.get_multi_sim(sim_card_number)
         if sim_card_option:
             sim_card_option.tap()
-        self.parent.wait_for_element_displayed(*DOM.Settings.sim_settings_header)
 
     def open_apn_settings(self):
         apn_settings_option = self.UTILS.element.getElement(
@@ -821,6 +820,26 @@ class Settings(object):
                 self.UTILS.element.waitForNotElements(DOM.Settings.sim_security_change_pin,
                                                       "Change PIN button <b> is not there </b>")
 
+    def enter_lockscreen_menu(self):
+        """Open the Lock Screen menu"""
+
+        # Enter the screen lock menu
+        scr_lock_menu = self.UTILS.element.getElement(DOM.Settings.screen_lock_menu, "Screen lock menu")
+        self.UTILS.element.scroll_into_view(scr_lock_menu)
+        time.sleep(1)
+        self.UTILS.element.simulateClick(scr_lock_menu)
+        time.sleep(1)
+
+    def set_lockscreen(self, enable):
+        """Enable or disable the lock screen"""
+
+        # Get lockscreen input status and enable if required
+        lockscreen_elem = self.marionette.find_element(*DOM.Settings.lockscreen_input)
+        enabled = lockscreen_elem.get_attribute("checked")
+        self.UTILS.reporting.info("LOCKSCREEN ENABLED: {}".format(enabled))
+        if (not enabled and enable) or (enabled and not enable):
+            self.marionette.find_element(*DOM.Settings.lockscreen_label).tap()
+
     def set_passcode_lock(self, enable=False, code=None):
         """Configure the passcode lock option.
 
@@ -828,13 +847,10 @@ class Settings(object):
         enable: if True, it will enable passcode lock.
         code: the code used for locking/unlocking.
         """
-        # Enter the screen lock menu
-        scr_lock_menu = self.UTILS.element.getElement(DOM.Settings.screen_lock_menu, "Screen lock menu")
-        scr_lock_menu.tap()
 
         # Move the passcode lock slider to the desired position, if required
         passcode_element = self.UTILS.element.getElement(DOM.Settings.passcode_lock, "Passcode lock")
-        passcode_lock = self.marionette.find_element(*DOM.Settings.passcode_enable, id=passcode_element.id)
+        passcode_lock = self.marionette.find_element(*DOM.Settings.passcode_enable)
         checked = passcode_lock.get_attribute("checked")
         passcode_enabled = checked is not None and checked == "true"
         self.UTILS.reporting.debug(

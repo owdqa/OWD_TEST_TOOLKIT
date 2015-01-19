@@ -143,3 +143,16 @@ class Browser(object):
                 result = self.marionette.switch_to_frame(web_frame)
                 break
         return result
+
+    def add_current_page_to_bookmarks(self):
+        """
+        Open the Edit menu and add the current page to the bookmarks list
+        """
+        self.marionette.switch_to_frame()
+        menu = self.UTILS.element.getElement(DOM.Browser.current_browser_menu, "Current browser window")
+        menu.tap()
+        add_btn = self.UTILS.element.getElement(DOM.Browser.search_add_to_homescreen, "Add to homescreen button")
+        add_btn.tap()
+        self.UTILS.iframe.switchToFrame(*DOM.Browser.bookmark_frame_locator)
+        done_btn = self.UTILS.element.getElement(DOM.Browser.bookmark_done_button, "Add bookmark Done button")
+        done_btn.tap()
