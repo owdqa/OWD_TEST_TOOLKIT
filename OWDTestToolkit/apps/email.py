@@ -435,7 +435,7 @@ class Email(object):
         self.wait_for_sync_completed()
         self.wait_for_message_list()
 
-    def setup_account_first_step(self, p_user, p_email, p_pass):
+    def setup_account_first_step(self, user, email, p_pass):
         """
         Set up a new email account in the email app and login.
         If we've just started out, email will open directly to "New Account").

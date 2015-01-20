@@ -3,6 +3,8 @@ _ = I18nSetup(I18nSetup).setup()
 
 frame_locator = ('src', 'dialer')
 frame_locator_calling = ('name', 'call_screen')
+call_screen_locator = ("css selector", "div.callscreenWindow.active")
+call_screen_frame_locator = ('css selector', 'div.callscreenWindow.active iframe')
 
 # Main options
 option_bar_call_log = ("id", "option-recents")
@@ -54,7 +56,7 @@ call_log_no_calls_msg = ("id", "no-result-message")
 call_log_delete_btn = ("id", "delete-button")
 call_log_confirm_delete = ('xpath', '//form[@id="confirmation-message"]/menu/button[@class="danger"]')
 call_log_missed = ('id', 'missed-filter')
-call_log_missed_number_xpath = '//a[contains(@id, "{}")]//aside[contains(@class, "icon-missed")]'
+call_log_missed_number = ('css selector', 'li.log-item.missed-call[data-phone-number="{}"]')
 call_log_numtap_send_msg = ("css selector", "form.call-group-menu button[data-l10n-id=sendSms]")
 call_log_numtap_call_info = ("css selector", "form.call-group-menu button[data-l10n-id=callInformation]")
 call_log_numtap_create_new = ("id", "call-info-create")

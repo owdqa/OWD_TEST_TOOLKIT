@@ -111,7 +111,7 @@ class Dialer(object):
         If p_open_call_log is set to False it will assume you are
         already in the call log.
         """
-
+        
         if p_open_call_log:
             self.open_call_log()
 
@@ -427,13 +427,18 @@ class Dialer(object):
 
         time.sleep(2)
 
-    def check_incoming_call(self, incoming_number):
+    def wait_for_incoming_call(self, phone_number, timeout=30):
+        self.marionette.switch_to_frame()
         try:
-            self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
-            self.parent.wait_for_element_displayed(
-                "xpath", DOM.Dialer.outgoing_call_numberXP.format(incoming_number), timeout=60)
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_screen_locator, timeout=60)
+            frame = self.marionette.find_element(*DOM.Dialer.call_screen_frame_locator)
+            self.marionette.switch_to_frame(frame)
+            elem = ("xpath", DOM.Dialer.outgoing_call_numberXP.format(phone_number))
+            self.UTILS.element.waitForElements(
+                elem, "Phone number [{}] is displayed in call_screen frame".format(phone_number))
         except:
             self.UTILS.test.test(False, "No incoming call received", True)
+
 
     def resume_hidden_call(self):
         self.marionette.switch_to_frame()

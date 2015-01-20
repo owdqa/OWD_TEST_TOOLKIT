@@ -90,9 +90,7 @@ sms_button_specific_id = 'send-sms-button-{}'
 email_button_spec_id = 'email-or-pick-{}'
 link_button = ('css selector', "#contact-detail-inner #link_button")
 
-#
 # Importing from gmail / hotmail etc...
-#
 import_all_imported_msg = ("xpath", "//*[@id='friends-msg' and contains(text(), 'your friends are imported')]")
 import_close_icon = ("id", "import-close")
 import_throbber = ("id", "popup-throbber")
@@ -138,9 +136,7 @@ importing_sim_contacts = ('xpath', '//h1[@id="progress-title" and contains(text(
 importing_progress = ('css selector', '#progress-activity #progress-msg')
 imported_contacts_path = "//section[@id='statusMsg']/p[contains(text(), '{}')]"
 
-#
 # Export
-#
 export_export_btn = ("id", "export-action")
 export_contacts = ("id", "exportContacts")
 export_sd_card = ("id", "export-sd-option")
