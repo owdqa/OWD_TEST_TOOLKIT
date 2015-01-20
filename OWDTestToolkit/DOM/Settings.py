@@ -158,8 +158,6 @@ dual_sim_switch_pin_sim1 = ('css selector', '#simpin-container .simpin-enabled.s
 dual_sim_change_pin_sim1 = ('css selector', '#simpin-container .simpin-change.simpin-change-0.simpin-0')
 
 screen_lock_menu = ('id', 'menuItem-screenLock')
-lockscreen_input = ('css selector', '.lockscreen-enable')
-lockscreen_label = ('xpath', '//input[@class="lockscreen-enable"]/..')
 passcode_lock = ('css selector', '.lockscreen-enabled')
 passcode_enable = ('css selector', '.passcode-enable')
 passcode_input = ('id', 'passcode-pseudo-input')

@@ -439,6 +439,7 @@ class Dialer(object):
         except:
             self.UTILS.test.test(False, "No incoming call received", True)
 
+
     def resume_hidden_call(self):
         self.marionette.switch_to_frame()
         self.UTILS.statusbar.displayStatusBar()
