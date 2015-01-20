@@ -335,6 +335,7 @@ class Settings(object):
             self.fdn_type_pin2(old_pin2)
 
         reset_btn = self.UTILS.element.getElement(DOM.Settings.fdn_reset_pin2_btn, "Reset PIN2 button")
+        time.sleep(1)
         reset_btn.tap()
 
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "Old PIN2 input")
