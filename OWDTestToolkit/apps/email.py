@@ -402,10 +402,16 @@ class Email(object):
         self.UTILS.element.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
         self.wait_for_folder(_("Inbox"))
 
-    def setup_account(self, user, email, passwd):
+    def setup_account(self, user, email, passwd, via_activity=False):
         """
         Set up a new email account in the email app and login.
         """
+
+        # TODO - There's some kind of malfunctioning here. It assumes that I've already set an account. If I close the
+        # email app, wait 2 secs, an open it back again, in the beginning, it shows the setup menu, but after 2-3 
+        # seconds it takes us back to inbox of the registered account, which should be the default behavior.
+        
+        time.sleep(5)
         if not self.no_existing_account(email):
             return
 
@@ -431,9 +437,10 @@ class Email(object):
         self.tap_next_account_preferences()
         self.tap_continue_to_mail()
 
-        self.wait_for_folder(_("Inbox"))
-        self.wait_for_sync_completed()
-        self.wait_for_message_list()
+        if not via_activity:
+            self.wait_for_folder(_("Inbox"))
+            self.wait_for_sync_completed()
+            self.wait_for_message_list()
 
     def setup_account_first_step(self, user, email):
         """
@@ -590,7 +597,7 @@ class Email(object):
 
     def setup_hotmail_account(self, expected_email, passwd):
         """
-        Switches to gmail login frame when trying to set up a gmail account
+        Switches to hotmail login frame when trying to set up a gmail account
         """
         self.parent.wait_for_element_displayed(*DOM.Email.email_label_for_passwd)
         label = self.marionette.find_element(*DOM.Email.email_label_for_passwd)
