@@ -14,15 +14,15 @@ password = ('class name', 'sup-info-password')
 login_account_info_next_btn = ('css selector', 'section[data-type="setup_account_info"] button.sup-info-next-btn')
 login_account_prefs_next_btn = ('css selector', '.card-setup-account-prefs button.sup-info-next-btn')
 login_account_passwd_next_btn = ('css selector', 'section[data-type="setup_account_password"] button.sup-info-next-btn')
-login_cont_to_email_btn =('class name', 'sup-show-mail-btn sup-form-btn recommend')
+login_cont_to_email_btn = ('class name', 'sup-show-mail-btn sup-form-btn recommend')
 email_label_for_passwd = ('css selector', 'span.sup-email-display ')
 
 
 # Manual setup locators
 manual_setup = ('class name', 'sup-manual-config-btn')
 manual_setup_next = ('class name', 'sup-manual-next-btn')
-manual_setup_sup_header = ('xpath', '//h1[@data-l10n-id="setup-manual-config-header"]')
-manual_setup_account_type = ('xpath', '//select[@class="mail-select sup-manual-account-type"]')
+manual_setup_sup_header = ('css selector', 'h1[data-l10n-id=setup-manual-config-header]')
+manual_setup_account_type = ('css selector', 'select.mail-select.sup-manual-account-type')
 manual_setup_account_options = ('css selector', 'form[data-type=value-selector]')
 manual_setup_account_option = ('xpath', '//form[@data-type="value-selector"]//li[@role="option"]//span[text()="{}"]')
 manual_setup_account_type_ok = ('css selector', 'form[data-type=value-selector] button[data-type=ok]')
@@ -63,13 +63,13 @@ settings_menu_btn = ('xpath', '//header//a[@class="msg-folder-list-btn"]')
 
 settings_set_btn = ('xpath', '//a[@class="fld-nav-toolbar bottom-toolbar"]//span[@data-l10n-id="drawer-settings-link"]')
 settings_del_acc_btn = ('class name', 'tng-account-delete')
-settings_del_conf_btn = ('xpath', '//button[@id="account-delete-ok"]')
+settings_del_conf_btn = ('id', 'account-delete-ok')
 settings_add_account_btn = ('class name', 'tng-account-add')
 
 goto_accounts_btn = ('class name', 'fld-accounts-btn')
 accounts_list_names = ('class name', 'fld-account-name')
 
-folder_list_container = ('xpath', '//div[@class="fld-folders-container"]')
+folder_list_container = ('css selector', 'div.fld-folders-container')
 folderList_header = ('class name', 'fld-folders-header-account-label')
 folder_name_xpath = '//span[@class="fld-folder-name" and text()="{}"]'
 email_entry = ('css selector', '#cardContainer .msg-header-item:not([data-index="-1"])')

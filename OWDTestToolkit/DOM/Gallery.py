@@ -35,7 +35,7 @@ preview_current_video_pause = ('css selector', 'div.frame.current button.videoPl
 preview_current_video_duration = ('css selector', 'div.frame.current span.videoPlayerDurationText')
 
 # Others
-no_thumbnails_message = ('xpath', '//h1[@id="overlay-title" and text()="{}""]'.format(_('No photos or videos')))
+no_thumbnails_message = ('xpath', '//h1[@id="overlay-title" and text()="{}"]'.format(_('No photos or videos')))
 crop_done = ('xpath', '//*[@id="crop-done-button"]')
 file_name_header = ('css selector', 'h1#filename')
 download_manager_preview = ('css selector', 'div#frame div.image-view')
