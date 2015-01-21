@@ -76,14 +76,14 @@ class app(object):
         _docked_apps = self.parent.element.getElements(DOM.Home.docked_apps, "Docked apps (after adding app)")
         _count_after = len(_docked_apps)
 
-        self.parent.reporting.logResult("info", "Before adding '{}' there were {} apps in the dock, now there are {}.".\
-                       format(app_name, _count_before, _count_after))
+        self.parent.reporting.logResult("info", "Before adding '{}' there were {} apps in the dock, now there are {}.".
+                                        format(app_name, _count_before, _count_after))
 
         if _count_after > _count_before:
             return True
         else:
-            self.parent.reporting.logResult("info", "<b>NOTE:</b> Could not add app to dock as it already contains {}.".\
-                           format(_count_after))
+            self.parent.reporting.logResult("info", "<b>NOTE:</b> Could not add app to dock as it already contains {}.".
+                                            format(_count_after))
             return False
 
     def findAppIcon(self, app_name):
@@ -128,6 +128,7 @@ class app(object):
         Private function to return a 'GaiaApp' object to use in UTILS.killApp() calls.
         """
         class GaiaApp(object):
+
             def __init__(self, origin, name, frame, src):
                 self.frame = frame
                 self.frame_id = frame
@@ -190,7 +191,8 @@ class app(object):
         is_moved = False
         for i in x:
             if i.get_attribute("aria-label") == app_name:
-                self.parent.reporting.logResult("info", "Trying to move '{}' from the doc to the homescreen ...".format(app_name))
+                self.parent.reporting.logResult(
+                    "info", "Trying to move '{}' from the doc to the homescreen ...".format(app_name))
                 self.parent.actions.press(i).wait(1).move_by_offset(0, -100).wait(1).release().perform()
                 self.parent.home.touchHomeButton()
                 is_moved = True
@@ -208,7 +210,8 @@ class app(object):
             x = self.parent.element.getElements(DOM.Home.docked_apps, "Dock apps")
             for i in x:
                 if i.get_attribute("aria-label") == app_name:
-                    self.parent.reporting.logResult("info", "<b>NOTE:</b>App '{}' is still in the dock after moving!".format(app_name))
+                    self.parent.reporting.logResult(
+                        "info", "<b>NOTE:</b>App '{}' is still in the dock after moving!".format(app_name))
                     return False
                     break
         except:
@@ -226,13 +229,13 @@ class app(object):
             self.parent.apps.set_permission(app_name, item, value)
 
             if not quiet:
-                self.parent.reporting.logResult("info", "Setting  permission for app '{}' -> '{}' to '{}' returned no issues.".\
-                               format(app_name, item, value))
+                self.parent.reporting.logResult("info", "Setting  permission for app '{}' -> '{}' to '{}' returned no issues.".
+                                                format(app_name, item, value))
             return True
         except:
             if not quiet:
-                self.parent.reporting.logResult("info", "WARNING: unable to set permission for app '{}' -> '{}' to '{}'!".\
-                               format(app_name, item, value))
+                self.parent.reporting.logResult("info", "WARNING: unable to set permission for app '{}' -> '{}' to '{}'!".
+                                                format(app_name, item, value))
             return False
 
     def switchToApp(self, app_name):
@@ -254,16 +257,16 @@ class app(object):
         self.marionette.switch_to_frame()
         try:
             self.parent.parent.wait_for_element_present("xpath", "//iframe[contains(@{}, '{}')]".format(app_frame[0], app_frame[1]),
-                                          timeout=1)
-            self.parent.reporting.logResult("info", "(Looks like app '{}' is already running - just switching to it's iframe ...)".\
-                           format(app_name))
+                                                        timeout=1)
+            self.parent.reporting.logResult("info", "(Looks like app '{}' is already running - just switching to it's iframe ...)".
+                                            format(app_name))
             self.parent.iframe.switchToFrame(*app_frame)
         except:
 
             # The app isn't open yet, so try to launch it.
             try:
-                self.parent.reporting.logResult("info", "(Looks like app '{}' is not currently running, so I'll launch it.)".\
-                               format(app_name))
+                self.parent.reporting.logResult("info", "(Looks like app '{}' is not currently running, so I'll launch it.)".
+                                                format(app_name))
                 self.parent.apps.launch(app_name)
                 self.parent.element.waitForNotElements(DOM.GLOBAL.loading_overlay,
                                                        "{} app loading 'overlay'".format(app_name))
@@ -280,18 +283,20 @@ class app(object):
         if myApp:
             self.parent.element.scroll_into_view(myApp)
             self.parent.actions.long_press(myApp, 2).perform()
+
             delete_btn = ("xpath", DOM.Home.app_delete_icon_xpath.format(app_name))
             delete_button = self.parent.element.getElement(delete_btn, "Delete button", False, 30, True)
             delete_button.tap()
 
-            self.marionette.switch_to_frame()
-            delete = self.parent.element.getElement(DOM.Home.app_confirm_delete, "Confirm app delete button")
-            delete.tap()
+            confirm_delete_btn = self.parent.element.getElement(
+                DOM.Home.app_confirm_delete, "Confirm app delete button")
+            confirm_delete_btn.tap()
 
-            time.sleep(2)
+            # Force exit Edit mode
             self.parent.apps.kill_all()
             time.sleep(2)
-
-            self.parent.test.test(not self.isAppInstalled(app_name), "App is uninstalled after deletion.")
+            # self.parent.test.test(not self.isAppInstalled(app_name), "App is uninstalled after deletion.")
+            self.parent.parent.wait_for_condition(
+                lambda m: not self.isAppInstalled(app_name), timeout=20, message="App is uninstalled after deletion.")
         else:
             self.parent.reporting.logResult("info", u"(No need to uninstall {}.)".format(app_name))

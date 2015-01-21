@@ -995,11 +995,12 @@ class Contacts(object):
                             DOM.Contacts.view_all_contact_specific_contact[1].format(contact_name_strong))
 
         the_contact = self.UTILS.element.getElement(contact_locator, "Contact with name: {} {}".format(contact_locator, contact_name))
+        time.sleep(1)
         the_contact.tap()
 
         if header_check:
             header = self.UTILS.element.getElement(DOM.Contacts.details_view_header, "View contact header")
-            self.UTILS.test.test(header.text == contact_name, "Contact details for contact {}".format(contact_name))
+            self.UTILS.test.test(contact_name in header.text, "Contact details for contact {}".format(contact_name))
 
     def go_back(self):
         """Press back button in the contacts list scren

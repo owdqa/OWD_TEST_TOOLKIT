@@ -435,17 +435,18 @@ class Email(object):
         self.wait_for_sync_completed()
         self.wait_for_message_list()
 
-    def setup_account_first_step(self, user, email, p_pass):
+    def setup_account_first_step(self, user, email):
         """
         Set up a new email account in the email app and login.
         If we've just started out, email will open directly to "New Account").
         """
-        if not self.no_existing_account(p_email):
+        if not self.no_existing_account(email):
             return
 
         # (At this point we are now in the 'New account' screen by one path or another.)
         self.marionette.find_element(*DOM.Email.username).send_keys(user)
         self.marionette.find_element(*DOM.Email.email_addr).send_keys(email)
+        self.tap_next_account_info()
 
     def no_existing_account(self, email):
         """

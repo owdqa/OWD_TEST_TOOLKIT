@@ -37,6 +37,7 @@ def retry(num_retries, delay=2, context=None, aux_func_name=None):
                     if i < num_retries:
                         pass
                     else:
+                        utils.reporting.logResult("info", "############# LANZANDO EXCEPTION. Reise, Reise Seemann Reiseeee")
                         raise
 
                 if aux_func_name is not None:
