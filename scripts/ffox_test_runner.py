@@ -23,7 +23,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
     assertion_manager = AssertionManager()
 
-    def _show_test_info(self, filepath):
+    def _show_test_info(self, filepath, index, total):
         """
         This method is responsible of running a single test.
         We've overrun it in order to perform some tasks belonging to OWD initiative.
@@ -46,7 +46,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         else:
             expected = 'pass'
 
-        sys.stdout.write(u"{}: {:103s} ".format(test_num, description))
+        sys.stdout.write(u"[{}/{}] {}: {:103s} ".format(index, total, test_num, description))
         sys.stdout.flush()
 
         return expected
@@ -56,10 +56,12 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             random.seed(self.shuffle_seed)
             random.shuffle(tests)
 
+        index = 0
         for test in tests:
             attempt = 0
             total_time = 0
-            expected = self._show_test_info(test['filepath'])
+            index = index + 1
+            expected = self._show_test_info(test['filepath'], index, len(tests))
             while attempt < self.testvars['general']['test_retries']:
                 self.run_test(test['filepath'], expected, test['oop'])
                 result = self.results[-1]
