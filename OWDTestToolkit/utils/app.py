@@ -284,7 +284,7 @@ class app(object):
             delete_button = self.parent.element.getElement(delete_btn, "Delete button", False, 30, True)
             delete_button.tap()
 
-            self.marionette.switch_to_frame()
+            self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
             delete = self.parent.element.getElement(DOM.Home.app_confirm_delete, "Confirm app delete button")
             delete.tap()
 
