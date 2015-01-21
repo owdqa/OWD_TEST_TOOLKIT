@@ -58,7 +58,8 @@ app_permissions_header = ('xpath', GLOBAL.app_head_specific.format(_('App permis
 wifi = ('id', 'menuItem-wifi')
 wifi_header = ('xpath', GLOBAL.app_head_specific.format('Wi-Fi'))
 wifi_enabled = ('css selector', '.wifi-enabled label')
-wifi_available_networks = ('css selector', ".wifi-availableNetworks aside.pack-end.wifi-icon")
+# Jump the unwanted li inside .wifi-availableNetworks
+wifi_available_networks = ('css selector', '.wifi-availableNetworks li:not(.explanation):not([data-state="on"]):not([data-state="ready"])')
 wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
 wifi_name_xpath = '//ul[@class="wifi-availableNetworks"]//span[text()="{}"]'
 wifi_connected = ('xpath', '//small[text()="{}"]'.format(_("Connected")))

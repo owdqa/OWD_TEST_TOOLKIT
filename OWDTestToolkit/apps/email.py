@@ -446,7 +446,7 @@ class Email(object):
         # (At this point we are now in the 'New account' screen by one path or another.)
         self.marionette.find_element(*DOM.Email.username).send_keys(user)
         self.marionette.find_element(*DOM.Email.email_addr).send_keys(email)
-        self.marionette.find_element(*DOM.Email.login_account_info_next_btn).tap()
+        self.tap_next_account_info()
 
     def no_existing_account(self, email):
         """

@@ -171,7 +171,7 @@ class statusbar(object):
         """
         self.click_on_notification(DOM.Statusbar.notification_statusbar_detail, text, frame_to_change, timeout)
 
-    @retry(5, 10)
+    @retry(2, 10)
     def wait_for_notification_toaster_title(self, text, frame_to_change=None, notif_text=None, timeout=30):
         """
         Waits for a new popup notification which contains a certain title
@@ -187,7 +187,8 @@ class statusbar(object):
         self.wait_for_notification_statusbar_title(notif_text if notif_text else text)
 
         if frame_to_change:
-            self.parent.iframe.switchToFrame(*frame_to_change)
+            f = self.marionette.find_element(*frame_to_change)
+            self.marionette.switch_to_frame(f)
 
     @retry(5, 10)
     def wait_for_notification_toaster_detail(self, text, frame_to_change=None, notif_text=None, timeout=30):

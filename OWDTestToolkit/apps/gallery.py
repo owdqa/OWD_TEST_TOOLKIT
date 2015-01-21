@@ -120,9 +120,9 @@ class Gallery(object):
                                        "Message saying there are no thumbnails", False, 5)
         else:
             # Come out of 'select' mode.
-            select_mode_btn = self.UTILS.element.getElement(
-                DOM.Gallery.thumbnail_cancel_select_mode, "Exit select mode button")
-            select_mode_btn.tap()
+            exit_select_mode_header = self.UTILS.element.getElement(
+                DOM.Gallery.exit_select_mode_header, "Exit select mode button")
+            exit_select_mode_header.tap(25, 25)
 
             current_thumbs = self.get_number_of_thumbnails()
             self.UTILS.test.test(current_thumbs == target_thumbcount,

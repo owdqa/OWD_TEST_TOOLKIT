@@ -280,18 +280,20 @@ class app(object):
         if myApp:
             self.parent.element.scroll_into_view(myApp)
             self.parent.actions.long_press(myApp, 2).perform()
+
             delete_btn = ("xpath", DOM.Home.app_delete_icon_xpath.format(app_name))
             delete_button = self.parent.element.getElement(delete_btn, "Delete button", False, 30, True)
             delete_button.tap()
 
             self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
-            delete = self.parent.element.getElement(DOM.Home.app_confirm_delete, "Confirm app delete button")
-            delete.tap()
+            confirm_delete = self.parent.element.getElement(DOM.Home.app_confirm_delete, "Confirm app delete button")
+            confirme_delete.tap()
 
             time.sleep(2)
             self.parent.apps.kill_all()
             time.sleep(2)
 
-            self.parent.test.test(not self.isAppInstalled(app_name), "App is uninstalled after deletion.")
+            self.parent.parent.wait_for_condition(
+                lambda m: not self.isAppInstalled(app_name), timeout=20, message="App is uninstalled after deletion.")
         else:
             self.parent.reporting.logResult("info", u"(No need to uninstall {}.)".format(app_name))
