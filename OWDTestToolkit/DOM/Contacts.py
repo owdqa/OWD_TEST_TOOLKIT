@@ -7,7 +7,7 @@ _ = I18nSetup(I18nSetup).setup()
 frame_locator = ("src", "contacts")
 view_all_header = ('xpath', GLOBAL.app_head_specific.format(_('Contacts')))
 view_all_contact_xpath = '//*[@data-order="{}"]'
-#Sometimes there's a hidden data-group called 'ice', we must skip it
+# Sometimes there's a hidden data-group called 'ice', we must skip it
 view_all_contact_list = ('css selector', 'li.contact-item:not([data-group=ice])')
 view_all_contact_name_xpath = "//li[@class='contact-item']//p[contains(@data-search,'{}')]"
 contact_names = ('css selector', '.contact-item .contact-text')

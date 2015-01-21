@@ -994,7 +994,8 @@ class Contacts(object):
         contact_locator = (DOM.Contacts.view_all_contact_specific_contact[0],
                             DOM.Contacts.view_all_contact_specific_contact[1].format(contact_name_strong))
 
-        the_contact = self.UTILS.element.getElement(contact_locator, "Contact with name: {} {}".format(contact_locator, contact_name))
+        the_contact = self.UTILS.element.getElement(contact_locator, "Contact with name: {} {}".
+                                                    format(contact_locator, contact_name))
         the_contact.tap()
 
         if header_check:
