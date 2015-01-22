@@ -184,9 +184,10 @@ class Settings(object):
             network_type_locator, "Network Operator. Select: {}".format(network_type))
         option.tap()
 
-        select_ok_btn = self.UTILS.element.getElement(
-            DOM.Settings.networkOperator_OK_btn, "Network Operator. Click on OK button")
-        select_ok_btn.tap()
+        select_ok_btns = self.marionette.find_elements(*DOM.Settings.networkOperator_OK_btn)
+        for btn in select_ok_btns:
+            if btn.is_displayed():
+                btn.tap()
         self.UTILS.iframe.switchToFrame(*DOM.Settings.frame_locator)
 
     def confirm_data_conn(self):
