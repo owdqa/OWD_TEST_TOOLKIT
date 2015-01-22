@@ -408,9 +408,9 @@ class Email(object):
         """
 
         # TODO - There's some kind of malfunctioning here. It assumes that I've already set an account. If I close the
-        # email app, wait 2 secs, an open it back again, in the beginning, it shows the setup menu, but after 2-3 
+        # email app, wait 2 secs, an open it back again, in the beginning, it shows the setup menu, but after 2-3
         # seconds it takes us back to inbox of the registered account, which should be the default behavior.
-        
+
         time.sleep(5)
         if not self.no_existing_account(email):
             return

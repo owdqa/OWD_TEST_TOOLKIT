@@ -28,7 +28,7 @@ input_message_area = ('id', 'messages-input')
 send_message_button = ('id', 'messages-send-button')
 messages_counter = ('id', 'messages-counter-label')
 attach_button = ('id', 'messages-attach-button')
-message_sending_spinner = ("xpath", "//aside[@class='pack-end'][-1]/progress")
+message_sending_spinner = ("css selector", "div[data-l10n-id=message-delivery-status-sending]")
 
 header_back_button = ("id", "messages-back-button")
 header_close_button = ('id', 'messages-close-button')
