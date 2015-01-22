@@ -33,7 +33,7 @@ class Messages(object):
     def cancelSettings(self):
         self.UTILS.reporting.logResult("info", "Cliking on messages options button")
         options_btn = self.UTILS.element.getElement(DOM.Messages.messages_options_btn,
-                                          "Messages option button is displayed")
+                                                    "Messages option button is displayed")
         options_btn.tap()
 
         # Press cancel button
@@ -159,7 +159,7 @@ class Messages(object):
                 break
 
         self.UTILS.test.test(boolOK,
-            "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
+                             "\"" + str(target) + "\" is the number in one of the 'To:' field targets.")
         return boolOK
 
     def checkThreadHeader(self, header):
@@ -338,19 +338,20 @@ class Messages(object):
         Deletes all threads (assumes the messagin app is already open).
         """
         try:
-            self.parent.wait_for_element_displayed(*DOM.Messages.no_threads_message, timeout=2)
-            x = self.marionette.find_element(*DOM.Messages.no_threads_message)
-            if x.is_displayed():
+            self.parent.wait_for_element_displayed(*DOM.Messages.no_threads_message, timeout=3)
+            no_threads_message = self.marionette.find_element(*DOM.Messages.no_threads_message)
+            if no_threads_message.is_displayed():
                 self.UTILS.reporting.logResult("info", "(No message threads to delete.)")
         except:
             self.UTILS.reporting.logResult("info", "Deleting message threads ...")
+            self.threadEditModeON()
 
-            x = self.threadEditModeON()
-            x = self.UTILS.element.getElement(DOM.Messages.delete_threads_button, "Delete threads button")
-            x.tap()
-            x = self.UTILS.element.getElement(DOM.Messages.check_all_threads_btn,
-                                              "Select all button")
-            x.tap()
+            select_threads = self.UTILS.element.getElement(
+                DOM.Messages.edit_msgs_select_threads_btn, "Delete threads button")
+            select_threads.tap()
+
+            select_all_btn = self.UTILS.element.getElement(DOM.Messages.check_all_threads_btn, "Select all button")
+            select_all_btn.tap()
 
             self.deleteSelectedThreads()
             self.UTILS.element.waitForElements(DOM.Messages.no_threads_message,
@@ -388,7 +389,8 @@ class Messages(object):
         time.sleep(2)
 
         self.UTILS.reporting.debug("*** Tap Delete messages confirmation button")
-        confirm_btn = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete messages confirmation button")
+        confirm_btn = self.UTILS.element.getElement(
+            DOM.Messages.delete_threads_ok_btn, "Delete messages confirmation button")
         confirm_btn.tap()
         time.sleep(2)
 
@@ -396,15 +398,9 @@ class Messages(object):
         delete_btn = self.UTILS.element.getElement(DOM.Messages.threads_delete_button, "Delete threads button")
         delete_btn.tap()
 
-        time.sleep(2)
-        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete threads confirmation button")
-        x.tap()
-        """
-        For some reason after you do this, you can't enter a 'to' number anymore.
-        After a lot of headscratching, it was just easier to re-launch the app.
-        """
-        time.sleep(5)
-        self.launch()
+        delete_confirm_btn = self.UTILS.element.getElement(
+            DOM.Messages.delete_threads_ok_btn, "Delete threads confirmation button")
+        delete_confirm_btn.tap()
 
     def deleteThreads(self, target_array=False):
         """
@@ -456,7 +452,6 @@ class Messages(object):
         target_array is an array of target numbers
         or contacts which identify the threads to be selected.
         """
-
         # Go into edit mode..
         self.threadEditModeON()
 
@@ -469,7 +464,7 @@ class Messages(object):
         for i in target_array:
             self.UTILS.reporting.debug("selecting thread for [{}]".format(i))
             thread = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_selector_xpath.format(i)),
-                                              "Thread checkbox for '{}'".format(i))
+                                                   "Thread checkbox for '{}'".format(i))
             self.UTILS.reporting.debug("Trying to tap in element {}".format(thread))
             thread.tap()
 
@@ -930,8 +925,8 @@ class Messages(object):
         """
         Turns on Edit mode while in the SMS threads screen.
         """
-        x = self.UTILS.element.getElement(DOM.Messages.edit_threads_button, "Edit button")
-        self.UTILS.element.simulateClick(x)
+        edit_btn = self.UTILS.element.getElement(DOM.Messages.edit_threads_button, "Edit button")
+        edit_btn.tap()
         self.UTILS.element.waitForElements(DOM.Messages.cancel_edit_threads, "Cancel button")
 
     def threadExists(self, num):
@@ -1046,6 +1041,6 @@ class Messages(object):
             # Nope - sleep then try again.
             time.sleep(poll_time)
 
-        self.UTILS.test.test(result, "Last message in thread 'received' within {} seconds.".\
+        self.UTILS.test.test(result, "Last message in thread 'received' within {} seconds.".
                              format(timeout))
         return result
