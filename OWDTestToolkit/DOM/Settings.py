@@ -6,7 +6,7 @@ _ = I18nSetup(I18nSetup).setup()
 
 frame_locator = ('src', "settings")
 settings_header = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode("utf8")))
-back_button = ('class name', 'icon icon-back')
+back_button = ('css selector', 'gaia-header button[data-icon=back]')
 
 call_settings_option = ('id', 'call-settings')
 call_settings_sim_card_number = ('id', 'menuItem-call-sim{}')

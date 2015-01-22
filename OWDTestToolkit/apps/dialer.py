@@ -254,14 +254,15 @@ class Dialer(object):
             self.UTILS.test.test(_postcount == _precount,
                                  "{} numbers are left after deletion (there are {}).".format(_precount, _postcount))
 
-    def call_this_number(self):
-
-        # Calls the current number.
+    def tap_on_call_button(self):
         call_number_button = self.UTILS.element.getElement(DOM.Dialer.call_number_button, "Call number button")
-        self.UTILS.reporting.debug(
-            "*** Call this number button: [{}]   Text: [{}]".format(call_number_button, call_number_button.text))
         self.UTILS.element.simulateClick(call_number_button)
 
+    def call_this_number(self):
+        """ 
+        Calls the current number.
+        """
+        self.tap_on_call_button()
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
         self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call locator", True, 5)
 
