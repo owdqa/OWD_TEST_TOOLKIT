@@ -2,7 +2,7 @@ from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
 status_bar_new = ('xpath', "//*[@id='statusbar-notification'][@data-unread='true']")
-wifi = ('css selector', '#statusbar-minimized-wrapper #statusbar-wifi')
+wifi = ('css selector', '#statusbar-maximized-wrapper #statusbar-wifi')
 dataConn = ('css selector', '#statusbar-connections .statusbar-data')
 dataConn = ('xpath', '//div[@id="statusbar-connections"]//div[contains(@class, "statusbar-data") and @aria-hidden="true"]')
 bluetooth = ('id', 'statusbar-bluetooth')
