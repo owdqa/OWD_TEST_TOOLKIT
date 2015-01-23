@@ -288,6 +288,46 @@ class Settings(object):
         time.sleep(1)
         ok_btn.tap()
 
+    def initial_check_fdn(self, pin2, puk2):
+        """This method ensure FDN is disabled, and, if during that process it finds out that
+            the SIM card is locked because of PUK2 is required, it unlocks the SIM and then,
+            disables FDN
+
+            This method should be called as soon as possible inside the setUp method of each
+            test that deals somehow with FDN
+        """
+        self.call_settings()
+        self.open_fdn()
+
+        status = self.UTILS.element.getElement(DOM.Settings.fdn_status, "FDN status").text
+        if (status == _("Disabled")):
+            self.UTILS.reporting.logResult('info', '[initial_check_fdn] FDN disabled')
+            return
+
+        switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "Disable FDN")
+        switch.tap()
+
+        header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Disable FDN")))
+        self.UTILS.element.waitForElements(header, "Disable FDN header")
+        self.fdn_type_pin2(pin2)
+
+        try:
+            self.parent.wait_for_element_displayed(
+                *('xpath', DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").encode("utf8"))))
+        except:
+            self.restore_pin2(pin2, puk2)
+        
+            switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "Disable FDN")
+            time.sleep(1)
+            switch.tap()
+
+            header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Disable FDN")))
+            self.UTILS.element.waitForElements(header, "Disable FDN header")
+            self.fdn_type_pin2(pin2)
+            status = self.UTILS.element.getElement(DOM.Settings.fdn_status, "FDN status").text
+            self.UTILS.test.test(status == _("Disabled"), "FDN is DISABLED on way or another")
+
+
     def open_fdn(self):
         fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
         fdn.tap()
@@ -303,6 +343,7 @@ class Settings(object):
         know outside this method that there is no need in typing the PIN2
         """
         if do_return:
+            self.UTILS.reporting.logResult('info', 'FDN already {}!'.format("Enabled" if enable else "Disabled"))
             return False
 
         switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "{} FDN".
