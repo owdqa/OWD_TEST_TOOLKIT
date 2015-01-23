@@ -165,12 +165,15 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         """ This methods ensures that the destination results directory is created before launching the
         test/s execution. It also creates (or cleans) the html results report file and the error_output file
         """
-        if not os.path.exists(self.testvars['output']['result_dir']):
-            os.makedirs(self.testvars['output']['result_dir'])
-
         def _initialize_file(file_path):
             with open(file_path, 'w') as f:
                 f.close()
+
+        # Clean results dir if needed
+        result_dir = self.testvars['output']['result_dir']
+        if os.path.exists(result_dir):
+            shutil.rmtree(result_dir)
+        os.makedirs(result_dir)
 
         files = [self.testvars['output']['html_output'], self.testvars['output']['error_output']]
         map(_initialize_file, files)
@@ -284,6 +287,12 @@ class TestRunner(object):
         soup = BeautifulSoup(results_file)
         results_file.close()
 
+        if len(self.failed_tests) > 0:
+            results_table = soup.find('table', id='results-table')
+            failed_tag = soup.new_tag('span', id='failed-tests')
+            failed_tag.string = "Failed tests: {}".format(", ".join(self.failed_tests))
+            results_table.insert_before(failed_tag)
+
         test_nums = [re.search('test_(\w*).*$', testname.string.strip()).group(1)
                      for testname in soup.find_all("td", class_="col-class")]
         col_links = soup.find_all("td", class_="col-links")
@@ -375,6 +384,7 @@ class TestRunner(object):
         options.toolkit_location = location
 
         # Hit the runner
+        Utilities.connect_device()
         self.runner = self.start_test_runner(self.runner_class, options, tests)
 
         # Show the results via console and prepare the details
