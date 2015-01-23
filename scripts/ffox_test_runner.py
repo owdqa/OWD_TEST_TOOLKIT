@@ -288,10 +288,10 @@ class TestRunner(object):
         results_file.close()
 
         if len(self.failed_tests) > 0:
-            results_table = soup.find('table', id='results-table')
-            failed_tag = soup.new_tag('span', id='failed-tests')
+            target = soup.find('span', class_='unexpected pass')
+            failed_tag = soup.new_tag('div', id='failed-tests', style="font-size: 17px; font-weight: bold; margin-top: 1em;")
             failed_tag.string = "Failed tests: {}".format(", ".join(self.failed_tests))
-            results_table.insert_before(failed_tag)
+            target.parent.insert_after(failed_tag)
 
         test_nums = [re.search('test_(\w*).*$', testname.string.strip()).group(1)
                      for testname in soup.find_all("td", class_="col-class")]
