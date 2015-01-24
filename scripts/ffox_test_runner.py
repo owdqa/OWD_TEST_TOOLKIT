@@ -3,6 +3,7 @@ import shutil
 import os
 import re
 import random
+import pygal
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
@@ -65,6 +66,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             while attempt < self.testvars['general']['test_retries']:
                 self.run_test(test['filepath'], expected, test['oop'])
                 result = self.results[-1]
+                result.filepath = test['filepath']
                 total_time += result.time_taken
                 attempt += 1
                 result.attempts = attempt
@@ -209,6 +211,7 @@ class TestRunner(object):
         self.expected_failures = 0
         self.assertion_manager = AssertionManager()
         self.failed_tests = []
+        self.results_by_suite = {}
 
     def start_test_runner(self, runner_class, options, tests):
         """
@@ -228,6 +231,13 @@ class TestRunner(object):
         """
         setattr(self, attr_name, getattr(self, attr_name) + attr_value)
 
+    def update_results_by_suites(self, test_path, test_result):
+        suite = test_path.split("/")[-2]
+        if self.results_by_suite.get(suite, None):
+            self.results_by_suite[suite].append(test_result)
+        else:
+            self.results_by_suite[suite] = [test_result]
+
     def process_runner_results(self):
         """
         This method takes the results contained in the instance of runner (it assumes the runner has been run, ofc)
@@ -244,9 +254,30 @@ class TestRunner(object):
             result_values = [len(getattr(result, name)) for name in result_attrs]
             map(self.update_attr, own_attrs, result_values)
 
+            test = result.tests.next()
             if len(result.errors) > 0 or len(result.failures) > 0:
-                test_name = re.search('test_(\w*).*$', result.tests.next().test_name).group(1)
+                test_name = re.search('test_(\w*).*$', test.test_name).group(1)
                 self.failed_tests.append(test_name)
+
+            ##########################################################################################################
+            ###############################################  GRAPHICS  ###############################################
+            ##########################################################################################################
+            
+            if len(result.errors) > 0:
+                result_msg = "Automation Failed"
+            elif len(result.failures) > 0:
+                result_msg = "Failed"
+            elif len(result.skipped) > 0:
+                result_msg = "Skipped"
+            elif len(result.unexpectedSuccesses) > 0:
+                result_msg = "Unblock"
+            elif len(result.expectedFailures) > 0:
+                result_msg = "Blocked"
+            else:
+                result_msg = "Passed"
+
+            self.update_results_by_suites(result.filepath, result_msg)
+            print self.results_by_suite
 
         self.total = len(self.runner.results)
 
@@ -392,6 +423,22 @@ class TestRunner(object):
         self.edit_html_results()
         self.edit_test_details()
         self.display_results()
+        self.generate_suite_graphics()
+
+    def gimme_occurrences(self, target, values):
+        return [values.count(target) for pr in values]
+
+    def generate_suite_graphics(self):
+        possible_values = ["Passed", "Failed", "Automation Failed", "Blocked", "Unblock", "Skipped"]
+        bar_chart = pygal.StackedBar()
+        labels = map(str.capitalize,self.results_by_suite.keys())
+        values = self.results_by_suite.values()
+        occurrences = [self.gimme_occurrences(pv, value) for value in values for pv in possible_values]
+
+        print "occurrences: {}".format(occurrences)
+        # bar_chart.add('Fibonacci', [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55])
+        # bar_chart.add('Padovan', [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12])
+        # bar_chart.render()
 
     def parse_toolkit_location(self, args):
         path = args[0]
@@ -400,3 +447,4 @@ class TestRunner(object):
 
 if __name__ == "__main__":
     TestRunner(sys.argv).run()
+ 
