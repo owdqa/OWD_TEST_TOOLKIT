@@ -23,16 +23,25 @@ class Settings(object):
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def go_back(self):
+    def go_back(self, elem_id=None):
         """
         Tap the back icon.
         """
         # TODO: remove tap with coordinates after Bug 1061698 is fixed
-        headers = self.marionette.find_elements('css selector', 'gaia-header[action=back]')
-        for header in headers:
-            if header.is_displayed():
-                header.tap(25, 25)
-                break
+        if elem_id is not None:
+            self.UTILS.reporting.info("Tapping element: {}".format(elem_id))
+            header = self.UTILS.element.getElement(('css selector', 'gaia-header#{}[action=back]'.format(elem_id)),
+                                                   "Back button")
+            time.sleep(5)
+            header.tap(25, 25)
+            self.UTILS.reporting.info("Tapped {}".format(elem_id))
+        else:
+            self.UTILS.reporting.info("Tapping unknown element")
+            headers = self.marionette.find_elements('css selector', 'gaia-header[action=back]')
+            for header in headers:
+                if header.is_displayed():
+                    header.tap(25, 25)
+                    break
         time.sleep(2)
 
     def go_sound(self):
@@ -316,7 +325,7 @@ class Settings(object):
                 *('xpath', DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").encode("utf8"))))
         except:
             self.restore_pin2(pin2, puk2)
-        
+
             switch = self.UTILS.element.getElement(DOM.Settings.fdn_enable, "Disable FDN")
             time.sleep(1)
             switch.tap()
@@ -711,23 +720,106 @@ class Settings(object):
         time.sleep(2)
         self.marionette.switch_to_frame()
 
+    def enable_sim_security(self, enable, pin, puk=None):
+        """Enable SIM PIN security, if required"""
+
+        sim_manager = self.UTILS.element.getElement(DOM.Settings.sim_manager, "SIM Manager menu")
+        time.sleep(3)
+        self.UTILS.element.simulateClick(sim_manager)
+
+        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM Security menu")
+        sim_security.tap()
+
+        switcher = self.UTILS.element.getElement(DOM.Settings.dual_sim_switch_pin_sim1, "SIM PIN switch")
+        switch_input = self.marionette.find_element('css selector', 'input', switcher.id)
+        enabled = switch_input.get_attribute("checked") is not None
+        self.UTILS.reporting.info("PIN enabled: {}".format(enabled is not None))
+
+        # If PIN is already in the correct state, just return
+        if enabled and not enable or (not enabled and enable):
+            self.UTILS.reporting.info("Pin not in correct state. Current: {} Requested: {}. Changing.".
+                                      format(enabled, enable))
+            # First of all, verify if the SIM is locked, and, in that case, unlock using PUK
+            switcher.tap()
+            time.sleep(1)
+            unlocked = self.unlock_sim(puk, pin)
+            if unlocked:
+                self.check_security_menu()
+                switcher.tap()
+            pin_input = self.UTILS.element.getElement(DOM.Settings.sim_security_enter_pin_input, "Enter PIN input")
+            pin_input.tap()
+            time.sleep(1)
+            pin_input.send_keys(pin)
+            time.sleep(1)
+            done_btn = self.marionette.find_element(*DOM.Settings.sim_security_enter_pin_done)
+            done_btn.tap()
+
+        self.check_security_menu()
+        self.go_back("simpin-header")
+        time.sleep(1)
+        self.go_back()
+
+    def check_security_status(self, expected):
+        sim_manager = self.UTILS.element.getElement(DOM.Settings.sim_manager, "SIM Manager menu")
+        time.sleep(3)
+        self.UTILS.element.simulateClick(sim_manager)
+
+        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM Security menu")
+        sim_security.tap()
+
+        switcher = self.UTILS.element.getElement(DOM.Settings.dual_sim_switch_pin_sim1, "SIM PIN switch")
+        switch_input = self.marionette.find_element('css selector', 'input', switcher.id)
+        enabled = switch_input.get_attribute("checked") is not None
+        self.UTILS.reporting.info("PIN enabled: {}".format(enabled is not None))
+        self.UTILS.test.test(enabled == expected, "Security enabled: {}  Expected: {}".format(enabled, expected))
+
+    def check_security_menu(self):
+        try:
+            self.UTILS.reporting.logResult("info", "SIM Security header")
+            self.parent.wait_for_element_displayed(*DOM.Settings.sim_security_header)
+        except:
+            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security,
+                                                         "SIM manager -> SIM security")
+            sim_security.tap()
+        time.sleep(1)
+
+    def unlock_sim(self, puk, pin):
+        time.sleep(2)
+        self.UTILS.reporting.info("Checking if SIM is locked to unlock with PUK {} and PIN {}".format(puk, pin))
+        try:
+            self.marionette.find_element('css selector', 'h1[data-l10n-id=pukTitle]')
+        except:
+            # SIM is not locked, so simply return
+            return False
+
+        # Enter PUK and PIN twice to unlock the SIM
+        puk_input = self.UTILS.element.getElement(DOM.Settings.puk_code_input, "PUK code input")
+        puk_input.send_keys(puk)
+
+        pin_input = self.UTILS.element.getElement(DOM.Settings.unlock_new_pin_input, "New PIN input")
+        pin_input.send_keys(pin)
+
+        confirm_pin_input = self.UTILS.element.getElement(DOM.Settings.unlock_confirm_new_pin_input,
+                                                          "Confirm PIN input")
+        confirm_pin_input.send_keys(pin)
+        done_btn = self.UTILS.element.getElement(DOM.Settings.unlock_done_btn, "Done button")
+        done_btn.tap()
+        return True
+
     def change_sim_pin(self, old_pin, new_pin, confirm_pin):
         """
         This method changes the current PIN code to a new one
         """
-        is_dual_sim = self.UTILS.general.is_device_dual_sim()
-
         self.enable_sim_security(True, old_pin)
         time.sleep(1)
-        self.go_back()
 
-        if is_dual_sim:
-            sim_security = self.UTILS.element.getElement(
-                DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
-        else:
-            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
+        sim_manager = self.UTILS.element.getElement(DOM.Settings.sim_manager, "SIM Manager menu")
+        time.sleep(3)
+        self.UTILS.element.simulateClick(sim_manager)
 
+        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM Security menu")
         sim_security.tap()
+
         change_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin, "Change PIN button")
         change_btn.tap()
 
@@ -743,7 +835,7 @@ class Settings(object):
         done_btn = self.UTILS.element.getElement(DOM.Settings.change_pin_done_btn, "Change PIN Done button")
         done_btn.tap()
 
-    def enable_sim_security(self, enable, pin, is_dual_sim=None):
+    def enable_sim_security2(self, enable, pin, is_dual_sim=None):
         """
         This method sets the SIM security configuration.
         """
