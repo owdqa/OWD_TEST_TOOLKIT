@@ -724,8 +724,8 @@ class Settings(object):
         """Enable SIM PIN security, if required"""
 
         sim_manager = self.UTILS.element.getElement(DOM.Settings.sim_manager, "SIM Manager menu")
-        self.UTILS.element.simulateClick(sim_manager)
         time.sleep(3)
+        self.UTILS.element.simulateClick(sim_manager)
 
         sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM Security menu")
         sim_security.tap()
@@ -758,6 +758,20 @@ class Settings(object):
         self.go_back("simpin-header")
         time.sleep(1)
         self.go_back()
+
+    def check_security_status(self, expected):
+        sim_manager = self.UTILS.element.getElement(DOM.Settings.sim_manager, "SIM Manager menu")
+        time.sleep(3)
+        self.UTILS.element.simulateClick(sim_manager)
+
+        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM Security menu")
+        sim_security.tap()
+
+        switcher = self.UTILS.element.getElement(DOM.Settings.dual_sim_switch_pin_sim1, "SIM PIN switch")
+        switch_input = self.marionette.find_element('css selector', 'input', switcher.id)
+        enabled = switch_input.get_attribute("checked") is not None
+        self.UTILS.reporting.info("PIN enabled: {}".format(enabled is not None))
+        self.UTILS.test.test(enabled == expected, "Security enabled: {}  Expected: {}".format(enabled, expected))
 
     def check_security_menu(self):
         try:
@@ -796,19 +810,16 @@ class Settings(object):
         """
         This method changes the current PIN code to a new one
         """
-        is_dual_sim = self.UTILS.general.is_device_dual_sim()
-
         self.enable_sim_security(True, old_pin)
         time.sleep(1)
-        self.go_back()
 
-        if is_dual_sim:
-            sim_security = self.UTILS.element.getElement(
-                DOM.Settings.sim_manager_sim_security, "SIM manager -> SIM security")
-        else:
-            sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
+        sim_manager = self.UTILS.element.getElement(DOM.Settings.sim_manager, "SIM Manager menu")
+        time.sleep(3)
+        self.UTILS.element.simulateClick(sim_manager)
 
+        sim_security = self.UTILS.element.getElement(DOM.Settings.sim_manager_sim_security, "SIM Security menu")
         sim_security.tap()
+
         change_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin, "Change PIN button")
         change_btn.tap()
 
