@@ -126,9 +126,9 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         seconds_str = "{:02d}".format(seconds)
         hundreds = int((results.time_taken - int(results.time_taken)) * 100)
         hundreds_str = ".{:02d}s".format(hundreds)
-        time_string = "{:3s}{:3s}{}{}".format(hours_str if hours else "", \
-                                      mins_str if mins else "", seconds_str, hundreds_str)
-        sys.stdout.write("{} {:4s} {:20s} (assertions: {}/{})\n".\
+        time_string = "{:3s}{:3s}{}{}".format(hours_str if hours else "",
+                                              mins_str if mins else "", seconds_str, hundreds_str)
+        sys.stdout.write("{} {:4s} {:20s} (assertions: {}/{})\n".
                          format(time_string, "(x{})".format(results.attempts) if results.attempts > 1 else "",
                                 self.get_result_msg(results),
                                 OWDMarionetteTestRunner.assertion_manager.passed,
@@ -136,6 +136,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
 
 class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingTestRunnerMixin):
+
     """
     OWD runner class
     This class performs a bunch of tasks which are needed before and after running the test/s
@@ -153,7 +154,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # the devices config or the css template
         self.testvars['toolkit_cfg']['toolkit_location'] = kwargs['toolkit_location']
         GaiaTestRunnerMixin.__init__(self, **kwargs)
-        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__,
+        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.1', version=__version__,
                                               html_output=self.testvars['output']['html_output'], **kwargs)
         self.test_handlers = [GaiaTestCase]
 
@@ -197,7 +198,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
 
 class TestRunner(object):
 
-# runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
+    # runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
     def __init__(self, args):
         self.args = args
         self.runner_class = OWDTestRunner
@@ -262,7 +263,7 @@ class TestRunner(object):
             ##########################################################################################################
             ###############################################  GRAPHICS  ###############################################
             ##########################################################################################################
-            
+
             if len(result.errors) > 0:
                 result_msg = "Automation Failed"
             elif len(result.failures) > 0:
@@ -320,7 +321,8 @@ class TestRunner(object):
 
         if len(self.failed_tests) > 0:
             target = soup.find('span', class_='unexpected pass')
-            failed_tag = soup.new_tag('div', id='failed-tests', style="font-size: 17px; font-weight: bold; margin-top: 1em;")
+            failed_tag = soup.new_tag(
+                'div', id='failed-tests', style="font-size: 17px; font-weight: bold; margin-top: 1em;")
             failed_tag.string = "Failed tests: {}".format(", ".join(self.failed_tests))
             target.parent.insert_after(failed_tag)
 
@@ -423,22 +425,71 @@ class TestRunner(object):
         self.edit_html_results()
         self.edit_test_details()
         self.display_results()
-        self.generate_suite_graphics()
+        if self.runner.testvars['graphics']['enabled']:
+            self.generate_graphics()
 
-    def gimme_occurrences(self, target, values):
-        return [values.count(target) for pr in values]
+    def suite_graphic(self, results, style, legend, labels):
 
-    def generate_suite_graphics(self):
-        possible_values = ["Passed", "Failed", "Automation Failed", "Blocked", "Unblock", "Skipped"]
-        bar_chart = pygal.StackedBar()
-        labels = map(str.capitalize,self.results_by_suite.keys())
-        values = self.results_by_suite.values()
-        occurrences = [self.gimme_occurrences(pv, value) for value in values for pv in possible_values]
+        bar_chart = pygal.StackedBar(
+            x_label_rotation=30, style=style, title_font_size=24, label_font_size=16, tooltip_font_size=16)
+        bar_chart.x_labels = map(str.capitalize, labels)
+        bar_chart.title = 'TESTRUN RESULTS by SUITE'
+        for index, result in enumerate(results):
+            bar_chart.add(legend[index], result)
+        bar_chart.render_to_png("{}/{}".format(self.runner.testvars['graphics']['graphics_dir'], "results_suites.png"))
+        bar_chart.render_to_file(
+            "{}/{}".format(self.runner.testvars['graphics']['graphics_dir'], "results_suites.svg"))
 
-        print "occurrences: {}".format(occurrences)
-        # bar_chart.add('Fibonacci', [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55])
-        # bar_chart.add('Padovan', [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12])
-        # bar_chart.render()
+    def get_test_run_percentages(self):
+        def _get_the_percentage(result_type):
+            return float(result_type) / self.total * 100
+
+        results = [self.passed, self.unexpected_failures, self.automation_failures,
+                   self.expected_failures, self.unexpected_passed, self.skipped]
+        return map(_get_the_percentage, results)
+
+    def total_results_graphic(self, results, style, legend):
+        pie_chart = pygal.Pie(
+            x_label_rotation=30, style=style, title_font_size=24, label_font_size=16, tooltip_font_size=16)
+        pie_chart.title = 'TESTRUN RESULTS'
+        for index, result in enumerate(results):
+            pie_chart.add(legend[index], result)
+        pie_chart.render_to_png("{}/{}".format(self.runner.testvars['graphics']['graphics_dir'], "results_total.png"))
+        pie_chart.render_to_file("{}/{}".format(self.runner.testvars['graphics']['graphics_dir'], "results_total.svg"))
+
+    def generate_graphics(self):
+        _POSSIBLE_RESULTS = ["Passed", "Failed", "Automation Failed", "Blocked", "Unblock", "Skipped"]
+        from pygal.style import Style
+        custom_style = Style(
+            background='#073642',
+            plot_background='#002b36',
+            foreground='#839496',
+            foreground_light='#fdf6e3',
+            foreground_dark='#657b83',
+            opacity='.66',
+            opacity_hover='.9',
+            transition='500ms ease-in',
+            colors=('#20C72E', '#EB0C35', '#F06B0C', '#0404B4', '#FE9A2E', '#6E6E6E'))
+
+        # This array of arrays contains the ocurrences of each possible test result for each suite
+        # Thus, it always has 6 elements, corresponding to the possible values (see above)
+        # Each element, is an array containing the occurrences of that values for each suite, so it'll
+        # have as many elements as suites being run
+        #
+        # Example: running 2 suites, A and B
+        #
+        #            Passed       Failed       AF        blocked     Unblock     Skipped
+        # Results: [ [1, 1],     [0, 1],     [1, 0],     [0, 0],     [0, 0],     [0, 0] ]
+        #             |  |        |  |        |  |        |  |        |  |        |  |
+        #             |  B        |  B        |  B        |  B        |  B        |  B
+        #             A           A           A           A           A           A
+        suites = sorted(self.results_by_suite.keys())
+        results_occurrences_by_suite = [
+            [self.results_by_suite[suite].count(pv) for suite in suites] for pv in _POSSIBLE_RESULTS]
+        self.suite_graphic(results_occurrences_by_suite, custom_style, _POSSIBLE_RESULTS, suites)
+
+        results_total = self.get_test_run_percentages()
+        self.total_results_graphic(results_total, custom_style, _POSSIBLE_RESULTS)
 
     def parse_toolkit_location(self, args):
         path = args[0]
@@ -447,4 +498,3 @@ class TestRunner(object):
 
 if __name__ == "__main__":
     TestRunner(sys.argv).run()
- 
