@@ -3,7 +3,6 @@ import shutil
 import os
 import re
 import random
-import pygal
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
@@ -18,6 +17,7 @@ from mozlog import structured
 
 from OWDTestToolkit.utils.assertions import AssertionManager
 from utilities import Utilities
+from utilities import Graphics
 
 
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
@@ -233,6 +233,10 @@ class TestRunner(object):
         setattr(self, attr_name, getattr(self, attr_name) + attr_value)
 
     def update_results_by_suites(self, test_path, test_result):
+        """
+        This method builds a dictionary which contains for each suite, the results
+        of each test run.
+        """
         suite = test_path.split("/")[-2]
         if self.results_by_suite.get(suite, None):
             self.results_by_suite[suite].append(test_result)
@@ -260,10 +264,7 @@ class TestRunner(object):
                 test_name = re.search('test_(\w*).*$', test.test_name).group(1)
                 self.failed_tests.append(test_name)
 
-            ##########################################################################################################
-            ###############################################  GRAPHICS  ###############################################
-            ##########################################################################################################
-
+            # I don't really like this piece of code. Not very fancy.
             if len(result.errors) > 0:
                 result_msg = "Automation Failed"
             elif len(result.failures) > 0:
@@ -278,7 +279,6 @@ class TestRunner(object):
                 result_msg = "Passed"
 
             self.update_results_by_suites(result.filepath, result_msg)
-            print self.results_by_suite
 
         self.total = len(self.runner.results)
 
@@ -426,70 +426,11 @@ class TestRunner(object):
         self.edit_test_details()
         self.display_results()
         if self.runner.testvars['graphics']['enabled']:
-            self.generate_graphics()
-
-    def suite_graphic(self, results, style, legend, labels):
-
-        bar_chart = pygal.StackedBar(
-            x_label_rotation=30, style=style, title_font_size=24, label_font_size=16, tooltip_font_size=16)
-        bar_chart.x_labels = map(str.capitalize, labels)
-        bar_chart.title = 'TESTRUN RESULTS by SUITE'
-        for index, result in enumerate(results):
-            bar_chart.add(legend[index], result)
-        bar_chart.render_to_png("{}/{}".format(self.runner.testvars['graphics']['graphics_dir'], "results_suites.png"))
-        bar_chart.render_to_file(
-            "{}/{}".format(self.runner.testvars['graphics']['graphics_dir'], "results_suites.svg"))
-
-    def get_test_run_percentages(self):
-        def _get_the_percentage(result_type):
-            return float(result_type) / self.total * 100
-
-        results = [self.passed, self.unexpected_failures, self.automation_failures,
-                   self.expected_failures, self.unexpected_passed, self.skipped]
-        return map(_get_the_percentage, results)
-
-    def total_results_graphic(self, results, style, legend):
-        pie_chart = pygal.Pie(
-            x_label_rotation=30, style=style, title_font_size=24, label_font_size=16, tooltip_font_size=16)
-        pie_chart.title = 'TESTRUN RESULTS'
-        for index, result in enumerate(results):
-            pie_chart.add(legend[index], result)
-        pie_chart.render_to_png("{}/{}".format(self.runner.testvars['graphics']['graphics_dir'], "results_total.png"))
-        pie_chart.render_to_file("{}/{}".format(self.runner.testvars['graphics']['graphics_dir'], "results_total.svg"))
-
-    def generate_graphics(self):
-        _POSSIBLE_RESULTS = ["Passed", "Failed", "Automation Failed", "Blocked", "Unblock", "Skipped"]
-        from pygal.style import Style
-        custom_style = Style(
-            background='#073642',
-            plot_background='#002b36',
-            foreground='#839496',
-            foreground_light='#fdf6e3',
-            foreground_dark='#657b83',
-            opacity='.66',
-            opacity_hover='.9',
-            transition='500ms ease-in',
-            colors=('#20C72E', '#EB0C35', '#F06B0C', '#0404B4', '#FE9A2E', '#6E6E6E'))
-
-        # This array of arrays contains the ocurrences of each possible test result for each suite
-        # Thus, it always has 6 elements, corresponding to the possible values (see above)
-        # Each element, is an array containing the occurrences of that values for each suite, so it'll
-        # have as many elements as suites being run
-        #
-        # Example: running 2 suites, A and B
-        #
-        #            Passed       Failed       AF        blocked     Unblock     Skipped
-        # Results: [ [1, 1],     [0, 1],     [1, 0],     [0, 0],     [0, 0],     [0, 0] ]
-        #             |  |        |  |        |  |        |  |        |  |        |  |
-        #             |  B        |  B        |  B        |  B        |  B        |  B
-        #             A           A           A           A           A           A
-        suites = sorted(self.results_by_suite.keys())
-        results_occurrences_by_suite = [
-            [self.results_by_suite[suite].count(pv) for suite in suites] for pv in _POSSIBLE_RESULTS]
-        self.suite_graphic(results_occurrences_by_suite, custom_style, _POSSIBLE_RESULTS, suites)
-
-        results_total = self.get_test_run_percentages()
-        self.total_results_graphic(results_total, custom_style, _POSSIBLE_RESULTS)
+            total_results_count = [self.passed, self.unexpected_failures, self.automation_failures,
+                                   self.expected_failures, self.unexpected_passed, self.skipped]
+            self.graphics = Graphics(results_by_suite=self.results_by_suite, total_results_count=total_results_count,
+                                     output_dir=self.runner.testvars['graphics']['graphics_dir'])
+            self.graphics.generate_all_graphics()
 
     def parse_toolkit_location(self, args):
         path = args[0]
