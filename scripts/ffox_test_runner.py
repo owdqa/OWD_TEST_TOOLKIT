@@ -432,6 +432,10 @@ class TestRunner(object):
                                      output_dir=self.runner.testvars['graphics']['graphics_dir'])
             self.graphics.generate_all_graphics()
 
+        # Generate CSV results (if required)
+        is_cert = self.runner.testvars['general']['is_cert_device']
+        Utilities.generate_csv_reports(self.runner, is_cert)
+
     def parse_toolkit_location(self, args):
         path = args[0]
         index = path.find('/scripts/ffox_test_runner.py')
