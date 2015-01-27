@@ -6,6 +6,7 @@
 		"test_descriptions": "Docs/test_descriptions.json",
 		"blocked_tests": "Docs/blocked_tests.json",
 		"description_length": "100",
+		"is_cert_device": false,
 		"test_retries": 2
 	},
 	"wifi": {
@@ -16,6 +17,7 @@
 		"open_wifi_name": ""
 	},
 	"toolkit_cfg": {
+		"devices_cfg": "config/devices_cfg.json",
 		"css_file": "config/details.css",
 		"results_template": "config/results_template.html"
 	},
@@ -35,7 +37,7 @@
 		"gmail_3_user": "roytesterton.3",
 		"hotmail_1_user": "roytesterton.1",
 		"hotmail_1_email": "roytesterton.1@hotmail.co.uk",
-		"hotmail_1_pass": "owdqa1234",
+		"hotmail_1_pass": "owdqa2015",
 		"hotmail_2_user": "roytesterton.2",
 		"hotmail_2_email": "roytesterton.2@hotmail.co.uk",
 		"hotmail_2_pass": "test123x",
@@ -70,6 +72,10 @@
 		"pigeon_api_key": "",
 		"pigeon_api_secret": ""
 	},
+	"graphics":{
+		"enabled": true,
+		"graphics_dir": "/tmp/tests"
+	},
 	"output": {
 		"log_cfg": "tests/logger.cfg",
 		"webdir": "http://ci-owd-deven-01/owd_tests",
@@ -97,3 +103,4 @@
 		"buildname_cert": "cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
 	}
 }
+

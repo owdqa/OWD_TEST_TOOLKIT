@@ -17,6 +17,7 @@ from mozlog import structured
 
 from OWDTestToolkit.utils.assertions import AssertionManager
 from utilities import Utilities
+from utilities import Graphics
 
 
 class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
@@ -65,6 +66,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             while attempt < self.testvars['general']['test_retries']:
                 self.run_test(test['filepath'], expected, test['oop'])
                 result = self.results[-1]
+                result.filepath = test['filepath']
                 total_time += result.time_taken
                 attempt += 1
                 result.attempts = attempt
@@ -124,9 +126,9 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
         seconds_str = "{:02d}".format(seconds)
         hundreds = int((results.time_taken - int(results.time_taken)) * 100)
         hundreds_str = ".{:02d}s".format(hundreds)
-        time_string = "{:3s}{:3s}{}{}".format(hours_str if hours else "", \
-                                      mins_str if mins else "", seconds_str, hundreds_str)
-        sys.stdout.write("{} {:4s} {:20s} (assertions: {}/{})\n".\
+        time_string = "{:3s}{:3s}{}{}".format(hours_str if hours else "",
+                                              mins_str if mins else "", seconds_str, hundreds_str)
+        sys.stdout.write("{} {:4s} {:20s} (assertions: {}/{})\n".
                          format(time_string, "(x{})".format(results.attempts) if results.attempts > 1 else "",
                                 self.get_result_msg(results),
                                 OWDMarionetteTestRunner.assertion_manager.passed,
@@ -134,6 +136,7 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
 
 
 class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingTestRunnerMixin):
+
     """
     OWD runner class
     This class performs a bunch of tasks which are needed before and after running the test/s
@@ -151,7 +154,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # the devices config or the css template
         self.testvars['toolkit_cfg']['toolkit_location'] = kwargs['toolkit_location']
         GaiaTestRunnerMixin.__init__(self, **kwargs)
-        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__,
+        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.1', version=__version__,
                                               html_output=self.testvars['output']['html_output'], **kwargs)
         self.test_handlers = [GaiaTestCase]
 
@@ -165,12 +168,15 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         """ This methods ensures that the destination results directory is created before launching the
         test/s execution. It also creates (or cleans) the html results report file and the error_output file
         """
-        if not os.path.exists(self.testvars['output']['result_dir']):
-            os.makedirs(self.testvars['output']['result_dir'])
-
         def _initialize_file(file_path):
             with open(file_path, 'w') as f:
                 f.close()
+
+        # Clean results dir if needed
+        result_dir = self.testvars['output']['result_dir']
+        if os.path.exists(result_dir):
+            shutil.rmtree(result_dir)
+        os.makedirs(result_dir)
 
         files = [self.testvars['output']['html_output'], self.testvars['output']['error_output']]
         map(_initialize_file, files)
@@ -192,7 +198,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
 
 class TestRunner(object):
 
-# runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
+    # runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
     def __init__(self, args):
         self.args = args
         self.runner_class = OWDTestRunner
@@ -206,6 +212,7 @@ class TestRunner(object):
         self.expected_failures = 0
         self.assertion_manager = AssertionManager()
         self.failed_tests = []
+        self.results_by_suite = {}
 
     def start_test_runner(self, runner_class, options, tests):
         """
@@ -225,6 +232,17 @@ class TestRunner(object):
         """
         setattr(self, attr_name, getattr(self, attr_name) + attr_value)
 
+    def update_results_by_suites(self, test_path, test_result):
+        """
+        This method builds a dictionary which contains for each suite, the results
+        of each test run.
+        """
+        suite = test_path.split("/")[-2]
+        if self.results_by_suite.get(suite, None):
+            self.results_by_suite[suite].append(test_result)
+        else:
+            self.results_by_suite[suite] = [test_result]
+
     def process_runner_results(self):
         """
         This method takes the results contained in the instance of runner (it assumes the runner has been run, ofc)
@@ -241,9 +259,26 @@ class TestRunner(object):
             result_values = [len(getattr(result, name)) for name in result_attrs]
             map(self.update_attr, own_attrs, result_values)
 
+            test = result.tests.next()
             if len(result.errors) > 0 or len(result.failures) > 0:
-                test_name = re.search('test_(\w*).*$', result.tests.next().test_name).group(1)
+                test_name = re.search('test_(\w*).*$', test.test_name).group(1)
                 self.failed_tests.append(test_name)
+
+            # I don't really like this piece of code. Not very fancy.
+            if len(result.errors) > 0:
+                result_msg = "Automation Failed"
+            elif len(result.failures) > 0:
+                result_msg = "Failed"
+            elif len(result.skipped) > 0:
+                result_msg = "Skipped"
+            elif len(result.unexpectedSuccesses) > 0:
+                result_msg = "Unblock"
+            elif len(result.expectedFailures) > 0:
+                result_msg = "Blocked"
+            else:
+                result_msg = "Passed"
+
+            self.update_results_by_suites(result.filepath, result_msg)
 
         self.total = len(self.runner.results)
 
@@ -283,6 +318,13 @@ class TestRunner(object):
         results_file = open(self.runner.testvars['output']['html_output'])
         soup = BeautifulSoup(results_file)
         results_file.close()
+
+        if len(self.failed_tests) > 0:
+            target = soup.find('span', class_='unexpected pass')
+            failed_tag = soup.new_tag(
+                'div', id='failed-tests', style="font-size: 17px; font-weight: bold; margin-top: 1em;")
+            failed_tag.string = "Failed tests: {}".format(", ".join(self.failed_tests))
+            target.parent.insert_after(failed_tag)
 
         test_nums = [re.search('test_(\w*).*$', testname.string.strip()).group(1)
                      for testname in soup.find_all("td", class_="col-class")]
@@ -375,6 +417,7 @@ class TestRunner(object):
         options.toolkit_location = location
 
         # Hit the runner
+        Utilities.connect_device()
         self.runner = self.start_test_runner(self.runner_class, options, tests)
 
         # Show the results via console and prepare the details
@@ -382,10 +425,16 @@ class TestRunner(object):
         self.edit_html_results()
         self.edit_test_details()
         self.display_results()
+        if self.runner.testvars['graphics']['enabled']:
+            total_results_count = [self.passed, self.unexpected_failures, self.automation_failures,
+                                   self.expected_failures, self.unexpected_passed, self.skipped]
+            self.graphics = Graphics(results_by_suite=self.results_by_suite, total_results_count=total_results_count,
+                                     output_dir=self.runner.testvars['graphics']['graphics_dir'])
+            self.graphics.generate_all_graphics()
 
         # Generate CSV results (if required)
         is_cert = self.runner.testvars['general']['is_cert_device']
-        Utilities.generate_csv_reports(self.runner, is_cert)
+        Utilities.generate_csv_reports(self, is_cert)
 
     def parse_toolkit_location(self, args):
         path = args[0]

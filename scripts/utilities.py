@@ -1,7 +1,9 @@
 import json
+import pygal
 import os
 import shutil
 from csv_writer import CsvWriter
+from pygal.style import Style
 
 
 class Utilities():
@@ -22,9 +24,9 @@ class Utilities():
     def connect_device():
         """Force connection to device and forward ports, just in case.
         """
-        os.popen("adb kill-server")
-        os.popen("adb devices")
-        os.popen("adb forward tcp:2828 tcp:2828")
+        os.popen("adb kill-server > /dev/null 2>&1")
+        os.popen("adb devices > /dev/null 2>&1")
+        os.popen("adb forward tcp:2828 tcp:2828 > /dev/null 2>&1")
 
     @staticmethod
     def generate_csv_reports(test_runner, is_cert=False):
@@ -39,8 +41,8 @@ class Utilities():
         is_by_test_suite = os.getenv("RUN_ID", "").find("testing_by_TEST_SUITE")
         if (not is_ci_server or is_by_test_suite != -1) and not is_cert:
             return
-        fieldnames = ['START_TIME', 'DATE', 'TEST_SUITE', 'TEST_CASES_PASSED', 'FAILURES', 'AUTOMATION_FAILURES', \
-                      'UNEX_PASSES', 'KNOWN_BUGS', 'EX_PASSES', 'IGNORED', 'UNWRITTEN', 'PERCENT_FAILED', 'DEVICE', \
+        fieldnames = ['START_TIME', 'DATE', 'TEST_SUITE', 'TEST_CASES_PASSED', 'FAILURES', 'AUTOMATION_FAILURES',
+                      'UNEX_PASSES', 'KNOWN_BUGS', 'EX_PASSES', 'IGNORED', 'UNWRITTEN', 'PERCENT_FAILED', 'DEVICE',
                       'VERSION', 'BUILD', 'TEST_DETAILS']
         passes = test_runner.passed + test_runner.unexpected_passed
         failures = test_runner.expected_failures + test_runner.unexpected_failures + test_runner.automation_failures
@@ -62,11 +64,11 @@ class Utilities():
             filedir = html_webdir[index + 9:]
         else:
             filedir = test_runner.runner.testvars['output']['html_output']
-        values = [test_runner.start_time.strftime("%d/%m/%Y %H:%M"), test_runner.end_time.strftime("%d/%m/%Y %H:%M"), \
-                  run_id, "{} / {}".format(passes, totals), \
-                  str(test_runner.unexpected_failures), \
-                  str(test_runner.automation_failures), str(test_runner.unexpected_passed), \
-                  str(test_runner.expected_failures), str(test_runner.passed), str(test_runner.skipped), "0", \
+        values = [test_runner.start_time.strftime("%d/%m/%Y %H:%M"), test_runner.end_time.strftime("%d/%m/%Y %H:%M"),
+                  run_id, "{} / {}".format(passes, totals),
+                  str(test_runner.unexpected_failures),
+                  str(test_runner.automation_failures), str(test_runner.unexpected_passed),
+                  str(test_runner.expected_failures), str(test_runner.passed), str(test_runner.skipped), "0",
                   "{:.2f}".format(error_rate), device, branch, buildname, filedir]
         weekly_file = '/var/www/html/owd_tests/total_csv_file.csv'
         daily_file = '/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW.csv'.format(device, branch)
@@ -96,3 +98,73 @@ class Utilities():
 
         # Move the errors file to the same location
         shutil.move(testvars['output']['error_output'], dstdir)
+
+
+class Graphics(object):
+
+    def __init__(self, **kwargs):
+        self.custom_style = Style(
+            background='#073642',
+            plot_background='#002b36',
+            foreground='#839496',
+            foreground_light='#fdf6e3',
+            foreground_dark='#657b83',
+            opacity='.66',
+            opacity_hover='.9',
+            transition='500ms ease-in',
+            colors=('#20C72E', '#EB0C35', '#F06B0C', '#0404B4', '#CFF73E', '#6E6E6E'))
+
+        self._POSSIBLE_RESULTS = ['Passed', 'Failed', 'Automation Failed', 'Blocked', 'Unblock', 'Skipped']
+        self.results_by_suite = kwargs.pop('results_by_suite')
+        self.total_results_count = kwargs.pop('total_results_count')
+        self.output_dir = kwargs.pop('output_dir')
+        self.suites = sorted(self.results_by_suite.keys())
+
+        self.total_results_percentages = self._get_test_run_percentages()
+        self.results_occurrences_by_suite = self._calculate_result_occurrences_by_suite()
+
+    def _calculate_result_occurrences_by_suite(self):
+        """
+        Returns an array of arrays contains the ocurrences of each possible test result for each suite
+        Thus, it always has 6 elements, corresponding to the possible values (see above)
+        Each element, is an array containing the occurrences of that values for each suite, so it'll
+        have as many elements as suites being run
+
+        Example: running 2 suites, A and B
+
+                   Passed       Failed       AF        blocked     Unblock     Skipped
+        Results: [ [2, 1],     [0, 1],     [1, 0],     [0, 0],     [0, 0],     [0, 0] ]
+                    |  |        |  |        |  |        |  |        |  |        |  |
+                    |  B        |  B        |  B        |  B        |  B        |  B
+                    A           A           A           A           A           A
+        """
+        return [[self.results_by_suite[suite].count(pv) for suite in self.suites] for pv in self._POSSIBLE_RESULTS]
+
+    def _get_test_run_percentages(self):
+        def _get_percentage(result_type):
+            return float(result_type) / total * 100
+        total = sum(self.total_results_count)
+        return map(_get_percentage, self.total_results_count)
+
+    def generate_all_graphics(self):
+        self.suite_graphic(self.results_occurrences_by_suite, self._POSSIBLE_RESULTS, self.suites, self.output_dir)
+        self.total_results_graphic(self.total_results_percentages, self._POSSIBLE_RESULTS, self.output_dir)
+
+    def suite_graphic(self, results, legend, labels, output):
+        bar_chart = pygal.StackedBar(
+            x_label_rotation=45, style=self.custom_style, title_font_size=24, label_font_size=16, tooltip_font_size=16)
+        bar_chart.x_labels = map(str.capitalize, labels)
+        bar_chart.title = 'TESTRUN RESULTS by SUITE'
+        for index, result in enumerate(results):
+            bar_chart.add(legend[index], result)
+        bar_chart.render_to_png("{}/{}".format(output, "results_suites.png"))
+        bar_chart.render_to_file("{}/{}".format(output, "results_suites.svg"))
+
+    def total_results_graphic(self, results, legend, output):
+        pie_chart = pygal.Pie(
+            x_label_rotation=30, style=self.custom_style, title_font_size=24, label_font_size=16, tooltip_font_size=16)
+        pie_chart.title = 'TESTRUN RESULTS'
+        for index, result in enumerate(results):
+            pie_chart.add(legend[index], result)
+        pie_chart.render_to_png("{}/{}".format(output, "results_total.png"))
+        pie_chart.render_to_file("{}/{}".format(output, "results_total.svg"))

@@ -6,6 +6,7 @@
 		"test_descriptions": "Docs/test_descriptions.json",
 		"blocked_tests": "Docs/blocked_tests.json",
 		"description_length": "100",
+		"is_cert_device": false,
 		"test_retries": 2
 	},
 	"wifi": {
@@ -69,6 +70,10 @@
 		"cp_usernetwpin": "68617610508695F4:1234",
 		"pigeon_api_key": "321f02d7-b856-4147-864e-bae7d703ea94",
 		"pigeon_api_secret": "a058c12d-f973-46c2-971b-c30125f2e741"
+	},
+	"graphics":{
+		"enabled": true,
+		"graphics_dir": "/tmp/tests"
 	},
 	"output": {
 		"log_cfg": "tests/logger.cfg",
