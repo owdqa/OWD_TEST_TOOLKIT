@@ -61,7 +61,7 @@ class Utilities():
         on_ci_server = os.getenv("ON_CI_SERVER")
         if on_ci_server:
             index = html_webdir.find("owd_tests")
-            filedir = html_webdir[index:]
+            filedir = html_webdir[index + 9:]
         else:
             filedir = test_runner.runner.testvars['output']['html_output']
         values = [test_runner.start_time.strftime("%d/%m/%Y %H:%M"), test_runner.end_time.strftime("%d/%m/%Y %H:%M"),
