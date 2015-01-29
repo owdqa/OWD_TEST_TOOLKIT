@@ -3,6 +3,7 @@ import shutil
 import os
 import re
 import random
+import subprocess32
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
@@ -58,17 +59,26 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
             random.shuffle(tests)
 
         index = 0
+        current_dir = None
         for test in tests:
             attempt = 0
             total_time = 0
             index = index + 1
+            cwd = os.getcwd()
+            filedir = test['filepath'][len(cwd) + 1:test['filepath'].rfind('/')]
+            if filedir != current_dir:
+                print "------------------ Suite: {} ------------------".format(filedir)
+                current_dir = filedir
             expected = self._show_test_info(test['filepath'], index, len(tests))
             while attempt < self.testvars['general']['test_retries']:
+                # Let's try to detect GaiaTestCase setUp errors. If a SetupException raises,
+                # retry the test execution for as many times as setup_retries. Otherwise,
+                # retry as usual, only up to the number of test_retries
                 self.run_test(test['filepath'], expected, test['oop'])
+                attempt += 1
                 result = self.results[-1]
                 result.filepath = test['filepath']
                 total_time += result.time_taken
-                attempt += 1
                 result.attempts = attempt
                 # Be careful, now self.results is a list of GaiaTestResult
                 if len(result.errors) + len(result.failures) > 0:
@@ -285,7 +295,7 @@ class TestRunner(object):
     @property
     def _console_separator(self):
         try:
-            columns = int(os.popen('stty size', 'r').read().split()[-1])
+            columns = int(subprocess32.check_output(['stty', 'size']).split()[-1])
         except Exception:
             columns = 120
         return "#" * columns
