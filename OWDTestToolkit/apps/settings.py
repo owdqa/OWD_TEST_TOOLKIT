@@ -742,6 +742,8 @@ class Settings(object):
             # First of all, verify if the SIM is locked, and, in that case, unlock using PUK
             switcher.tap()
             time.sleep(1)
+            if puk is None:
+                puk = self.UTILS.general.get_config_variable("puk", "custom")
             unlocked = self.unlock_sim(puk, pin)
             if unlocked:
                 self.check_security_menu()
@@ -772,6 +774,10 @@ class Settings(object):
         enabled = switch_input.get_attribute("checked") is not None
         self.UTILS.reporting.info("PIN enabled: {}".format(enabled is not None))
         self.UTILS.test.test(enabled == expected, "Security enabled: {}  Expected: {}".format(enabled, expected))
+        self.check_security_menu()
+        self.go_back("simpin-header")
+        time.sleep(1)
+        self.go_back()
 
     def check_security_menu(self):
         try:
