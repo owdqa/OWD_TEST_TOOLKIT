@@ -248,7 +248,7 @@ class Contacts(object):
             DOM.Contacts.settings_delete_all_contacts, "Delete All Contacts button")
         delete_all_btn.tap()
 
-        select_all_btn = self.UTILS.element.getElement(DOM.Contacts.export_select_all, "Select All")
+        select_all_btn = self.UTILS.element.getElement(DOM.Contacts.action_select_all, "Select All")
         select_all_btn.tap()
 
         delete_btn = self.UTILS.element.getElement(DOM.Contacts.select_action, "Delete button")
