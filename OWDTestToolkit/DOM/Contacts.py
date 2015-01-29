@@ -5,6 +5,7 @@ _ = I18nSetup(I18nSetup).setup()
 
 
 frame_locator = ("src", "contacts")
+action_select_all = ("id", "select-all")
 view_all_header = ('xpath', GLOBAL.app_head_specific.format(_('Contacts')))
 view_all_contact_xpath = '//*[@data-order="{}"]'
 # Sometimes there's a hidden data-group called 'ice', we must skip it
@@ -143,12 +144,10 @@ imported_contacts_path = "//section[@id='statusMsg']/p[contains(text(), '{}')]"
 
 import_sd_btn = ('id', 'import-sd-option')
 
-
 # Export
 export_export_btn = ("id", "export-action")
 export_contacts = ("id", "exportContacts")
 export_sd_card = ("id", "export-sd-option")
-action_select_all = ("id", "select-all")
 export_import_banner = ("id", "statusMsg")
 
 export_sim_card = ("id", "export-sim-option-8934071100275319352")
