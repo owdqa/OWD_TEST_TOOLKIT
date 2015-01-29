@@ -45,6 +45,8 @@ settings_fb_enable = ('xpath', '//li[@class="fb-item"]')
 settings_import_fb = ('id', 'import-fb')
 settings_fb_frame = ("id", 'fb-extensions')
 settings_fb_logout_wait = ('id', 'progress-title')
+settings_delete_all_contacts = ('id', 'bulkDelete')
+select_action = ("id", "select-action")
 add_contact_button = ('id', 'add-contact-button')
 add_contact_header = ('xpath', GLOBAL.app_head_specific.format(_('Add contact')))
 contact_form_header = ('id', 'contact-form-header')
@@ -128,6 +130,9 @@ hotmail_import_frame = ("src", "live")  # It's in the contacts iframe.
 hotmail_import_frame2 = ("data-url", "live")  # It's in the contacts iframe.
 hotmail_header = ("css selector", '#header')
 
+# Import
+import_contacts = ('id', 'importContacts')
+import_contact_header = ('id', 'import-settings-header')
 import_sim_btn = ('css selector', '#import-options button.icon-sim')
 reading_sim_card = ('xpath', '//h1[@id="progress-title" and contains(text(), "{}")]'.\
                     format(_("Reading from SIM card")))
@@ -136,12 +141,14 @@ importing_sim_contacts = ('xpath', '//h1[@id="progress-title" and contains(text(
 importing_progress = ('css selector', '#progress-activity #progress-msg')
 imported_contacts_path = "//section[@id='statusMsg']/p[contains(text(), '{}')]"
 
+import_sd_btn = ('id', 'import-sd-option')
+
+
 # Export
 export_export_btn = ("id", "export-action")
 export_contacts = ("id", "exportContacts")
 export_sd_card = ("id", "export-sd-option")
 export_select_all = ("id", "select-all")
-export = ("xpath", "//button[@id='select-action']")
 export_import_banner = ("id", "statusMsg")
 
 export_sim_card = ("id", "export-sim-option-8934071100275319352")

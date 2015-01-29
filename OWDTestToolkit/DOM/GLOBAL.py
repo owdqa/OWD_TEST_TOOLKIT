@@ -70,3 +70,4 @@ battery_icon = ('id', 'statusbar-battery')
 
 # Generic buttons
 ok_button = ("xpath", "//button[text()='{}']".format(_("OK")))
+cancel_overlay = ('id', 'cancel-overlay')

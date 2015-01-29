@@ -240,6 +240,23 @@ class Contacts(object):
 
         self.populate_contact_fields(contact)
 
+    def delete_all_contacts(self):
+        settings_btn = self.UTILS.element.getElement(DOM.Contacts.settings_button, "Settings button")
+        settings_btn.tap()
+
+        delete_all_btn = self.UTILS.element.getElement(
+            DOM.Contacts.settings_delete_all_contacts, "Delete All Contacts button")
+        delete_all_btn.tap()
+
+        select_all_btn = self.UTILS.element.getElement(DOM.Contacts.export_select_all, "Select All")
+        select_all_btn.tap()
+
+        delete_btn = self.UTILS.element.getElement(DOM.Contacts.select_action, "Delete button")
+        delete_btn.tap()
+
+        confirm_delete_btn = self.UTILS.element.getElement(DOM.Contacts.confirm_delete_btn, "Confirm delete button")
+        confirm_delete_btn.tap()
+
     def delete_contact(self, fullname, header_check=True):
         """
         Deletes a contact.<br>
@@ -362,7 +379,7 @@ class Contacts(object):
 
     def export_contacts_to_sim_card_by_position(self, positions):
         self.select_contacts_by_position(positions)
-        export_button = self.UTILS.element.getElement(DOM.Contacts.export, "Export action button")
+        export_button = self.UTILS.element.getElement(DOM.Contacts.select_action, "Export action button")
         export_button.tap()
 
     def select_contacts_by_position(self, positions):
@@ -710,10 +727,10 @@ class Contacts(object):
         self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "View all contacts header")
 
         # Now check the contact's name is displayed here too.
-        contact_name = ("xpath", DOM.Contacts.view_all_contact_xpath.format(contact['name'].upper().\
+        contact_name = ("xpath", DOM.Contacts.view_all_contact_xpath.format(contact['name'].upper().
                                                                             replace(" ", "")))
 
-        self.UTILS.element.waitForElements(contact_name, "Contact '{}'".format(contact['name'].upper().\
+        self.UTILS.element.waitForElements(contact_name, "Contact '{}'".format(contact['name'].upper().
                                                                                replace(" ", "")), timeout=30)
 
     def get_view_fields(self):
@@ -862,12 +879,12 @@ class Contacts(object):
         btn = None
         if cancel:
             btn = self.UTILS.element.getElement((DOM.Contacts.select_recipient_btn[0],
-                                             DOM.Contacts.select_recipient_btn[1].format("Cancel")),
-                                             "Cancel Select number button")
+                                                 DOM.Contacts.select_recipient_btn[1].format("Cancel")),
+                                                "Cancel Select number button")
         else:
             btn = self.UTILS.element.getElement((DOM.Contacts.select_recipient_btn[0],
-                                             DOM.Contacts.select_recipient_btn[1].format(number + " ")),
-                                             "Select number button")
+                                                 DOM.Contacts.select_recipient_btn[1].format(number + " ")),
+                                                "Select number button")
         btn.tap()
 
     def start_create_new_contact(self):
@@ -992,9 +1009,10 @@ class Contacts(object):
         self.UTILS.reporting.logResult('info', 'Trying to view contact: {}'.format(contact_name))
         contact_name_strong = contact_name.split(" ")[0]
         contact_locator = (DOM.Contacts.view_all_contact_specific_contact[0],
-                            DOM.Contacts.view_all_contact_specific_contact[1].format(contact_name_strong))
+                           DOM.Contacts.view_all_contact_specific_contact[1].format(contact_name_strong))
 
-        the_contact = self.UTILS.element.getElement(contact_locator, "Contact with name: {} {}".format(contact_locator, contact_name))
+        the_contact = self.UTILS.element.getElement(
+            contact_locator, "Contact with name: {} {}".format(contact_locator, contact_name))
         time.sleep(1)
         the_contact.tap()
 
