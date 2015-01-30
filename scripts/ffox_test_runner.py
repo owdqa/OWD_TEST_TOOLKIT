@@ -295,7 +295,8 @@ class TestRunner(object):
     @property
     def _console_separator(self):
         try:
-            columns = int(subprocess32.check_output(['stty', 'size', '2>/dev/null']).split()[-1])
+            with open(os.devnull, 'w') as DEVNULL:
+                columns = int(subprocess32.check_output(['stty', 'size'], stderr=DEVNULL).split()[-1])
         except Exception:
             columns = 120
         return "#" * columns
