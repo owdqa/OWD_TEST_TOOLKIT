@@ -416,7 +416,6 @@ class Contacts(object):
         import_btn = self.UTILS.element.getElement(DOM.Contacts.import_contacts, "Import button")
         time.sleep(1)
         import_btn.tap()
-        # self.UTILS.element.simulateClick(import_btn)
 
         # Press the Gmail button.
         import_gmail_btn = self.UTILS.element.getElement(DOM.Contacts.gmail_button, "Gmail button")
