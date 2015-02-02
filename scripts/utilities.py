@@ -45,7 +45,7 @@ class Utilities():
                       'UNEX_PASSES', 'KNOWN_BUGS', 'EX_PASSES', 'IGNORED', 'UNWRITTEN', 'PERCENT_FAILED', 'DEVICE',
                       'VERSION', 'BUILD', 'TEST_DETAILS']
         passes = test_runner.passed + test_runner.unexpected_passed
-        failures = test_runner.expected_failures + test_runner.unexpected_failures + test_runner.automation_failures
+        failures = test_runner.unexpected_failures + test_runner.automation_failures
         totals = passes + failures
         error_rate = float(failures * 100) / totals
         device = os.getenv("DEVICE") if not is_cert else test_runner.runner.testvars["device_cert"]
