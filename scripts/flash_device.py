@@ -61,11 +61,13 @@ def main():
     # Flash the device
     if not last_flashed:
         flash(options.device)
+        # Wait for the device to be available
+        wait_for_device()
+        # And reconnect to it
+        Utilities.connect_device()
     else:
         print "Last build detected on the device. No need to flash."
 
-    # Wait for the device to be connected
-    wait_for_device()
 
 if __name__ == '__main__':
     main()
