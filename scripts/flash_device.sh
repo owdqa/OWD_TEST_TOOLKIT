@@ -89,35 +89,7 @@ fi
 
 cd $REL_DIR
 
-
-#
-# Restart adb service (just to be sure we're pointing to the correct device).
-#
-# In case 'su' doesn't have the path to adb, grab it first ...
-cmd_adb=$(which adb)
-if [ ! "$cmd_adb" ]
-then
-    printf "\nCould not find 'adb' - please check your installation! Aborting ...\n\n"
-    exit 5
-fi
-sudo $cmd_adb kill-server > /dev/null
-sudo $cmd_adb start-server > /dev/null
-sudo $cmd_adb forward tcp:2828 tcp:2828 > /dev/null
-
-
-#
-# Do the flash.
-#
-printf "\n\nFLASHING DEVICE - DO NOT DISTURB! :)\n"
-if [ "$DEVICE" = "hamachi_light" ]
-then
-    sudo ./update-gecko-gaia.sh 
-else
-    sudo ./flash.sh
-fi
-
-# Need to sleep while the phone boots up ('flash' doesn't track this event).
-sleep 40
+python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE
 
 #
 # Tidy up (remove the unpacked directory, but leave the flash file in case we need it again).
@@ -126,10 +98,6 @@ cd $TARGET_DIR
 rm -rf $REL_DIR
 
 printf "\n\nDONE!\n"
-
-printf "\n\nKilling FTU app\n"
-#sudo $cmd_adb kill-server > /dev/null
-#sudo $cmd_adb start-server > /dev/null
 
 #
 # Install gaiatest.
@@ -157,26 +125,7 @@ then
     sudo $OWD_TEST_TOOLKIT_BIN/adjustRAM.sh 512
 fi
 
-#
-# Wait until the device is ready.
-#
-timeoutLoops=10
-while true
-do
-	sudo $cmd_adb start-server >/dev/null 2>&1
-	[ $? -eq 0 ] && break
-
-	$timeoutLoops=$(($timeoutLoops-1))
-	[ $timeoutLoops -le 0 ] && break
-
-	sleep 5
-done
-
-sleep 30
-sudo adb devices
-sudo $cmd_adb start-server
-sudo $cmd_adb forward tcp:2828 tcp:2828
-
+sudo adb wait-for-device
 
 printf "\n\nDONE!\n"
-exit 0
+
