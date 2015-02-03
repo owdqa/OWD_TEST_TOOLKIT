@@ -88,7 +88,9 @@ class general(object):
     def is_device_dual_sim(self):
         import os
         try:
-            prop = os.popen('adb shell cat /system/build.prop | grep multisim').read().strip().split("=")[-1]
+            with open(os.devnull, 'w') as DEVNULL:
+                prop = subprocess32.check_output(
+                    'adb shell cat /system/build.prop | grep multisim', shell=True, stderr=DEVNULL).strip().split("=")[-1]
             self.parent.reporting.logResult("info", "Value of property: {}".format(prop))
             return prop == "dsds"
         except:
@@ -202,7 +204,7 @@ class general(object):
         else:
 
             # Tap the element to get the keyboard to popup.
-            self.parent.reporting.logResult("info", u"(Sending '{}' to this field using the keyboard.)".\
+            self.parent.reporting.logResult("info", u"(Sending '{}' to this field using the keyboard.)".
                                             format(p_str))
 
             # Type the string.
@@ -277,14 +279,14 @@ class general(object):
         contact_given = "Test"
         contact_family = map(str, range(1, number_of_contacts + 1))
         contact_name = ["{} {}".format(contact_given, contact_family[i])
-                             for i in range(number_of_contacts)]
+                        for i in range(number_of_contacts)]
 
         contact_numbers = [str(i) * 12 for i in range(1, number_of_contacts + 1)]
 
         test_contacts = [MockContact(name=contact_name[i], givenName=contact_given,
-                                          familyName=contact_family[i],
-                                          tel={'type': 'Mobile', 'value': contact_numbers[i]})
-                              for i in range(number_of_contacts)]
+                                     familyName=contact_family[i],
+                                     tel={'type': 'Mobile', 'value': contact_numbers[i]})
+                         for i in range(number_of_contacts)]
         map(self.insertContact, test_contacts)
 
     def show_all_settings(self):

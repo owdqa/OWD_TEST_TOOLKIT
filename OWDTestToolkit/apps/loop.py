@@ -50,13 +50,13 @@ class Loop(object):
 
     def install_via_grunt(self, version="1.1"):
         self.UTILS.reporting.logResult('info', 'Installing via grunt....')
-        script = """ cd {0}
-        git checkout {1}
-        git fetch && git merge origin/{1}
-        grunt build
-        """.format(self.loop_dir, version)
+        c1 = 'cd {}'.format(self.loop_dir)
+        c2 = 'git checkout {}'.format(version)
+        c3 = 'git fetch && git merge origin/{}'.format(version)
+        c4 = 'grunt build'
 
-        result = os.popen(script).read()
+        with open(os.devnull, 'w') as DEVNULL:
+            result = subprocess32.check_output("; ".join([c1, c2, c3, c4]), shell=True, stderr=DEVNULL)
 
         self.marionette.switch_to_frame()
         msg = "{} installed".format(self.app_name)
@@ -102,15 +102,14 @@ class Loop(object):
     def update_and_publish(self):
         self.publish_loop_dir = self.UTILS.general.get_config_variable("aux_files", "loop")
 
-        result = os.popen("cd {} && ./publish_app.sh {}".format(self.publish_loop_dir, self.loop_dir)).read()
+        c1 = 'cd {}'.fomrat(self.publish_loop_dir)
+        c2 = './publish_app.sh {}'.format(self.loop_dir)
+        with open(os.devnull, 'w') as DEVNULL:
+            result = subprocess32.check_output("; ".join([c1, c2]), shell=True, stderr=DEVNULL)
+
         chops = result.split("\n")
         self.UTILS.reporting.logResult('info', "result: {}".format(chops))
         self.UTILS.test.test("And all done, hopefully." in chops, "The script to publish an app is OK", True)
-
-    def update_db(self, local_dir):
-        loop_dir = os.popen("adb shell ls {} | grep loop".format(self.persistent_directory)).read().rstrip()
-        target_dir = "{}/{}/idb/".format(self.persistent_directory, loop_dir)
-        os.system("cd {} && adb push . {}".format(local_dir, target_dir))
 
     def _fill_fxa_field(self, field_locator, text):
         """ Auxiliary method to fill "Firefox account login" fields
