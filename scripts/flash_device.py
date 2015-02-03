@@ -3,15 +3,7 @@ import time
 from argparse import ArgumentParser
 import os
 import get_latest_build
-
-
-def connect_device():
-    """Force connection to device and forward ports, just in case.
-    """
-    with open(os.devnull, 'w') as DEVNULL:
-        subprocess32.check_call(['sudo', 'adb', 'kill-server'], stderr=DEVNULL)
-        subprocess32.check_call(['sudo', 'adb', 'devices'], stderr=DEVNULL)
-        subprocess32.check_call(['sudo', 'adb', 'forward', 'tcp:2828', 'tcp:2828'], stderr=DEVNULL)
+from utilities import Utilities
 
 
 def flash(device):
@@ -47,10 +39,7 @@ def check_device_build(source, user, passwd):
     daf = time.strftime("%m-%d-%y", da)
     print "Current build's date in device: {}".format(daf)
     last_date = get_latest_build.detect_latest_date(source, user, passwd)
-    result = False
-    if daf == last_date:
-        result = True
-    return result
+    return daf == last_date
 
 
 def main():
@@ -65,7 +54,7 @@ def main():
     options = parser.parse_args()
 
     # First of all, ensure device is connected
-    connect_device()
+    Utilities.connect_device()
 
     last_flashed = check_device_build(options.source, options.username, options.passwd)
 
