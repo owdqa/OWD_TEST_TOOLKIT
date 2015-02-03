@@ -24,9 +24,10 @@ class Utilities():
     def connect_device():
         """Force connection to device and forward ports, just in case.
         """
-        os.popen("adb kill-server > /dev/null 2>&1")
-        os.popen("adb devices > /dev/null 2>&1")
-        os.popen("adb forward tcp:2828 tcp:2828 > /dev/null 2>&1")
+        with open(os.devnull, 'w') as DEVNULL:
+            subprocess32.call('adb kill-server', shell=True, stderr=DEVNULL, stdout=DEVNULL)
+            subprocess32.call('adb devices', shell=True, stderr=DEVNULL, stdout=DEVNULL)
+            subprocess32.call('adb forward tcp:2828 tcp:2828', shell=True, stderr=DEVNULL, stdout=DEVNULL)
 
     @staticmethod
     def generate_csv_reports(test_runner, is_cert=False):
