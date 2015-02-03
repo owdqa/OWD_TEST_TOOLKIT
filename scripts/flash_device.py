@@ -1,7 +1,6 @@
 import subprocess32
 import time
 from argparse import ArgumentParser
-import os
 import get_latest_build
 from utilities import Utilities
 
