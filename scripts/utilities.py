@@ -4,6 +4,7 @@ import os
 import shutil
 from csv_writer import CsvWriter
 from pygal.style import Style
+import subprocess32
 
 
 class Utilities():
