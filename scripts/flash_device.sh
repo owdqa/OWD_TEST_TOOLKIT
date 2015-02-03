@@ -28,16 +28,10 @@ VERSION=$3
 LOGFILE=/tmp/${DEVICE}_flash_download.log
 TARGET_DIR=$HOME/Downloads/device_flash_files
 
-#
-# Make sure nothing else is running first.
-#
-$OWD_TEST_TOOLKIT_BIN/wait_for_no_other_test_run.sh $$
-
-
 # By default, get the build file too (just pass any parameter as $3 and it'll skip this).
 if [ ! "$4" ]
 then
-    $OWD_TEST_TOOLKIT_BIN/get_latest_build.sh $DEVICE $TYPE $VERSION
+    python $OWD_TEST_TOOLKIT_BIN/get_latest_build.py -d $DEVICE -t $TYPE -b $VERSION -u owdmoz -p gaia -s http://ci-owd-misc-02/releases/DEVELOP/ -o $TARGET_DIR
 
     if [ $? -ne 0 ]
     then
