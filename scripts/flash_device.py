@@ -13,9 +13,9 @@ def flash(device):
     """
 
     if device == "hamachi-light":
-        subprocess32.check_call(['./update-gecko-gaia.sh'])
+        subprocess32.check_call(['sudo', './update-gecko-gaia.sh'])
     else:
-        subprocess32.check_call(['./flash.sh'])
+        subprocess32.check_call(['sudo', './flash.sh'])
     print "Device successfully flashed!"
 
 

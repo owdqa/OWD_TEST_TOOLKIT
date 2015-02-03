@@ -89,7 +89,7 @@ fi
 
 cd $REL_DIR
 
-python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE
+sudo python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE
 
 #
 # Tidy up (remove the unpacked directory, but leave the flash file in case we need it again).
@@ -111,9 +111,9 @@ printf "\n<b>Installing gaiatest for branch \"$(git branch | grep '*')\" ... </b
 sudo python setup.py develop
 
 printf "\n\nDevices\n"
-sudo $cmd_adb devices
+sudo adb devices
 printf "\n\nDevice forward 2828\n"
-$cmd_adb forward tcp:2828 tcp:2828
+sudo adb forward tcp:2828 tcp:2828
 printf "\n\nRunning apps\n"
 gcli listrunningapps
 printf "\n\nKilling apps\n"
