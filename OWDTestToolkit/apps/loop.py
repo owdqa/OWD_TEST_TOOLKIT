@@ -24,8 +24,8 @@ class Loop(object):
         self.browser = Browser(self.parent)
         self.app_name = "Firefox Hello"
         self.market_url = "https://owd.tid.es/B3lg1r89n/market/appList.html"
-        self.persistent_directory = "/data/local/storage/persistent"
         self.loop_dir = self.UTILS.general.get_config_variable("install_dir", "loop")
+        self.phone_number = self.UTILS.general.get_config_variable("phone_number", "custom")
 
     def launch(self):
         """
@@ -106,11 +106,6 @@ class Loop(object):
         chops = result.split("\n")
         self.UTILS.reporting.logResult('info', "result: {}".format(chops))
         self.UTILS.test.test("And all done, hopefully." in chops, "The script to publish an app is OK", True)
-
-    def update_db(self, local_dir):
-        loop_dir = os.popen("adb shell ls {} | grep loop".format(self.persistent_directory)).read().rstrip()
-        target_dir = "{}/{}/idb/".format(self.persistent_directory, loop_dir)
-        os.system("cd {} && adb push . {}".format(local_dir, target_dir))
 
     def _fill_fxa_field(self, field_locator, text):
         """ Auxiliary method to fill "Firefox account login" fields
@@ -203,6 +198,18 @@ class Loop(object):
             done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
             done_btn.tap()
 
+    def phone_login_auto(self, option_number=1):
+        """Wrapper to log in using phone number, either the already selected or entering it manually"""
+        try:
+            self.UTILS.reporting.info("Trying phone login using Mobile ID")
+            self.phone_login(option_number)
+        except:
+            self.UTILS.reporting.info("Mobile ID login failed, falling back to manual")
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
+            self.marionette.find_element('id', 'header').tap(25, 25)
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
+            self.phone_login_manually(self.phone_number)
+
     # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login(self, option_number=1):
         """ Logs in using mobile id
@@ -226,7 +233,8 @@ class Loop(object):
             self.parent.wait_for_element_displayed(
                 DOM.Loop.mobile_id_verified_button[0], DOM.Loop.mobile_id_verified_button[1], timeout=30)
             verified_button = self.marionette.find_element(*DOM.Loop.mobile_id_verified_button)
-            self.UTILS.element.simulateClick(verified_button)
+            time.sleep(1)
+            verified_button.tap()
         except:
             self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
                 *DOM.Loop.mobile_id_allow_button).get_attribute("class"), timeout=5, message="Button is still sending")
@@ -252,8 +260,8 @@ class Loop(object):
         self.parent.wait_for_element_displayed(*mobile_id_header)
 
         # Manually!
-        manually_link = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number)
-        manually_link.tap()
+        # manually_link = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number)
+        # manually_link.tap()
 
         self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_add_phone_number_number)
         phone_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
@@ -261,6 +269,7 @@ class Loop(object):
 
         # NOTE: before you virtually kill me, I cannot take this duplicated code into another
         # separated method due to the @reply decorator. Just letting you know :).
+        self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_add_phone_number_number)
         allow_button = self.marionette.find_element(*DOM.Loop.mobile_id_allow_button)
         allow_button.tap()
 
@@ -268,7 +277,8 @@ class Loop(object):
             self.parent.wait_for_element_displayed(
                 DOM.Loop.mobile_id_verified_button[0], DOM.Loop.mobile_id_verified_button[1], timeout=30)
             verified_button = self.marionette.find_element(*DOM.Loop.mobile_id_verified_button)
-            self.UTILS.element.simulateClick(verified_button)
+            time.sleep(1)
+            verified_button.tap()
         except:
             self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
                 *DOM.Loop.mobile_id_allow_button).get_attribute("class"), timeout=5, message="Button is still sending")
