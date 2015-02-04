@@ -287,7 +287,7 @@ class Loop(object):
 
         self.apps.switch_to_displayed_app()
 
-    # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_ffox_login")
+    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_ffox_login")
     def allow_permission_ffox_login(self):
         """ Allows Loop to read our contacts
 
