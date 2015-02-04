@@ -48,7 +48,7 @@ class Loop(object):
         else:
             self.UTILS.test.test(False, "Not valid way to install Loop")
 
-    def install_via_grunt(self, version="1.1"):
+    def install_via_grunt(self, version="1.1.1"):
         self.UTILS.reporting.logResult('info', 'Installing via grunt....')
         script = """ cd {0}
         git checkout {1}
@@ -57,6 +57,7 @@ class Loop(object):
         """.format(self.loop_dir, version)
 
         result = os.popen(script).read()
+        self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
     
         self.marionette.switch_to_frame()
         msg = "{} installed".format(self.app_name)
@@ -64,7 +65,6 @@ class Loop(object):
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
     
         install_ok_msg = "Done, without errors."
-        self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
         self.UTILS.test.test(install_ok_msg in result, "Install via grunt is OK")
 
     def install_via_marketplace(self):
@@ -203,7 +203,7 @@ class Loop(object):
             done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
             done_btn.tap()
 
-    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
+    # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login(self, option_number=1):
         """ Logs in using mobile id
         """
@@ -235,7 +235,7 @@ class Loop(object):
 
         self.apps.switch_to_displayed_app()
 
-    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
+    # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login_manually(self, phone_number_without_prefix):
         """
         Logs in using mobile id, but instead of using the automatically provided by the app
@@ -277,7 +277,7 @@ class Loop(object):
 
         self.apps.switch_to_displayed_app()
 
-    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_ffox_login")
+    # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_ffox_login")
     def allow_permission_ffox_login(self):
         """ Allows Loop to read our contacts
 
