@@ -4,7 +4,6 @@ from OWDTestToolkit import DOM
 from OWDTestToolkit.apps.browser import Browser
 from marionette import Actions
 from OWDTestToolkit.utils.decorators import retry
-# from OWDTestToolkit.utils.contacts import MockContact
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
@@ -58,12 +57,12 @@ class Loop(object):
 
         result = os.popen(script).read()
         self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
-    
+
         self.marionette.switch_to_frame()
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-    
+
         install_ok_msg = "Done, without errors."
         self.UTILS.test.test(install_ok_msg in result, "Install via grunt is OK")
 
@@ -87,7 +86,7 @@ class Loop(object):
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-    
+
     def reinstall(self):
         self.uninstall()
         time.sleep(2)
@@ -126,7 +125,7 @@ class Loop(object):
         ffox_btn = self.marionette.find_element(*DOM.Loop.wizard_login_ffox_account)
         self.UTILS.element.simulateClick(ffox_btn)
 
-    def _tap_on_phone_login_button(self):
+    def tap_on_phone_login_button(self):
         phone_btn = self.marionette.find_element(*DOM.Loop.wizard_login_phone_number)
         self.UTILS.element.simulateClick(phone_btn)
 
@@ -198,6 +197,7 @@ class Loop(object):
             done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
             done_btn.tap()
 
+    # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login_auto(self, option_number=1):
         """Wrapper to log in using phone number, either the already selected or entering it manually"""
         try:
@@ -210,11 +210,11 @@ class Loop(object):
             self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
             self.phone_login_manually(self.phone_number)
 
-    # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
+    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login(self, option_number=1):
         """ Logs in using mobile id
         """
-        self._tap_on_phone_login_button()
+        self.tap_on_phone_login_button()
         self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
         self.parent.wait_for_element_not_displayed(*DOM.Loop.ffox_account_login_overlay)
 
@@ -252,16 +252,12 @@ class Loop(object):
         NOTE: for the shake of simplicity, we assume the prefix is the spanish one (+34) by default
         """
 
-        self._tap_on_phone_login_button()
+        self.tap_on_phone_login_button()
         self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
         self.parent.wait_for_element_not_displayed(*DOM.Loop.ffox_account_login_overlay)
 
         mobile_id_header = ("xpath", DOM.GLOBAL.app_head_specific.format(_("Mobile ID")))
         self.parent.wait_for_element_displayed(*mobile_id_header)
-
-        # Manually!
-        # manually_link = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number)
-        # manually_link.tap()
 
         self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_add_phone_number_number)
         phone_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
@@ -379,7 +375,7 @@ class Loop(object):
 
         self.apps.switch_to_displayed_app()
         time.sleep(2)
-        self._tap_on_phone_login_button()
+        self.tap_on_phone_login_button()
 
     def open_settings(self):
         """ Open settings panel from call log 
@@ -553,8 +549,7 @@ class Loop(object):
         self.marionette.find_element(*DOM.GLOBAL.conf_screen_ok_button).tap()
 
         self.apps.switch_to_displayed_app()
-    
+
         # Make sure the option is indeed selected, for that we have to check against the _values var
         self.parent.wait_for_condition(
             lambda m: m.find_element(*DOM.Loop.settings_select_call_mode).get_attribute("value") == _values[mode.capitalize()])
-
