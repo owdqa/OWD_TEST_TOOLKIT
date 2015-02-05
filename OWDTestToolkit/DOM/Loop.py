@@ -4,7 +4,6 @@ _ = I18nSetup(I18nSetup).setup()
 frame_locator = ('src', 'loop')
 loading_overlay = ('id', 'loading-overlay')
 app_header = ('xpath', '//section[@id="calllog-panel"]//h1[text()="Firefox Hello"]')
-error_screen_ok = ('id', 'error-screen-ok')
 
 # Wizard
 wizard = ('id', 'wizard-tutorial-section')
@@ -78,7 +77,7 @@ settings_select_call_mode = ('id', 'video-default-setting')
 settings_selected_call_mode = ('css selector', '#video-default-setting option[value=true]')
 settings_select_call_mode_option = ('xpath', '//select[@id="video-default-setting"]/option[@data-l10n-id="{}"]')
 settings_select_camera = ('id', 'camera-default-setting')
-settings_selected_camera = ('css selector', '#camera-default-setting option[value=true]')
+settings_selected_camera = ('css selector', '#camera-default-setting option:checked')
 settings_select_camera_option = ('xpath', '//select[@id="camera-default-setting"]/option[@data-l10n-id="{}"]')
 settings_clean_calls = ('id', 'settings-clean-calls-button')
 settings_clean_shared_links = ('id', 'settings-clean-urls-button')
@@ -96,7 +95,9 @@ form_confirm_cancel = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n
 form_confirm_delete = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="delete"]')
 form_confirm_logout = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="logOut"]')
 
-connection_error_msg = ('xpath', "//span[@class='modal-dialog-alert-message' and contains(text(), '{}')]")
+error_screen = ('id', 'error-screen')
+error_msg = ('id', 'error-message')
+error_screen_ok = ('id', 'error-screen-ok')
 
 # Share panel
 share_panel = ('id', 'share-panel')
