@@ -134,3 +134,8 @@ call_screen_resume = ('id', 'resume-button')
 feedback = ('id', 'feedback')
 feedback_skip = ('id', 'skip-feedback-button')
 feedback_rate = ('id', 'rate-feedback-button')
+
+# Footer
+toggle_new_communication_button = ('css selector', 'button.toggle-actions')
+create_new_room = ('css selector', 'button.create-room')
+create_new_call = ('css selector', 'button.new-conversation')
