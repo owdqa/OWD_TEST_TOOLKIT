@@ -553,3 +553,16 @@ class Loop(object):
         # Make sure the option is indeed selected, for that we have to check against the _values var
         self.parent.wait_for_condition(
             lambda m: m.find_element(*DOM.Loop.settings_select_call_mode).get_attribute("value") == _values[mode.capitalize()])
+
+    def toggle_new_communication(self, is_room=True):
+        """
+        Taps on new communication button displayed_app at the footer of the Rooms Log or Calls log
+        and selects one of the options. 
+        Does not deal with what may come after (Call: contact selection panel; Room: New room formulary)
+        """
+        self.parent.wait_for_element_displayed(*DOM.Loop.toggle_new_communication_button)
+        self.marionette.find_element(*DOM.Loop.toggle_new_communication_button).tap()
+
+        communication_button = DOM.Loop.create_new_room if is_room else DOM.Loop.create_new_call
+        self.parent.wait_for_element_displayed(*communication_button)
+        self.marionette.find_element(*communication_button).tap()
