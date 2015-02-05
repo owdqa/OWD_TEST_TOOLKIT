@@ -4,7 +4,6 @@ _ = I18nSetup(I18nSetup).setup()
 frame_locator = ('src', 'loop')
 loading_overlay = ('id', 'loading-overlay')
 app_header = ('xpath', '//section[@id="calllog-panel"]//h1[text()="Firefox Hello"]')
-error_screen_ok = ('id', 'error-screen-ok')
 
 # Wizard
 wizard = ('id', 'wizard-tutorial-section')
@@ -96,7 +95,9 @@ form_confirm_cancel = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n
 form_confirm_delete = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="delete"]')
 form_confirm_logout = ('xpath', '//form[@data-type="confirm"]//button[@data-l10n-id="logOut"]')
 
-connection_error_msg = ('xpath', "//span[@class='modal-dialog-alert-message' and contains(text(), '{}')]")
+error_screen = ('id', 'error-screen')
+error_msg = ('id', 'error-message')
+error_screen_ok = ('id', 'error-screen-ok')
 
 # Share panel
 share_panel = ('id', 'share-panel')
