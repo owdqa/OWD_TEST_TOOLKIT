@@ -32,7 +32,7 @@ def retry(num_retries, delay=2, context=None, aux_func_name=None):
                     return res
                 except Exception, e:
                     utils.reporting.debug(">>>>>> The function to retry failed: {}".format(e))
-                    if i < num_retries:
+                    if i < num_retries - 1:
                         pass
                     else:
                         raise

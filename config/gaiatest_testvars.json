@@ -48,10 +48,10 @@
 		"download_url": "",
 		"nowsms_user": "",
 		"nowsms_pass": "",
-		"fxa_user": "owdqa@hotmail.es",
-		"fxa_pass": "12345678",
-		"fxa_user2": "",
-		"fxa_pass2": "",
+		"fxa_user": "roytesterton.1@hotmail.co.uk",
+		"fxa_pass": "test123x",
+		"fxa_user2": "roytesterton.2@hotmail.co.uk",
+		"fxa_pass2": "test123x",
 		"smsc_number": "+34609090909"
 	},
 	"custom": {
