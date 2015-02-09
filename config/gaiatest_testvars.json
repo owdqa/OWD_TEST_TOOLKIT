@@ -81,3 +81,18 @@
 	},
 	"loop": {
 	    "install_via": "Grunt",
+	    "install_dir": "/home/develenv/projects/firefoxos-loop-client",
+	    "aux_files": "/home/develenv/projects/owd_test_cases/tests/LOOP/aux_files"
+	},
+	"csv": {
+	    "weekly_csv_file": "/var/www/html/owd_tests/total_csv_file.csv",
+	    "daily_csv_file": "/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW.csv",
+	    "weekly_csv_cert_file": "/var/www/html/owd_tests/total_csv_file_CERT.csv",
+	    "daily_csv_cert_file": "/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW_CERT.csv"
+	},
+	"cert": {
+	    "device_cert": "cert_device",
+	    "branch_cert": "v2.0",
+	    "buildname_cert": "cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
+	}
+}
