@@ -139,3 +139,21 @@ feedback_rate = ('id', 'rate-feedback-button')
 toggle_new_communication_button = ('css selector', 'button.toggle-actions')
 create_new_room = ('css selector', 'button.create-room')
 create_new_call = ('css selector', 'button.new-conversation')
+
+# Conversation (call) detail
+new_call_header = ('css selector', 'h1[data-l10n-id=conversationDetailTitle]')
+new_call_subject = ('css selector', 'section.fit form input[type=text]')
+new_call_subject_chars_left = ('css selector', 'section.fit form p.counter')
+new_call_subject_reset = ('css selector', 'section.fit form button[type=reset]')
+new_call_camera_back = ('css selector', 'li.icon-camera-back')
+new_call_camera_front = ('css selector', 'li.icon-camera-front')
+new_call_selected_camera = ('css selector', 'input[name=select-camera]:checked')
+new_call_start_call = ('css selector', 'button.call')
+
+# Fallback
+new_call_fallback_message = ('css selector', 'form[data-type=confirm] p')
+new_call_fallback_new_room = ('css selector', 'button[data-l10n-id=newRoom]')
+new_call_fallback_cancel = ('css selector', 'button[data-l10n-id=cancel]')
+
+# Fallback options ( very generic :( )
+fallback_options = ('css selector', 'form[data-type=action] menu button')
