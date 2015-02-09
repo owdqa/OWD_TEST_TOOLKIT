@@ -26,16 +26,20 @@ def wait_for_device():
     subprocess32.check_output(['sudo', 'adb', 'wait-for-device'])
 
 
+def get_device_build_date():
+    output = subprocess32.check_output('sudo adb shell getprop | grep "build.date.utc]"', shell=True)
+    build_date = output.split(": [")[-1].strip().replace("]", "")
+    da = time.localtime(float(build_date))
+    return time.strftime("%m-%d-%y", da)
+
+
 def check_device_build(source, user, passwd):
     """Check if the device has already the latest available build.
 
     If the device has been already flashed with the latest available build,
     return True. False otherwise.
     """
-    output = subprocess32.check_output('sudo adb shell getprop | grep "build.date]"', shell=True)
-    build_date = output.split(": [")[-1].strip().replace("]", "")
-    da = time.strptime(build_date, "%a %b %d %H:%M:%S %Z %Y")
-    daf = time.strftime("%m-%d-%y", da)
+    daf = get_device_build_date()
     print "Current build's date in device: {}".format(daf)
     last_date = get_latest_build.detect_latest_date(source, user, passwd)
     return daf == last_date
