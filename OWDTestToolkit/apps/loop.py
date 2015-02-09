@@ -25,6 +25,7 @@ class Loop(object):
         self.market_url = "https://owd.tid.es/B3lg1r89n/market/appList.html"
         self.loop_dir = self.UTILS.general.get_config_variable("install_dir", "loop")
         self.phone_number = self.UTILS.general.get_config_variable("phone_number", "custom")
+        self.not_a_loop_user = _("is not a Firefox Hello user yet. No problem! Just create a room and share it with him.")
 
     def launch(self):
         """
