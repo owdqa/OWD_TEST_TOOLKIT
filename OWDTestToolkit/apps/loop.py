@@ -51,20 +51,20 @@ class Loop(object):
         self.UTILS.reporting.logResult('info', 'Installing via grunt....')
         script = """ cd {0}
         git checkout {1}
+        git stash && git stash drop
         git fetch && git merge origin/{1}
         grunt build
         """.format(self.loop_dir, version)
 
         result = os.popen(script).read()
         self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
+        install_ok_msg = "Done, without errors."
+        self.UTILS.test.test(install_ok_msg in result, "Install via grunt is OK")
 
         self.marionette.switch_to_frame()
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-
-        install_ok_msg = "Done, without errors."
-        self.UTILS.test.test(install_ok_msg in result, "Install via grunt is OK")
 
     def install_via_marketplace(self):
         self.UTILS.reporting.logResult('info', 'Installing via marketplace....')
@@ -206,11 +206,11 @@ class Loop(object):
         except:
             self.UTILS.reporting.info("Mobile ID login failed, falling back to manual")
             self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
-            self.marionette.find_element('id', 'header').tap(25, 25)
+            self.marionette.find_element('id', 'close-button').tap(25, 25)
             self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
-            self.phone_login_manually(self.phone_number)
+            self.phone_login_manually(self.phone_number.split("+34")[-1])
 
-    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
+    # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login(self, option_number=1):
         """ Logs in using mobile id
         """
@@ -270,10 +270,21 @@ class Loop(object):
         allow_button.tap()
 
         try:
-            self.parent.wait_for_element_displayed(
-                DOM.Loop.mobile_id_verified_button[0], DOM.Loop.mobile_id_verified_button[1], timeout=30)
+            def _allow_contact_permission():
+                self.marionette.switch_to_frame()
+                self.parent.wait_for_element_displayed(*DOM.GLOBAL.app_permission_btn_yes, timeout=30)
+                allow_permission_button = self.marionette.find_element(*DOM.GLOBAL.app_permission_btn_yes)
+                self.UTILS.element.simulateClick(allow_permission_button)
+
+            _allow_contact_permission()
+
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
+            time.sleep(2)
+
+            self.UTILS.reporting.logResult('info', "Permissions accepted. Click on verified button!!")
+            self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_verified_button, timeout=5)
             verified_button = self.marionette.find_element(*DOM.Loop.mobile_id_verified_button)
-            time.sleep(1)
+            self.UTILS.element.simulateClick(verified_button)
             verified_button.tap()
         except:
             self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
@@ -566,3 +577,19 @@ class Loop(object):
         communication_button = DOM.Loop.create_new_room if is_room else DOM.Loop.create_new_call
         self.parent.wait_for_element_displayed(*communication_button)
         self.marionette.find_element(*communication_button).tap()
+
+    def is_camera_selected(self, back_camera=True):
+        locator = DOM.Loop.new_call_camera_back if back_camera else DOM.Loop.new_call_camera_front
+        try:
+            self.marionette.find_element(*locator).find_element(*('css selector', 'input[name=select-camera]:checked'))
+            return True
+        except:
+            return False
+
+    def create_new_call(self, subject="", back_camera=True):
+        if subject != "":
+            self.marionette.find_element(*DOM.Loop.new_call_subject).send_keys(subject)
+
+        locator = DOM.Loop.new_call_camera_back if back_camera else DOM.Loop.new_call_camera_front
+        self.marionette.find_element(*locator).tap()
+        self.marionette.find_element(*DOM.Loop.new_call_start_call).tap()
