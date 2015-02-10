@@ -677,7 +677,7 @@ class Settings(object):
         network_type_locator = (DOM.Settings.networkOperator_select_type[0],
                                 DOM.Settings.networkOperator_select_type[1].format(network_type))
 
-        x = self.UTILS.element.getElement(network_type_locator, "Network Operator. Select: {}".format(network_type))
+        x = self.UTILS.element.getElement(network_type_locator, u"Network Operator. Select: {}".format(network_type))
         x.tap()
 
         x = self.UTILS.element.getElement(DOM.Settings.networkOperator_OK_btn, "Network Operator. Click on OK button")

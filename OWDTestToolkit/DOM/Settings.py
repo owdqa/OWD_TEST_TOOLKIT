@@ -161,7 +161,7 @@ passcode_keyb_btn = ('css selector', '#lockscreen-passcode-pad a[data-key="{}"]'
 
 networkOperator_button = ('css selector', '#carrier button[data-l10n-id="networkOperator"]')
 networkOperator_types = ("id", "preferredNetworkType")
-networkOperator_select_type = ("xpath", "//*[@id='value-selector-container']//span[text()='{}']")
+networkOperator_select_type = ("xpath", u"//*[@id='value-selector-container']//span[text()='{}']")
 networkOperator_OK_btn = ("css selector", "#select-option-popup #select-options-buttons button[data-l10n-id='ok']")
 
 change_pin_done_btn = ('xpath', '//section[@id="simpin-dialog"]//button[@data-l10n-id="done"]')
