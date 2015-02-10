@@ -236,9 +236,6 @@ class Email(object):
         #
         # Goto a specific folder in the folder list screen.
         #
-        x = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult("info", "Screen shot:", x)
-
         name = _(name)
         elem = ('xpath', DOM.Email.folderList_name_xpath.format(name))
 
@@ -420,15 +417,11 @@ class Email(object):
     def _is_composed_btn_tapped(self):
 
         try:
-            self.parent.wait_for_element_displayed(*('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))))
+            self.parent.wait_for_element_displayed(*DOM.Email.compose_header)
             return True
         except:
             self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
             compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
-
-            screenshot = self.UTILS.debug.screenShotOnErr()
-            self.UTILS.reporting.logResult('info', "Screenshot before tapping 'RETRY - Compose msg btn'", screenshot)
-
             compose_new_msg_btn.tap()
             return False
 
@@ -448,8 +441,7 @@ class Email(object):
         reply_opt.tap()
 
         # Wait for 'compose message' header.
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
-                                  "Compose message header")
+        self.parent.wait_for_element_displayed(*DOM.Email.compose_header)
         time.sleep(5)
 
         #
@@ -490,8 +482,7 @@ class Email(object):
         reply_opt.tap()
 
         # Wait for 'compose message' header.
-        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
-                                  "Compose message header")
+        self.parent.wait_for_element_displayed(*DOM.Email.compose_header)
         time.sleep(5)
 
         # Check the sender is not included in the 'To' field
@@ -524,8 +515,7 @@ class Email(object):
         fw_opt.tap()
 
         # Wait for 'compose message' header.
-        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
-                                  "Compose message header")
+        self.parent.wait_for_element_displayed(*DOM.Email.compose_header)
         time.sleep(5)
 
         # Put items in the corresponding fields.
