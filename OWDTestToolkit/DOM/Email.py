@@ -6,6 +6,9 @@ frame_locator = ("src", "email")
 username = ('class name', 'sup-info-name')
 email_addr = ('class name', 'sup-info-email')
 password = ('class name', 'sup-info-password')
+folder_name = ('css selector', 'span.msg-list-header-folder-name')
+message_list_locator = ('css selector', '.card-message-list')
+
 login_account_info_next_btn = ('xpath', '//section[@data-type="setup_account_info"]//button[contains(@class, "sup-info-next-btn")]')
 login_account_prefs_next_btn = ('css selector', '.card-setup-account-prefs button.sup-info-next-btn')
 login_cont_to_email_btn = ("xpath", "//button[text()='{}']".format(_("Continue to Mail")))
@@ -66,6 +69,7 @@ accounts_list_names = ('class name', 'fld-account-name')
 folder_list_container = ('xpath', '//div[@class="fld-folders-container"]')
 folderList_header = ('class name', 'fld-folders-header-account-label')
 folderList_name_xpath = '//span[@class="fld-folder-name" and text()="{}"]'
+email_entry = ('css selector', '#cardContainer .msg-header-item:not([data-index="-1"])')
 
 folder_message_container = ('class name', 'msg-messages-container')
 folder_message_list = ('class name', 'msg-header-item')
