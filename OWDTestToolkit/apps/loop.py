@@ -303,17 +303,24 @@ class Loop(object):
         allow_button.tap()
 
         try:
-            self.parent.wait_for_element_displayed(
-                DOM.Loop.mobile_id_verified_button[0], DOM.Loop.mobile_id_verified_button[1], timeout=30)
+            def _allow_contact_permission():
+                self.marionette.switch_to_frame()
+                self.parent.wait_for_element_displayed(*DOM.GLOBAL.app_permission_btn_yes, timeout=30)
+                allow_permission_button = self.marionette.find_element(*DOM.GLOBAL.app_permission_btn_yes)
+                self.UTILS.element.simulateClick(allow_permission_button)
+
+            _allow_contact_permission()
+
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
+            time.sleep(2)
+
+            self.UTILS.reporting.logResult('info', "Permissions accepted. Click on verified button!!")
+            self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_verified_button, timeout=5)
             verified_button = self.marionette.find_element(*DOM.Loop.mobile_id_verified_button)
-            self.UTILS.reporting.info("Before Tapping verify button")
-            time.sleep(5)
-            self.UTILS.reporting.info("Tapping verify button")
             self.UTILS.element.simulateClick(verified_button)
         except:
             self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
                 *DOM.Loop.mobile_id_allow_button).get_attribute("class"), timeout=5, message="Button is still sending")
-            # Make @retry do its work
             raise
 
         self.apps.switch_to_displayed_app()
@@ -669,7 +676,6 @@ class Loop(object):
         except:
             self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
             self.UTILS.reporting.debug("Message not found, continue sharing.")
-            pass
 
         # If the contact has both phone number and email, a menu will appear, asking which of the
         # two contact methods should be used. The by_sms parameter is used to select.
