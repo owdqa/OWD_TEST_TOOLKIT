@@ -27,7 +27,7 @@ confirmation_msg_header = ('xpath', '//form[@id="confirmation-message"]//h1[cont
 confirmation_msg_content = ('xpath', '//form[@id="confirmation-message"]//p[contains(text(), "{}")]')
 confirmation_msg_ok_btn = ('xpath', '//form[@id="confirmation-message"]//button[@class="full"]')
 
-confirm_form_delete_btn = ('xpath', '//form[@data-type="confirm"]//button[@class="danger"]')
+confirm_form_delete_btn = ('css selector', 'form[data-type=confirm] button.danger')
 
 # Action menu
 action_menu = ('xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]/menu')

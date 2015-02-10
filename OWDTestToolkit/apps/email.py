@@ -1,3 +1,4 @@
+from marionette import Wait
 from OWDTestToolkit import DOM
 from OWDTestToolkit.apps.video import Video
 from OWDTestToolkit.apps.gallery import Gallery
@@ -25,6 +26,43 @@ class Email(object):
         self.app = self.apps.launch(self.__class__.__name__)
         self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
+
+    def refresh(self):
+        self.parent.wait_for_element_displayed(*DOM.Email.folder_refresh_button)
+        self.marionette.find_element(*DOM.Email.folder_refresh_button).tap()
+
+    def mails(self):
+        self.refresh()
+        self.wait_for_sync_completed()
+        self.wait_for_message_list()
+        return self.marionette.find_elements(*DOM.Email.email_entry)
+
+    def _email_exists(self, subject):
+        if subject in [mail.find_element(*DOM.Email.folder_subject_list).text for mail in self.mails()]:
+            return True
+        else:
+            self.refresh()
+            self.wait_for_sync_completed()
+            self.UTILS.element.scroll_into_view(self.mails()[0])
+            return False
+
+    def get_email(self, subject):
+        return filter(lambda msg: msg.find_element(*DOM.Email.folder_subject_list).text == subject, self.mails())[0]
+
+    def wait_for_sync_completed(self):
+        element = self.marionette.find_element(*DOM.Email.folder_refresh_button)
+        self.parent.wait_for_condition(lambda m: element.get_attribute('data-state') == 'synchronized')
+
+    def wait_for_folder(self, folder_name):
+        self.parent.wait_for_condition(lambda m: m.find_element(*DOM.Email.folder_name).text == folder_name)
+
+    def wait_for_email_loaded(self, subject):
+        Wait(self.marionette, timeout=20, interval=5).until(
+            lambda m: m.find_element(*DOM.Email.open_email_subject).text == subject)
+
+    def wait_for_message_list(self):
+        element = self.marionette.find_element(*DOM.Email.message_list_locator)
+        self.parent.wait_for_condition(lambda m: element.is_displayed() and element.location['x'] == 0)
 
     def createEmailImage(self):
 
@@ -160,77 +198,9 @@ class Email(object):
         x = self.UTILS.element.getElements(DOM.Email.folder_subject_list, "Email messages in this folder")
         self.UTILS.test.test(x[0].text != subject, "Email '" + subject + "' no longer found in this folder.", False)
 
-    def emailIsInFolder(self, subject):
-        #
-        # Verify an email is in this folder with the expected subject.
-        #
-
-        #
-        # Because this can take a while, try to "wait_for_element..." several times (5 mins).
-        #
-        MAX_LOOPS = 30
-        loops = MAX_LOOPS
-        self.marionette.execute_script("document.getElementsByClassName('" + \
-                                                       DOM.Email.folder_message_container[1] + \
-                                                       "')[0].scrollIntoView();")
-        while loops > 0:
-            try:
-                #
-                # Look through any entries found in the folder ...
-                #
-                self.parent.wait_for_element_displayed(*DOM.Email.folder_subject_list, timeout=2)
-                z = self.marionette.find_elements(*DOM.Email.folder_subject_list)
-
-                #
-                # If we've tried several times and found nothing, it is likely that
-                # we are stuck at some point down the mails list, so let's try
-                # to go to the top
-                #
-                if loops % 10 == 0 and loops != MAX_LOOPS:
-                    self.marionette.execute_script("document.getElementsByClassName('" + \
-                                                       DOM.Email.folder_message_container[1] + \
-                                                       "')[0].scrollIntoView();")
-                pos = 0
-                for i in z:
-                    #
-                    # Do any of the folder items match our subject?
-                    #
-                    if i.text == subject:
-                        # Yes! But it might be off the screen, so scroll it into view.
-                        # This is a bit of a hack since marionette.tap() doesn't do it
-                        # (and I haven't figured out how to get the action chain to do it yet).
-                        self.marionette.execute_script("document.getElementsByClassName('" + \
-                                                       DOM.Email.folder_headers_list[1] + \
-                                                       "')[" + str(pos) + "].scrollIntoView();")
-                        self.marionette.execute_script("document.getElementsByTagName('h1')[0].scrollIntoView();")
-                        time.sleep(1)
-
-                        return i
-
-                    pos += 1
-
-            except:
-                #
-                # Nothing is in the folder yet, just ignore and loop again.
-                #
-                pass
-
-            #
-            # Either the folder is still empty, or none of the items in it match our
-            # subject yet.
-            # Wait a couple for seconds and try again.
-            #
-            # (don't validate because this could go on for a while...)
-            self.UTILS.reporting.logResult("info",
-                                 "'" + subject + "' not found yet - refreshing the folder and looking again ...")
-            x = self.marionette.find_element(*DOM.Email.folder_refresh_button)
-            x.tap()
-
-            time.sleep(5)
-
-            loops -= 1
-
-        return False
+    def emailIsInFolder(self, subject, timeout=60):
+        self.parent.wait_for_condition(lambda m: self._email_exists(subject), timeout=timeout)
+        return True
 
     def goto_folder_from_list(self, name):
         #
@@ -238,7 +208,6 @@ class Email(object):
         #
         name = _(name)
         elem = ('xpath', DOM.Email.folderList_name_xpath.format(name))
-
 
         folder_link = self.UTILS.element.getElement(elem, "Link to folder '" + name + "'")
         self.UTILS.element.scroll_into_view(folder_link)
@@ -248,11 +217,9 @@ class Email(object):
                                    "Header for '" + name + "' folder")
 
     def openMailFolder(self, folder_name):
-
         #
         # Check whether we're already there
         #
-
         try:
             self.UTILS.reporting.logResult("info", "Checking if it's necessary to open it")
             self.parent.wait_for_element_displayed(*("xpath", DOM.GLOBAL.app_head_specific.format(folder_name)))
@@ -317,57 +284,39 @@ class Email(object):
             return False
 
     def remove_accounts_and_restart(self):
-        #
-        # Remove current email accounts via the UI and restart the application.
-        # <br><br>
-        # <b>NOTE:</b> Currently broken due to https://bugzilla.mozilla.org/show_bug.cgi?id=849183
-        # so it's been set to do nothing!
-        #
-        return
-
-        try:
-            #
-            # Make sure we're starting from the beginning ...
-            # (it might not be running, so ignore any errors here).
-            #
-            self.marionette.kill("Email")
-        except:
-            pass
+        """Remove current email accounts via the UI and restart the application."""
 
         self.launch()
 
         try:
-            x = self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Inbox"))), "Inbox header", 10)
+            self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Inbox"))),
+                                                        "Inbox header", 10)
         except:
-            #
             # We have no accounts set up (or the app would default to
             # the inbox of one of them).
-            #
             self.UTILS.reporting.logResult("info", "(No email accounts set up yet.)")
             return
 
-        x = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings button")
-        x.tap()
+        settings_btn = self.UTILS.element.getElement(DOM.Email.settings_menu_btn, "Settings button")
+        settings_btn.tap()
 
-        x = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Set settings button")
-        x.tap()
+        set_btn = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Set settings button")
+        set_btn.tap()
 
-        x = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Mail Settings")))
-        self.UTILS.element.waitForElements(x, "Mail settings", True, 20, False)
+        header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Mail Settings")))
+        self.UTILS.element.waitForElements(header, "Mail settings", True, 20, False)
 
-        #
         # Remove each email address listed ...
-        #
-        x = self.UTILS.element.getElements(DOM.Email.email_accounts_list,
+        accounts_list = self.UTILS.element.getElements(DOM.Email.email_accounts_list,
                                    "Email accounts list", False, 20, False)
-        for i in x:
+        for i in accounts_list:
             if i.text != "":
                 # This isn't a placeholder, so delete it.
                 self.UTILS.reporting.logComment("i: " + i.text)
                 i.tap()
 
-                x = ('xpath', DOM.GLOBAL.app_head_specific.format(i.text))
-                self.UTILS.element.waitForElements(x, i.text + " header", True, 20, False)
+                header = ('xpath', DOM.GLOBAL.app_head_specific.format(i.text))
+                self.UTILS.element.waitForElements(header, i.text + " header", True, 20, False)
 
                 # Delete.
                 delacc = self.UTILS.element.getElement(DOM.Email.settings_del_acc_btn, "Delete account button")
@@ -380,9 +329,7 @@ class Email(object):
 
                 # Wait for this dialog to go away, then sleep for 1s.
 
-        #
         # Now relaunch the app.
-        #
         self.launch()
 
     def send_new_email(self, p_target, p_subject, p_message, attach=False, attached_type=None):

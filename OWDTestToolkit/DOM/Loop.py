@@ -3,7 +3,7 @@ _ = I18nSetup(I18nSetup).setup()
 
 frame_locator = ('src', 'loop')
 loading_overlay = ('id', 'loading-overlay')
-app_header = ('xpath', '//section[@id="calllog-panel"]//h1[text()="Firefox Hello"]')
+app_header = ('css selector', 'section#calllog-panel')
 
 # Wizard
 wizard = ('id', 'wizard-tutorial-section')
@@ -30,9 +30,13 @@ ffox_account_login_overlay = ('id', 'fxa-overlay')
 ffox_account_error_overlay = ('id', 'fxa-error-overlay')
 ffox_account_error_overlay_title = ('id', 'fxa-error-title')
 ffox_account_error_overlay_ok = ('id', 'fxa-error-ok')
+ffox_account_age_selector = ('id', 'fxa-age-select')
+ffox_account_age_option = ('css selector', '#value-selector-container li[data-option-index="1"]')
 
 # Mobile ID login
 mobile_id_frame_locator = ('src', 'mobile_id')
+mobile_id_header = ('id', 'header')
+mobile_id_close_btn = ('id', 'close-button')
 mobile_id_explanation = ('id', 'mobile-id-explanation')
 mobile_id_sim_list = ('css selector', 'ul.phone-options-list')
 mobile_id_sim_list_item = ('css selector', 'ul.phone-options-list li')
@@ -80,6 +84,7 @@ settings_select_camera = ('id', 'camera-default-setting')
 settings_selected_camera = ('css selector', '#camera-default-setting option:checked')
 settings_select_camera_option = ('xpath', '//select[@id="camera-default-setting"]/option[@data-l10n-id="{}"]')
 settings_clean_calls = ('id', 'settings-clean-calls-button')
+settings_clean_rooms = ('id', 'settings-clean-rooms-button')
 settings_clean_shared_links = ('id', 'settings-clean-urls-button')
 
 # Settings panel - footer
@@ -139,6 +144,55 @@ feedback_rate = ('id', 'rate-feedback-button')
 toggle_new_communication_button = ('css selector', 'button.toggle-actions')
 create_new_room = ('css selector', 'button.create-room')
 create_new_call = ('css selector', 'button.new-conversation')
+
+# Rooms
+calllog_container = ('id', 'calllog_container')
+nav_rooms_button = ('id', 'rooms-section-filter')
+nav_calls_button = ('id', 'calls-section-filter')
+rooms_section = ('id', 'rooms-section')
+calls_section = ('id', 'calls-section')
+new_room_input = ('css selector', '#new-room input')
+save_room_btn = ('id', 'save-room-action')
+rooms_entries = ('css selector', 'rooms-section-entries li')
+room_entry = ('css selector', '#rooms-section-entries li[data-room-name="{}"]')
+room_edit = ('css selector', 'button.secondary-action.room-time')
+room_detail_edit_btn = ('id', 'rdp-edit-button')
+room_detail_header = ('css selector', '#room-detail-panel h1[data-l10n-id=roomDetail]')
+room_edit_name_input = ('css selector', 'section#new-room input')
+room_edit_name_reset = ('css selector', 'section#new-room button[type=reset]')
+save_room_btn = ('id', 'save-room-action')
+
+# Room Details view
+room_name = ('id', 'rdp-name')
+room_back_btn = ('id', 'rdp-back-button')
+room_share_section = ('id', 'rdp-share-section')
+room_share_button = ('id', 'rdp-share-contact')
+room_invitees_section = ('id', 'rdp-invitees-section')
+room_show_invitees = ('id', 'rdp-show-invitees')
+room_history_section = ('id', 'rdp-history-section')
+room_show_history = ('id', 'rdp-show-history')
+room_expiration_section = ('id', 'rdp-expiration-section')
+room_expiration = ('id', 'rdp-expiration')
+
+# Room sharing and joining
+room_share_invalid_contact_ok = ('css selector', 'div[data-manifest-name="Firefox Hello"] button.modal-dialog-alert-ok')
+room_share_button_with_text = ('xpath', '//form[@data-type="action"]//button[text()="{}"]')
+room_link_in_email = ('css selector', 'a[ext-href*="hello.firefox.com"]')
+room_open_link_ok = ('id', 'msg-browse-ok')
+room_open_link_cancel = ('id', 'msg-browse-cancel')
+room_btn_browser_join = ('css selector', 'button.btn-join')
+room_btn_browser_leave = ('css selector', 'button.btn-hangup')
+room_select_camera_front = ('css selector', 'li.icon-camera-front label')
+room_select_camera_back = ('css selector', 'li.icon-camera-back label')
+room_camera_container = ('css selector', 'section.camera-container')
+room_button_join = ('css selector', 'button.join')
+room_button_cancel = ('css selector', 'button.cancel')
+
+# Room call controls
+room_leave_btn = ('id', 'leave-room')
+room_settings_togglemic = ('id', 'room-settings-togglemic')
+room_settings_togglevideo = ('id', 'room-settings-togglevideo')
+room_settings_switch_speaker = ('id', 'room-settings-switchspeaker')
 
 # Conversation (call) detail
 new_call_header = ('css selector', 'h1[data-l10n-id=conversationDetailTitle]')

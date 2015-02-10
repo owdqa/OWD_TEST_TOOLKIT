@@ -180,7 +180,7 @@ class Loop(object):
             time.sleep(1)
 
         self.marionette.switch_to_frame(self.apps.displayed_app.frame_id)
-        self.parent.wait_for_element_displayed(DOM.Loop.wizard_login[0], DOM.Loop.wizard_login[1], timeout=10)
+        self.parent.wait_for_element_displayed(*DOM.Loop.wizard_login, timeout=10)
 
     def firefox_login(self, email, password, is_wrong=False):
         """ Logs in using Firefox account
@@ -188,12 +188,32 @@ class Loop(object):
         self.tap_on_firefox_login_button()
 
         self.UTILS.iframe.switchToFrame(*DOM.Loop.ffox_account_frame_locator)
-        self.parent.wait_for_element_displayed(
-            DOM.Loop.ffox_account_login_title[0], DOM.Loop.ffox_account_login_title[1], timeout=20)
+        self.parent.wait_for_element_displayed(*DOM.Loop.ffox_account_login_title, timeout=20)
 
         self._fill_fxa_field(DOM.Loop.ffox_account_login_mail, email)
+        self.marionette.find_element(*DOM.Loop.ffox_account_login_next).tap()
+
+        # Sometimes we can get an age verification screen. In that case, select a proper value
+        # and continue.
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Loop.ffox_account_age_selector, timeout=6)
+            self.marionette.find_element(*DOM.Loop.ffox_account_age_selector).tap()
+            self.marionette.switch_to_frame()
+            self.marionette.find_element(*DOM.Loop.ffox_account_age_option).tap()
+            self.UTILS.reporting.debug("Age validation 1990 or earlier selected")
+            self.marionette.find_element(*DOM.GLOBAL.conf_screen_ok_button).tap()
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.ffox_account_frame_locator)
+            self.parent.wait_for_element_displayed(*DOM.Loop.ffox_account_login_next, timeout=6)
+            self.marionette.find_element(*DOM.Loop.ffox_account_login_next).tap()
+        except Exception as e:
+            self.UTILS.reporting.debug("Age validation not found. Exception was: {}".format(e))
+
+        self.UTILS.reporting.debug("Waiting for password input to be displayed...")
+        self.parent.wait_for_element_displayed(*DOM.Loop.ffox_account_login_pass)
+        self.UTILS.reporting.debug("Filling in password input...")
         self._fill_fxa_field(DOM.Loop.ffox_account_login_pass, password)
 
+        time.sleep(2)
         if not is_wrong:
             done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
             done_btn.tap()
@@ -206,9 +226,6 @@ class Loop(object):
             self.phone_login(option_number)
         except:
             self.UTILS.reporting.info("Mobile ID login failed, falling back to manual")
-            self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
-            self.marionette.find_element('id', 'close-button').tap(25, 25)
-            self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
             self.phone_login_manually(self.phone_number.split("+34")[-1])
 
     # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
@@ -219,27 +236,42 @@ class Loop(object):
         self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
         self.parent.wait_for_element_not_displayed(*DOM.Loop.ffox_account_login_overlay)
 
+        time.sleep(5)
+        self.UTILS.reporting.info("Looking for Mobile ID header")
         mobile_id_header = ("xpath", DOM.GLOBAL.app_head_specific.format(_("Mobile ID")))
         self.parent.wait_for_element_displayed(*mobile_id_header)
 
-        options = self._get_mobile_id_options()
-        if len(options) > 1:
-            # Option number refers to the SIM number (1 or 2), not to the position in the array
-            options[option_number - 1].tap()
-
+        #=======================================================================
+        # FJCS: I think this is not required now
+        # options = self._get_mobile_id_options()
+        # if len(options) > 1:
+        #    # Option number refers to the SIM number (1 or 2), not to the position in the array
+        #    options[option_number - 1].tap()
+        #=======================================================================
+        self.UTILS.reporting.info("Looking for Mobile ID INPUT")
+        mobile_id_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
+        mobile_id_value = mobile_id_input.get_attribute("value")
+        self.UTILS.reporting.info("Mobile ID Found: [{}]".format(mobile_id_value))
+        if mobile_id_value == "":
+            self.UTILS.reporting.info("No ID found, switching to manual...")
+            self.marionette.find_element(*DOM.Loop.mobile_id_close_btn).tap()
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
+            time.sleep(5)
+            self.marionette.find_element(*DOM.Loop.error_screen_ok).tap()
+            time.sleep(5)
+            raise Exception
         allow_button = self.marionette.find_element(*DOM.Loop.mobile_id_allow_button)
         allow_button.tap()
 
         try:
-            self.parent.wait_for_element_displayed(
-                DOM.Loop.mobile_id_verified_button[0], DOM.Loop.mobile_id_verified_button[1], timeout=30)
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.mobile_id_frame_locator)
+            self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_verified_button, timeout=30)
             verified_button = self.marionette.find_element(*DOM.Loop.mobile_id_verified_button)
-            time.sleep(1)
+            time.sleep(5)
             verified_button.tap()
         except:
             self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
                 *DOM.Loop.mobile_id_allow_button).get_attribute("class"), timeout=5, message="Button is still sending")
-            # Make @retry do its work
             raise
 
         self.apps.switch_to_displayed_app()
@@ -286,11 +318,9 @@ class Loop(object):
             self.parent.wait_for_element_displayed(*DOM.Loop.mobile_id_verified_button, timeout=5)
             verified_button = self.marionette.find_element(*DOM.Loop.mobile_id_verified_button)
             self.UTILS.element.simulateClick(verified_button)
-            verified_button.tap()
         except:
             self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
                 *DOM.Loop.mobile_id_allow_button).get_attribute("class"), timeout=5, message="Button is still sending")
-            # Make @retry do its work
             raise
 
         self.apps.switch_to_displayed_app()
@@ -569,8 +599,8 @@ class Loop(object):
     def toggle_new_communication(self, is_room=True):
         """
         Taps on new communication button displayed_app at the footer of the Rooms Log or Calls log
-        and selects one of the options. 
-        Does not deal with what may come after (Call: contact selection panel; Room: New room formulary)
+        and selects one of the options.
+        Does not deal with what may come after (Call: contact selection panel; Room: New room form)
         """
         self.parent.wait_for_element_displayed(*DOM.Loop.toggle_new_communication_button)
         self.marionette.find_element(*DOM.Loop.toggle_new_communication_button).tap()
@@ -578,6 +608,140 @@ class Loop(object):
         communication_button = DOM.Loop.create_new_room if is_room else DOM.Loop.create_new_call
         self.parent.wait_for_element_displayed(*communication_button)
         self.marionette.find_element(*communication_button).tap()
+
+    def create_room(self, name):
+        """Create a new room.
+
+        Tap on the new communication button, enter the room name and click Save.
+        """
+        self.toggle_new_communication()
+        time.sleep(2)
+        self.parent.wait_for_element_displayed(*DOM.Loop.new_room_input)
+
+        # Enter room name
+        name_input = self.marionette.find_element(*DOM.Loop.new_room_input)
+        name_input.send_keys(name)
+
+        # Save room
+        save_btn = self.marionette.find_element(*DOM.Loop.save_room_btn)
+        save_btn.tap()
+
+    def open_room_details(self, name):
+        """Open room details page."""
+
+        self.UTILS.reporting.info("Looking for Room entry: [{}]".format(name))
+        room = self.marionette.find_element(DOM.Loop.room_entry[0], DOM.Loop.room_entry[1].format(name))
+        self.UTILS.reporting.info("Tapping Edit button")
+        self.marionette.find_element(*DOM.Loop.room_entry, id=room.id).tap()
+
+    def edit_room(self, new_name):
+        """Edit the room being shown in the detail view and change its name"""
+
+        self.marionette.find_element(*DOM.Loop.room_detail_edit_btn).tap()
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.room_edit_name_reset)
+        self.UTILS.reporting.info("Resetting Room name")
+        reset_btn = self.marionette.find_element(*DOM.Loop.room_edit_name_reset)
+        reset_btn.tap()
+
+        self.UTILS.reporting.info("Setting new room name")
+        name_input = self.marionette.find_element(*DOM.Loop.room_edit_name_input)
+        name_input.send_keys(new_name)
+
+        self.UTILS.reporting.info("Save room")
+        self.marionette.find_element(*DOM.Loop.save_room_btn).tap()
+
+    def share_room(self, contact, by_sms=True):
+        """Share the current room with the given contact.
+
+        If the by_sms parameter is True and the user has both phone number and email,
+        the room link will be sent by SMS. Otherwise, it will be sent by email.
+        """
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.room_share_button)
+        self.marionette.find_element(*DOM.Loop.room_share_button).tap()
+
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+        self.parent.contacts.search(contact['name'])
+        self.parent.contacts.select_search_result(contact['name'])
+
+        # If the contact does not have either phone number or email, an error screen
+        # will appear
+        try:
+            self.marionette.switch_to_frame()
+            self.UTILS.reporting.debug("Waiting for Invalid contact message...")
+            self.parent.wait_for_element_displayed(*DOM.Loop.room_share_invalid_contact_ok, timeout=6)
+            self.marionette.find_element(*DOM.Loop.room_share_invalid_contact_ok).tap()
+            return False
+        except:
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
+            self.UTILS.reporting.debug("Message not found, continue sharing.")
+
+        # If the contact has both phone number and email, a menu will appear, asking which of the
+        # two contact methods should be used. The by_sms parameter is used to select.
+        try:
+            self.UTILS.reporting.debug("Using email: {}".format(contact['email']['value']))
+            button = (DOM.Loop.room_share_button_with_text[0],
+                      DOM.Loop.room_share_button_with_text[1].format(contact['email']['value']))
+            self.UTILS.reporting.debug("Waiting for button with text: {}".format(contact['email']['value']))
+            self.parent.wait_for_element_displayed(*button, timeout=6)
+            self.UTILS.reporting.debug("Button found, selecting method {}".format("SMS" if by_sms else "Email"))
+            if by_sms:
+                button = (DOM.Loop.room_share_button_with_text[0],
+                      DOM.Loop.room_share_button_with_text[1].format(contact['tel']['value']))
+                self.UTILS.reporting.debug("Looking for SMS button with text: {}".format(contact['tel']['value']))
+            share_button = self.marionette.find_element(*button)
+            self.UTILS.reporting.debug("Tapping method button: {}".format(share_button))
+            self.UTILS.element.simulateClick(share_button)
+            time.sleep(2)
+        except Exception as e:
+            self.UTILS.reporting.debug("Error selecting sharing method: {}".format(e))
+            pass
+
+        time.sleep(3)
+        if by_sms:
+            self.UTILS.iframe.switchToFrame(*DOM.Messages.frame_locator)
+            self.marionette.find_element(*DOM.Messages.send_message_button).tap()
+        else:
+            self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
+            self.marionette.find_element(*DOM.Email.compose_send_btn).tap()
+        time.sleep(2)
+        self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
+
+    def clean_all_rooms(self):
+        """Remove all the rooms for the current user."""
+
+        self.marionette.find_element(*DOM.Loop.open_settings_btn).tap()
+        self.parent.wait_for_element_displayed(*DOM.Loop.settings_clean_rooms, timeout=6)
+        self.marionette.find_element(*DOM.Loop.settings_clean_rooms).tap()
+        self.parent.wait_for_element_displayed(*DOM.GLOBAL.confirm_form_delete_btn, timeout=6)
+        self.marionette.find_element(*DOM.GLOBAL.confirm_form_delete_btn).tap()
+
+    def select_camera_and_join_room(self, back=True):
+        """Select the camera for a given call or room.
+
+        If the back parameter is True indicates the back camera will be used. The front camera will
+        be used otherwise.
+        """
+        btn_dom = DOM.Loop.room_select_camera_back if back else DOM.Loop.room_select_camera_front
+        self.UTILS.reporting.debug("Selecting [{}] camera with DOM [{}]".format("Back" if back else "Front", btn_dom))
+        self.parent.wait_for_element_displayed(*btn_dom)
+        btn = self.marionette.find_element(*btn_dom)
+        self.UTILS.element.simulateClick(btn)
+        camera_container = self.marionette.find_element(*DOM.Loop.room_camera_container)
+        selected_camera = camera_container.get_attribute("data-camera")
+        expected_camera = "camera-{}".format("back" if back else "front")
+        self.UTILS.test.test(selected_camera == expected_camera, "Expected camera: {}   Got: {}".
+                             format(expected_camera, selected_camera))
+        self.marionette.find_element(*DOM.Loop.room_button_join).tap()
+
+    def hangup_room(self):
+        """Hang up a room conversation and go back to the call log"""
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.room_leave_btn)
+        leave_btn = self.marionette.find_element(*DOM.Loop.room_leave_btn)
+        self.UTILS.element.simulateClick(leave_btn)
+        time.sleep(2)
 
     def is_camera_selected(self, back_camera=True):
         locator = DOM.Loop.new_call_camera_back if back_camera else DOM.Loop.new_call_camera_front
