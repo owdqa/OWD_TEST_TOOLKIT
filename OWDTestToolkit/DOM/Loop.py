@@ -193,3 +193,21 @@ room_leave_btn = ('id', 'leave-room')
 room_settings_togglemic = ('id', 'room-settings-togglemic')
 room_settings_togglevideo = ('id', 'room-settings-togglevideo')
 room_settings_switch_speaker = ('id', 'room-settings-switchspeaker')
+
+# Conversation (call) detail
+new_call_header = ('css selector', 'h1[data-l10n-id=conversationDetailTitle]')
+new_call_subject = ('css selector', 'section.fit form input[type=text]')
+new_call_subject_chars_left = ('css selector', 'section.fit form p.counter')
+new_call_subject_reset = ('css selector', 'section.fit form button[type=reset]')
+new_call_camera_back = ('css selector', 'li.icon-camera-back')
+new_call_camera_front = ('css selector', 'li.icon-camera-front')
+new_call_selected_camera = ('css selector', 'input[name=select-camera]:checked')
+new_call_start_call = ('css selector', 'button.call')
+
+# Fallback
+new_call_fallback_message = ('css selector', 'form[data-type=confirm] p')
+new_call_fallback_new_room = ('css selector', 'button[data-l10n-id=newRoom]')
+new_call_fallback_cancel = ('css selector', 'button[data-l10n-id=cancel]')
+
+# Fallback options ( very generic :( )
+fallback_options = ('css selector', 'form[data-type=action] menu button')

@@ -9,9 +9,13 @@ import subprocess
 
 from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
+from marionette import EnduranceOptionsMixin
+from marionette import HTMLReportingOptionsMixin
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
+from gaiatest import GaiaOptionsMixin
+
 from bs4 import BeautifulSoup
 from datetime import datetime
 from gaiatest.version import __version__
@@ -218,6 +222,14 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         map(_initialize_file, files)
 
 
+class OWDTestOptions(BaseMarionetteOptions, GaiaOptionsMixin, EnduranceOptionsMixin, HTMLReportingOptionsMixin):
+
+    def __init__(self, **kwargs):
+        BaseMarionetteOptions.__init__(self, **kwargs)
+        GaiaOptionsMixin.__init__(self, **kwargs)
+        EnduranceOptionsMixin.__init__(self, **kwargs)
+
+
 class TestRunner(object):
 
 # runner_class=MarionetteTestRunner, parser_class=BaseMarionetteOptions
@@ -373,7 +385,7 @@ class TestRunner(object):
         """
 
         # Preprocess
-        parser = BaseMarionetteOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
+        parser = OWDTestOptions(usage='%prog [options] test_file_or_dir <test_file_or_dir> ...')
         options, tests = parser.parse_args(self.args[1:])
         parser.verify_usage(options, tests)
 

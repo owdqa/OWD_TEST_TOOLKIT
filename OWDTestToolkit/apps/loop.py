@@ -24,7 +24,8 @@ class Loop(object):
         self.app_name = "Firefox Hello"
         self.market_url = "https://owd.tid.es/B3lg1r89n/market/appList.html"
         self.loop_dir = self.UTILS.general.get_config_variable("install_dir", "loop")
-        self.phone_number = self.UTILS.general.get_config_variable("phone_number", "custom")[3:]
+        self.phone_number = self.UTILS.general.get_config_variable("phone_number", "custom")
+        self.not_a_loop_user = _("is not a Firefox Hello user yet. No problem! Just create a room and share it with him.")
 
     def launch(self):
         """
@@ -51,20 +52,20 @@ class Loop(object):
         self.UTILS.reporting.logResult('info', 'Installing via grunt....')
         script = """ cd {0}
         git checkout {1}
+        git stash && git stash drop
         git fetch && git merge origin/{1}
         grunt build
         """.format(self.loop_dir, version)
 
         result = os.popen(script).read()
         self.UTILS.reporting.logResult('info', "Result of this test script: {}".format(result))
+        install_ok_msg = "Done, without errors."
+        self.UTILS.test.test(install_ok_msg in result, "Install via grunt is OK")
 
         self.marionette.switch_to_frame()
         msg = "{} installed".format(self.app_name)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
         self.UTILS.element.waitForElements(installed_app_msg, "App installed", timeout=30)
-
-        install_ok_msg = "Done, without errors."
-        self.UTILS.test.test(install_ok_msg in result, "Install via grunt is OK")
 
     def install_via_marketplace(self):
         self.UTILS.reporting.logResult('info', 'Installing via marketplace....')
@@ -225,9 +226,9 @@ class Loop(object):
             self.phone_login(option_number)
         except:
             self.UTILS.reporting.info("Mobile ID login failed, falling back to manual")
-            self.phone_login_manually(self.phone_number)
+            self.phone_login_manually(self.phone_number.split("+34")[-1])
 
-#    @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
+    # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login(self, option_number=1):
         """ Logs in using mobile id
         """
@@ -308,7 +309,7 @@ class Loop(object):
             self.UTILS.reporting.info("Before Tapping verify button")
             time.sleep(5)
             self.UTILS.reporting.info("Tapping verify button")
-            verified_button.tap()
+            self.UTILS.element.simulateClick(verified_button)
         except:
             self.parent.wait_for_condition(lambda m: "state-sending" in m.find_element(
                 *DOM.Loop.mobile_id_allow_button).get_attribute("class"), timeout=5, message="Button is still sending")
@@ -735,3 +736,19 @@ class Loop(object):
         leave_btn = self.marionette.find_element(*DOM.Loop.room_leave_btn)
         self.UTILS.element.simulateClick(leave_btn)
         time.sleep(2)
+
+    def is_camera_selected(self, back_camera=True):
+        locator = DOM.Loop.new_call_camera_back if back_camera else DOM.Loop.new_call_camera_front
+        try:
+            self.marionette.find_element(*locator).find_element(*('css selector', 'input[name=select-camera]:checked'))
+            return True
+        except:
+            return False
+
+    def create_new_call(self, subject="", back_camera=True):
+        if subject != "":
+            self.marionette.find_element(*DOM.Loop.new_call_subject).send_keys(subject)
+
+        locator = DOM.Loop.new_call_camera_back if back_camera else DOM.Loop.new_call_camera_front
+        self.marionette.find_element(*locator).tap()
+        self.marionette.find_element(*DOM.Loop.new_call_start_call).tap()
