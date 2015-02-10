@@ -191,9 +191,28 @@ class Loop(object):
 
         self._fill_fxa_field(DOM.Loop.ffox_account_login_mail, email)
         self.marionette.find_element(*DOM.Loop.ffox_account_login_next).tap()
+
+        # Sometimes we can get an age verification screen. In that case, select a proper value
+        # and continue.
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Loop.ffox_account_age_selector, timeout=6)
+            self.marionette.find_element(*DOM.Loop.ffox_account_age_selector).tap()
+            self.marionette.switch_to_frame()
+            self.marionette.find_element(*DOM.Loop.ffox_account_age_option).tap()
+            self.UTILS.reporting.debug("Age validation 1990 or earlier selected")
+            self.marionette.find_element(*DOM.GLOBAL.conf_screen_ok_button).tap()
+            self.UTILS.iframe.switchToFrame(*DOM.Loop.ffox_account_frame_locator)
+            self.parent.wait_for_element_displayed(*DOM.Loop.ffox_account_login_next, timeout=6)
+            self.marionette.find_element(*DOM.Loop.ffox_account_login_next).tap()
+        except Exception as e:
+            self.UTILS.reporting.debug("Age validation not found. Exception was: {}".format(e))
+
+        self.UTILS.reporting.debug("Waiting for password input to be displayed...")
         self.parent.wait_for_element_displayed(*DOM.Loop.ffox_account_login_pass)
+        self.UTILS.reporting.debug("Filling in password input...")
         self._fill_fxa_field(DOM.Loop.ffox_account_login_pass, password)
 
+        time.sleep(2)
         if not is_wrong:
             done_btn = self.marionette.find_element(*DOM.Loop.ffox_account_login_done)
             done_btn.tap()
@@ -588,6 +607,7 @@ class Loop(object):
         Tap on the new communication button, enter the room name and click Save.
         """
         self.toggle_new_communication()
+        time.sleep(2)
         self.parent.wait_for_element_displayed(*DOM.Loop.new_room_input)
 
         # Enter room name
@@ -663,7 +683,7 @@ class Loop(object):
                 button = (DOM.Loop.room_share_button_with_text[0],
                       DOM.Loop.room_share_button_with_text[1].format(contact['tel']['value']))
                 self.UTILS.reporting.debug("Looking for SMS button with text: {}".format(contact['tel']['value']))
-            share_button = self.marionette.find_element(button)
+            share_button = self.marionette.find_element(*button)
             self.UTILS.reporting.debug("Tapping method button: {}".format(share_button))
             self.UTILS.element.simulateClick(share_button)
             time.sleep(2)
@@ -678,3 +698,40 @@ class Loop(object):
         else:
             self.UTILS.iframe.switchToFrame(*DOM.Email.frame_locator)
             self.marionette.find_element(*DOM.Email.compose_send_btn).tap()
+        time.sleep(2)
+        self.UTILS.iframe.switchToFrame(*DOM.Loop.frame_locator)
+
+    def clean_all_rooms(self):
+        """Remove all the rooms for the current user."""
+
+        self.marionette.find_element(*DOM.Loop.open_settings_btn).tap()
+        self.parent.wait_for_element_displayed(*DOM.Loop.settings_clean_rooms, timeout=6)
+        self.marionette.find_element(*DOM.Loop.settings_clean_rooms).tap()
+        self.parent.wait_for_element_displayed(*DOM.GLOBAL.confirm_form_delete_btn, timeout=6)
+        self.marionette.find_element(*DOM.GLOBAL.confirm_form_delete_btn).tap()
+
+    def select_camera_and_join_room(self, back=True):
+        """Select the camera for a given call or room.
+
+        If the back parameter is True indicates the back camera will be used. The front camera will
+        be used otherwise.
+        """
+        btn_dom = DOM.Loop.room_select_camera_back if back else DOM.Loop.room_select_camera_front
+        self.UTILS.reporting.debug("Selecting [{}] camera with DOM [{}]".format("Back" if back else "Front", btn_dom))
+        self.parent.wait_for_element_displayed(*btn_dom)
+        btn = self.marionette.find_element(*btn_dom)
+        self.UTILS.element.simulateClick(btn)
+        camera_container = self.marionette.find_element(*DOM.Loop.room_camera_container)
+        selected_camera = camera_container.get_attribute("data-camera")
+        expected_camera = "camera-{}".format("back" if back else "front")
+        self.UTILS.test.test(selected_camera == expected_camera, "Expected camera: {}   Got: {}".
+                             format(expected_camera, selected_camera))
+        self.marionette.find_element(*DOM.Loop.room_button_join).tap()
+
+    def hangup_room(self):
+        """Hang up a room conversation and go back to the call log"""
+
+        self.parent.wait_for_element_displayed(*DOM.Loop.room_leave_btn)
+        leave_btn = self.marionette.find_element(*DOM.Loop.room_leave_btn)
+        self.UTILS.element.simulateClick(leave_btn)
+        time.sleep(2)
