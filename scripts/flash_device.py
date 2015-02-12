@@ -27,6 +27,8 @@ def wait_for_device():
 
 
 def get_device_build_date():
+    """Return the date of the current build in the device."""
+
     output = subprocess32.check_output('sudo adb shell getprop | grep "build.date.utc]"', shell=True)
     build_date = output.split(": [")[-1].strip().replace("]", "")
     da = time.localtime(float(build_date))

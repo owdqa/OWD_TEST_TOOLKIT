@@ -33,12 +33,6 @@ def detect_build_file(source, user, passwd, device, typ, branch, last_date):
     if elem:
         print "Release file: {}".format(elem.text)
         return elem.text
-    # If there is no build file fot the given date, it can mean it has not been generated yet,
-    # so we ask the device for its current version
-    print "Build for date {} not found. Checking current build in device...".format(last_date)
-    daf = flash_device.get_device_build_date()
-    print "Build detected in device: {}".format(daf)
-    return daf
 
 
 def download_build(source, user, passwd, last_date, filename, outdir):
@@ -79,6 +73,13 @@ def main():
     last_date = detect_latest_date(options.source, options.username, options.passwd)
     f = detect_build_file(options.source, options.username, options.passwd, options.device, options.build_type,
                           options.branch, last_date)
+
+    # If there is no build file for the given date, it can mean it has not been generated yet,
+    # so we ask the device for its current version
+    if not f:
+        print "Build for date {} not found. Checking current build in device...".format(last_date)
+        daf = flash_device.get_device_build_date()
+        print "Build detected in device: {}".format(daf)
 
     # Once we know the name of the build file to download, check if it already exists
     # in the outpur directory. In that case, just skip this step.
