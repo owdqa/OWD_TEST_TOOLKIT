@@ -20,6 +20,7 @@ class general(object):
         # Put a file onto the device (path is relative to the dir
         # you are physically in when running the tests).
         #
+        self.parent.reporting.logResult('info', '>>>> destination: {}'.format(self.get_config_variable("OWD_DEVICE_SDCARD")))
         self.parent.device.push_file(file_name, count, '{}/{}'.format(self.get_config_variable("OWD_DEVICE_SDCARD"),
                                                                       destination))
 

@@ -57,7 +57,7 @@ attach_gallery_btn = ("xpath", u"//form//button[text()='{}']".format(_("Gallery"
 attach_camera_btn = ("xpath", u"//form//button[text()='{}']".format(_("Camera")))
 
 settings_menu_btn = ('xpath', '//header//a[@class="msg-folder-list-btn"]')
-
+settings_header = ('css selector', 'h1.tng-main-header-label')
 settings_set_btn = ('xpath', '//a[@class="fld-nav-toolbar bottom-toolbar"]//span[@data-l10n-id="drawer-settings-link"]')
 settings_del_acc_btn = ('class name', 'tng-account-delete')
 settings_del_conf_btn = ('xpath', '//button[@id="account-delete-ok"]')

@@ -12,7 +12,7 @@
     	"sdcard": "/storage/sdcard1"
     	},
     "ZTE_OPEN2": {
-    	"sdcard": "/storage/sdcard1"
+    	"sdcard": "/storage/sdcard"
     	},
     "flame": {
     	"sdcard": "/storage/sdcard0"
