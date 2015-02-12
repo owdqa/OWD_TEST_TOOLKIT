@@ -36,6 +36,7 @@ header_close_button = ('id', 'messages-close-button')
 # This field will allow to retrieve phone numbers and emails in the body of the last SM or MM
 phone_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//a[@data-action="dial-link"]')
 email_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//a[@data-action="email-link"]')
+link_in_msg = ('css selector', 'a[data-action=url-link]')
 
 threads = ("css selector", "p.name")
 threads_list = ('css selector', '#threads-container li')
