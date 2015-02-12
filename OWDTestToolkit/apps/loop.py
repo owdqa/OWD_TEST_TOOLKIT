@@ -241,17 +241,11 @@ class Loop(object):
         mobile_id_header = ("xpath", DOM.GLOBAL.app_head_specific.format(_("Mobile ID")))
         self.parent.wait_for_element_displayed(*mobile_id_header)
 
-        #=======================================================================
-        # FJCS: I think this is not required now
-        # options = self._get_mobile_id_options()
-        # if len(options) > 1:
-        #    # Option number refers to the SIM number (1 or 2), not to the position in the array
-        #    options[option_number - 1].tap()
-        #=======================================================================
-        self.UTILS.reporting.info("Looking for Mobile ID INPUT")
-        mobile_id_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
-        mobile_id_value = mobile_id_input.get_attribute("value")
+        # Check if the phone number is already filled in or not
         self.UTILS.reporting.info("Mobile ID Found: [{}]".format(mobile_id_value))
+
+        mobile_id_value = self._get_mobile_id_value()
+
         if mobile_id_value == "":
             self.UTILS.reporting.info("No ID found, switching to manual...")
             self.marionette.find_element(*DOM.Loop.mobile_id_close_btn).tap()
@@ -275,6 +269,21 @@ class Loop(object):
             raise
 
         self.apps.switch_to_displayed_app()
+
+    def _get_mobile_id_value(self):
+        """Try to find the mobile id value, if it exists"""
+
+        mobile_id_value = None
+        try:
+            self.UTILS.reporting.debug("Looking for already existing phone number")
+            mobile_id_input = self.marionette.find_element(*DOM.Loop.mobile_id_existing_phone_number)
+            mobile_id_value = mobile_id_input.get_attribute("value")
+            self.UTILS.reporting.debug("Mobile ID already filled in")
+        except:
+            self.UTILS.reporting.info("Phone number is not already filled in. Looking for Mobile ID input")
+            mobile_id_input = self.marionette.find_element(*DOM.Loop.mobile_id_add_phone_number_number)
+            mobile_id_value = mobile_id_input.get_attribute("value")
+        return mobile_id_value
 
     # @retry(5, context=("OWDTestToolkit.apps.loop", "Loop"), aux_func_name="retry_phone_login")
     def phone_login_manually(self, phone_number_without_prefix):
@@ -630,11 +639,15 @@ class Loop(object):
         """Open room details page."""
 
         self.UTILS.reporting.info("Looking for Room entry: [{}]".format(name))
-        room = self.marionette.find_element(DOM.Loop.room_entry[0], DOM.Loop.room_entry[1].format(name))
+        dom = (DOM.Loop.room_entry[0], DOM.Loop.room_entry[1].format(name))
+        self.parent.wait_for_element_displayed(*dom, timeout=10)
+        room = self.marionette.find_element(*dom)
+        time.sleep(1)
         self.UTILS.reporting.info("Tapping Edit button")
-        self.marionette.find_element(*DOM.Loop.room_entry, id=room.id).tap()
+        edit_btn = self.marionette.find_element(*DOM.Loop.room_edit, id=room.id)
+        self.UTILS.element.simulateClick(edit_btn)
 
-    def edit_room(self, new_name):
+    def edit_room(self, new_name, save=True):
         """Edit the room being shown in the detail view and change its name"""
 
         self.marionette.find_element(*DOM.Loop.room_detail_edit_btn).tap()
@@ -648,8 +661,12 @@ class Loop(object):
         name_input = self.marionette.find_element(*DOM.Loop.room_edit_name_input)
         name_input.send_keys(new_name)
 
-        self.UTILS.reporting.info("Save room")
-        self.marionette.find_element(*DOM.Loop.save_room_btn).tap()
+        if save:
+            self.UTILS.reporting.info("Saving room name changes")
+            self.marionette.find_element(*DOM.Loop.save_room_btn).tap()
+        else:
+            self.UTILS.reporting.info("Cancelling room name changes")
+            self.marionette.find_element(*DOM.Loop.room_edit_close_btn).tap()
 
     def share_room(self, contact, by_sms=True):
         """Share the current room with the given contact.
