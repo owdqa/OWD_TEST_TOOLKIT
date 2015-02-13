@@ -220,8 +220,7 @@ class Messages(object):
         #
         x = self.UTILS.element.getElement(DOM.Messages.header_back_button, "Back button")
         x.tap()
-        self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Messages"))),
-                                           "Messages main header")
+        self.UTILS.element.waitForElements(DOM.Messages.main_header, "Messages main header")
 
     def countMessagesInThisThread(self):
         #
@@ -961,11 +960,10 @@ class Messages(object):
                     #
                     # This contact was added via 'add contact' icon.
                     #
-                    self.parent.wait_for_element_displayed("xpath", "//button[text()='{}']".format(_("Remove")),
-                                                           timeout=2)
-                    y = self.marionette.find_element("xpath", "//button[text()='{}']".format(_("Remove")))
+                    self.parent.wait_for_element_displayed(*DOM.Messages.remove_contact_from_to_field)
+                    confirm_remove = self.marionette.find_element(*DOM.Messages.remove_contact_from_to_field)
                     self.UTILS.reporting.logResult("info", "Tapping 'Remove' button.")
-                    y.tap()
+                    confirm_remove.tap()
                     return True
                 except:
                     #
