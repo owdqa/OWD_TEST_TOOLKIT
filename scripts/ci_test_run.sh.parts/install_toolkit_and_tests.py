@@ -13,7 +13,7 @@ def main():
     tests_repo = 'https://github.com/owdqa/owd_test_cases.git'
     os.chdir(tk_dir)
 
-    # subprocess32.check_output('$OWD_TEST_TOOLKIT_DIR/install.sh $BRANCH >> $LOGFILE 2>&1', shell=True)
+    subprocess32.check_output('$OWD_TEST_TOOLKIT_DIR/install.sh $BRANCH >> $LOGFILE 2>&1', shell=True)
 
     # Check if test cases repository exists. If not, clone it
     os.chdir(tk_dir + '/..')
