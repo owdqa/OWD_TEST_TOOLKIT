@@ -5,7 +5,6 @@ then
     export OWD_TEST_TOOLKIT_DIR=$PWD
 fi
 
-# Create file containing the required vars...
 export OWD_TEST_TOOLKIT_DIR=$OWD_TEST_TOOLKIT_DIR
 export OWD_TEST_TOOLKIT_BIN=$OWD_TEST_TOOLKIT_DIR/scripts
 export OWD_TEST_TOOLKIT_CONFIG=$OWD_TEST_TOOLKIT_DIR/config
@@ -14,39 +13,8 @@ export PATH=$PATH:/usr/android-sdk/platform-tools/adb:$OWD_TEST_TOOLKIT_DIR/scri
 
 export BRANCH=${1:"v2.0"}
 
-#
-# CHECK DEPENDENCIES ...
-#
-# Python 2.7
-x=$(which python2.7 2>/dev/null)
-if [ ! "$x" ]
-then
-    echo "<b>Python 2.7 not found - please install and try again!</b>" | tee -a $LOGFILE
-    exit 1
-fi
-
-# ADB
-x=$(which adb 2>/dev/null)
-if [ ! "$x" ]
-then
-    echo "<b>ADB not found - please install and try again!</b>" | tee -a $LOGFILE
-    exit 1
-fi
-
-# python-setuptools
-x=$(which easy_install 2>/dev/null)
-if [ ! "$x" ]
-then
-    echo "<b>'easy_install' (python-setuptools) not found - please install and try again!</b>" | tee -a $LOGFILE
-    exit 1
-fi
-
-
-#
 # Install gaiatest and marionette.
-#
 $OWD_TEST_TOOLKIT_BIN/install_gaiatest.sh "$BRANCH"
-
 
 #
 # Checkout is already made in script from CI (prepare_and_run.sh),

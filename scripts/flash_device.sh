@@ -1,11 +1,7 @@
 #!/bin/bash
 . $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
-#
-# Organises downloading the latest build and flashing the
-# device with it.
-#
-# Relies on user and password being set in ~/.wgetrc
+# Download and flash the latest available build, if required
 #
 # Set up variables.
 #
@@ -28,6 +24,7 @@ VERSION=$3
 LOGFILE=/tmp/${DEVICE}_flash_download.log
 TARGET_DIR=$HOME/Downloads/device_flash_files
 
+
 # By default, get the build file too (just pass any parameter as $3 and it'll skip this).
 if [ ! "$4" ]
 then
@@ -39,12 +36,10 @@ then
         exit 1
     fi
 fi
-
 #
 # Get the latest build file.
 #
 cd $TARGET_DIR
-#REL_FILE=$(ls -lrt | grep -vi "^total" | egrep "${DEVICE}.*\.${TYPE}\.${VERSION}" | tail -1 | awk '{print $NF}')
 # Add "AutomationVersion flag"
 REL_FILE=$(ls -lrt | grep -vi "^total" | egrep "${DEVICE}.*\.${TYPE}\.${VERSION}\.AutomationVersion" | tail -1 | awk '{print $NF}')
 if [ ! "$REL_FILE" ]

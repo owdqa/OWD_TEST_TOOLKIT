@@ -3,7 +3,7 @@ import re
 from bs4 import BeautifulSoup
 from argparse import ArgumentParser
 import os
-import flash_device
+import sys
 
 
 def retrieve_url(source, user, passwd):
@@ -29,7 +29,9 @@ def detect_build_file(source, user, passwd, device, typ, branch, last_date):
     """Detect the build filename based on the last date directory contents"""
 
     soup = retrieve_url(source + last_date, user, passwd)
-    elem = soup.find("a", href=re.compile("{}.*{}.*{}.*AutomationVersion.*".format(device, typ, branch)))
+    pattern = "{}.*{}.*{}.*AutomationVersion.*".format(device, typ, branch)
+    print "Looking for build file with pattern: {}".format(pattern)
+    elem = soup.find("a", href=re.compile(pattern))
     if elem:
         print "Release file: {}".format(elem.text)
         return elem.text
@@ -75,11 +77,10 @@ def main():
                           options.branch, last_date)
 
     # If there is no build file for the given date, it can mean it has not been generated yet,
-    # so we ask the device for its current version
+    # so we just don't download anything.
     if not f:
-        print "Build for date {} not found. Checking current build in device...".format(last_date)
-        daf = flash_device.get_device_build_date()
-        print "Build detected in device: {}".format(daf)
+        print "Build for date {} not found. Will use current build in device...".format(last_date)
+        sys.exit(1)
 
     # Once we know the name of the build file to download, check if it already exists
     # in the outpur directory. In that case, just skip this step.

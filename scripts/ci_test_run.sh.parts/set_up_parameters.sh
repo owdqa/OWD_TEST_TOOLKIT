@@ -17,9 +17,7 @@ then
 fi
 
 export ON_CI_SERVER="Y"
-
 export RUN_ID=${JOB_NAME}_${BUILD_NUMBER}
-
 export RESULT_DIR="/tmp/tests/$RUN_ID"
 [ ! -d "$RESULT_DIR" ] && mkdir -p $RESULT_DIR || rm $RESULT_DIR/* 2>/dev/null
 

@@ -35,22 +35,15 @@ then
 else
     printf "(refreshing 'gaia' - this will take just a minute or so ...)\n\n" | tee -a $LOGFILE
     cd $HOME/gaia
-    git stash
-    #git fetch
-    #sudo git checkout $BRANCH  2> >( tee -a $LOGFILE)
-    #sudo git merge origin/$BRANCH
+    git stash -u && git stash drop
     git checkout -f $BRANCH  2> >( tee -a $LOGFILE)
     git pull 2> >( tee -a $LOGFILE)
 fi
 
 #
-# Install gaiatest.
-#
-cd $GAIATEST_PATH/..
-
-#
 # Install gaiatest and dependencies.
 #
+cd $GAIATEST_PATH/..
 printf "\n<b>Installing gaiatest for branch \"$(git branch | grep '*')\" ... </b>\n\n" | tee -a $LOGFILE
 sudo python setup.py develop > $LOGFILE.tmp 2>&1
 
