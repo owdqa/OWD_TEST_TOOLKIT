@@ -1,9 +1,6 @@
 #
 # Flash device.
 #
-#flash_device.sh $DEVICE eng $BRANCH NODOWNLOAD >$RESULT_DIR/flash_device 2>&1
-# forcing to download the build file
-
 if [ "$DEVICE" = "certification" ]
 then
     printf "\n\n CERTIFICATION BUILD PREINSTALLED. NOT FLASHING DEVICE!)\n"

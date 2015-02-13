@@ -5,13 +5,13 @@
 # It is assumed that the OWD_TEST_TOOLKIT has already been cloned
 # (or this script would not exist to run!).
 #
-export DEVICE=${1:-"flame"}
-export BRANCH=${2:-"v2.0"}
+export DEVICE=${1:-"flame-KK"}
+export BRANCH=${2:-"v2.1"}
 export TEST_TYPE=${3:-"REGRESSION"}
 
 . $0.parts/set_up_parameters.sh
 
-. $0.parts/install_toolkit_and_test_cases.sh
+python $0.parts/install_toolkit_and_tests.py
 
 . $OWD_TEST_TOOLKIT_BIN/ci_test_run.sh.parts/flash_device.sh
 
