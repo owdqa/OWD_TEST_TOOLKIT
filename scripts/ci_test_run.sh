@@ -11,11 +11,11 @@ export TEST_TYPE=${3:-"REGRESSION"}
 
 OWD_TEST_TOOLKIT_DIR=`dirname $PWD`
 
-. set_up_parameters.sh
+. scripts/set_up_parameters.sh
 
-python install_toolkit_and_tests.py
+python scripts/install_toolkit_and_tests.py
 
-. call_flash_device.sh
+. scripts/call_flash_device.sh
 
 cd $OWD_TEST_TOOLKIT_DIR/../owd_test_cases
 

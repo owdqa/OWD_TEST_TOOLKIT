@@ -4,18 +4,24 @@
 
 import os
 import subprocess32
+from subprocess32 import CalledProcessError
 
 
 def main():
     scripts_dir = os.environ['PWD']
-    tkdir = os.path.dirname(os.path.realpath(__file__))
+    tkdir = os.path.dirname(scripts_dir)
     branch = os.environ['BRANCH']
     integration = os.environ['INTEGRATION']
     log_file = os.environ['LOGFILE']
     tests_repo = 'https://github.com/owdqa/owd_test_cases.git'
     os.chdir(tkdir)
 
-    subprocess32.check_output('{}/install.sh {} >> {} 2>&1'.format(tkdir, branch, log_file), shell=True)
+    try:
+        subprocess32.check_output('{}/install.sh {} >> {} 2>&1'.format(tkdir, branch, log_file), shell=True)
+    except CalledProcessError as e:
+        print "================================================================="
+        print "Error code: {}".format(e.returncode)
+        print "Output: {}".format(e.output)
 
     # Check if test cases repository exists. If not, clone it
     os.chdir(tkdir + '/..')
@@ -23,13 +29,13 @@ def main():
     # cloned is set to True if the tests repository does not exist and has to be cloned
     cloned = False
     if not os.path.exists('owd_test_cases'):
-        subprocess32.call('git clone {} >> $LOGFILE 2>&1'.format(tests_repo), shell=True)
+        subprocess32.call('git clone {} >> {} 2>&1'.format(tests_repo, log_file), shell=True)
         cloned = True
 
     with open(log_file, 'a') as f:
         os.chdir('owd_test_cases')
         f.write('Switching to branch {}{} of owd_test_cases'.format(integration, branch))
-        subprocess32.call('git checkout {}{} >> $LOGFILE 2>&1'.format(integration, branch), shell=True)
+        subprocess32.call('git checkout {}{} >> {} 2>&1'.format(integration, branch, log_file), shell=True)
 
         if not cloned:
             # If the test repository existed, compare last commit in local and remote repositories
@@ -47,7 +53,7 @@ def main():
                 subprocess32.check_output('git pull', shell=True)
             else:
                 print "Tests repository already updated, no need to pull"
-                f.write("Tests repository already updated, no need to pull")
+                f.write("\nTests repository already updated, no need to pull")
 
     os.chdir(scripts_dir)
 

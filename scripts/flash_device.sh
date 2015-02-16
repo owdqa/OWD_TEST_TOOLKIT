@@ -90,19 +90,6 @@ sudo python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE
 cd $TARGET_DIR
 rm -rf $REL_DIR
 
-printf "\n\nDONE!\n"
-
-#
-# Install gaiatest.
-#
-cd $GAIATEST_PATH/..
-
-#
-# Install gaiatest and dependencies.
-#
-printf "\n<b>Installing gaiatest for branch \"$(git branch | grep '*')\" ... </b>\n\n" | tee -a $LOGFILE
-sudo python setup.py develop
-
 printf "\n\nDevices\n"
 sudo adb devices
 printf "\n\nDevice forward 2828\n"

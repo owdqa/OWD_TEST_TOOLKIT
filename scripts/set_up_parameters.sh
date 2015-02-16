@@ -1,15 +1,6 @@
 #
 # Set up parameters.
 #
-# NOTE: If you create a file called "${INSTALL_LOG}...something" it
-#       will be included in the 'setup' part of the results web page.
-#       The filename must have 2 sections in it, separated by "@",
-#       i.e.:
-#               ${INSTALL_LOG}@title@description
-#
-#       The 'description' part will become a link you can click to
-#       see the file contents.
-#
 if [ ! "$JOB_NAME" ] || [ ! "$BUILD_NUMBER" ]
 then
 	printf "\n** Either JOB_NAME or BUILD_NUMBER are not set (this is not a CI run) - exiting. **\n\n"
