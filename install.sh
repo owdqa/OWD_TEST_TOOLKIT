@@ -2,11 +2,12 @@
 
 OWD_TEST_TOOLKIT_DIR=$PWD
 
-export BRANCH=${1:"v2.0"}
+export BRANCH=${1:-"v2.1"}
 
 # Install gaiatest and marionette.
 . scripts/install_gaiatest.sh $BRANCH
 
+cd $OWD_TEST_TOOLKIT_DIR
 #
 # Checkout is already made in script from CI (prepare_and_run.sh),
 # but it is necesary to maintain (repeat) here, in case of direct installation into local machine
@@ -41,4 +42,8 @@ fi
 sudo python setup.py clean --all >> $LOGFILE 2>&1
 sudo python setup.py install >> $LOGFILE 2>&1
 
-[ ! -d "/tmp/tests" ] && mkdir /tmp/tests >/dev/null 2>&1
+if [ ! -d /tmp/tests ]
+then
+    mkdir /tmp/tests >/dev/null 2>&1
+fi
+
