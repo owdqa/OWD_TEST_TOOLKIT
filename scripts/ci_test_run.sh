@@ -9,11 +9,13 @@ export DEVICE=${1:-"flame-KK"}
 export BRANCH=${2:-"v2.1"}
 export TEST_TYPE=${3:-"REGRESSION"}
 
-. $0.parts/set_up_parameters.sh
+OWD_TEST_TOOLKIT_DIR=`dirname $PWD`
 
-python $0.parts/install_toolkit_and_tests.py
+. set_up_parameters.sh
 
-. $OWD_TEST_TOOLKIT_BIN/ci_test_run.sh.parts/flash_device.sh
+python install_toolkit_and_tests.py
+
+. call_flash_device.sh
 
 cd $OWD_TEST_TOOLKIT_DIR/../owd_test_cases
 

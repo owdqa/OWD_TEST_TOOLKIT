@@ -1,6 +1,4 @@
 #!/bin/bash
-. $HOME/.OWD_TEST_TOOLKIT_LOCATION
-
 #
 # Rebuilds the README.md files for each area.
 #

@@ -2,12 +2,6 @@
 #
 # Handles all dependencies etc... related to installing gaiatest.
 #
-
-. $HOME/.OWD_TEST_TOOLKIT_LOCATION
-
-export MYPATH=$(dirname $0)
-export CURRPATH=$(pwd)
-
 export BRANCH=${1:-"v2.1"}
 LOGFILE=${LOGFILE:-/tmp/gaiatest_setup.log}
 
@@ -20,6 +14,8 @@ printf "\n<b>====================================================</b>\n" | tee -
 printf "\n* Installing the latest gaiatest from github: " | tee -a $LOGFILE
 #git clone https://github.com/mozilla/gaia-ui-tests.git >> $LOGFILE 2>&1
 
+export GAIATEST_PATH=$HOME/gaia/tests/python/gaia-ui-tests/gaiatest
+
 if [ ! -d "$GAIATEST_PATH" ]
 then
     printf "(need to clone all of 'gaia' - this will take about 10-15 minutes ...)\n\n" | tee -a $LOGFILE
@@ -29,9 +25,6 @@ then
     printf "\n<b>Switching to branch \"$BRANCH\" of gaiatest ...</b>\n\n" | tee -a $LOGFILE
 	cd $HOME/gaia
 	git checkout $BRANCH  2> >( tee -a $LOGFILE)
-
-	# Temporary hack...
-	#$OWD_TEST_TOOLKIT_BIN/tmp_hack.sh
 else
     printf "(refreshing 'gaia' - this will take just a minute or so ...)\n\n" | tee -a $LOGFILE
     cd $HOME/gaia
