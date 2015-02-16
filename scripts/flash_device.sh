@@ -1,5 +1,4 @@
 #!/bin/bash
-. $HOME/.OWD_TEST_TOOLKIT_LOCATION
 
 # Download and flash the latest available build, if required
 #
@@ -14,7 +13,6 @@ then
 
         i.e. $MYNAME unagi eng v1-train
     "
-
     exit 2
 fi
 
@@ -23,12 +21,12 @@ TYPE=$2
 VERSION=$3
 LOGFILE=/tmp/${DEVICE}_flash_download.log
 TARGET_DIR=$HOME/Downloads/device_flash_files
-
+OWD_TEST_TOOLKIT_BIN=$PWD
 
 # By default, get the build file too (just pass any parameter as $3 and it'll skip this).
 if [ ! "$4" ]
 then
-    python $OWD_TEST_TOOLKIT_BIN/get_latest_build.py -d $DEVICE -t $TYPE -b $VERSION -u owdmoz -p gaia -s http://ci-owd-misc-02/releases/DEVELOP/ -o $TARGET_DIR
+    python get_latest_build.py -d $DEVICE -t $TYPE -b $VERSION -u owdmoz -p gaia -s http://ci-owd-misc-02/releases/DEVELOP/ -o $TARGET_DIR
 
     if [ $? -ne 0 ]
     then

@@ -131,9 +131,6 @@ class current_frame():
 # Starting point.
 #
 
-# Make sure we're connected to the device.
-os.system(". $HOME/.OWD_TEST_TOOLKIT_LOCATION; $OWD_TEST_TOOLKIT_BIN/connect_device.sh")
-
 # Set up the dir.
 LOGDIR = False
 try:

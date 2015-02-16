@@ -7,16 +7,18 @@ import subprocess32
 
 
 def main():
-    tk_dir = os.environ['OWD_TEST_TOOLKIT_DIR']
+    scripts_dir = os.environ['PWD']
+    tkdir = os.path.dirname(os.path.realpath(__file__))
     branch = os.environ['BRANCH']
     integration = os.environ['INTEGRATION']
+    log_file = os.environ['LOGFILE']
     tests_repo = 'https://github.com/owdqa/owd_test_cases.git'
-    os.chdir(tk_dir)
+    os.chdir(tkdir)
 
-    subprocess32.check_output('$OWD_TEST_TOOLKIT_DIR/install.sh $BRANCH >> $LOGFILE 2>&1', shell=True)
+    subprocess32.check_output('{}/install.sh {} >> {} 2>&1'.format(tkdir, branch, log_file), shell=True)
 
     # Check if test cases repository exists. If not, clone it
-    os.chdir(tk_dir + '/..')
+    os.chdir(tkdir + '/..')
 
     # cloned is set to True if the tests repository does not exist and has to be cloned
     cloned = False
@@ -24,7 +26,6 @@ def main():
         subprocess32.call('git clone {} >> $LOGFILE 2>&1'.format(tests_repo), shell=True)
         cloned = True
 
-    log_file = os.environ['LOGFILE']
     with open(log_file, 'a') as f:
         os.chdir('owd_test_cases')
         f.write('Switching to branch {}{} of owd_test_cases'.format(integration, branch))
@@ -48,7 +49,7 @@ def main():
                 print "Tests repository already updated, no need to pull"
                 f.write("Tests repository already updated, no need to pull")
 
-    os.chdir('..')
+    os.chdir(scripts_dir)
 
 if __name__ == '__main__':
     main()
