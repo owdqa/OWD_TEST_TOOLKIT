@@ -94,13 +94,18 @@ def main():
     # in the outpur directory. In that case, just skip this step.
     if f and not os.path.exists(options.outdir + '/' + f):
         download_build(options.source, options.username, options.passwd, last_date, f, options.outdir)
-        print "Unpacking tarball file..."
-        untar_build_file(options.outdir + '/' + f, options.outdir)
     else:
         print "Build file [{}] already exists. No need to download".format(f)
     build_dir = f.split(".tgz")[0]
+
+    # If the extracted build directory does not exist, uncompress it
+    build_full_path = options.outdir + '/' + build_dir
+    if not os.path.exists(build_full_path):
+        print "Build path does not exist. Unpacking tarball file..."
+        untar_build_file(options.outdir + '/' + f, options.outdir)
     print "Moving to directory [{}] inside [{}]".format(build_dir, options.outdir)
-    os.chdir(options.outdir + '/' + build_dir)
+    os.chdir(build_full_path)
+
 
 if __name__ == '__main__':
     main()
