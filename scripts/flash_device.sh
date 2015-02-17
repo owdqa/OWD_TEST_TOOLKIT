@@ -35,19 +35,6 @@ then
     fi
 fi
 
-#
-# Go into the release directory (if you can).
-#
-REL_DIR=${REL_FILE%.tgz} 
-if [ ! -d "$REL_DIR" ]
-then
-    printf "\n***** ERROR: $REL_DIR does not exist!\n\n"
-    echo "Perhaps there was a problem with the tarfile! Aborting ..."
-    exit 4
-fi
-
-cd $REL_DIR
-
 sudo python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE
 
 #
