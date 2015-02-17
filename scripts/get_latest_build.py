@@ -104,7 +104,7 @@ def main():
     # so we just don't download anything.
     if not f:
         print "Build for date {} not found. Will use current build in device...".format(last_date)
-        detect_device_build_file(options.device, options.type, options.branch, options.outdir)
+        detect_device_build_file(options.device, options.build_type, options.branch, options.outdir)
         sys.exit(1)
 
     # Once we know the name of the build file to download, check if it already exists
