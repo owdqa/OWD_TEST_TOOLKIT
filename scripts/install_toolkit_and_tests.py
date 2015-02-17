@@ -12,12 +12,12 @@ def main():
     tkdir = os.path.dirname(scripts_dir)
     branch = os.environ['BRANCH']
     integration = os.environ['INTEGRATION']
-    log_file = os.environ['LOGFILE']
+    logfile = os.environ['LOGFILE']
     tests_repo = 'https://github.com/owdqa/owd_test_cases.git'
     os.chdir(tkdir)
 
     try:
-        subprocess32.check_output('{}/install.sh {} >> {} 2>&1'.format(tkdir, branch, log_file), shell=True)
+        subprocess32.check_output('{}/install.sh {} >> {} 2>&1'.format(tkdir, branch, logfile), shell=True)
     except CalledProcessError as e:
         print "================================================================="
         print "Error code: {}".format(e.returncode)
@@ -29,13 +29,13 @@ def main():
     # cloned is set to True if the tests repository does not exist and has to be cloned
     cloned = False
     if not os.path.exists('owd_test_cases'):
-        subprocess32.call('git clone {} >> {} 2>&1'.format(tests_repo, log_file), shell=True)
+        subprocess32.call('git clone {} >> {} 2>&1'.format(tests_repo, logfile), shell=True)
         cloned = True
 
-    with open(log_file, 'a') as f:
+    with open(logfile, 'a') as f:
         os.chdir('owd_test_cases')
         f.write('Switching to branch {}{} of owd_test_cases'.format(integration, branch))
-        subprocess32.call('git checkout {}{} >> {} 2>&1'.format(integration, branch, log_file), shell=True)
+        subprocess32.call('git checkout {}{} >> {} 2>&1'.format(integration, branch, logfile), shell=True)
 
         if not cloned:
             # If the test repository existed, compare last commit in local and remote repositories
