@@ -55,4 +55,4 @@ def check(name, url, branch, cmd=None):
     os.chdir('..')
 
 if __name__ == '__main__':
-    check()
+    main()
