@@ -34,40 +34,6 @@ then
         exit 1
     fi
 fi
-#
-# Get the latest build file.
-#
-cd $TARGET_DIR
-# Add "AutomationVersion flag"
-REL_FILE=$(ls -lrt | grep -vi "^total" | egrep "${DEVICE}.*\.${TYPE}\.${VERSION}\.AutomationVersion" | tail -1 | awk '{print $NF}')
-if [ ! "$REL_FILE" ]
-then
-    printf "\n*** WARNING: NO BUILD FILES FOUND IN $TARGET_DIR! ***\n\n"
-    exit 0
-fi
-
-#
-# If the file's still being updated then wait for it to finish (better to wait a few minutes
-# and run the tests against the very latest build).
-#
-if [ "$(fuser $REL_FILE 2>/dev/null)" ]
-then
-	printf "Waiting for file to finish downloading " >> $LOGFILE
-	while [ "$(fuser $REL_FILE 2>/dev/null)" ]
-	do
-		printf "." >> $LOGFILE
-		sleep 5
-	done
-    printf " done.\n" >> $LOGFILE
-fi
-
-
-#
-# Unpack the file.
-#
-echo "Unpacking $REL_FILE ..."
-tar xvfz $REL_FILE
-
 
 #
 # Go into the release directory (if you can).

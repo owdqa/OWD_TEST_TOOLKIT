@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from argparse import ArgumentParser
 import os
 import sys
+import tarfile
 
 
 def retrieve_url(source, user, passwd):
@@ -51,6 +52,13 @@ def download_build(source, user, passwd, last_date, filename, outdir):
                 f.flush()
 
 
+def untar_build_file(f, outdir):
+    """Uncompress the given tar file in the output directory."""
+
+    tar = tarfile.open(f)
+    tar.extractall(outdir)
+
+
 def main():
     parser = ArgumentParser()
     parser.add_argument("-d", "--device", dest="device", action="store", default="flame-KK", help="Target device")
@@ -86,6 +94,10 @@ def main():
     # in the outpur directory. In that case, just skip this step.
     if f and not os.path.exists(options.outdir + '/' + f):
         download_build(options.source, options.username, options.passwd, last_date, f, options.outdir)
+        print "Unpacking tarball file..."
+        untar_build_file(options.outdir + '/' + f, options.outdir)
+    else:
+        print "Build file [{}] already exists. No need to download".format(f)
 
 if __name__ == '__main__':
     main()
