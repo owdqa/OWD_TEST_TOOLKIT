@@ -69,7 +69,7 @@ else
         printf "Getting device_buildname from $RESULT_DIR/flash_device\n"
 
         # I hate this line, and I will be back to blow it up
-        export DEVICE_BUILDNAME=$(egrep "^Device build name: " $RESULT_DIR/flash_device | awk '{print $2}' | sed -e "s/^\(.*\).tgz$/\1/")
+        export DEVICE_BUILDNAME=$(egrep "^Device build name: " $RESULT_DIR/flash_device | awk '{print $4}' | sed -e "s/^\(.*\).tgz$/\1/")
         mv $RESULT_DIR/flash_device ${RESULT_DIR}/@Flash_device@${DEVICE_BUILDNAME}
 
     fi

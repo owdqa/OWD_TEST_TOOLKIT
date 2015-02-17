@@ -30,7 +30,7 @@ else
     cd $HOME/gaia
     sudo git stash -u && git stash drop
     user=`whoami`
-    printf "Resetting gaia ownership to user $user"
+    printf "Resetting gaia ownership to user $user\n"
     sudo chown $user:$user .git -R
     git checkout -f $BRANCH  2> >( tee -a $LOGFILE)
     git pull 2> >( tee -a $LOGFILE)
