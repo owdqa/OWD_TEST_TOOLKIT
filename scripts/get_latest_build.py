@@ -98,6 +98,9 @@ def main():
         untar_build_file(options.outdir + '/' + f, options.outdir)
     else:
         print "Build file [{}] already exists. No need to download".format(f)
+    build_dir = f.split(".tgz")[0]
+    print "Moving to directory [{}] inside [{}]".format(build_dir, options.outdir)
+    os.chdir(options.outdir + '/' + build_dir)
 
 if __name__ == '__main__':
     main()
