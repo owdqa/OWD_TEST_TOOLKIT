@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 from argparse import ArgumentParser
 import os
+import subprocess32
 import sys
 import tarfile
 
@@ -34,8 +35,23 @@ def detect_build_file(source, user, passwd, device, typ, branch, last_date):
     print "Looking for build file with pattern: {}".format(pattern)
     elem = soup.find("a", href=re.compile(pattern))
     if elem:
-        print "Release file: {}".format(elem.text)
+        print "Device build name: {}".format(elem.text)
         return elem.text
+
+
+def detect_device_build_file(device, typ, branch, build_dir):
+    """Detect the current device build file"""
+
+    # Get the current build version
+    output = subprocess32.check_output('sudo adb shell getprop | grep "ro.build.version.incremental"', shell=True)
+    build_version = output.split(": [")[-1].strip().replace("]", "")
+    pattern = "{}.{}.{}.AutomationVersion.*B-{}*.tgz".format(device, typ, branch, build_version)
+
+    # Locate the build file in build_dir using the composed pattern
+    os.chdir(build_dir)
+    out = subprocess32.check_output('ls {}'.format(pattern))
+    print "Device build name: {}".format(out.split(".tgz")[0] if out != "" else pattern)
+    return out
 
 
 def download_build(source, user, passwd, last_date, filename, outdir):
@@ -88,6 +104,7 @@ def main():
     # so we just don't download anything.
     if not f:
         print "Build for date {} not found. Will use current build in device...".format(last_date)
+        detect_device_build_file(options.device, options.type, options.branch, options.outdir)
         sys.exit(1)
 
     # Once we know the name of the build file to download, check if it already exists

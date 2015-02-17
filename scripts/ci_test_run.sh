@@ -15,7 +15,7 @@ OWD_TEST_TOOLKIT_DIR=`dirname $PWD`
 
 python install_toolkit_and_tests.py
 
-. call_flash_device.sh
+. flash_device.sh
 
 cd $OWD_TEST_TOOLKIT_DIR/../owd_test_cases
 
