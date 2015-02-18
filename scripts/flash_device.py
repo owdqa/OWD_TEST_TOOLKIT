@@ -6,17 +6,18 @@ import get_latest_build
 from utilities import Utilities
 
 
-def flash(device):
+def flash(device, targetdir, buildfile):
     """Flash the device
 
     We must distinguish between hamachi-light and the rest of devices, because
     the flash method is different.
     """
 
+    filedir = buildfile.split('.tgz')[0]
     if device == "hamachi-light":
-        subprocess32.check_call(['sudo', './update-gecko-gaia.sh'])
+        subprocess32.check_call(['sudo', '{}/{}/update-gecko-gaia.sh'.format(targetdir, filedir)])
     else:
-        subprocess32.check_call(['sudo', './flash.sh'])
+        subprocess32.check_call(['sudo', '{}/{}/flash.sh'.format(targetdir, filedir)])
     print "Device successfully flashed!"
 
 
@@ -51,16 +52,14 @@ def check_device_build(source, user, passwd):
 def main():
     parser = ArgumentParser()
     parser.add_argument("-d", "--device", dest="device", action="store", default="flame-KK", help="Target device")
-    parser.add_argument("-v", "--version", dest="version", action="store", default="v2.1", help="Target branch")
     parser.add_argument("-u", "--username", dest="username", action="store", default="owdmoz",
                         help="Username for the releases server")
     parser.add_argument("-p", "--password", dest="passwd", action="store", default="gaia",
                         help="Password for the releases server")
     parser.add_argument("-s", "--source", dest="source", action="store",
                         default="http://ci-owd-misc-02/releases/DEVELOP/", help="Releases server location")
-    parser.add_argument("-t", "--type", dest="type", action="store", default="eng",
-                        help="Type of the build (eng|user)")
-    parser.add_argument("-b", "--builddir", dest="builddir", action="store", help="Directory where builds are located")
+    parser.add_argument("-t", "--targetdir", dest="targetdir", action="store", help="Directory where the builds are")
+    parser.add_argument("-b", "--buildfile", dest="buildfile", action="store", help="Build file")
     options = parser.parse_args()
 
     # First of all, ensure device is connected
@@ -70,11 +69,7 @@ def main():
 
     # Flash the device
     if not last_flashed:
-        # Locate the appropriate build directory
-        target_dir = get_latest_build.detect_device_build_file(options.device, options.type, options.version,
-                                                               options.builddir)
-        os.chdir(target_dir)
-        flash(options.device)
+        flash(options.device, options.targetdir, options.buildfile)
         # Wait for the device to be available
         wait_for_device()
         # And reconnect to it

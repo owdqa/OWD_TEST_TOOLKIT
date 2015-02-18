@@ -45,7 +45,11 @@ else
             fi
         fi
 
-        sudo python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE -t $TYPE -v $VERSION -b $TARGET_DIR
+        printf "Getting device_buildname from $RESULT_DIR/flash_device\n"
+
+        # I hate this line, and I will be back to blow it up
+        export DEVICE_BUILDNAME=$(egrep "^Device build name: " $RESULT_DIR/flash_device | awk '{print $4}' | sed -e "s/^\(.*\).tgz$/\1/")
+        sudo python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE -t $TARGET_DIR -b $DEVICE_BUILDNAME
 
         printf "\n\nDevices\n"
         sudo adb devices
@@ -66,10 +70,6 @@ else
 
         printf "\n\nDONE!\n"
 
-        printf "Getting device_buildname from $RESULT_DIR/flash_device\n"
-
-        # I hate this line, and I will be back to blow it up
-        export DEVICE_BUILDNAME=$(egrep "^Device build name: " $RESULT_DIR/flash_device | awk '{print $4}' | sed -e "s/^\(.*\).tgz$/\1/")
         mv $RESULT_DIR/flash_device ${RESULT_DIR}/@Flash_device@${DEVICE_BUILDNAME}
 
     fi
