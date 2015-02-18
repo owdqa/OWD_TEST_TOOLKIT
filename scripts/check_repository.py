@@ -27,14 +27,14 @@ def check(name, url, branch, cmd=None):
 
     with open(logfile, 'a') as f:
         os.chdir(name)
-        f.write('Switching to branch {} of {}'.format(branch, name))
+        f.write('Switching to branch {} of {}\n'.format(branch, name))
         subprocess32.call('git checkout {} >> {} 2>&1'.format(branch, logfile), shell=True)
 
         if not cloned:
             # If the test repository existed, compare last commit in local and remote repositories
             local_commit = subprocess32.check_output('git log -n 1 --format="%H"', shell=True).strip()
             print "Last local commit:  [{}]".format(local_commit)
-            cmd = 'git ls-remote --heads {} {}'.format(name, branch)
+            cmd = 'git ls-remote --heads {} {}'.format(url, branch)
             remote_commit = subprocess32.check_output(cmd, shell=True).split()[0]
             print "Last remote commit: [{}]".format(remote_commit)
 
@@ -46,7 +46,7 @@ def check(name, url, branch, cmd=None):
                 subprocess32.check_output('git pull', shell=True)
                 if cmd is not None:
                     print "Executing after update commands:\n{}\n".format(cmd)
-                    f.write('Executing after update commands:\n{}\n".format(cmd)')
+                    f.write('Executing after update commands:\n{}\n'.format(cmd))
                     subprocess32.check_output(cmd, shell=True)
             else:
                 print "Repository {} already updated, no need to pull".format(name)

@@ -1,3 +1,4 @@
+import os
 import subprocess32
 import time
 from argparse import ArgumentParser
@@ -50,12 +51,16 @@ def check_device_build(source, user, passwd):
 def main():
     parser = ArgumentParser()
     parser.add_argument("-d", "--device", dest="device", action="store", default="flame-KK", help="Target device")
+    parser.add_argument("-v", "--version", dest="version", action="store", default="v2.1", help="Target branch")
     parser.add_argument("-u", "--username", dest="username", action="store", default="owdmoz",
                         help="Username for the releases server")
     parser.add_argument("-p", "--password", dest="passwd", action="store", default="gaia",
                         help="Password for the releases server")
     parser.add_argument("-s", "--source", dest="source", action="store",
                         default="http://ci-owd-misc-02/releases/DEVELOP/", help="Releases server location")
+    parser.add_argument("-t", "--type", dest="type", action="store", default="eng",
+                        help="Type of the build (eng|user)")
+    parser.add_argument("-b", "--builddir", dest="builddir", action="store", help="Directory where builds are located")
     options = parser.parse_args()
 
     # First of all, ensure device is connected
@@ -65,6 +70,10 @@ def main():
 
     # Flash the device
     if not last_flashed:
+        # Locate the appropriate build directory
+        target_dir = get_latest_build.detect_device_build_file(options.device, options.type, options.version,
+                                                               options.builddir)
+        os.chdir(target_dir)
         flash(options.device)
         # Wait for the device to be available
         wait_for_device()

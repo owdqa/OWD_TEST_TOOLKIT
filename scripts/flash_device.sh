@@ -45,7 +45,7 @@ else
             fi
         fi
 
-        sudo python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE
+        sudo python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE -t $TYPE -v $VERSION -b $TARGET_DIR
 
         printf "\n\nDevices\n"
         sudo adb devices
