@@ -48,8 +48,7 @@ def detect_device_build_file(device, typ, branch, build_dir):
     pattern = "{}.{}.{}.AutomationVersion.*B-{}*.tgz".format(device, typ, branch, build_version)
 
     # Locate the build file in build_dir using the composed pattern
-    os.chdir(build_dir)
-    out = subprocess32.check_output('ls {}'.format(pattern))
+    out = subprocess32.check_output('ls {}/{}'.format(build_dir, pattern))
     print "Device build name: {}".format(out.split(".tgz")[0] if out != "" else pattern)
     return out
 
