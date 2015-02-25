@@ -49,6 +49,7 @@ else
 
         # I hate this line, and I will be back to blow it up
         export DEVICE_BUILDNAME=$(egrep "^Device build name: " $RESULT_DIR/flash_device | awk '{print $4}' | sed -e "s/^\(.*\).tgz$/\1/")
+        cd $TARGET_DIR/$DEVICE_BUILDNAME
         sudo python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE -t $TARGET_DIR -b $DEVICE_BUILDNAME
 
         printf "\n\nDevices\n"
