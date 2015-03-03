@@ -106,8 +106,8 @@
 		"enabled": true,
 		"engine": "pil",
 		"save_baseline": false,
-		"baseline_dir": "/home/avillena/OWD/owd_test_cases/screenshots/baseline",
-		"cmp_dir": "/home/avillena/OWD/owd_test_cases/screenshots/cmp"
+		"baseline_dir": "",
+		"cmp_dir": ""
 	}
 }
 
