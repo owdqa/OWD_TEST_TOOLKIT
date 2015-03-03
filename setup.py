@@ -73,6 +73,7 @@ setup(name='OWD_TEST_TOOLKIT',
       packages=['OWDTestToolkit',
                 'OWDTestToolkit/DOM',
                 'OWDTestToolkit/apps',
-                'OWDTestToolkit/utils'],
+                'OWDTestToolkit/utils',
+                'OWDTestToolkit/utils/engines'],
       cmdclass=cmdclass
       )

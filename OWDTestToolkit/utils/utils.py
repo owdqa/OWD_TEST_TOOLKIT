@@ -13,6 +13,7 @@ from network import network
 from reporting import reporting
 from statusbar import statusbar
 from test import test
+from visual_tests import visualtests
 
 
 class UTILS(object):
@@ -47,6 +48,7 @@ class UTILS(object):
         self.reporting = reporting(self)
         self.statusbar = statusbar(self)
         self.test = test(self)
+        self.visual_tests = visualtests(self)
 
         self.marionette.set_search_timeout(10000)
         self.marionette.set_script_timeout(10000)
