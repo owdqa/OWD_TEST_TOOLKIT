@@ -100,5 +100,12 @@
 		"device_cert": "cert_device",
 		"branch_cert": "v2.0",
 		"buildname_cert": "cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
+	},
+	"visualtest": {
+		"enabled": true,
+		"engine": "pil",
+		"save_baseline": false,
+		"baseline_dir": "/home/develenv/projects/owd_test_cases/screenshots/baseline",
+		"cmp_dir": "/home/develenv/projects/owd_test_cases/screenshots/cmp"
 	}
 }
