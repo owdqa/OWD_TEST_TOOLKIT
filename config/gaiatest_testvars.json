@@ -7,7 +7,7 @@
 		"blocked_tests": "Docs/blocked_tests.json",
 		"description_length": "100",
 		"is_cert_device": false,
-		"test_retries": 1
+		"test_retries": 2
 	},
 	"wifi": {
 		"ssid": "",
