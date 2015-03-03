@@ -7,7 +7,7 @@
 		"blocked_tests": "Docs/blocked_tests.json",
 		"description_length": "100",
 		"is_cert_device": false,
-		"test_retries": 2
+		"test_retries": 1
 	},
 	"wifi": {
 		"ssid": "",
@@ -105,7 +105,7 @@
 	"visualtest": {
 		"enabled": true,
 		"engine": "pil",
-		"save_baseline": true,
+		"save_baseline": false,
 		"baseline_dir": "/home/avillena/OWD/owd_test_cases/screenshots/baseline",
 		"cmp_dir": "/home/avillena/OWD/owd_test_cases/screenshots/cmp"
 	}

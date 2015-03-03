@@ -33,6 +33,7 @@ else:
     from itertools import izip
 
 from PIL import Image
+from base import EngineBase
 
 class Engine(EngineBase):
 
@@ -40,7 +41,7 @@ class Engine(EngineBase):
         output_image = Image.open(output_file).convert('RGB')
         baseline_image = Image.open(baseline_file).convert('RGB')
         diff = ImageDiff(output_image, baseline_image)
-        distance = abs(diff.get_distance())
+        distance = abs(diff.get_nrmsd())
         if distance > threshold:
             raise AssertionError("The new screenshot '%s' did not match "
                                  "the baseline '%s' (by a distance of %.2f)"

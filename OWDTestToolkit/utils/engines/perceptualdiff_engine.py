@@ -27,7 +27,7 @@ import subprocess
 import os
 
 from PIL import Image
-from base import EngineBase
+from OWDTestToolkit.utils.engines.base import EngineBase
 
 
 class Engine(EngineBase):
