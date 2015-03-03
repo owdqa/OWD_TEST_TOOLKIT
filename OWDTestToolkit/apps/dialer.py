@@ -2,7 +2,6 @@ import time
 import datetime
 from OWDTestToolkit import DOM
 from marionette import Actions
-
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
@@ -270,7 +269,7 @@ class Dialer(object):
         self.UTILS.element.simulateClick(call_number_button)
 
         self.UTILS.iframe.switchToFrame(*DOM.Dialer.frame_locator_calling)
-        self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call locator", True, 5)
+        self.UTILS.element.waitForElements(DOM.Dialer.outgoing_call_locator, "Outgoing call locator", True, 20)
 
     def call_this_number_and_hangup(self, delay):
         self.call_this_number()
@@ -282,9 +281,9 @@ class Dialer(object):
         self.UTILS.element.waitForElements(DOM.Settings.fdn_warning_header, "Waiting for FDN warning header", True, 10)
         self.UTILS.element.waitForElements(DOM.Settings.fdn_warning_body, "Waiting for FDN warning body")
         body = self.marionette.find_element(*DOM.Settings.fdn_warning_body)
-        self.UTILS.reporting.log_to_file("body.text: {}   msg: {}".format(body.text, DOM.Dialer.fdn_warning_msg.\
+        self.UTILS.reporting.log_to_file(u"body.text: {}   msg: {}".format(body.text, DOM.Dialer.fdn_warning_msg.\
                                                                           format(phone_number)))
-        self.UTILS.test.test(body.text == DOM.Dialer.fdn_warning_msg.format(phone_number),
+        self.UTILS.test.test(body.text.encode("utf-8") == DOM.Dialer.fdn_warning_msg.format(phone_number).encode("utf-8"),
                              "Correct FDN warning message")
 
         ok_btn = self.UTILS.element.getElement(DOM.Settings.fdn_warning_ok, "OK button")

@@ -58,7 +58,7 @@ app_permissions_header = ('xpath', GLOBAL.app_head_specific.format(_('App permis
 # app_perm_camera_geo = ('xpath', './/*[@id="appPermissions-details"]//span[text()="Geolocation"]/select')
 
 wifi = ('id', 'menuItem-wifi')
-wifi_header = ('xpath', GLOBAL.app_head_specific.format('Wi-Fi'))
+wifi_header = ('css selector', 'h1[data-l10n-id="wifi-header"]')
 wifi_enabled = ('xpath', ".//*[@id='wifi-enabled']/label")
 wifi_available_networks = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside[contains(@class, 'pack-end wifi-icon level-')]")
 wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")

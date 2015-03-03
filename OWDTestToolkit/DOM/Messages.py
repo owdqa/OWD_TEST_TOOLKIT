@@ -29,7 +29,7 @@ input_message_area = ('id', 'messages-input')
 send_message_button = ('id', 'messages-send-button')
 messages_counter = ('id', 'messages-counter-label')
 attach_button = ('id', 'messages-attach-button')
-message_sending_spinner = ("xpath", "//aside[@class='pack-end'][-1]/progress")
+message_sending_spinner = ("xpath", "//aside[@class='message-status']/progress")
 
 header_back_button = ("id", "messages-back-button")
 header_close_button = ('id', 'messages-close-button')
@@ -112,7 +112,7 @@ header_send_message_btn = ('css selector', 'form.contact-prompt button[data-l10n
 header_create_new_contact_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="createNewContact"]')
 header_add_to_contact_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="addToExistingContact"]')
 contact_cancel_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="cancel"]')
-header_send_message_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="sendEmail"]')
+header_send_email_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="sendEmail"]')
 
 mms_from_video = ("xpath", "//button[@class='icon' and contains(@style, 'app://video')]")
 mms_from_camera = ("xpath", "//button[@class='icon' and contains(@style, 'app://camera')]")

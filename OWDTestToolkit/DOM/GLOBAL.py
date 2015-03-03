@@ -32,7 +32,7 @@ confirm_form_delete_btn = ('css selector', 'form[data-type=confirm] button.dange
 # Action menu
 action_menu = ('xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]/menu')
 action_menu_option = (
-    'xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]//button[text()="{}"]')
+    'xpath', u'//form[@data-type="action" and @data-z-index-level="action-menu"]//button[text()="{}"]')
 action_menu_cancel_btn = (
     'xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]//button[@data-l10n-id="cancel" and @data-action="cancel"]')
 

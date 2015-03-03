@@ -988,6 +988,7 @@ class Messages(object):
         #
         sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send sms button")
         sendBtn.tap()
+        self.UTILS.element.waitForElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 20)
 
         # (Give the spinner time to appear.)
         time.sleep(2)
