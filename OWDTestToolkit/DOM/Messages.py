@@ -59,7 +59,7 @@ message_timestamps = ("xpath", "//div[@id='messages-container']/div[@class='mess
 last_message = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]')
 message_body_xpath = '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-body"]'
 last_message_body = ('xpath', message_body_xpath)
-last_message_time = ('xpath', message_body_xpath + '/time')
+last_message_time = ('xpath', message_body_xpath + '//time')
 last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
 last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p')
 last_message_mms_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span')

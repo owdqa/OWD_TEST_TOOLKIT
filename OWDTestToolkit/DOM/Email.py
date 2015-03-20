@@ -107,7 +107,7 @@ switch_account_panel_one_account = ('class name', 'card-folder-picker card anim-
 switch_account_scroll_outer = ('xpath', '//div[@class="fld-acct-scrollouter"]')
 switch_account_scroll = ('class name', 'fld-acct-header closed')
 switch_account_current_account = ('xpath', '//div[@class="fld-acct-scrollouter"]//a[@class="fld-acct-header closed"]//span[@class="fld-acct-header-account-label"]')
-switch_account_accounts_to_change = ('xpath', '//div[@class="fld-accountlist-container"]//a[@class="fld-account-item"]//span[@class="fld-account-name"]')  # This selector does not return the current account
+switch_account_accounts_to_change = ('css selector', 'div.fld-accountlist-container a.fld-account-item span.fld-account-name')  # This selector does not return the current account
 
 # Open external link confirmation
 confirmation_browser_cancel = ('id', 'msg-browse-cancel')
