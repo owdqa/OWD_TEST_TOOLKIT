@@ -3,7 +3,7 @@ frame_locator = ('src', 'music')
 audio = ('id', 'player-audio')
 done_button = ("xpath", "//*[@id='title-done']")
 song_by_title = ("xpath", "//span[@class='list-main-title'][text()='{}']")
-first_song = ("xpath", "//span[@class='list-main-title']")
+first_song = ("xpath", '//*[text()="MP4"]')
 song_title_amr = ("xpath", "//*[@data-l10n-id='unknownTitle']")
 song_title = ("xpath", "//*[@data-l10n-id='music']")
 

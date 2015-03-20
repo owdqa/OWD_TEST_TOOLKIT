@@ -22,11 +22,15 @@ class Music(object):
                                               " app - loading overlay")
         return self.app
 
-    @retry(5)
+    @retry(2)
     def click_on_song(self, title=None, frame=None):
         dom_elem = DOM.Music.first_song if not title\
             else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
-        song = self.UTILS.element.getElement(dom_elem, "Song")
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
+        self.wait_for_element_displayed(*dom_elem)
+        song = self.marionette.find_element(*dom_elem)
+        # song = self.UTILS.element.getElement(dom_elem, "Song", timeout=10)
         time.sleep(1)
         song.tap()
         time.sleep(1)

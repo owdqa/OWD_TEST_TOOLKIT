@@ -17,6 +17,9 @@
     "flame": {
     	"sdcard": "/storage/sdcard0"
     	},
+    "full_jrdhz72_w_ff": {
+        "sdcard": "/storage/sdcard1"
+        },
     "generic": {
     	"sdcard": "/sdcard"
     	}

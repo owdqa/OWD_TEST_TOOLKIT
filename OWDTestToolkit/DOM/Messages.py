@@ -29,7 +29,7 @@ input_message_area = ('id', 'messages-input')
 send_message_button = ('id', 'messages-send-button')
 messages_counter = ('id', 'messages-counter-label')
 attach_button = ('id', 'messages-attach-button')
-message_sending_spinner = ("xpath", "//aside[@class='message-status']/progress")
+message_sending_spinner = ("css selector", "aside.message-status progress")
 
 header_back_button = ("id", "messages-back-button")
 header_close_button = ('id', 'messages-close-button')
@@ -66,6 +66,7 @@ last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[
 last_message_mms_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span')
 # Use this with a find_element over the result of getting last_message
 last_message_text_nested = ('xpath', '//div[@class="message-content"]//p')
+last_message_sending_spinner = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//aside[@class="message-status"]/progress')
 
 message_send_timestamp = ('xpath', '//section[@id="thread-messages"]/h1[@data-title={}]/../../article[@id="messages-container"]/ul/li[last()]')
 unread_message = ('css selector', 'li > a.unread')

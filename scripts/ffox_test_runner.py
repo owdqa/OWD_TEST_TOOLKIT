@@ -21,6 +21,7 @@ from datetime import datetime
 from gaiatest.version import __version__
 
 from OWDTestToolkit.utils.assertions import AssertionManager
+from OWDTestToolkit.pixi_testcase import PixiTestCase
 from utilities import Utilities
 
 
@@ -178,7 +179,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         GaiaTestRunnerMixin.__init__(self, **kwargs)
         HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.0', version=__version__,
                                               html_output=self.testvars['output']['html_output'], **kwargs)
-        self.test_handlers = [GaiaTestCase]
+        self.test_handlers = [PixiTestCase]
 
     def parse_descriptions_file(self):
         self.descriptions = Utilities.parse_file(self.testvars['general']['test_descriptions'])

@@ -988,11 +988,11 @@ class Messages(object):
         #
         sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send sms button")
         sendBtn.tap()
-        self.UTILS.element.waitForElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 20)
+        self.UTILS.element.waitForElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 20)
 
         # (Give the spinner time to appear.)
         time.sleep(2)
-        self.UTILS.element.waitForNotElements(DOM.Messages.message_sending_spinner, "'Sending' icon", True, 180)
+        self.UTILS.element.waitForNotElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 180)
 
         #
         # Check if we received the 'service unavailable' message.
