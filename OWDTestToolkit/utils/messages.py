@@ -30,7 +30,7 @@ class Messages(object):
                    "content-type": "application/x-www-form-urlencoded"}
 
         pigeon = pigeonpdu.PigeonPDU()
-        user_data = pigeon.getXMLPushUserdata(ota_filename, pin_number, pin_type)
+        user_data = pigeon.getXMLPushUserdata(ota_filename, pin_number)
         pdu_data = binascii.hexlify(user_data)
         # If no security is used, we must extract that part from the PDU.
         self.parent.reporting.debug("PDU_DATA: [{}]".format(pdu_data))

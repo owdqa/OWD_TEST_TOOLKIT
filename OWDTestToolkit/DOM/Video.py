@@ -2,7 +2,7 @@ from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
 frame_locator = ('src', 'video')
-no_videos_message = ('xpath', 'h1[@id="overlay-title" and text() = "{}"]'.format(_("Add videos to get started")))
+no_videos_message = ('xpath', u'h1[@id="overlay-title" and text() = "{}"]'.format(_("Add videos to get started")))
 no_videos_go_to_camera = ('id', 'overlay-action-button')
 
 # Thumbnails view

@@ -4,6 +4,7 @@ _ = I18nSetup(I18nSetup).setup()
 
 frame_locator = ('src', 'sms')
 
+main_header = ('css selector', 'h1[data-l10n-id="messages"]')
 statusbar_new_sms = ('xpath', ".//*[@id='desktop-notifications-container']/div[@class='notification']/div[contains(text(),'{}')]")
 new_sms_popup_msg = ("xpath", "//div[@id='toaster-detail' and contains(text(),'{}')]")
 new_sms_popup_num = ("xpath", "//div[@id='toaster-title' and contains(text(),'{}')]")
@@ -28,7 +29,7 @@ input_message_area = ('id', 'messages-input')
 send_message_button = ('id', 'messages-send-button')
 messages_counter = ('id', 'messages-counter-label')
 attach_button = ('id', 'messages-attach-button')
-message_sending_spinner = ("xpath", "//aside[@class='pack-end'][-1]/progress")
+message_sending_spinner = ("xpath", "//aside[@class='message-status']/progress")
 
 header_back_button = ("id", "messages-back-button")
 header_close_button = ('id', 'messages-close-button')
@@ -59,7 +60,7 @@ message_timestamps = ("xpath", "//div[@id='messages-container']/div[@class='mess
 last_message = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]')
 message_body_xpath = '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-body"]'
 last_message_body = ('xpath', message_body_xpath)
-last_message_time = ('xpath', message_body_xpath + '/time')
+last_message_time = ('xpath', message_body_xpath + '//time')
 last_sent_message = ('xpath', "//li[contains(@class, 'sent')][last()]")
 last_message_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p')
 last_message_mms_text = ('xpath', '//div[@id="messages-container"]//div[last()]//li[last()]//div[@class="message-content"]//p/span')
@@ -83,8 +84,8 @@ edit_msgs_delete_btn = ("id", "messages-delete-button")
 edit_msgs_header = ("id", "messages-edit-mode")
 edit_msgs_sel_all_btn = ("id", "messages-check-all-button")
 
-airplane_warning_message = ("xpath", "//p/*[contains(text(),'Airplane')]")
-airplane_warning_ok = ("xpath", "//button[text()='{}']".format(_("OK")))
+airplane_warning_message = ('css selector', 'strong[data-l10n-id="sendFlightModeTitle"]')
+airplane_warning_ok = ('css selector', 'button[data-l10n-id="sendFlightModeBtnOk"]')
 
 received_sms = ('xpath', "//li[@class='message sms received incoming']/section/div/p")
 received_mms = ('xpath', "//li[@class='message mms received incoming']/section/div/p")
@@ -107,12 +108,12 @@ last_message_attachment_av = ('xpath', '//*[@id="messages-container"]//li[last()
 # Use this selector, after having used either last_message_attachment_img, last_message_attachment_av
 last_message_thumbnail = ('xpath', '//div[contains(@class, "thumbnail-placeholder")]')
 
-header_call_btn = ("xpath", "//button[text()='{}']".format(_("Call")))
-header_send_message_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='sendEmail']")
-header_create_new_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='createNewContact']")
-header_add_to_contact_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='addToExistingContact']")
-contact_cancel_btn = ("xpath", "//form[@class='contact-prompt']//button[@data-l10n-id='cancel']")
-header_send_email_btn = ("xpath", "//button[text()='{}']".format(_("Send email")))
+header_call_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="call"]')
+header_send_message_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="sendMessage"]')
+header_create_new_contact_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="createNewContact"]')
+header_add_to_contact_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="addToExistingContact"]')
+contact_cancel_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="cancel"]')
+header_send_email_btn = ('css selector', 'form.contact-prompt button[data-l10n-id="sendEmail"]')
 
 mms_from_video = ("xpath", "//button[@class='icon' and contains(@style, 'app://video')]")
 mms_from_camera = ("xpath", "//button[@class='icon' and contains(@style, 'app://camera')]")
@@ -146,3 +147,5 @@ mms_max_length_msg = ('id', 'messages-max-length-notice')
 
 fdn_blocked_title = ('css selector', '[data-l10n-id=fdnBlocked2Title]')
 fdn_blocked_btn_ok = ('css selector', '[data-l10n-id=fdnBlocked2BtnOk]')
+
+remove_contact_from_to_field = ('css selector', 'button.danger[data-l10n-id="remove"]')

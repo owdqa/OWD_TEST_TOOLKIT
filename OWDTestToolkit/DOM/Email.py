@@ -11,8 +11,8 @@ message_list_locator = ('css selector', '.card-message-list')
 
 login_account_info_next_btn = ('xpath', '//section[@data-type="setup_account_info"]//button[contains(@class, "sup-info-next-btn")]')
 login_account_prefs_next_btn = ('css selector', '.card-setup-account-prefs button.sup-info-next-btn')
-login_cont_to_email_btn = ("xpath", "//button[text()='{}']".format(_("Continue to Mail")))
-sup_header = ('xpath', '//h1[text()="{}"]'.format(_("New Account")))
+login_cont_to_email_btn = ('css selector', 'button[data-l10n-id=setup-show-mail]')
+sup_header = ('css selector', 'h1.sup-account-header-label')
 sup_next_btn = ('class name', 'sup-info-next-btn')
 email_accounts_list = ('class name', 'tng-account-item-label list-text')
 
@@ -51,13 +51,13 @@ compose_send_failed_ok = ("id", "cmp-send-failed-ok")
 compose_sending_spinner = ('class name', 'cmp-messages-sending')
 compose_attach_btn = ('class name', 'icon icon-attachment')
 
-attach_video_btn = ("xpath", "//form//button[text()='{}']".format(_("Video")))
-attach_music_btn = ("xpath", "//form//button[text()='{}']".format(_("Music")))
-attach_gallery_btn = ("xpath", "//form//button[text()='{}']".format(_("Gallery")))
-attach_camera_btn = ("xpath", "//form//button[text()='{}']".format(_("Camera")))
+attach_video_btn = ("xpath", u"//form//button[text()='{}']".format(_("Video")))
+attach_music_btn = ("xpath", u"//form//button[text()='{}']".format(_("Music")))
+attach_gallery_btn = ("xpath", u"//form//button[text()='{}']".format(_("Gallery")))
+attach_camera_btn = ("xpath", u"//form//button[text()='{}']".format(_("Camera")))
 
 settings_menu_btn = ('xpath', '//header//a[@class="msg-folder-list-btn"]')
-
+settings_header = ('css selector', 'h1.tng-main-header-label')
 settings_set_btn = ('xpath', '//a[@class="fld-nav-toolbar bottom-toolbar"]//span[@data-l10n-id="drawer-settings-link"]')
 settings_del_acc_btn = ('class name', 'tng-account-delete')
 settings_del_conf_btn = ('xpath', '//button[@id="account-delete-ok"]')
@@ -107,7 +107,7 @@ switch_account_panel_one_account = ('class name', 'card-folder-picker card anim-
 switch_account_scroll_outer = ('xpath', '//div[@class="fld-acct-scrollouter"]')
 switch_account_scroll = ('class name', 'fld-acct-header closed')
 switch_account_current_account = ('xpath', '//div[@class="fld-acct-scrollouter"]//a[@class="fld-acct-header closed"]//span[@class="fld-acct-header-account-label"]')
-switch_account_accounts_to_change = ('xpath', '//div[@class="fld-accountlist-container"]//a[@class="fld-account-item"]//span[@class="fld-account-name"]')  # This selector does not return the current account
+switch_account_accounts_to_change = ('css selector', 'div.fld-accountlist-container a.fld-account-item span.fld-account-name')  # This selector does not return the current account
 
 # Open external link confirmation
 confirmation_browser_cancel = ('id', 'msg-browse-cancel')

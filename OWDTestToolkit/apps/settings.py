@@ -677,7 +677,7 @@ class Settings(object):
         network_type_locator = (DOM.Settings.networkOperator_select_type[0],
                                 DOM.Settings.networkOperator_select_type[1].format(network_type))
 
-        x = self.UTILS.element.getElement(network_type_locator, "Network Operator. Select: {}".format(network_type))
+        x = self.UTILS.element.getElement(network_type_locator, u"Network Operator. Select: {}".format(network_type))
         x.tap()
 
         x = self.UTILS.element.getElement(DOM.Settings.networkOperator_OK_btn, "Network Operator. Click on OK button")
@@ -714,10 +714,9 @@ class Settings(object):
         self.marionette.switch_to_frame()
 
     def change_sim_pin(self, old_pin, new_pin, confirm_pin):
-        #
-        # This method changes the current PIN code to a new one
-        #
-        #
+        """
+        This method changes the current PIN code to a new one
+        """
 
         is_dual_sim = self.UTILS.general.is_device_dual_sim()
 
@@ -731,6 +730,8 @@ class Settings(object):
             sim_security = self.UTILS.element.getElement(DOM.Settings.sim_security, "SIM Security")
 
         sim_security.tap()
+
+        self.UTILS.element.waitForElements(DOM.Settings.sim_security_header, "SIM security header")
         change_btn = self.UTILS.element.getElement(DOM.Settings.sim_security_change_pin, "Change PIN button")
         change_btn.tap()
 
@@ -805,8 +806,10 @@ class Settings(object):
             current = sim_security_tag.text == _("Enabled")
             self.UTILS.reporting.logResult("info", "Value of current: {}".format(current))
             if enable == current:
+                self.UTILS.reporting.logResult('info', '>>>>>>>> SIM security already enabled')
                 # click anyway so that we can later check whether the button to change the PIN
                 sim_security.tap()
+                self.parent.wait_for_element_displayed(*DOM.Settings.sim_security_header, timeout=15)
                 return
 
             sim_security.tap()

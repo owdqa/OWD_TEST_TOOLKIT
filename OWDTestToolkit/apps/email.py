@@ -206,9 +206,6 @@ class Email(object):
         #
         # Goto a specific folder in the folder list screen.
         #
-        x = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult("info", "Screen shot:", x)
-
         name = _(name)
         elem = ('xpath', DOM.Email.folderList_name_xpath.format(name))
 
@@ -251,39 +248,20 @@ class Email(object):
                                           "Loading messages spinner", True, 60, False)
 
     def openMsg(self, subject):
-        #
-        # Opens a specific email in the current folder
-        # (assumes we're already in the folder we want).
-        #
+        """
+        Opens a specific email in the current folder
+        (assumes we're already in the folder we want).
+        """
 
-        myEmail = self.emailIsInFolder(subject)
-        self.UTILS.test.test(myEmail != False, "Found email with subject '" + subject + "'.")
-        if myEmail:
-            #
-            # We found it - open the email.
-            #
-            myEmail.tap()
-
-            #
-            # Check it opened.
-            #
-            ok = True
-            try:
-                self.parent.wait_for_element_displayed(*DOM.Email.open_email_from)
-                ok = True
-            except:
-                #
-                # Try once again, before giving up
-                #
-                self.UTILS.element.simulateClick(myEmail)
-                try:
-                    self.parent.wait_for_element_displayed(*DOM.Email.open_email_from)
-                    ok = True
-                except:
-                    ok = False
-
-            return ok
+        if self.emailIsInFolder(subject):
+            mail = self.get_email(subject)
+            self.UTILS.element.scroll_into_view(mail)
+            mail.tap()
+            self.wait_for_email_loaded(subject)
+            return True
         else:
+            screenshot = self.UTILS.debug.screenShotOnErr()
+            self.UTILS.reporting.logResult('info', "Mail not found", screenshot)
             return False
 
     def remove_accounts_and_restart(self):
@@ -306,8 +284,7 @@ class Email(object):
         set_btn = self.UTILS.element.getElement(DOM.Email.settings_set_btn, "Set settings button")
         set_btn.tap()
 
-        header = ('xpath', DOM.GLOBAL.app_head_specific.format(_("Mail Settings")))
-        self.UTILS.element.waitForElements(header, "Mail settings", True, 20, False)
+        self.UTILS.element.waitForElements(DOM.Email.settings_header, "Mail settings", True, 20, False)
 
         # Remove each email address listed ...
         accounts_list = self.UTILS.element.getElements(DOM.Email.email_accounts_list,
@@ -367,15 +344,11 @@ class Email(object):
     def _is_composed_btn_tapped(self):
 
         try:
-            self.parent.wait_for_element_displayed(*('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))))
+            self.parent.wait_for_element_displayed(*DOM.Email.compose_header)
             return True
         except:
             self.parent.wait_for_element_displayed(*DOM.Email.compose_msg_btn)
             compose_new_msg_btn = self.marionette.find_element(*DOM.Email.compose_msg_btn)
-
-            screenshot = self.UTILS.debug.screenShotOnErr()
-            self.UTILS.reporting.logResult('info', "Screenshot before tapping 'RETRY - Compose msg btn'", screenshot)
-
             compose_new_msg_btn.tap()
             return False
 
@@ -395,8 +368,7 @@ class Email(object):
         reply_opt.tap()
 
         # Wait for 'compose message' header.
-        x = self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
-                                  "Compose message header")
+        self.parent.wait_for_element_displayed(*DOM.Email.compose_header)
         time.sleep(5)
 
         #
@@ -437,8 +409,7 @@ class Email(object):
         reply_opt.tap()
 
         # Wait for 'compose message' header.
-        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
-                                  "Compose message header")
+        self.parent.wait_for_element_displayed(*DOM.Email.compose_header)
         time.sleep(5)
 
         # Check the sender is not included in the 'To' field
@@ -471,8 +442,7 @@ class Email(object):
         fw_opt.tap()
 
         # Wait for 'compose message' header.
-        self.UTILS.element.getElement(('xpath', DOM.GLOBAL.app_head_specific.format(_("Compose"))),
-                                  "Compose message header")
+        self.parent.wait_for_element_displayed(*DOM.Email.compose_header)
         time.sleep(5)
 
         # Put items in the corresponding fields.
