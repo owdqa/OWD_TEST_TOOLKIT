@@ -1076,7 +1076,7 @@ class Messages(object):
         # Returns the time of a thread.
         #
         x = self.UTILS.element.getElement(("xpath", DOM.Messages.thread_timestamp_xpath.format(num)),
-                                          "Thread time", True, 5, False)
+                                          "Thread time", True, 10, False)
         return x.text
 
     def thread_timestamp(self, num):
