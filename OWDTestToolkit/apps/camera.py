@@ -121,9 +121,7 @@ class Camera(object):
         """
         self.parent.wait_for_condition(lambda m: m.find_element(
             *DOM.Camera.controls_pane).get_attribute('data-enabled') == 'true', 20)
-        capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button", timeout=20)
-        time.sleep(1)
-        capture_button.tap()
+        self._tap_on_capture_button()
         self.UTILS.element.waitForElements(DOM.Camera.open_thumbs, "Camera thumbnails", timeout=40)
 
     def open_preview(self):

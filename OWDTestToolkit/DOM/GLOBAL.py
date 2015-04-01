@@ -64,3 +64,11 @@ frame_containing = ("xpath", "//iframe[contains({},'{}')]")
 
 # Battery
 battery_icon = ('id', 'statusbar-battery')
+
+#Sleep menu
+sleep_menu = ('id', 'sleep-menu')
+sleep_menu_airplane_mode = ('css selector', '#sleep-menu li[data-value="airplane"]')
+sleep_menu_silent_off = ('css selector', '#sleep-menu li[data-value="silentOff"]')
+sleep_menu_restart = ('css selector', '#sleep-menu li[data-value="restart"]')
+sleep_menu_power = ('css selector', '#sleep-menu li[data-value="power"]')
+sleep_menu_cancel = ('css selector', '#sleep-menu button[data-l10n-id="cancel"]')

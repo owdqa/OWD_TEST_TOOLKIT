@@ -905,9 +905,11 @@ class Messages(object):
         # Opens the thread for this number (assumes we're looking at the
         # threads in the messaging screen).
         #
+        self.UTILS.reporting.logResult('info', 'Trying to open thread for: {}'.format(num))
         try:
             thread_el = ("xpath", DOM.Messages.thread_selector_xpath.format(num))
-            x = self.UTILS.element.getElement(thread_el, "Message thread for " + num)
+            self.parent.wait_for_element_displayed(*thread_el)
+            x = self.marionette.find_element(*thread_el)
             x.tap()
 
             self.UTILS.element.waitForElements(DOM.Messages.send_message_button, "'Send' button")
@@ -987,6 +989,7 @@ class Messages(object):
         # Just presses the 'send' button (assumes everything else is done).
         #
         sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send sms button")
+        time.sleep(1)
         sendBtn.tap()
         self.UTILS.element.waitForElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 20)
 

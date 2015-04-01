@@ -118,6 +118,11 @@ class Video(object):
             return True
         else:
             raise
+
+    def is_this_video_being_played_no_retries(self, video_name):
+        self.show_controls()
+        video_title = self.UTILS.element.getElement(DOM.Video.video_title, "Video title")
+        return video_name == video_title.text and self.is_video_playing()
     
     def tap_on_play_button(self):
         self.parent.wait_for_element_displayed(*DOM.Video.player_toolbar_play)

@@ -127,7 +127,7 @@ class iframe(object):
             x = self.marionette.find_elements(*_frameDef)
         except:
             pass
-
+        self.parent.reporting.logResult('info',  'Len frames: {}'.format(len(x)))
         is_ok = False
         for i in range(len(x)):
             #

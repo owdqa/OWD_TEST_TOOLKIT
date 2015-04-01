@@ -794,6 +794,7 @@ class Contacts(object):
 
         # Tap the search area.
         search_field = self.UTILS.element.getElement(DOM.Contacts.search_field, "Search field")
+        time.sleep(1)
         search_field.tap()
 
         self.UTILS.general.typeThis(DOM.Contacts.search_contact_input, "Search input", value,

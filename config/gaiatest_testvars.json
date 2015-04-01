@@ -6,14 +6,14 @@
 		"test_descriptions": "Docs/test_descriptions.json",
 		"blocked_tests": "Docs/blocked_tests.json",
 		"description_length": "100",
-	    "test_retries": 1
+	    "test_retries": 2
 	},
 	"wifi": {
-		"ssid": "OWDTEST",
+		"ssid": "Wololooooo",
 		"keyManagement": "WPA-PSK",
-		"psk": "tidowd22",
-		"password": "tidowd22",
-		"open_wifi_name": "OWDTEST"
+		"psk": "12345678",
+		"password": "12345678",
+		"open_wifi_name": "Wololooooo"
 	},
 	"toolkit_cfg": {
 		"devices_cfg": "config/devices_cfg.json",
