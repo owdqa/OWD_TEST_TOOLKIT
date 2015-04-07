@@ -256,7 +256,8 @@ class Email(object):
         if self.emailIsInFolder(subject):
             mail = self.get_email(subject)
             self.UTILS.element.scroll_into_view(mail)
-            mail.tap()
+            time.sleep(2)
+            self.UTILS.element.simulateClick(mail)
             self.wait_for_email_loaded(subject)
             return True
         else:
@@ -639,6 +640,9 @@ class Email(object):
 
         self.parent.wait_for_element_displayed(*DOM.Email.login_account_prefs_next_btn, timeout=120)
         next2 = self.marionette.find_element(*DOM.Email.login_account_prefs_next_btn)
+        # screenshot = self.UTILS.debug.screenShotOnErr()
+        # self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
+        time.sleep(1)
         self.UTILS.element.simulateClick(next2)
         self.UTILS.reporting.logResult("info", "'Next button'")
 

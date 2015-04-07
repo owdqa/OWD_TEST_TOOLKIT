@@ -22,28 +22,17 @@ class Music(object):
                                               " app - loading overlay")
         return self.app
 
-    # @retry(2)
     def click_on_song(self, title=None, frame=None):
+        # Waiting for songs to be displayed
+        self.parent.wait_for_element_not_displayed(*('css selector', 'p[data-l10n-id="scanning-text"]'))
+        self.parent.wait_for_element_not_displayed(*('css selector', '#overlay-content'))
+
         dom_elem = DOM.Music.first_song if not title\
             else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
-        self.parent.wait_for_element_not_displayed(*('css selector', 'p[data-l10n-id="scanning-text"]'))
-
-
-
-
-        # dom_elem = ('xpath', '//a[@data-key-range="My Music At Home"]')
-        screenshot = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
         song = self.UTILS.element.getElementByXpath(dom_elem[1])
         self.UTILS.reporting.logResult('info', 'Text|Displayed: {}|{}'.format(song.text, song.is_displayed()))
-        # song = self.marionette.find_element(*dom_elem)
-        # for s in song:
-            # self.UTILS.reporting.logResult('info', 'Li: {}'.format(s.text))
-        # song = self.UTILS.element.getElement(dom_elem, "Song", timeout=10)
         time.sleep(1)
-        # self.marionette.execute_script('arguments[0].click()', script_args=[self.UTILS.element.getParent(song)])
         self.UTILS.element.simulateClick(song)
-        time.sleep(1)
 
         doneButton = self.UTILS.element.getElement(DOM.Music.done_button, "Done Button")
         doneButton.tap()

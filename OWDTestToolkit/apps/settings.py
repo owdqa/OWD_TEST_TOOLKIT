@@ -142,7 +142,9 @@ class Settings(object):
         # Tap on Auto Retrieve Select
         #
         x = self.UTILS.element.getElement(DOM.Settings.auto_retrieve_select_btn, "Auto Retrieve Select")
+        self.UTILS.element.scroll_into_view(x)
         x.tap()
+
 
         #
         # Changing to top level frame
