@@ -114,9 +114,9 @@ class app(object):
         """
         self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
 
-        x = ('xpath', DOM.Home.app_icon_css_selector.format(app_name))
+        app_locator = ('css selector', DOM.Home.app_icon_css_selector.format(app_name))
         try:
-            self.marionette.find_element(*x)
+            self.marionette.find_element(*app_locator)
             self.parent.reporting.logResult("info", "App <b>{}</b> is currently installed.".format(app_name))
             return True
         except:

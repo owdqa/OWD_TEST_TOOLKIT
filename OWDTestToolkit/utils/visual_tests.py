@@ -34,7 +34,7 @@ class visualtests(object):
         Takes a screenshot of a certain HTMLElement, given the element itself or the locator.
         The screen capture is returned as a lossless PNG image encoded as a base 64 string by default.
         :param element_or_locator:
-            Either a selector as a tuple (selector_type, selector) or a :py:class:`~marionette.HTMLElement` 
+            Either a selector as a tuple (selector_type, selector) or a :py:class:`~marionette.HTMLElement`
             object that represents the element to capture. If None, will take a screenshot of the current frame.
 
         """
@@ -51,7 +51,7 @@ class visualtests(object):
         """
         Saves the screenshot in the file system as a PNG file
         :param element_or_locator:
-            Either a selector as a tuple (selector_type, selector) or a :py:class:`~marionette.HTMLElement` 
+            Either a selector as a tuple (selector_type, selector) or a :py:class:`~marionette.HTMLElement`
             object that represents the element to capture. If None, will take a screenshot of the current frame.
         :param output_file:
             Path where the png will be stored
@@ -65,8 +65,8 @@ class visualtests(object):
         Assert that a screenshot of an element is the same as a screenshot on disk, within a given threshold.
 
         :param element_or_locator:
-            Either a selector as a tuple (selector_type, selector) or a :py:class:`~marionette.HTMLElement` 
-            object that represents the element to capture. If None, will take a screenshot of the current frame. 
+            Either a selector as a tuple (selector_type, selector) or a :py:class:`~marionette.HTMLElement`
+            object that represents the element to capture. If None, will take a screenshot of the current frame.
         :param filename:
             The filename for the screenshot, which will be appended with ``.png``.
         :param file_suffix:
@@ -82,7 +82,8 @@ class visualtests(object):
         if self.save_baseline or not os.path.exists(baseline_file):
             # Save the baseline screenshot and bail out
             self.parent.reporting.info(
-                "[Visual tests] Visual screenshot '{}' being saved in baseline folder '{}'".format(filename, self.baseline_dir))
+                "[Visual tests] Visual screenshot '{}' being saved in baseline folder '{}'".
+                format(filename, self.baseline_dir))
             self.save_screenshot(element_or_locator, baseline_file)
         else:
             prefix = datetime.now().strftime("%y-%m-%d_%H%M%S")
@@ -93,5 +94,6 @@ class visualtests(object):
             self.save_screenshot(element_or_locator, compare_file)
 
             # Compare the screenshots
-            self.parent.reporting.info("[Visual tests] Ready to compare screenshots[{}|{}]".format(compare_file, baseline_file))
+            self.parent.reporting.info("[Visual tests] Ready to compare screenshots[{}|{}]".
+                                       format(compare_file, baseline_file))
             self.engine.assertSameFiles(compare_file, baseline_file, threshold)
