@@ -49,7 +49,7 @@ details_back_button = ('id', 'details-back')
 
 reset_field_xpath = ".//*[@id='{}']//button[@id='img-delete-button']"
 edit_image = ("id", "thumbnail-action")
-edit_contact_header = ('xpath', GLOBAL.app_head_specific.format(_('Edit contact')))
+edit_contact_header = ('css selector', 'h1[data-l10n-id="editContact"]')
 edit_update_button = ('id', 'save-button')
 edit_details_button = ('id', 'edit-contact-button')
 edit_cancel_button = ('id', 'cancel-edit')

@@ -112,6 +112,7 @@ class Camera(object):
         Switch between still shot and video.
         """
         switch_btn = self.UTILS.element.getElement(DOM.Camera.switch_source, "Source switcher")
+        time.sleep(1)
         switch_btn.tap()
         self._wait_for_camera_ready()
 

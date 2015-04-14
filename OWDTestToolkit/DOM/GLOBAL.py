@@ -16,7 +16,7 @@ scroller_curr_val = ("css selector", ".picker-unit.selected")
 pin_input = ("css selector", "#dialog-overlay #simpin-dialog .container #pinArea .input-wrapper input")
 pin_ok_button = ("xpath", '//div[@id="simpin-dialog"]//button[@data-l10n-id="ok"]')
 pin_skip_button = ("xpath", "//div[@id='simpin-dialog']//button[@data-l10n-id='skip']")
-lockscreen_network_locator = ('xpath', '//div[@id="lockscreen-header"]//span[@class="connstate-line"]')
+lockscreen_network_locator = ('xpath', '//div[@id="lockscreen-conn-states"]//span[@class="connstate-line"]')
 
 puk_puk_input = ('xpath', '//div[@id="pukArea"]//input')
 puk_new_pin_input = ('xpath', '//div[@id="newPinArea"]//input')

@@ -31,7 +31,7 @@ class Dialer(object):
     def _cancel_addNumberToContact(self):
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.element.waitForElements(
-            ("xpath", "//h1[text()='{}']".format(_("Contacts"))), "'Select contact' header")
+            ("xpath", "//h1[text()='{}']".format(_("Select contact"))), "'Select contact' header")
 
         cancel_icon = self.UTILS.element.getElement(DOM.Dialer.add_to_conts_cancel_btn, "Cancel icon")
         cancel_icon.tap()
@@ -44,7 +44,7 @@ class Dialer(object):
         #
         self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
         self.UTILS.element.waitForElements(
-            ("xpath", "//h1[text()='{}']".format(_("Contacts"))), "'Select contact' header")
+            ("xpath", "//h1[text()='{}']".format(_("Select contact"))), "'Select contact' header")
 
         y = self.UTILS.element.getElements(DOM.Contacts.view_all_contact_list, "All contacts list")
         boolOK = False
@@ -323,11 +323,11 @@ class Dialer(object):
             self.UTILS.date_and_time.setTimeToSpecific(p_day=new_date.day, p_month=new_date.month)
 
             self.enterNumber(phone_number)
-            self.call_this_number_and_hangup(delay=7)
+            self.call_this_number_and_hangup(delay=5)
             # This needs to be done bcs sometimes (50%) the Dialer app crushes after hanging up
-            self.apps.kill_all()
-            time.sleep(2)
-            self.launch()
+            # self.apps.kill_all()
+            # time.sleep(2)
+            # self.launch()
 
     def enterNumber(self, p_num, validate=True):
         #
@@ -417,6 +417,14 @@ class Dialer(object):
                 self.UTILS.reporting.logResult("info", "Exception when killing active call via data_layer")
                 pass
 
+    def accept_number_busy_warning(self):
+        try:
+            self.parent.wait_for_element_displayed(*DOM.Dialer.call_busy_button_ok, timeout=5)
+            ok_btn = self.marionette.find_element(*DOM.Dialer.call_busy_button_ok)
+            ok_btn.tap()
+        except:
+            self.UTILS.reporting.logResult('info', 'No warning after hanging up')
+
     def hangUp(self):
         #
         # Hangs up (assuming we're in the 'calling' frame).
@@ -427,9 +435,7 @@ class Dialer(object):
             # The call may already be terminated, so don't throw an error if
             # the hangup bar isn't there.
             self.apps.switch_to_displayed_app()  # go back to dialer
-            self.parent.wait_for_element_displayed(*DOM.Dialer.call_busy_button_ok, timeout=5)
-            ok_btn = self.marionette.find_element(*DOM.Dialer.call_busy_button_ok)
-            ok_btn.tap()
+            self.accept_number_busy_warning()
             return
 
         hangup = self.marionette.find_element(*DOM.Dialer.hangup_bar_locator)
@@ -443,15 +449,16 @@ class Dialer(object):
                 pass
 
         self.apps.switch_to_displayed_app()
+        self.accept_number_busy_warning()
 
     def open_call_log(self):
         #
         # Opens the call log.
         #
         x = self.UTILS.element.getElement(DOM.Dialer.option_bar_call_log, "Call log button")
+        time.sleep(1)
         x.tap()
-
-        time.sleep(2)
+        # self.UTILS.simulateClick(x)
 
     def check_incoming_call(self, incoming_number):
         try:

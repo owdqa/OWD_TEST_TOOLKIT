@@ -65,9 +65,13 @@ class home(object):
 
     def _touch_home_button(self, homescreen_name):
         apps = self.parent.apps
+        self.parent.reporting.logResult('info', 'homescreen_name: {}'.format(homescreen_name))
+        homescreen_name = "home screen" if homescreen_name == "homescreen" else homescreen_name
+        
         if apps.displayed_app.name.lower() != homescreen_name:
             # touching home button will return to homescreen
             self._dispatch_home_button_event()
+            self.parent.reporting.logResult('info', 'actual_name: {}'.format(apps.displayed_app.name.lower()))
             Wait(self.marionette).until(
                 lambda m: apps.displayed_app.name.lower() == homescreen_name)
             apps.switch_to_displayed_app()

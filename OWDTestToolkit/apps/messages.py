@@ -306,7 +306,7 @@ class Messages(object):
         self.sendSMS()
         return self.last_sent_message_timestamp()
 
-    def create_and_send_sms(self, nums, msg):
+    def create_and_send_sms(self, nums, msg, sending_check=True):
         #
         # Create and send a new SMS.<br>
         # <b>Note:</b> The nums field must be an array of numbers
@@ -337,7 +337,7 @@ class Messages(object):
         #
         # Send the message.
         #
-        self.sendSMS()
+        self.sendSMS(sending_check)
 
     def create_mms_image(self):
 
@@ -512,7 +512,6 @@ class Messages(object):
         self.UTILS.reporting.debug("*** Tap Edit button")
         x = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
         x.tap()
-        time.sleep(2)
 
         #
         # Go into message edit mode..
@@ -520,17 +519,20 @@ class Messages(object):
         self.UTILS.reporting.debug("*** Tap Delete messages button")
         x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Delete messages button")
         x.tap()
-        time.sleep(2)
 
         #
         # Check the messages (for some reason, just doing x[i].click() doesn't
         # work for element zero, so I had to do this 'longhanded' version!).
         #
         messages = self.UTILS.element.getElements(DOM.Messages.message_list, "Messages")
+        self.UTILS.reporting.logResult('info', 'Total messages: {}'.format(len(messages)))
+        
         selected = 0
         for msg in messages:
+            self.UTILS.reporting.logResult('info', 'Checking if we have to delete message #{}'.format(selected))
             if selected in msg_array:
                 self.UTILS.reporting.debug("Selecting message {} ...".format(selected))
+                self.UTILS.element.scroll_into_view(msg)
                 msg.tap()
                 time.sleep(2)
             selected += 1
@@ -984,18 +986,19 @@ class Messages(object):
         add_btn = self.UTILS.element.getElement(DOM.Messages.add_contact_button, "Add contact button")
         add_btn.tap()
 
-    def sendSMS(self):
+    def sendSMS(self, check=True):
         #
         # Just presses the 'send' button (assumes everything else is done).
         #
         sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send sms button")
         time.sleep(1)
         sendBtn.tap()
-        self.UTILS.element.waitForElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 20)
 
-        # (Give the spinner time to appear.)
-        time.sleep(2)
-        self.UTILS.element.waitForNotElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 180)
+        if check:
+            self.UTILS.element.waitForElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 20)
+            # (Give the spinner time to appear.)
+            time.sleep(2)
+            self.UTILS.element.waitForNotElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 180)
 
         #
         # Check if we received the 'service unavailable' message.
@@ -1042,7 +1045,9 @@ class Messages(object):
         # Turns on Edit mode while in the SMS threads screen.
         #
         x = self.UTILS.element.getElement(DOM.Messages.edit_threads_button, "Edit button")
-        self.UTILS.element.simulateClick(x)
+        time.sleep(1)
+        x.tap()
+        # self.UTILS.element.simulateClick(x)
         self.UTILS.element.waitForElements(DOM.Messages.cancel_edit_threads, "Cancel button")
 
     def threadExists(self, num):
