@@ -899,10 +899,8 @@ class Contacts(object):
         <i>Private</i> function to handle the iframe hop-scotch involved in
         finding the facebook app launched via contacts app.
         """
-        # self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame)
-        self.marionette.switch_to_frame()
-        f = self.marionette.find_element(*DOM.Contacts.settings_fb_frame)
-        self.marionette.switch_to_frame(f)
+        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
+        self.UTILS.iframe.switchToFrame("src", "facebook", via_root_frame=False)
 
         screenshot = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult('info', "Screenshot in switch_to_facebook method", screenshot)
