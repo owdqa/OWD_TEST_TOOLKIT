@@ -145,7 +145,6 @@ class Settings(object):
         self.UTILS.element.scroll_into_view(x)
         x.tap()
 
-
         #
         # Changing to top level frame
         #
@@ -425,23 +424,10 @@ class Settings(object):
         x.tap()
         time.sleep(1)
 
-        #
-        # Wait for the hotspot to begin.
-        #
-        is_disabled = False
-        retry = 10
-        for i in range(retry):
-            x = self.marionette.find_element(*DOM.Settings.hotspot_settings)
-            # FJCS: disabled == "false" to disable?
-            if x.get_attribute("disabled") == "false":
-                # It's done.
-                is_disabled = True
-                break
-            time.sleep(0.5)
+        self.parent.wait_for_condition(lambda m: not self.parent.data_layer.get_setting("hotspot.enabled.status"),
+                                       timeout=30, message="Hotspot is enabled")
 
         is_status_icon = self.UTILS.statusbar.isIconInStatusBar(DOM.Statusbar.hotspot)
-
-        self.UTILS.test.test(is_disabled, "Hotspot settings are disabled (because 'hotspot' is not running).")
         self.UTILS.test.test(not is_status_icon, "Hotspot icon is not present in the status bar.")
 
     def downloads(self):
@@ -491,22 +477,10 @@ class Settings(object):
         x.tap()
         time.sleep(1)
 
-        #
-        # Wait for the hotspot to begin.
-        #
-        is_enabled = False
-        retry = 10
-        for i in range(retry):
-            x = self.marionette.find_element(*DOM.Settings.hotspot_settings)
-            if x.get_attribute("disabled") == "true":
-                # It's done.
-                is_enabled = True
-                break
-            time.sleep(0.5)
+        self.parent.wait_for_condition(lambda m: self.parent.data_layer.get_setting("hotspot.enabled.status"),
+                                       timeout=30, message="Hotspot is enabled")
 
         is_status_icon = self.UTILS.statusbar.isIconInStatusBar(DOM.Statusbar.hotspot)
-
-        self.UTILS.test.test(is_enabled, "Hotspot settings are disabled (because 'hotspot' is now running).")
         self.UTILS.test.test(is_status_icon, "Hotspot icon is present in the status bar.")
 
     def fxa(self):
@@ -1012,15 +986,12 @@ class Settings(object):
         #
         # Tap the network name in the list.
         #
-        screenshot = self.UTILS.debug.screenShotOnErr()
-        self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
 
         _wifi_name_element = ("xpath", DOM.Settings.wifi_name_xpath.format(wlan_name))
         self.parent.wait_for_element_displayed(_wifi_name_element[0], _wifi_name_element[1], timeout=10)
         wifi = self.marionette.find_element(*_wifi_name_element)
-
-        self.UTILS.element.simulateClick(wifi)
-        time.sleep(2)
+        time.sleep(1)
+        wifi.tap()
 
     def wifi_switchOn(self):
         #

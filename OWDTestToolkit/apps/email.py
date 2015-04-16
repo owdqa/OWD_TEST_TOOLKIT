@@ -181,8 +181,10 @@ class Email(object):
         #
         # Press the delete button and confirm deletion.
         #
-        delete_btn = self.UTILS.element.getElementByXpath(DOM.Email.delete_this_email_btn[1])
+        delete_btn = self.UTILS.element.getElement(DOM.Email.delete_this_email_btn, "Delete Email button")
+        time.sleep(1)
         delete_btn.tap()
+
         delete_confirm = self.UTILS.element.getElement(DOM.Email.confirmation_delete_ok, "Confirmation button")
         delete_confirm.tap()
 
@@ -614,7 +616,7 @@ class Email(object):
         self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox"))), "Inbox")
         time.sleep(2)
 
-    def setupAccount(self, user, email, passwd):
+    def setupAccount(self, user, email, passwd, via_activity=False):
         #
         # Set up a new email account in the email app and login.
         #
@@ -657,8 +659,10 @@ class Email(object):
 
         self.UTILS.element.waitForNotElements(DOM.Email.login_cont_to_email_btn, "'Continue to mail' button")
 
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox"))), "Inbox")
-        time.sleep(2)
+        if not via_activity:
+            self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Inbox"))), "Inbox")
+            self.wait_for_sync_completed()
+            self.wait_for_message_list()
 
     def setupAccountFirstStep(self, p_user, p_email, p_pass):
         #

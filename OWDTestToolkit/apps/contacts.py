@@ -269,6 +269,7 @@ class Contacts(object):
 
         # Return to the contact list screen.
         back_btn = self.UTILS.element.getElement(DOM.Contacts.details_back_button, "Details 'back' button")
+        time.sleep(1)
         back_btn.tap()
 
         self.UTILS.element.waitForElements(DOM.Contacts.view_all_header, "'View all contacts' screen header")
@@ -863,8 +864,13 @@ class Contacts(object):
         <i>Private</i> function to handle the iframe hop-scotch involved in
         finding the facebook app launched via contacts app.
         """
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.frame_locator)
-        self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame, via_root_frame=False)
+        # self.UTILS.iframe.switchToFrame(*DOM.Contacts.settings_fb_frame)
+        self.marionette.switch_to_frame()
+        f = self.marionette.find_element(*DOM.Contacts.settings_fb_frame)
+        self.marionette.switch_to_frame(f)
+
+        screenshot = self.UTILS.debug.screenShotOnErr()
+        self.UTILS.reporting.logResult('info', "Screenshot in switch_to_facebook method", screenshot)
 
         # Wait for the fb page to start.
         self.UTILS.element.waitForElements(DOM.Facebook.friends_header, "Facebook friends header")

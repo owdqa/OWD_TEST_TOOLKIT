@@ -61,7 +61,7 @@ app_permissions_header = ('xpath', GLOBAL.app_head_specific.format(_('App permis
 wifi = ('id', 'menuItem-wifi')
 wifi_header = ('css selector', 'h1[data-l10n-id="wifi-header"]')
 wifi_enabled = ('xpath', ".//*[@id='wifi-enabled']/label")
-wifi_available_networks = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside[contains(@class, 'pack-end wifi-icon level-')]")
+wifi_available_networks = ('css selector', '#wifi-availableNetworks li:not(.explanation):not([data-state="on"]):not([data-state="ready"]) a')
 wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
 wifi_name_xpath = '//*[@id="wifi-availableNetworks"]//a[text()="{}"]'
 wifi_connected = ('xpath', '//small[text()="{}"]'.format(_("Connected")))
@@ -121,7 +121,7 @@ sound_alarm_vol = ('name', 'audio.volume.alarm')
 hotspot = ("id", "menuItem-internetSharing")
 hotspot_header = ('xpath', GLOBAL.app_head_specific.format(_('Internet sharing')))
 hotspot_switch = ("css selector", "#hotspot span[data-l10n-id=wifi-hotspot]")
-hotspot_switch_input = ("css selector", "#hotspot input[name='tethering.wifi.enabled']")
+hotspot_switch_input = ("css selector", "#hotspot-enabled input")
 hotspot_settings = ("css selector", "#hotspot-settings-section button[data-l10n-id=hotspotSettings]")
 
 msg_settings = ("css selector", "[data-l10n-id='messagingSettings']")

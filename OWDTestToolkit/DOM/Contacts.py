@@ -39,7 +39,7 @@ settings_header = ('xpath', GLOBAL.app_head_specific.format(_('Settings').encode
 settings_done_button = ('id', 'settings-close')
 settings_fb_enable = ('xpath', '//li[@class="fb-item"]')
 settings_import_fb = ('id', 'import-fb')
-settings_fb_frame = ("id", 'fb-extensions')
+settings_fb_frame = ("css selector", '.popupWindow.active iframe[data-url*=facebook]')
 settings_fb_logout_wait = ('id', 'progress-title')
 add_contact_button = ('id', 'add-contact-button')
 add_contact_header = ('css selector', 'h1[data-l10n-id="addContact"]')
