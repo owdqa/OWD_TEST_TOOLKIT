@@ -2,7 +2,7 @@ from gaiatest import GaiaTestCase
 
 
 class FireCTestCase(GaiaTestCase):
-    
+
     def setUp(self):
         super(FireCTestCase, self).setUp()
         self.data_layer.set_setting('ums.enabled', False)

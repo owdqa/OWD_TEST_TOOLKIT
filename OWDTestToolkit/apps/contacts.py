@@ -14,6 +14,33 @@ class Contacts(object):
         self.marionette = parent.marionette
         self.UTILS = parent.UTILS
 
+        self._view_fields = {
+            'name': DOM.Contacts.view_details_title,
+            'tel': DOM.Contacts.view_contact_tel_field,
+            'email': DOM.Contacts.view_contact_email_field,
+            'address': DOM.Contacts.view_contact_address
+        }
+
+        self._edit_fields = {
+            'givenName': DOM.Contacts.given_name_field,
+            'familyName': DOM.Contacts.family_name_field,
+            'tel': DOM.Contacts.phone_field,
+            'email': DOM.Contacts.email_field,
+            'street': DOM.Contacts.street_field,
+            'zip': DOM.Contacts.zip_code_field,
+            'city': DOM.Contacts.city_field,
+            'country': DOM.Contacts.country_field
+        }
+
+        self._add_edit_field_btn = {
+            'tel': DOM.Contacts.add_phone_button,
+            'email': DOM.Contacts.add_email_button,
+            'street': DOM.Contacts.add_address_button,
+            'zip': DOM.Contacts.add_address_button,
+            'city': DOM.Contacts.add_address_button,
+            'country': DOM.Contacts.add_address_button
+        }
+
     def launch(self):
         """
         Launch the app.
@@ -353,30 +380,41 @@ class Contacts(object):
         for pos in positions:
             contact_list[pos].tap()
 
+    def get_view_fields(self):
+        fields = {}
+        for k, v in self._view_fields.items():
+            try:
+                fields[k] = self.marionette.find_element(*v)
+            except:
+                self.UTILS.reporting.debug("** No field found for key: {}".format(k))
+        return fields
+
+    def get_edit_fields(self):
+        fields = {}
+        for k, v in self._edit_fields.items():
+            try:
+                self.UTILS.reporting.info("*** Looking for field {} with dom {}".format(k, v))
+                fields[k] = self.marionette.find_element(*v)
+            except:
+                # Try to tap on add new {field} button
+                self.UTILS.reporting.info("*** FAIL: Looking for button {}".format(self._add_edit_field_btn[k]))
+                add_new_field_btn = self.marionette.find_element(*self._add_edit_field_btn[k])
+                self.UTILS.element.scroll_into_view(add_new_field_btn)
+                add_new_field_btn.tap()
+                fields[k] = self.marionette.find_element(*v)
+        return fields
+
     def get_contact_fields(self, view=False):
         """
         Return 3-d array of contact details.
         if view is set, it will use the DOM specs for the view screen. Otherwise
         it will assume you are in the edit screen.
         """
+
         if view:
-            return {
-                'name': self.UTILS.element.getElement(DOM.Contacts.view_details_title, "Name in title field", True, 5, False),
-                'tel': self.UTILS.element.getElement(DOM.Contacts.view_contact_tel_field, "Phone number field", True, 5, False),
-                'email': self.UTILS.element.getElement(DOM.Contacts.view_contact_email_field, "Email field", True, 5, False),
-                'address': self.UTILS.element.getElement(DOM.Contacts.view_contact_address, "Address field", True, 5, False),
-            }
+            return self.get_view_fields()
         else:
-            return {
-                'givenName': self.UTILS.element.getElement(DOM.Contacts.given_name_field, "Given name field", True, 5, False),
-                'familyName': self.UTILS.element.getElement(DOM.Contacts.family_name_field, "Family name field", True, 5, False),
-                'tel': self.UTILS.element.getElement(DOM.Contacts.phone_field, "Phone number field", True, 5, False),
-                'email': self.UTILS.element.getElement(DOM.Contacts.email_field, "Email field", True, 5, False),
-                'street': self.UTILS.element.getElement(DOM.Contacts.street_field, "Street field", True, 5, False),
-                'zip': self.UTILS.element.getElement(DOM.Contacts.zip_code_field, "Zip code field", True, 5, False),
-                'city': self.UTILS.element.getElement(DOM.Contacts.city_field, "City field", True, 5, False),
-                'country': self.UTILS.element.getElement(DOM.Contacts.country_field, "Country field", True, 5, False),
-            }
+            return self.get_edit_fields()
 
     @retry(5, 5)
     def switch_to_gmail_login_frame(self):
@@ -412,8 +450,8 @@ class Contacts(object):
 
         # Sometimes the device remembers your login from before (even if the device is
         # reset and all data cleared), so check for that.
-        # self.switch_to_gmail_login_frame()
-        self.UTILS.iframe.switch_to_frame("data-url", "google")
+        self.switch_to_gmail_login_frame()
+        # self.UTILS.iframe.switch_to_frame("data-url", "google")
         try:
             time.sleep(2)
             self.UTILS.element.waitForNotElements(DOM.Contacts.import_throbber, "Animated 'loading' indicator")
@@ -758,13 +796,10 @@ class Contacts(object):
         that you have to get the button into view before you
         can press it, then re-align the screen again.
         """
-        self.marionette.execute_script("document.getElementById('" +
-                                       DOM.Contacts.delete_contact_btn[1] +
-                                       "').scrollIntoView();")
-        self.marionette.execute_script("document.getElementById('settings-button').scrollIntoView();")
-        delete_contact_btn = self.UTILS.element.getElement(
-            DOM.Contacts.delete_contact_btn, "Delete contacts button", False)
-        delete_contact_btn.tap()
+        delete_btn = self.marionette.find_element(*DOM.Contacts.delete_contact_btn)
+        self.UTILS.element.scroll_into_view(delete_btn)
+        time.sleep(1)
+        delete_btn.tap()
 
     def press_edit_contact_button(self):
         """
