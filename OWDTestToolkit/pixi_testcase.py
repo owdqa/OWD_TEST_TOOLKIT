@@ -1,6 +1,8 @@
 from gaiatest import GaiaTestCase
 
+
 class PixiTestCase(GaiaTestCase):
+
     def setUp(self):
         super(PixiTestCase, self).setUp()
         self.data_layer.set_setting('ums.enabled', False)
