@@ -60,11 +60,11 @@ app_permissions_header = ('xpath', GLOBAL.app_head_specific.format(_('App permis
 wifi = ('id', 'menuItem-wifi')
 wifi_header = ('css selector', 'h1[data-l10n-id="wifi-header"]')
 wifi_enabled = ('xpath', ".//*[@id='wifi-enabled']/label")
-wifi_available_networks = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside[contains(@class, 'pack-end wifi-icon level-')]")
-wifi_network_name = ('xpath', "//*[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
-wifi_name_xpath = '//*[@id="wifi-availableNetworks"]//a[text()="{}"]'
+wifi_available_networks = ('css selector', "#wifi-availableNetworks li aside")
+wifi_network_name = ('xpath', "//ul[@id='wifi-availableNetworks']/li/aside/a[text()={}]")
+wifi_name_xpath = '//ul[@id="wifi-availableNetworks"]//a[text()="{}"]'
 wifi_connected = ('xpath', '//small[text()="{}"]'.format(_("Connected")))
-wifi_list_connected_xp = "//*[@id='wifi-availableNetworks']/li[@class='active']//a[text()='{}']"
+wifi_list_connected_xp = "//ul[@id='wifi-availableNetworks']/li[@class='active']//a[text()='{}']"
 
 wifi_login_header = ("xpath", "//section[@id='wifi-auth']//h1")
 wifi_login_user = ('name', 'identity')
