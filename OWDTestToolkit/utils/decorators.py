@@ -28,10 +28,12 @@ def retry(num_retries, delay=2, context=None, aux_func_name=None):
                 try:
                     utils.reporting.debug(
                         ">>>>>> Trying function[{}] for the #{} time".format(func_to_retry.__name__, i + 1))
-                    res = func_to_retry(*args, **kwargs)
-                    return res
-                except Exception, e:
-                    utils.reporting.debug(">>>>>> The function to retry failed: {}".format(e))
+                    return func_to_retry(*args, **kwargs)
+                except Exception as e:
+                    # MarionetteException does not use the 'message' attribute, 'msg' is used instead.
+                    # We have to deal with that.
+                    utils.reporting.debug(
+                        u">>>>>> The function to retry failed: {}".format(e.msg if hasattr(e, 'msg') else e))
                     if i < num_retries - 1:
                         pass
                     else:

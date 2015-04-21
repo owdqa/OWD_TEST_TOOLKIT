@@ -49,7 +49,7 @@ class Settings(object):
         except:
             self.UTILS.reporting.logResult("info", "No double SIM detected. Keep working...")
 
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.\
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.
                                             format(_("Call Settings").encode("utf8"))), "Call settings header")
 
     def three_times_bad_pin2(self, wrong_pin2):
@@ -214,8 +214,8 @@ class Settings(object):
     def open_fdn(self):
         fdn = self.UTILS.element.getElement(DOM.Settings.call_fdn, "Fixed dialing numbers")
         fdn.tap()
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").\
-                                                        encode("utf8"))), "FDN header")
+        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Fixed dialing numbers").
+                                                                                         encode("utf8"))), "FDN header")
 
     def go_enable_fdn(self, enable):
         status = self.UTILS.element.getElement(DOM.Settings.fdn_status, "FDN status").text
@@ -330,8 +330,7 @@ class Settings(object):
         #
         # PIN2 Confirmation
         #
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))),
-                                           "Confirm SIM PIN2 header")
+        self.UTILS.element.waitForElements(DOM.Settings.fdn_confirm_pin2_header, "Confirm SIM PIN2 header")
 
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "PIN2 input")
         pin2_input.send_keys(pin2)
@@ -376,8 +375,7 @@ class Settings(object):
         #
         # PIN2 Confirmation
         #
-        self.UTILS.element.waitForElements(('xpath', DOM.GLOBAL.app_head_specific.format(_("Enter SIM PIN2"))),
-                                           "Confirm SIM PIN2 header", True, 10)
+        self.UTILS.element.waitForElements(DOM.Settings.fdn_confirm_pin2_header, "Confirm SIM PIN2 header", True, 10)
 
         pin2_input = self.UTILS.element.getElement(DOM.Settings.fdn_pin2_input, "PIN2 input", True, 10)
         pin2_input.send_keys(pin2)
@@ -1073,9 +1071,10 @@ class Settings(object):
 
         # switch to the root frame, since the selectable menu appears on top, not under Settings
         self.marionette.switch_to_frame()
-        option = self.UTILS.element.getElement(DOM.Settings.language_option_xpath.format(lang))
+        option = self.UTILS.element.getElement(
+            ('xpath', DOM.Settings.language_option_xpath.format(lang)), "Getting option")
         option.tap()
-        ok_btn = self.UTILS.element.getElement(DOM.Settings.language_option_ok_btn)
+        ok_btn = self.UTILS.element.getElement(DOM.Settings.language_option_ok_btn, "Getting OK button")
         ok_btn.tap()
         # switch back to the Settings application
         self.UTILS.iframe.switch_to_frame(*DOM.Settings.frame_locator)

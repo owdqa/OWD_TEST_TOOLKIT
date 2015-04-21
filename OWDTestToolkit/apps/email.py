@@ -24,7 +24,8 @@ class Email(object):
         # Launch the app.
         #
         self.app = self.apps.launch(self.__class__.__name__)
-        self.UTILS.element.waitForNotElements(DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
+        self.UTILS.element.waitForNotElements(
+            DOM.GLOBAL.loading_overlay, self.__class__.__name__ + " app - loading overlay")
         return self.app
 
     def refresh(self):
@@ -177,24 +178,21 @@ class Email(object):
         # Open the message.
         #
         self.openMsg(subject)
-
         #
         # Press the delete button and confirm deletion.
         #
-        delete_btn = self.UTILS.element.getElementByXpath(DOM.Email.delete_this_email_btn[1])
+        delete_btn = self.UTILS.element.getElement(DOM.Email.delete_this_email_btn, "Delete Email button")
+        time.sleep(1)
         delete_btn.tap()
         delete_confirm = self.UTILS.element.getElement(DOM.Email.confirmation_delete_ok, "Confirmation button")
         delete_confirm.tap()
-
         self.UTILS.element.waitForElements(DOM.Email.deleted_email_notif, "Email deletion notifier")
-
         #
         # Refresh and check that the message is no longer in the inbox.
         #
         refresh_btn = self.marionette.find_element(*DOM.Email.folder_refresh_button)
         refresh_btn.tap()
         time.sleep(2)
-
         x = self.UTILS.element.getElements(DOM.Email.folder_subject_list, "Email messages in this folder")
         self.UTILS.test.test(x[0].text != subject, "Email '" + subject + "' no longer found in this folder.", False)
 
@@ -214,7 +212,7 @@ class Email(object):
         folder_link.tap()
 
         self.UTILS.element.waitForElements(("xpath", DOM.GLOBAL.app_head_specific.format(name)),
-                                   "Header for '" + name + "' folder")
+                                           "Header for '" + name + "' folder")
 
     def openMailFolder(self, folder_name):
         #
@@ -234,7 +232,8 @@ class Email(object):
             #
             # When we're looking at the folders screen ...
             #
-            self.UTILS.element.waitForElements(DOM.Email.folder_list_container, "Folder list container", True, 20, False)
+            self.UTILS.element.waitForElements(
+                DOM.Email.folder_list_container, "Folder list container", True, 20, False)
 
             #
             # ... click on the folder were after.
@@ -245,7 +244,7 @@ class Email(object):
             # Wait a while for everything to finish populating.
             #
             self.UTILS.element.waitForNotElements(DOM.Email.folder_sync_spinner,
-                                          "Loading messages spinner", True, 60, False)
+                                                  "Loading messages spinner", True, 60, False)
 
     def openMsg(self, subject):
         """
@@ -271,7 +270,7 @@ class Email(object):
 
         try:
             self.UTILS.element.waitForElements(("xpath", "//h1[text()='{}']".format(_("Inbox"))),
-                                                        "Inbox header", 10)
+                                               "Inbox header", 10)
         except:
             # We have no accounts set up (or the app would default to
             # the inbox of one of them).
@@ -288,7 +287,7 @@ class Email(object):
 
         # Remove each email address listed ...
         accounts_list = self.UTILS.element.getElements(DOM.Email.email_accounts_list,
-                                   "Email accounts list", False, 20, False)
+                                                       "Email accounts list", False, 20, False)
         for i in accounts_list:
             if i.text != "":
                 # This isn't a placeholder, so delete it.
@@ -325,7 +324,7 @@ class Email(object):
         # Sometimes, the tap on the "Compose message button" does not work, resulting in a failed test
         # Let's try to do something about it
         self.parent.wait_for_condition(lambda m: self._is_composed_btn_tapped(),
-                                        timeout=30, message="'Compose message' button tapped")
+                                       timeout=30, message="'Compose message' button tapped")
         # Put items in the corresponsing fields.
         if type(p_target) is list:
             for addr in p_target:
@@ -376,12 +375,12 @@ class Email(object):
         #
 
         # #
-        # # Get the guy we're replying to
+        # Get the guy we're replying to
         # #
         # to_field = self.UTILS.element.getElement(DOM.Email.compose_to_from_contacts_address, "[Reply] 'To' field", False).text
 
         # #
-        # # Check we're actually replying to the guy who sent us the email
+        # Check we're actually replying to the guy who sent us the email
         # #
         # self.UTILS.reporting.logResult("info", "'From' field: {}".format(from_field))
         # self.UTILS.reporting.logResult("info", "'To' field: {}".format(to_field))
@@ -414,11 +413,12 @@ class Email(object):
 
         # Check the sender is not included in the 'To' field
         bubbles = self.UTILS.element.getElements(('css selector', '.cmp-to-container.cmp-addr-container .cmp-bubble-container .cmp-peep-name'),
-                                            '"To" field bubbles')
+                                                 '"To" field bubbles')
         bubbles_text = [bubble.text for bubble in bubbles]
 
         if sender['username'] in bubbles_text:
-            self.UTILS.test.test(False, "Sender ({}) must not appear in the 'To field' when replying".format(sender['username']), True)
+            self.UTILS.test.test(
+                False, "Sender ({}) must not appear in the 'To field' when replying".format(sender['username']), True)
 
         # Write some reply content
         self.UTILS.general.typeThis(DOM.Email.compose_msg, "Message field", reply_message, True, True, False, False)
@@ -578,7 +578,8 @@ class Email(object):
         self.marionette.switch_to_frame()
         self.UTILS.element.waitForElements(DOM.Email.manual_setup_account_options, "Account type options", True, 5)
         # Select active sync
-        elem = (DOM.Email.manual_setup_account_option[0], DOM.Email.manual_setup_account_option[1].format("ActiveSync"))
+        elem = (DOM.Email.manual_setup_account_option[0],
+                DOM.Email.manual_setup_account_option[1].format("ActiveSync"))
         active_sync = self.UTILS.element.getElement(elem, "ActiveSync option")
         active_sync.tap()
 
@@ -723,7 +724,8 @@ class Email(object):
                 # Since the element is not displayed, sometimes we cannot access to the text using .text
                 # This way is more secure
                 #
-                current_account_text = self.marionette.execute_script("return arguments[0].innerHTML", script_args=[current_account])
+                current_account_text = self.marionette.execute_script(
+                    "return arguments[0].innerHTML", script_args=[current_account])
 
                 self.UTILS.reporting.logResult('info', "Current account: {}".format(current_account_text))
                 self.UTILS.reporting.logResult('info', "Account to switch: {}".format(address))
@@ -736,7 +738,8 @@ class Email(object):
                     self.goto_folder_from_list(_("Inbox"))
                     return True
                 else:
-                    self.UTILS.reporting.logResult("info", "It looks like the account we want to switch is not set up yet, so we cannot switch to it")
+                    self.UTILS.reporting.logResult(
+                        "info", "It looks like the account we want to switch is not set up yet, so we cannot switch to it")
                     return False
             except:
                 self.UTILS.reporting.logResult("info", "ONE ACCOUNT - something went wrong")
@@ -756,30 +759,34 @@ class Email(object):
                 self.goto_folder_from_list(_("Inbox"))
                 return True
 
-            self.UTILS.reporting.logResult("info", "We're not in the account we want to be, so open the scroll to see what's there")
+            self.UTILS.reporting.logResult(
+                "info", "We're not in the account we want to be, so open the scroll to see what's there")
 
             self.parent.wait_for_element_displayed(*DOM.Email.switch_account_scroll)
             scroll = self.marionette.find_element(*DOM.Email.switch_account_scroll)
             scroll.tap()
 
-            self.UTILS.reporting.logResult("info", "Now we have to iterate over all accounts displayed (but not already selected)")
+            self.UTILS.reporting.logResult(
+                "info", "Now we have to iterate over all accounts displayed (but not already selected)")
             self.parent.wait_for_element_displayed(*DOM.Email.switch_account_accounts_to_change)
             accounts = self.marionette.find_elements(*DOM.Email.switch_account_accounts_to_change)
 
             for account in accounts:
                 if account.text == address:
-                    self.UTILS.reporting.logResult("info", "We got a winner. Switching to already configured account...")
+                    self.UTILS.reporting.logResult(
+                        "info", "We got a winner. Switching to already configured account...")
                     account.tap()
                     self.UTILS.element.waitForElements(("xpath", DOM.GLOBAL.app_head_specific.format(_("Inbox"))),
-                                   "Header for 'Inbox' folder")
+                                                       "Header for 'Inbox' folder")
                     return True
 
-            self.UTILS.reporting.logResult("info", "It looks like the account we want to switch is not set up yet, so we cannot switch to it")
+            self.UTILS.reporting.logResult(
+                "info", "It looks like the account we want to switch is not set up yet, so we cannot switch to it")
             return False
 
     def waitForDone(self):
         #
         # Wait until any progress icon goes away.
         #
-        self.UTILS.element.waitForNotElements(('tag name', 'progress'), "Progress icon", True, 60);
+        self.UTILS.element.waitForNotElements(('tag name', 'progress'), "Progress icon", True, 60)
         time.sleep(2)  # (just to be sure!)

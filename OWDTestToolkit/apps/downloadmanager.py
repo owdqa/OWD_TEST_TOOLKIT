@@ -92,7 +92,8 @@ class DownloadManager(object):
         self.UTILS.reporting.logResult('info', 'The status [parameter] is: {}'.format(status))
 
         if status == "downloading":
-            match = re.search(r"(\d)+(.(\d)+)*\s(GB|MB|KB)\sof\s(\d)+(.(\d)+)*\s(GB|MB|KB)",
+            of = _("of")
+            match = re.search(r"(\d)+(.(\d)+)*\s(GB|MB|KB|Gb|Mb|Kb)\s{}\s(\d)+(.(\d)+)*\s(GB|MB|KB|Gb|Mb|Kb)".format(of),
                               download_info.text)
             self.UTILS.test.test(match is not None, "Verify the the text is of the type: 'X' MB of 'Y' MB")
         else:
@@ -190,6 +191,21 @@ class DownloadManager(object):
         link = self.UTILS.element.getElement(('css selector', 'a[href="{}"]'.format(file_name)),
                                              'The file [{}] to download'.format(file_name), True, 10)
         link.tap()
+
+        """
+        HARDCODED FOR THIS BUILD OF FIRE2: When the file format is not compatible with any app, a confirmation
+        message is shown asking whether to "Keep file" or "Delete" it. This is quite likely a bug, but in order 
+        to keep things running, we're gonna skip it.
+        """
+        self.marionette.switch_to_frame()
+        try:
+            continue_download_locator = ('css selector', '#downloadConfirmUI button[type="button"]:not(.danger)')
+            self.parent.wait_for_element_displayed(*continue_download_locator, timeout=20)
+            continue_download = self.marionette.find_element(*continue_download_locator)
+            continue_download.tap()
+        except:
+            self.UTILS.reporting.logResult('info', 'No confirmation shown')
+
 
     def is_file_downloading(self, data_url):
         """

@@ -6,6 +6,7 @@ from OWDTestToolkit.utils.decorators import retry
 from gaiatest.apps.keyboard.app import Keyboard
 from gaiatest import GaiaData
 from gaiatest import GaiaApps
+from marionette.wait import Wait
 
 
 class general(object):
@@ -20,7 +21,8 @@ class general(object):
         # Put a file onto the device (path is relative to the dir
         # you are physically in when running the tests).
         #
-        self.parent.reporting.logResult('info', '>>>> destination: {}'.format(self.get_config_variable("OWD_DEVICE_SDCARD")))
+        self.parent.reporting.logResult(
+            'info', '>>>> destination: {}'.format(self.get_config_variable("OWD_DEVICE_SDCARD")))
         self.parent.device.push_file(file_name, count, '{}/{}'.format(self.get_config_variable("OWD_DEVICE_SDCARD"),
                                                                       destination))
 
@@ -32,7 +34,7 @@ class general(object):
         #
         try:
             self.marionette.start_session()
-            self.parent.reporting.logResult("debug", "<i>(*** The Marionette session was "\
+            self.parent.reporting.logResult("debug", "<i>(*** The Marionette session was "
                                             "restarted due to a possible crash. ***)</i>")
         except:
             self.parent.reporting.logResult('debug', "Marionette session still running")
@@ -81,7 +83,7 @@ class general(object):
     def insertContact(self, contact):
         self.marionette.switch_to_frame()
         mozcontact = contact.create_mozcontact()
-        result = self.marionette.execute_async_script('return GaiaDataLayer.insertContact({});'.\
+        result = self.marionette.execute_async_script('return GaiaDataLayer.insertContact({});'.
                                                       format(json.dumps(mozcontact)), special_powers=True)
         assert result, 'Unable to insert contact {}'.format(contact)
 
@@ -90,7 +92,7 @@ class general(object):
         try:
             prop = os.popen('adb shell cat /system/build.prop | grep multisim').read().strip().split("=")[-1]
             self.parent.reporting.logResult("info", "Value of property: {}".format(prop))
-            return  prop == "dsds"
+            return prop == "dsds"
         except:
             self.parent.reporting.logResult("info", "That property was not found")
             return False
@@ -207,8 +209,8 @@ class general(object):
             #
             # Don't use the keyboard.
             #
-            self.parent.reporting.logResult("info", u"(Sending '{}' to this field without using the keyboard.)".\
-                format(p_str))
+            self.parent.reporting.logResult("info", u"(Sending '{}' to this field without using the keyboard.)".
+                                            format(p_str))
 
             input_elem.send_keys(p_str)
 
@@ -253,7 +255,7 @@ class general(object):
                 fieldText = value[-(len(p_str)):]
 
             self.parent.test.test(p_str == fieldText,
-                      "The field contains the correct string ...|{}|- vs. -|{}".format(fieldText, p_str))
+                                  "The field contains the correct string ...|{}|- vs. -|{}".format(fieldText, p_str))
 
         if p_remove_keyboard:
             #

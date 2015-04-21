@@ -333,6 +333,7 @@ class Browser(object):
 
         # Add the page to the bookmark
         bookmarkmenu_button = self.UTILS.element.getElement(DOM.Browser.bookmarkmenu_button, "Bookmark menu button")
+        time.sleep(1)
         bookmarkmenu_button.tap()
 
         bookmark_button = self.UTILS.element.getElement(DOM.Browser.bookmark_button, "Bookmark button")
