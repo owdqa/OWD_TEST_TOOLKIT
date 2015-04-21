@@ -62,7 +62,7 @@ class Camera(object):
         processed = time.strptime(the_string, '%M:%S')
         return (int(datetime.timedelta(minutes=processed.tm_min, seconds=processed.tm_sec).total_seconds()))
 
-    def check_video_length(self, expected_duration, margin=2):
+    def check_video_length(self, expected_duration, margin=3):
         """
         This method asserts that the video has the desired duration
         @expected_duration: specify the video duration in seconds
@@ -73,9 +73,10 @@ class Camera(object):
         video_length = self.UTILS.element.getElement(DOM.Camera.preview_video_slider_duration, "Video length")
         real_duration = self.convert_str_to_seconds(video_length.text)
 
-        # Note: we give 1 second margin in case the things went a little bit slower when recording the video
+        # Note: we give some second margin in case the things went a little bit slower when recording the video
         interval = range(expected_duration - margin, expected_duration + margin + 1, 1)
-        self.UTILS.test.test(real_duration in interval, "Duration matches")
+        self.UTILS.test.test(real_duration in interval, "Interval: {}  duration_in_secs: {} expected: {}".
+                             format(interval, real_duration, expected_duration))
 
     def _tap_on_capture_button(self):
         capture_button = self.UTILS.element.getElement(DOM.Camera.capture_button, "Capture button")
@@ -96,16 +97,21 @@ class Camera(object):
 
         self.UTILS.test.test(self.is_video_being_recorded(), "Video recording")
         self.UTILS.element.waitForNotElements(DOM.Camera.open_thumbs,
-                                              "Thumbnail appears after recording video", True, 10, False)
+                                              "Thumbnail disappears when recording video", True, 10, False)
 
         # Record for video_length seconds. Looks like it always takes one second more
         time.sleep(video_length)
+
         # Stop recording
+        rec_timer = self.UTILS.element.getElement(DOM.Camera.recording_timer, "Video timer").text
         self._tap_on_capture_button()
+
+        rec_duration = self.convert_str_to_seconds(rec_timer)
 
         self.UTILS.element.waitForNotElements(DOM.Camera.recording_timer, "Video timer", True, 10, False)
         self.UTILS.element.waitForElements(DOM.Camera.open_thumbs,
                                            "Thumbnail appears after recording video", True, 10, False)
+        return rec_duration
 
     def switch_source(self):
         """
@@ -136,8 +142,8 @@ class Camera(object):
         # Check the last picture is shown
         count_text = self.UTILS.element.getElement(DOM.Camera.preview_count_text, "Preview count")
         self.UTILS.reporting.logResult('info', "The text is: {}".format(count_text.text))
-        self.UTILS.test.test(count_text.text.split(
-            "/")[0] == "1", "Once we open the preview screen, the last picture is shown")
+        self.UTILS.test.test(count_text.text.split("/")[0] == "1",
+                             "Once we open the preview screen, the last picture is shown")
 
     def delete_from_preview(self, confirm=True):
         options = self.UTILS.element.getElement(DOM.Camera.preview_options, "preview options")
@@ -170,7 +176,7 @@ class Camera(object):
 
     def take_and_select_picture(self):
         """
-        This method takes a picture and hits on select. It is 
+        This method takes a picture and hits on select.
         """
         self.parent.wait_for_condition(lambda m: m.find_element(
             *DOM.Camera.controls_pane).get_attribute('data-enabled') == 'true', 20)

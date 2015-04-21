@@ -192,6 +192,21 @@ class DownloadManager(object):
                                              'The file [{}] to download'.format(file_name), True, 10)
         link.tap()
 
+        """
+        HARDCODED FOR THIS BUILD OF FIRE2: When the file format is not compatible with any app, a confirmation
+        message is shown asking whether to "Keep file" or "Delete" it. This is quite likely a bug, but in order 
+        to keep things running, we're gonna skip it.
+        """
+        self.marionette.switch_to_frame()
+        try:
+            continue_download_locator = ('css selector', '#downloadConfirmUI button[type="button"]:not(.danger)')
+            self.parent.wait_for_element_displayed(*continue_download_locator, timeout=20)
+            continue_download = self.marionette.find_element(*continue_download_locator)
+            continue_download.tap()
+        except:
+            self.UTILS.reporting.logResult('info', 'No confirmation shown')
+
+
     def is_file_downloading(self, data_url):
         """
         Checks whether the file is downloading in the downloads list
