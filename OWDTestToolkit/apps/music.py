@@ -28,20 +28,11 @@ class Music(object):
             else (DOM.Music.song_by_title[0], DOM.Music.song_by_title[1].format(title))
         self.parent.wait_for_element_not_displayed(*('css selector', 'p[data-l10n-id="scanning-text"]'))
 
-
-
-
-        # dom_elem = ('xpath', '//a[@data-key-range="My Music At Home"]')
         screenshot = self.UTILS.debug.screenShotOnErr()
         self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
         song = self.UTILS.element.getElementByXpath(dom_elem[1])
         self.UTILS.reporting.logResult('info', 'Text|Displayed: {}|{}'.format(song.text, song.is_displayed()))
-        # song = self.marionette.find_element(*dom_elem)
-        # for s in song:
-            # self.UTILS.reporting.logResult('info', 'Li: {}'.format(s.text))
-        # song = self.UTILS.element.getElement(dom_elem, "Song", timeout=10)
         time.sleep(1)
-        # self.marionette.execute_script('arguments[0].click()', script_args=[self.UTILS.element.getParent(song)])
         self.UTILS.element.simulateClick(song)
         time.sleep(1)
 

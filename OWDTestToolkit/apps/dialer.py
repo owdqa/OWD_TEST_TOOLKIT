@@ -454,7 +454,6 @@ class Dialer(object):
         x = self.UTILS.element.getElement(DOM.Dialer.option_bar_call_log, "Call log button")
         time.sleep(1)
         x.tap()
-        # self.UTILS.simulateClick(x)
 
     def check_incoming_call(self, incoming_number):
         try:
