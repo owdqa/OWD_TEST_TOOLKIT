@@ -6,14 +6,14 @@
 		"test_descriptions": "Docs/test_descriptions.json",
 		"blocked_tests": "Docs/blocked_tests.json",
 		"description_length": "100",
-	    "test_retries": 2
+	    "test_retries": 1
 	},
 	"wifi": {
-		"ssid": "Wololooooo",
+		"ssid": "OWDTEST",
 		"keyManagement": "WPA-PSK",
-		"psk": "LPGQULPHYGMTRC",
-		"password": "LPGQULPHYGMTRC",
-		"open_wifi_name": "Wololooooo"
+		"psk": "tidowd22",
+		"password": "tidowd22",
+		"open_wifi_name": "OWDTEST"
 	},
 	"toolkit_cfg": {
 		"devices_cfg": "config/devices_cfg.json",
@@ -34,12 +34,10 @@
         "gmail_3_email": "roytesterton.3@gmail.com",
         "gmail_3_pass": "test123x",
         "gmail_3_user": "roytesterton.3",
-		"hotmail_1_user": "roy1",
 		"hotmail_1_email": "roytesterton.1@hotmail.co.uk",
 		"hotmail_1_pass": "testqwe123",
-		"hotmail_2_user": "roy2",
 		"hotmail_2_email": "roytesterton.2@hotmail.co.uk",
-		"hotmail_2_pass": "testqwe123",
+		"hotmail_2_pass": "test123x",
 		"target_call_number": "983548227",
 		"incoming_call_number": "+34620912635",
 		"test_url": "www.google.com",
