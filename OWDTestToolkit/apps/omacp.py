@@ -38,7 +38,7 @@ class OMACP(object):
         self.UTILS.reporting.logResult('info', "Screenshot", screenshot)
 
         cancel_msg = self.UTILS.element.getElement(DOM.OMACP.CP_Cancel_Message, "Cancel Message")
-        self.UTILS.test.test(cancel_msg.text == "The message has not been processed yet, do you really want to quit?",
+        self.UTILS.test.test(cancel_msg.text == _("The message has not been processed yet, do you really want to quit?"),
                         "Cancel Message Text")
 
         quit_btn = self.UTILS.element.getElement(DOM.OMACP.CP_Quit_Button, "Quit button")
