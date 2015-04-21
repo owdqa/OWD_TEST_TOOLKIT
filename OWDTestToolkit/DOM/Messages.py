@@ -35,8 +35,8 @@ header_back_button = ("id", "messages-back-button")
 header_close_button = ('id', 'messages-close-button')
 
 # This field will allow to retrieve phone numbers and emails in the body of the last SM or MM
-phone_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//a[@data-action="dial-link"]')
-email_info_in_msg = ('xpath', '//*[@id="messages-container"]//li[last()]//a[@data-action="email-link"]')
+phone_info_in_msg = ('css selector', '#messages-container li:last-child a[data-action="dial-link"]')
+email_info_in_msg = ('css selector', '#messages-container li:last-child a[data-action="email-link"]')
 link_in_msg = ('css selector', 'a[data-action=url-link]')
 
 threads = ("css selector", "p.name")
@@ -85,7 +85,7 @@ edit_msgs_delete_btn = ("id", "messages-delete-button")
 edit_msgs_header = ("id", "messages-edit-mode")
 edit_msgs_sel_all_btn = ("id", "messages-check-all-button")
 
-airplane_warning_message = ('css selector', 'strong[data-l10n-id="sendFlightModeTitle"]')
+airplane_warning_message = ('css selector', 'h1[data-l10n-id="sendFlightModeBody"]')
 airplane_warning_ok = ('css selector', 'button[data-l10n-id="sendFlightModeBtnOk"]')
 
 received_sms = ('xpath', "//li[@class='message sms received incoming']/section/div/p")
@@ -151,3 +151,4 @@ fdn_blocked_title = ('css selector', '[data-l10n-id=fdnBlocked2Title]')
 fdn_blocked_btn_ok = ('css selector', '[data-l10n-id=fdnBlocked2BtnOk]')
 
 remove_contact_from_to_field = ('css selector', 'button.danger[data-l10n-id="remove"]')
+empty_msg_body_warning = ('css selector', 'h1[data-l10n-id="send-empty-message"]')
