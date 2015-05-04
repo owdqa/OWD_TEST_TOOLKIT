@@ -285,7 +285,7 @@ class Messages(object):
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='DCIM/100MZLLA')
+            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='/SD/vid')
 
             self.create_mms_video()
             self.video.click_on_video_at_position_mms(0)
