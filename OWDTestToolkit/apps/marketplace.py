@@ -47,11 +47,10 @@ class Marketplace(object):
         self.UTILS.test.test(app_header.text == app, "Title in app detail is {} (expected: {})".\
                              format(app_header.text, app))
 
-        x = self.UTILS.element.getElement(DOM.Market.install_button, "Install button")
+        install_btn = self.UTILS.element.getElement(DOM.Market.install_button, "Install button")
 
         # Sometimes this needs to be clicked ... sometimes tapped ... just do 'everything'!
-        x.click()
-        x.tap()
+        install_btn.tap()
 
         #
         # Confirm the installation of the app.
@@ -60,11 +59,11 @@ class Marketplace(object):
 
         yes_button = self.UTILS.element.getElement(DOM.Market.confirm_install_button, "Confirm install button")
         yes_button.tap()
-        
+
         self.marionette.switch_to_frame()
         msg = "{} installed".format(app)
         installed_app_msg = (DOM.GLOBAL.system_banner_msg[0], DOM.GLOBAL.system_banner_msg[1].format(msg))
-        self.UTILS.element.waitForElements(installed_app_msg, msg, timeout=30)
+        self.UTILS.element.waitForElements(installed_app_msg, msg, timeout=60)
         return True
 
     def search_for_app(self, app):

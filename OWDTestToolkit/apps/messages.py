@@ -306,7 +306,7 @@ class Messages(object):
         self.sendSMS()
         return self.last_sent_message_timestamp()
 
-    def create_and_send_sms(self, nums, msg, sending_check=True):
+    def create_and_send_sms(self, nums, msg):
         #
         # Create and send a new SMS.<br>
         # <b>Note:</b> The nums field must be an array of numbers
@@ -337,7 +337,7 @@ class Messages(object):
         #
         # Send the message.
         #
-        self.sendSMS(sending_check)
+        self.sendSMS()
 
     def create_mms_image(self):
 
@@ -432,32 +432,32 @@ class Messages(object):
             #
             # Go into messages Settings..
             #
-            x = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
-            x.tap()
+            edit_btn = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
+            edit_btn.tap()
 
             #
             # Go into message edit mode..
             #
-            x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Edit button")
-            x.tap()
+            delete_btn = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Delete button")
+            delete_btn.tap()
 
             #
             # Press select all button.
             #
-            x = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn, "'Select all' button")
-            x.tap()
+            select_btn = self.UTILS.element.getElement(DOM.Messages.check_all_messages_btn, "'Select all' button")
+            select_btn.tap()
 
         self.deleteSelectedMessages()
 
     def deleteSelectedMessages(self):
         self.UTILS.reporting.debug("*** Tapping top Delete button")
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "Delete button")
-        x.tap()
+        delete_btn = self.UTILS.element.getElement(DOM.Messages.delete_messages_ok_btn, "Delete button")
+        delete_btn.tap()
         time.sleep(2)
 
         self.UTILS.reporting.debug("*** Tap Delete messages confirmation button")
-        x = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete messages confirmation button")
-        x.tap()
+        ok_btn = self.UTILS.element.getElement(DOM.Messages.delete_threads_ok_btn, "Delete messages confirmation button")
+        ok_btn.tap()
         time.sleep(2)
 
     def deleteSelectedThreads(self):
@@ -510,16 +510,16 @@ class Messages(object):
         # Go into messages Settings..
         #
         self.UTILS.reporting.debug("*** Tap Edit button")
-        x = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
-        x.tap()
+        edit_btn = self.UTILS.element.getElement(DOM.Messages.edit_messages_icon, "Edit button")
+        edit_btn.tap()
         time.sleep(2)
 
         #
         # Go into message edit mode..
         #
         self.UTILS.reporting.debug("*** Tap Delete messages button")
-        x = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Delete messages button")
-        x.tap()
+        delete_btn = self.UTILS.element.getElement(DOM.Messages.delete_messages_btn, "Delete messages button")
+        delete_btn.tap()
         time.sleep(2)
 
         #
@@ -531,6 +531,7 @@ class Messages(object):
         for msg in messages:
             if selected in msg_array:
                 self.UTILS.reporting.debug("Selecting message {} ...".format(selected))
+                self.UTILS.element.scroll_into_view(msg)
                 msg.tap()
                 time.sleep(2)
             selected += 1
@@ -1003,15 +1004,14 @@ class Messages(object):
         #
         try:
             self.parent.wait_for_element_displayed(*DOM.Messages.service_unavailable_msg, timeout=2)
-            x = self.UTILS.debug.screenShotOnErr()
+            screenshot = self.UTILS.debug.screenShotOnErr()
             msg = "'Service unavailable' message detected - unable to send sms!"
-            self.UTILS.reporting.logResult("info", msg, x)
+            self.UTILS.reporting.logResult("info", msg, screenshot)
             return False
         except:
             pass
 
         return True
-
 
     def startNewSMS(self):
         #
@@ -1025,8 +1025,8 @@ class Messages(object):
         #
         # Returns the 'carrier' being used by this thread.
         #
-        x = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field, "Type and carrier information")
-        parts = x.text.split("|")
+        carrier = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field, "Type and carrier information")
+        parts = carrier.text.split("|")
         if len(parts) > 1:
             return parts[1].strip()
         return parts[0].strip()
@@ -1064,8 +1064,9 @@ class Messages(object):
         #
         # Returns the 'type' being used by this thread.
         #
-        x = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field, "Type and carrier information")
-        parts = x.text.split("|")
+        thread_type = self.UTILS.element.getElement(DOM.Messages.type_and_carrier_field,
+                                                    "Type and carrier information")
+        parts = thread_type.text.split("|")
         typ = parts[0].strip()
         return typ if len(parts) > 1 else ''
 
