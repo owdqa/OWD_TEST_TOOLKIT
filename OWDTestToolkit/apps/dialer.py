@@ -317,13 +317,12 @@ class Dialer(object):
 
         today = datetime.datetime.today()
         for i in range(entries_number):
-            delta = datetime.timedelta(days=i)
-            new_date = today - delta
-
-            self.UTILS.date_and_time.setTimeToSpecific(p_day=new_date.day, p_month=new_date.month)
-
             self.enterNumber(phone_number)
             self.call_this_number_and_hangup(delay=5)
+            # This needs to be done bcs sometimes (50%) the Dialer app crushes after hanging up
+            self.apps.kill_all()
+            time.sleep(2)
+            self.launch()
 
     def enterNumber(self, p_num, validate=True):
         #

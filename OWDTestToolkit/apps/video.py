@@ -128,5 +128,6 @@ class Video(object):
         self.marionette.find_element(*DOM.Video.player_toolbar_play).tap()
 
     def wait_for_list(self):
-        self.parent.wait_for_element_displayed('id', 'throbber', timeout=10)
         self.parent.wait_for_element_not_displayed('id', 'throbber', timeout=30)
+        self.parent.wait_for_element_not_displayed('id', 'overlay', timeout=30)
+

@@ -285,7 +285,7 @@ class Messages(object):
             #
             # Load an video file into the device.
             #
-            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='/SD/mus')
+            self.UTILS.general.add_file_to_device('./tests/_resources/mpeg4.mp4', destination='/SD/vid')
 
             self.create_mms_video()
             self.video.click_on_video_at_position_mms(0)
@@ -985,21 +985,19 @@ class Messages(object):
         add_btn = self.UTILS.element.getElement(DOM.Messages.add_contact_button, "Add contact button")
         add_btn.tap()
 
-    def sendSMS(self):
+   def sendSMS(self, check=True):
         #
         # Just presses the 'send' button (assumes everything else is done).
         #
         sendBtn = self.UTILS.element.getElement(DOM.Messages.send_message_button, "Send sms button")
         time.sleep(1)
         sendBtn.tap()
-        try:
-            self.parent.wait_for_element_displayed(*DOM.Messages.last_message_sending_spinner, timeout=10)
-        except:
-            return False
 
-        # (Give the spinner time to appear.)
-        time.sleep(2)
-        self.UTILS.element.waitForNotElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 180)
+        if check:
+            self.UTILS.element.waitForElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 20)
+            # (Give the spinner time to appear.)
+            time.sleep(2)
+            self.UTILS.element.waitForNotElements(DOM.Messages.last_message_sending_spinner, "'Sending' icon", True, 180)
 
         #
         # Check if we received the 'service unavailable' message.

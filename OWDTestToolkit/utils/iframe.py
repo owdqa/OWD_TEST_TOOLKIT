@@ -106,7 +106,6 @@ class iframe(object):
         #
         if via_root_frame:
             self.parent.reporting.logResult("debug", "(Switching to root-level iframe.)")
-            self.parent.general.checkMarionetteOK()
             self.marionette.switch_to_frame()
 
         #
