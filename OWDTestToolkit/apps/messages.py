@@ -985,7 +985,7 @@ class Messages(object):
         add_btn = self.UTILS.element.getElement(DOM.Messages.add_contact_button, "Add contact button")
         add_btn.tap()
 
-    def sendSMS(self, check=True):
+   def sendSMS(self, check=True):
         #
         # Just presses the 'send' button (assumes everything else is done).
         #
