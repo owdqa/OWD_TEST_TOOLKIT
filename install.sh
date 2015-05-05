@@ -15,7 +15,7 @@ cd $OWD_TEST_TOOLKIT_DIR
 printf "\n\nCompleting install of OWD_TEST_TOOLKIT..." | tee -a $LOGFILE
 printf "\n=========================================\n" | tee -a $LOGFILE
 printf "\nSwitching to branch $INTEGRATION$BRANCH of OWD_TEST_TOOLKIT ...\n\n" | tee -a $LOGFILE
-git checkout $INTEGRATION$BRANCH 2> >( tee -a $LOGFILE)
+# git checkout $INTEGRATION$BRANCH 2> >( tee -a $LOGFILE)
 printf "\nNow using OWD_TEST_TOOLKIT branch \"$(git branch | grep '*')\".\n\n" | tee -a $LOGFILE
 
 printf "\nInstalling OWD_TEST_TOOLKIT...\n\n" | tee -a $LOGFILE

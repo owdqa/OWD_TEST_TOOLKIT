@@ -21,6 +21,8 @@ class general(object):
         Put a file onto the device (path is relative to the dir
         you are physically in when running the tests).
         """
+        self.parent.reporting.logResult('info', 'File name: {}'.format(file_name))
+        self.parent.reporting.logResult('info', 'Remote path: {}'.format(self.parent.device.storage_path))
         self.parent.device.file_manager.push_file(
             local_path=file_name, remote_path=self.parent.device.storage_path, count=count)
 
