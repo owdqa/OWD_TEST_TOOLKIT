@@ -40,6 +40,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>framePresent</td>
+        <td align=left>p_attrib<br>p_str<br>p_viaRootFrame=True</td>
+        <td align=left>Checks for the presence of an iframe containing the attribute value <b>p_str</b>.<br>  For example: ("src", "contacts") or ("src", "sms") etc...<br><br>  NOTE: You *usually* need to do this via the 'root' frame (almost all iframes  are contained in the root-level frame).<br><br>  Performs this 'silently' and just returns True or False.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>switchToFrame</td>
         <td align=left>p_attrib<br>p_str<br>p_quitOnError=True<br>p_viaRootFrame=True</td>
         <td align=left>Switch to the iframe containing the attribute value <b>p_str</b>.<br>  For example: ("src", "contacts") or ("src", "sms") etc...<br><br>  NOTE: You *usually* need to do this via the 'root' frame (almost all iframes  are contained in the root-level frame).</td>
@@ -56,7 +63,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>viewAllIframes</td>
         <td align=left></td>
-        <td align=left>DEV TOOL: this will loop through every iframe,  report all attributes ("src","id" etc...), take a screenshot and capture the html.   Because this is only meant as a dev aid (and shouldn't be in any released test  scripts), it reports to ERROR instead of COMMENT.</td>
+        <td align=left>Dumps details of all iframes (recursively) into the run log.</td>
     </tr>
 
 
@@ -96,8 +103,15 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>putHomeInEditMode</td>
+        <td align=left></td>
+        <td align=left>Just uses the first icon it comes across to put the homescreen into edit mode.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>findAppIcon</td>
-        <td align=left>p_appName<br>p_reloadHome=True</td>
+        <td align=left>p_appName</td>
         <td align=left>Scroll around the homescreen until we find our app icon.</td>
     </tr>
 
@@ -110,9 +124,23 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>moveAppFromDock</td>
+        <td align=left>p_name</td>
+        <td align=left>Moves the app 'p_name' from the dock to the homescreen.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>killApp</td>
         <td align=left>p_name</td>
         <td align=left>Kills the app specified by p_name.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>addAppToDock</td>
+        <td align=left>p_appName</td>
+        <td align=left>Adds <i>p_appName</i> to the homescreen dock if possible  (if the dock already the maximum number of apps in it a message  will be added to the details log and the function will return False).</td>
     </tr>
 
 
@@ -153,7 +181,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
     <tr>
         <td align=center>isIconInStatusBar</td>
-        <td align=left>p_dom<br>p_returnFrame=False</td>
+        <td align=left>p_dom</td>
         <td align=left>Check an icon is in the statusbar, then return to the  given frame (doesn't wait, just expects it to be there).</td>
     </tr>
 
@@ -197,6 +225,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
         <td align=center>waitForNetworkItemDisabled</td>
         <td align=left>p_type<br>p_timeOut=60</td>
         <td align=left>Waits for network 'item' to be disabled.  <br><br>  Accepted 'types' are:<br>  <b>data</b><br>  <b>wifi</b><br>  <b>airplane</b><br>  <b>bluetooth</b></td>
+    </tr>
+
+
+    <tr>
+        <td align=center>waitForNoNetworkActivity</td>
+        <td align=left>p_timeout=10</td>
+        <td align=left>Waits for the network activity icon in the status bar to dissappear.<br>  <b>NOTE:</b> Leaves you in the root iframe and returns True or False.</td>
     </tr>
 
 
@@ -278,6 +313,13 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
+        <td align=center>getStackTrace</td>
+        <td align=left></td>
+        <td align=left>Adds the stack trace to the test report (called automatically if UTILS.TEST() fails).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>screenShot</td>
         <td align=left>p_fileSuffix</td>
         <td align=left>Take a screenshot.</td>
@@ -299,7 +341,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
 
 
     <tr>
-        <td align=center>setTimeToNow</td>
+        <td align=center>set_time_to_now</td>
         <td align=left>p_continent=False<br>p_city=False</td>
         <td align=left>Set the phone's time (using gaia data_layer instead of the UI).  <b>NOTE:</b> Also sets the timezone (continent and city).</td>
     </tr>
@@ -308,14 +350,14 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>setTimeToSpecific</td>
         <td align=left>p_year="NOW"<br>p_month="NOW"<br>p_day="NOW"<br>p_hour="NOW"<br>p_minute="NOW"</td>
-        <td align=left>Sets the device time to a specific time (always today) based on the parameters:<br>  <pre>  <b>p_year :</b> <i>YYYY</i>, i.e. "2013"<br>  <b>p_month :</b> <i>mm</i>, i.e. "1" -> "12"<br>  <b>p_day :</b> <i>dd</i>, i.e. "1" -> "31"<br>  <b>p_hour :</b> <i>HH</i>, i.e. "0" -> "23"<br>  <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>  </pre><br>  All parameters will default to 'now'.<br>  Returns a 'dateTime' object for the new date and time.</td>
+        <td align=left>Sets the device time to a specific time (always today) based on the parameters:<br>  <pre>  <b>p_year :</b> <i>YYYY</i>, i.e. "2013"<br>  <b>p_month :</b> <i>mm</i>, i.e. "1" -> "12"<br>  <b>p_day :</b> <i>dd</i>, i.e. "1" -> "31"<br>  <b>p_hour :</b> <i>HH</i>, i.e. "0" -> "23"<br>  <b>p_minute :</b> <i>MM</i>, i.e. "0" -> "59"<br>  </pre><br>  All parameters will default to 'now'.<br>  Returns a 'dateTime' object for the new date and time:  <pre>  Attribute Field Values<br>  tm_mday Day 1 to 31<br>  tm_year 4-digit year 2008 etc...<br>  tm_mon Month 1 to 12<br>  tm_mday Day 1 to 31<br>  tm_hour Hour 0 to 23<br>  tm_min Minute 0 to 59<br>  tm_sec Second 0 to 61 (60 or 61 are leap-seconds)<br>  tm_wday Day of Week 0 to 6 (0 is Monday)<br>  tm_yday Day of year 1 to 366 (Julian day)<br>  tm_isdst Daylight savings -1, 0, 1, -1 means library determines DST<br>  </pre></td>
     </tr>
 
 
     <tr>
         <td align=center>getEpochSecsFromDateTime</td>
         <td align=left>p_dateTime</td>
-        <td align=left>Converts a date-time struct into epoch seconds.</td>
+        <td align=left>Converts a date-time struct into epoch seconds. If p_dateTime is teh object returned  from getDateTimeFromEpochSecs() then it will handle that too.</td>
     </tr>
 
 
@@ -329,7 +371,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>getDateTimeFromEpochSecs</td>
         <td align=left>p_seconds_since_epoch</td>
-        <td align=left>Returns struct containing date and time strings  converted from 'seconds since epoch' (now = "time.time()").<br>  The result array elements are as follows:<br>  <pre>  Attribute Field Values<br>  tm_year 4-digit year 2008<br>  tm_mon Month 1 to 12<br>  tm_mday Day 1 to 31<br>  tm_hour Hour 0 to 23<br>  tm_min Minute 0 to 59<br>  tm_sec Second 0 to 61 (60 or 61 are leap-seconds)<br>  tm_wday Day of Week 0 to 6 (0 is Monday)<br>  tm_yday Day of year 1 to 366 (Julian day)<br>  tm_isdst Daylight savings -1, 0, 1, -1 means library determines DST<br>  </pre>  <br>  Example:<br>  <pre>  x = self.UTILS.getDateTimeFromEpochSecs(_myTime)<br>  self.UTILS.logResults(x.tm_wday)<br>  <pre></td>
+        <td align=left>Returns struct containing date and time strings  converted from 'seconds since epoch'  (for 'today' you would use: "getDateTimeFromEpochSecs(int(time.time()))").<br>  The result array elements are as follows:<br>  <pre>  Attribute Field Values<br>  day_name Day "Monday" to "Friday"<br>  month_name Day "january" to "December"<br>  mday Day 1 to 31<br>  year 4-digit year 2008 etc...<br>  mon Month 1 to 12<br>  mday Day 1 to 31<br>  hour Hour 0 to 23<br>  min Minute 0 to 59<br>  sec Second 0 to 61 (60 or 61 are leap-seconds)<br>  wday Day of Week 0 to 6 (0 is Monday)<br>  yday Day of year 1 to 366 (Julian day)<br>  isdst Daylight savings -1, 0, 1, -1 means library determines DST<br>  </pre>  <br>  Example:<br>  <pre>  _today = self.UTILS.getDateTimeFromEpochSecs( int(time.time()) )<br>  self.UTILS.logResults("info", "Day: %s" % _today.day_name)<br>  <pre></td>
     </tr>
 
 
@@ -399,7 +441,7 @@ self.UTILS.TEST(True, "I am using the utils classes!")
     <tr>
         <td align=center>checkMarionetteOK</td>
         <td align=left></td>
-        <td align=left>Sometimes marionette session 'vanishes', so this makes sure we have one still.</td>
+        <td align=left>Sometimes marionette session 'vanishes', so this makes sure we have one still.  <b>NOTE: </b>This leaves you in the 'top -level' iframe, so you'll need to navigate back  to your frame after running this.   try:  self.marionette.delete_session()  except:  pass</td>
     </tr>
 
 

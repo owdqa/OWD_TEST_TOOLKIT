@@ -1,112 +1,66 @@
-from OWDTestToolkit.global_imports import *
+import time
+import datetime
+from marionette_driver.marionette import Actions
+from app import app
+from date_and_time import date_and_time
+from debug import debug
+from element import element
+from general import general
+from home import home
+from iframe import iframe
+from messages import Messages
+from network import network
+from reporting import reporting
+from statusbar import statusbar
+from test import test
+from visual_tests import visualtests
 
-import  app         ,\
-        date_and_time,\
-        debug       ,\
-        element     ,\
-        general     ,\
-        home        ,\
-        iframe      ,\
-        network     ,\
-        reporting   ,\
-        statusbar   ,\
-        test
 
+class UTILS(object):
+    """
+    When you create your instance of this class, include the
+    "self" object so we can access the calling class' objects.
+    """
+    def __init__(self, parent):
+        self.parent = parent
+        self.device = parent.device
+        self.data_layer = parent.data_layer
+        self.apps = parent.apps
+        self.marionette = parent.marionette
+        self.actions = Actions(self.marionette)
 
-class UTILS(app.main        ,
-            date_and_time.main,
-            debug.main      ,
-            element.main    ,
-            general.main    ,
-            home.main       ,
-            iframe.main     ,
-            network.main    ,
-            reporting.main  ,
-            statusbar.main  ,
-            test.main):
-    #
-    # When you create your instance of this class, include the
-    # "self" object so we can access the calling class' objects.
-    #
-    def __init__(self, p_parent):
-        self.parent         = p_parent
-        self.device         = p_parent.device
-        self.data_layer     = p_parent.data_layer
-        self.apps           = p_parent.apps
-        self.marionette     = p_parent.marionette
-        self.actions        = Actions(self.marionette)
-
-        #
         # Globals used for reporting ...
-        #
-        self._resultArray   = []
-        self._commentArray  = []
-        self.errNum         = 0
-        self.passed         = 0
-        self.failed         = 0
-        self.start_time     = time.time()
-        self.last_timestamp = time.time()
-        
-        #
-        # Other globals ...
-        #
-        self._DEFAULT_ELEMENT_TIMEOUT = 5   
+        self.errNum = 0
+        self.start_time = time.time()
 
-        #
         # Get run details from the OS.
-        #
-        varStr = "Setting OS variables ..."
-        self.testNum        = self.get_os_variable("TEST_NUM", True)
-        self.det_fnam       = self.get_os_variable("DET_FILE", True)
-        self.sum_fnam       = self.get_os_variable("SUM_FILE", True)
-        self.logResult("info", "Get OS variables ..." +\
-                               "|self.testNum  = '" + str(self.testNum)  + "'." +\
-                               "|self.det_fnam = '" + str(self.det_fnam) + "'." +\
-                               "|self.sum_fnam = '" + str(self.sum_fnam) + "'."
-                               )
-                
-        #
-        # Set device defaults.
-        #
-        a=self.setSetting("vibration.enabled",          True,   True)
-        b=self.setSetting("audio.volume.notification",  0,      True)
-        c=self.setSetting('ril.radio.disabled',         False,  True)
-        self.logResult("info", "Default device settings ..." +\
-                               "|Set 'vibration.enabled'         = True  " + ("[OK]" if a else "[UNABLE TO SET!]!") +\
-                               "|Set 'audio.volume.notification' = 0     " + ("[OK]" if b else "[UNABLE TO SET!]!") +\
-                               "|Set 'ril.radio.disabled'        = False " + ("[OK]" if c else "[UNABLE TO SET!]!")
-                                )
-    
-        a=self.setPermission('Camera', 'geolocation', 'deny', True)
-        b=self.setPermission('Homescreen', 'geolocation', 'deny', True)
-        self.logResult("info", "Default app permissions ..." +\
-                               "|Set 'Camera'     -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!") +\
-                               "|Set 'Homescreen' -> 'geolocation' = True  " + ("[OK]" if a else "[UNABLE TO SET!]!")
-                               )
-            
+        self.general = general(self)
+        self.test_num = parent.__module__[5:]
+
+        self.app = app(self)
+        self.date_and_time = date_and_time(self)
+        self.debug = debug(self)
+        self.element = element(self)
+        self.home = home(self)
+        self.iframe = iframe(self)
+        self.messages = Messages(self)
+        self.network = network(self)
+        self.reporting = reporting(self)
+        self.statusbar = statusbar(self)
+        self.test = test(self)
+        self.visual_tests = visualtests(self)
 
         self.marionette.set_search_timeout(10000)
         self.marionette.set_script_timeout(10000)
 
+        elapsed = time.time() - self.start_time
+        elapsed = round(elapsed, 0)
+        elapsed = str(datetime.timedelta(seconds=elapsed))
+        self.reporting.debug("Initializing 'UTILS' took {} seconds.".format(elapsed))
+        current_lang = parent.data_layer.get_setting("language.current").split('-')[0]
+        self.reporting.info("Current Toolkit language: [{}]".format(current_lang))
         try:
-            self.setTimeToNow()
+            btn = self.marionette.find_element('id', 'charge-warning-ok')
+            btn.tap()
         except:
-            self.logResult("info", "WARNING: Failed to set the current time on this device!")
-        
-        try:
-            self.setupDataConn()
-        except:
-            self.logResult("info", "WARNING: Failed to set up the data conn details (APN etc...)!")
-            
-        #
-        # Remove any current contacts (it would be nice to do more, but at the
-        # moment this will do).
-        #
-        self.data_layer.remove_all_contacts()
-        self.apps.kill_all()
-        time.sleep(2)
-        
-        #
-        # Unlock (if necessary).
-        #
-        self.parent.lockscreen.unlock()
+            pass

@@ -1,0 +1,327 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-10-23 12:12+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Gallery.py:35
+#: OWDTestToolkit/DOM/Gallery.py:35
+msgid "No photos or videos"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Facebook.py:9
+#: OWDTestToolkit/DOM/Facebook.py:9
+msgid "Facebook Friends"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Clock.py:14
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Messages.py:24
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Messages.py:85
+#: OWDTestToolkit/DOM/Clock.py:14 OWDTestToolkit/DOM/Messages.py:24
+#: OWDTestToolkit/DOM/Messages.py:85
+msgid "OK"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/FTU.py:24
+#: OWDTestToolkit/DOM/FTU.py:24
+msgid "Change"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:8
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/dialer.py:35
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/dialer.py:48
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/contacts.py:228
+#: OWDTestToolkit/DOM/Contacts.py:8 OWDTestToolkit/apps/dialer.py:35
+#: OWDTestToolkit/apps/dialer.py:48 OWDTestToolkit/apps/contacts.py:228
+msgid "Contacts"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:38
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:8
+#: OWDTestToolkit/DOM/Contacts.py:38 OWDTestToolkit/DOM/Settings.py:8
+msgid "Settings"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:45
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:315
+#: OWDTestToolkit/DOM/Contacts.py:45 OWDTestToolkit/apps/settings.py:315
+msgid "Add contact"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:52
+#: OWDTestToolkit/DOM/Contacts.py:52
+msgid "Edit contact"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:57
+#: OWDTestToolkit/DOM/Contacts.py:57
+msgid "Cancel"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:58
+#: OWDTestToolkit/DOM/Contacts.py:58
+msgid "Delete"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:102
+#: OWDTestToolkit/DOM/Contacts.py:102
+msgid "Import Contacts"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:127
+#: OWDTestToolkit/DOM/Contacts.py:127
+msgid "Reading from SIM card"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Contacts.py:129
+#: OWDTestToolkit/DOM/Contacts.py:129
+msgid "Importing SIM contacts"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:56
+#: OWDTestToolkit/DOM/Settings.py:56
+msgid "App permissions"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:66
+#: OWDTestToolkit/DOM/Settings.py:66
+msgid "Connected"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:75
+#: OWDTestToolkit/DOM/Settings.py:75
+msgid "Forget"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:91
+#: OWDTestToolkit/DOM/Settings.py:91
+msgid "Cellular & Data"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:121
+#: OWDTestToolkit/DOM/Settings.py:121
+msgid "Internet sharing"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:141
+#: OWDTestToolkit/DOM/Settings.py:141
+msgid "SIM security"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:144
+#: OWDTestToolkit/DOM/Settings.py:144
+msgid "Enter SIM PIN"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:146
+#: OWDTestToolkit/DOM/Settings.py:146
+msgid "Done"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Settings.py:150
+#: OWDTestToolkit/DOM/Settings.py:150
+msgid "SIM manager"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Video.py:5
+#: OWDTestToolkit/DOM/Video.py:5
+msgid "Add videos to get started"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Browser.py:45
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Browser.py:46
+#: OWDTestToolkit/DOM/Browser.py:45 OWDTestToolkit/DOM/Browser.py:46
+msgid "Problemloadingpage"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:11
+#: OWDTestToolkit/DOM/Email.py:11
+msgid "Continue to Mail"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:12
+#: OWDTestToolkit/DOM/Email.py:12
+msgid "New Account"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:45
+#: OWDTestToolkit/DOM/Email.py:45
+msgid "Sending email failed"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:50
+#: OWDTestToolkit/DOM/Email.py:50
+msgid "Video"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:51
+#: OWDTestToolkit/DOM/Email.py:51
+msgid "Music"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:52
+#: OWDTestToolkit/DOM/Email.py:52
+msgid "Gallery"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:53
+#: OWDTestToolkit/DOM/Email.py:53
+msgid "Camera"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Email.py:89
+#: OWDTestToolkit/DOM/Email.py:89
+msgid "1 message deleted"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Statusbar.py:10
+#: OWDTestToolkit/DOM/Statusbar.py:10
+msgid "bars"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Messages.py:23
+#: OWDTestToolkit/DOM/Messages.py:23
+msgid "No phones"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Messages.py:108
+#: OWDTestToolkit/DOM/Messages.py:108
+msgid "Call"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/DOM/Messages.py:113
+#: OWDTestToolkit/DOM/Messages.py:113
+msgid "Send email"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/loop.py:184
+#: OWDTestToolkit/apps/loop.py:184
+msgid "Mobile ID"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:222
+#: OWDTestToolkit/apps/messages.py:222
+msgid "Messages"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:337
+#: OWDTestToolkit/apps/messages.py:337
+msgid " recipient"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:337
+#: OWDTestToolkit/apps/messages.py:337
+msgid " recipients"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:568
+#: OWDTestToolkit/apps/messages.py:568
+msgid "Delete messages"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:959
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/messages.py:961
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/contacts.py:287
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/contacts.py:295
+#: OWDTestToolkit/apps/messages.py:959 OWDTestToolkit/apps/messages.py:961
+#: OWDTestToolkit/apps/contacts.py:287 OWDTestToolkit/apps/contacts.py:295
+msgid "Remove"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:344
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:594
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:695
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:738
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:818
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:838
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:855
+#: OWDTestToolkit/apps/email.py:344 OWDTestToolkit/apps/email.py:594
+#: OWDTestToolkit/apps/email.py:695 OWDTestToolkit/apps/email.py:738
+#: OWDTestToolkit/apps/email.py:818 OWDTestToolkit/apps/email.py:838
+#: OWDTestToolkit/apps/email.py:855
+msgid "Inbox"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:359
+#: OWDTestToolkit/apps/email.py:359
+msgid "Mail Settings"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:422
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:450
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:492
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/email.py:526
+#: OWDTestToolkit/apps/email.py:422 OWDTestToolkit/apps/email.py:450
+#: OWDTestToolkit/apps/email.py:492 OWDTestToolkit/apps/email.py:526
+msgid "Compose"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/downloadmanager.py:45
+#: OWDTestToolkit/apps/downloadmanager.py:45
+msgid "Unable to open"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/downloadmanager.py:158
+#: OWDTestToolkit/apps/downloadmanager.py:158
+msgid "No downloads"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:53
+#: OWDTestToolkit/apps/settings.py:53
+msgid "Call Settings"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:218
+#: OWDTestToolkit/apps/settings.py:218
+msgid "Fixed dialing numbers"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:223
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:763
+#: OWDTestToolkit/apps/settings.py:223 OWDTestToolkit/apps/settings.py:763
+msgid "Enabled"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:223
+#: OWDTestToolkit/apps/settings.py:223
+msgid "Disabled"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:235
+#: OWDTestToolkit/apps/settings.py:235
+msgid "Enable FDN"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:235
+#: OWDTestToolkit/apps/settings.py:235
+msgid "Disable FDN"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:298
+#: OWDTestToolkit/apps/settings.py:298
+msgid "Authorized numbers"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:333
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/settings.py:378
+#: OWDTestToolkit/apps/settings.py:333 OWDTestToolkit/apps/settings.py:378
+msgid "Enter SIM PIN2"
+msgstr ""
+
+#: build/lib.linux-x86_64-2.7/OWDTestToolkit/apps/marketplace.py:70
+#: OWDTestToolkit/apps/marketplace.py:70
+msgid "Downloading"
+msgstr ""

@@ -1,0 +1,111 @@
+{
+	"acknowledged_risks": true,
+	"skip_warning": true,
+	"general": {
+		"lockscreen.locked": false,
+		"test_descriptions": "Docs/test_descriptions.json",
+		"blocked_tests": "Docs/blocked_tests.json",
+		"description_length": "100",
+		"is_cert_device": false,
+		"test_retries": 2
+	},
+	"wifi": {
+		"ssid": "OWDTEST",
+		"keyManagement": "WPA-PSK",
+		"psk": "tidowd22",
+		"password": "tidowd22",
+		"open_wifi_name": "OWDTEST"
+	},
+	"toolkit_cfg": {
+		"css_file": "config/details.css",
+		"results_template": "config/results_template.html"
+	},
+	"common": {
+		"long_wait_time": "36",
+		"short_wait_time": "18",
+		"usblt_wait_time": "72",
+		"usblt_4_hour_wait_time": "144",
+		"gmail_1_email": "roytesterton.1@gmail.com",
+		"gmail_1_pass": "test123x",
+		"gmail_1_user": "roytesterton.1",
+		"gmail_2_email": "roytesterton.2@gmail.com",
+		"gmail_2_pass": "test123x",
+		"gmail_2_user": "roytesterton.2",
+		"gmail_3_email": "roytesterton.3@gmail.com",
+		"gmail_3_pass": "test123x",
+		"gmail_3_user": "roytesterton.3",
+		"hotmail_1_user": "roytesterton.1",
+		"hotmail_1_email": "roytesterton.1@hotmail.co.uk",
+		"hotmail_1_pass": "owdqa2015",
+		"hotmail_2_user": "roytesterton.2",
+		"hotmail_2_email": "roytesterton.2@hotmail.co.uk",
+		"hotmail_2_pass": "test123x",
+		"target_call_number": "983548227",
+		"incoming_call_number": "+34620912635",
+		"test_url": "www.google.com",
+		"city": "Madrid",
+		"region": "Europe",
+		"sms_platform_numbers": "+34606304548,+34629538220",
+		"pigeon_url": "http://pigeon.compilon.com:443/sms/v2/smsoutbound",
+		"download_url": "https://owd.tid.es/dm",
+		"nowsms_user": "owd",
+		"nowsms_pass": "qa",
+		"fxa_user": "owdqa@hotmail.es",
+		"fxa_pass": "12345678",
+		"fxa_user2": "",
+		"fxa_pass2": "",
+		"smsc_number": "+34609090909"
+	},
+	"custom": {
+		"phone_number": "+34620992464",
+		"short_phone_number": "800192",
+		"pin": "1234",
+		"lock_code": "1234",
+		"puk": "57470252",
+		"puk2": "35255134",
+		"pin2": "3456",
+		"pin2_wrong": "1234",
+		"cp_netwpin": "68617610508695F4",
+		"cp_userpin": "1234",
+		"cp_usernetwpin": "68617610508695F4:1234",
+		"pigeon_api_key": "321f02d7-b856-4147-864e-bae7d703ea94",
+		"pigeon_api_secret": "a058c12d-f973-46c2-971b-c30125f2e741"
+	},
+	"graphics":{
+		"enabled": true,
+		"graphics_dir": "/tmp/tests"
+	},
+	"output": {
+		"log_cfg": "tests/logger.cfg",
+		"webdir": "http://ci-owd-deven-01/owd_tests",
+		"result_dir": "/tmp/tests/details",
+		"html_output": "/tmp/tests/results.html",
+		"error_output": "/tmp/tests/error.txt",
+		"log_path": "/tmp/tests/tests.log",
+		"persistent_dir": "/var/www/html/owd_tests",
+		"verbosity": "3"
+	},
+	"loop": {
+		"install_via": "Grunt",
+		"install_dir": "/home/develenv/projects/firefoxos-loop-client",
+		"aux_files": "/home/develenv/projects/owd_test_cases/tests/LOOP/aux_files"
+	},
+	"csv": {
+		"weekly_csv_file": "/var/www/html/owd_tests/total_csv_file.csv",
+		"daily_csv_file": "/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW.csv",
+		"weekly_csv_cert_file": "/var/www/html/owd_tests/total_csv_file_CERT.csv",
+		"daily_csv_cert_file": "/var/www/html/owd_tests/{}/{}/partial_csv_file_NEW_CERT.csv"
+	},
+	"cert": {
+		"device_cert": "cert_device",
+		"branch_cert": "v2.0",
+		"buildname_cert": "cert_build-.master.B-xxx.Gecko-xxxxxxx.Gaia-xxxxxxx"
+	},
+	"visualtest": {
+		"enabled": true,
+		"engine": "pil",
+		"save_baseline": false,
+		"baseline_dir": "/home/develenv/projects/owd_test_cases/screenshots/baseline",
+		"cmp_dir": "/home/develenv/projects/owd_test_cases/screenshots/cmp"
+	}
+}

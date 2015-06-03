@@ -28,9 +28,72 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
+        <td align=center>closeTab</td>
+        <td align=left>p_num</td>
+        <td align=left>Closes the browser tab p_num (starting at '1').  Assumes we are in the main Browser iframe.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>searchUsingUrlField</td>
+        <td align=left>p_searchStr</td>
+        <td align=left>Searches for p_searchStr using the URL field.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getAwesomeList</td>
+        <td align=left>p_tabName</td>
+        <td align=left>Retrns a list of elements from the awesomescreen tabs  (<b>p_tabName</b> must be one of: "top sites", "bookmarks", "history").  Theses elements have some handy attributes:<br>  <br>  href: containing the url (may have 'extra' info in it, so use 'x in y').<br>  .find_element("tag name","h5"): contains the title of this page.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>loadedURL</td>
+        <td align=left></td>
+        <td align=left>Returns the url of the currently loaded web page.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getTabNumber</td>
+        <td align=left>p_titleContains</td>
+        <td align=left>Returns the number of the browser tab with a title that contains  p_titleContains, or False if it's not found.  <br>  Assumes we're in the main browser frame.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>trayCounterValue</td>
+        <td align=left></td>
+        <td align=left>Returns the tray counter value (filtering weird characters out).  Assumes we are in the main browser iframe.<br>  <b>NOTE: </b> The value returned from this is a <i>string</i>, not an <i>int</i>.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>openTab</td>
+        <td align=left>p_num</td>
+        <td align=left>Tries to open the tab p_num (starting at 1).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>getTabTitle</td>
+        <td align=left>p_num</td>
+        <td align=left>Returns the title of tab p_num (assume we are in the main browser frame).</td>
+    </tr>
+
+
+    <tr>
         <td align=center>check_page_loaded</td>
         <td align=left>p_url</td>
         <td align=left>Check the page didn't have a problem.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>addNewTab</td>
+        <td align=left></td>
+        <td align=left>Adds a new tab (assume we are in the main Browser iframe).</td>
     </tr>
 
 
@@ -45,6 +108,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>waitForPageToFinishLoading</td>
         <td align=left></td>
         <td align=left>Waits for the current url to finish loading.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>openTabTray</td>
+        <td align=left></td>
+        <td align=left>Opens the tab tray (can be one of several methods).</td>
     </tr>
 
 </table>
@@ -68,9 +138,16 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>addEvent</td>
-        <td align=left></td>
-        <td align=left>Press the 'add event' button.</td>
+        <td align=center>moveMonthViewBy</td>
+        <td align=left>p_num</td>
+        <td align=left>Switches to month view, then moves 'p_num' months in the future or past (if the p_num is  positive or negative) relative to today.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>changeDay</td>
+        <td align=left>p_numDays<br>p_viewType</td>
+        <td align=left>Changes the calendar day to a different day relative to 'today' - <b>uses the  month view to do this, then switches back to whichever  view you want (month, week, day)</b>.<br>  <b>p_numDays</b> is a number (can be negative to go back, i.e. -5,-2,1,3,5 etc...).<br>  <b>p_viewType</b> is the calendar view to return to (today / day / week / month)<br>  Returns a modified DateTime object from <i>UTILS.getDateTimeFromEpochSecs()</i>.</td>
     </tr>
 
 
@@ -82,8 +159,15 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>moveDayViewBy</td>
+        <td align=left>p_num</td>
+        <td align=left>Switches to week view, then moves 'p_num' weeks in the future or past (if the p_num is  positive or negative) relative to today.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>createEvent</td>
-        <td align=left>p_title<br>p_location<br>p_allDay<br>p_startDate<br>p_startTime<br>p_endDate<br>p_endTime<br>p_notes</td>
+        <td align=left></td>
         <td align=left>Create a new event - use 'False' in the following fields if you want to leave them at default:   start date,  end date,  location,  notes</td>
     </tr>
 
@@ -91,7 +175,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
     <tr>
         <td align=center>setView</td>
         <td align=left>p_type</td>
-        <td align=left>Set to view type (day / week / month).</td>
+        <td align=left>Set to view type (today / day / week / month).</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>moveWeekViewBy</td>
+        <td align=left>p_num</td>
+        <td align=left>Switches to week view, then moves 'p_num' weeks in the future or past (if the p_num is  positive or negative) relative to today.</td>
     </tr>
 
 </table>
@@ -102,42 +193,42 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>takePicture</td>
+        <td align=center>take_picture</td>
         <td align=left></td>
         <td align=left>Take a picture.</td>
     </tr>
 
 
     <tr>
-        <td align=center>goToGallery</td>
+        <td align=center>go_to_gallery</td>
         <td align=left></td>
         <td align=left>Clicks the Gallery button to switch to the Gallery application  (warning: this will land you in the gallery iframe).</td>
     </tr>
 
 
     <tr>
-        <td align=center>checkVideoLength</td>
+        <td align=center>check_video_length</td>
         <td align=left>p_vid_num<br>p_from_SS<br>p_to_SS</td>
         <td align=left>Check the length of a video.</td>
     </tr>
 
 
     <tr>
-        <td align=center>switchSource</td>
+        <td align=center>switch_source</td>
         <td align=left></td>
         <td align=left>Switch between still shot and video.</td>
     </tr>
 
 
     <tr>
-        <td align=center>clickThumbnail</td>
+        <td align=center>click_on_thumbnail_at_pos</td>
         <td align=left>p_num</td>
         <td align=left>Click thumbnail.</td>
     </tr>
 
 
     <tr>
-        <td align=center>recordVideo</td>
+        <td align=center>record_video</td>
         <td align=left>p_length</td>
         <td align=left>Record a video.  p_length is the number of seconds to record for.</td>
     </tr>
@@ -269,7 +360,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
     <tr>
         <td align=center>editContact</td>
-        <td align=left>p_contact_curr_json_obj<br>p_contact_new_json_obj</td>
+        <td align=left>p_contact_name<br>p_contact_new_json_obj</td>
         <td align=left>Replace the details of one contact with another via the edit screen.  <br><br>  <b>p_contact_curr_json_obj</b> and <b>p_contact_new_json_obj</b> must  be objects in the same format as the one in  ./example/tests/mock_data/contacts.py (however, only needs the  'name' component is used from the p_contact_curr_json_obj).</td>
     </tr>
 
@@ -311,15 +402,15 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
     <tr>
         <td align=center>viewContact</td>
-        <td align=left>p_contact_name<br>p_HeaderCheck=True</td>
-        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen).  <br>  In some cases you don't want this to check the header (if the contact has no name  for example). In that case, set p_HeaderCheck=False.</td>
+        <td align=left>p_contactName<br>p_HeaderCheck=True</td>
+        <td align=left>Navigate to the 'view details' screen for a contact (assumes we are in the  'view all contacts' screen, either from Contacts app, or Dialer app).  <br>  In some cases you don't want this to check the header (if the contact has no name,  or you're just using the given name etc..). In that case, set p_HeaderCheck=False.</td>
     </tr>
 
 
     <tr>
         <td align=center>import_HotmailLogin</td>
-        <td align=left>p_name<br>p_pass<br>p_clickSignIn=True</td>
-        <td align=left>Presses the Settings button, then Hotmail, then logs in using  p_name and p_pass (to begin the process of importing contacts).  <br>  If p_clickSignIn is set to True then this method will also click  the Sign in button (defaults to true).  <br>  Returns False if the login failed, else True.</td>
+        <td align=left>p_name<br>p_pass<br>p_clickSignIn=True<br>p_justSignIn=False</td>
+        <td align=left>Presses the Settings button in the contacts app, then Hotmail, then logs in using  p_name and p_pass (to begin the process of importing contacts).  <br>  If p_clickSignIn is set to True then this method will also click  the Sign in button (defaults to true).  <br>  Returns False if the login failed, "ALLIMPORTED" if all your contacts are already imported else True.</td>
     </tr>
 
 
@@ -348,13 +439,6 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>checkViewContactDetails</td>
         <td align=left>p_contact_json_obj<br>p_imageCheck = False</td>
         <td align=left>Validate the details of a contact in the 'view contact' screen.  <br><br>  <b>p_contact_json_obj</b> must be an object in the same format as the  one in ./example/tests/mock_data/contacts.py.</td>
-    </tr>
-
-
-    <tr>
-        <td align=center>selectContactFromAll</td>
-        <td align=left>p_contactName</td>
-        <td align=left>Select the result of a search</td>
     </tr>
 
 
@@ -463,6 +547,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>callLog_clearAll</td>
+        <td align=left></td>
+        <td align=left>Wipes all entries from the csll log.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>openCallLog</td>
         <td align=left></td>
         <td align=left>Opens the call log.</td>
@@ -510,6 +601,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=left>Put a number in the call log multiple times  (done by manipulating the device time).  Leaves you in the call log.</td>
     </tr>
 
+
+    <tr>
+        <td align=center>callLog_clearSome</td>
+        <td align=left>p_entryNumbers</td>
+        <td align=left>Wipes entries from the call log, using p_entryNumbers as an array of  numbers. For example: callLog_clearSome([1,2,3]) will remove the first 3.  <br><b>NOTE:</b> the first item is 1, <i>not</i> 0.</td>
+    </tr>
+
 </table>
 #Email
 <table>
@@ -518,14 +616,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>deleteEmail</td>
+        <td align=center>delete_email</td>
         <td align=left>p_subject</td>
         <td align=left>Deletes the first message in this folder with this subject line.</td>
     </tr>
 
 
     <tr>
-        <td align=center>emailIsInFolder</td>
+        <td align=center>email_is_in_folder</td>
         <td align=left>p_subject</td>
         <td align=left>Verify an email is in this folder with the expected subject.</td>
     </tr>
@@ -539,7 +637,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>sendTheMessage</td>
+        <td align=center>send_the_email</td>
         <td align=left></td>
         <td align=left>Hits the 'Send' button to send the message (handles  waiting for the correct elements etc...).</td>
     </tr>
@@ -560,7 +658,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>switchAccount</td>
+        <td align=center>switch_account</td>
         <td align=left>p_address</td>
         <td align=left>Add a new account.</td>
     </tr>
@@ -574,14 +672,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>setupAccount</td>
+        <td align=center>setup_account</td>
         <td align=left>p_user<br>p_email<br>p_pass</td>
         <td align=left>Set up a new email account in the email app and login.</td>
     </tr>
 
 
     <tr>
-        <td align=center>openMsg</td>
+        <td align=center>open_msg</td>
         <td align=left>p_subject</td>
         <td align=left>Opens a specific email in the current folder  (assumes we're already in the folder we want).</td>
     </tr>
@@ -601,6 +699,13 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
+        <td align=center>removeGroups</td>
+        <td align=left>p_groupArray=False<br>p_validate=True</td>
+        <td align=left>Removes groups from the EME group page.<br>  <b>p_groupArray</p> is an array of group names (default = all groups).<br>  <b>p_validate</p> check that the groups were removed (default = True).<br>  <br>  For example: <i> removeGroups(["Games","Local"])</td>
+    </tr>
+
+
+    <tr>
         <td align=center>searchForApp</td>
         <td align=left>p_name</td>
         <td align=left>Uses the search field to find the app (waits for the  result to appear etc...).<br>  Returns the element for the icon (or False if it's not found).</td>
@@ -608,9 +713,9 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>removeGroup</td>
-        <td align=left>p_group</td>
-        <td align=left>Removes a group from the EME group page.</td>
+        <td align=center>bookmarkApp</td>
+        <td align=left>p_appName</td>
+        <td align=left>'Bookmarks' (installs) an app from EME (assumes everything.me is already running).</td>
     </tr>
 
 
@@ -629,9 +734,23 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
+        <td align=center>launchFromGroup</td>
+        <td align=left>p_appName</td>
+        <td align=left>Function to launch an app directly from an EME group.</td>
+    </tr>
+
+
+    <tr>
         <td align=center>addAppToHomescreen</td>
         <td align=left>p_name</td>
         <td align=left>Pick an app from the apps listed in this group.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>addMultipleGroups</td>
+        <td align=left>p_groupArray=False</td>
+        <td align=left>Adds multiple groups based on an array of numbers (defaults to all available groups).  <br><br>  For example: addMultipleGroups([0,1,2,3,8,11]) ... or just: addMultipleGroups()</td>
     </tr>
 
 </table>
@@ -738,14 +857,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>thumbCount</td>
+        <td align=center>get_number_of_thumbnails</td>
         <td align=left></td>
         <td align=left>Returns the number of thumbnails.</td>
     </tr>
 
 
     <tr>
-        <td align=center>checkVideoLength</td>
+        <td align=center>check_video_length</td>
         <td align=left>p_from_SS<br>p_to_SS</td>
         <td align=left>Check the length of a video.</td>
     </tr>
@@ -759,14 +878,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>deleteThumbnails</td>
+        <td align=center>delete_thumbnails</td>
         <td align=left>p_num_array</td>
-        <td align=left>Deletes the thumbnails listed in p_num_array  (following an index starting at number 0).<br>  The list must be numeric, i.e "deleteThumbnails( (0,1,2) )".</td>
+        <td align=left>Deletes the thumbnails listed in p_num_array  (following an index starting at number 0).<br>  The list must be numeric, i.e "delete_thumbnails( (0,1,2) )".</td>
     </tr>
 
 
     <tr>
-        <td align=center>clickThumb</td>
+        <td align=center>click_on_thumbnail_at_position</td>
         <td align=left>p_num</td>
         <td align=left>Clicks a thumbnail from the gallery.</td>
     </tr>
@@ -885,7 +1004,7 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
     <tr>
         <td align=center>threadExists</td>
         <td align=left>p_num</td>
-        <td align=left>Verifies that a thread exists for this number (just return True or False).</td>
+        <td align=left>Verifies that a thread exists for this number (returns True or False).</td>
     </tr>
 
 
@@ -1113,21 +1232,28 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>goSound</td>
+        <td align=center>hotSpot</td>
+        <td align=left></td>
+        <td align=left>Open 'Internet sharing' settings (also known as 'hotspot').</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>go_sound</td>
         <td align=left></td>
         <td align=left>Go to Sound menu.</td>
     </tr>
 
 
     <tr>
-        <td align=center>setRingerAndNotifsVolume</td>
+        <td align=center>set_ringer_and_notifs_volume</td>
         <td align=left>p_vol</td>
         <td align=left>Set the volume for ringer and notifications.</td>
     </tr>
 
 
     <tr>
-        <td align=center>setTimeToNow</td>
+        <td align=center>set_time_to_now</td>
         <td align=left></td>
         <td align=left>Set date and time to 'now'.<br>  WARNING: DOES NOT WORK YET!!! ...<br>  1. Marionette.flick() not working here.<br>  2. Cannot figure out how to tell what the current value is (no 'active' setting here),</td>
     </tr>
@@ -1141,23 +1267,37 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>setAlarmVolume</td>
+        <td align=center>set_alarm_volume</td>
         <td align=left>p_vol</td>
         <td align=left>Set the volume for alarms.</td>
     </tr>
 
 
     <tr>
-        <td align=center>tap_wifi_network_name</td>
-        <td align=left>p_wifi_name<br>p_user<br>p_pass</td>
-        <td align=left>Select a network.</td>
+        <td align=center>wifi_forget</td>
+        <td align=left>p_silent=True</td>
+        <td align=left>Forget the wifi (assumes you have clicked the wifi name).<br>  If p_silent is True, then it will not assert if this wifi is aready known.<br>  If p_silent is True, then it will assert (and expect) that this wifi is already known.<br>  Either way, it will return True for forgotten, or False for 'not known'.</td>
     </tr>
 
 
     <tr>
-        <td align=center>turn_wifi_on</td>
+        <td align=center>wifi_list_is_cot_connected</td>
+        <td align=left>p_name<br>p_timeOut=30</td>
+        <td align=left>Verify the expected network is listed as connected in 'available networks'.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>enable_hotspot</td>
         <td align=left></td>
-        <td align=left>Click slider to turn wifi on.</td>
+        <td align=left>Enable hotspot (internet sharing) - asusmes Settings app is already open.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>wifi_list_tap_name</td>
+        <td align=left>p_wifi_name</td>
+        <td align=left>Tap the network name in the list.</td>
     </tr>
 
 
@@ -1169,9 +1309,23 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
 
 
     <tr>
-        <td align=center>checkWifiLisetedAsConnected</td>
-        <td align=left>p_name</td>
+        <td align=center>wifi_list_is_connected</td>
+        <td align=left>p_name<br>p_timeOut=30</td>
         <td align=left>Verify the expected network is listed as connected in 'available networks'.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>disable_hotspot</td>
+        <td align=left></td>
+        <td align=left>Enable hotspot (internet sharing) - asusmes Settings app is already open.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>wifi_switch_on</td>
+        <td align=left></td>
+        <td align=left>Click slider to turn wifi on.</td>
     </tr>
 
 
@@ -1179,6 +1333,20 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
         <td align=center>turn_dataConn_on</td>
         <td align=left>p_wifiOFF=False</td>
         <td align=left>Click slider to turn data connection on.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>wifi_connect</td>
+        <td align=left>p_wifi_name<br>p_user<br>p_pass</td>
+        <td align=left>Connects to the wifi specified in the parameters using the Settings app.  Launches Settings if it's not already running.</td>
+    </tr>
+
+
+    <tr>
+        <td align=center>goBack</td>
+        <td align=left></td>
+        <td align=left>Tap the back icon (gets a bit complicated sometimes, because  there's sometimes more than one match for this icon DOM reference).</td>
     </tr>
 
 </table>
@@ -1189,14 +1357,14 @@ self.browser.check_page_loaded("http://www.this_api_works_for_me.com")
   </tr>
 
     <tr>
-        <td align=center>checkVideoLength</td>
+        <td align=center>check_video_length</td>
         <td align=left>p_vid_num<br>p_from_SS<br>p_to_SS</td>
         <td align=left></td>
     </tr>
 
 
     <tr>
-        <td align=center>startVideo</td>
+        <td align=center>play_video</td>
         <td align=left>p_num</td>
         <td align=left>Clicks the thumbnail to start the video.</td>
     </tr>
