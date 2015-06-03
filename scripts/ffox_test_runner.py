@@ -9,7 +9,6 @@ from marionette import HTMLReportingTestRunnerMixin
 from marionette import BaseMarionetteTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
-from marionette import expected
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
 from bs4 import BeautifulSoup
 from datetime import datetime
