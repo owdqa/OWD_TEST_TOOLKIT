@@ -2,7 +2,7 @@ import time
 import os
 from OWDTestToolkit import DOM
 from OWDTestToolkit.apps.browser import Browser
-from marionette import Actions
+from marionette_driver.marionette import Actions
 from OWDTestToolkit.utils.decorators import retry
 # from OWDTestToolkit.utils.contacts import MockContact
 from OWDTestToolkit.utils.i18nsetup import I18nSetup

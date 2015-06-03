@@ -1,7 +1,7 @@
 import time
 import datetime
 from OWDTestToolkit import DOM
-from marionette import Actions
+from marionette_driver.marionette import Actions
 
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()

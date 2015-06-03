@@ -1,5 +1,5 @@
 import time
-from marionette import Actions
+from marionette_driver.marionette import Actions
 from OWDTestToolkit import DOM
 from OWDTestToolkit.utils.decorators import retry
 
