@@ -1,6 +1,6 @@
 import time
 import datetime
-from marionette_driver.marionette import Actions
+from marionette import Actions
 from app import app
 from date_and_time import date_and_time
 from debug import debug
@@ -64,3 +64,4 @@ class UTILS(object):
             btn.tap()
         except:
             pass
+        parent.data_layer.set_setting("screen.automatic-brightness", True)

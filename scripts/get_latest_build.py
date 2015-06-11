@@ -17,14 +17,13 @@ def retrieve_url(source, user, passwd):
     return BeautifulSoup(html)
 
 
-def detect_latest_date(source, user, passwd):
-    """Detect the latest date for build available"""
+def detect_latest_dates(source, user, passwd):
+    """Detect the latest dates for build available"""
 
     soup = retrieve_url(source, user, passwd)
     dates = [d.text[:-1] for d in soup.find_all("a", href=re.compile("..-..-.."))]
-    last_date = dates[0]
-    print "Latest date: {}".format(last_date)
-    return last_date
+    print "Latest date: {}".format(dates[0])
+    return dates
 
 
 def detect_build_file(source, user, passwd, device, typ, branch, last_date):
@@ -95,21 +94,30 @@ def main():
     if not os.path.exists(options.outdir):
         os.makedirs(options.outdir)
 
-    last_date = detect_latest_date(options.source, options.username, options.passwd)
-    f = detect_build_file(options.source, options.username, options.passwd, options.device, options.build_type,
-                          options.branch, last_date)
+    dates = detect_latest_dates(options.source, options.username, options.passwd)
 
-    # If there is no build file for the given date, it can mean it has not been generated yet,
-    # so we just don't download anything.
+    # Iterate over the last_date list in order to look for the latest available build.
+    # If there is no build file for a given date, it can mean it has not been generated yet,
+    # so we try with the previous date.
+    last_build_date = None
+    for day in dates:
+        print "Checking build for day {}".format(day)
+        f = detect_build_file(options.source, options.username, options.passwd, options.device, options.build_type,
+                          options.branch, day)
+        if f:
+            last_build_date = day
+            break
+        print "No build found for day {}".format(day)
+
     if not f:
-        print "Build for date {} not found. Will use current build in device...".format(last_date)
-        detect_device_build_file(options.device, options.build_type, options.branch, options.outdir)
+        print "No build found. Will use current build in device..."
+        # detect_device_build_file(options.device, options.build_type, options.branch, options.outdir)
         sys.exit(1)
 
     # Once we know the name of the build file to download, check if it already exists
     # in the outpur directory. In that case, just skip this step.
     if f and not os.path.exists(options.outdir + '/' + f):
-        download_build(options.source, options.username, options.passwd, last_date, f, options.outdir)
+        download_build(options.source, options.username, options.passwd, last_build_date, f, options.outdir)
     else:
         print "Build file [{}] already exists. No need to download".format(f)
     build_dir = f.split(".tgz")[0]

@@ -1,7 +1,7 @@
 import time
 import datetime
 from OWDTestToolkit import DOM
-from marionette_driver.marionette import Actions
+from marionette import Actions
 
 class Camera(object):
 

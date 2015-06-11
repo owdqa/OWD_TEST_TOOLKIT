@@ -1,5 +1,5 @@
 import time
-from marionette_driver.marionette import Actions
+from marionette import Actions
 from OWDTestToolkit import DOM
 from gaiatest.apps.keyboard.app import Keyboard
 
