@@ -5,8 +5,8 @@ import re
 import random
 import subprocess32
 
-from marionette_driver.marionette import HTMLReportingTestRunnerMixin
-from marionette_driver.marionette import BaseMarionetteTestRunner
+from marionette import HTMLReportingTestRunnerMixin
+from marionette import BaseMarionetteTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin

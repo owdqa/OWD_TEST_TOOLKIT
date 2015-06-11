@@ -1,7 +1,7 @@
 import os
 import base64
 from datetime import datetime
-from marionette_driver.marionette import HTMLElement
+from marionette import HTMLElement
 from OWDTestToolkit.utils.engines.perceptualdiff_engine import Engine as diff_Engine
 from OWDTestToolkit.utils.engines.pil_engine import Engine as pil_Engine
 

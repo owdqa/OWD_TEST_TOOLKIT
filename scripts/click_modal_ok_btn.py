@@ -3,7 +3,7 @@
 # Script to work around Marionette bug 879816 (cannot click the modal 'ok' button
 # following clicking something else).
 #
-from marionette_driver.marionette import Marionette
+from marionette import Marionette
 marionette = Marionette(host='localhost', port=2828)
 marionette.start_session()
 marionette.switch_to_frame()

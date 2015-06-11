@@ -6,7 +6,7 @@
 import base64
 import sys
 import os
-from marionette_driver.marionette import Marionette
+from marionette import Marionette
 
 
 class current_frame():

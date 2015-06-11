@@ -17,14 +17,13 @@ def retrieve_url(source, user, passwd):
     return BeautifulSoup(html)
 
 
-def detect_latest_date(source, user, passwd):
-    """Detect the latest date for build available"""
+def detect_latest_dates(source, user, passwd):
+    """Detect the latest dates for build available"""
 
     soup = retrieve_url(source, user, passwd)
     dates = [d.text[:-1] for d in soup.find_all("a", href=re.compile("..-..-.."))]
-    last_date = dates
-    print "Latest date: {}".format(last_date[0])
-    return last_date
+    print "Latest date: {}".format(dates[0])
+    return dates
 
 
 def detect_build_file(source, user, passwd, device, typ, branch, last_date):
@@ -95,13 +94,13 @@ def main():
     if not os.path.exists(options.outdir):
         os.makedirs(options.outdir)
 
-    last_date = detect_latest_date(options.source, options.username, options.passwd)
+    dates = detect_latest_dates(options.source, options.username, options.passwd)
 
     # Iterate over the last_date list in order to look for the latest available build.
     # If there is no build file for a given date, it can mean it has not been generated yet,
     # so we try with the previous date.
     last_build_date = None
-    for day in last_date:
+    for day in dates:
         print "Checking build for day {}".format(day)
         f = detect_build_file(options.source, options.username, options.passwd, options.device, options.build_type,
                           options.branch, day)

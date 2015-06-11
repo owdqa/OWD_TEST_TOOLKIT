@@ -1,7 +1,7 @@
 from OWDTestToolkit import DOM
 import time
 import datetime
-from marionette_driver.marionette import Actions
+from marionette import Actions
 
 
 class Gallery(object):

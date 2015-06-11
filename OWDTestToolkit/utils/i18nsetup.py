@@ -1,7 +1,7 @@
 import os
 import gettext
 import site
-from marionette_driver.marionette import Marionette
+from marionette import Marionette
 
 
 class SingletonType(type):

@@ -45,8 +45,8 @@ def check_device_build(source, user, passwd):
     """
     daf = get_device_build_date()
     print "Current build's date in device: {}".format(daf)
-    last_date = get_latest_build.detect_latest_date(source, user, passwd)
-    return daf == last_date[0]
+    dates = get_latest_build.detect_latest_dates(source, user, passwd)
+    return daf == dates[0]
 
 
 def main():

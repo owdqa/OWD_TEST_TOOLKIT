@@ -1,4 +1,4 @@
-from marionette_driver.marionette import Wait
+from marionette import Wait
 from OWDTestToolkit import DOM
 from OWDTestToolkit.apps.video import Video
 from OWDTestToolkit.apps.gallery import Gallery

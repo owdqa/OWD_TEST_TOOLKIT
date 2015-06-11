@@ -6,7 +6,7 @@ from OWDTestToolkit.apps.contacts import Contacts
 from OWDTestToolkit.apps.camera import Camera
 from OWDTestToolkit.utils.decorators import retry
 
-from marionette_driver.marionette import Actions
+from marionette import Actions
 import time
 
 from OWDTestToolkit.utils.i18nsetup import I18nSetup
