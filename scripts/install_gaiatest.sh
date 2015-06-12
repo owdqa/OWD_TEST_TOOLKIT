@@ -36,6 +36,10 @@ else
     git pull 2> >( tee -a $LOGFILE)
 fi
 
+
+# Remove previous installation of marionette python packages to prevent errors in python packages resolution
+pip freeze|grep marionette|suodo xargs pip uninstall -y
+
 #
 # Install gaiatest and dependencies.
 #
