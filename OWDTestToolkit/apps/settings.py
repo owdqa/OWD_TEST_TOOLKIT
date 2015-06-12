@@ -1191,3 +1191,15 @@ class Settings(object):
 
         reset_btn = self.UTILS.element.getElement(DOM.Settings.reset_phone_button, "Reset phone button")
         reset_btn.tap()
+
+    def developer_settings(self):
+        """Open the developer menu."""
+
+        dev_menu = self.UTILS.element.getElement(DOM.Settings.developer_menu, "Developer menu")
+        dev_menu.tap()
+
+    def service_workers_menu(self):
+        """Open the Service Workers menu."""
+
+        service_workers_item = self.UTILS.element.getElement(DOM.Settings.service_workers_item, "Service workers menu")
+        service_workers_item.tap()
