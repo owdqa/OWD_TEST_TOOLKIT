@@ -2,7 +2,7 @@
 #
 # Handles all dependencies etc... related to installing gaiatest.
 #
-export BRANCH=${1:-"v2.1"}
+export BRANCH=${1:-"master"}
 LOGFILE=${LOGFILE:-/tmp/gaiatest_setup.log}
 
 printf "\n\nInstalling gaiatest (for $BRANCH) and Marionette ..." | tee -a $LOGFILE
@@ -37,7 +37,7 @@ else
 fi
 
 # Remove previous installation of marionette python packages to prevent errors in python packages resolution
-pip freeze|grep marionette|suodo xargs pip uninstall -y
+pip freeze|grep marionette|sudo xargs pip uninstall -y
 
 #
 # Install gaiatest and dependencies.
