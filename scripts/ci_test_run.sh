@@ -6,7 +6,7 @@
 # (or this script would not exist to run!).
 #
 export DEVICE=${1:-"flame-KK"}
-export BRANCH=${2:-"v2.1"}
+export BRANCH=${2:-"master"}
 export TEST_TYPE=${3:-"REGRESSION"}
 
 OWD_TEST_TOOLKIT_DIR=`dirname $PWD`

@@ -5,8 +5,8 @@ import re
 import random
 import subprocess32
 
-from marionette_driver.marionette import HTMLReportingTestRunnerMixin
-from marionette_driver.marionette import BaseMarionetteTestRunner
+from marionette import HTMLReportingTestRunnerMixin
+from marionette import BaseMarionetteTestRunner
 from gaiatest.runtests import GaiaTextTestRunner
 from marionette.runner import BaseMarionetteOptions
 from gaiatest import GaiaTestCase, GaiaTestRunnerMixin
@@ -163,7 +163,7 @@ class OWDTestRunner(OWDMarionetteTestRunner, GaiaTestRunnerMixin, HTMLReportingT
         # the devices config or the css template
         self.testvars['toolkit_cfg']['toolkit_location'] = kwargs['toolkit_location']
         GaiaTestRunnerMixin.__init__(self, **kwargs)
-        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-v2.1', version=__version__,
+        HTMLReportingTestRunnerMixin.__init__(self, name='gaiatest-master', version=__version__,
                                               html_output=self.testvars['output']['html_output'], **kwargs)
         self.test_handlers = [GaiaTestCase]
 
