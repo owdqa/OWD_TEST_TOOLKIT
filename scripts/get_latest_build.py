@@ -79,7 +79,7 @@ def main():
     parser.add_argument("-d", "--device", dest="device", action="store", default="flame-KK", help="Target device")
     parser.add_argument("-t", "--type", dest="build_type", action="store", default="eng",
                         help="Build type (eng or user)")
-    parser.add_argument("-b", "--branch", dest="branch", action="store", default="v2.1", help="Branch")
+    parser.add_argument("-b", "--branch", dest="branch", action="store", default="master", help="Branch")
     parser.add_argument("-u", "--username", dest="username", action="store", default="owdmoz",
                         help="Username for the releases server")
     parser.add_argument("-p", "--password", dest="passwd", action="store", default="gaia",
