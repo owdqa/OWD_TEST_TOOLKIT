@@ -64,11 +64,7 @@ def check_device_build(source, user, passwd, device_buildname):
         print "Gaia versions match, no need to flash"
     else:
         print "Gaia versions DO NOT match"
-    last_date = get_latest_build.detect_latest_date(source, user, passwd)
-    print "daf == last_date: {}   gaia_commit == device_gaia: {}".format(daf == last_date, gaia_commit == device_gaia)
-    print "daf == last_date and gaia_commit == device_gaia ---> {}".\
-            format(daf == last_date and gaia_commit == device_gaia)
-    return daf == last_date and gaia_commit == device_gaia
+    return gaia_commit == device_gaia
 
 
 def main():
