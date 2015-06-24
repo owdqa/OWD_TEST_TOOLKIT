@@ -55,7 +55,7 @@ x=$(grep -i error $LOGFILE.tmp)
 if [ "$x" ]
 then
 	printf "\nERRORS detected while setting up gaiatest dependencies! Trying once more in 1 minute ...\n\n" | tee -a $LOGFILE
-	sleep 60
+	sleep 2
 	sudo python setup.py develop > $LOGFILE.tmp
 
 	x=$(grep -i error $LOGFILE.tmp)

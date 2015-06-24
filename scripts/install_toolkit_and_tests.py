@@ -11,7 +11,7 @@ def main():
     scripts_dir = os.environ['PWD']
     tkdir = os.path.dirname(scripts_dir)
     branch = os.environ['BRANCH']
-    integration = os.environ['INTEGRATION']
+    integration = os.getenv('INTEGRATION', '')
     logfile = os.environ['LOGFILE']
     tests_repo = 'https://github.com/owdqa/owd_test_cases.git'
     os.chdir(tkdir)
