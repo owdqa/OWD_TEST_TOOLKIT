@@ -52,21 +52,17 @@ else
 
                 printf "\n\nDevices\n"
                 sudo adb devices
-                read -p "Press [Enter] key to start backup..."
                 printf "\n\nDevice forward 2828\n"
                 sudo adb forward tcp:2828 tcp:2828
-                read -p "Press [Enter] key to start backup..."
                 printf "\n\nRunning apps\n"
                 gcli listrunningapps
-                read -p "Press [Enter] key to start backup..."
                 printf "\n\nKilling apps\n"
                 gcli killapps
-                read -p "Press [Enter] key to start backup..."
 
                 if [ "$DEVICE" = "flame-JB" ] || [ "$DEVICE" = "flame-KK" ]
                 then
                     printf "\nFLAME device: adjusting RAM to 512Mb\n"
-                    # sudo $OWD_TEST_TOOLKIT_BIN/adjustRAM.sh 512
+                    sudo $OWD_TEST_TOOLKIT_BIN/adjustRAM.sh 512
                 fi
 
                 sudo adb "wait-for-device"
