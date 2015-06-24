@@ -14,7 +14,11 @@ if [ $# -eq 0 ]; then
   printf "\nNo arguments provided. RAM: [0|256-1024] (273 or 319 are the values we should use right now.\n"
   exit
 else
-  $cmd_adb reboot bootloader
-  $cmd_fastboot oem mem $1 
-  $cmd_fastboot reboot
+  if [ $cmd_adb != "" ] then
+    $cmd_adb reboot bootloader
+  fi
+  if [ $cmd_fastboot != "" ] then
+    $cmd_fastboot oem mem $1 
+    $cmd_fastboot reboot
+  fi
 fi

@@ -1,8 +1,8 @@
-import os
 import subprocess32
 import time
 from argparse import ArgumentParser
 import get_latest_build
+import zipfile
 from utilities import Utilities
 
 
@@ -15,9 +15,9 @@ def flash(device, targetdir, buildfile):
 
     filedir = buildfile.split('.tgz')[0]
     if device == "hamachi-light":
-        subprocess32.check_call(['sudo', '{}/{}/update-gecko-gaia.sh'.format(targetdir, filedir)])
+        subprocess32.check_output('sudo {}/{}/update-gecko-gaia.sh'.format(targetdir, filedir), shell=True)
     else:
-        subprocess32.check_call(['sudo', '{}/{}/flash.sh'.format(targetdir, filedir)])
+        subprocess32.check_output('sudo {}/{}/flash.sh'.format(targetdir, filedir), shell=True)
     print "Device successfully flashed!"
 
 
@@ -25,28 +25,50 @@ def wait_for_device():
     """Issue an adb command to wait for the device to be online
     """
 
-    subprocess32.check_output(['sudo', 'adb', 'wait-for-device'])
+    subprocess32.check_output('sudo adb wait-for-device', shell=True)
 
 
 def get_device_build_date():
     """Return the date of the current build in the device."""
 
     output = subprocess32.check_output('sudo adb shell getprop | grep "build.date.utc]"', shell=True)
+    print output
     build_date = output.split(": [")[-1].strip().replace("]", "")
     da = time.localtime(float(build_date))
     return time.strftime("%m-%d-%y", da)
 
 
-def check_device_build(source, user, passwd):
+def check_device_build(source, user, passwd, device_buildname):
     """Check if the device has already the latest available build.
 
     If the device has been already flashed with the latest available build,
     return True. False otherwise.
     """
+    print "Checking current build's date in device"
     daf = get_device_build_date()
     print "Current build's date in device: {}".format(daf)
-    dates = get_latest_build.detect_latest_dates(source, user, passwd)
-    return daf == dates[0]
+
+    # Check if the current build in device corresponds to the same Gaia commit (branch) as
+    # the build to be flashed
+    print "DEVICE_BUILDNAME: {}".format(device_buildname)
+    gaia_commit = device_buildname.split("Gaia-")[1]
+    print "Gaia version for last build: {}".format(gaia_commit)
+
+    # Get gaia version in device, from resources/gaia_commit.txt inside the Settings application
+    # First of all, pull the application from the device
+    subprocess32.check_output('sudo adb pull /data/local/webapps/settings.gaiamobile.org/application.zip', shell=True)
+    zf = zipfile.ZipFile('application.zip')
+    device_gaia = zf.read('resources/gaia_commit.txt')[0:7]
+    print "Gaia version in device: {}".format(device_gaia)
+    if gaia_commit == device_gaia:
+        print "Gaia versions match, no need to flash"
+    else:
+        print "Gaia versions DO NOT match"
+    last_date = get_latest_build.detect_latest_date(source, user, passwd)
+    print "daf == last_date: {}   gaia_commit == device_gaia: {}".format(daf == last_date, gaia_commit == device_gaia)
+    print "daf == last_date and gaia_commit == device_gaia ---> {}".\
+            format(daf == last_date and gaia_commit == device_gaia)
+    return daf == last_date and gaia_commit == device_gaia
 
 
 def main():
@@ -65,7 +87,7 @@ def main():
     # First of all, ensure device is connected
     Utilities.connect_device()
 
-    last_flashed = check_device_build(options.source, options.username, options.passwd)
+    last_flashed = check_device_build(options.source, options.username, options.passwd, options.buildfile)
 
     # Flash the device
     if not last_flashed:
