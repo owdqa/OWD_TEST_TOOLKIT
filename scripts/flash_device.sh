@@ -46,22 +46,27 @@ else
 
                 # I hate this line, and I will be back to blow it up
                 export DEVICE_BUILDNAME=$(egrep "^Device build name: " $RESULT_DIR/flash_device | awk '{print $4}' | sed -e "s/^\(.*\).tgz$/\1/")
+                printf "\nDevice buildname: $DEVICE_BUILDNAME\n"
                 cd $TARGET_DIR/$DEVICE_BUILDNAME
                 sudo python $OWD_TEST_TOOLKIT_BIN/flash_device.py -d $DEVICE -t $TARGET_DIR -b $DEVICE_BUILDNAME
 
                 printf "\n\nDevices\n"
                 sudo adb devices
+                read -p "Press [Enter] key to start backup..."
                 printf "\n\nDevice forward 2828\n"
                 sudo adb forward tcp:2828 tcp:2828
+                read -p "Press [Enter] key to start backup..."
                 printf "\n\nRunning apps\n"
                 gcli listrunningapps
+                read -p "Press [Enter] key to start backup..."
                 printf "\n\nKilling apps\n"
                 gcli killapps
+                read -p "Press [Enter] key to start backup..."
 
                 if [ "$DEVICE" = "flame-JB" ] || [ "$DEVICE" = "flame-KK" ]
                 then
                     printf "\nFLAME device: adjusting RAM to 512Mb\n"
-                    sudo $OWD_TEST_TOOLKIT_BIN/adjustRAM.sh 512
+                    # sudo $OWD_TEST_TOOLKIT_BIN/adjustRAM.sh 512
                 fi
 
                 sudo adb "wait-for-device"
