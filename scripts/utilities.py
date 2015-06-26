@@ -16,9 +16,14 @@ class Utilities():
         It takes a JSON file as an input and returns a dictionary containing all
         its properties.
         """
-        the_file = open(file_name)
-        data = json.load(the_file)
-        the_file.close()
+        data = []
+        try:
+            the_file = open(file_name)
+            data = json.load(the_file)
+            the_file.close()
+        except IOError as e:
+            print "Error reading file {}: {}".format(file_name, e.message)
+            pass
         return data
 
     @staticmethod
