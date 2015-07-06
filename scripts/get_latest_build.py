@@ -83,8 +83,10 @@ def main():
                         help="Username for the releases server")
     parser.add_argument("-p", "--password", dest="passwd", action="store", default="gaia",
                         help="Password for the releases server")
-    parser.add_argument("-s", "--source", dest="source", action="store",
+    #parser.add_argument("-s", "--source", dest="source", action="store",
                         default="http://ci-owd-misc-02/releases/DEVELOP/", help="Releases server location")
+    parser.add_argument("-s", "--source", dest="source", action="store",
+                        default="http://owd.tid.es/releases/DEVELOP/", help="Releases server location")
 
     home = os.environ['HOME']
     default_dir = "{}/Downloads/device_flash_files".format(home)
