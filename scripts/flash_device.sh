@@ -36,7 +36,8 @@ else
         # By default, get the build file too (just pass any parameter as $3 and it'll skip this).
         if [ ! "$4" ]
         then
-            python get_latest_build.py -d $DEVICE -t $TYPE -b $VERSION -u owdmoz -p gaia -s http://ci-owd-misc-02/releases/DEVELOP/ -o $TARGET_DIR
+            #python get_latest_build.py -d $DEVICE -t $TYPE -b $VERSION -u owdmoz -p gaia -s http://ci-owd-misc-02/releases/DEVELOP/ -o $TARGET_DIR
+            python get_latest_build.py -d $DEVICE -t $TYPE -b $VERSION -u owdmoz -p gaia -s http://owd.tod.es/releases/DEVELOP/ -o $TARGET_DIR
 
             if [ $? -ne 0 ]
             then
