@@ -32,8 +32,8 @@ else
     user=`whoami`
     printf "Resetting gaia ownership to user $user\n"
     sudo chown $user:$user .git -R
-    git checkout -f $BRANCH  2> >( tee -a $LOGFILE)
-    git pull 2> >( tee -a $LOGFILE)
+    sudo git checkout -f $BRANCH  2> >( tee -a $LOGFILE)
+    sudo git pull 2> >( tee -a $LOGFILE)
 fi
 
 
