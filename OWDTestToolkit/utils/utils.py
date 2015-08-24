@@ -64,4 +64,3 @@ class UTILS(object):
             btn.tap()
         except:
             pass
-        parent.data_layer.set_setting("screen.automatic-brightness", True)

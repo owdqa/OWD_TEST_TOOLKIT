@@ -263,6 +263,7 @@ class general(object):
 
         # After restarting we need to re-instantiate javascript objects
         self.parent.device.restart_b2g()
+        time.sleep(5)
         self.apps = GaiaApps(self.marionette)
         self.parent.data_layer = GaiaData(self.marionette, self.parent.parent.testvars)
         # Restore lockscreen status

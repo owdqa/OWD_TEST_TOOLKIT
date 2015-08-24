@@ -261,6 +261,7 @@ class Email(object):
         reply_btn = self.UTILS.element.getElement(DOM.Email.reply_btn, "Reply message button")
         reply_btn.tap()
 
+        time.sleep(2)
         # Now choose the "Reply all" option
         reply_opt = self.UTILS.element.getElement(DOM.Email.reply_menu_reply_all, "'Reply all' option button")
         reply_opt.tap()
@@ -269,8 +270,8 @@ class Email(object):
         self.parent.wait_for_element_displayed(*DOM.Email.compose_header, timeout=30)
 
         # Check the sender is not included in the 'To' field
-        bubbles = self.UTILS.element.getElements(('css selector', '.cmp-to-container.cmp-addr-container .cmp-bubble-container .cmp-peep-name'),
-                                                 '"To" field bubbles')
+        bubbles_dom = ('css selector', '.cmp-to-container.cmp-addr-container .cmp-bubble-container .cmp-peep-name')
+        bubbles = self.UTILS.element.getElements(bubbles_dom, '"To" field bubbles')
         bubbles_text = [bubble.text for bubble in bubbles]
 
         if sender['username'] in bubbles_text:
@@ -427,6 +428,9 @@ class Email(object):
         domain = re.search('[a-zA-Z0-9+_\-\.]+@([0-9a-zA-Z][.-0-9a-zA-Z]*).[a-zA-Z]+', email).group(1)
         if 'gmail' in domain:
             self.switch_to_gmail_frame(email)
+            b = self.marionette.find_element(*DOM.Email.gmail_email_next_locator)
+            self.UTILS.element.scroll_into_view(b)
+            b.tap()
             self.gmail_login(passwd)
             self.wait_for_gmail_approve_access()
             self.tap_gmail_approve_access()

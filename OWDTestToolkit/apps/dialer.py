@@ -277,7 +277,7 @@ class Dialer(object):
         self.UTILS.element.waitForElements(DOM.Settings.fdn_warning_header, "Waiting for FDN warning header", True, 10)
         self.UTILS.element.waitForElements(DOM.Settings.fdn_warning_body, "Waiting for FDN warning body")
         body = self.marionette.find_element(*DOM.Settings.fdn_warning_body)
-        self.UTILS.reporting.log_to_file("body.text: {}   msg: {}".format(body.text, DOM.Dialer.fdn_warning_msg.
+        self.UTILS.reporting.log_to_file(u"body.text: {}   msg: {}".format(body.text, DOM.Dialer.fdn_warning_msg.
                                                                           format(phone_number)))
         self.UTILS.test.test(body.text == DOM.Dialer.fdn_warning_msg.format(phone_number),
                              "Correct FDN warning message")

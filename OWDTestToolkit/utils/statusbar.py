@@ -22,6 +22,7 @@ class statusbar(object):
         # is fully shown
         time.sleep(2)
         utility_tray.clear_all_notifications()
+        self.hideStatusBar()
 
     def displayStatusBar(self):
         """
@@ -198,8 +199,9 @@ class statusbar(object):
         self.marionette.switch_to_frame()
 
         dom = (DOM.Statusbar.notification_toaster_detail[0], DOM.Statusbar.notification_toaster_detail[1].format(text))
-        self.parent.reporting.debug(u"** Waiting for notification toaster detail: [{}]".format(dom))
+        # self.parent.reporting.info(u"** Waiting for notification toaster detail: [{}]".format(dom))
         self.parent.parent.wait_for_element_present(dom[0], dom[1], timeout)
+        # self.parent.reporting.info(u"** Waiting for notification statusbar detail: [{}]".format(notif_text))
 
         # Check if the notification actually exists or if it is a "ghost" one.
         # Note that we can use either @text or @notif_text

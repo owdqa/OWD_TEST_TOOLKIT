@@ -89,10 +89,9 @@ class app(object):
     def findAppIcon(self, app_name):
         """Try to find an application icon in the homescreen.
         """
-        self.parent.home.goHome()
 
         try:
-
+            self.parent.iframe.switchToFrame(*DOM.Home.frame_locator)
             # If this works, then the icon is visible at the moment.
             self.parent.reporting.debug("*** Looking for application icon {}".format(app_name))
             app_icon = self.marionette.find_element('xpath', DOM.Home.app_name_xpath.format(app_name))

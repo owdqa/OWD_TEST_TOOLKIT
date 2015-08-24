@@ -92,7 +92,8 @@ class DownloadManager(object):
         self.UTILS.reporting.logResult('info', 'The status [parameter] is: {}'.format(status))
 
         if status == "downloading":
-            match = re.search(r"(\d)+(.(\d)+)*\s(GB|MB|KB)\sof\s(\d)+(.(\d)+)*\s(GB|MB|KB)",
+            ofstr = _("of")
+            match = re.search(r"(\d)+(.(\d)+)*\s(GB|MB|KB)\s{}\s(\d)+(.(\d)+)*\s(GB|MB|KB)".format(ofstr),
                               download_info.text)
             self.UTILS.test.test(match is not None, "Verify the the text is of the type: 'X' MB of 'Y' MB")
         else:

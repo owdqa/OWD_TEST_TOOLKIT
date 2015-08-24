@@ -44,7 +44,7 @@ compose_msg = ('class name', 'cmp-body-text')
 
 reply_btn = ('class name', "msg-reply-btn")
 reply_menu_reply = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-reply"]')
-reply_menu_reply_all = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-reply-all"]')
+reply_menu_reply_all = ('css selector', 'form.msg-reply-menu button.msg-reply-menu-reply-all')
 reply_menu_forward = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-forward"]')
 reply_menu_cancel = ('xpath', './/form[@class="msg-reply-menu"]//button[@class="msg-reply-menu-cancel"]')
 
@@ -54,9 +54,9 @@ compose_send_failed_ok = ("id", "cmp-send-failed-ok")
 compose_sending_spinner = ('class name', 'cmp-messages-sending')
 compose_attach_btn = ('class name', 'icon icon-attachment')
 
-attach_video_btn = ("xpath", "//form//button[text()='{}']".format(_("Video")))
+attach_video_btn = ("xpath", u"//form//button[text()='{}']".format(_("Video")))
 attach_music_btn = ("xpath", "//form//button[text()='{}']".format(_("Music")))
-attach_gallery_btn = ("xpath", "//form//button[text()='{}']".format(_("Gallery")))
+attach_gallery_btn = ("xpath", u"//form//button[text()='{}']".format(_("Gallery")))
 attach_camera_btn = ("xpath", "//form//button[text()='{}']".format(_("Camera")))
 
 settings_menu_btn = ('xpath', '//header//a[@class="msg-folder-list-btn"]')
@@ -103,8 +103,8 @@ confirm_msg = ('xpath', '//form[@class="confirm-dialog-form"]//p[@class="confirm
 
 new_account_error_msg = ('css selector', 'section.card-setup-account-info div.scrollregion-below-header div.sup-error-region div.sup-error-message')
 
-toaster_sending_mail = ('xpath', '//section[contains(@class, "toaster actionable")]//p[@class="toaster-text" and contains(text(), "Sending mail")]')
-toaster_sent_mail = ('xpath', '//section[contains(@class, "toaster actionable")]//p[@class="toaster-text" and text()="Email sent."]')
+toaster_sending_mail = ('xpath', '//section[contains(@class, "toaster actionable")]//p[@class="toaster-text" and contains(text(), "{}")]'.format(_("Sending email")))
+toaster_sent_mail = ('xpath', '//section[contains(@class, "toaster actionable")]//p[@class="toaster-text" and text()="{}"]'.format(_("Email sent.")))
 
 switch_account_panel_one_account = ('class name', 'card-folder-picker card anim-vertical anim-overlay one-account center opened')
 
@@ -126,3 +126,4 @@ gmail_email_locator = ('id', 'Email')
 gmail_password_locator = ('id', 'Passwd')
 gmail_sign_in_locator = ('id', 'signIn')
 gmail_approve_access_locator = ('css selector', '#submit_approve_access.goog-buttonset-action')
+gmail_email_next_locator = ('id', 'next')

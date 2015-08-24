@@ -69,7 +69,7 @@ class Contacts(object):
         self.marionette.switch_to_frame()
 
         # Choose to get a picture from the Gallery.
-        elem = (DOM.GLOBAL.action_menu_option[0], DOM.GLOBAL.action_menu_option[1].format("Gallery"))
+        elem = (DOM.GLOBAL.action_menu_option[0], DOM.GLOBAL.action_menu_option[1].format(_("Gallery")))
         gallery_option = self.UTILS.element.getElement(elem, "Gallery link")
         gallery_option.tap()
 

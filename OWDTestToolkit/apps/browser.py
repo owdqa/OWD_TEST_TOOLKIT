@@ -29,7 +29,7 @@ class Browser(object):
                                               self.__class__.__name__ + " app - loading overlay")
         return self.app
 
-    def open_url(self, url, timeout=30, trusted=True):
+    def open_url(self, url, timeout=60, trusted=True):
         self.marionette.switch_to_frame()
         self.parent.wait_for_element_displayed(*DOM.Browser.url_input)
         url_input = self.marionette.find_element(*DOM.Browser.url_input)
@@ -57,7 +57,7 @@ class Browser(object):
             except:
                 pass
 
-    def wait_for_page_to_load(self, timeout=30):
+    def wait_for_page_to_load(self, timeout=90):
         self.parent.wait_for_condition(lambda m: m.find_element(
             *DOM.Browser.browser_app).get_attribute("loading-state") == "false", timeout=timeout)
 

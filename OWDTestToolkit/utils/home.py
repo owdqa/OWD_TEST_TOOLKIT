@@ -53,4 +53,6 @@ class home(object):
     def touchHomeButton(self):
         """Touch Home button.
         """
-        self.parent.parent.device.touch_home_button()
+        # self.parent.parent.device.touch_home_button()
+        self.parent.apps.kill_all()
+        time.sleep(2)

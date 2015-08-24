@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from gaiatest.version import __version__
 from mozlog import structured
+import mozdevice
 
 from OWDTestToolkit.utils.assertions import AssertionManager
 from utilities import Utilities
@@ -73,7 +74,12 @@ class OWDMarionetteTestRunner(BaseMarionetteTestRunner):
                 # Let's try to detect GaiaTestCase setUp errors. If a SetupException raises,
                 # retry the test execution for as many times as setup_retries. Otherwise,
                 # retry as usual, only up to the number of test_retries
-                self.run_test(test['filepath'], expected, test['test_container'])
+                try:
+                    self.run_test(test['filepath'], expected, test['test_container'])
+                except IOError as err:
+                    print "    >>> Error: {}".format(err)
+                    Utilities.connect_device()
+                    continue
                 attempt += 1
                 result = self.results[-1]
                 result.filepath = test['filepath']

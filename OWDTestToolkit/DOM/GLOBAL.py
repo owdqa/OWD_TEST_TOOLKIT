@@ -2,7 +2,7 @@ from OWDTestToolkit.utils.i18nsetup import I18nSetup
 _ = I18nSetup(I18nSetup).setup()
 
 loading_overlay = ('id', 'loading-overlay')
-app_head_specific = "//h1[text()='{}']"
+app_head_specific = u"//h1[text()='{}']"
 app_head = ('tag name', "h1")
 app_titlebar_name = ('class name', 'titlebarIcon')
 modal_confirm_ok = ("id", "confirm-ok")
@@ -34,10 +34,10 @@ confirm_form_delete_btn = ('xpath', '//form[@data-type="confirm"]//button[@class
 
 # Action menu
 action_menu = ('xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]/menu')
-action_menu_option = (
-    'xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]//button[text()="{}"]')
-action_menu_cancel_btn = (
-    'xpath', '//form[@data-type="action" and @data-z-index-level="action-menu"]//button[@data-l10n-id="cancel" and @data-action="cancel"]')
+action_menu_option = ('xpath',
+                      u'//form[@data-type="action" and @data-z-index-level="action-menu"]//button[text()="{}"]')
+action_menu_cancel_btn = ('xpath',
+            '//form[@data-type="action" and @data-z-index-level="action-menu"]//button[@data-l10n-id="cancel" and @data-action="cancel"]')
 
 # Modal dialogs
 modal_dialog = ('css selector', 'form.modal-dialog-alert')

@@ -28,12 +28,12 @@ def retry(num_retries, delay=2, context=None, aux_func_name=None):
 
             for i in range(num_retries):
                 try:
-                    utils.reporting.debug(
+                    utils.reporting.info(
                         ">>>>>> Trying function[{}] for the #{} time".format(func_to_retry.__name__, i + 1))
                     res = func_to_retry(*args, **kwargs)
                     return res
                 except Exception, e:
-                    utils.reporting.debug(">>>>>> The function to retry failed: {}".format(e))
+                    # utils.reporting.info(u">>>>>> The function to retry failed: {}".format(e))
                     if i < num_retries:
                         pass
                     else:
@@ -45,29 +45,29 @@ def retry(num_retries, delay=2, context=None, aux_func_name=None):
                         try:
                             sys.modules[module_context]
                         except KeyError:
-                            utils.reporting.debug(">>>>>> Importing module at runtime")
+                            utils.reporting.info(">>>>>> Importing module at runtime")
                             try:
                                 importlib.import_module(module_context)
                             except Exception, e:
-                                utils.reporting.debug(">>>>>> Importing failed: {}".format(e))
+                                utils.reporting.info(u">>>>>> Importing failed: {}".format(e))
 
                         try:
                             # We get the context of the aux_func
                             class_context = getattr(sys.modules[module_context], function_context)
                         except Exception, e:
-                            utils.reporting.debug(
+                            utils.reporting.info(
                                 ">>>>>> Failed getting aux_func context: {}".format(e))
 
                         try:
                             # Get a self reference of the aux_func (it may not be defined in the same
                             # class as func_to_retry)
-                            utils.reporting.debug(">>>>>> Executing aux_func.....")
+                            utils.reporting.info(">>>>>> Executing aux_func.....")
 
                             aux_func_self = retry_self if class_context.__name__ == retry_self.__class__.__name__ else class_context(
                                 retry_self.parent)
                             aux_func_self.__getattribute__(aux_func_name)()
                         except Exception, e:
-                            utils.reporting.debug(">>>>>> Failed: {}".format(e))
+                            utils.reporting.info(u">>>>>> Failed: {}".format(e))
                             break
                     except:
                         pass
